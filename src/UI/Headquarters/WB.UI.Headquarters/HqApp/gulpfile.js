@@ -3,14 +3,17 @@ const webpack = require("webpack")
 const utils = require('gulp-util')
 const merge = require('webpack-merge');
 const rimraf = require("rimraf");
-const debug = require('gulp-debug');
+//const debug = require('gulp-debug');
 const plugins = require('gulp-load-plugins')();
-const jest = require('jest-cli');
+//const jest = require('jest-cli');
 const fs = require("fs")
+
+const isDevMode = !utils.env.production
 
 const config = {
     dist: 'dist',
-    hqViews: '../Views/Shared'
+    hqViews: '../Views/Shared',
+    webTester: '../../../WB.UI.WebTester/Content/Dist'
 }
 
 config.resources = {
@@ -18,14 +21,31 @@ config.resources = {
     dest: "locale/.resources"
 }
 
-gulp.task("default", ['cleanup', 'resx2json', 'build', 'test'].filter((x) => x));
+gulp.task("webTester", ['build'], function(){
+
+    const filter = [
+        '**/*.js', 
+        '!**/hq/*',
+        '!**/webinterview/*',
+        '!**/hq.bundle*.js',
+        '!**/webinterview.bundle*.js',
+        '!**/review.bundle*.js',
+        isDevMode ? '**/*.map' : null, 
+        '**/*.css'].filter(x => x)
+
+    return gulp.src(config.dist + "/**/*.*")
+        .pipe(plugins.filter(filter))
+        .pipe(gulp.dest(config.webTester));
+});
+
+gulp.task("default", ['cleanup', 'resx2json', 'build', 'webTester', 'test'].filter((x) => x));
 
 gulp.task("build", ["resx2json", "vendor"], (done) => {
     const opts = {
         plugins: []
     }
 
-    if (!utils.env.production) {
+    if (isDevMode) {
         opts.plugins.push(new webpack.ProgressPlugin());
     } else {
         process.env.NODE_ENV = 'production';
@@ -65,6 +85,7 @@ gulp.task("test", (done) => {
 gulp.task('resx2json', ["cleanup"], () => {
     return gulp.src([
         "../**/*.resx",
+        "../../../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
         "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
     ])
         // .pipe(debug())
@@ -79,10 +100,11 @@ gulp.task('resx2json', ["cleanup"], () => {
 });
 
 gulp.task('cleanup', (cb) => {
-    if (utils.env.production || process.env.FORCE_CLEANUP) {
+    if (!isDevMode || process.env.FORCE_CLEANUP) {
         rimraf.sync(config.dist + "/**/*.*")
         rimraf.sync(config.resources.dest + "/**/*.*")
         rimraf.sync(config.hqViews + "/partial.*.cshtml")
+        rimraf.sync(config.webTester  + "/**/*.*")
     }
     return cb();
 });
@@ -92,7 +114,7 @@ gulp.task("vendor", ["cleanup"], (done) => {
         if (err) {
             utils.log(utils.colors.yellow("Building VENDOR DLL libs"));
 
-            if (utils.env.production) {
+            if (!isDevMode) {
                 process.env.NODE_ENV = 'production';
             }
 

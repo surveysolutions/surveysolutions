@@ -3,15 +3,20 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class AssignmentDetails : AssignmentViewItem
     {
-        [DataMember]
-        public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; }
+        [DataMember] public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; }
+    }
+
+    public class FullAssignmentDetails : AssignmentDetails
+    {
+        [DataMember] 
+        public List<InterviewAnswer> Answers { get; set; }
     }
 
     public class AssignmentIdentifyingDataItem
@@ -23,11 +28,9 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentViewItem
     {
-        [DataMember]
-        public int Id { get; set; }
+        [DataMember] public int Id { get; set; }
 
-        [DataMember]
-        public Guid ResponsibleId { get; set; }
+        [DataMember] public Guid ResponsibleId { get; set; }
 
         /// <summary>
         /// Name of the responsible person
@@ -79,8 +82,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class AssignmentAssignRequest
     {
-        [DataMember]
-        public string Responsible { get; set; }
+        [DataMember] public string Responsible { get; set; }
     }
 
     public class AssignmentsListView : BaseApiView
@@ -102,21 +104,25 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// Filter result by custom search query
         /// </summary>
         public string SearchBy { get; set; }
+
         public string QuestionnaireId { get; set; }
 
         /// <summary>
         /// Responsible user Id on name
         /// </summary>
         public string Responsible { get; set; }
+
         public Guid? SupervisorId { get; set; }
 
         public bool ShowArchive { get; set; }
+
         /// <summary>
         /// Possible values are
         /// Id, ResponsibleName, InterviewsCount, Quantity, UpdatedAtUtc, CreatedAtUtc
         /// Followed by ordering direction "ASC" or "DESC"
         /// </summary>
         public string Order { get; set; }
+
         public int Offset { get; set; }
         public int Limit { get; set; }
     }
@@ -129,9 +135,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
     public class CreateAssignmentApiRequest
     {
-        [DataMember]
-        [Required]
-        public string Responsible { get; set; }
+        [DataMember] [Required] public string Responsible { get; set; }
 
         /// <summary>
         /// Maximum number of allowed to create assignments
@@ -148,7 +152,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         [Required]
-        public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; } = new List<AssignmentIdentifyingDataItem>();
+        public List<AssignmentIdentifyingDataItem> IdentifyingData { get; set; } =
+            new List<AssignmentIdentifyingDataItem>();
     }
-
 }

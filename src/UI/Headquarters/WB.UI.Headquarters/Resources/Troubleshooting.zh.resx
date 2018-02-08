@@ -181,7 +181,7 @@
     <value>服务器上未找到已同步的访谈</value>
   </data>
   <data name="SupportSite" xml:space="preserve">
-    <value>点击您要解决的问题的链接。如果您的问题没有出现在列表中，请访问Survey Solutions&lt;a href="{0}" target="_blank"&gt;支持网站&lt;/a&gt;。</value>
+    <value>点击您要解决的问题的关联。如果您的问题没有出现在列表中，请访问Survey Solutions&lt;a href="{0}" target="_blank"&gt;支持网站&lt;/a&gt;。</value>
   </data>
   <data name="TableTitle_Enumerator" xml:space="preserve">
     <value>调查员</value>

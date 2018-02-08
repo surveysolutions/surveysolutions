@@ -30,7 +30,11 @@
                         data: "creationDate",
                         name: "CreationDate",
                         // case-sensitive! should be DB name here from Designer DB questionnairelistviewitems? to sort column
-                        "class": "date"
+                        "class": "date",
+                        render: function (data) {
+                            var localDate = moment.utc(data).local();
+                            return localDate.format(window.CONFIG.dateFormat);
+                        }
                     },
                     {
                         data: "email",

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo
@@ -18,6 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public string QuestionnaireId { get; set; }
         public string Title { get; set; }
         public bool IsPublic { get; set; }
+        public bool WebTestAvailable { get; set; }
         public List<ChapterInfoView> Chapters { get; set; }
         public List<MacroView> Macros { get; set; }
         public List<LookupTableView> LookupTables { get; set; }
@@ -33,5 +36,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<AttachmentView> Attachments { get; set; }
 
         public List<TranslationView> Translations { get; set; }
+
+        public MetadataView Metadata { get; set; }
+
+        public List<StudyTypeItem> StudyTypes { get; set; }
+        public List<KindOfDataItem> KindsOfData { get; set; }
+        public List<CountryItem> Countries { get; set; }
+        public List<ModeOfDataCollectionItem> ModesOfDataCollection { get; set; }
     }
 }

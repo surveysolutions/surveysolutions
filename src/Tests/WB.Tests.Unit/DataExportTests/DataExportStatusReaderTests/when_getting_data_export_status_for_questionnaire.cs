@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
             var tabularDataExportFilePath = "tabularDataExportFilePath";
 
             filebasedExportedDataAccessor.Setup(
-                x => x.GetArchiveFilePathForExportedData(questionnaireIdentity, DataExportFormat.Tabular, null))
+                x => x.GetArchiveFilePathForExportedData(questionnaireIdentity, DataExportFormat.Tabular, null, null, null))
                 .Returns(tabularDataExportFilePath);
             fileSystemAccessorMock.Setup(x => x.IsFileExists(tabularDataExportFilePath)).Returns(true);
 

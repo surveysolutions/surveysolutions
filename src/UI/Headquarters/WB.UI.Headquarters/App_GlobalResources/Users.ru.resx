@@ -232,8 +232,8 @@
     <comment>Почта супервизора</comment>
   </data>
   <data name="AddInterviewer" xml:space="preserve">
-    <value>Добавить интервьювера</value>
-    <comment>Добавить интервьювера</comment>
+    <value>Добавить интервьюера</value>
+    <comment>Добавить интервьюера</comment>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
     <value>Наблюдатели ({0})</value>

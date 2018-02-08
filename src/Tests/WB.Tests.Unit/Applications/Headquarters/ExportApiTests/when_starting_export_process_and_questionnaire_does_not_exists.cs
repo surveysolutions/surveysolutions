@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
 using It = Machine.Specifications.It;
 
@@ -16,20 +15,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_starting_export_process_and_questionnaire_does_not_exists : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfQuestionnaireBrowseViewFactory = new Mock<IQuestionnaireBrowseViewFactory>();
             mockOfQuestionnaireBrowseViewFactory.Setup(x => x.GetById(questionnaireIdentity)).Returns((QuestionnaireBrowseItem)null);
 
             controller = CreateExportController(questionnaireBrowseViewFactory: mockOfQuestionnaireBrowseViewFactory.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        Because BecauseOf = () => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
-        It should_return_http_not_found_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_not_found_response () =>
             ((NegotiatedContentResult<string>)result).StatusCode.ShouldEqual(HttpStatusCode.NotFound);
 
-        It should_response_has_specified_message = () =>
+        [NUnit.Framework.Test] public void should_response_has_specified_message () =>
             ((NegotiatedContentResult<string>)result).Content.ShouldEqual("Questionnaire not found");
 
         private static ExportController controller;

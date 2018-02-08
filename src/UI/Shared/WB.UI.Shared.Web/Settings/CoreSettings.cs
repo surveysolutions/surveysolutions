@@ -1,7 +1,6 @@
-﻿using System;
+﻿using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Web.Configuration;
-using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Shared.Web.Settings
 {

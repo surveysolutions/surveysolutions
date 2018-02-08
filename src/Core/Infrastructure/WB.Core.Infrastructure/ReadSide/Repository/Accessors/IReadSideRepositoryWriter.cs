@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors

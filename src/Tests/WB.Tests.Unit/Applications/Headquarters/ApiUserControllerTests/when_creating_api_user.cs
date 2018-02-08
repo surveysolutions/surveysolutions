@@ -1,25 +1,21 @@
-﻿using System;
 using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.Controllers;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
 {
     internal class when_creating_api_user : ApiUserControllerTestContext
     {
-        private Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
-            inputModel = new UserModel()
+            inputModel = new UserModel
             {
                 UserName = "apiTest",
                 Password = "12345",
@@ -29,17 +25,16 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             userManagerMock.Setup(o => o.CreateUserAsync(Moq.It.IsAny<HqUser>(), inputModel.Password, UserRoles.ApiUser))
                 .Returns(() => Task.FromResult(IdentityResult.Success));
             controller = CreateApiUserController(userManager: userManagerMock.Object);
-        };
 
-        Because of = () =>
-        {
-            actionResult = controller.Create(inputModel).Result;
-        };
+            BecauseOf();
+        }
 
-        It should_return_ViewResult = () =>
+        private void BecauseOf() => actionResult = controller.Create(inputModel).Result;
+
+        [NUnit.Framework.Test] public void should_return_ViewResult () =>
             actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
 
-        It should_user_be_created = () =>
+        [NUnit.Framework.Test] public void should_user_be_created () =>
             userManagerMock.Verify(x => x.CreateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()), Times.Once);
 
         private static Mock<TestHqUserManager> userManagerMock;

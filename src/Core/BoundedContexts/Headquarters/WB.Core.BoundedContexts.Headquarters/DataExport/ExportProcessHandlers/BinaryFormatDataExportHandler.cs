@@ -10,9 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -52,21 +50,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
 
-        protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity,
-            InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken)
+        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(settings.QuestionnaireId);
             var multimediaQuestionIds = questionnaire.Find<IMultimediaQuestion>().Select(x => x.PublicKey).ToArray();
 
             cancellationToken.ThrowIfCancellationRequested();
             
             var allMultimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, multimediaQuestionIds));
+                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId, multimediaQuestionIds));
 
             cancellationToken.ThrowIfCancellationRequested();
 
             var allAudioAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetAudioAnswersByQuestionnaire(questionnaireIdentity));
+                () => this.interviewFactory.GetAudioAnswersByQuestionnaire(settings.QuestionnaireId));
 
             var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
                 .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();
@@ -78,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var interviewDirectory = this.fileSystemAccessor.CombinePath(directoryPath, interviewId.FormatGuid());
+                var interviewDirectory = this.fileSystemAccessor.CombinePath(settings.ExportDirectory, interviewId.FormatGuid());
 
                 if (!this.fileSystemAccessor.IsDirectoryExists(interviewDirectory))
                     this.fileSystemAccessor.CreateDirectory(interviewDirectory);

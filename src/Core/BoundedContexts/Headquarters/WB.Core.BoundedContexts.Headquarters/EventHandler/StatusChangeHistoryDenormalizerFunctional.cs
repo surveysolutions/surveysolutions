@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -272,6 +273,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private string GetResponsibleIdName(Guid responsibleId)
             => this.users.GetUser(new UserViewInputModel(responsibleId))?.UserName ?? this.unknown;
 
+        private readonly List<InterviewExportedAction> actionsThatAreNotStatusChange = new List<InterviewExportedAction>
+        {
+            InterviewExportedAction.Paused,
+            InterviewExportedAction.Resumed,
+            InterviewExportedAction.OpenedBySupervisor,
+            InterviewExportedAction.ClosedBySupervisor
+        };
+
         private InterviewSummary AddCommentedStatus(
             Guid eventId,
             InterviewSummary state,
@@ -284,9 +293,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             TimeSpan? timeSpanWithPreviousStatus = null;
 
-            if (state.InterviewCommentedStatuses.Any())
+            if (!actionsThatAreNotStatusChange.Contains(status) && state.InterviewCommentedStatuses.Any())
             {
-                timeSpanWithPreviousStatus = timestamp - state.InterviewCommentedStatuses.Last().Timestamp;
+                timeSpanWithPreviousStatus = timestamp - state.InterviewCommentedStatuses.Last(x => !actionsThatAreNotStatusChange.Contains(x.Status)).Timestamp;
             }
             var supervisorName = supervisorId.HasValue ? this.GetResponsibleIdName(supervisorId.Value) : "";
             var interviewerName = interviewerId.HasValue ? this.GetResponsibleIdName(interviewerId.Value) : "";

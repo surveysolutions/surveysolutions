@@ -6,17 +6,20 @@
 @using WB.Core.BoundedContexts.Headquarters.Views
 @using WB.Core.BoundedContexts.Headquarters.Views.Interview
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
-@using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Headquarters.Code
 @using WB.UI.Shared.Web.Extensions
-@model WB.Core.BoundedContexts.Headquarters.Views.DetailsViewModel
+@model DetailsViewModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     var interviewQuestions = Model.FilteredEntities.OfType<InterviewQuestionView>();
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
     ViewBag.Title = Model.InterviewKey;
+
+    bool isApproveAllowed = Model.ApproveReject.SupervisorApproveAllowed || Model.ApproveReject.HqOrAdminApproveAllowed;
+    bool isRejectAllowed = Model.ApproveReject.SupervisorRejectAllowed || Model.ApproveReject.HqOrAdminRejectAllowed;
+    bool isUnapproveAllowed = Model.ApproveReject.HqOrAdminUnapproveAllowed;
+
+    bool isShowInterviewerSelectForRejectBySupervisor = Model.ApproveReject.SupervisorRejectAllowed && !Model.InterviewDetails.IsAssignedToInterviewer;
 }
 @section styles
 {
@@ -120,25 +123,16 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <span><button data-bind="visible: !IsFilterOpen(), click: ToggleFilter" class="btn btn-default  btn-xs"><span class="glyphicon glyphicon-arrow-right"></span> @Pages.InterviewDetails_ShowGroupsLabel</button></span>
-                @{
-                    bool isSupervisorApproveSupport = Model.ApproveReject.SupervisorApproveAllowed;
-                    bool isHeadquarteerOrAdminApproveSupport = Model.ApproveReject.HqOrAdminApproveAllowed;
 
-                    bool isSupervisorRedjectSupport = Model.ApproveReject.SupervisorRejectAllowed;
-                    bool isHeadquarteerOrAdminRedjectSupport = Model.ApproveReject.HqOrAdminRejectAllowed;
-
-                    bool isHeadquarteerOrAdminUnapproveSupport = Model.ApproveReject.HqOrAdminUnapproveAllowed;
-                }
-
-                @if (isSupervisorApproveSupport || isHeadquarteerOrAdminApproveSupport)
+                @if (isApproveAllowed)
                 {
                     <button class="btn btn-success " data-bind="click: showApproveModal">@Pages.ApproveRejectPartialView_ApproveAction</button>
                 }
-                @if (isSupervisorRedjectSupport || isHeadquarteerOrAdminRedjectSupport)
+                @if (isRejectAllowed)
                 {
                     <button class="btn btn-danger" data-bind="click: showRejectModal">@Pages.ApproveRejectPartialView_RejectAction</button>
                 }
-                @if (isHeadquarteerOrAdminUnapproveSupport)
+                @if (isUnapproveAllowed)
                 {
                     <button class="btn" data-bind="click: showUnapproveByHeadquarterModal">@Pages.ApproveRejectPartialView_UnapproveAction</button>
                 }
@@ -205,7 +199,7 @@
 
     @Html.Partial("CommentTemplatePartialView")
     @Html.Partial("HistoryOfStatusesPartialView", Model.History)
-    @Html.Partial("ApproveRejectPartialView", Model.InterviewDetails)
+    @Html.Partial("ApproveRejectPartialView", new { isApproveAllowed, isRejectAllowed, isUnapproveAllowed, isShowInterviewerSelectForRejectBySupervisor })
 
     @helper SetGroupLevelClass(int level)
     {

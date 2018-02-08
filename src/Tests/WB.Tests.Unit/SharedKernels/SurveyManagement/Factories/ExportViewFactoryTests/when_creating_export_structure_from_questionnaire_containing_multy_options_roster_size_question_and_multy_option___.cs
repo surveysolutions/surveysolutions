@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
         private It should_create_header_with_2_column = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[linkedQuestionId]
-                .ColumnNames.Length.ShouldEqual(2);
+                .ColumnHeaders.Count.ShouldEqual(2);
 
         private It should_create_header_with_nullable_level_labels = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();

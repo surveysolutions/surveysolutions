@@ -115,6 +115,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Import users template.
+        /// </summary>
+        internal static string ImportUsersTemplate {
+            get {
+                return ResourceManager.GetString("ImportUsersTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview Chart.
         /// </summary>
         internal static string InterviewChart {

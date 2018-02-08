@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
                 tabularFormatExportServiceMock.Verify(
                     x =>
                         x.ExportInterviewsInTabularFormat(Moq.It.IsAny<QuestionnaireIdentity>(),
-                            Moq.It.IsAny<InterviewStatus?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<IProgress<int>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
+                            Moq.It.IsAny<InterviewStatus?>(), Moq.It.IsAny<string>(), Moq.It.IsAny<IProgress<int>>(), Moq.It.IsAny<CancellationToken>(), Moq.It.IsAny<DateTime?>(), Moq.It.IsAny<DateTime?>()), Times.Once);
 
         private static Mock<ITabularFormatExportService> tabularFormatExportServiceMock = new Mock<ITabularFormatExportService>();
         private static SpssFormatExportHandler spssFormatExportHandler;

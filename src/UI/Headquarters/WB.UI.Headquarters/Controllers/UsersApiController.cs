@@ -1,9 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
@@ -11,8 +14,11 @@ using Resources;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -23,7 +29,11 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -37,6 +47,8 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IExportFactory exportFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewerProfileFactory interviewerProfileFactory;
+        private readonly IUserImportService userImportService;
+        private readonly IMoveUserToAnotherTeamService moveUserToAnotherTeamService;
 
         public UsersApiController(
             ICommandService commandService,
@@ -46,8 +58,10 @@ namespace WB.UI.Headquarters.Controllers
             HqUserManager userManager,
             IInterviewerVersionReader interviewerVersionReader,
             IExportFactory exportFactory, 
-            IFileSystemAccessor fileSystemAccessor, 
-            IInterviewerProfileFactory interviewerProfileFactory)
+            IInterviewerProfileFactory interviewerProfileFactory,
+            IFileSystemAccessor fileSystemAccessor,
+            IUserImportService userImportService, 
+            IMoveUserToAnotherTeamService moveUserToAnotherTeamService)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -57,6 +71,8 @@ namespace WB.UI.Headquarters.Controllers
             this.exportFactory = exportFactory;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewerProfileFactory = interviewerProfileFactory;
+            this.userImportService = userImportService;
+            this.moveUserToAnotherTeamService = moveUserToAnotherTeamService;
         }
 
         [HttpPost]
@@ -98,7 +114,8 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate.FormatDateWithTime(),
+                    CreationDate = x.CreationDate,
+                    SupervisorId = x.SupervisorId,
                     SupervisorName = x.SupervisorName,
                     Email = x.Email,
                     DeviceId = x.DeviceId,
@@ -136,23 +153,14 @@ namespace WB.UI.Headquarters.Controllers
 
             var interviewersReport = this.interviewerProfileFactory.GetInterviewersReport(filteredInterviewerIdsToExport);
 
-            var exportFile = this.exportFactory.CreateExportFile(type);
-
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(interviewersReport.Headers, interviewersReport.Data));
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
-
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(Reports.Interviewers)}{exportFile.FileExtension}"
-            };
-            return result;
+            return this.CreateReportResponse(type, interviewersReport, Reports.Interviewers);
         }
 
         public class InterviewerListItem
         {
             public virtual Guid UserId { get; set; }
             public virtual string UserName { get; set; }
-            public virtual string CreationDate { get; set; }
+            public virtual DateTime CreationDate { get; set; }
             public virtual string SupervisorName { get; set; }
             public virtual string Email { get; set; }
             public virtual string DeviceId { get; set; }
@@ -160,6 +168,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual bool IsArchived { get; set; }
             public virtual string EnumeratorVersion { get; set; }
             public bool IsUpToDate { get; set; }
+            public virtual Guid? SupervisorId { get; set; }
         }
 
         [HttpPost]
@@ -252,12 +261,27 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     UserId = x.UserId,
                     UserName = x.UserName,
-                    CreationDate = x.CreationDate.FormatDateWithTime(),
+                    CreationDate = x.CreationDate,
                     Email = x.Email,
                     IsLocked = x.IsLockedByHQ || x.IsLockedBySupervisor,
                     IsArchived = x.IsArchived
                 })
             };
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        public async Task<MoveInterviewerToAnotherTeamResult> MoveUserToAnotherTeam(MoveUserToAnotherTeamRequest moveRequest)
+        {
+            var userId = this.authorizedUser.Id;
+            var result = await this.moveUserToAnotherTeamService.Move(
+                userId,
+                moveRequest.InterviewerId,
+                moveRequest.NewSupervisorId, 
+                moveRequest.OldSupervisorId, 
+                moveRequest.Mode);
+
+            return result;
         }
 
         [HttpPost]
@@ -278,12 +302,119 @@ namespace WB.UI.Headquarters.Controllers
                     }).ToList()
             };
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [Localizable(false)]
+        public HttpResponseMessage ImportUsersTemplate() => this.CreateReportResponse(ExportFileType.Tab, new ReportView
+        {
+            Headers = this.userImportService.GetUserProperties(),
+            Data = new object[][] { }
+        }, Reports.ImportUsersTemplate);
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        [ApiNoCache]
+        public IHttpActionResult ImportUsers(ImportUsersRequest request)
+        {
+            if (request?.File?.FileBytes == null)
+                this.BadRequest(BatchUpload.Prerequisite_FileOpen);
+
+            var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
+
+            if (!new[] {TextExportFile.Extension, TabExportFile.Extention}.Contains(fileExtension))
+                this.BadRequest(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, TabExportFile.Extention, TextExportFile.Extension));
+
+            try
+            {
+                return this.Ok(this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
+                    .Take(8).Select(ToImportError).ToArray());
+            }
+            catch (UserPreloadingException e)
+            {
+                return this.BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        public void CancelToImportUsers() => this.userImportService.RemoveAllUsersToImport();
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        [ApiNoCache]
+        public UsersImportStatus ImportStatus() => this.userImportService.GetImportStatus();
+
+        [HttpGet]
+        [Authorize(Roles = "Administrator, Headquarter")]
+        [CamelCase]
+        [ApiNoCache]
+        public UsersImportCompleteStatus ImportCompleteStatus() => this.userImportService.GetImportCompleteStatus();
+
+        private ImportUserError ToImportError(UserImportVerificationError error) => new ImportUserError
+        {
+            Line = error.RowNumber.ToString(@"D2"),
+            Column = error.ColumnName.ToLower(),
+            Message = ToImportErrorMessage(error.Code),
+            Description = ToImportErrorDescription(error.Code, error.CellValue),
+            Recomendation = ToImportErrorRecomendation(error.Code)
+        };
+
+        private string ToImportErrorRecomendation(string errorCode)
+            => UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Recomendation");
+
+        private string ToImportErrorDescription(string errorCode, string errorCellValue)
+            => string.Format(UserPreloadingVerificationMessages.ResourceManager.GetString($"{errorCode}Description"), errorCellValue);
+
+        private string ToImportErrorMessage(string errorCode)
+            => UserPreloadingVerificationMessages.ResourceManager.GetString(errorCode);
+
+
+        public class ImportUserError
+        {
+            public string Line { get; set; }
+            public string Column { get; set; }
+            public string Message { get; set; }
+            public string Description { get; set; }
+            public string Recomendation { get; set; }
+        }
+
+        private HttpResponseMessage CreateReportResponse(ExportFileType type, ReportView report, string reportName)
+        {
+            var exportFile = this.exportFactory.CreateExportFile(type);
+
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
+
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileNameStar = $@"{this.fileSystemAccessor.MakeValidFileName(reportName)}{exportFile.FileExtension}"
+            };
+
+            return result;
+        }
+    }
+
+    public class ImportUsersRequest
+    {
+        public HttpFile File { get; set; }
     }
 
     public class ArchiveUsersRequest
     {
         public Guid[] UserIds { get; set; }
         public bool Archive { get; set; }
+    }
+
+    public class MoveUserToAnotherTeamRequest
+    {
+        public Guid InterviewerId { get; set; }
+        public Guid OldSupervisorId { get; set; }
+        public Guid NewSupervisorId { get; set; }
+        public MoveUserToAnotherTeamMode Mode { get; set; }
     }
 
     public class DeleteSupervisorCommandRequest

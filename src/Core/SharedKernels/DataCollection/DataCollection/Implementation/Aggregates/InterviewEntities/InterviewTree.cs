@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 => $"{message}{Environment.NewLine}{string.Join(Environment.NewLine, nodes)}";
         }
 
-        private IQuestionnaire questionnaire;
+        public IQuestionnaire Questionnaire { get; private set; }
         private readonly ISubstitutionTextFactory textFactory;
 
         private Dictionary<Identity, IInterviewTreeNode> nodesCache = new Dictionary<Identity, IInterviewTreeNode>();
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public InterviewTree(Guid interviewId, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory)
         {
             this.InterviewId = interviewId.FormatGuid();
-            this.questionnaire = questionnaire;
+            this.Questionnaire = questionnaire;
             this.textFactory = textFactory;
         }
 
@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             WarmUpCache();
         }
 
-        public void SwitchQuestionnaire(IQuestionnaire questionnaire) => this.questionnaire = questionnaire;
+        public void SwitchQuestionnaire(IQuestionnaire questionnaire) => this.Questionnaire = questionnaire;
 
         public string InterviewId { get; }
         public IReadOnlyCollection<InterviewTreeSection> Sections { get; private set; }
@@ -271,7 +271,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeQuestion CreateQuestion(Identity questionIdentity)
         {
-            return CreateQuestion(this, this.questionnaire, this.textFactory, questionIdentity);
+            return CreateQuestion(this, this.Questionnaire, this.textFactory, questionIdentity);
         }
 
         public static InterviewTreeQuestion CreateQuestion(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity questionIdentity)
@@ -356,7 +356,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeSubSection CreateSubSection(Identity subSectionIdentity)
         {
-            return CreateSubSection(this, this.questionnaire, textFactory, subSectionIdentity);
+            return CreateSubSection(this, this.Questionnaire, textFactory, subSectionIdentity);
         }
 
         public static InterviewTreeSubSection CreateSubSection(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity subSectionIdentity)
@@ -375,7 +375,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeStaticText CreateStaticText(Identity staticTextIdentity)
         {
-            return CreateStaticText(this, this.questionnaire, textFactory, staticTextIdentity);
+            return CreateStaticText(this, this.Questionnaire, textFactory, staticTextIdentity);
         }
 
         public static InterviewTreeStaticText CreateStaticText(InterviewTree tree, IQuestionnaire questionnaire, ISubstitutionTextFactory textFactory, Identity staticTextIdentity)
@@ -389,30 +389,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public RosterManager GetRosterManager(Guid rosterId)
         {
-            if (questionnaire.IsFixedRoster(rosterId))
+            if (Questionnaire.IsFixedRoster(rosterId))
             {
-                return new FixedRosterManager(this, this.questionnaire, rosterId, this.textFactory);
+                return new FixedRosterManager(this, this.Questionnaire, rosterId, this.textFactory);
             }
 
-            Guid sourceQuestionId = questionnaire.GetRosterSizeQuestion(rosterId);
-            var questionaType = questionnaire.GetQuestionType(sourceQuestionId);
+            Guid sourceQuestionId = Questionnaire.GetRosterSizeQuestion(rosterId);
+            var questionaType = Questionnaire.GetQuestionType(sourceQuestionId);
             if (questionaType == QuestionType.MultyOption)
             {
-                if (this.questionnaire.IsQuestionYesNo(sourceQuestionId))
+                if (this.Questionnaire.IsQuestionYesNo(sourceQuestionId))
                 {
-                    return new YesNoRosterManager(this, this.questionnaire, rosterId, this.textFactory);
+                    return new YesNoRosterManager(this, this.Questionnaire, rosterId, this.textFactory);
                 }
-                return new MultiRosterManager(this, this.questionnaire, rosterId, this.textFactory);
+                return new MultiRosterManager(this, this.Questionnaire, rosterId, this.textFactory);
             }
 
             if (questionaType == QuestionType.Numeric)
             {
-                return new NumericRosterManager(this, this.questionnaire, rosterId, this.textFactory);
+                return new NumericRosterManager(this, this.Questionnaire, rosterId, this.textFactory);
             }
 
             if (questionaType == QuestionType.TextList)
             {
-                return new ListRosterManager(this, this.questionnaire, rosterId, this.textFactory);
+                return new ListRosterManager(this, this.Questionnaire, rosterId, this.textFactory);
             }
 
             throw new ArgumentException("Unknown roster type");
@@ -526,7 +526,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
         {
-            return this.questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+            return this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+        }
+        
+        public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
+        {
+            return this.Questionnaire.GetOptionsForQuestion(questionId, parentQuestionValue, filter);
         }
 
         public IEnumerable<IInterviewTreeNode> GetAllNodesInEnumeratorOrder() =>

@@ -1,10 +1,14 @@
+@using System.Diagnostics
+@using AngleSharp.Dom.Events
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
+@using WB.Core.BoundedContexts.Designer.Implementation.Services
+
 @model WB.UI.Designer.Models.QuestionnaireViewModel
 
 @{
     ViewBag.Title = QuestionnaireController.CreateNew;
-}    
+}
 
 <div id="edit-form">
     @if (TempData.ContainsKey(Alerts.SUCCESS))
@@ -13,7 +17,6 @@
     }
     @using (Html.BeginForm())
     {
-
         @Html.AntiForgeryToken()
         <h1>@QuestionnaireController.CreateNewQuestionnaire</h1>
         if (TempData.ContainsKey(Alerts.ERROR))
@@ -24,12 +27,6 @@
             @Html.TextBoxFor(x => x.Title, new { @class = "form-control", placeholder = QuestionnaireController.QuestionnaireTitle })
             @Html.ValidationMessageFor(x => x.Title, null, new { @class = "help-inline" })
         </div>
-        @*<div class="form-group">
-            @Html.CheckBoxFor(x => x.IsPublic, new { @id = "is-public-questionnaire", @class = "wb-checkbox" })
-            <label for="is-public-questionnaire">
-                <span></span>Is Public
-            </label><br />
-        </div>*@
 
         <div class="form-actions">
             <input type="submit" class="btn btn-success btn-lg" value="@QuestionnaireController.Create" id="inputSubmitQuestionnaire" />
@@ -39,6 +36,7 @@
 </div>
 
 @section Scripts {
+    @Styles.Render("~/editform-css")
     @Scripts.Render("~/editform")
     <script>
         $(function () {

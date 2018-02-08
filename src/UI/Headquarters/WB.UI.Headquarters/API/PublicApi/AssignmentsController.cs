@@ -72,10 +72,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("{id:int}")]
         public AssignmentDetails Details(int id)
         {
-            var assignment = assignmentsStorage.GetById(id)
+            Assignment assignment = assignmentsStorage.GetById(id)
                 ?? throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            return this.mapper.Map<AssignmentDetails>(assignment);
+            return this.mapper.Map<FullAssignmentDetails>(assignment);
         }
 
         /// <summary>

@@ -2,15 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Android.OS;
+using Android.Support.Design.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Humanizer;
+using Humanizer.Localisation;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
+using MvvmCross.Plugins.Messenger;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
-    public abstract class SingleInterviewActivity<TViewModel> : AuthorizedUserActivity<TViewModel> where TViewModel : SingleInterviewViewModel
+    public abstract class SingleInterviewActivity<TViewModel> : BaseActivity<TViewModel> where TViewModel : SingleInterviewViewModel
     {
+        private IMvxMessenger Messenger => ServiceLocator.Current.GetInstance<IMvxMessenger>();
+        private bool showAnswerAcceptedToast = true;
+        private MvxSubscriptionToken answerAcceptedSubsribtion;
+
         #region Subclasses
 
         public class MenuItemDescription
@@ -58,6 +70,44 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             this.toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(this.toolbar);
+
+            SetupAnswerTimeMeasurement();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (this.answerAcceptedSubsribtion != null)
+            {
+                Messenger.Unsubscribe<AnswerAcceptedMessage>(this.answerAcceptedSubsribtion);
+                this.answerAcceptedSubsribtion.Dispose();
+                this.answerAcceptedSubsribtion = null;
+
+            }
+        }
+
+        private void SetupAnswerTimeMeasurement()
+        {
+            var settings = Mvx.Resolve<IEnumeratorSettings>();
+
+            if (settings.ShowAnswerTime && answerAcceptedSubsribtion == null)
+            {
+                answerAcceptedSubsribtion = Messenger.Subscribe<AnswerAcceptedMessage>(msg =>
+                {
+                    if (showAnswerAcceptedToast)
+                    {
+                        var message = string.Format(UIResources.AnswerRecordedMsg,
+                            msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));
+
+                        var rootLayout = this.FindViewById(Resource.Id.rootLayout);
+                        Snackbar.Make(rootLayout,
+                                message,
+                                Snackbar.LengthIndefinite)
+                            .SetAction(UIResources.AnswerRecordedMsgDismiss, view => { })
+                            .Show();
+                    }
+                });
+            }
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

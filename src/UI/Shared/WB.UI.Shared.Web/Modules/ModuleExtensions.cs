@@ -10,5 +10,11 @@ namespace WB.UI.Shared.Web.Modules
         {
             return new NinjectModuleAdapter<TModule>(module);
         }
+
+        public static NinjectModule AsWebNinject<TModule>(this TModule module)
+            where TModule : IWebModule
+        {
+            return new NinjectWebModuleAdapter<TModule>(module);
+        }
     }
 }

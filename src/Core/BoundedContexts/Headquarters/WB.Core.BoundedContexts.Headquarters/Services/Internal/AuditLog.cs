@@ -1,4 +1,5 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using System;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -42,6 +43,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
         public void ExportEncriptionChanged(bool enabled)
         {
             this.Append("Export encription","changed", $"{(enabled ? "enabled" : "disabled")}'");
+        }
+
+        public void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName)
+        {
+            this.Append($"User {interviewerName}", "moved", $"From team {previousSupervisorName}' to {newSupervisorName}");
         }
 
         private void Append(string target, string action, string args = null)

@@ -1,11 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Security.Permissions;
 
 namespace WB.Core.SharedKernels.DataCollection.Exceptions
 {
+    [Serializable]
     public class InterviewException : Exception
     {
-        public readonly InterviewDomainExceptionType ExceptionType;
+        public InterviewDomainExceptionType ExceptionType { get; set; }
 
         public InterviewException(string message, InterviewDomainExceptionType? exceptionType = null)
             : base(message)
@@ -17,6 +19,18 @@ namespace WB.Core.SharedKernels.DataCollection.Exceptions
             : base(message, innerException)
         {
             this.ExceptionType = exceptionType ?? InterviewDomainExceptionType.Undefined;
+        }
+
+        protected InterviewException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+            ExceptionType = (InterviewDomainExceptionType)info.GetInt32(nameof(ExceptionType));
+        }
+
+        [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(ExceptionType), (int)this.ExceptionType);
+            base.GetObjectData(info, context);
         }
     }
 }

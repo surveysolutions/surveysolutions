@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
 

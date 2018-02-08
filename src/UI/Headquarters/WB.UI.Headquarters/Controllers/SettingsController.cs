@@ -14,6 +14,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.CompanyLogo;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
 {

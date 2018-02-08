@@ -9,6 +9,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -182,8 +183,11 @@ namespace WB.Tests.Abc
         {
             questionnaireDocument.IsUsingExpressionStorage = true;
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
-            var questionnaireDocumentExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
-            questionnaireDocument.ExpressionsPlayOrder = questionnaireDocumentExpressionsPlayOrder;
+
+            var expressionsPlayOrderProvider = Create.Service.ExpressionsPlayOrderProvider();
+            questionnaireDocument.ExpressionsPlayOrder = expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument); 
+            questionnaireDocument.DependencyGraph = expressionsPlayOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument); 
+            questionnaireDocument.ValidationDependencyGraph = expressionsPlayOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument); 
 
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -214,9 +218,9 @@ namespace WB.Tests.Abc
             return zipUtilsMock.Object;
         }
 
-        public static IPrincipal InterviewerPrincipal(string name, string pass)
+        public static IInterviewerPrincipal InterviewerPrincipal(string name, string pass)
         {
-            return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == new InterviewerIdentity() { Name = "name", Password = "pass" });
+            return Mock.Of<IInterviewerPrincipal>(p => p.CurrentUserIdentity == new InterviewerIdentity() { Name = "name", Password = "pass" });
         }
 
         public static IPlainStorageAccessor<TEntity> PlainStorageAccessorWithOneEntity<TEntity>(object id, TEntity entity)

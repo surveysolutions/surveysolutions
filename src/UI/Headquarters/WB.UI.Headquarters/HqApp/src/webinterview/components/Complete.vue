@@ -55,13 +55,15 @@
                 <a href="javascript:void(0);" class="btn btn-lg" v-bind:class="{
                     'btn-success': isAllAnswered,
                     'btn-primary' : hasUnansweredQuestions,
-                    'btn-danger' : hasInvalidQuestions }" @click="completeInterview">{{ $t("WebInterviewUI.Complete")}}</a>
+                    'btn-danger' : hasInvalidQuestions }" @click="completeInterview">{{ competeButtonTitle }}</a>
             </div>
         </div>
     </div>
 </template>
 
 <script lang="js">
+    import modal from "./modal";
+
     export default {
         name: 'complete-view',
         beforeMount() {
@@ -70,11 +72,22 @@
         watch: {
             $route(to, from) {
                 this.fetchCompleteInfo()
+            },
+            shouldCloseWindow(to){
+                if(to === true) {
+                    this.completeInterview();
+                }
             }
         },
         computed: {
             completeInfo() {
                 return this.$store.state.webinterview.completeInfo;
+            },
+            shouldCloseWindow() {
+                return this.$store.state.webinterview.interviewCompleted && this.$config.inWebTesterMode
+            },
+            competeButtonTitle() {
+                return this.$t("WebInterviewUI.Complete")
             },
             hasCompleteInfo() {
                 return this.completeInfo != undefined
@@ -113,9 +126,24 @@
             fetchCompleteInfo() {
                 this.$store.dispatch("fetchCompleteInfo")
             },
+
             completeInterview() {
+                if(this.shouldCloseWindow) {
+                     modal.dialog({
+                        title: '<p style="text-align: center">' + this.$t("WebInterviewUI.WebTesterSessionOver") + "</p>",
+                        message: `<p style="text-align: center">${this.$t("WebInterviewUI.WebTesterSessionOverMessage")}</p>`,
+                        callback: () => {},
+                        onEscape: false,
+                        closeButton: false,
+                        buttons: {}
+                    });
+
+                    return
+                }
+
                 this.$store.dispatch('completeInterview', { comment: this.comment });
             },
+
             navigateTo(entityWithError) {
                 if(entityWithError.isPrefilled){
                     this.$router.push({ name: "prefilled" })

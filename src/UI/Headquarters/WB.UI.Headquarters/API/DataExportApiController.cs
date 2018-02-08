@@ -6,10 +6,12 @@ using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -20,7 +22,7 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportApiController : ApiController
     {
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        private readonly IFilebasedExportedDataAccessor exportedFilesAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly IDataExportStatusReader dataExportStatusReader;
@@ -28,56 +30,60 @@ namespace WB.UI.Headquarters.API
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
 
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IDdiMetadataAccessor ddiMetadataAccessor)
+            IDdiMetadataAccessor ddiMetadataAccessor,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.exportedFilesAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage Paradata(Guid id, long version)
-            => CreateHttpResponseMessageWithFileContent(
-                this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                    new QuestionnaireIdentity(id, version), DataExportFormat.Paradata));
+        public HttpResponseMessage Paradata(Guid id, long version, DateTime? from = null, DateTime? to = null)
+            => CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
+                    new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, from?.ToUniversalTime(), to?.ToUniversalTime()));
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null)
-        {
-            return
-                CreateHttpResponseMessageWithFileContent(
-                    this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                        new QuestionnaireIdentity(id, version), format, status));
-        }
+        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+            => CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
+                    new QuestionnaireIdentity(id, version), format, status, from?.ToUniversalTime(), to?.ToUniversalTime()));
 
         [HttpGet]
         [ObserverNotAllowedApi]
         public HttpResponseMessage DDIMetadata(Guid id, long version)
-        {
-            return
-                CreateHttpResponseMessageWithFileContent(
-                    this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id,
-                        version)));
-        }
+            => CreateFile(this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id, version)));
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage RequestUpdate(Guid questionnaireId, long questionnaireVersion,
-            DataExportFormat format,
-            InterviewStatus? status)
+        public HttpResponseMessage RequestUpdate(Guid id, long version,
+            DataExportFormat format, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
         {
+            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaireBrowseItem == null)
+                throw new HttpException(404, @"Questionnaire not found");
+
             try
             {
-                this.dataExportProcessesService.AddDataExport(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), format, status);
+                this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
+                {
+                    FromDate = from?.ToUniversalTime(),
+                    ToDate = to?.ToUniversalTime(),
+                    InterviewStatus = status
+                });
             }
             catch (Exception e)
             {
@@ -103,15 +109,12 @@ namespace WB.UI.Headquarters.API
             return Request.CreateResponse(true);
         }
 
-        public DataExportStatusView ExportedDataReferencesForQuestionnaire(Guid questionnaireId,
-            long questionnaireVersion,
-            InterviewStatus? status)
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            return this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity, status);
-        }
+        [HttpPost]
+        [ObserverNotAllowedApi]
+        public DataExportStatusView GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
+            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(new QuestionnaireIdentity(id, version), status, from?.ToUniversalTime(), to?.ToUniversalTime());
 
-        private HttpResponseMessage CreateHttpResponseMessageWithFileContent(string filePath)
+        private HttpResponseMessage CreateFile(string filePath)
         {
             if (!fileSystemAccessor.IsFileExists(filePath))
                 throw new HttpException(404, @"file is absent");

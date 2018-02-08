@@ -4,11 +4,14 @@ using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
+using Java.Interop;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.UI.Shared.Enumerator.Activities
@@ -26,7 +29,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.rootLayout);
             this.drawerToggle = new ActionBarDrawerToggle(this, this.drawerLayout, this.toolbar, 0, 0);
             this.drawerLayout.AddDrawerListener(this.drawerToggle);
             this.drawerLayout.DrawerOpened += (sender, args) =>
@@ -105,7 +108,21 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnStop();
 
+            var messenger = Mvx.Resolve<IMvxMessenger>();
+            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
+            messenger.Unsubscribe<InterviewCompletedMessage>(interviewCompleteActivityToken);
             Mvx.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
+        }
+
+        protected void Navigate(string navigateTo)
+        {
+            var parts = navigateTo.Split('|');
+            this.ViewModel.navigationState.NavigateTo(new NavigationIdentity
+            {
+                TargetScreen = ScreenType.Group,
+                TargetGroup = Identity.Parse(parts[0]),
+                AnchoredElementIdentity = parts.Length > 1 ? Identity.Parse(parts[1]) : null
+            });
         }
     }
 }

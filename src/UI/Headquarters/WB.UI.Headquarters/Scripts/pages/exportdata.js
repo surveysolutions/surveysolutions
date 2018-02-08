@@ -13,7 +13,28 @@
     self.exportFromats = $exportFromats;
 
     self.selectedTemplate = ko.observable();
-    self.selectedStatus = ko.observable({status : 'null'});
+    self.selectedStatus = ko.observable({ status: 'null' });
+    
+    self.fromDateSelected = ko.observable();
+    self.toDateSelected = ko.observable();
+
+    self.fromDateSelected.subscribe(function(newValue) {
+        if (newValue == null) return;
+
+        const picker = $("#to-date").data('datetimepickr_inst');
+        picker.config.minDate = newValue;
+
+        self.updateDataExportInfo(false);
+    });
+
+    self.toDateSelected.subscribe(function(newValue) {
+        if (newValue == null) return;
+
+        const picker = $("#from-date").data('datetimepickr_inst');
+        picker.config.maxDate = newValue;
+
+        self.updateDataExportInfo(false);
+    });
 
     self.selectedTemplateId = ko.computed(function () {
         return self.selectedTemplate() && self.selectedTemplate().id;
@@ -30,6 +51,24 @@
     self.selectedStatus.subscribe(function() {
         self.updateDataExportInfo(false);
     });
+    
+    self.getRequestQuery = function (format) {
+        const request = {
+            id: self.selectedTemplateId(),
+            version: self.selectedTemplate().version,
+            status: self.selectedStatus().status
+        };
+        if (format)
+            request["format"] = format;
+
+        if (self.fromDateSelected() != undefined)
+            request["from"] = self.fromDateSelected().toJSON();
+
+        if (self.toDateSelected() != undefined)
+            request["to"] = moment(self.toDateSelected()).add(1, 'days').utc().toISOString();
+
+        return $.param(request);
+    };
 
     self.updateDataExportInfo = function (runRecursively) {
         if (self.selectedTemplate() == null) {
@@ -38,11 +77,8 @@
             }, 3000);
             return;
         }
-        var questionnaireId = self.selectedTemplateId();
-        var questionnaireVersion = self.selectedTemplate().version;
-        var status = self.selectedStatus().status;
 
-        self.sendWebRequest(self.Url + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&status=" + status, {}, function (data) {
+        self.sendWebRequest(self.Url + "?" + self.getRequestQuery(), {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
             if (runRecursively===true) {
                 _.delay(function () {
@@ -73,14 +109,10 @@
     }
 
     self.requestDataUpdate = function(format) {
-        var questionnaireId = self.selectedTemplateId();
-        var questionnaireVersion = self.selectedTemplate().version;
-        var status = self.selectedStatus().status;
-
         return function() {
-            self.sendWebRequest(self.UpdateDataUrl + "?questionnaireId=" + questionnaireId + "&questionnaireVersion=" + questionnaireVersion + "&format=" + format + "&status=" + status,
+            self.sendWebRequest(self.UpdateDataUrl + "?" + self.getRequestQuery(format),
                 [],
-                function (data) {
+                function(data) {
                     self.updateDataExportInfo();
                 });
         }

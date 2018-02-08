@@ -223,16 +223,4 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
-  <data name="AssignmentsSelected_1" xml:space="preserve">
-    <value>{{count}} Задания выбрано </value>
-  </data>
-  <data name="AssignmentsSelected_2" xml:space="preserve">
-    <value>{{count}} Заданий выбрано </value>
-  </data>
-  <data name="NumberOfAssignmentsAffected_1" xml:space="preserve">
-    <value>{{count}} Задания будет изменено</value>
-  </data>
-  <data name="NumberOfAssignmentsAffected_2" xml:space="preserve">
-    <value>{{count}} Заданий будет изменено</value>
-  </data>
 </root>

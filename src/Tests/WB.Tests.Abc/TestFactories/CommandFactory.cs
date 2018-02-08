@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ASP;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.Infrastructure.EventBus;
@@ -48,11 +49,11 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedRosterVectors: answer);
 
-        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, int[] answer = null)
+        public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, int[] answer = null, Guid? questionId = null)
             => new AnswerMultipleOptionsQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 selectedValues: answer);
@@ -103,11 +104,11 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 selectedRosterVector: answer);
 
-        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, int answer = 0)
+        public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, int answer = 0, Guid? questionId = null)
             => new AnswerSingleOptionQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 selectedValue: answer);
@@ -121,11 +122,14 @@ namespace WB.Tests.Abc.TestFactories
                 answerTime: DateTime.UtcNow,
                 answers: answer);
 
-        public AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, Guid userId, string answer = "")
+        public AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, 
+            Guid userId, 
+            Guid? questionId = null,
+            string answer = "")
             => new AnswerTextQuestionCommand(
                 interviewId: interviewId,
                 userId: userId,
-                questionId: Guid.NewGuid(),
+                questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
                 answerTime: DateTime.UtcNow,
                 answer: answer);
@@ -191,8 +195,8 @@ namespace WB.Tests.Abc.TestFactories
             IEvent[] synchronizedEvents = null,
             InterviewStatus interviewStatus = InterviewStatus.Completed,
             bool createdOnClient = true,
-            InterviewKey interviewKey = null
-            )
+            InterviewKey interviewKey = null,
+            Guid? newSupervisorId = null)
         {
             return new SynchronizeInterviewEventsCommand(interviewId ?? Guid.NewGuid(), 
                 userId ?? Guid.NewGuid(), 
@@ -201,7 +205,8 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizedEvents ?? new IEvent[0], 
                 interviewStatus, 
                 createdOnClient,
-                interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()));
+                interviewKey ?? new InterviewKey(Guid.NewGuid().GetHashCode()),
+                newSupervisorId);
         }
 
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
@@ -214,9 +219,9 @@ namespace WB.Tests.Abc.TestFactories
             return new DisableQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
         }
 
-        public SwitchTranslation SwitchTranslation(string language = null)
+        public SwitchTranslation SwitchTranslation(string language = null, Guid? interviewId = null)
         {
-            return new SwitchTranslation(Guid.Empty, language, Guid.NewGuid());
+            return new SwitchTranslation(interviewId ?? Guid.Empty, language, Guid.NewGuid());
         }
 
 
@@ -314,6 +319,16 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerId,
                 supervisorId ?? Guid.NewGuid(),
                 assignTime ?? DateTime.UtcNow);
+        }
+
+        public ResumeInterviewCommand ResumeInterview(Guid interviewId, DateTime utcDate)
+        {
+            return new ResumeInterviewCommand(interviewId, Guid.NewGuid(), DateTime.Now, utcDate);
+        }
+
+        public PauseInterviewCommand PauseInterview(Guid interviewId, DateTime utcDate)
+        {
+            return new PauseInterviewCommand(interviewId, Guid.NewGuid(), DateTime.Now, utcDate);
         }
     }
 }

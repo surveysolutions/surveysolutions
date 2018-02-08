@@ -5,7 +5,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     [Subject(typeof(SurveysAndStatusesReport))]
     internal class SurveysAndStatusesReportTestsContext

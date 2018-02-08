@@ -39,6 +39,10 @@ installApi(Vue, {
 
 box.init(i18n, browserLanguage)
 
+window._api = {
+    store, router
+}
+
 export default new Vue({
     el: "#app",
     render: h => h(App),

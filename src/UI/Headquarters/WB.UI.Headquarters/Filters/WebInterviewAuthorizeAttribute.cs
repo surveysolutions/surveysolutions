@@ -1,10 +1,9 @@
-﻿using System;
-using System.Web;
+﻿using System.Web;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Enumerator.Native.WebInterview;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview;
-using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -17,9 +16,14 @@ namespace WB.UI.Headquarters.Filters
 
         private IWebInterviewAllowService webInterviewAllowService => ServiceLocator.Current.GetInstance<IWebInterviewAllowService>();
 
+        public string InterviewIdQueryString { get; set; }
+
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
-            var interviewId = httpContext.Request.RequestContext.RouteData.Values["id"].ToString();
+            var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString) 
+                ? httpContext.Request.RequestContext.RouteData.Values["id"].ToString() 
+                : httpContext.Request.QueryString[InterviewIdQueryString];
+
             try
             {
                 webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
@@ -33,7 +37,10 @@ namespace WB.UI.Headquarters.Filters
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            var interviewId = filterContext.RequestContext.RouteData.Values["id"].ToString();
+            var interviewId = string.IsNullOrWhiteSpace(InterviewIdQueryString)
+                ? filterContext.HttpContext.Request.RequestContext.RouteData.Values["id"].ToString()
+                : filterContext.HttpContext.Request.QueryString[InterviewIdQueryString];
+
             try
             {
                 webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);

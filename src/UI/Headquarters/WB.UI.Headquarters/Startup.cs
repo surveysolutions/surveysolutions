@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,12 +26,15 @@ using NLog;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;
+using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
@@ -57,6 +61,8 @@ namespace WB.UI.Headquarters
 
         public void Configuration(IAppBuilder app)
         {
+            EnsureJsonStorageForErrorsExists();
+
             app.Use(RemoveServerNameFromHeaders);
 
             var kernel = ConfigureNinject(app);
@@ -66,9 +72,9 @@ namespace WB.UI.Headquarters
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
-            ConfigureWebApi(app, kernel);
+            ConfigureWebApi(app);
 
-            Settings.Current.GetCustomData += (exception, dictionary) =>
+            Exceptional.Settings.GetCustomData += (exception, dictionary) =>
             {
                 void AddAllSqlData(Exception e)
                 {
@@ -90,7 +96,7 @@ namespace WB.UI.Headquarters
                 //AddAllSqlData(exception);
             };
 
-            Settings.Current.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
+            Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
                 void AddAllSqlData(Exception e)
                 {
@@ -143,7 +149,7 @@ namespace WB.UI.Headquarters
             return kernel;
         }
 
-        private void ConfigureWebApi(IAppBuilder app, IKernel kernel)
+        private void ConfigureWebApi(IAppBuilder app)
         {
             var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
@@ -153,7 +159,7 @@ namespace WB.UI.Headquarters
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            API.WebInterview.Bootstrap.Configure(app, kernel);
+            WebInterviewModule.Configure(app, HqWebInterviewModule.HubPipelineModules);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
             app.UseNinjectWebApi(config);
@@ -310,6 +316,20 @@ namespace WB.UI.Headquarters
 
         public static void RegisterWebApiFilters(HttpFilterCollection filters)
         {
+        }
+
+        private void EnsureJsonStorageForErrorsExists()
+        {
+            if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
+            {
+                var jsonStorePath = exceptionalConfig.Settings.Path;
+                var jsonStorePathAbsolute = HostingEnvironment.MapPath(jsonStorePath);
+
+                if (!Directory.Exists(jsonStorePathAbsolute))
+                {
+                    Directory.CreateDirectory(jsonStorePathAbsolute);
+                }
+            }
         }
     }
 }

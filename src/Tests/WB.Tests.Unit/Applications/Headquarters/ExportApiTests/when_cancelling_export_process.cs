@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
@@ -8,24 +8,23 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_cancelling_export_process : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateExportController(dataExportProcessesService: mockOfDataExportProcessesService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.CancelProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
+        private void BecauseOf() => result = controller.CancelProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
-        It should_return_http_ok_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_ok_response () =>
             result.ShouldBeOfExactType<OkResult>();
 
-        It should_call_add_export_method_in_data_export_processes_service = () =>
-            mockOfDataExportProcessesService.Verify(x=>x.DeleteProcess(questionnaireIdentity, DataExportFormat.Tabular), Times.Once);
+        [NUnit.Framework.Test] public void should_call_add_export_method_in_data_export_processes_service () =>
+            mockOfDataExportProcessesService.Verify(x=>x.DeleteDataExport(Moq.It.IsAny<string>()), Times.Once);
 
         private static ExportController controller;
 

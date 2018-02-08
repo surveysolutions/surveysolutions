@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -51,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token);
         
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
-        Task GetMapContentAndSave(string url, Stream streamToSave, CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
+        Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken);
+        Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
     }
 }

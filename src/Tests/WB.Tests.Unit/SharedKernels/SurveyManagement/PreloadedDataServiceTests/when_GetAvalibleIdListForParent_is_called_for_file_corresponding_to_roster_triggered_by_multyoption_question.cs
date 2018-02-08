@@ -8,6 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         CreatePreloadedDataByFile(
                             new string[] { ServiceColumns.InterviewId, rosterSizeQuestionVariableName + "_0", rosterSizeQuestionVariableName + "_1" },
                             new string[][] { new string[] { "1", "3", "" } },
-                            questionnaireDocument.Title),new ValueVector<Guid> { rosterSizeQuestionId}, new []{"1"}, new PreloadedDataByFile[0]);
+                            questionnaireDocument.Title),new ValueVector<Guid> { rosterSizeQuestionId}, new []{"1"}, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]));
 
         private It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

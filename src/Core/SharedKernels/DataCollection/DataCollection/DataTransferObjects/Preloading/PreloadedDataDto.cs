@@ -10,6 +10,15 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading
         {
             this.Data = data;
         }
+
+        public PreloadedDataDto(List<InterviewAnswer> answers)
+        {
+            this.Data = answers
+                .GroupBy(x => x.Identity.RosterVector)
+                .Select(x => new PreloadedLevelDto(x.Key, x.ToDictionary(a => a.Identity.Id, a => a.Answer)))
+                .ToArray();
+        }
+
         public PreloadedLevelDto[] Data { get; private set; }
 
         public List<InterviewAnswer> Answers => Data.SelectMany(x => x.Answers.Select(a => new InterviewAnswer

@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-            this.isRosterSizeQuestion = questionnaire.ShouldQuestionSpecifyRosterSize(this.questionIdentity.Id);
+            this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(this.questionIdentity.Id);
             this.maxAnswerCount = questionnaire.GetMaxSelectedAnswerOptions(this.questionIdentity.Id);
 
             var textListQuestion = interview.GetTextListQuestion(entityIdentity);

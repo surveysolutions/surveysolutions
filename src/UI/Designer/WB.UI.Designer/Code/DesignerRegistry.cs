@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using Ninject.Modules;
-using Ninject.Web.Mvc.FilterBindingSyntax;
-using Ninject.Web.WebApi.FilterBindingSyntax;
+﻿using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -17,10 +13,11 @@ using WB.UI.Designer.Mailers;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Designer.Code
 {
-    public class DesignerRegistry : NinjectModule
+    public class DesignerRegistry : IWebModule
     {
         private readonly PdfSettings pdfSettings;
         private readonly DeskSettings deskSettings;
@@ -45,29 +42,27 @@ namespace WB.UI.Designer.Code
             this.historySettings = new QuestionnaireHistorySettings(questionnaireChangeHistoryLimit);
         }
 
-        public override void Load()
+        public void Load(IWebIocRegistry registry)
         {
-            this.BindFilter<PlainTransactionFilter>(FilterScope.First, 0)
-                .WhenActionMethodHasNo<NoTransactionAttribute>();
-            this.BindHttpFilter<PlainApiTransactionFilter>(System.Web.Http.Filters.FilterScope.Global)
-                .When((controllerContext, actionDescriptor) => !actionDescriptor.GetCustomAttributes(typeof(NoTransactionAttribute)).Any());
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
+            registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global);
 
-            this.Bind<ICommandInflater>().To<CommandInflater>();
-            this.Bind<IQuestionnaireHelper>().To<QuestionnaireHelper>();
-            this.Bind<IVerificationErrorsMapper>().To<VerificationErrorsMapper>();
-            this.Bind<ISystemMailer>().To<SystemMailer>();
-            this.Bind<IDynamicCompiler>().To<RoslynCompiler>();
-            this.Bind<IExpressionReplacer>().To<ExpressionReplacer>();
-            this.Bind<IMacrosSubstitutionService>().To<MacrosSubstitutionService>();
-            this.Bind<IExpressionProcessorGenerator>().To<QuestionnaireExpressionProcessorGenerator>();
-            this.Bind<IExpressionsGraphProvider>().To<ExpressionsGraphProvider>();
-            this.Bind<IExpressionsPlayOrderProvider>().To<ExpressionsPlayOrderProvider>();
-            this.Bind<IQuestionnaireInfoFactory>().To<QuestionnaireInfoFactory>();
-            this.Bind<PdfSettings>().ToConstant(pdfSettings);
-            this.Bind<DeskSettings>().ToConstant(deskSettings);
-            this.Bind<QuestionnaireHistorySettings>().ToConstant(historySettings);
-            this.Bind<IPdfFactory>().To<PdfFactory>();
-            this.Bind<IDeskAuthenticationService>().To<DeskAuthenticationService>();
+            registry.Bind<ICommandInflater, CommandInflater>();
+            registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();
+            registry.Bind<IVerificationErrorsMapper, VerificationErrorsMapper>();
+            registry.Bind<ISystemMailer, SystemMailer>();
+            registry.Bind<IDynamicCompiler, RoslynCompiler>();
+            registry.Bind<IExpressionReplacer, ExpressionReplacer>();
+            registry.Bind<IMacrosSubstitutionService, MacrosSubstitutionService>();
+            registry.Bind<IExpressionProcessorGenerator, QuestionnaireExpressionProcessorGenerator>();
+            registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();
+            registry.Bind<IExpressionsPlayOrderProvider, ExpressionsPlayOrderProvider>();
+            registry.Bind<IQuestionnaireInfoFactory, QuestionnaireInfoFactory>();
+            registry.BindToConstant<PdfSettings>(() => pdfSettings);
+            registry.BindToConstant<DeskSettings>(() => deskSettings);
+            registry.BindToConstant<QuestionnaireHistorySettings>(() => historySettings);
+            registry.Bind<IPdfFactory, PdfFactory>();
+            registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
         }
     }
 }

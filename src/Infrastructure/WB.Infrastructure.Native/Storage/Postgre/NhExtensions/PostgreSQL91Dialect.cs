@@ -444,4 +444,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
         public bool IsMutable => true;
     }
+
+    public class NpgsqlLowerCaseNameTranslator : INpgsqlNameTranslator
+    {
+        public string TranslateTypeName(string clrName) => ToLower(clrName);
+        public string TranslateMemberName(string clrName) => ToLower(clrName);
+
+        private static string ToLower(string clrName) => clrName.ToLowerInvariant();
+    }
 }

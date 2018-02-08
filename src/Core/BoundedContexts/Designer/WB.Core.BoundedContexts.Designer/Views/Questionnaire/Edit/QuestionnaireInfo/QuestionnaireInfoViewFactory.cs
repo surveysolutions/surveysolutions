@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
@@ -16,6 +19,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires;
+        private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersion;
         private readonly IPlainStorageAccessor<Aggregates.User> accountsStorage;
         private readonly IAttachmentService attachmentService;
         private readonly IMembershipUserService membershipUserService;
@@ -23,12 +27,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public QuestionnaireInfoViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
             IPlainStorageAccessor<QuestionnaireListViewItem> questionnaires,
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersion,
             IPlainStorageAccessor<Aggregates.User> accountsStorage,
             IAttachmentService attachmentService,
             IMembershipUserService membershipUserService)
         {
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.questionnaires = questionnaires;
+            this.questionnaireCompilationVersion = questionnaireCompilationVersion;
             this.accountsStorage = accountsStorage;
             this.attachmentService = attachmentService;
             this.membershipUserService = membershipUserService;
@@ -107,6 +113,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.SharedPersons = sharedPersons;
             questionnaireInfoView.IsReadOnlyForUser = person == null || (!person.IsOwner && person.ShareType != ShareType.Edit);
             questionnaireInfoView.HasViewerAdminRights = this.membershipUserService.WebUser.IsAdmin;
+            questionnaireInfoView.WebTestAvailable = this.questionnaireCompilationVersion.GetById(listItem.PublicId)?.Version == null;
 
             questionnaireInfoView.Macros = questionnaireDocument
                 .Macros
@@ -148,6 +155,34 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 })
                 .OrderBy(x => x.Name)
                 .ToList();
+
+            questionnaireInfoView.Metadata = new MetadataView()
+            {
+                Title = questionnaireDocument.Title,
+                SubTitle = questionnaireDocument.Metadata?.SubTitle,
+                Version = questionnaireDocument.Metadata?.Version,
+                KindOfData = questionnaireDocument.Metadata?.KindOfData,
+                VersionNotes = questionnaireDocument.Metadata?.VersionNotes,
+                PrimaryInvestigator = questionnaireDocument.Metadata?.PrimaryInvestigator,
+                Year = questionnaireDocument.Metadata?.Year,
+                Language = questionnaireDocument.Metadata?.Language,
+                Country = questionnaireDocument.Metadata?.Country,
+                ModeOfDataCollection = questionnaireDocument.Metadata?.ModeOfDataCollection,
+                UnitOfAnalysis = questionnaireDocument.Metadata?.UnitOfAnalysis,
+                AgreeToMakeThisQuestionnairePublic = questionnaireDocument.Metadata?.AgreeToMakeThisQuestionnairePublic ?? false,
+                Universe = questionnaireDocument.Metadata?.Universe,
+                Funding = questionnaireDocument.Metadata?.Funding,
+                Coverage = questionnaireDocument.Metadata?.Coverage,
+                Notes = questionnaireDocument.Metadata?.Notes,
+                Consultant = questionnaireDocument.Metadata?.Consultant,
+                StudyType = questionnaireDocument.Metadata?.StudyType,
+                Keywords = questionnaireDocument.Metadata?.Keywords,
+            };
+
+            questionnaireInfoView.StudyTypes = StudyTypeProvider.GetStudyTypeItems();
+            questionnaireInfoView.KindsOfData = KindOfDataProvider.GetKindOfDataItems();
+            questionnaireInfoView.Countries = CountryListProvider.GetCounryItems();
+            questionnaireInfoView.ModesOfDataCollection = ModeOfDataCollectionProvider.GetModeOfDataCollectionItems();
 
             return questionnaireInfoView;
         }

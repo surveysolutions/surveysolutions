@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         void UpdateEnablement(IInterviewTreeNode entity);
         void UpdateEnablement(InterviewTreeGroup entity);
+        void UpdateEnablement(InterviewTreeRoster entity);
 
         void UpdateSingleOptionQuestion(InterviewTreeQuestion question);
         void UpdateMultiOptionQuestion(InterviewTreeQuestion question);

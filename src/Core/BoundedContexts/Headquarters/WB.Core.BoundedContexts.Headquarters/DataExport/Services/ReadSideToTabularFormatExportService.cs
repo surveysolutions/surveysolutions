@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -25,7 +26,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -41,13 +41,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly ITransactionManagerProvider transactionManager;
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
-        private readonly InterviewsExporter interviewsExporter;
+        private readonly IInterviewsExporter interviewsExporter;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
         private readonly InterviewDataExportSettings exportSettings;
         private readonly IProductVersion productVersion;
-        private InterviewErrorsExporter errorsExporter;
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
@@ -67,10 +66,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.productVersion = productVersion;
 
-            this.interviewsExporter = ServiceLocator.Current.GetInstance<InterviewsExporter>();
+            this.interviewsExporter = ServiceLocator.Current.GetInstance<IInterviewsExporter>();
 
             this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
-            this.errorsExporter = ServiceLocator.Current.GetInstance<InterviewErrorsExporter>();
 
             this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
         }
@@ -94,90 +92,100 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             }
 
             this.fileSystemAccessor.WriteAllText(
-                this.fileSystemAccessor.CombinePath(basePath, "description.txt"),
+                Path.Combine(basePath, "export__readme.txt"),
                 descriptionBuilder.ToString());
         }
 
-        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity,
-            InterviewStatus? status, 
-            string basePath, 
-            IProgress<int> progress, 
-            CancellationToken cancellationToken)
+        public void ExportInterviewsInTabularFormat(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string basePath, IProgress<int> progress, CancellationToken cancellationToken, DateTime? fromDate, DateTime? toDate)
         {
             QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
 
             var exportInterviewsProgress = new Progress<int>();
             var exportCommentsProgress = new Progress<int>();
             var exportInterviewActionsProgress = new Progress<int>();
-            var exportErrorsProgress = new Progress<int>();
 
             ProggressAggregator proggressAggregator = new ProggressAggregator();
-            proggressAggregator.Add(exportInterviewsProgress, 0.7);
+            proggressAggregator.Add(exportInterviewsProgress, 0.8);
             proggressAggregator.Add(exportCommentsProgress, 0.1);
             proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
-            proggressAggregator.Add(exportErrorsProgress, 0.1);
 
             proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
 
-            List<Guid> interviewIdsToExport = GetInterviewIdsToExport(questionnaireIdentity, status, cancellationToken);
+            var interviewsToExport = GetInterviewsToExport(questionnaireIdentity, status, cancellationToken, fromDate, toDate).ToList();
+            var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = new Stopwatch();
             exportWatch.Start(); 
 
             Task.WaitAll(new[] {
-                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
                 Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportCommentsProgress), cancellationToken),
                 Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken),
-                Task.Run(() => this.errorsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportErrorsProgress, cancellationToken), cancellationToken),
             }, cancellationToken);
             exportWatch.Stop();
 
             this.logger.Info($"Export with all steps finished for questionnaire {questionnaireIdentity}. Took {exportWatch.Elapsed:c}");
         }
 
-        public List<Guid> GetInterviewIdsToExport(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, CancellationToken cancellationToken)
+        public IEnumerable<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
+            InterviewStatus? status, CancellationToken cancellationToken, DateTime? fromDate, DateTime? toDate)
         {
-            Expression<Func<InterviewSummary, bool>> expression;
-            if (status.HasValue)
-            {
-                InterviewStatus requiredStatus = status.Value;
-                expression = x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                                  x.QuestionnaireVersion == questionnaireIdentity.Version &&
-                                  x.Status == requiredStatus;
-            }
-            else
-            {
-                expression = x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
-                                  x.QuestionnaireVersion == questionnaireIdentity.Version;
-            }
-
-            List<Guid> interviewIdsToExport = new List<Guid>();
+            var skipInterviewsCount = 0;
+            var batchInterviews = new List<InterviewToExport>();
 
             var stopwatch = Stopwatch.StartNew();
-           
-            string lastRecivedId = null;
-            while (true)
+
+            do
             {
-                var ids = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                    this.interviewSummaries.Query(_ => _
-                        .Where(expression)
-                        .OrderBy(x => x.InterviewId)
-                        .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
-                        .Select(x => x.InterviewId)
+                cancellationToken.ThrowIfCancellationRequested();
+
+                batchInterviews = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
+                    this.interviewSummaries.Query(_ => this.Filter(_, questionnaireIdentity, status, fromDate, toDate)
+                        .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.HasErrors, x.Status))
+                        .Skip(skipInterviewsCount)
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
                         .ToList()));
 
-                if (ids.Count == 0) break;
+                skipInterviewsCount += batchInterviews.Count;
+                this.logger.Debug($"Received {skipInterviewsCount:n0} interview ids.");
 
-                cancellationToken.ThrowIfCancellationRequested();
-                interviewIdsToExport.AddRange(ids);
-                lastRecivedId = ids.Last().FormatGuid();
-                this.logger.Debug($"Received {interviewIdsToExport.Count:n0} interview interview ids.");
-            }
+                foreach (var interview in batchInterviews)
+                    yield return interview;
+
+            } while (batchInterviews.Count > 0);
+
             stopwatch.Stop();
-            this.logger.Info($"Received {interviewIdsToExport.Count:N0} interviewIds to start export. Took {stopwatch.Elapsed:g} to complete.");
-            return interviewIdsToExport.ToList();
+
+            this.logger.Info($"Received {skipInterviewsCount:N0} interviewIds to start export. " +
+                             $"Took {stopwatch.Elapsed:g} to complete.");
+        }
+
+        private IQueryable<InterviewSummary> Filter(IQueryable<InterviewSummary> queryable,
+            QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, DateTime? fromDate, DateTime? toDate)
+        {
+            queryable = queryable.Where(x => x.QuestionnaireId == questionnaireIdentity.QuestionnaireId &&
+                                             x.QuestionnaireVersion == questionnaireIdentity.Version);
+
+            if (status.HasValue)
+            {
+                var filteredByStatus = status.Value;
+                queryable = queryable.Where(x => x.Status == filteredByStatus);
+            }
+
+            if (fromDate.HasValue)
+            {
+                var filteredFromDate = fromDate.Value;
+                queryable = queryable.Where(x => x.UpdateDate >= filteredFromDate);
+            }
+
+            if(toDate.HasValue)
+            {
+                var filteredToDate = toDate.Value;
+                queryable = queryable.Where(x => x.UpdateDate < filteredToDate);
+            }
+
+            return queryable;
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
@@ -214,7 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
                 {
-                    interviewLevelHeader.AddRange(headerItem.ColumnNames);
+                    interviewLevelHeader.AddRange(headerItem.ColumnHeaders.Select(x=> x.Name));
                 }
 
                 if (level.LevelScopeVector.Length == 0)

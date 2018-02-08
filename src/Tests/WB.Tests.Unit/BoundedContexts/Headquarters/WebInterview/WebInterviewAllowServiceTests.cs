@@ -12,7 +12,7 @@ using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.UI.Headquarters.Code;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {
@@ -176,6 +176,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             ArrangeTest(interviewStatus: InterviewStatus.Deleted);
 
             Assert.Throws<InterviewAccessException>(Act);
+        }
+
+        [Test]
+        public void should_not_allow_access_web_interview_for_loggedin_user_that_is_not_responsible_with_valid_reason()
+        {
+            ArrangeTest(interviewStatus: InterviewStatus.InterviewerAssigned, webInterviewEnabled: false, 
+                loggedInUserRole: UserRoles.Administrator,
+                loggedInUserId: Id.gA,
+                responsibleId: Id.g1);
+
+            var exception = Assert.Throws<InterviewAccessException>(Act);
+            Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.UserNotAuthorised));
+        }
+
+        [Test]
+        public void should_not_allow_access_web_interview_for_anonymous_user_if_it_is_stopped()
+        {
+            ArrangeTest(interviewStatus: InterviewStatus.InterviewerAssigned, webInterviewEnabled: false, 
+                responsibleId: Id.g1);
+
+            var exception = Assert.Throws<InterviewAccessException>(Act);
+            Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
         }
     }
 }

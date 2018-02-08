@@ -14,7 +14,6 @@ namespace WB.UI.Tester.ServiceLocation
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
-            registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<IMapService, MapService>();
             registry.Bind<TesterSettings>();
 

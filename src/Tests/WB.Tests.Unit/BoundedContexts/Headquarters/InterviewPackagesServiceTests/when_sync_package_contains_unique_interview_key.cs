@@ -7,23 +7,28 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTests
 {
-    internal class when_sync_package_contains_unique_interview_key : InterviewPackagesServiceTestsContext
+    internal class when_sync_package_contains_unique_interview_key
     {
         [Test]
         public void should_not_generate_new_interview_key()
         {
+            SynchronizeInterviewEventsCommand syncCommand = null;
             Mock<ICommandService> commandService = new Mock<ICommandService>();
-            var service = CreateInterviewPackagesService(commandService: commandService.Object);
+            commandService
+                .Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
+                .Callback((ICommand c, string o) => { syncCommand = c as SynchronizeInterviewEventsCommand; });
+
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
             InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned();
-            var aggregateRootEvent = Create.Event.AggregateRootEvent(keyAssignedEvent);
 
-            var interviewPackage = Create.Entity.InterviewPackage(events: new[]{aggregateRootEvent});
+            var interviewPackage = Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent);
             // Act
             service.ProcessPackage(interviewPackage);
 
             // Assert
-            commandService.Verify(x => x.Execute(It.Is<SynchronizeInterviewEventsCommand>(cmd => cmd.InterviewKey == null), It.IsAny<string>()));
+            Assert.That(syncCommand, Is.Not.Null);
+            Assert.That(syncCommand.InterviewKey, Is.Null);
         }
     }
 }
