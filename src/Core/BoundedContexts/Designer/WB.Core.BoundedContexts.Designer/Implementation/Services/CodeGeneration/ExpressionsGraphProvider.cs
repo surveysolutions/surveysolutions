@@ -114,6 +114,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
                         .Where(x => x.RosterSizeQuestionId.HasValue)
                         .Select(x => new { Key = x.RosterSizeQuestionId.Value, Value = x.PublicKey })
+                    .Union(questionnaire
+                        .Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
+                        .Where(x => x.RosterTitleQuestionId.HasValue)
+                        .Select(x => new { Key = x.RosterTitleQuestionId.Value, Value = x.PublicKey }))
                     .GroupBy(x => x.Key)
                     .ToDictionary(x => x.Key, x => x.Select(r => r.Value).ToList());
 
@@ -136,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (entity is IQuestion question)
                 {
-                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression);
+                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression, ignoreReferenceOnSelf: true);
                     FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.LinkedFilterExpression);
 
                     if (question.CascadeFromQuestionId != null)
@@ -194,7 +198,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     foreach (var validationCondition in validatableEntity.ValidationConditions)
                     {
-                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression, includeReferenceOnSelf: true);
+                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression, ignoreReferenceOnSelf: true);
                     }
                 }
             }
@@ -207,12 +211,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, Macro>.ValueCollection allMacroses, 
             Guid entityId, 
             string expression,
-            bool includeReferenceOnSelf = false)
+            bool ignoreReferenceOnSelf = false)
         {
             if (string.IsNullOrWhiteSpace(expression)) return;
 
             var conditionExpression = this.macrosSubstitutionService.InlineMacros(expression, allMacroses);
-            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, includeReferenceOnSelf);
+            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, ignoreReferenceOnSelf);
 
             if (!dependencies.TryGetValue(entityId, out List<Guid> depsList))
             {
@@ -230,17 +234,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         IEnumerable<Guid> GetIdsOfEntitiesInvolvedInExpression(Dictionary<string, Guid> variableNamesByEntitiyIds, 
             string conditionExpression,
             Guid entityId,
-            bool includeReferenceOnSelf = false)
+            bool ignoreReferenceOnSelf = false)
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 
-            if (includeReferenceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
+            if (!ignoreReferenceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
                 yield return entityId;
 
             foreach (var variable in identifiersUsedInExpression)
             {
                 if (variableNamesByEntitiyIds.TryGetValue(variable, out var value))
                 {
+                    if (ignoreReferenceOnSelf && value == entityId)
+                        continue;
                     yield return value;
                 }
             }
