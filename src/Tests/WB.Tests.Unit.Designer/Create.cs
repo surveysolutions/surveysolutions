@@ -402,7 +402,7 @@ namespace WB.Tests.Unit.Designer
             return new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = publicKey,
-                StataExportCaption = "mo_question_" + publicKey.ToString("N"),
+                StataExportCaption = publicKey.ToString("N"),
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
@@ -543,7 +543,7 @@ namespace WB.Tests.Unit.Designer
             params Answer[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            var stataExportCaption = variable ?? "question_"+ publicKey.ToString("N");
+            var stataExportCaption = variable ?? publicKey.ToString("N");
             return new TextQuestion(title)
             {
                 PublicKey = publicKey,
@@ -627,7 +627,7 @@ namespace WB.Tests.Unit.Designer
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", string label = null)
         {
             var publicKey = id ?? Guid.NewGuid();
-            var name = variableName ?? "variable_" + publicKey.ToString("N");
+            var name = variableName ?? publicKey.ToString("N");
             return new Variable(publicKey: publicKey, 
                 variableData: new VariableData(type: type, name: name, expression: expression, label: label));
         }
@@ -848,7 +848,7 @@ namespace WB.Tests.Unit.Designer
             return new SingleQuestion
             {
                 PublicKey = publicKey,
-                StataExportCaption = variable ?? "single_option_question_" + publicKey.ToString("N"),
+                StataExportCaption = variable ?? publicKey.ToString("N"),
                 QuestionText = title ?? "SO Question",
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
@@ -944,7 +944,7 @@ namespace WB.Tests.Unit.Designer
 
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            var stataExportCaption = variable ?? "text_question_" + publicKey.ToString("N");
+            var stataExportCaption = variable ?? publicKey.ToString("N");
             return new TextQuestion(text)
             {
                 PublicKey = publicKey,
