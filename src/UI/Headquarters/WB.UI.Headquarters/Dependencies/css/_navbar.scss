@@ -122,6 +122,21 @@
 					display: none;
 				}
 			}
+
+		}
+	}
+	.btn-icon{
+		padding: 0;
+		margin: 21px 5px;
+		color: #7e898f;
+		.glyphicon{
+			font-size: 22px;
+			line-height: 22px;
+		}
+		&:hover, &:focus, &:active{
+			color: #fff;
+			background: transparent;
+			border-color: transparent;
 		}
 	}
 }
@@ -148,9 +163,8 @@
 }
 .navbar-header {
 	text-align: center;
-	.badge.badge_nav{
-		display: none;
-	}
+	.badge.badge_nav,
+	.btn-icon,
 	.number-of-synchronized-interviews{
 		display: none;
 	}
@@ -309,6 +323,7 @@
 								}
 							}
 						}
+
 					}
 				}
 				.navbar-right .badge.badge_nav{
@@ -406,6 +421,15 @@
 		.navbar-header{
 			margin: 0;
 			padding-top: 5px;
+			.btn-icon,
+			.badge.badge_nav{
+				display: block;
+				float: right;
+				position: relative;
+				top: 0;
+				left: 0;
+				margin: 10px;
+			}
 			.active-page{
 				display: inline-block;
 			}
@@ -422,11 +446,6 @@
 				}
 			}
 			.badge.badge_nav{
-				display: block;
-				float: right;
-				position: relative;
-				top: 0;
-				left: 0;
 				margin: 5px 15px 5px 10px;
 			}
 			.number-of-synchronized-interviews{
@@ -496,6 +515,9 @@
 								}
 							}
 						}
+					}
+					.btn-icon {
+						margin: 21px 12px;
 					}
 				}
 			}
