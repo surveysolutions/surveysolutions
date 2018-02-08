@@ -262,6 +262,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MultimediaController.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\PrivateSettersResolver.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationService.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterAppDomainModule.cs" />
@@ -269,6 +270,7 @@
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationStorage.cs" />
     <Compile Include="Infrastructure\WebTesterCommandService.cs" />
     <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
+    <Compile Include="Services\IInterviewFactory.cs" />
     <Compile Include="Services\Implementation\AppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\IAppdomainsPerInterviewManager.cs" />
     <Compile Include="Services\ICacheStorage.cs" />
@@ -287,7 +289,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Hub\DesignerTokenRenewalPipeline.cs" />
     <Compile Include="Hub\WebInterviewHub.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireAssemblyAccessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
