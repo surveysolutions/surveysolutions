@@ -402,7 +402,7 @@ namespace WB.Tests.Unit.Designer
             return new MultyOptionsQuestion("Question MO")
             {
                 PublicKey = publicKey,
-                StataExportCaption = publicKey.ToString("N"),
+                StataExportCaption = GetNameForEntity("multi_option", publicKey),
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
@@ -543,7 +543,7 @@ namespace WB.Tests.Unit.Designer
             params Answer[] answers)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            var stataExportCaption = variable ?? publicKey.ToString("N");
+            var stataExportCaption = variable ?? GetNameForEntity("question", publicKey);
             return new TextQuestion(title)
             {
                 PublicKey = publicKey,
@@ -627,7 +627,7 @@ namespace WB.Tests.Unit.Designer
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", string label = null)
         {
             var publicKey = id ?? Guid.NewGuid();
-            var name = variableName ?? publicKey.ToString("N");
+            var name = variableName ?? GetNameForEntity("var", publicKey);
             return new Variable(publicKey: publicKey, 
                 variableData: new VariableData(type: type, name: name, expression: expression, label: label));
         }
@@ -812,7 +812,7 @@ namespace WB.Tests.Unit.Designer
             Group group = Create.Group(
                 groupId: id,
                 title: title,
-                variable: variable ?? "roster_var_" + id,
+                variable: variable ?? GetNameForEntity("roster_var",  id),
                 enablementCondition: enablementCondition,
                 children: children);
 
@@ -848,7 +848,7 @@ namespace WB.Tests.Unit.Designer
             return new SingleQuestion
             {
                 PublicKey = publicKey,
-                StataExportCaption = variable ?? publicKey.ToString("N"),
+                StataExportCaption = variable ?? GetNameForEntity("single_option", publicKey),
                 QuestionText = title ?? "SO Question",
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
@@ -944,7 +944,7 @@ namespace WB.Tests.Unit.Designer
 
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            var stataExportCaption = variable ?? publicKey.ToString("N");
+            var stataExportCaption = variable ?? GetNameForEntity("text_quetion", publicKey);
             return new TextQuestion(text)
             {
                 PublicKey = publicKey,
@@ -1375,6 +1375,15 @@ namespace WB.Tests.Unit.Designer
         public static JsonFormatter JsonFormatter(Version hqVersion)
         {
             return new JsonFormatter(new Func<Version>(() => hqVersion));
+        }
+
+        private static string GetNameForEntity(string prefix, Guid entityId)
+        {
+            var name = prefix + "_" + entityId.ToString("N");
+            if (name.Length > 32)
+                return name.Substring(0, 32);
+
+            return name;
         }
     }
 }
