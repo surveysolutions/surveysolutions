@@ -16,9 +16,15 @@ namespace WB.UI.WebTester.Services
             string supportingAssembly);
 
         void TearDown(Guid interviewId);
+
         List<CommittedEvent> Execute(ICommand command);
         
         List<CategoricalOption> GetFirstTopFilteredOptionsForQuestion(Guid interviewId, Identity questionIdentity, 
             int? parentQuestionValue, string filter, int itemsCount = 200);
+
+        /// <summary>
+        /// Deletes existing data inside interview but keeps appdomain ready to be reused for new interview
+        /// </summary>
+        void Flush(Guid interviewId);
     }
 }
