@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             this.dataParser = dataParser;
         }
 
-        public AssignmentImportData[] GetAssignmentsData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity, AssignmentImportType mode)
+        public AssignmentImportData[] GetAssignmentsData(QuestionnaireIdentity questionnaireIdentity, AssignmentImportType mode)
         {
             IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
@@ -54,11 +54,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             QuestionnaireExportStructure exportStructure = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
 
             IEnumerable<PreloadedInterviewBaseLevel> levels = mode == AssignmentImportType.Panel
-                ? CreateParsedInterviewLevels(this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId), exportStructure, questionnaire)
+                ? CreateParsedInterviewLevels(this.preloadedDataRepository.GetPreloadedDataOfPanel(), exportStructure, questionnaire)
                 : new[]
                 {
                     new PreloadedInterviewQuestionnaireLevel(
-                        this.preloadedDataRepository.GetPreloadedDataOfSample(interviewImportProcessId),
+                        this.preloadedDataRepository.GetPreloadedDataOfSample(),
                         exportStructure)
                 };
 

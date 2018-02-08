@@ -81,7 +81,7 @@
                         </p>
                     }
                 </div>
-                @using (Html.BeginForm("InterviewImportConfirmation", "SurveySetup", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+                @using (Html.BeginForm("InterviewImportConfirmation", "SurveySetup", new { questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(x => x.EntitiesCount)

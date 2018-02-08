@@ -7,7 +7,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
 {
     public interface IInterviewImportDataParsingService
     {
-        AssignmentImportData[] GetAssignmentsData(string interviewImportProcessId, QuestionnaireIdentity questionnaireIdentity, AssignmentImportType mode);
+        AssignmentImportData[] GetAssignmentsData(QuestionnaireIdentity questionnaireIdentity, AssignmentImportType mode);
     }
 
     public class InterviewImportData

@@ -77,11 +77,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
 
-        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId)
+        public void VerifyAssignments(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-            if (StartImportProcess(questionnaireIdentity, questionnaire.Title, interviewImportProcessId, AssignmentImportType.Assignments)) return;
+            if (StartImportProcess(questionnaireIdentity, questionnaire.Title, AssignmentImportType.Assignments)) return;
 
             try
             {
@@ -89,8 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
                 this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
 
-                AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(
-                    interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
+                AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(questionnaireIdentity, AssignmentImportType.Panel);
 
                 if (assignmentImportData == null)
                 {
@@ -149,10 +148,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return AssignmentVerificationResult.Ok();
         }
 
-        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, string interviewImportProcessId, Guid? responsibleId, Guid headquartersId, 
+        public void ImportAssignments(QuestionnaireIdentity questionnaireIdentity, Guid? responsibleId, Guid headquartersId, 
             AssignmentImportType mode, bool shouldSkipInterviewCreation)
         {
-            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, mode);
+            AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(questionnaireIdentity, mode);
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
@@ -189,7 +188,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            if (StartImportProcess(questionnaireIdentity, questionnaire.Title, interviewImportProcessId, AssignmentImportType.Assignments)) return;
+            if (StartImportProcess(questionnaireIdentity, questionnaire.Title, AssignmentImportType.Assignments)) return;
             this.Status.Stage = AssignmentImportStage.AssignmentCreation;
             RunImportProcess(assignmentImportData, questionnaireIdentity, ImportAction);
         }
@@ -266,7 +265,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
         }
 
-        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle , string interviewImportProcessId,
+        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
             AssignmentImportType assignmentImportType)
         {
             lock (lockStart)
@@ -278,7 +277,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 {
                     QuestionnaireId = questionnaireIdentity,
                     QuestionnaireTitle = questionnaireTitle,
-                    InterviewImportProcessId = interviewImportProcessId,
                     StartedDateTime = DateTime.Now,
                     ProcessedCount = 0,
                     ElapsedTime = 0,

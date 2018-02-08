@@ -2,7 +2,6 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -41,6 +40,7 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
+            registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
             registry.Bind<IInterviewImportService, InterviewImportService>();
             registry.Bind<IFormDataConverterLogger, FormDataConverterLogger>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();

@@ -29,10 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             recordsAccessorFactory=new Mock<IRecordsAccessorFactory>();
             recordsAccessorFactory.Setup(x => x.CreateRecordsAccessor(Moq.It.IsAny<Stream>(), Moq.It.IsAny<string>()))
                 .Returns(Mock.Of<IRecordsAccessor>(_ => _.Records == new string[][] { new string[] { "q1" }, new string[] { "1" }, }));
-            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
+            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(archiveUtils.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel();
 
         It should_result_has_2_elements = () =>
             result.Length.ShouldEqual(2);

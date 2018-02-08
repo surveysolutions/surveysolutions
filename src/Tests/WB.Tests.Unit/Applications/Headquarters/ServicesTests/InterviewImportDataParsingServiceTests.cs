@@ -45,14 +45,14 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
                 Create.Entity.QuestionnaireExportStructure(questionnaireDocument));
 
             var preloadedDataRepository = Mock.Of<IPreloadedDataRepository>(x =>
-                x.GetPreloadedDataOfSample(It.IsAny<string>()) == new PreloadedDataByFile(importProcessId,
+                x.GetPreloadedDataOfSample() == new PreloadedDataByFile(
                     preloadedFileName, new[] {questionVariable}, new[] {new[] {"text"}}));
 
             var service = CreateInterviewImportDataParsingService(questionnaireStorage: questionnaireStorage,
                 preloadedDataRepository: preloadedDataRepository, questionnaireExportStructureStorage: questionnaireExportStructure);
 
             //act
-            var result = service.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Assignments);
+            var result = service.GetAssignmentsData(questionnaireIdentity, AssignmentImportType.Assignments);
             //assert
             Assert.That(result, Is.Not.Empty);
         }

@@ -97,10 +97,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             };
 
             interviewImportDataParsingServiceMock
-                .Setup(x => x.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Panel))
+                .Setup(x => x.GetAssignmentsData(questionnaireIdentity, AssignmentImportType.Panel))
                 .Returns(assignments);
 
-            importService.VerifyAssignments(questionnaireIdentity, importProcessId);
+            importService.VerifyAssignments(questionnaireIdentity);
 
             Assert.That(importService.Status.TotalCount, Is.EqualTo(1));
             Assert.That(importService.Status.ProcessedCount, Is.EqualTo(1));

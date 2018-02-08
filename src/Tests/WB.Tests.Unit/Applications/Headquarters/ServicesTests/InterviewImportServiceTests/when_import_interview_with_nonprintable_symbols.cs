@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     Create.Entity.GpsCoordinateQuestion(questionId: Guid.Parse("10101010101010101010101010101010"), variable: "LongLat", isPrefilled: true));
             
             var mockOfSamplePreloadingDataParsingService = new Mock<IInterviewImportDataParsingService>();
-            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsData("sampleId", questionnaireIdentity, AssignmentImportType.Assignments))
+            mockOfSamplePreloadingDataParsingService.Setup(x => x.GetAssignmentsData(questionnaireIdentity, AssignmentImportType.Assignments))
                 .Returns(new[]
                 {
                     new AssignmentImportData
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         };
 
         Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments, false));
+                interviewImportService.ImportAssignments(questionnaireIdentity, null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments, false));
 
         It should_not_be_exception = () =>
             exception.ShouldBeNull();

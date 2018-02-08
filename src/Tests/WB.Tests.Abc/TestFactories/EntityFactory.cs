@@ -1841,7 +1841,6 @@ namespace WB.Tests.Abc.TestFactories
         {
             var randomstring = Guid.NewGuid().ToString();
             return new PreloadedDataByFile(
-                id: id ?? randomstring,
                 fileName: fileName ?? "file-" + randomstring,
                 header: header,
                 content: content);

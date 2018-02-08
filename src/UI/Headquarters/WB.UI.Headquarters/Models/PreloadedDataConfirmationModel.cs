@@ -18,13 +18,10 @@ namespace WB.UI.Headquarters.Models
     public class PreloadedDataInProgressModel
     {
         public PreloadedDataQuestionnaireModel Questionnaire { get; set; }
-        public string CurrentProcessId { get; set; }
     }
 
     public class PreloadedDataConfirmationModel : IValidatableObject
     {
-        public string Id { get; set; }
-
         public AssignmentImportType AssignmentImportType { get; set; }
 
         public Guid QuestionnaireId { get; set; }

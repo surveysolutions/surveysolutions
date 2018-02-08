@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public IEnumerable<PanelImportVerificationError> VerifyAssignmentsSample(PreloadedDataByFile data, IPreloadedDataService preloadedDataService)
             => this.PrefilledVerifiers.SelectMany(verifier => verifier.Invoke(new[]
             {
-                new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(),
+                new PreloadedDataByFile(preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(),
                     data.Header, data.Content)
             }, preloadedDataService));
 
