@@ -1311,7 +1311,7 @@ namespace WB.Tests.Unit.Designer
             IMacrosSubstitutionService macrosSubstitutionService = null,
             ILookupTableService lookupTableService = null,
             IAttachmentService attachmentService = null,
-            ITopologicalSorter<string> topologicalSorter = null,
+            ITopologicalSorter<Guid> topologicalSorter = null,
             IQuestionnaireTranslator questionnaireTranslator = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
@@ -1332,20 +1332,24 @@ namespace WB.Tests.Unit.Designer
 
             var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
 
-            return new QuestionnaireVerifier(expressionProcessor ?? Create.RoslynExpressionProcessor(),
+            var expressionProcessorImp = expressionProcessor ?? Create.RoslynExpressionProcessor();
+            var macrosSubstitutionServiceImp = macrosSubstitutionService ?? Create.MacrosSubstitutionService();
+
+            return new QuestionnaireVerifier(expressionProcessorImp,
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
                 new DesignerEngineVersionService(),
-                macrosSubstitutionService ?? Create.MacrosSubstitutionService(),
+                macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
-                topologicalSorter ?? Create.TopologicalSorter<string>(),
+                topologicalSorter ?? Create.TopologicalSorter<Guid>(),
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
-                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()));
+                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()),
+                new ExpressionsPlayOrderProvider(new ExpressionsGraphProvider(expressionProcessorImp, macrosSubstitutionServiceImp)));
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
