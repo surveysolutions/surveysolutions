@@ -26,10 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
             archiveUtils.Setup(x => x.IsZipFile(Moq.It.IsAny<string>())).Returns(true);
 
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
-            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
+            filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(archiveUtils.Object);
         };
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
+        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel();
 
         It should_result_has_0_elements = () =>
             result.Length.ShouldEqual(0);

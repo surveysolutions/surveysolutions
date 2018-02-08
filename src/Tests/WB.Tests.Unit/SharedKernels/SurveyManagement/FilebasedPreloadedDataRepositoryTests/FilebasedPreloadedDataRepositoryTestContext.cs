@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Machine.Specifications;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -16,11 +11,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
     internal class FilebasedPreloadedDataRepositoryTestContext
     {
         protected static FilebasedPreloadedDataRepository CreateFilebasedPreloadedDataRepository(
-            IFileSystemAccessor fileSystemAccessor = null, IArchiveUtils archiveUtils = null,
-            IRecordsAccessorFactory recordsAccessorFactory = null, string folderPath = "")
+            IArchiveUtils archiveUtils = null, string folderPath = "",
+            IAssignmentsImportService assignmentsImportService = null)
         {
-            return new FilebasedPreloadedDataRepository(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(), folderPath,
-                archiveUtils ?? Mock.Of<IArchiveUtils>(), recordsAccessorFactory ?? Mock.Of<IRecordsAccessorFactory>());
+            return new FilebasedPreloadedDataRepository(folderPath,
+                archiveUtils ?? Mock.Of<IArchiveUtils>(), 
+                assignmentsImportService ?? Mock.Of<IAssignmentsImportService>());
         }
 
         protected static Mock<IFileSystemAccessor> CreateIFileSystemAccessorMock()

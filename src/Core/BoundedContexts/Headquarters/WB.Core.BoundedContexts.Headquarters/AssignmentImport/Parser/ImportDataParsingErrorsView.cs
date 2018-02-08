@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                 new[] { new PanelImportVerificationError("PL0000", error) },
                 new InterviewImportError[0],
                 false,
-                null,
                 assignmentImportType,
                 fileName);
 
@@ -30,13 +29,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             PanelImportVerificationError[] errors,
             InterviewImportError[] importErrors,
             bool wasSupervisorProvided, 
-            string id, 
             AssignmentImportType assignmentImportType, 
             string fileName = null)
         {
             this.AssignmentImportType = assignmentImportType;
             this.FileName = fileName;
-            this.Id = id;
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
             this.Errors = errors;
@@ -44,8 +41,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             this.WasSupervisorProvided = wasSupervisorProvided;
             this.QuestionnaireTitle = questionnaireTitle;
         }
-
-        public string Id { get; private set; }
 
         public Guid QuestionnaireId { get; private set; }
 

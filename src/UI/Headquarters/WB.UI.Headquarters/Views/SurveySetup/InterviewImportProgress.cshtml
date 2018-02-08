@@ -16,7 +16,6 @@
 
             self.questionnaireId = '@Model.QuestionnaireId';
             self.questionnaireVersion = @Model.Version;
-            self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
@@ -33,13 +32,9 @@
             var countOfRequestsToStopImport = 0;
 
             var shouldStopRequestUpdates = function(data) {
-                if (_.isNull(data.interviewImportProcessId))
-                    countOfRequestsToStopImport++;
-                else if (data.totalInterviewsCount === 0)
+                if (data.totalInterviewsCount === 0)
                     countOfRequestsToStopImport++;
                 else if (data.isInProgress === false)
-                    countOfRequestsToStopImport++;
-                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
                     countOfRequestsToStopImport++;
                 else {
                     countOfRequestsToStopImport = 0;

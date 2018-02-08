@@ -90,7 +90,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             };
 
             interviewImportDataParsingServiceMock
-                .Setup(x => x.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Panel))
+                .Setup(x => x.GetAssignmentsData(questionnaireIdentity, AssignmentImportType.Panel))
                 .Returns(assignments);
 
             CreateInterview createInterviewCommand = null;
@@ -102,7 +102,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     createInterviewCommand = command as CreateInterview;
                 });
 
-            importService.ImportAssignments(questionnaireIdentity, importProcessId, null, Guid.NewGuid(),  AssignmentImportType.Panel, false);
+            importService.ImportAssignments(questionnaireIdentity, null, Guid.NewGuid(),  AssignmentImportType.Panel, false);
 
             Assert.That(importService.Status.IsInProgress, Is.False);
             Assert.That(importService.Status.TotalCount, Is.EqualTo(1));
@@ -142,10 +142,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             };
 
             interviewImportDataParsingServiceMock
-                .Setup(x => x.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Panel))
+                .Setup(x => x.GetAssignmentsData(questionnaireIdentity, AssignmentImportType.Panel))
                 .Returns(assignments);
 
-            importService.ImportAssignments(questionnaireIdentity, importProcessId, null, Guid.NewGuid(), AssignmentImportType.Panel, true);
+            importService.ImportAssignments(questionnaireIdentity, null, Guid.NewGuid(), AssignmentImportType.Panel, true);
 
             Assert.That(importService.Status.IsInProgress, Is.False);
             Assert.That(importService.Status.TotalCount, Is.EqualTo(1));
