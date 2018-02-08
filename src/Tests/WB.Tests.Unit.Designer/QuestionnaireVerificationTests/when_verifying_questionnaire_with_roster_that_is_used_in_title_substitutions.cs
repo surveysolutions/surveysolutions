@@ -26,26 +26,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0019 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0019");
+            verificationMessages.ShouldContainError("WB0019");
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
-            verificationMessages.Single().References.Count.ShouldEqual(2);
+            verificationMessages.GetError("WB0019").References.Count.ShouldEqual(2);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0019").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
-            verificationMessages.Single().References.Second().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetError("WB0019").References.Second().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_question () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(questionId);
+            verificationMessages.GetError("WB0019").References.First().Id.ShouldEqual(questionId);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_roster () =>
-            verificationMessages.Single().References.Second().Id.ShouldEqual(rosterId);
+            verificationMessages.GetError("WB0019").References.Second().Id.ShouldEqual(rosterId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
