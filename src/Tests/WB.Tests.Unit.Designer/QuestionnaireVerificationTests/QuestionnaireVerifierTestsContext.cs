@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             IMacrosSubstitutionService macrosSubstitutionService = null,
             ILookupTableService lookupTableService = null,
             IAttachmentService attachmentService = null,
-            ITopologicalSorter<string> topologicalSorter = null,
+            ITopologicalSorter<Guid> topologicalSorter = null,
             IQuestionnaireTranslator questionnaireTranslator = null)
             => Create.QuestionnaireVerifier(
                 expressionProcessor: expressionProcessor,
