@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -37,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             preloadedDataByFileRosterLevel = CreatePreloadedDataByFile(new[] { rosterTitle + "__id", "ParentId1" }, new string[][] { new string[] { "5", "1" } },
                 rosterTitle + ".csv");
 
-            files = new[] { preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel };
+            files = Create.Entity.PreloadedDataByFile(preloadedDataByFileTopLevel, preloadedDataByFileRosterLevel);
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFileRosterLevel)).Returns(0);
             preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFileRosterLevel)).Returns(new[] { 1 });
@@ -45,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileTopLevel.FileName)).Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId });
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(preloadedDataByFileRosterLevel.FileName))
-                .Returns(new HeaderStructureForLevel() { LevelIdColumnName = preloadedDataByFileRosterLevel.Header[0], LevelScopeVector = new ValueVector<Guid>(new[] { rosterId }) });
+                .Returns(new HeaderStructureForLevel { LevelIdColumnName = preloadedDataByFileRosterLevel.Header[0], LevelScopeVector = new ValueVector<Guid>(new[] { rosterId }) });
             preloadedDataServiceMock.Setup(x => x.GetParentDataFile(preloadedDataByFileRosterLevel.FileName, files))
                 .Returns(preloadedDataByFileTopLevel);
 

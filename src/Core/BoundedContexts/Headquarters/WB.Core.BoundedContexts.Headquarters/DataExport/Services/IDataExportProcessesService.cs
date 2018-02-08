@@ -1,8 +1,6 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -10,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         DataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
 
-        string AddDataExport(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat, InterviewStatus? status = null);
+        void AddDataExport(DataExportProcessDetails details);
 
         DataExportProcessDetails[] GetRunningExportProcesses();
 
@@ -23,8 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         void UpdateDataExportProgress(string processId, int progressInPercents);
 
         void DeleteDataExport(string processId);
-
-        void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat);
 
         void ChangeStatusType(string processId, DataExportStatus status);
     }

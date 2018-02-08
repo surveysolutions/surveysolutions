@@ -23,11 +23,6 @@
         }
         &.selected{
             background-color: #e1e3e3 !important;
-            td.without-break{
-                &:before{
-                    @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
-                }
-            }
             input.checkbox-filter{
                 & ~ label .tick{
                     background-position: -43px 0;
@@ -54,15 +49,8 @@
                     background-position: -43px -180px;
                 }
             }
-            &:hover, &:focus, &:active{
-                td.without-break{
-                    &:before{
-                        @include gradient-horizontal(transparent, $table-selected, 0%, 70%);
-                    }
-                }
-            }
         }
-        @include transition(all, 0.2s);
+        @extend .add-transition;
         td{
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -142,7 +130,7 @@
                     color: #fff;
                 }
                 a{
-                    @include transition(all, 0.2s);
+                    @extend .add-transition;
                     text-overflow: ellipsis;
                     color: $gray_text;
                     
@@ -182,7 +170,7 @@
                     }
                 }
                 a{
-                    @include transition(all, 0.2s);
+                    @extend .add-transition;
                     text-overflow: ellipsis;
                     color: $gray_text;
                 }
@@ -412,7 +400,7 @@
             }
             input{
                 height: 40px;
-                @include transition(all, 0.2s);
+                @extend .add-transition;
                 @extend %visibility-hidden;
                 width: 0;
                 margin-right: 40px;

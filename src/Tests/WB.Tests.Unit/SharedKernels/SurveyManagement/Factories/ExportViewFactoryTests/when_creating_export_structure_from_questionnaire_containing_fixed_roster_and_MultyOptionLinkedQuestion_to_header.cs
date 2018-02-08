@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
         It should_create_header_with_2_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].HeaderItems[linkedQuestionId].ColumnNames.Length.ShouldEqual(2);
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].HeaderItems[linkedQuestionId].ColumnHeaders.Count.ShouldEqual(2);
 
         It should_create_header_with_2_header_labeles = () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterGroupId }].LevelLabels.Length.ShouldEqual(2);

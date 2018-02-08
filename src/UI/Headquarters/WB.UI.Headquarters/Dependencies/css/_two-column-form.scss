@@ -31,10 +31,9 @@
             margin-bottom: 0;
             a{
                 color: $gray_light;
-                box-shadow: 0 1px 0 $gray_light;
+                text-decoration: underline;
                 &:hover, &:focus{
                     text-decoration: none;
-                    box-shadow: none;
                 }
             }
         }

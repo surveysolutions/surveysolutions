@@ -8,11 +8,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     public interface IAssignmentsService
     {
         List<Assignment> GetAssignments(Guid responsibleId);
+
+        List<int> GetAllAssignmentIds(Guid responsibleId);
+        
         Assignment GetAssignment(int id);
 
         List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
+        
         int GetCountOfAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId);
 
         AssignmentApiDocument MapAssignment(Assignment assignment);
+
+        void Reassign(int assignmentId, Guid responsibleId);
     }
 }

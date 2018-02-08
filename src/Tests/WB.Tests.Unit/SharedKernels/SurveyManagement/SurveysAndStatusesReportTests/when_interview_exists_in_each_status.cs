@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     internal class when_interview_exists_in_each_status : SurveysAndStatusesReportTestsContext
     {

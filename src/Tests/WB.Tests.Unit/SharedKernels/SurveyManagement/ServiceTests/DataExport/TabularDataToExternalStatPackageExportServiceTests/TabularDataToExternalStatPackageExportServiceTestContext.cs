@@ -63,7 +63,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
 
         protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(QuestionType type = QuestionType.Text, string[] columnNames = null)
         {
-            return new ExportedQuestionHeaderItem() { ColumnNames = columnNames ?? new[] { "1" }, Titles = columnNames ?? new[] { "1" }, QuestionType = type };
+            return new ExportedQuestionHeaderItem()
+            {
+
+                ColumnHeaders = columnNames == null ? new List<HeaderColumn>(){new HeaderColumn(){Name = "1", Title = "1"}} :
+                    columnNames.Select(x => new HeaderColumn(){Name = x, Title = x}).ToList(),
+                QuestionType = type
+            };
         }
 
         protected static QuestionnaireExportStructure CreateQuestionnaireExportStructure(params HeaderStructureForLevel[] levels)

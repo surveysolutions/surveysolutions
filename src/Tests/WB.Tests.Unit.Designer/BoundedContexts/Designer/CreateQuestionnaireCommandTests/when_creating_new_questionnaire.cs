@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCom
             BecauseOf();
         }
 
-        private void BecauseOf() => questionnaire.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic);
+        private void BecauseOf() => questionnaire.CreateQuestionnaire(Create.Command.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic));
 
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_id () =>
             questionnaire.QuestionnaireDocument.PublicKey.ShouldEqual(questionnaireId);

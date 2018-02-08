@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Designer.Services.CodeGeneration
     {
         bool EnableDump { get; }
         string DumpFolder { get; }
-
         IEnumerable<IDynamicCompilerSettings> SettingsCollection { get; }
     }
 }

@@ -99,7 +99,6 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<AnsweringViewModel>();
             registry.Bind<AudioDialogViewModel>();
             registry.Bind<VibrationViewModel>();
-            registry.Bind<AnsweringViewModel>();
             registry.Bind<AudioDialogViewModel>();
             registry.Bind<BreadCrumbItemViewModel>();
             registry.Bind<BreadCrumbsViewModel>();

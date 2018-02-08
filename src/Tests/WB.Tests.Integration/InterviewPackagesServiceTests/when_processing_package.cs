@@ -7,6 +7,7 @@ using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -49,7 +50,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             transactionManager = new Mock<ITransactionManager>();
-            interviewPackagesService = new InterviewPackagesService(
+            interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer, 

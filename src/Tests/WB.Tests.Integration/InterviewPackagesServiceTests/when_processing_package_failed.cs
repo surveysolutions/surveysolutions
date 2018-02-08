@@ -7,10 +7,9 @@ using Npgsql;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -20,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.Synchronization;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -34,31 +32,35 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         Establish context = () =>
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
-            plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
+                new[] {typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap)}, true);
+            plainPostgresTransactionManager =
+                new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             origin = "hq";
-            expectedException = new InterviewException("Some interview exception", InterviewDomainExceptionType.StatusIsNotOneOfExpected);
+            expectedException = new InterviewException("Some interview exception",
+                InterviewDomainExceptionType.StatusIsNotOneOfExpected);
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
-            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(plainPostgresTransactionManager);
+            brokenPackagesStorage =
+                new PostgresPlainStorageRepository<BrokenInterviewPackage>(plainPostgresTransactionManager);
 
             mockOfCommandService = new Mock<ICommandService>();
             mockOfCommandService.Setup(
-                x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
+                    x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws(expectedException);
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
             transactionManagerMock = new Mock<ITransactionManager>();
 
-            interviewPackagesService = new InterviewPackagesService(
+            interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
-                serializer: newtonJsonSerializer, 
+                serializer: newtonJsonSerializer,
                 interviewPackageStorage: packagesStorage,
                 brokenInterviewPackageStorage: brokenPackagesStorage,
                 commandService: mockOfCommandService.Object,
@@ -74,15 +76,17 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 interviewStatus: InterviewStatus.Restarted,
                 createdOnClient: true,
                 synchronizedEvents:
-                    new IEvent[]
-                    {
-                        Create.Event.InterviewOnClientCreated(Guid.NewGuid(), 111),
-                        new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow),
-                        new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid()),
-                        new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
-                    });
+                new IEvent[]
+                {
+                    Create.Event.InterviewOnClientCreated(Guid.NewGuid(), 111),
+                    new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow),
+                    new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid()),
+                    new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] {2, 5, 8},
+                        DateTime.UtcNow, DateTime.Today),
+                });
 
-            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray());
+            expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
+                .Select(IntegrationCreate.AggregateRootEvent).ToArray());
 
             plainPostgresTransactionManager.ExecuteInPlainTransaction(
                 () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
@@ -98,7 +102,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         };
 
         Because of = () => plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.ProcessPackage("1"));
+            () => interviewPackagesService.ProcessPackage("1"));
 
         It should_broken_packages_storage_contains_specified_interview = () =>
         {
@@ -117,7 +121,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.PackageSize.ShouldEqual(expectedEventsString.Length);
         };
 
-        It should_rollback_transaction = () => transactionManagerMock.Verify(x => x.BeginCommandTransaction(), Times.Once);
+        It should_rollback_transaction =
+            () => transactionManagerMock.Verify(x => x.BeginCommandTransaction(), Times.Once);
 
         Cleanup things = () => { pgSqlConnection.Close(); };
 

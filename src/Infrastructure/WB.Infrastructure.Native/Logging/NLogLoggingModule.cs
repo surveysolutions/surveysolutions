@@ -1,18 +1,18 @@
-﻿using Ninject.Modules;
-using WB.Core.GenericSubdomains.Portable.Services;
+﻿using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Infrastructure.Native.Logging
 {
-    public class NLogLoggingModule : NinjectModule
+    public class NLogLoggingModule : IModule
     {
-        public override void Load()
+        public void Load(IIocRegistry registry)
         {
-            this.Bind<ILoggerProvider>().To<NLogLoggerProvider>();
+            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
-            this.Bind<ILogger>().ToMethod(context =>
+            registry.BindToMethod<ILogger>(context =>
             {
-                if (context.Request.Target != null)
-                    return new NLogLogger(context.Request.Target.Member.DeclaringType);
+                if (context.MemberDeclaringType != null)
+                    return new NLogLogger(context.MemberDeclaringType);
 
                 return new NLogLogger("UNKNOWN");
             });

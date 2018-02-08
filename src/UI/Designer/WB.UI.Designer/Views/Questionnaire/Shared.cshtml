@@ -1,0 +1,20 @@
+﻿@using WB.UI.Designer.Resources
+
+@{
+    ViewBag.Title = QuestionnaireController.SharedQuestionnaires;
+}
+@section Scripts {
+    @Scripts.Render("~/list")
+}
+
+@Html.Partial("QuestionnairesList")
+
+@section Modal
+{
+    <div>
+        @Html.Partial("DeleteModalDialog")
+    </div>
+    <div>
+        @Html.Partial("ExportPdfModalDialog")
+    </div>
+}

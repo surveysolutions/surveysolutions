@@ -157,5 +157,15 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             return new string(source.Where(c => !Char.IsControl(c)).ToArray());
         }
+        
+        public static bool ToBool(this string value, bool @default)
+        {
+            return Boolean.TryParse(value, out var result) ? result : @default;
+        }
+
+        public static int ToInt(this string value, int @default)
+        {
+            return Int32.TryParse(value, out var result) ? result : @default;
+        }
     }
 }

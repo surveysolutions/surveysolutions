@@ -721,6 +721,12 @@ figure img {
     text-decoration: none;
 }
 
+h4 {
+    text-transform: uppercase;
+    margin-bottom: 17px;
+    //font-family: 'RobotoMedium';
+}
+
 .structure {
     margin: 35px 0;
 }
@@ -733,23 +739,29 @@ figure img {
     margin: 1px 0px;
 }
 
-.splitted_variables {
+.splitted_variables,
+.questionnaire_description {
     overflow: hidden;
 }
 
-.splitted_variables dt, .splitted_variables dd {
+.splitted_variables dt,
+.splitted_variables dd,
+.questionnaire_description dt,
+.questionnaire_description dd {
     float: left;
     min-height: 20px;
     margin-bottom: 5px;
 }
 
-.splitted_variables dt {
+.splitted_variables dt,
+.questionnaire_description dt {
     text-align: right;
     clear: left;
     min-width: 26%;
 }
 
-.splitted_variables dd {
+.splitted_variables dd,
+.questionnaire_description dd {
     margin-left: 40px;
     width: 66%;
     position: relative;
@@ -761,6 +773,28 @@ figure img {
     position: absolute;
     top: 0;
     left: -30px;
+}
+
+.questionnaire_description dt {
+    //font: 12px/14px "RobotoItalic";
+    color: #3f3f3f;
+    font-style: italic;
+}
+
+.questionnaire_description dd {
+    //font-family: "RobotoRegular";
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.questionnaire_description dd div {
+    margin-bottom: 5px;
+}
+
+.identification_information h3 {
+    text-transform: none;
+    padding-left: calc(~"26% + 15px"); 
+    font-weight: bold;
 }
 /*End Appendix*/
 

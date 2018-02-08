@@ -78,7 +78,7 @@
             });
         },
         updated(){
-            document.title = `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
+            document.title = this.$config.splashScreen ? this.$t("WebInterviewUI.LoadingQuestionnaire") : `${this.$store.state.webinterview.interviewKey} | ${this.questionnaireTitle} | ${this.$t("WebInterviewUI.WebInterview")}`
         },
         computed: {
             canChangeLanguage() {
@@ -88,6 +88,8 @@
                 return this.$store.state.webinterview.currentLanguage || this.$store.state.webinterview.originalLanguageName
             },
             questionnaireTitle(){
+                if(this.$config.splashScreen) return this.$t("WebInterviewUI.LoadingQuestionnaire")
+
                 return this.$store.state.webinterview.questionnaireTitle || ""
             },
             toFirstSection(){

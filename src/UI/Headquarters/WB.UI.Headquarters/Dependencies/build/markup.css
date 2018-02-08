@@ -5860,14 +5860,14 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   height: 18px;
   background: transparent url("../img/questionnaire-sprite.png") no-repeat;
   vertical-align: middle;
-  background-size: 629px 18px;
+  background-size: 793px 18px;
   background-position: 4px 2px;
   margin-right: 12px; }
   @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
     input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
       /* on retina, use image that's scaled by 2 */
       background-image: url("../img/questionnaire-sprite2k.png");
-      background-size: 629px 18px; } }
+      background-size: 793px 18px; } }
 
 .combo-box input:checked ~ .btn-clear, .answered > .btn-clear, .field.answered .btn-clear, .field.has-error .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu, .dataTables_wrapper .dataTables_filter label.active input {
   visibility: visible;
@@ -6005,9 +6005,7 @@ a.disabled {
   top: 5px;
   right: 0;
   border-radius: 4px;
-  z-index: 3;
-  -webkit-transition: all 0.2s linear 0s;
-  transition: all 0.2s linear 0s; }
+  z-index: 3; }
   .foldback-button:hover span.arrow, .foldback-button:focus span.arrow {
     background-color: black; }
   .foldback-button:hover .glyphicon, .foldback-button:focus .glyphicon {
@@ -6044,9 +6042,7 @@ a.disabled {
   cursor: pointer;
   z-index: 3;
   top: calc(50% - 18px);
-  display: block;
-  -webkit-transition: all 0.2s linear 0s;
-  transition: all 0.2s linear 0s; }
+  display: block; }
   .humburger-foldback-button:before, .humburger-foldback-button:after {
     content: "";
     display: block;
@@ -6098,8 +6094,6 @@ a.disabled {
     background-color: #8c8f90; }
 
 .btn-default.btn-post-comment {
-  -webkit-transition: all 0.2s linear 0s;
-  transition: all 0.2s linear 0s;
   padding: 12px;
   background-color: #fff;
   color: #a6a8a9;
@@ -6118,8 +6112,6 @@ a.disabled {
   padding-left: 5px; }
 
 .input-group .input-group-btn .btn.btn-post-comment {
-  -webkit-transition: all 0.2s linear 0s;
-  transition: all 0.2s linear 0s;
   padding: 12px;
   color: #a6a8a9;
   background-color: #fff;
@@ -6210,7 +6202,7 @@ a.disabled {
   position: absolute;
   top: 0;
   right: 0; }
-  .btn-clear:active span:before, .btn-clear:active span:after, .btn-clear:active:focus span:before, .btn-clear:active:focus span:after {
+  .btn-clear:active span:before, .btn-clear:active span:after, .btn-clear:active:focus span:before, .btn-clear:active:focus span:after, .btn-clear:focus span:before, .btn-clear:focus span:after {
     background-color: #000;
     opacity: 1;
     filter: alpha(opacity=100); }
@@ -6290,8 +6282,6 @@ a.disabled {
   .btn-plus:hover:before, .btn-plus:hover:after, .btn-plus:focus:before, .btn-plus:focus:after, .btn-plus:active:before, .btn-plus:active:after {
     background-color: #595c5d; }
   .btn-plus:before, .btn-plus:after {
-    -webkit-transition: all 0.2s linear 0s;
-    transition: all 0.2s linear 0s;
     -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
     top: 0; }
@@ -6439,9 +6429,7 @@ a.disabled {
     left: 0; }
   .btn-strips span, .btn-strips:before, .btn-strips:after {
     opacity: 0.5;
-    filter: alpha(opacity=50);
-    -webkit-transition: all 0.2s linear 0s;
-    transition: all 0.2s linear 0s; }
+    filter: alpha(opacity=50); }
   .btn-strips:hover span, .btn-strips:hover:before, .btn-strips:hover:after, .btn-strips:focus span, .btn-strips:focus:before, .btn-strips:focus:after, .btn-strips:active span, .btn-strips:active:before, .btn-strips:active:after {
     opacity: 1;
     filter: alpha(opacity=100); }
@@ -6476,8 +6464,6 @@ a.disabled {
     border-color: #8c8f90; }
 
 .get-interviewer-app {
-  -webkit-transition: all 0.2s linear 0s;
-  transition: all 0.2s linear 0s;
   width: 248px;
   background: url("../img/HQ-login-mobile-get-button-logo.png") no-repeat;
   background-size: 55px;
@@ -6546,8 +6532,6 @@ a.disabled {
   .navbar .navbar-collapse li {
     position: relative; }
     .navbar .navbar-collapse li.active > a {
-      -webkit-transition: all 0.5s linear 0s;
-      transition: all 0.5s linear 0s;
       font-family: "RobotoBold"; }
       .navbar .navbar-collapse li.active > a span {
         font-family: "RobotoLight"; }
@@ -6555,9 +6539,7 @@ a.disabled {
         border-top-color: #fff; }
     .navbar .navbar-collapse li > a {
       padding: 24px 5px;
-      text-align: center;
-      -webkit-transition: all 0.5s linear 0s;
-      transition: all 0.5s linear 0s; }
+      text-align: center; }
       .navbar .navbar-collapse li > a.notifications {
         padding-left: 45px; }
       .navbar .navbar-collapse li > a:hover, .navbar .navbar-collapse li > a:focus {
@@ -6597,9 +6579,7 @@ a.disabled {
       .navbar .navbar-collapse li .dropdown-menu li a {
         padding: 10px;
         text-align: left;
-        color: #3f3f3f;
-        -webkit-transition: all 0.2s linear 0s;
-        transition: all 0.2s linear 0s; }
+        color: #3f3f3f; }
         .navbar .navbar-collapse li .dropdown-menu li a:hover, .navbar .navbar-collapse li .dropdown-menu li a:focus {
           background-color: #ececec;
           font-family: "RobotoLight"; }
@@ -7041,122 +7021,151 @@ a.disabled {
   font-style: italic;
   color: #a6a8a9 !important; }
 
-input.wb-checkbox {
-  display: none; }
-  input.wb-checkbox ~ label:hover .tick,
-  input.wb-checkbox ~ label:focus .tick {
-    background-position: -37px 2px; }
-  input.wb-checkbox:checked ~ label .tick {
-    background-position: -78px 2px; }
-  input.wb-checkbox:checked ~ label:hover .tick,
-  input.wb-checkbox:checked ~ label:focus .tick {
-    background-position: -119px 2px; }
-  input.wb-checkbox:disabled ~ label .tick {
-    background-position: -160px 2px; }
-  input.wb-checkbox:disabled ~ label:hover .tick,
-  input.wb-checkbox:disabled ~ label:focus .tick {
-    background-position: -201px 2px; }
-  input.wb-checkbox:checked:disabled ~ label .tick {
-    background-position: -242px 2px; }
-  input.wb-checkbox:checked:disabled ~ label:hover .tick,
-  input.wb-checkbox:checked:disabled ~ label:focus .tick {
-    background-position: -283px 2px; }
+input.wb-checkbox,
+input.checkbox-filter,
+input.double-checkbox,
+input.double-checkbox-white,
+.radio input.wb-radio {
+  display: block;
+  position: absolute;
+  left: -999999px; }
 
-input.checkbox-filter {
-  display: none; }
-  input.checkbox-filter ~ label {
-    position: relative;
-    padding-left: 30px;
-    cursor: pointer; }
-  input.checkbox-filter ~ label .tick {
-    display: inline-block;
-    width: 25px;
-    height: 20px;
-    vertical-align: middle;
-    position: absolute;
-    top: 0;
-    left: -5px;
-    background: transparent url("../img/chekboxes.png") no-repeat;
-    background-size: 68px 350px;
-    background-position: 0 0;
-    margin-right: 10px; }
-    @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-      input.checkbox-filter ~ label .tick {
-        /* on retina, use image that's scaled by 2 */
-        background-image: url("../img/chekboxes2k.png");
-        background-size: 68px 350px; } }
-  input.checkbox-filter ~ label:hover .tick,
-  input.checkbox-filter ~ label:focus .tick {
-    background-position: 0px -36px; }
-  input.checkbox-filter:checked ~ label .tick {
-    background-position: 0px -72px; }
-  input.checkbox-filter:checked ~ label:hover .tick,
-  input.checkbox-filter:checked ~ label:focus .tick {
-    background-position: 0px -108px; }
-  input.checkbox-filter:disabled ~ label .tick,
-  input.checkbox-filter:checked:disabled ~ label .tick {
-    background-position: 0px -144px; }
-  input.checkbox-filter:disabled ~ label:hover .tick,
-  input.checkbox-filter:checked:disabled ~ label:hover .tick,
-  input.checkbox-filter:disabled ~ label:focus .tick,
-  input.checkbox-filter:checked:disabled ~ label:focus .tick {
-    background-position: 0px -180px; }
+input.wb-checkbox ~ label:hover .tick,
+input.wb-checkbox:focus ~ label .tick,
+input.wb-checkbox ~ label:focus .tick {
+  background-position: -37px 2px; }
 
-input.double-checkbox {
-  display: none; }
-  input.double-checkbox ~ label {
-    position: relative;
-    cursor: pointer;
-    margin: 0; }
-  input.double-checkbox ~ label .tick {
-    display: inline-block;
-    width: 25px;
-    height: 20px;
-    vertical-align: middle;
-    background: transparent url("../img/chekboxes.png") no-repeat;
-    background-size: 68px 350px;
-    background-position: 0 -216px; }
-    @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-      input.double-checkbox ~ label .tick {
-        /* on retina, use image that's scaled by 2 */
-        background-image: url("../img/chekboxes2k.png");
-        background-size: 68px 350px; } }
-  input.double-checkbox ~ label:hover .tick,
-  input.double-checkbox ~ label:focus .tick {
-    background-position: 0px -254px; }
-  input.double-checkbox:checked ~ label .tick {
-    background-position: 0px -292px; }
-  input.double-checkbox:checked ~ label:hover .tick,
-  input.double-checkbox:checked ~ label:focus .tick {
-    background-position: 0px -330px; }
+input.wb-checkbox:checked ~ label .tick {
+  background-position: -78px 2px; }
 
-input.double-checkbox-white {
-  display: none; }
-  input.double-checkbox-white ~ label {
-    position: relative;
-    cursor: pointer;
-    margin: 0; }
-  input.double-checkbox-white ~ label .tick {
-    display: inline-block;
-    width: 25px;
-    height: 20px;
-    vertical-align: middle;
-    background: transparent url("../img/chekboxes.png") no-repeat;
-    background-size: 68px 350px;
-    background-position: -44px -216px; }
-    @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-      input.double-checkbox-white ~ label .tick {
-        /* on retina, use image that's scaled by 2 */
-        background-image: url("../img/chekboxes2k.png");
-        background-size: 68px 350px; } }
-  input.double-checkbox-white ~ label:hover .tick,
-  input.double-checkbox-white ~ label:focus .tick {
-    background-position: -44px -254px; }
-  input.double-checkbox-white:checked ~ label .tick {
-    background-position: -44px -292px; }
-  input.double-checkbox-white:checked ~ label:hover .tick,
-  input.double-checkbox-white:checked ~ label:focus .tick {
-    background-position: -44px -330px; }
+input.wb-checkbox:checked ~ label:hover .tick,
+input.wb-checkbox:checked ~ label:focus .tick,
+input.wb-checkbox:checked:focus ~ label .tick {
+  background-position: -119px 2px; }
+
+input.wb-checkbox:disabled ~ label .tick {
+  background-position: -160px 2px; }
+
+input.wb-checkbox:disabled ~ label:hover .tick,
+input.wb-checkbox:disabled ~ label:focus .tick {
+  background-position: -201px 2px; }
+
+input.wb-checkbox:checked:disabled ~ label .tick {
+  background-position: -242px 2px; }
+
+input.wb-checkbox:checked:disabled ~ label:hover .tick,
+input.wb-checkbox:checked:disabled ~ label:focus .tick {
+  background-position: -283px 2px; }
+
+input.checkbox-filter ~ label {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer; }
+
+input.checkbox-filter ~ label .tick {
+  display: inline-block;
+  width: 25px;
+  height: 20px;
+  vertical-align: middle;
+  position: absolute;
+  top: 0;
+  left: -5px;
+  background: transparent url("../img/chekboxes.png") no-repeat;
+  background-size: 68px 350px;
+  background-position: 0 0;
+  margin-right: 10px; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    input.checkbox-filter ~ label .tick {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/chekboxes2k.png");
+      background-size: 68px 350px; } }
+
+input.checkbox-filter:focus ~ label .tick,
+input.checkbox-filter ~ label:hover .tick,
+input.checkbox-filter ~ label:focus .tick {
+  background-position: 0px -36px; }
+
+input.checkbox-filter:checked ~ label .tick {
+  background-position: 0px -72px; }
+
+input.checkbox-filter:checked ~ label:hover .tick,
+input.checkbox-filter:checked ~ label:focus .tick,
+input.checkbox-filter:checked:focus ~ label .tick {
+  background-position: 0px -108px; }
+
+input.checkbox-filter:disabled ~ label .tick,
+input.checkbox-filter:checked:disabled ~ label .tick {
+  background-position: 0px -144px; }
+
+input.checkbox-filter:disabled ~ label:hover .tick,
+input.checkbox-filter:checked:disabled ~ label:hover .tick,
+input.checkbox-filter:disabled ~ label:focus .tick,
+input.checkbox-filter:checked:disabled ~ label:focus .tick {
+  background-position: 0px -180px; }
+
+input.double-checkbox ~ label {
+  position: relative;
+  cursor: pointer;
+  margin: 0; }
+
+input.double-checkbox ~ label .tick {
+  display: inline-block;
+  width: 25px;
+  height: 20px;
+  vertical-align: middle;
+  background: transparent url("../img/chekboxes.png") no-repeat;
+  background-size: 68px 350px;
+  background-position: 0 -216px; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    input.double-checkbox ~ label .tick {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/chekboxes2k.png");
+      background-size: 68px 350px; } }
+
+input.double-checkbox ~ label:hover .tick,
+input.double-checkbox:focus ~ label .tick,
+input.double-checkbox ~ label:focus .tick {
+  background-position: 0px -254px; }
+
+input.double-checkbox:checked ~ label .tick {
+  background-position: 0px -292px; }
+
+input.double-checkbox:checked ~ label:hover .tick,
+input.double-checkbox:checked ~ label:focus .tick,
+input.double-checkbox:checked:focus ~ label .tick {
+  background-position: 0px -330px; }
+
+input.double-checkbox-white ~ label {
+  position: relative;
+  cursor: pointer;
+  margin: 0; }
+
+input.double-checkbox-white ~ label .tick {
+  display: inline-block;
+  width: 25px;
+  height: 20px;
+  vertical-align: middle;
+  background: transparent url("../img/chekboxes.png") no-repeat;
+  background-size: 68px 350px;
+  background-position: -44px -216px; }
+  @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+    input.double-checkbox-white ~ label .tick {
+      /* on retina, use image that's scaled by 2 */
+      background-image: url("../img/chekboxes2k.png");
+      background-size: 68px 350px; } }
+
+input.double-checkbox-white:focus ~ label .tick,
+input.double-checkbox-white ~ label:hover .tick,
+input.double-checkbox-white ~ label:focus .tick {
+  background-position: -44px -254px; }
+
+input.double-checkbox-white:checked ~ label .tick {
+  background-position: -44px -292px; }
+
+input.double-checkbox-white:checked ~ label:hover .tick,
+input.double-checkbox-white:checked ~ label:focus .tick,
+input.double-checkbox-white:checked:focus ~ label .tick {
+  background-position: -44px -330px; }
 
 .radio {
   margin: 0; }
@@ -7164,31 +7173,31 @@ input.double-checkbox-white {
     color: #a6a8a9;
     font-weight: normal;
     padding: 7px 0; }
-  .radio input.wb-radio {
-    display: none; }
-    .radio input.wb-radio:checked + label {
-      color: #3f3f3f;
-      font-weight: bold; }
-    .radio input.wb-radio + label .tick {
-      background-position: -326px 2px; }
-    .radio input.wb-radio + label:hover .tick,
-    .radio input.wb-radio + label:focus .tick {
-      background-position: -367px 2px; }
-    .radio input.wb-radio:checked + label .tick {
-      background-position: -408px 2px; }
-    .radio input.wb-radio:checked + label:hover .tick,
-    .radio input.wb-radio:checked + label:focus .tick {
-      background-position: -449px 2px; }
-    .radio input.wb-radio:disabled + label .tick {
-      background-position: -572px 2px; }
-    .radio input.wb-radio:disabled + label:hover .tick,
-    .radio input.wb-radio:disabled + label:focus .tick {
-      background-position: -613px 2px; }
-    .radio input.wb-radio:checked:disabled + label .tick {
-      background-position: -490px 2px; }
-    .radio input.wb-radio:checked:disabled + label:hover .tick,
-    .radio input.wb-radio:checked:disabled + label:focus .tick {
-      background-position: -531px 2px; }
+  .radio input.wb-radio:checked + label {
+    color: #3f3f3f;
+    font-weight: bold; }
+  .radio input.wb-radio + label .tick {
+    background-position: -326px 2px; }
+  .radio input.wb-radio + label:hover .tick,
+  .radio input.wb-radio:focus + label .tick,
+  .radio input.wb-radio + label:focus .tick {
+    background-position: -367px 2px; }
+  .radio input.wb-radio:checked + label .tick {
+    background-position: -408px 2px; }
+  .radio input.wb-radio:checked + label:hover .tick,
+  .radio input.wb-radio:checked + label:focus .tick,
+  .radio input.wb-radio:checked:focus + label .tick {
+    background-position: -449px 2px; }
+  .radio input.wb-radio:disabled + label .tick {
+    background-position: -572px 2px; }
+  .radio input.wb-radio:disabled + label:hover .tick,
+  .radio input.wb-radio:disabled + label:focus .tick {
+    background-position: -613px 2px; }
+  .radio input.wb-radio:checked:disabled + label .tick {
+    background-position: -490px 2px; }
+  .radio input.wb-radio:checked:disabled + label:hover .tick,
+  .radio input.wb-radio:checked:disabled + label:focus .tick {
+    background-position: -531px 2px; }
 
 .control-label {
   font-size: 14px;
@@ -7266,7 +7275,6 @@ input.double-checkbox-white {
     line-height: 20px;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
     border-color: #dbdfe2;
-    /* outline: none !important; */
     height: 40px; }
     .bootstrap-select.btn-group .dropdown-toggle:hover, .bootstrap-select.btn-group .dropdown-toggle:focus, .bootstrap-select.btn-group .dropdown-toggle:active, .bootstrap-select.btn-group .dropdown-toggle:active:focus {
       outline: none !important;
@@ -7397,7 +7405,7 @@ ul.typeahead.dropdown-menu {
     -webkit-transition: none;
     transition: none;
     background-color: #fff; }
-    .search .btn-clear:active span:before, .search .btn-clear:active span:after, .search .btn-clear:active:focus span:before, .search .btn-clear:active:focus span:after {
+    .search .btn-clear:active span:before, .search .btn-clear:active span:after, .search .btn-clear:active:focus span:before, .search .btn-clear:active:focus span:after, .search .btn-clear:focus span:before, .search .btn-clear:focus span:after {
       background-color: #000;
       opacity: 1;
       filter: alpha(opacity=100); }
@@ -7683,6 +7691,9 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
 
 .dropdown-backdrop {
   z-index: 1; }
+
+.field .combo-box {
+  width: 100%; }
 
 .filters {
   -webkit-transition: width 0.5s linear 0s;
@@ -8169,70 +8180,57 @@ body > .ui-pnotify {
   font: 14px/16px Arial, sans-serif; }
   .table td.type-numeric {
     text-align: right; }
-  .table tr {
-    -webkit-transition: all 0.2s linear 0s;
-    transition: all 0.2s linear 0s; }
-    .table tr .without-break {
-      white-space: nowrap;
-      max-width: 300px;
-      text-overflow: clip;
-      overflow: hidden;
-      position: relative; }
-      .table tr .without-break:before {
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        content: "";
-        height: 100%;
-        width: 30px;
-        background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(70%, #fff));
-        background-image: linear-gradient(to right, transparent 0%, #fff 70%);
-        background-repeat: repeat-x;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFFFFFFF', GradientType=1); }
-    .table tr.selected {
-      background-color: #e1e3e3 !important; }
-      .table tr.selected td.without-break:before {
-        background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(70%, #cad1d7));
-        background-image: linear-gradient(to right, transparent 0%, #cad1d7 70%);
-        background-repeat: repeat-x;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFCAD1D7', GradientType=1); }
-      .table tr.selected input.checkbox-filter ~ label .tick {
-        background-position: -43px 0; }
-      .table tr.selected input.checkbox-filter ~ label:hover .tick,
-      .table tr.selected input.checkbox-filter ~ label:focus .tick {
-        background-position: -43px -36px; }
-      .table tr.selected input.checkbox-filter:checked ~ label .tick {
-        background-position: -43px -72px; }
-      .table tr.selected input.checkbox-filter:checked ~ label:hover .tick,
-      .table tr.selected input.checkbox-filter:checked ~ label:focus .tick {
-        background-position: -43px -108px; }
-      .table tr.selected input.checkbox-filter:disabled ~ label .tick,
-      .table tr.selected input.checkbox-filter:checked:disabled ~ label .tick {
-        background-position: -43px -144px; }
-      .table tr.selected input.checkbox-filter:disabled ~ label:hover .tick,
-      .table tr.selected input.checkbox-filter:checked:disabled ~ label:hover .tick,
-      .table tr.selected input.checkbox-filter:disabled ~ label:focus .tick,
-      .table tr.selected input.checkbox-filter:checked:disabled ~ label:focus .tick {
-        background-position: -43px -180px; }
-      .table tr.selected:hover td.without-break:before, .table tr.selected:focus td.without-break:before, .table tr.selected:active td.without-break:before {
-        background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(70%, #cad1d7));
-        background-image: linear-gradient(to right, transparent 0%, #cad1d7 70%);
-        background-repeat: repeat-x;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFCAD1D7', GradientType=1); }
-    .table tr td {
-      word-wrap: break-word;
-      overflow-wrap: break-word; }
-    .table tr th.with-search {
-      padding-left: 40px;
-      min-width: 150px; }
-    .table tr.disabled {
-      background: repeating-linear-gradient(-45deg, #dbdfe2, #dbdfe2 2px, transparent 2px, transparent 6px); }
-      .table tr.disabled a, .table tr.disabled label, .table tr.disabled input, .table tr.disabled button {
-        cursor: not-allowed;
-        pointer-events: none; }
-      .table tr.disabled td:hover a, .table tr.disabled td:hover a:hover, .table tr.disabled td:hover a:focus, .table tr.disabled td:hover a:active, .table tr.disabled td:focus a, .table tr.disabled td:focus a:hover, .table tr.disabled td:focus a:focus, .table tr.disabled td:focus a:active, .table tr.disabled td:active a, .table tr.disabled td:active a:hover, .table tr.disabled td:active a:focus, .table tr.disabled td:active a:active {
-        color: #3f3f3f !important; }
+  .table tr .without-break {
+    white-space: nowrap;
+    max-width: 300px;
+    text-overflow: clip;
+    overflow: hidden;
+    position: relative; }
+    .table tr .without-break:before {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      content: "";
+      height: 100%;
+      width: 30px;
+      background-image: -webkit-gradient(linear, left top, right top, from(transparent), color-stop(70%, #fff));
+      background-image: linear-gradient(to right, transparent 0%, #fff 70%);
+      background-repeat: repeat-x;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFFFFFFF', GradientType=1); }
+  .table tr.selected {
+    background-color: #e1e3e3 !important; }
+    .table tr.selected input.checkbox-filter ~ label .tick {
+      background-position: -43px 0; }
+    .table tr.selected input.checkbox-filter ~ label:hover .tick,
+    .table tr.selected input.checkbox-filter ~ label:focus .tick {
+      background-position: -43px -36px; }
+    .table tr.selected input.checkbox-filter:checked ~ label .tick {
+      background-position: -43px -72px; }
+    .table tr.selected input.checkbox-filter:checked ~ label:hover .tick,
+    .table tr.selected input.checkbox-filter:checked ~ label:focus .tick {
+      background-position: -43px -108px; }
+    .table tr.selected input.checkbox-filter:disabled ~ label .tick,
+    .table tr.selected input.checkbox-filter:checked:disabled ~ label .tick {
+      background-position: -43px -144px; }
+    .table tr.selected input.checkbox-filter:disabled ~ label:hover .tick,
+    .table tr.selected input.checkbox-filter:checked:disabled ~ label:hover .tick,
+    .table tr.selected input.checkbox-filter:disabled ~ label:focus .tick,
+    .table tr.selected input.checkbox-filter:checked:disabled ~ label:focus .tick {
+      background-position: -43px -180px; }
+  .table tr td {
+    word-wrap: break-word;
+    overflow-wrap: break-word; }
+  .table tr th.with-search {
+    padding-left: 40px;
+    min-width: 150px; }
+  .table tr.disabled {
+    background: repeating-linear-gradient(-45deg, #dbdfe2, #dbdfe2 2px, transparent 2px, transparent 6px); }
+    .table tr.disabled a, .table tr.disabled label, .table tr.disabled input, .table tr.disabled button {
+      cursor: not-allowed;
+      pointer-events: none; }
+    .table tr.disabled td:hover a, .table tr.disabled td:hover a:hover, .table tr.disabled td:hover a:focus, .table tr.disabled td:hover a:active, .table tr.disabled td:focus a, .table tr.disabled td:focus a:hover, .table tr.disabled td:focus a:focus, .table tr.disabled td:focus a:active, .table tr.disabled td:active a, .table tr.disabled td:active a:hover, .table tr.disabled td:active a:focus, .table tr.disabled td:active a:active {
+      color: #3f3f3f !important; }
   .table thead {
     letter-spacing: 0.5px;
     color: #a6a8a9; }
@@ -8271,8 +8269,6 @@ body > .ui-pnotify {
     .table tbody tr td .pull-right .glyphicon-remove, .table tbody tr td .caret {
       color: #fff; }
     .table tbody tr td a {
-      -webkit-transition: all 0.2s linear 0s;
-      transition: all 0.2s linear 0s;
       text-overflow: ellipsis;
       color: #3f3f3f; }
     .table tbody tr td:hover a, .table tbody tr td:hover a:hover, .table tbody tr td:hover a:focus, .table tbody tr td:hover a:active, .table tbody tr td:focus a, .table tbody tr td:focus a:hover, .table tbody tr td:focus a:focus, .table tbody tr td:focus a:active, .table tbody tr td:active a, .table tbody tr td:active a:hover, .table tbody tr td:active a:focus, .table tbody tr td:active a:active {
@@ -8297,8 +8293,6 @@ body > .ui-pnotify {
         color: #2a81cb !important;
         text-decoration: none; }
       .table tfoot tr td a, .table tfoot tr th a {
-        -webkit-transition: all 0.2s linear 0s;
-        transition: all 0.2s linear 0s;
         text-overflow: ellipsis;
         color: #3f3f3f; }
   .table .total-row {
@@ -8475,8 +8469,6 @@ body > .ui-pnotify {
         padding: 5px 10px; }
       .dataTables_wrapper .dataTables_filter label input {
         height: 40px;
-        -webkit-transition: all 0.2s linear 0s;
-        transition: all 0.2s linear 0s;
         width: 0;
         margin-right: 40px;
         font-size: 13px;
@@ -8881,7 +8873,9 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   padding: 15px;
   border-radius: 5px;
   border: 1px solid #dbdfe2;
-  background-color: #f8f8f8; }
+  background-color: #f8f8f8;
+  word-wrap: break-word;
+  overflow-wrap: break-word; }
   .alerts .alert .close {
     color: inherit; }
     .alerts .alert .close:hover, .alerts .alert .close:focus, .alerts .alert .close:active {
@@ -8928,7 +8922,7 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
   color: #e74924 !important; }
 
 .success-text {
-  color: #2fc507 !important; }
+  color: #3ca21a !important; }
 
 .default-text {
   color: #dbdfe2 !important; }
@@ -9185,6 +9179,10 @@ main.hidden.display-block {
   text-overflow: ellipsis;
   overflow: hidden; }
 
+.add-transition, .foldback-button, .humburger-foldback-button, .btn-default.btn-post-comment, .input-group .input-group-btn .btn.btn-post-comment, .btn-plus:before, .btn-plus:after, .btn-strips span, .btn-strips:before, .btn-strips:after, .get-interviewer-app, .navbar .navbar-collapse li.active > a, .navbar .navbar-collapse li > a, .navbar .navbar-collapse li .dropdown-menu li a, .table tr, .table tbody tr td a, .table tfoot tr td a, .table tfoot tr th a, .dataTables_wrapper .dataTables_filter label input {
+  -webkit-transition: all 0.2s linear 0s;
+  transition: all 0.2s linear 0s; }
+
 @media (max-width: 1210px) {
   html body {
     padding-top: 70px; }
@@ -9336,6 +9334,34 @@ dl dd:after {
 .warning-message {
   font-family: "RobotoBold"; }
 
+.underlined-link {
+  text-decoration: underline; }
+  .underlined-link:hover, .underlined-link:focus, .underlined-link:active {
+    text-decoration: none; }
+
+.gray-text-row {
+  font-style: normal;
+  text-transform: uppercase;
+  font: 14px/16px "TrebuchetMS";
+  letter-spacing: 1px;
+  color: #a6a8a9; }
+
+.gray-action-unit {
+  color: #a6a8a9; }
+  .gray-action-unit:hover, .gray-action-unit:focus, .gray-action-unit:active {
+    color: #6b6b6b !important; }
+
+.green-action-unit {
+  color: #3ca21a; }
+  .green-action-unit:hover, .green-action-unit:focus, .green-action-unit:active {
+    color: #2c7613; }
+
+.action-block {
+  margin-top: 30px; }
+
+.always-visible-scroll {
+  overflow-y: scroll; }
+
 .left-column #log-in {
   text-align: left; }
 
@@ -9454,12 +9480,9 @@ img#placeholder {
       margin-bottom: 0; }
       .two-columns-form .left-column p a {
         color: #a6a8a9;
-        -webkit-box-shadow: 0 1px 0 #a6a8a9;
-                box-shadow: 0 1px 0 #a6a8a9; }
+        text-decoration: underline; }
         .two-columns-form .left-column p a:hover, .two-columns-form .left-column p a:focus {
-          text-decoration: none;
-          -webkit-box-shadow: none;
-                  box-shadow: none; }
+          text-decoration: none; }
   .two-columns-form .right-column {
     padding: 10px 0 10px 40px;
     border-left: 2px solid #dbdfe2; }

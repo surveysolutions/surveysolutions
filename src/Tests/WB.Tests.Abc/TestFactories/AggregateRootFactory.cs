@@ -3,7 +3,6 @@ using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Headquarters.Questionnaires.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation;
@@ -15,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -58,13 +58,13 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IPlainStorageAccessor<TranslationInstance> translationsStorage = null)
+            IPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance> translationsStorage = null)
             => new Questionnaire(
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IQuestionnaireAssemblyAccessor>(),
                 questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                translationsStorage ?? new InMemoryPlainStorageAccessor<TranslationInstance>());
+                translationsStorage ?? new InMemoryPlainStorageAccessor<Enumerator.Native.Questionnaire.TranslationInstance>());
 
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,

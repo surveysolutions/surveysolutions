@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Sanitizer;
 
@@ -72,6 +73,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         {
             this.questionnaire = questionnaire;
             this.Settings = settings;
+            this.Metadata = this.questionnaire.Metadata ?? new QuestionnaireMetaInfo();
         }
 
         public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
@@ -87,6 +89,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public List<IVariable> VariableWithLongExpressions { get; internal set; }
 
         public string Title => this.questionnaire.Title;
+        public QuestionnaireMetaInfo Metadata { get; internal set; } 
         public IEnumerable<Guid> SectionIds => this.questionnaire.Children.Select(x => x.PublicKey).ToList();
         public IEnumerable<ModificationStatisticsByUser> SharedPersons { get; set; }
 

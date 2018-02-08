@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     }
                 }
 
-                throttle.Reset();
+            throttle.Restart();
             }
         }
     }

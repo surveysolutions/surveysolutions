@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -68,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         || x.Status == InterviewStatus.SentToCapi) &&
                         !x.ReceivedByInterviewer && !x.WasCompleted,
                     CanApprove = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
-                    CanReject = x.Status == InterviewStatus.ApprovedBySupervisor,
+                    CanReject = x.Status == InterviewStatus.ApprovedBySupervisor || x.Status == InterviewStatus.Completed,
                     CanUnapprove = x.Status == InterviewStatus.ApprovedByHeadquarters,
                     CanBeReassigned = x.Status == InterviewStatus.SupervisorAssigned
                         || x.Status == InterviewStatus.InterviewerAssigned
@@ -200,9 +199,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 items = items.Where(x => input.Statuses.Contains(x.Status));
             }
 
-            if (!string.IsNullOrWhiteSpace(input.TeamLeadName))
+            if (!string.IsNullOrWhiteSpace(input.SupervisorOrInterviewerName))
             {
-                items = items.Where(x => x.TeamLeadName == input.TeamLeadName);
+                items = items.Where(x => x.TeamLeadName == input.SupervisorOrInterviewerName || x.ResponsibleName == input.SupervisorOrInterviewerName);
             }
 
             if (input.ResponsibleId.HasValue)

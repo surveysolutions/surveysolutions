@@ -51,9 +51,8 @@ export default {
         hideSearchResults({ commit, dispatch, state }, newState = null) {
             if (state.screenWidth >= state.mediumScreenThreshold){
                 commit("SET_FACET_HIDDEN", false)
-            }
-            dispatch("resetAllFilters")
-            commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? !state.searchResultsHidden : newState)
+            }            
+            commit("SET_SEARCH_RESULTS_HIDDEN", newState == null ? true : newState)
         },
         showSearchResults({ commit, state }) {
             commit("SET_SEARCH_RESULTS_HIDDEN", false)
@@ -85,6 +84,8 @@ export default {
 
     mutations: {
         SET_SIDEBAR_STATE(state, sideBar) {
+            if(sideBar == null) return
+            
             const byParentId = groupBy(sideBar.groups, "parentId")
             forEach(byParentId, (panels, id) => {
                 Vue.set(state.panels, id, panels)

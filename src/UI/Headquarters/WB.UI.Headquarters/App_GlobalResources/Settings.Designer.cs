@@ -19,7 +19,7 @@ namespace Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option or rebuild the Visual Studio project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Web.Application.StronglyTypedResourceProxyBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Settings {
@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password could open the data archives..
+        ///   Looks up a localized string similar to Check Enable encryption box to encrypt export data archives and protect them with the provided password. Change password by pressing the circular error button. After encryption, only people who know the password can open the exported data..
         /// </summary>
         internal static string ExportEncryption_Description {
             get {
@@ -187,7 +187,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Company logo shows a custom image on the server login page and on the login page of the interviewer app. Click Choose file button to upload an image on your computer to the server..
+        ///   Looks up a localized string similar to Company logo shows a custom image on the server login page and on the login page of the Interviewer app. Click the Choose file button to upload an image from your computer to the server..
         /// </summary>
         internal static string LogoSettings_Description {
             get {
@@ -214,7 +214,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to regenerate password? You will need to regenerate exported data in order to open it..
+        ///   Looks up a localized string similar to Are you sure you want to create a new password? You will need to regenerate exported data in order to open them..
         /// </summary>
         internal static string RegeneratePasswordConfirm {
             get {

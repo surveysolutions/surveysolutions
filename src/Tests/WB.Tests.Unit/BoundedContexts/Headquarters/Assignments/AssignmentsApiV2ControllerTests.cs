@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignments = await controller.GetAssignmentsAsync(new CancellationToken());
 
             Assert.That(assignments.Single(), Has.Property(nameof(AssignmentApiView.Quantity))
-                .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */ + 2 /* interviews sent to device */));
+                .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */));
         }
 
         [Test]

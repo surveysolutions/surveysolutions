@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Utils;
@@ -13,7 +12,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewFolder> publicFoldersStorage;
 
-        public QuestionnaireListViewFactory(IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
+        public QuestionnaireListViewFactory(
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnaireListViewItemStorage,
             IPlainStorageAccessor<QuestionnaireListViewFolder> publicFoldersStorage)
         {
             this.questionnaireListViewItemStorage = questionnaireListViewItemStorage;
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             List<QuestionnaireListViewFolder> folders = new List<QuestionnaireListViewFolder>();
             List<QuestionnaireListViewItem> questionnaires = new List<QuestionnaireListViewItem>(); 
             int foldersCount = 0, questionnairesCount = 0;
-            var isSupportFolders = input.IsPublic;
+            var isSupportFolders = input.Type == QuestionnairesType.Public;
 
             if (isSupportFolders)
             {
@@ -175,7 +175,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
             }
         }
 
-        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(IQueryable<QuestionnaireListViewItem> _,
+        private IQueryable<QuestionnaireListViewItem> FilterQuestionnaires(
+            IQueryable<QuestionnaireListViewItem> _,
             QuestionnaireListInputModel input, bool isSupportFolders)
         {
             var result = _.Where(x => x.IsDeleted == false);
@@ -204,53 +205,37 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList
                         x => x.Title.ToLower().Contains(filterLowerCase) || x.CreatorName.ToLower().Contains(filterLowerCase));
             }
 
-            if (input.IsAdminMode)
-            {
-                if (!input.IsPublic)
-                {
-                    result =
-                        result.Where(
-                            x =>
-                                x.CreatedBy == input.ViewerId ||
-                                x.SharedPersons.Any(person => person.UserId == input.ViewerId));
-                }
-            }
-            else
-            {
-                if (input.IsPublic)
-                    result = result.Where(x => x.IsPublic);
-                else
-                    result =
-                        result.Where(
-                            x =>
-                                x.CreatedBy == input.ViewerId ||
-                                x.SharedPersons.Any(person => person.UserId == input.ViewerId));
-            }
+            result = result.Where(x =>
+                   input.Type.HasFlag(QuestionnairesType.My) 
+                        && x.CreatedBy == input.ViewerId || 
+                   
+                   input.Type.HasFlag(QuestionnairesType.Shared) 
+                        && x.CreatedBy != input.ViewerId 
+                        && x.SharedPersons.Any(person => person.UserId == input.ViewerId) ||
+                   
+                   input.Type.HasFlag(QuestionnairesType.Public) 
+                        && (input.IsAdminMode || x.IsPublic)
+            );
+            
             return result;
         }
 
         private IQueryable<QuestionnaireListViewFolder> FilterFolders(IQueryable<QuestionnaireListViewFolder> _,
             QuestionnaireListInputModel input)
         {
-            var result = _.Where(x => input.IsPublic == true); // support only public folders
+            if (string.IsNullOrEmpty(input.SearchFor))
+                return _.Where(x => input.FolderId == x.Parent);
 
-            if (!string.IsNullOrEmpty(input.SearchFor))
-            {
-                var filterLowerCase = input.SearchFor.Trim().ToLower();
-                result = result.Where(x => x.Title.ToLower().Contains(filterLowerCase));
+            var filterLowerCase = input.SearchFor.Trim().ToLower();
+            _ = _.Where(x => x.Title.ToLower().Contains(filterLowerCase));
 
-                if (input.FolderId.HasValue)
-                {
-                    var folderId = input.FolderId.Value.ToString();
-                    result = result.Where(f => f.Path.Contains(folderId));
-                }
-            }
-            else 
+            if (input.FolderId.HasValue)
             {
-                result = result.Where(x => input.FolderId == x.Parent);
+                var folderId = input.FolderId.Value.ToString();
+                _ = _.Where(f => f.Path.Contains(folderId));
             }
 
-            return result;
+            return _;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
@@ -22,13 +21,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     {
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
         private readonly IPlainStorageAccessor<UserMap> userMapsStorage;
-        private readonly IMapPropertiesProvider mapPropertiesProvider;
+        private readonly IMapService mapPropertiesProvider;
         private readonly IUserRepository userStorage;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IArchiveUtils archiveUtils;
         private const string TempFolderName = "TempMapsData";
-        private const string UnzippedFoldername = "Unzipped";
         private const string MapsFolderName = "MapsData";
         private readonly string path;
 
@@ -38,12 +36,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<FileSystemMapStorageService>();
 
-        private static readonly HashSet<string> createdFolders = new HashSet<string>();
-
         public FileSystemMapStorageService(IFileSystemAccessor fileSystemAccessor, string folderPath, IArchiveUtils archiveUtils,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IPlainStorageAccessor<UserMap> userMapsStorage,
-            IMapPropertiesProvider mapPropertiesProvider,
+            IMapService mapPropertiesProvider,
             IUserRepository userStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -64,74 +60,51 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 fileSystemAccessor.CreateDirectory(this.mapsFolderPath);
         }
 
-        public string[] UnzipAndGetFileList(byte[] fileBytes, out string tempStore)
+        public async Task SaveOrUpdateMapAsync(ExtractedFile mapFile)
         {
-            var processId = Guid.NewGuid().FormatGuid();
-            var pathToUnzip = this.fileSystemAccessor.CombinePath(this.path, processId);
+            var tempFileStore = Guid.NewGuid().FormatGuid();
+            var pathToSave = this.fileSystemAccessor.CombinePath(this.path, tempFileStore);
+            if (!this.fileSystemAccessor.IsDirectoryExists(pathToSave))
+                this.fileSystemAccessor.CreateDirectory(pathToSave);
 
-            if (!this.fileSystemAccessor.IsDirectoryExists(pathToUnzip))
-                this.fileSystemAccessor.CreateDirectory(pathToUnzip);
+            var tempFile = this.fileSystemAccessor.CombinePath(pathToSave, mapFile.Name);
 
-            tempStore = pathToUnzip;
+            this.fileSystemAccessor.WriteAllBytes(tempFile, mapFile.Bytes);
 
             try
-                {
-                    this.archiveUtils.Unzip(fileBytes, pathToUnzip);
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e.Message, e);
-                    throw;
-                }
-            
-            var unzippedFiles = this.fileSystemAccessor.GetFilesInDirectory(pathToUnzip)
-                .Where(file => this.permittedFileExtensions.Contains(this.fileSystemAccessor.GetFileExtension(file)))
-                .ToArray();
-
-            return unzippedFiles;
-        }
-
-        public async Task SaveOrUpdateMapAsync(string map)
-        {
-
-            this.fileSystemAccessor.CopyFileOrDirectory(map, this.mapsFolderPath, true);
-
-            var filename = this.fileSystemAccessor.GetFileName(map);
-            var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(map);
-
-            var mapItem = new MapBrowseItem()
             {
-                Id = filename,
-                ImportDate = DateTime.UtcNow,
-                FileName = filename,
-                Size = this.fileSystemAccessor.GetFileSize(map),
+                var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(tempFile);
 
-                Wkid = properties.Wkid,
-                XMaxVal = properties.XMax,
-                YMaxVal = properties.YMax,
-                XMinVal = properties.XMin,
-                YMinVal = properties.YMin,
-                MaxScale = properties.MaxScale,
-                MinScale = properties.MinScale
-            };
+                var mapItem = new MapBrowseItem()
+                {
+                    Id = mapFile.Name,
+                    ImportDate = DateTime.UtcNow,
+                    FileName = mapFile.Name,
+                    Size = mapFile.Size,
 
-            this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
-        }
+                    Wkid = properties.Wkid,
+                    XMaxVal = properties.XMax,
+                    YMaxVal = properties.YMax,
+                    XMinVal = properties.XMin,
+                    YMinVal = properties.YMin,
+                    MaxScale = properties.MaxScale,
+                    MinScale = properties.MinScale
+                };
 
-        public void DeleteTemporaryData(string id)
-        {
-            var currentFolderPath = this.fileSystemAccessor.CombinePath(this.path, id);
-
-            if (this.fileSystemAccessor.IsDirectoryExists(currentFolderPath))
+                var targetFile = this.fileSystemAccessor.CombinePath(this.mapsFolderPath, mapFile.Name);
+                fileSystemAccessor.MoveFile(tempFile, targetFile);
+                this.mapPlainStorageAccessor.Store(mapItem, mapItem.Id);
+            }
+            catch
             {
-                try
-                {
-                    this.fileSystemAccessor.DeleteDirectory(currentFolderPath);
-                }
-                catch (Exception exception)
-                {
-                    Logger.Warn($"Failed to delete folder '{currentFolderPath}'. Will try next time.", exception);
-                }
+                if (this.fileSystemAccessor.IsFileExists(tempFile))
+                    fileSystemAccessor.DeleteFile(tempFile);
+                throw;
+            }
+            finally
+            {
+                if (this.fileSystemAccessor.IsDirectoryExists(pathToSave))
+                    fileSystemAccessor.DeleteDirectory(pathToSave);
             }
         }
 
@@ -199,7 +172,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             
             return new ReportView()
             {
-                Headers = new string[] {"map", "users"},
+                Headers = new [] {"map", "users"},
                 Data = rows.ToArray()
             };
         }

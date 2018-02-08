@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Tests.Abc;
 
@@ -16,17 +11,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
     {
         Establish context = () =>
         {
-            questionnaireDocument =
-                CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster",
-                        obsoleteFixedTitles: new[] { "1" }));
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.FixedRoster(rosterId: rosterGroupId, title: "Roster Group", variable: "roster", obsoleteFixedTitles: new[] { "1" })
+            );
 
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
         };
 
-        Because of =
-           () =>
-               result =
-                   importDataParsingService.GetParentDataFile("roster", new[] { CreatePreloadedDataByFile(null, null, "roster"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title) });
+        Because of = () => 
+            result = importDataParsingService.GetParentDataFile("roster",  Create.Entity.PreloadedDataByFile(
+                           CreatePreloadedDataByFile(null, null, "roster"), 
+                           CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
 
         It should_return_not_null_result = () =>
             result.ShouldNotBeNull();

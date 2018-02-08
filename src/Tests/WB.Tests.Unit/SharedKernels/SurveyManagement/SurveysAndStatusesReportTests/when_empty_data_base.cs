@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveysAndStatusesReportTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     internal class when_empty_data_base : SurveysAndStatusesReportTestsContext
     {

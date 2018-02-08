@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -265,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (listOfPermittedExtraColumns.Contains(columnName))
                     continue;
 
-                if (!levelExportStructure.HeaderItems.Values.Any(headerItem => headerItem.ColumnNames.Contains(columnName)))
+                if (!levelExportStructure.HeaderItems.Values.Any(headerItem => headerItem.ColumnHeaders.Any(x => x.Name.Equals(columnName,StringComparison.OrdinalIgnoreCase))))
                     yield return columnName;
             }
         }

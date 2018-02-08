@@ -32,10 +32,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             return Encoding.UTF8.GetBytes(sb.ToString());
         }
 
-        private CsvConfiguration CreateCsvConfiguration() => new CsvConfiguration
+        private Configuration CreateCsvConfiguration() => new Configuration
         {
             HasHeaderRecord = false,
-            TrimFields = true,
+            TrimOptions = TrimOptions.Trim,
             IgnoreQuotes = false
         };
 

@@ -17,15 +17,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
         public QuestionnaireIdentity Questionnaire { get; }
         public string QuestionnaireTitle { get; }
 
-        public override string NaturalId => $"{InterviewStatusString()}${this.Format}${this.Questionnaire}";
+        public override string NaturalId => $"{InterviewStatusString()}${this.Format}${this.Questionnaire}" +
+                                            $"${this.FromDate?.ToString("YYYYMMDD") ?? "EMPTY FROM DATE"}" +
+                                            $"${this.ToDate?.ToString("YYYYMMDD") ?? "EMPTY TO DATE"}";
 
         public override string Name => $"(ver. {this.Questionnaire.Version}) {this.QuestionnaireTitle}";
 
         public InterviewStatus? InterviewStatus { get; set; }
 
-        private string InterviewStatusString()
-        {
-            return InterviewStatus?.ToString() ?? "All";
-        }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+
+        private string InterviewStatusString() => InterviewStatus?.ToString() ?? "All";
     }
 }

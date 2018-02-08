@@ -240,18 +240,6 @@
   <data name="ExcludeEsriTitle" xml:space="preserve">
     <value>No incluir soporte de mapa SERI</value>
   </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Exportar</value>
-  </data>
-  <data name="ExportToCsv" xml:space="preserve">
-    <value>Valores separados por comas (.CSV)</value>
-  </data>
-  <data name="ExportToExcel" xml:space="preserve">
-    <value>Excel (.XLSX)</value>
-  </data>
-  <data name="ExportToTab" xml:space="preserve">
-    <value>Valores separados por tab (.TSV)</value>
-  </data>
   <data name="Filters_Assignment" xml:space="preserve">
     <value>Asignación</value>
   </data>

@@ -190,7 +190,7 @@
     <value>被锁定</value>
   </data>
   <data name="NotLinkedToDevice" xml:space="preserve">
-    <value>没有链接到设备</value>
+    <value>没有关联到设备</value>
   </data>
   <data name="Observer" xml:space="preserve">
     <value>观察员</value>
@@ -257,5 +257,20 @@
   </data>
   <data name="SupervisorsInTeam" xml:space="preserve">
     <value>您团队中的督导员</value>
+  </data>
+  <data name="ApiUsersCountDescription" xml:space="preserve">
+    <value>API用户 （{0}）</value>
+  </data>
+  <data name="HeadquartersCountDescription" xml:space="preserve">
+    <value>总部 ({0})</value>
+  </data>
+  <data name="InterviewerIssues" xml:space="preserve">
+    <value>调查员的问题</value>
+  </data>
+  <data name="InterviewersCountDescription" xml:space="preserve">
+    <value>调查员 ({0})</value>
+  </data>
+  <data name="ObserversCountDescription" xml:space="preserve">
+    <value>观测员 ({0})</value>
   </data>
 </root>

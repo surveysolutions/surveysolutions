@@ -94,16 +94,19 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             {
                 foreach (var answer in question.Answers)
                 {
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                        answer.ParentCode == parentQuestionValue)
-                        yield return
-                            new CategoricalOption()
-                            {
-                                Value = Convert.ToInt32(answer.AnswerCode.Value),
-                                Title = answer.AnswerText,
-                                ParentValue =
-                                    answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null
-                            };
+                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+                    var categoricalOption = new CategoricalOption
+                    {
+                        Value = Convert.ToInt32(answer.AnswerCode.Value),
+                        Title = answer.AnswerText,
+                        ParentValue = answer.ParentCode.HasValue ? Convert.ToInt32(answer.AnswerCode.Value) : (int?)null
+                    };
+
+                    if (answer.ParentCode == parentQuestionValue)
+                        yield return categoricalOption;
+                    else if (parentQuestionValue == null)
+                        yield return categoricalOption;
                 }
             }
             else
@@ -114,15 +117,19 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                         ? (int?)null
                         : Convert.ToInt32(ParseAnswerOptionParentValueOrThrow(answer.ParentValue, question.PublicKey));
 
-                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) >= 0 &&
-                        parentOption == parentQuestionValue)
-                        yield return
-                            new CategoricalOption
-                            {
-                                Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
-                                Title = answer.AnswerText,
-                                ParentValue = parentOption
-                            };
+                    if (answer.AnswerText.IndexOf(filter, StringComparison.OrdinalIgnoreCase) < 0) continue;
+
+                    var categoricalOption = new CategoricalOption
+                    {
+                        Value = Convert.ToInt32(ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey)),
+                        Title = answer.AnswerText,
+                        ParentValue = parentOption
+                    };
+
+                    if (parentOption == parentQuestionValue)
+                        yield return categoricalOption;
+                    else if (parentQuestionValue == null)
+                        yield return categoricalOption;
                 }
             }
         }

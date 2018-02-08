@@ -37,14 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         public void Should_return_null_as_answer_to_unanswered_single_option_question()
         {
             var singleOpionAnswer = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedSingleOptionQuestionid));
-            Assert.That(singleOpionAnswer, Is.Empty);
+            Assert.That(singleOpionAnswer, Is.Null);
         }
 
         [Test]
         public void Should_return_null_as_answer_to_unanswered_multi_option_question()
         {
             var multioptionAnswer = this.interview.GetAnswerAsString(Create.Entity.Identity(this.linkedMultiOptionQuestionid));
-            Assert.That(multioptionAnswer, Is.Empty);
+            Assert.That(multioptionAnswer, Is.Null);
         }
 
         [Test]

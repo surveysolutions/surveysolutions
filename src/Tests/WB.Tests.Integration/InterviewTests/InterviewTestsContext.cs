@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -25,6 +26,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
 using It = Moq.It;
@@ -50,7 +52,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
             questionnaireDocument.IsUsingExpressionStorage = true;
-            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
@@ -107,7 +113,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
             questionnaireDocument.IsUsingExpressionStorage = true;
-            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
@@ -139,7 +149,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
             questionnaireDocument.IsUsingExpressionStorage = true;
-            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
@@ -167,7 +181,11 @@ namespace WB.Tests.Integration.InterviewTests
         {
             Guid questionnaireId = questionnaireDocument.PublicKey;
             questionnaireDocument.IsUsingExpressionStorage = true;
-            questionnaireDocument.ExpressionsPlayOrder = IntegrationCreate.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaireDocument.AsReadOnly());
+            var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
+            var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
+            questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+            questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
@@ -270,8 +288,8 @@ namespace WB.Tests.Integration.InterviewTests
             {
                 Mock.Of<IDynamicCompilerSettings>(_
                     => _.PortableAssembliesPath == pathToProfile
-                    && _.DefaultReferencedPortableAssemblies == referencesToAdd
-                    && _.Name == "profile111")
+                       && _.DefaultReferencedPortableAssemblies == referencesToAdd
+                       && _.Name == "profile111")
             };
 
             var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);

@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Interviews {
@@ -194,7 +194,7 @@ namespace WB.UI.Headquarters.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
-        ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;..
+        ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
         /// </summary>
         public static string RejectConfirmMessageHQ {
             get {

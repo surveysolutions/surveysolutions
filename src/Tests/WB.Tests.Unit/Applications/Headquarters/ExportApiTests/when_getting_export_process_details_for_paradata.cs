@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Machine.Specifications;
@@ -18,12 +18,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
     public class when_getting_export_process_details_for_paradata : ExportControllerTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireExportStructureStorage = Mock.Of<IQuestionnaireExportStructureStorage>(
                     x => x.GetQuestionnaireExportStructure(questionnaireIdentity) == new QuestionnaireExportStructure());
 
-            paraDataExportProcessDetails = new DataExportProcessDetails(DataExportFormat.Paradata, questionnaireIdentity, "questionnaire title")
+            paraDataExportProcessDetails = new DataExportProcessDetails(DataExportFormat.Paradata,
+                questionnaireIdentity, "questionnaire title")
             {
                 Status = DataExportStatus.Running,
                 ProgressInPercents = 98
@@ -38,20 +38,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
                 dataExportProcessesService: dataExportProcessesService);
 
             controller = CreateExportController(dataExportStatusReader: dataExportStatusReader);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
+        private void BecauseOf() => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
 
-        It should_return_http_ok_response = () =>
+        [NUnit.Framework.Test] public void should_return_http_ok_response () =>
             result.ShouldBeOfExactType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
 
-        It should_return_specified_json_object = () =>
+        [NUnit.Framework.Test] public void should_return_specified_json_object () 
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
             jsonResult.ExportStatus.ShouldEqual(paraDataExportProcessDetails.Status);
             jsonResult.RunningProcess.ProgressInPercents.ShouldEqual(paraDataExportProcessDetails.ProgressInPercents);
-        };
+        }
             
 
         private static ExportController controller;

@@ -21,9 +21,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 {
@@ -78,11 +76,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override DataExportFormat Format => DataExportFormat.Paradata;
 
-        protected override void ExportDataIntoDirectory(QuestionnaireIdentity questionnaireIdentity, InterviewStatus? status, string directoryPath,
-            IProgress<int> progress, CancellationToken cancellationToken)
+        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
-            var interviewsToExport = this.tabularFormatExportService.GetInterviewIdsToExport(
-                questionnaireIdentity, status, cancellationToken);
+            var interviewsToExport = this.tabularFormatExportService.GetInterviewsToExport(
+                settings.QuestionnaireId, settings.InterviewStatus, cancellationToken, settings.FromDate,
+                settings.ToDate).ToList();
 
             var paradataReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
 
@@ -92,7 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportFilePath = this.fileSystemAccessor.CombinePath(directoryPath, "paradata.tab");
+            var exportFilePath = this.fileSystemAccessor.CombinePath(settings.ExportDirectory, "paradata.tab");
 
             using (var fileStream = this.fileSystemAccessor.OpenOrCreateFile(exportFilePath, true))
             using (var writer = this.csvWriter.OpenCsvWriter(fileStream, ExportFileSettings.DataFileSeparator.ToString()))
@@ -111,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var eventsByInterview = this.eventStore.Read(interviewId, 0);
+                    var eventsByInterview = this.eventStore.Read(interviewId.Id, 0);
 
                     try
                     {
@@ -120,8 +119,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                         var paradata = paradataReader.Query(_ => _.FirstOrDefault());
                         for (int i = 0; i < paradata.Records.Count; i++)
                         {
-                            var evnt = paradata?.Records[i];
-                            writer.WriteField(interviewId);
+                            var evnt = paradata.Records[i];
+                            writer.WriteField(interviewId.Id);
                             writer.WriteField(i + 1);
                             writer.WriteField(evnt.Action);
                             writer.WriteField(evnt.OriginatorName);

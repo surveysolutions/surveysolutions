@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public InterviewKey InterviewKey { get; }
 
+        public Guid? NewSupervisorId { get; }
+
         public SynchronizeInterviewEventsCommand(Guid interviewId,
             Guid userId,
             Guid questionnaireId,
@@ -26,7 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             IEvent[] synchronizedEvents,
             InterviewStatus interviewStatus,
             bool createdOnClient,
-            InterviewKey interviewKey)
+            InterviewKey interviewKey,
+            Guid? newSupervisorId)
             : base(interviewId, userId)
         {
             QuestionnaireId = questionnaireId;
@@ -35,6 +38,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             InterviewStatus = interviewStatus;
             CreatedOnClient = createdOnClient;
             this.InterviewKey = interviewKey;
+            NewSupervisorId = newSupervisorId;
         }
     }
 }

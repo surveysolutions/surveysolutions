@@ -147,4 +147,19 @@
   <data name="UserRoles_Supervisor" xml:space="preserve">
     <value>督导员</value>
   </data>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>已完成</value>
+  </data>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>资料</value>
+  </data>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>已拒绝</value>
+  </data>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>已开始</value>
+  </data>
 </root>

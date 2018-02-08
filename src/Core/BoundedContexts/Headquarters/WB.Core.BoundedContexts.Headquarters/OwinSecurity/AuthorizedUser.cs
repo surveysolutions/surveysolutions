@@ -2,6 +2,7 @@ using System;
 using System.Security.Claims;
 using System.Threading;
 using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
@@ -28,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             get
             {
-                var userId = this.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userId = this.User?.Identity.GetUserId();
                 return userId != null ? Guid.Parse(userId) : Guid.Empty;
             }
         }

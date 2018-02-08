@@ -1,9 +1,9 @@
 {
     "baseUri": "http://localhost/headquarters",
     "interviewers": [
-        {"name": "inter", "pass": "Qwerty1234", "assignment": "4"}
+        {"name": "int", "pass": "1", "assignment": "27"}
     ],
-    "questionnaireIdentity": "6158dd07-4d64-498f-8a50-e5e9828fda23$1",
-    "questionnaireId": "6158dd07-4d64-498f-8a50-e5e9828fda23",
+    "questionnaireIdentity": "b69017ab-3d34-4a0e-b569-62c7b1bf1d83$1",
+    "questionnaireId": "b69017ab-3d34-4a0e-b569-62c7b1bf1d83",
     "questionnaireVersion": 1
 }

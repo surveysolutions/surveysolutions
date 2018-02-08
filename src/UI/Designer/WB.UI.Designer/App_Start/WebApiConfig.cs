@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net.Http.Formatting;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -7,12 +8,13 @@ using System.Web.Http.Controllers;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Routing;
 using StackExchange.Exceptional;
-using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.MessageHandlers;
+using WB.UI.Shared.Web.Compression;
 
 namespace WB.UI.Designer
 {
+
     public class CentralizedPrefixProvider : DefaultDirectRouteProvider
     {
         private readonly string _centralizedPrefix;
@@ -79,7 +81,7 @@ namespace WB.UI.Designer
                 routeTemplate: "api/hq/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-
+            
             config.Routes.MapHttpRoute(
                 name: "VersionedHQApiWithAction",
                 routeTemplate: "api/hq/v{version:int}/{controller}/{action}/{id}",
@@ -113,6 +115,8 @@ namespace WB.UI.Designer
                 defaults: new { id = RouteParameter.Optional }
             );
 
+            var xml = config.Formatters.SingleOrDefault(f => f is XmlMediaTypeFormatter);
+            if (xml != null) config.Formatters.Remove(xml);
             config.Formatters.Insert(0, new JsonFormatter());
         } 
     }

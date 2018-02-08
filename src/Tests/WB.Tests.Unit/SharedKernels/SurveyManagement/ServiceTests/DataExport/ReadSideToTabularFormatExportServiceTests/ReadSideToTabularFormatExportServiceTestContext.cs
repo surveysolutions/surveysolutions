@@ -28,13 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         {
             // arrange
             string description = null;
-            IFileSystemAccessor fileSystemAccessor = Mock.Of<IFileSystemAccessor>();
-
-            Mock.Get(fileSystemAccessor)
-                .Setup(accessor => accessor.CombinePath(@"x:\", "description.txt"))
-                .Returns(@"x:\description.txt");
-            Mock.Get(fileSystemAccessor)
-                .Setup(accessor => accessor.WriteAllText(@"x:\description.txt", It.IsAny<string>()))
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
                 .Callback<string, string>((file, content) => description = content);
 
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
@@ -52,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             });
 
             var exportService = Create.Service.ReadSideToTabularFormatExportService(
-                fileSystemAccessor: fileSystemAccessor,
+                fileSystemAccessor: fileSystemAccessor.Object,
                 questionnaireExportStructure: questionnaireExportStructure);
 
             // act
@@ -156,8 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             => new ExportedQuestionHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
-                ColumnNames = columnNames ?? new[] { "1" },
-                Titles = columnNames ?? new[] { "1" },
+                ColumnHeaders = columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x}).ToList() ?? new List<HeaderColumn>(){new HeaderColumn(){Name = "1", Title = "1"}},
                 QuestionType = type,
                 VariableName = variableName,
             };
@@ -167,8 +162,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
             => new ExportedVariableHeaderItem
             {
                 PublicKey = Guid.NewGuid(),
-                ColumnNames = columnNames ?? new[] { "var__1" },
-                Titles = columnNames ?? new[] { "var__1" },
+                ColumnHeaders = columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>() { new HeaderColumn() { Name = "var__1", Title = "var__1" } },
                 VariableType = type,
                 VariableName = variableName,
             };

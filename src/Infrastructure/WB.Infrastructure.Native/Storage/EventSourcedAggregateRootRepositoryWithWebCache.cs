@@ -12,14 +12,16 @@ using WB.Infrastructure.Native.Monitoring;
 namespace WB.Infrastructure.Native.Storage
 {
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository,
-        IAggregateRootCacheCleaner
+        IAggregateRootCacheCleaner, IAggregateRootCacheFiller
     {
         private readonly IAggregateLock aggregateLock;
 
         private static readonly ConcurrentDictionary<string, bool> CacheCountTracker = new ConcurrentDictionary<string, bool>();
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, ISnapshotStore snapshotStore,
-            IDomainRepository repository, IAggregateLock aggregateLock)
+        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
+            ISnapshotStore snapshotStore,
+            IDomainRepository repository, 
+            IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
             this.aggregateLock = aggregateLock;
@@ -63,6 +65,7 @@ namespace WB.Infrastructure.Native.Storage
         }
 
         private static Cache Cache => System.Web.HttpRuntime.Cache;
+        protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)
         {
@@ -71,22 +74,18 @@ namespace WB.Infrastructure.Native.Storage
             CacheCountTracker.AddOrUpdate(key, true, (k, old) => true);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
 
-            Cache.Insert(key, aggregateRoot, null, Cache.NoAbsoluteExpiration,
-                TimeSpan.FromMinutes(5), OnUpdateCallback);
+            Cache.Add(key, aggregateRoot, null, Cache.NoAbsoluteExpiration, Expiration, CacheItemPriority.Normal, OnUpdateCallback);
         }
 
-        private string Key(Guid id) => $"aggregateRoot_" + id.ToString();
-
-        private void OnUpdateCallback(string key, CacheItemUpdateReason reason,
-            out object expensiveObject,
-            out CacheDependency dependency,
-            out DateTime absoluteExpiration,
-            out TimeSpan slidingExpiration)
+        protected virtual string Key(Guid id) => $"aggregateRoot_" + id.ToString();
+        
+        private void OnUpdateCallback(string key, object value, CacheItemRemovedReason reason)
         {
-            expensiveObject = null;
-            dependency = null;
-            absoluteExpiration = Cache.NoAbsoluteExpiration;
-            slidingExpiration = Cache.NoSlidingExpiration;
+            CacheItemRemoved(key);
+        }
+
+        protected virtual void CacheItemRemoved(string key)
+        {
             CacheCountTracker.TryRemove(key, out _);
             CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
         }
@@ -96,10 +95,17 @@ namespace WB.Infrastructure.Native.Storage
             this.aggregateLock.RunWithLock(aggregateId.FormatGuid(), () =>
             {
                 var key = Key(aggregateId);
-                CacheCountTracker.TryRemove(key, out _);
-                CommonMetrics.StateFullInterviewsCount.Set(CacheCountTracker.Count);
-                Cache.Remove(key);
+
+                if (Cache.Remove(key) != null)
+                {
+                    CacheItemRemoved(key);
+                }
             });
+        }
+
+        public void Store(IEventSourcedAggregateRoot aggregateRoot)
+        {
+            PutToCache(aggregateRoot);
         }
     }
 }

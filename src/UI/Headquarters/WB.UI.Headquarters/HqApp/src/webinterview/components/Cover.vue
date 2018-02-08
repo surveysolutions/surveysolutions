@@ -87,7 +87,7 @@ export default {
             return this.$store.state.webinterview.coverInfo.identifyingQuestions
         },
         commentedQuestions() {
-            return this.$store.state.webinterview.coverInfo.entitiesWithComments
+            return this.$store.state.webinterview.coverInfo.entitiesWithComments || []
         },
         firstSectionId() {
             return this.$store.state.webinterview.firstSectionId

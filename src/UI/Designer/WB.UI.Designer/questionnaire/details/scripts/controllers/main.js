@@ -1,6 +1,6 @@
 angular.module('designerApp')
     .controller('MainCtrl',
-        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, utilityService, hotkeys, $uibModal, notificationService, userService) {
+        function ($rootScope, $scope, $state, $i18next, $sce, questionnaireService, commandService, verificationService, webTesterService, utilityService, hotkeys, $uibModal, notificationService, userService) {
             $scope.verificationStatus = {
                 errors: null,
                 warnings: null,
@@ -129,7 +129,7 @@ angular.module('designerApp')
             var ERROR = "error";
             var WARNING = "warning";
 
-            $scope.verify = function() {
+            $scope.verify = function () {
                 $scope.verificationStatus.errors = null;
                 $scope.verificationStatus.warnings = null;
                 $rootScope.$broadcast("verifing", {});
@@ -142,13 +142,22 @@ angular.module('designerApp')
                         $scope.verificationStatus.time = new Date();
                         $scope.verificationStatus.typeOfMessageToBeShown = ERROR;
 
-                        if ($scope.verificationStatus.errors.length > 0)
+                        if ($scope.verificationStatus.errors.length > 0) {
                             $scope.showVerificationErrors();
+                        }
                         else {
                             $scope.closeVerifications();
                         }
                     });
                 }, 500);
+            };
+
+            $scope.webTest = function () {
+                var webTesterWindow = window.open("about:blank", '_blank');
+
+                webTesterService.run($state.params.questionnaireId).then(function (response) {
+                    webTesterWindow.location.href = response.data;
+                });
             };
 
             $scope.showVerificationErrors = function () {

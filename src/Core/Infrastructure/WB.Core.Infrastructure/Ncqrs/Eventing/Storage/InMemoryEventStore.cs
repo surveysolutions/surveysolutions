@@ -51,11 +51,11 @@ namespace Ncqrs.Eventing.Storage
 
         public CommittedEventStream Store(UncommittedEventStream eventStream)
         {
-            Queue<CommittedEvent> events;
             if (eventStream.IsNotEmpty)
             {
                 List<CommittedEvent> result = new List<CommittedEvent>();
-                if (!_events.TryGetValue(eventStream.SourceId, out events))
+
+                if (!_events.TryGetValue(eventStream.SourceId, out var events))
                 {
                     events = new Queue<CommittedEvent>();
                     _events.Add(eventStream.SourceId, events);

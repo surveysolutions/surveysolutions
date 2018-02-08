@@ -10,10 +10,11 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.BoundedContexts.Designer.Services.TopologicalSorter;
+using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -25,10 +26,16 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -59,6 +66,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
@@ -70,6 +78,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -95,7 +104,7 @@ namespace WB.Tests.Abc.TestFactories
         public CommandService CommandService(
             IEventSourcedAggregateRootRepository repository = null,
             IPlainAggregateRootRepository plainRepository = null,
-            IEventBus eventBus = null, 
+            IEventBus eventBus = null,
             IAggregateSnapshotter snapshooter = null,
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
@@ -113,7 +122,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
 
-        public AttachmentContentService AttachmentContentService(IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
+        public AttachmentContentService AttachmentContentService(
+            IPlainStorageAccessor<AttachmentContent> attachmentContentPlainStorage)
             => new AttachmentContentService(
                 attachmentContentPlainStorage ?? Mock.Of<IPlainStorageAccessor<AttachmentContent>>());
 
@@ -122,9 +132,10 @@ namespace WB.Tests.Abc.TestFactories
             IReadSideRepositoryWriter<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferencesStorage = null)
             => new CumulativeChartDenormalizer(
-                cumulativeReportStatusChangeStorage ?? Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
+                cumulativeReportStatusChangeStorage ??
+                Mock.Of<IReadSideRepositoryWriter<CumulativeReportStatusChange>>(),
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
-                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>() );
+                cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
 
         public InterviewerDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -132,7 +143,7 @@ namespace WB.Tests.Abc.TestFactories
             ILiteEventRegistry liteEventRegistry = null,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
             IAnswerToStringConverter answerToStringConverter = null
-            )
+        )
             => new InterviewerDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
@@ -140,7 +151,8 @@ namespace WB.Tests.Abc.TestFactories
                 liteEventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 answerToStringConverter ?? Mock.Of<IAnswerToStringConverter>());
 
-        public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null, IServiceLocator serviceLocator = null)
+        public DomainRepository DomainRepository(IAggregateSnapshotter aggregateSnapshotter = null,
+            IServiceLocator serviceLocator = null)
             => new DomainRepository(
                 aggregateSnapshotter: aggregateSnapshotter ?? Mock.Of<IAggregateSnapshotter>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>());
@@ -157,8 +169,9 @@ namespace WB.Tests.Abc.TestFactories
                 repository ?? Mock.Of<IDomainRepository>(),
                 new AggregateLock());
 
-        public EventSourcedAggregateRootRepositoryWithExtendedCache EventSourcedAggregateRootRepositoryWithExtendedCache(
-            IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
+        public EventSourcedAggregateRootRepositoryWithExtendedCache
+            EventSourcedAggregateRootRepositoryWithExtendedCache(
+                IEventStore eventStore = null, ISnapshotStore snapshotStore = null, IDomainRepository repository = null)
             => new EventSourcedAggregateRootRepositoryWithExtendedCache(
                 eventStore ?? Mock.Of<IEventStore>(),
                 snapshotStore ?? Mock.Of<ISnapshotStore>(),
@@ -167,7 +180,8 @@ namespace WB.Tests.Abc.TestFactories
         public FileSystemIOAccessor FileSystemIOAccessor()
             => new FileSystemIOAccessor();
 
-        public InterviewAnswersCommandValidator InterviewAnswersCommandValidator(IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
+        public InterviewAnswersCommandValidator InterviewAnswersCommandValidator(
+            IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
             => new InterviewAnswersCommandValidator(
                 interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
 
@@ -183,13 +197,13 @@ namespace WB.Tests.Abc.TestFactories
         {
             var userView = Create.Entity.UserView();
             return new InterviewDetailsViewFactory(
-                userStore ?? Mock.Of<IUserViewFactory>(_=>_.GetUser(It.IsAny<UserViewInputModel>()) == userView),
+                userStore ?? Mock.Of<IUserViewFactory>(_ => _.GetUser(It.IsAny<UserViewInputModel>()) == userView),
                 changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
                 incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                substitutionService ?? this.SubstitutionService(), 
+                substitutionService ?? this.SubstitutionService(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>());
         }
 
@@ -233,36 +247,43 @@ namespace WB.Tests.Abc.TestFactories
         public LiteEventRegistry LiteEventRegistry()
             => new LiteEventRegistry();
 
-        public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null, ILogger logger = null)
+        public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
+            ILogger logger = null, params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
-                logger: logger ?? Mock.Of<ILogger>());
+                logger: logger ?? Mock.Of<ILogger>(),
+                eventHandlers: handlers);
 
         public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
             => new ImportDataParsingService(
-                new ExportViewFactory(new FileSystemIOAccessor(), 
-                                      new ExportQuestionService(), 
-                                      Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire && 
-                                                                          _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
-                                      new RosterStructureService(),
-                                      Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
-                                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                new RosterStructureService().GetRosterScopes(questionnaire), 
+                new ExportViewFactory(new FileSystemIOAccessor(),
+                        new ExportQuestionService(),
+                        Mock.Of<IQuestionnaireStorage>(_ =>
+                            _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire &&
+                            _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
+                            Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
+                        new RosterStructureService(),
+                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
+                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
+                new RosterStructureService().GetRosterScopes(questionnaire),
                 questionnaire,
                 new QuestionDataParser(),
                 new UserViewFactory(Mock.Of<IUserRepository>(), Mock.Of<IInterviewerProfileFactory>()));
 
-        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
+        public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
+            IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
         public QuestionnaireNameValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
             => new QuestionnaireNameValidator(
-                questionnaireBrowseItemStorage ?? Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
+                questionnaireBrowseItemStorage ??
+                Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
-        public IStatefulInterviewRepository StatefulInterviewRepository(IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
+        public IStatefulInterviewRepository StatefulInterviewRepository(
+            IEventSourcedAggregateRootRepository aggregateRootRepository, ILiteEventBus liteEventBus = null)
             => new StatefulInterviewRepository(
                 aggregateRootRepository: aggregateRootRepository ?? Mock.Of<IEventSourcedAggregateRootRepository>());
 
@@ -287,29 +308,36 @@ namespace WB.Tests.Abc.TestFactories
         public VariableToUIStringService VariableToUIStringService()
             => new VariableToUIStringService();
 
-        public IInterviewExpressionStatePrototypeProvider ExpressionStatePrototypeProvider(ILatestInterviewExpressionState expressionState = null)
+        public IInterviewExpressionStatePrototypeProvider ExpressionStatePrototypeProvider(
+            ILatestInterviewExpressionState expressionState = null)
         {
             var expressionStatePrototypeProvider = new Mock<IInterviewExpressionStatePrototypeProvider>();
-            ILatestInterviewExpressionState latestInterviewExpressionState = expressionState ?? new InterviewExpressionStateStub();
+            ILatestInterviewExpressionState latestInterviewExpressionState =
+                expressionState ?? new InterviewExpressionStateStub();
             expressionStatePrototypeProvider.SetReturnsDefault(latestInterviewExpressionState);
 
             return expressionStatePrototypeProvider.Object;
         }
 
-        public IDataExportStatusReader DataExportStatusReader(IDataExportProcessesService dataExportProcessesService = null,
+        public IDataExportStatusReader DataExportStatusReader(
+            IDataExportProcessesService dataExportProcessesService = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
         {
-            return new DataExportStatusReader(dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
-                filebasedExportedDataAccessor: filebasedExportedDataAccessor ?? Substitute.For<IFilebasedExportedDataAccessor>(),
+            return new DataExportStatusReader(
+                dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
+                filebasedExportedDataAccessor: filebasedExportedDataAccessor ??
+                                               Substitute.For<IFilebasedExportedDataAccessor>(),
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
-                questionnaireExportStructureStorage: questionnaireExportStructureStorage ?? Substitute.For<IQuestionnaireExportStructureStorage>());
+                questionnaireExportStructureStorage: questionnaireExportStructureStorage ??
+                                                     Substitute.For<IQuestionnaireExportStructureStorage>());
         }
 
         public ISubstitutionTextFactory SubstitutionTextFactory()
         {
-            return new SubstitutionTextFactory(Create.Service.SubstitutionService(), Create.Service.VariableToUIStringService());
+            return new SubstitutionTextFactory(Create.Service.SubstitutionService(),
+                Create.Service.VariableToUIStringService());
         }
 
         public InterviewViewModelFactory InterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository,
@@ -321,14 +349,18 @@ namespace WB.Tests.Abc.TestFactories
                 settings ?? Mock.Of<IEnumeratorSettings>());
         }
 
-        public AllInterviewsFactory AllInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
+        public AllInterviewsFactory AllInterviewsFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
         {
-            return new AllInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+            return new AllInterviewsFactory(interviewSummarys ??
+                                            Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
-        public ITeamInterviewsFactory TeamInterviewsFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
+        public ITeamInterviewsFactory TeamInterviewsFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummarys = null)
         {
-            return new TeamInterviewsFactory(interviewSummarys ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
+            return new TeamInterviewsFactory(interviewSummarys ??
+                                             Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
 
         public PlainPostgresTransactionManager PlainPostgresTransactionManager(ISessionFactory sessionFactory = null)
@@ -337,18 +369,28 @@ namespace WB.Tests.Abc.TestFactories
         public CqrsPostgresTransactionManager CqrsPostgresTransactionManager(ISessionFactory sessionFactory = null)
             => new CqrsPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
 
-        public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null, NameValueCollection membershipSettings = null)
+        public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null,
+            NameValueCollection membershipSettings = null)
         {
-            return new ConfigurationManager(appSettings ?? new NameValueCollection(), membershipSettings ?? new NameValueCollection());
+            return new ConfigurationManager(appSettings ?? new NameValueCollection(),
+                membershipSettings ?? new NameValueCollection());
         }
 
-        public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5, int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
+        public WebCacheBasedCaptchaService WebCacheBasedCaptchaService(int? failedLoginsCount = 5,
+            int? timeSpanForLogins = 5, IConfigurationManager configurationManager = null)
         {
-            return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(new NameValueCollection
-            {
-                { "CountOfFailedLoginAttemptsBeforeCaptcha", (failedLoginsCount ?? 5).ToString() },
-                { "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt", (timeSpanForLogins ?? 5).ToString() },
-            }));
+            return new WebCacheBasedCaptchaService(configurationManager ?? this.ConfigurationManager(
+                                                       new NameValueCollection
+                                                       {
+                                                           {
+                                                               "CountOfFailedLoginAttemptsBeforeCaptcha",
+                                                               (failedLoginsCount ?? 5).ToString()
+                                                           },
+                                                           {
+                                                               "TimespanInMinutesCaptchaWillBeShownAfterFailedLoginAttempt",
+                                                               (timeSpanForLogins ?? 5).ToString()
+                                                           },
+                                                       }));
         }
 
         public IRandomValuesSource RandomValuesSource(params int[] sequence)
@@ -368,23 +410,27 @@ namespace WB.Tests.Abc.TestFactories
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentaries = null)
             => new ReadSideToTabularFormatExportService(fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(_
-                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) == (csvWriterService ?? Mock.Of<ICsvWriterService>())),
+                    => _.OpenCsvWriter(It.IsAny<Stream>(), It.IsAny<string>()) ==
+                       (csvWriterService ?? Mock.Of<ICsvWriterService>())),
                 Mock.Of<ILogger>(),
                 Mock.Of<ITransactionManagerProvider>(x => x.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 new TestInMemoryWriter<InterviewSummary>(),
                 new InterviewDataExportSettings(),
                 Mock.Of<IQuestionnaireExportStructureStorage>(_
-                    => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
+                    => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) ==
+                       questionnaireExportStructure),
                 Mock.Of<IProductVersion>());
 
-        public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage, IPasswordHasher passwordHasher)
+        public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+            IPasswordHasher passwordHasher)
         {
             return new InterviewerPrincipal(
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
 
-        public SynchronizationProcess SynchronizationProcess(IPlainStorage<InterviewView> interviewViewRepository = null,
+        public SynchronizationProcess SynchronizationProcess(
+            IPlainStorage<InterviewView> interviewViewRepository = null,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
@@ -392,7 +438,7 @@ namespace WB.Tests.Abc.TestFactories
             ILogger logger = null,
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
-            IPrincipal principal = null,
+            IInterviewerPrincipal principal = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null)
@@ -401,8 +447,8 @@ namespace WB.Tests.Abc.TestFactories
             return new SynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
-                interviewViewRepository ?? new SqliteInmemoryStorage<InterviewView>(),
-                principal ?? Mock.Of<IPrincipal>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
@@ -437,7 +483,8 @@ namespace WB.Tests.Abc.TestFactories
             );
         }
 
-        public TesterImageFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor, string rootDirectory)
+        public TesterImageFileStorage TesterPlainInterviewFileStorage(IFileSystemAccessor fileSystemAccessor,
+            string rootDirectory)
         {
             return new TesterImageFileStorage(fileSystemAccessor, rootDirectory);
         }
@@ -453,17 +500,21 @@ namespace WB.Tests.Abc.TestFactories
                 synchronizationService ?? Mock.Of<ISynchronizationService>());
         }
 
-        public IAssignmentsSynchronizer AssignmentsSynchronizer(IAssignmentSynchronizationApi synchronizationService = null,
+        public IAssignmentsSynchronizer AssignmentsSynchronizer(
+            IAssignmentSynchronizationApi synchronizationService = null,
             IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null)
         {
-            return new AssignmentsSynchronizer(synchronizationService ?? Mock.Of<IAssignmentSynchronizationApi>(),
+            return new AssignmentsSynchronizer(
+                synchronizationService ?? Mock.Of<IAssignmentSynchronizationApi>(),
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IAnswerToStringConverter>(),
-                Mock.Of<IInterviewAnswerSerializer>());
+                Mock.Of<IInterviewAnswerSerializer>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
         }
 
         public IAnswerToStringConverter AnswerToStringConverter()
@@ -475,15 +526,25 @@ namespace WB.Tests.Abc.TestFactories
             IExpressionProcessor expressionProcessor = null,
             IMacrosSubstitutionService macrosSubstitutionService = null)
         {
+            if (expressionProcessor == null && !ServiceLocator.IsLocationProviderSet)
+            {
+                var serviceLocator = Stub<IServiceLocator>.WithNotEmptyValues;
+
+                ServiceLocator.SetLocatorProvider(() => serviceLocator);
+                Setup.StubToMockedServiceLocator<IExpressionProcessor>();
+            }
+
             return new ExpressionsPlayOrderProvider(
-                    new ExpressionsGraphProvider(expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
-                        macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService()));
+                new ExpressionsGraphProvider(
+                    expressionProcessor ?? ServiceLocator.Current.GetInstance<IExpressionProcessor>(),
+                    macrosSubstitutionService ?? Create.Service.DefaultMacrosSubstitutionService()));
         }
 
         public IMacrosSubstitutionService DefaultMacrosSubstitutionService()
         {
             var macrosSubstitutionServiceMock = new Mock<IMacrosSubstitutionService>();
-            macrosSubstitutionServiceMock.Setup(x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>())).Returns((string e, IEnumerable<Macro> macros) => e);
+            macrosSubstitutionServiceMock.Setup(x => x.InlineMacros(It.IsAny<string>(), It.IsAny<IEnumerable<Macro>>()))
+                .Returns((string e, IEnumerable<Macro> macros) => e);
             return macrosSubstitutionServiceMock.Object;
         }
 
@@ -539,21 +600,93 @@ namespace WB.Tests.Abc.TestFactories
             return csvWriterMock.Object;
         }
 
+        public UserImportService UserImportService(UserPreloadingSettings userPreloadingSettings = null,
+            ICsvReader csvReader = null,
+            IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository = null,
+            IPlainStorageAccessor<UserToImport> importUsersRepository = null,
+            IUserRepository userStorage = null,
+            IUserImportVerifier userImportVerifier = null,
+            IAuthorizedUser authorizedUser = null,
+            ISessionProvider sessionProvider = null,
+            UsersImportTask usersImportTask = null)
+        {
+            usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
+                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
+
+            userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
+            return new UserImportService(
+                userPreloadingSettings,
+                csvReader ?? Stub<ICsvReader>.WithNotEmptyValues,
+                importUsersProcessRepository ?? Stub<IPlainStorageAccessor<UsersImportProcess>>.WithNotEmptyValues,
+                importUsersRepository ?? Stub<IPlainStorageAccessor<UserToImport>>.WithNotEmptyValues,
+                userStorage ?? Stub<IUserRepository>.WithNotEmptyValues,
+                userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
+                authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
+                sessionProvider ?? Stub<ISessionProvider>.WithNotEmptyValues,
+                usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues);
+        }
+
+        public ICsvReader CsvReader<T>(string[] headers, params T[] rows)
+        {
+            return Mock.Of<ICsvReader>(
+                x => x.ReadAll<T>(It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<bool>()) == rows &&
+                     x.ReadHeader(It.IsAny<Stream>(), It.IsAny<string>()) == headers);
+        }
+
         public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
-            IDeviceSyncInfoRepository deviceSyncInfoRepository = null, 
+            IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
             IInterviewerVersionReader interviewerVersionReader = null)
         {
             return new InterviewerProfileFactory(
                 userManager ?? Mock.Of<HqUserManager>(),
                 interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(), 
+                deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>());
         }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()
         {
-            return new StatefullInterviewSearcher(Mock.Of<IInterviewFactory>(x=> x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[]{}));
+            return new StatefullInterviewSearcher(Mock.Of<IInterviewFactory>(x =>
+                x.GetFlaggedQuestionIds(It.IsAny<Guid>()) == new Identity[] { }));
+        }
+
+        public InterviewPackagesService InterviewPackagesService(
+            IPlainStorageAccessor<InterviewPackage> interviewPackageStorage = null,
+            IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage = null,
+            ILogger logger = null,
+            IJsonAllTypesSerializer serializer = null,
+            ICommandService commandService = null,
+            IInterviewUniqueKeyGenerator uniqueKeyGenerator = null,
+            SyncSettings syncSettings = null,
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null,
+            ITransactionManager transactionManager = null,
+            IUserRepository userRepository = null)
+        {
+            InterviewKey generatedInterviewKey = new InterviewKey(5533);
+
+            var userRepositoryMock = new Mock<IUserRepository>();
+
+            var hqUserProfile = Mock.Of<HqUserProfile>(_ => _.SupervisorId == Id.gB);
+
+            var hqUser = Mock.Of<HqUser>(_ => _.Id == Id.gA
+                                           && _.Profile == hqUserProfile);
+            userRepositoryMock
+                .Setup(arg => arg.FindByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync(hqUser);
+
+            return new InterviewPackagesService(
+                syncSettings: syncSettings ?? Mock.Of<SyncSettings>(),
+                logger: logger ?? Mock.Of<ILogger>(),
+                serializer: serializer ?? new JsonAllTypesSerializer(),
+                interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
+                brokenInterviewPackageStorage: brokenInterviewPackageStorage ??
+                                               Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
+                commandService: commandService ?? Mock.Of<ICommandService>(),
+                uniqueKeyGenerator: uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(x => x.Get() == generatedInterviewKey),
+                interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
+                transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
+                userRepository: userRepository ?? userRepositoryMock.Object);
         }
     }
 }

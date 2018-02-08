@@ -28,13 +28,13 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         {
             var assignmentsToExport = this.GetAssignments(questionnaire);
 
-            var csvConfiguration = new CsvConfiguration
+            var csvConfiguration = new Configuration
             {
                 HasHeaderRecord = true,
-                TrimFields = true,
+                TrimOptions = TrimOptions.Trim,
                 IgnoreQuotes = false,
                 Delimiter = "\t",
-                WillThrowOnMissingField = false
+                MissingFieldFound = null
             };
 
             var questionnaireDocument = this.questionnaireStorage.GetQuestionnaire(questionnaire, null);

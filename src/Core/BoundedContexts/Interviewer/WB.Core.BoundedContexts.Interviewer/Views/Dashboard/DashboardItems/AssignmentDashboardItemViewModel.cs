@@ -16,6 +16,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private IInterviewFromAssignmentCreatorService InterviewFromAssignmentCreator
             => serviceLocator.GetInstance<IInterviewFromAssignmentCreatorService>();
 
+        private IAssignmentDocumentsStorage AssignmentsRepository
+            => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
+
         private AssignmentDocument assignment;
         private int interviewsByAssignmentCount;
         private QuestionnaireIdentity questionnaireIdentity;
@@ -32,9 +35,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             this.serviceLocator = serviceLocator;
         }
 
-        public void Init(AssignmentDocument assignmentDocument, int interviewsCount)
+        public void Init(AssignmentDocument assignmentDocument)
         {
-            interviewsByAssignmentCount = interviewsCount;
+            interviewsByAssignmentCount = assignmentDocument.CreatedInterviewsCount ?? 0;
             assignment = assignmentDocument;
             questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
             Status = DashboardInterviewStatus.Assignment;
@@ -107,6 +110,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public void DecreaseInterviewsCount()
         {
             interviewsByAssignmentCount--;
+
+            // update db assignment
+            assignment.CreatedInterviewsCount = interviewsByAssignmentCount;
+            AssignmentsRepository.Store(assignment);
+
+            
             BindTitles();
         }
     }

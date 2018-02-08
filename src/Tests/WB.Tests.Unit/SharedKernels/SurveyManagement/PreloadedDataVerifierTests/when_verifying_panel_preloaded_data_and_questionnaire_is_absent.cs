@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             importDataVerifier = CreatePreloadedDataVerifier();
         };
 
-        Because of = () => importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, new PreloadedDataByFile[0], status);
+        Because of = () => importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]), status);
 
         It should_result_has_1_error = () =>
             status.VerificationState.Errors.Count().ShouldEqual(1);

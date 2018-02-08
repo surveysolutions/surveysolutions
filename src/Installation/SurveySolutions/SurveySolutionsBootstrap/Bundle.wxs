@@ -7,7 +7,7 @@
     <Bundle Name="SurveySolutions"
             Version="$(var.SurveySolutionsVersion)"
             Manufacturer="The World Bank"
-            UpgradeCode="D101A3BD-9921-4BBC-8F13-2B496A721317">
+            UpgradeCode="D101A3BD-9921-4BBC-8F13-2B496A721317" >
 
         <bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
             (VersionNT64 &gt;= v6.3) 
@@ -38,7 +38,7 @@
         </BootstrapperApplicationRef>
         
         <Chain>
-            <PackageGroupRef Id="NetFx462WebLocal" />
+            <PackageGroupRef Id="NetFx471WebLocal" />
 
             <RollbackBoundary />
 
@@ -53,32 +53,32 @@
         </Chain>
     </Bundle>
     
-    <?define NetFx462MinRelease = 394802 ?>
+    <?define NetFx471MinRelease = 461308 ?>
     
     <Fragment>
         <PropertyRef Id="WIXNETFX4RELEASEINSTALLED" />
-        <Property Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" Secure="yes" />
-        <SetProperty Id="WIX_IS_NETFRAMEWORK_462_OR_LATER_INSTALLED" Value="1" After="AppSearch">
-            WIXNETFX4RELEASEINSTALLED >= "#$(var.NetFx462MinRelease)"
+        <Property Id="WIX_IS_NETFRAMEWORK_471_OR_LATER_INSTALLED" Secure="yes" />
+        <SetProperty Id="WIX_IS_NETFRAMEWORK_471_OR_LATER_INSTALLED" Value="1" After="AppSearch">
+            WIXNETFX4RELEASEINSTALLED >= "#$(var.NetFx471MinRelease)"
         </SetProperty>
     </Fragment>
 
     <Fragment>
-        <WixVariable Id="NetFx462WebDetectCondition" Value="NETFRAMEWORK45 &gt;= $(var.NetFx462MinRelease)" Overridable="yes" />
+        <WixVariable Id="NetFx471WebDetectCondition" Value="NETFRAMEWORK45 &gt;= $(var.NetFx471MinRelease)" Overridable="yes" />
     
         <util:RegistrySearchRef Id="NETFRAMEWORK45"/>
     
-        <PackageGroup Id="NetFx462WebLocal">
-            <ExePackage Id="NetFx462WebLocal"
+        <PackageGroup Id="NetFx471WebLocal">
+            <ExePackage Id="NetFx471WebLocal"
                     InstallCommand="/passive /showrmui /norestart /ChainingPackage &quot;[WixBundleName]&quot;"
                     PerMachine="yes"
                     Cache="no"
                     Compressed="yes"
                     Permanent="yes"
                     Vital="yes"
-                    Name="NDP462-KB3151802-Web.exe"
-                    SourceFile="redist\NDP462-KB3151802-Web.exe"
-                    DetectCondition="!(wix.NetFx462WebDetectCondition)">
+                    Name="NDP471-KB4033344-Web.exe"
+                    SourceFile="redist\NDP471-KB4033344-Web.exe"
+                    DetectCondition="!(wix.NetFx471WebDetectCondition)">
                 <ExitCode Behavior="forceReboot" Value="1641" />
                 <ExitCode Behavior="forceReboot" Value="3010" />
                 <ExitCode Behavior="success" Value="0" />
