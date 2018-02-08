@@ -15,15 +15,21 @@
                 <div class="navbar-brand">
                     <router-link class="logo" :to="toFirstSection" v-if="$store.state.webinterview.firstSectionId && hqLink == null"></router-link>
                     <a :href="hqLink" v-if="hqLink != null" class="logo"></a>
-                </div>
+                </div>  
+                <button v-if="this.$config.inWebTesterMode" type="button" class="btn btn-default btn-link btn-icon" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
+                    <span class="glyphicon glyphicon-sort"></span>
+                </button>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
                     <li v-if="this.$config.inWebTesterMode">
-                        <a :href="this.$config.reloadQuestionnaireUrl"><span class="glyphicon glyphicon-sort"></span></a>
+                        <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
+                            <span class="glyphicon glyphicon-sort"></span>
+                        </button>
                     </li>
+
                     <li class="dropdown language">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                             :title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
@@ -114,6 +120,9 @@
                     message: "<p>" + this.$t("WebInterviewUI.SwitchingLanguage") +"</p>",
                     closeButton: false
                 })
+            },
+            reloadQuestionnaire() {
+                window.location = this.$config.reloadQuestionnaireUrl;
             }
         }
     }

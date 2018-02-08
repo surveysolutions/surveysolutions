@@ -223,7 +223,7 @@ namespace WB.UI.WebTester.Services.Implementation
                                     itemsCount)>
                                 (jsonArg, CommandsSerializerSettings);
 
-                        var interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
+                        var interview = CurrentInterview.Instance;
 
                         var result = interview.GetFirstTopFilteredOptionsForQuestion(
                             args.questionIdentity,
