@@ -2,10 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\Services\DevicePasswordHasher.cs" Link="GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs" />
   </ItemGroup>
