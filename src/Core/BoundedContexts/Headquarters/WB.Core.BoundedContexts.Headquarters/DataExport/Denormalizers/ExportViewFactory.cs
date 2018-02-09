@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             {
                 foreach (var answer in question.Answers)
                 {
-                    exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
+                    exportedHeaderItem.Labels.Add(Guid.NewGuid(), new LabelItem(answer));
                 }
             }
 

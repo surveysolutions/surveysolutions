@@ -719,7 +719,6 @@ namespace WB.Tests.Abc.TestFactories
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
             => new Answer
             {
-                PublicKey = id ?? Guid.NewGuid(),
                 AnswerText = text ?? "text",
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
