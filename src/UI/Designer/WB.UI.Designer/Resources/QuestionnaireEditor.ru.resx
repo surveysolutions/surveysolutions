@@ -1042,4 +1042,7 @@
   <data name="Test" xml:space="preserve">
     <value>Тест</value>
   </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Добавить специальное значение</value>
+  </data>
 </root>
