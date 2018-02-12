@@ -139,7 +139,7 @@
     <value>Se inició la entrevista en la Web</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Inicio de la entrevista Web para {0}</value>
+    <value>Inicio de la entrevista Web para {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Detener Entrevista Web</value>

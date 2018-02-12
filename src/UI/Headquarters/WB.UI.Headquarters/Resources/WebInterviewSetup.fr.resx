@@ -139,7 +139,7 @@
     <value>L'entretien Web a commencé</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Début de l'entretien sur le Web pour {0}</value>
+    <value>Début de l'entretien sur le Web pour {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Arrêtez l'entrevue Web</value>
