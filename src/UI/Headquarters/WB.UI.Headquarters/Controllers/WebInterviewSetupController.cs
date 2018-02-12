@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -76,7 +77,10 @@ namespace WB.UI.Headquarters.Controllers
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
 
             model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
-                .Select(m => new DropdownItem((int) m, m.ToUiString())).ToList();
+                .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();
+            model.DefaultTexts = WebInterviewConfig.DefaultMessages;
+            model.TextDescriptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
+                .ToDictionary(m => m, m => WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{m}_Descr"));
 
             return View(model);
         }
@@ -145,5 +149,18 @@ namespace WB.UI.Headquarters.Controllers
             QuestionnaireBrowseItem questionnaire = this.questionnaireBrowseViewFactory.GetById(questionnarieId);
             return questionnaire;
         }
+    }
+
+    public class SetupModel
+    {
+        public string QuestionnaireTitle { get; set; }
+        public bool UseCaptcha { get; set; }
+        public int AssignmentsCount { get; set; }
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        public string QuestionnaireFullName { get; set; }
+        public string SurveySetupUrl { get; set; }
+        public KeyValuePair<string, string>[] TextOptions { get; set; }
+        public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
+        public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
     }
 }
