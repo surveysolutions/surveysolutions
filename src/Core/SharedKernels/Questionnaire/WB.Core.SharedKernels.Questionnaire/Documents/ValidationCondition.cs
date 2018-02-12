@@ -1,4 +1,7 @@
-﻿namespace WB.Core.SharedKernels.QuestionnaireEntities
+﻿using System.Xml.Schema;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+
+namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
     public class ValidationCondition
     {
@@ -14,6 +17,8 @@
 
         public string Expression { get; set; } 
         public string Message { get; set; }
+
+        public ValidationSeverity Severity { set; get; }
 
         public ValidationCondition Clone()
         {
