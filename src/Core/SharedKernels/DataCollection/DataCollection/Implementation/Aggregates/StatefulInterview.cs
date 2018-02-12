@@ -646,7 +646,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
-            if (question?.FailedValidations != null)
+            if (question?.FailedErrorValidations != null)
             {
                 var questionValidationMassages = question.ValidationMessages
                     .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
@@ -654,13 +654,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
 
-                return question.FailedValidations.Select(failedValidation =>
+                return question.FailedErrorValidations.Select(failedValidation =>
                     $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
 
             }
 
             var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
-            if (staticText?.FailedValidations != null)
+            if (staticText?.FailedErrorValidations != null)
             {
                 var staticTextValidationMassages = staticText.ValidationMessages
                     .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
@@ -668,7 +668,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                 if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
 
-                return staticText.FailedValidations.Select(failedValidation =>
+                return staticText.FailedErrorValidations.Select(failedValidation =>
                     $"{staticTextValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
                     $"[{failedValidation.FailedConditionIndex + 1}]");
             }
@@ -766,7 +766,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (question.IsAnswered() && !question.IsValid)
                     {
                         invalidAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                        failedValidationConditions.Add(question.Identity, question.FailedValidations.ToList());
+                        failedValidationConditions.Add(question.Identity, question.FailedErrorValidations.ToList());
                     }
                     if (question.IsValid)
                     {
@@ -794,7 +794,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (!staticText.IsValid)
                     {
                         invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
-                            staticTextIdentity, staticText.FailedValidations.ToList()));
+                            staticTextIdentity, staticText.FailedErrorValidations.ToList()));
                     }
                 }
                 else
