@@ -18,12 +18,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.Title = title;
             this.ValidationMessages = validationMessages ?? new SubstitutionText[0];
-            this.FailedValidations = new List<FailedValidationCondition>();
+            this.FailedErrorValidations = new List<FailedValidationCondition>();
+            this.FailedWarningValidations = new List<FailedValidationCondition>();
         }
 
-        public bool IsValid => this.FailedValidations.Count == 0;
+        public bool IsValid => this.FailedErrorValidations.Count == 0;
 
-        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+        public IReadOnlyList<FailedValidationCondition> FailedErrorValidations { get; private set; }
+        public IReadOnlyList<FailedValidationCondition> FailedWarningValidations { get; private set; }
 
         public void SetTitle(SubstitutionText title)
         {
@@ -44,10 +46,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
             if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
-            this.FailedValidations = failedValidations.ToReadOnlyCollection();
+            this.FailedErrorValidations = failedValidations.ToReadOnlyCollection();
         }
         public void MarkValid()
-            => this.FailedValidations = new List<FailedValidationCondition>();
+            => this.FailedErrorValidations = new List<FailedValidationCondition>();
+
+        public void MarkImplausibled(IEnumerable<FailedValidationCondition> failedValidations)
+        {
+            if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedWarningValidations = failedValidations.ToReadOnlyCollection();
+        }
+
+        public void MarkPlausibled()
+            => this.FailedWarningValidations = new List<FailedValidationCondition>();
 
         public override string ToString()
             => $"StaticText {Identity} '{Title}'. " +
@@ -59,7 +70,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var clone = (InterviewTreeStaticText)this.MemberwiseClone();
             clone.Title = this.Title?.Clone();
             clone.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
-            clone.FailedValidations = this.FailedValidations
+            clone.FailedErrorValidations = this.FailedErrorValidations
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
             return clone;

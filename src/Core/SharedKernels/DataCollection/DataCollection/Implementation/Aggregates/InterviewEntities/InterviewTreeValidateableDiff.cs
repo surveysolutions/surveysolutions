@@ -44,10 +44,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsNodeRemoved) return false;
             if (result.IsValid) return false;
-            var targetChangedValidations = result.FailedValidations ?? new List<FailedValidationCondition>();
+            var targetChangedValidations = result.FailedErrorValidations ?? new List<FailedValidationCondition>();
             if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
 
-            var sourceMessages = source?.FailedValidations ?? new List<FailedValidationCondition>();
+            var sourceMessages = source?.FailedErrorValidations ?? new List<FailedValidationCondition>();
             return !targetChangedValidations.SequenceEqual(sourceMessages);
         }
 
@@ -64,11 +64,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         bool IsValid { get; }
         SubstitutionText[] ValidationMessages { get; }
-        IReadOnlyList<FailedValidationCondition> FailedValidations { get; }
 
+        IReadOnlyList<FailedValidationCondition> FailedErrorValidations { get; }
         void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations);
-
         void MarkValid();
+
+        IReadOnlyList<FailedValidationCondition> FailedWarningValidations { get; }
+        void MarkImplausibled(IEnumerable<FailedValidationCondition> failedValidations);
+        void MarkPlausibled();
 
         void AcceptValidity(IInterviewTreeUpdater updater);
     }
