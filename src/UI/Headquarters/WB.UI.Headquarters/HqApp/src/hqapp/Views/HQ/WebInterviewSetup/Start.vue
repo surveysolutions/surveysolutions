@@ -33,7 +33,7 @@
                             <p>
                                 {{textDescription(opt)}}
                             </p>
-                            <textarea :id="'customTextOpt' + opt.value" rows="5" style="width:50%" :placeholder="defaultText(opt)"></textarea>
+                            <textarea :name="opt.value" :value="$config.model.definedTexts[opt.value]" rows="5" style="width:50%" :placeholder="defaultText(opt)"></textarea>
                         </div>
                     </div>
                 </div>

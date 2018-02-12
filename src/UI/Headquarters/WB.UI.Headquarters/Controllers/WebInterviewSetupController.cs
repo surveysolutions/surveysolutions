@@ -81,6 +81,8 @@ namespace WB.UI.Headquarters.Controllers
             model.DefaultTexts = WebInterviewConfig.DefaultMessages;
             model.TextDescriptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
                 .ToDictionary(m => m, m => WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{m}_Descr"));
+            model.DefinedTexts = config.CustomMessages;
+            
 
             return View(model);
         }
@@ -99,7 +101,17 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
-            this.configurator.Start(questionnaireIdentity, model.UseCaptcha);
+            Dictionary<WebInterviewUserMessages, string> customMessages = new Dictionary<WebInterviewUserMessages, string>();
+            foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
+            {
+                var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
+                if (Request[fieldNameInRequest] != null)
+                {
+                    customMessages[(WebInterviewUserMessages) customMessageName] = Request[fieldNameInRequest];
+                }
+            }
+
+            this.configurator.Start(questionnaireIdentity, model.UseCaptcha, customMessages);
             return this.RedirectToAction("Started", new { id = questionnaireIdentity.ToString() });
         }
 
@@ -162,5 +174,6 @@ namespace WB.UI.Headquarters.Controllers
         public KeyValuePair<string, string>[] TextOptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
         public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
+        public Dictionary<WebInterviewUserMessages, string> DefinedTexts { get; set; }
     }
 }

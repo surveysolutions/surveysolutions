@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Header text shown at final page when interview is done..
+        ///   Looks up a localized string similar to Text shown at final page when interview is completed.
         /// </summary>
         public static string WebInterviewUserMessages_FinishInterview_Descr {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome text shown before interview is started.
+        ///   Looks up a localized string similar to Header text shown to returning user before resume an interview.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeWelcome_Descr {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Header text for web survey.
+        ///   Looks up a localized string similar to Header text shown after interview completion.
         /// </summary>
         public static string WebInterviewUserMessages_WebSurveyHeader_Descr {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome text on initial page.
+        ///   Looks up a localized string similar to Header welcome text on initial page.
         /// </summary>
         public static string WebInterviewUserMessages_WelcomeText_Descr {
             get {
