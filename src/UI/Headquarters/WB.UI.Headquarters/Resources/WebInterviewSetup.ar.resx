@@ -139,7 +139,7 @@
     <value>تم البدء بالاستجواب الإلكتروني</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالاستجواب الإلكتروني لـ {0}</value>
+    <value>البدء بالاستجواب الإلكتروني لـ {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>إيقاف الاستجواب الإلكتروني</value>

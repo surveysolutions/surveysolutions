@@ -133,7 +133,7 @@
     <value>Web интервью начато</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Начать web интервью для {0}</value>
+    <value>Начать web интервью для {{name}}</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Настройка web интервью</value>
