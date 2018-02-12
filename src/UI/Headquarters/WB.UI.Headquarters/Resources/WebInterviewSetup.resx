@@ -158,7 +158,7 @@
     <value>Stop Web Interview</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
-    <value>Header text shown at final page when interview is done.</value>
+    <value>Text shown at final page when interview is completed</value>
   </data>
   <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
     <value>Invitation text presented to user on initial page. {0} is substituted with questionnaire name</value>
@@ -167,15 +167,15 @@
     <value>Text shown to returning user when interview is resumed. {0} is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
-    <value>Welcome text shown before interview is started</value>
+    <value>Header text shown to returning user before resume an interview</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
     <value>Name of conducted survey. {0} - is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
-    <value>Header text for web survey</value>
+    <value>Header text shown after interview completion</value>
   </data>
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
-    <value>Welcome text on initial page</value>
+    <value>Header welcome text on initial page</value>
   </data>
 </root>
