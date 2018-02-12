@@ -6,9 +6,15 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview
 {
     public class WebInterviewConfig
     {
+        public WebInterviewConfig()
+        {
+            this.CustomMessages = new Dictionary<WebInterviewUserMessages, string>();
+        }
+
         public QuestionnaireIdentity QuestionnaireId { get; set; }
         public bool Started { get; set; }
         public bool UseCaptcha { get; set; }
+        public Dictionary<WebInterviewUserMessages, string> CustomMessages { get; set; }
 
         public static Dictionary<WebInterviewUserMessages, string> DefaultMessages => 
             new Dictionary<WebInterviewUserMessages, string> 

@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.UI.Headquarters.Models.WebInterview;
 using WB.UI.Shared.Web.Services;
 
 namespace WB.UI.Headquarters.Controllers
@@ -155,6 +156,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
+            model.CustomMessages = webInterviewConfig.CustomMessages;
             return this.View(model);
         }
 
@@ -237,7 +239,10 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            return View(this.GetFinishModel(interview));
+            var finishWebInterview = this.GetFinishModel(interview);
+            finishWebInterview.CustomMessages = webInterviewConfig.CustomMessages;
+
+            return View(finishWebInterview);
         }
 
         [WebInterviewAuthorize]
@@ -357,11 +362,14 @@ namespace WB.UI.Headquarters.Controllers
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewExpired, Enumerator.Native.Resources.WebInterview.Error_InterviewExpired);
             }
 
+            var webInterviewConfig = this.configProvider.Get(interview.QuestionnaireIdentity);
+
             return new ResumeWebInterview
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = this.webInterviewConfigProvider.Get(interview.QuestionnaireIdentity).UseCaptcha,
-                StartedDate = interview.StartedDate
+                StartedDate = interview.StartedDate,
+                CustomMessages = webInterviewConfig.CustomMessages
             };
         }
 
