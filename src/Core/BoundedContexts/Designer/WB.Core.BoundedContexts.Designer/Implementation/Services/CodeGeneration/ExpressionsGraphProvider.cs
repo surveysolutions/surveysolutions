@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> structuralDependencies = BuildStructuralDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> rosterDependencies = BuildRosterDependencies(questionnaire);
-            Dictionary<Guid, Guid> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> susbtitutionDependencies = BuildSubstitutionDependencies(questionnaire);
 
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(rosterDependencies.Keys)
                     .Union(linkedQuestionByRosterDependencies.Keys)
                     .Union(susbtitutionDependencies.Keys)
-                    .Union(linkedQuestionByRosterDependencies.Values)
+                    .Union(linkedQuestionByRosterDependencies.SelectMany(x => x.Value))
                     .Union(structuralDependencies.SelectMany(x => x.Value))
                     .Union(conditionalDependencies.SelectMany(x => x.Value))
                     .Union(rosterDependencies.SelectMany(x => x.Value))
@@ -77,21 +77,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var linkedDependency in linkedQuestionByRosterDependencies)
             {
-                if (!mergedDependencies[linkedDependency.Value].Contains(linkedDependency.Key))
+                foreach (var entityId in linkedDependency.Value)
                 {
-                    mergedDependencies[linkedDependency.Value].Add(linkedDependency.Key);
+                    if (!mergedDependencies[entityId].Contains(linkedDependency.Key))
+                    {
+                        mergedDependencies[entityId].Add(linkedDependency.Key);
+                    }                    
                 }
             }
             return mergedDependencies;
         }
 
 
-        private Dictionary<Guid, Guid> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
+        private Dictionary<Guid, List<Guid>> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
-                .Find<IQuestion>(x => x.LinkedToQuestionId != null || x.LinkedToRosterId != null)
-                .ToDictionary(x => x.PublicKey, x => x.LinkedToQuestionId ?? x.LinkedToRosterId.Value);
-        }
+                    .Find<IQuestion>(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue)
+                    .Select(x => new { Key = x.PublicKey, Value = x.LinkedToQuestionId ?? x.LinkedToRosterId.Value })
+                .Union(questionnaire
+                    .Find<IQuestion>(x => x.LinkedToRosterId.HasValue)
+                    .Select(x => new { Id = x.PublicKey, RosterTitleQuestionId = questionnaire.GetRoster(x.LinkedToRosterId.Value)?.RosterTitleQuestionId })
+                    .Where(x => x.RosterTitleQuestionId.HasValue)
+                    .Select(x => new { Key = x.Id, Value = x.RosterTitleQuestionId.Value }))
+                .GroupBy(x => x.Key)
+                .ToDictionary(x => x.Key, x => x.Select(s => s.Value).ToList());        }
 
         private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
