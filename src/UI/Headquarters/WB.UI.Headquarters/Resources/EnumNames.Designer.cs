@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Finish Interview.
+        ///   Looks up a localized string similar to Finish Text.
         /// </summary>
         public static string WebInterviewUserMessages_FinishInterview {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invitation.
+        ///   Looks up a localized string similar to Welcome Invitation.
         /// </summary>
         public static string WebInterviewUserMessages_Invitation {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resume Welcome.
+        ///   Looks up a localized string similar to Resume Header.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeWelcome {
             get {
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web Survey Header.
+        ///   Looks up a localized string similar to Finish Header.
         /// </summary>
         public static string WebInterviewUserMessages_WebSurveyHeader {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome Text.
+        ///   Looks up a localized string similar to Welcome Header.
         /// </summary>
         public static string WebInterviewUserMessages_WelcomeText {
             get {
