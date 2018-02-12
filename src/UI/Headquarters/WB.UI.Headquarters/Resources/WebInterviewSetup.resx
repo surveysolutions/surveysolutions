@@ -133,7 +133,7 @@
     <value>Web interview started</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Starting web interview for {0}</value>
+    <value>Starting web interview for {{name}}</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Web interview setup</value>

@@ -139,7 +139,7 @@
     <value>ვებ-ინტერვიუ დაიწყო</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>ვებ-ინტერიუ იწყება {0}</value>
+    <value>ვებ-ინტერიუ იწყება {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>ვებ ინტერვიუს შეჩერება</value>
