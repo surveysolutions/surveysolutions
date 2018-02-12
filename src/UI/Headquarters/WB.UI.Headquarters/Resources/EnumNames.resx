@@ -163,24 +163,24 @@
     <value>None</value>
   </data>
   <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
-    <value>FinishInterview</value>
+    <value>Finish Interview</value>
   </data>
   <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
     <value>Invitation</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
-    <value>ResumeInvitation</value>
+    <value>Resume Invitation</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
-    <value>ResumeWelcome</value>
+    <value>Resume Welcome</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
-    <value>SurveyName</value>
+    <value>Survey Name</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
-    <value>WebSurveyHeader</value>
+    <value>Web Survey Header</value>
   </data>
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
-    <value>WelcomeText</value>
+    <value>Welcome Text</value>
   </data>
 </root>

@@ -105,7 +105,6 @@
     <Compile Include="WebInterview\Models\InterviewEntityType.cs" />
     <Compile Include="WebInterview\Models\InterviewEntityWithType.cs" />
     <Compile Include="WebInterview\Models\PrefilledPageData.cs" />
-    <Compile Include="WebInterview\Models\SetupModel.cs" />
     <Compile Include="WebInterview\Models\StartWebInterview.cs" />
     <Compile Include="WebInterview\Models\WebInterivewDtos.cs" />
     <Compile Include="WebInterview\Models\WebInterviewAutoMapProfile.cs" />

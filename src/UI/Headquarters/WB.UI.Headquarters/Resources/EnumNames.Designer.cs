@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to FinishInterview.
+        ///   Looks up a localized string similar to Finish Interview.
         /// </summary>
         public static string WebInterviewUserMessages_FinishInterview {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ResumeInvitation.
+        ///   Looks up a localized string similar to Resume Invitation.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeInvitation {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ResumeWelcome.
+        ///   Looks up a localized string similar to Resume Welcome.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeWelcome {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SurveyName.
+        ///   Looks up a localized string similar to Survey Name.
         /// </summary>
         public static string WebInterviewUserMessages_SurveyName {
             get {
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WebSurveyHeader.
+        ///   Looks up a localized string similar to Web Survey Header.
         /// </summary>
         public static string WebInterviewUserMessages_WebSurveyHeader {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to WelcomeText.
+        ///   Looks up a localized string similar to Welcome Text.
         /// </summary>
         public static string WebInterviewUserMessages_WelcomeText {
             get {
