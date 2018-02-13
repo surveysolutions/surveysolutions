@@ -142,13 +142,13 @@
     <value>Web interview setup</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Web interview for {0} started</value>
+    <value>Web interview for {{name}} started</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
     <value>Enable spam protection</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>Download ({0})</value>
+    <value>Download ({{count}})</value>
     <comment>{0} - count of interviews in file</comment>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
@@ -180,5 +180,14 @@
   </data>
   <data name="CustomText">
     <value>Use custom text</value>
+  </data>
+  <data name="TextsUpdated">
+    <value>Texts updated</value>
+  </data>
+  <data name="SaveAll">
+    <value>Save all</value>
+  </data>
+  <data name="TextCustomize">
+    <value>Text dispayed to respondents can be customized</value>
   </data>
 </root>

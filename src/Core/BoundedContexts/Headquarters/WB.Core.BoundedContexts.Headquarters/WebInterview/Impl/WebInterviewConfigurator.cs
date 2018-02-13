@@ -14,8 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             this.configs = configs ?? throw new ArgumentNullException(nameof(configs));
         }
 
-        public void Start(QuestionnaireIdentity questionnaireId, bool useCaptcha,
-            Dictionary<WebInterviewUserMessages, string> customMessages)
+        public void Start(QuestionnaireIdentity questionnaireId, bool useCaptcha)
         {
             var webInterviewConfig = this.configs.GetById(questionnaireId.ToString());
             if (webInterviewConfig == null)
@@ -26,9 +25,15 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
             webInterviewConfig.Started = true;
             webInterviewConfig.UseCaptcha = useCaptcha;
-            webInterviewConfig.CustomMessages = customMessages;
-
+        
             this.configs.Store(webInterviewConfig, questionnaireId.ToString());
+        }
+
+        public void UpdateMessages(QuestionnaireIdentity questionnaireId, Dictionary<WebInterviewUserMessages, string> messages)
+        {
+            var config = this.configs.GetById(questionnaireId.ToString()) ?? new WebInterviewConfig();
+            config.CustomMessages = messages;
+            this.configs.Store(config, questionnaireId.ToString());
         }
 
         public void Stop(QuestionnaireIdentity questionnaireId)
