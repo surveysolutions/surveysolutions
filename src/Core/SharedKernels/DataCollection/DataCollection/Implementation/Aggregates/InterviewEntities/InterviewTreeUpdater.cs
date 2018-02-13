@@ -272,24 +272,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void UpdateValidations(InterviewTreeStaticText staticText)
         {
-            IInterviewLevel level = this.GetLevel(staticText);
-            var validationExpressions = level.GetValidationExpressions(staticText.Identity) ?? new Func<bool>[0];
-            var validationResult = validationExpressions.Select(RunConditionExpression)
-                .Select((x, i) => !x ? new FailedValidationCondition(i) : null)
-                .Where(x => x != null)
-                .ToArray();
-
-            var warningIndexes = questionnaire.GetValidationWarningsIndexes(staticText.Identity.Id).ToHashSet();
-
-            if (validationResult.Any(v => warningIndexes.Contains(v.FailedConditionIndex)))
-                staticText.MarkImplausibled(validationResult.Where(v => warningIndexes.Contains(v.FailedConditionIndex)));
-            else
-                staticText.MarkPlausibled();
-
-            if (validationResult.Any(v => !warningIndexes.Contains(v.FailedConditionIndex)))
-                staticText.MarkInvalid(validationResult.Where(v => !warningIndexes.Contains(v.FailedConditionIndex)));
-            else
-                staticText.MarkValid();
+            UpdateValidationsForEntity(staticText);
         }
 
         public void UpdateValidations(InterviewTreeQuestion question)
@@ -297,20 +280,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (!question.IsAnswered())
             {
                 question.MarkValid();
+                question.MarkPlausibled();
                 return;
             }
 
-            IInterviewLevel level = this.GetLevel(question);
-            var validationExpressions = level.GetValidationExpressions(question.Identity) ?? new Func<bool>[0];
+            UpdateValidationsForEntity(question);
+        }
+
+        private void UpdateValidationsForEntity(InterviewTreeLeafNode entity)
+        {
+            if (!(entity is IInterviewTreeValidateable interviewTreeValidateable))
+                return;
+
+            IInterviewLevel level = this.GetLevel(entity);
+            var validationExpressions = level.GetValidationExpressions(entity.Identity) ?? new Func<bool>[0];
             var validationResult = validationExpressions.Select(RunConditionExpression)
                 .Select((x, i) => !x ? new FailedValidationCondition(i) : null)
                 .Where(x => x != null)
                 .ToArray();
 
-            if (validationResult.Any())
-                question.MarkInvalid(validationResult);
+            var warningIndexes = questionnaire.GetValidationWarningsIndexes(entity.Identity.Id).ToHashSet();
+
+            if (validationResult.Any(v => warningIndexes.Contains(v.FailedConditionIndex)))
+                interviewTreeValidateable.MarkImplausibled(validationResult.Where(v => warningIndexes.Contains(v.FailedConditionIndex)));
             else
-                question.MarkValid();
+                interviewTreeValidateable.MarkPlausibled();
+
+            if (validationResult.Any(v => !warningIndexes.Contains(v.FailedConditionIndex)))
+                interviewTreeValidateable.MarkInvalid(validationResult.Where(v => !warningIndexes.Contains(v.FailedConditionIndex)));
+            else
+                interviewTreeValidateable.MarkValid();
         }
 
         private IInterviewLevel GetLevel(IInterviewTreeNode entity)

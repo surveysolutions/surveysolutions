@@ -364,6 +364,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
         }
 
+        public virtual void Apply(AnswersDeclaredPlausible @event)
+        {
+            foreach (var questionIdentity in @event.Questions)
+                this.Tree.GetQuestion(questionIdentity)?.MarkPlausibled();
+        }
+
+        public virtual void Apply(AnswersDeclaredImplausible @event)
+        {
+            var questionsConditions = @event.GetFailedValidationConditionsDictionary();
+
+            foreach (var questionIdentity in questionsConditions.Keys)
+                this.Tree.GetQuestion(questionIdentity).MarkImplausibled(questionsConditions[questionIdentity]);
+        }
+
+        public virtual void Apply(StaticTextsDeclaredPlausible @event)
+        {
+            foreach (var staticTextIdentity in @event.StaticTexts)
+                this.Tree.GetStaticText(staticTextIdentity).MarkPlausibled();
+        }
+
+        public virtual void Apply(StaticTextsDeclaredImplausible @event)
+        {
+            var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
+
+            foreach (var staticTextIdentity in staticTextsConditions.Keys)
+                this.Tree.GetStaticText(staticTextIdentity).MarkImplausibled(staticTextsConditions[staticTextIdentity]);
+        }
+
         public void Apply(LinkedOptionsChanged @event)
         {
             foreach (var linkedQuestion in @event.ChangedLinkedQuestions)
@@ -2068,24 +2096,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
 
             var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedValidationIndexChanged).Select(x => x.ChangedNode)
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
                 .ToDictionary(x => x.Identity, x => x.FailedErrorValidations);
 
-//            var plausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
-//            var implausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedValidationIndexChanged).Select(x => x.ChangedNode)
-//                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedValidations))
-//                .ToList();
+            var plausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
+            var implausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarningValidations))
+                .ToList();
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedValidationIndexChanged).Select(x => x.ChangedNode)
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
                 .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedErrorValidations))
                 .ToList();
+
+            var plausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
+            var implausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarningValidations))
+                .ToList();
+
 
             if (validQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredValid(validQuestionIdentities));
             if (invalidQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestionIdentities));
 
+            if (plausibleQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredPlausible(plausibleQuestionIdentities));
+            if (implausibleQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredImplausible(implausibleQuestionIdentities));
+
             if (validStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTextIdentities));
             if (invalidStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTextIdentities));
+
+            if (plausibleStaticTextIdentities.Any()) this.ApplyEvent(new AnswersDeclaredPlausible(plausibleStaticTextIdentities));
+            if (implausibleStaticTextIdentities.Any()) this.ApplyEvent(new AnswersDeclaredImplausible(implausibleStaticTextIdentities));
 
             if (HasInvalidAnswers() || HasInvalidStaticTexts)
             {
@@ -2456,7 +2496,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                         || ((diff as InterviewTreeValidateableDiff)?.AreValidationMessagesChanged ?? false)
                                         || ((diff as InterviewTreeValidateableDiff)?.ChangedNodeBecameInvalid ?? false)
                                         || ((diff as InterviewTreeValidateableDiff)?.ChangedNodeBecameValid ?? false)
-                                        || ((diff as InterviewTreeValidateableDiff)?.IsFailedValidationIndexChanged ?? false)
+                                        || ((diff as InterviewTreeValidateableDiff)?.IsFailedErrorValidationIndexChanged ?? false)
                                         || ((diff as InterviewTreeVariableDiff)?.IsValueChanged ?? false)
                                         || ((diff as InterviewTreeStaticTextDiff)?.IsTitleChanged ?? false);
 
