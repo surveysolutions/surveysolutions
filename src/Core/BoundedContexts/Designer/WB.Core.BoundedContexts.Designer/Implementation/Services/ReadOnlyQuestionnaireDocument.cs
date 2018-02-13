@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -309,6 +310,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public bool IsLinked(IQuestion question)
         {
             return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
+        }
+
+        public bool IsTriggerForLongRoster(INumericQuestion question)
+        {
+            var rosters = this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).ToList();
+
+            if (rosters.Any(x => this.GetRosterScope(x).Length > 1)) return false;
+
+            foreach (var roster in rosters)
+            {
+                var entitiesInRoster = FindInGroup<IComposite>(roster.PublicKey).ToList();
+
+                if (entitiesInRoster.Count > Constants.MaxAmountOfItemsInLongRoster)
+                    return false;
+                if (entitiesInRoster.Any(x => (x as Group)?.IsRoster ?? false))
+                    return false;
+            }
+
+            return true;
         }
     }
 }
