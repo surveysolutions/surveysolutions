@@ -175,4 +175,7 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Заголовок приглашения на первой странице до начала интервью</value>
   </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>Пользовательский текст</value>
+  </data>
 </root>
