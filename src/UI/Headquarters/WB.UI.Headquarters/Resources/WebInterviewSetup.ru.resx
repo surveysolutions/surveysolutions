@@ -142,10 +142,10 @@
     <value>Настройка web интервью</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Web интервью для {0} начато</value>
+    <value>Web интервью для {{name}} начато</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>Скачать ({0})</value>
+    <value>Скачать ({{count}})</value>
     <comment>{0} - count of interviews in file</comment>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
@@ -177,5 +177,14 @@
   </data>
   <data name="CustomText" xml:space="preserve">
     <value>Пользовательский текст</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Сохранить всё</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>Сообщения для респондентов могут быть изменены</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Сообщения обновлены</value>
   </data>
 </root>

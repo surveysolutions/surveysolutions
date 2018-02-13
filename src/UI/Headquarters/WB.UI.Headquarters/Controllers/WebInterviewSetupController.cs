@@ -75,14 +75,6 @@ namespace WB.UI.Headquarters.Controllers
             model.UseCaptcha = true;
             model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
 
-            model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
-                .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();
-            model.DefaultTexts = WebInterviewConfig.DefaultMessages;
-            model.TextDescriptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
-                .ToDictionary(m => m, m => WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{m}_Descr"));
-            model.DefinedTexts = config.CustomMessages;
-            
-
             return View(model);
         }
 
@@ -101,23 +93,13 @@ namespace WB.UI.Headquarters.Controllers
             model.QuestionnaireTitle = questionnaire.Title;
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
 
-            Dictionary<WebInterviewUserMessages, string> customMessages = new Dictionary<WebInterviewUserMessages, string>();
-            foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
-            {
-                var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
-                if (!string.IsNullOrWhiteSpace(Request.Unvalidated[fieldNameInRequest]))
-                {
-                    customMessages[(WebInterviewUserMessages) customMessageName] = Request.Unvalidated[fieldNameInRequest];
-                }
-            }
-
-            this.configurator.Start(questionnaireIdentity, model.UseCaptcha, customMessages);
+            this.configurator.Start(questionnaireIdentity, model.UseCaptcha);
             return this.RedirectToAction("Started", new { id = questionnaireIdentity.ToString() });
         }
 
+        [ActivePage(MenuItem.Questionnaires)]
         public ActionResult Started(string id)
         {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
@@ -129,17 +111,47 @@ namespace WB.UI.Headquarters.Controllers
             var model = new SetupModel
             {
                 QuestionnaireTitle = questionnaire.Title,
-                QuestionnaireIdentity = questionnaireIdentity
+                QuestionnaireIdentity = questionnaireIdentity,
+                QuestionnaireFullName = string.Format(Pages.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version)
             };
 
-            model.AssignmentsCount =
-                this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
+            model.AssignmentsCount = this.assignmentsService.GetCountOfAssignmentsReadyForWebInterview(questionnaireIdentity);
+            model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
+                new {controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString()});
+            model.UpdateTextsUrl = Url.Action("UpdateMessages", new {id = questionnaireIdentity.ToString()});
+
+            var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
+
+            model.TextOptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
+                .ToDictionary(m => m.ToString().ToCamelCase(), m => m.ToUiString()).ToArray();
+            model.DefaultTexts = WebInterviewConfig.DefaultMessages;
+            model.TextDescriptions = Enum.GetValues(typeof(WebInterviewUserMessages)).Cast<WebInterviewUserMessages>()
+                .ToDictionary(m => m, m => WebInterviewSetup.ResourceManager.GetString($"{nameof(WebInterviewUserMessages)}_{m}_Descr"));
+            model.DefinedTexts = config.CustomMessages;
 
             return this.View(model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        public ActionResult UpdateMessages(string id)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+            Dictionary<WebInterviewUserMessages, string> customMessages = new Dictionary<WebInterviewUserMessages, string>();
+            foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
+            {
+                var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
+                if (!string.IsNullOrWhiteSpace(Request.Unvalidated[fieldNameInRequest]))
+                {
+                    customMessages[(WebInterviewUserMessages) customMessageName] = Request.Unvalidated[fieldNameInRequest];
+                }
+            }
+
+            this.configurator.UpdateMessages(questionnaireIdentity, customMessages);
+
+            return new HttpStatusCodeResult(200);
+        }
+
+        [HttpPost]
         [ActionName("Started")]
         public ActionResult StartedPost(string id)
         {
@@ -175,5 +187,7 @@ namespace WB.UI.Headquarters.Controllers
         public Dictionary<WebInterviewUserMessages, string> DefaultTexts { get; set; }
         public Dictionary<WebInterviewUserMessages, string> TextDescriptions { get; set; }
         public Dictionary<WebInterviewUserMessages, string> DefinedTexts { get; set; }
+        public string DownloadAssignmentsUrl { get; set; }
+        public string UpdateTextsUrl { get; set; }
     }
 }
