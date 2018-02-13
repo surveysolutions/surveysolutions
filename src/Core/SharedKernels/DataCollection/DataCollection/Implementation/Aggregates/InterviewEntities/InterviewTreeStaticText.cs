@@ -73,6 +73,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clone.FailedErrorValidations = this.FailedErrorValidations
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
+            clone.FailedWarningValidations = this.FailedWarningValidations
+                .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
+                .ToReadOnlyCollection();
             return clone;
         }
 

@@ -827,8 +827,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId)
         {
             return GetEntityOrThrow(entityId).GetValidationConditions()
-                .Select((v, index) => new {index = index, validationCondition = v})
-                //.Where(v => v.validationCondition.Type == Warning)
+                .Select((v, i) => new {index = i, validationCondition = v})
+                .Where(v => v.validationCondition.Severity == ValidationSeverity.Warning)
                 .Select(v => v.index)
                 .ToReadOnlyCollection();
         }

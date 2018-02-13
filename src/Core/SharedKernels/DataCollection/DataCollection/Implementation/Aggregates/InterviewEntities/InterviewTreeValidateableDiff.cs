@@ -14,7 +14,35 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             ChangedNodeBecameValid = ChangedNodeBecameValidImp(source, result);
             ChangedNodeBecameInvalid = ChangedNodeBecameInvalidImp(source, result) ;
             AreValidationMessagesChanged = AreValidationMessagesChangedIml(source, result);
-            IsFailedValidationIndexChanged = IsFailedValidationIndexChangedIml(source, result);
+            IsFailedErrorValidationIndexChanged = IsFailedErrorValidationIndexChangedIml(source, result);
+
+            ChangedNodeBecamePlausibled = ChangedNodeBecamePlausibledImp(source, result);
+            ChangedNodeBecameImplausibled = ChangedNodeBecameImplausibledImp(source, result);
+            IsFailedWarningValidationIndexChanged = IsFailedWarningValidationIndexChangedIml(source, result);
+        }
+
+        private bool ChangedNodeBecamePlausibledImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        {
+            if (this.IsNodeRemoved) return false;
+            return source == null || source.FailedWarningValidations.Count != 0 && result.FailedWarningValidations.Count == 0;
+        }
+
+        private bool ChangedNodeBecameImplausibledImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        {
+            if (this.IsNodeRemoved) return false;
+            var targetIsImplausibled = result.FailedWarningValidations.Count != 0;
+            return source == null ? targetIsImplausibled : source.FailedWarningValidations.Count == 0 && targetIsImplausibled;
+        }
+
+        private bool IsFailedWarningValidationIndexChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        {
+            if (this.IsNodeRemoved) return false;
+            if (result.FailedWarningValidations.Count == 0) return false;
+            var targetChangedValidations = result.FailedWarningValidations ?? new List<FailedValidationCondition>();
+            if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
+
+            var sourceMessages = source?.FailedWarningValidations ?? new List<FailedValidationCondition>();
+            return !targetChangedValidations.SequenceEqual(sourceMessages);
         }
 
         private bool ChangedNodeBecameValidImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
@@ -29,7 +57,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return source == null ? !result.IsValid : source.IsValid && !result.IsValid;
         }
 
-        public bool AreValidationMessagesChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        private bool AreValidationMessagesChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
             if (this.IsNodeRemoved) return false;
             if (result.IsValid) return false;
@@ -40,7 +68,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return !changedMessages.SequenceEqual(sourceMessages);
         }
 
-        public bool IsFailedValidationIndexChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
+        private bool IsFailedErrorValidationIndexChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
             if (this.IsNodeRemoved) return false;
             if (result.IsValid) return false;
@@ -51,13 +79,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return !targetChangedValidations.SequenceEqual(sourceMessages);
         }
 
-        public bool ChangedNodeBecameValid { get; private set; }
-
-        public bool ChangedNodeBecameInvalid { get; private set; }
-
         public bool AreValidationMessagesChanged { get; private set; }
 
-        public bool IsFailedValidationIndexChanged { get; private set; }
+        public bool ChangedNodeBecameValid { get; private set; }
+        public bool ChangedNodeBecameInvalid { get; private set; }
+        public bool IsFailedErrorValidationIndexChanged { get; private set; }
+
+        public bool ChangedNodeBecamePlausibled { get; private set; }
+        public bool ChangedNodeBecameImplausibled { get; private set; }
+        public bool IsFailedWarningValidationIndexChanged { get; private set; }
     }
 
     public interface IInterviewTreeValidateable
