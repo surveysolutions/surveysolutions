@@ -145,7 +145,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public ComboboxOptionModel[] QuestionInfo(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
-            var variables = this.mapReport.GetVariablesForQuestionnaire(questionnaireIdentity);
+
+            var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(questionnaireIdentity);
             return variables.Select(x => new ComboboxOptionModel(x, x)).ToArray();
         }
 
