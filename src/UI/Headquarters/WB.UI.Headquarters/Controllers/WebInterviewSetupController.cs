@@ -56,10 +56,9 @@ namespace WB.UI.Headquarters.Controllers
             this.webInterviewNotificationService = webInterviewNotificationService;
         }
 
+        [ActivePage(MenuItem.Questionnaires)]
         public ActionResult Start(string id)
         {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
             var config = this.webInterviewConfigProvider.Get(QuestionnaireIdentity.Parse(id));
             if (config.Started) return RedirectToAction("Started", new {id = id});
 
@@ -89,9 +88,10 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ActionName("Start")]
+        [ValidateInput(false)]
+        [ActivePage(MenuItem.Questionnaires)]
         public ActionResult StartPost(string id, SetupModel model)
         {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
             QuestionnaireBrowseItem questionnaire = this.FindQuestionnaire(id);
             if (questionnaire == null)
             {
@@ -105,9 +105,9 @@ namespace WB.UI.Headquarters.Controllers
             foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
             {
                 var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
-                if (Request[fieldNameInRequest] != null)
+                if (!string.IsNullOrWhiteSpace(Request.Unvalidated[fieldNameInRequest]))
                 {
-                    customMessages[(WebInterviewUserMessages) customMessageName] = Request[fieldNameInRequest];
+                    customMessages[(WebInterviewUserMessages) customMessageName] = Request.Unvalidated[fieldNameInRequest];
                 }
             }
 

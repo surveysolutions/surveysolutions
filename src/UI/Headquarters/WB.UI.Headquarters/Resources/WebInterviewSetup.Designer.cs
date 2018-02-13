@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use custom text.
+        /// </summary>
+        public static string CustomText {
+            get {
+                return ResourceManager.GetString("CustomText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string Done {
