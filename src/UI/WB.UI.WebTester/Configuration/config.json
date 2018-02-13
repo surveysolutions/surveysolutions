@@ -1,6 +1,6 @@
 ﻿{
   "InstanceName": "WebTester-local",
-  "DesignerAddress": "http://localhost/designer",
+  "DesignerAddress": "https://localhost/designer",
   "GoogleMapApiKey": "***REMOVED***",
   "Metrics.Gateway": "http://localhost:9091/metrics",
   "Cache.Expiration" : 10 
