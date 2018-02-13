@@ -32,7 +32,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private readonly TranslationType[] translationTypesWithIndexes =
         {
-            TranslationType.FixedRosterTitle, TranslationType.OptionTitle, TranslationType.ValidationMessage
+            TranslationType.FixedRosterTitle,
+            TranslationType.OptionTitle,
+            TranslationType.ValidationMessage,
+            TranslationType.SpecialValue
         };
 
         private const string EntityIdColumnName = "Entity Id";
@@ -429,9 +432,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                    select new TranslationRow
                    {
                        EntityId = question.PublicKey.FormatGuid(),
-                       Type = TranslationType.OptionTitle.ToString("G"),
+                       Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue.ToString("G") : TranslationType.OptionTitle.ToString("G"),
                        OriginalText = option.AnswerText,
-                       Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
+                       Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
                        OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
                        Sheet = isLongOptionsList ? $"{OptionsWorksheetPreffix}{question.StataExportCaption}" : WorksheetName
                    };

@@ -132,6 +132,9 @@
   <data name="Appendix_Options" xml:space="preserve">
     <value>Приложение {0} {1} опции</value>
   </data>
+  <data name="Appendix_SpecialValues" xml:space="preserve">
+    <value>Приложение {0} {1} специальные значения</value>
+  </data>
   <data name="Appendix_Validations" xml:space="preserve">
     <value>Приложение {0} {1} проверочные условия и сообщения об ошибках</value>
   </data>
@@ -360,7 +363,10 @@
   <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
     <value>Согласен, чтоб опросник был общедоступным</value>
   </data>
-  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <data name="SpecialValues" xml:space="preserve">
+    <value>Специальные значения</value>
+  </data>
+    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
     <value>Базовая информация</value>
   </data>
   <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
