@@ -1214,6 +1214,51 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Special values supports only integer values in range from {0} to {1}..
+        /// </summary>
+        public static string WB0131_SpecialValuesHasNonIntegerOptionsValues {
+            get {
+                return ResourceManager.GetString("WB0131_SpecialValuesHasNonIntegerOptionsValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special value title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
+        /// </summary>
+        public static string WB0132_SpecialValuesHasOptionsWithLongTexts {
+            get {
+                return ResourceManager.GetString("WB0132_SpecialValuesHasOptionsWithLongTexts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special values must be unique..
+        /// </summary>
+        public static string WB0133_SpecialValuesMustBeUniqueForNumericlQuestion {
+            get {
+                return ResourceManager.GetString("WB0133_SpecialValuesMustBeUniqueForNumericlQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains more than {0} special values..
+        /// </summary>
+        public static string WB0134_SpecialValuesCountMoreThanMaxOptionCount {
+            get {
+                return ResourceManager.GetString("WB0134_SpecialValuesCountMoreThanMaxOptionCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question contains a special value, which is too large and can&apos;t be used in this question since it determines the size of a roster..
+        /// </summary>
+        public static string WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit {
+            get {
+                return ResourceManager.GetString("WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {

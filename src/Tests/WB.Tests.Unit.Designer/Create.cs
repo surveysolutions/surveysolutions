@@ -461,7 +461,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
                 QuestionText = title,
-                VariableLabel = variableLabel
+                VariableLabel = variableLabel,
+                Answers = options?.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title}).ToList()
             };
         }
 
@@ -511,7 +512,7 @@ namespace WB.Tests.Unit.Designer
             string variable = null, string validationMessage = null, string text = "test", QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,
             bool hideIfDisabled = false)
         {
-            return new QRBarcodeQuestion()
+            return new QRBarcodeQuestion() 
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 ConditionExpression = enablementCondition,
