@@ -17,13 +17,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Guid[] multimediaQuestionIds);
 
         InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
+        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(QuestionnaireIdentity questionnaireIdentity, Guid? responsibleId = null);
 
         InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
-            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude);
+            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude, Guid? responsibleId = null);
 
-        string[] GetQuestionnairesWithAnsweredGpsQuestions();
+        string[] GetQuestionnairesWithAnsweredGpsQuestionsByResponsible(Guid? responsibleId = null);
 
         List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities);
