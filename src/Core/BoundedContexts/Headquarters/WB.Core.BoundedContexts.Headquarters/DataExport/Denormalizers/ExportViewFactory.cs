@@ -414,12 +414,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
                     
                 case QuestionType.MultyOption:
-                {
-                    return ExportValueType.NumericInt;
-                }
                 case QuestionType.SingleOption:
                 {
-                    return ExportValueType.NumericInt;
+                    return (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) ? ExportValueType.String : ExportValueType.NumericInt;
                 }
                 default:
                         return ExportValueType.Unknown;
