@@ -878,6 +878,93 @@ namespace WB.Tests.Integration
         }
 
         [Test]
+        public void when_getting_question_ids_of_answered_gps_questions_by_questionnaire_id_and_teamlead_id()
+        {
+            //arrange
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
+            var teamleadid = Guid.Parse("11111111111111111111111111111111");
+
+            var expectedGpsAnswers = new[]
+            {
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    TeamLeadId = teamleadid,
+                    QuestionnaireId = questionnaireId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(2)),
+                    TeamLeadId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    TeamLeadId = teamleadid,
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 11223),
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            var interviewSummaryRepository = GetPostgresInterviewSummaryRepository();
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                foreach (var gpsAnswer in expectedGpsAnswers)
+                {
+                    interviewSummaryRepository.Store(new InterviewSummary
+                    {
+                        InterviewId = gpsAnswer.InterviewId,
+                        Status = InterviewStatus.Completed,
+                        ReceivedByInterviewer = false,
+                        QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
+                        TeamLeadId = gpsAnswer.TeamLeadId
+
+                    }, gpsAnswer.InterviewId.FormatGuid());
+                }
+            });
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(expectedGpsAnswers
+                .Select(x => Create.Entity.GpsCoordinateQuestion(x.QuestionId.Id)).OfType<IComposite>().ToArray());
+
+            var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
+                questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
+
+            var entitySerializer = new EntitySerializer<object>();
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                foreach (var groupedInterviews in expectedGpsAnswers.GroupBy(x => x.InterviewId))
+                {
+                    var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
+
+                    factory.Save(interviewState);
+                }
+            });
+
+            //act
+            var allGpsQuestionIds = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(questionnaireId, teamleadid));
+
+            //assert
+            Assert.That(allGpsQuestionIds.Length, Is.EqualTo(1));
+            Assert.That(allGpsQuestionIds,
+                Is.EquivalentTo(expectedGpsAnswers
+                    .Where(x => x.QuestionnaireId == questionnaireId && x.TeamLeadId == teamleadid)
+                    .Select(x => x.QuestionId.Id)));
+        }
+
+        [Test]
         public void when_getting_questionnaire_ids_by_answered_gps_questions()
         {
             //arrange
@@ -956,6 +1043,92 @@ namespace WB.Tests.Integration
             //assert
             Assert.That(questionnaireIdentities.Length, Is.EqualTo(2));
             Assert.That(questionnaireIdentities, Is.EquivalentTo(expectedGpsAnswers.Select(x => x.QuestionnaireId.ToString()).Distinct()));
+        }
+
+        [Test]
+        public void when_getting_questionnaire_ids_by_teamlead_id_and_answered_gps_questions()
+        {
+            //arrange
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
+            var teamleadid = Guid.Parse("11111111111111111111111111111111");
+
+            var expectedGpsAnswers = new[]
+            {
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    TeamLeadId = teamleadid,
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector()),
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
+                    TeamLeadId = Guid.NewGuid(),
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    TeamLeadId = teamleadid,
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1,2)),
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            var interviewSummaryRepository = GetPostgresInterviewSummaryRepository();
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                foreach (var gpsAnswer in expectedGpsAnswers)
+                {
+                    interviewSummaryRepository.Store(new InterviewSummary
+                    {
+                        InterviewId = gpsAnswer.InterviewId,
+                        Status = InterviewStatus.Completed,
+                        ReceivedByInterviewer = false,
+                        QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
+                        TeamLeadId = gpsAnswer.TeamLeadId
+
+                    }, gpsAnswer.InterviewId.FormatGuid());
+                }
+            });
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(expectedGpsAnswers
+                .Select(x => Create.Entity.GpsCoordinateQuestion(x.QuestionId.Id)).OfType<IComposite>().ToArray());
+
+            var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
+                questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
+
+            var entitySerializer = new EntitySerializer<object>();
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                this.plainTransactionManager.GetSession().Connection.Execute($"DELETE FROM {InterviewsTableName}");
+
+                foreach (var groupedInterviews in expectedGpsAnswers.GroupBy(x => x.InterviewId))
+                {
+                    var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
+
+                    factory.Save(interviewState);
+                }
+            });
+
+            //act
+            var questionnaireIdentities = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetQuestionnairesWithAnsweredGpsQuestionsByResponsible(teamleadid));
+
+            //assert
+            Assert.That(questionnaireIdentities.Length, Is.EqualTo(1));
+            Assert.That(questionnaireIdentities[0], Is.EqualTo(questionnaireId.ToString()));
         }
 
         [Test]
@@ -1038,6 +1211,99 @@ namespace WB.Tests.Integration
             Assert.That(gpsAnswers.Length, Is.EqualTo(2));
             Assert.That(gpsAnswers, Is.EquivalentTo(allGpsAnswers
                     .Where(x => x.QuestionId == questionId && x.QuestionnaireId == questionnaireId)
+                    .Select(x => new InterviewGpsAnswer
+                    {
+                        InterviewId = x.InterviewId,
+                        Longitude = x.Answer.Longitude,
+                        Latitude = x.Answer.Latitude
+                    })));
+        }
+
+        [Test]
+        public void when_getting_gps_answers_by_questionnaire_id_and_question_id_and_teamlead_id()
+        {
+            //arrange
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 555);
+            var questionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+            var teamleadid = Guid.Parse("11111111111111111111111111111111");
+
+            var allGpsAnswers = new[]
+            {
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    TeamLeadId = teamleadid,
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 777),
+                    TeamLeadId = teamleadid,
+                    QuestionId = InterviewStateIdentity.Create(Guid.NewGuid(), Create.RosterVector(1)),
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    TeamLeadId = Guid.NewGuid(),
+                    QuestionId = questionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            var interviewSummaryRepository = GetPostgresInterviewSummaryRepository();
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                foreach (var gpsAnswer in allGpsAnswers)
+                {
+                    interviewSummaryRepository.Store(new InterviewSummary
+                    {
+                        InterviewId = gpsAnswer.InterviewId,
+                        Status = InterviewStatus.Completed,
+                        ReceivedByInterviewer = false,
+                        QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString(),
+                        TeamLeadId = gpsAnswer.TeamLeadId
+                        
+                    }, gpsAnswer.InterviewId.FormatGuid());
+                }
+            });
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(allGpsAnswers
+                .Select(x => Create.Entity.GpsCoordinateQuestion(x.QuestionId.Id)).OfType<IComposite>().ToArray());
+
+            var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
+                questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
+
+            var entitySerializer = new EntitySerializer<object>();
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                foreach (var groupedInterviews in allGpsAnswers.GroupBy(x => x.InterviewId))
+                {
+                    var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
+                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsGps = entitySerializer.Serialize(x.Answer)
+                    });
+
+                    factory.Save(interviewState);
+                }
+            });
+
+            //act
+            var gpsAnswers = this.plainTransactionManager.ExecuteInPlainTransaction(
+                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(questionnaireId, questionId.Id, 10, 90, -90, 180, -180, teamleadid));
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(1));
+            Assert.That(gpsAnswers, Is.EquivalentTo(allGpsAnswers
+                    .Where(x => x.QuestionId == questionId && x.QuestionnaireId == questionnaireId && x.TeamLeadId == teamleadid)
                     .Select(x => new InterviewGpsAnswer
                     {
                         InterviewId = x.InterviewId,
