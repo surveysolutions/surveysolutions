@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -241,15 +242,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.FailedErrorValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
         }
 
-        public IReadOnlyList<FailedValidationCondition> FailedWarningValidations { get; }
-        public void MarkImplausibled(IEnumerable<FailedValidationCondition> failedValidations)
-        {
-            throw new NotImplementedException();
-        }
+        public IReadOnlyList<FailedValidationCondition> FailedWarningValidations { get; private set; } = Enumerable.Empty<FailedValidationCondition>().ToReadOnlyCollection();
 
         public void MarkPlausibled()
+            => this.FailedWarningValidations = new List<FailedValidationCondition>();
+
+        public void MarkImplausibled(IEnumerable<FailedValidationCondition> failedValidations)
         {
-            throw new NotImplementedException();
+            if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedWarningValidations = failedValidations.ToReadOnlyCollection();
         }
 
         public InterviewTreeDoubleQuestion GetAsInterviewTreeDoubleQuestion() => this.InterviewQuestion as InterviewTreeDoubleQuestion;
@@ -635,6 +636,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             clonedQuestion.Title = this.Title?.Clone();
             clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
             clonedQuestion.FailedErrorValidations = this.FailedErrorValidations?
+                .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
+                .ToReadOnlyCollection();
+            clonedQuestion.FailedWarningValidations = this.FailedWarningValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
             clonedQuestion.AnswerComments = this.AnswerComments?
