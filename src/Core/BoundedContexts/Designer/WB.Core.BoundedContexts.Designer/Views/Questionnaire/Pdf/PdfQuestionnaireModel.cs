@@ -78,6 +78,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
 
+        public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; }
+
         public List<IQuestion> QuestionsWithLongInstructions { get; internal set; }
 
         public List<IQuestion> QuestionsWithLongOptionsFilterExpression { get; internal set; }
@@ -445,6 +447,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsOptionsFilterAppendixEmpty => QuestionsWithLongOptionsFilterExpression.Count == 0;
         public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
+
+        public bool IsSpecialValuesAppendixEmpty => QuestionsWithLongSpecialValuesList.Count == 0;
 
         public char ConditionsAppendixIndex => 'A';
         public char ValidationsAppendixIndex => IsConditionsAppendixEmpty ? ConditionsAppendixIndex : (char)(ConditionsAppendixIndex + 1);

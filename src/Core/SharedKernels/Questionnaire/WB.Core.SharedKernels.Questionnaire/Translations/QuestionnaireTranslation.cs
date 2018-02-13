@@ -33,6 +33,9 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
         public string GetAnswerOption(Guid questionId, string answerOptionValue)
             => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.OptionTitle);
 
+        public string GetSpecialValue(Guid questionId, string answerOptionValue)
+            => this.GetTranslationByTypeAndIndex(questionId, answerOptionValue, TranslationType.SpecialValue);
+
         public string GetValidationMessage(Guid entityId, int validationOneBasedIndex)
             => this.GetTranslationByTypeAndIndex(
                 entityId, validationOneBasedIndex.ToString(), TranslationType.ValidationMessage);
