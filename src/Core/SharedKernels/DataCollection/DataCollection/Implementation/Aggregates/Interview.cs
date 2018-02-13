@@ -2124,8 +2124,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (validStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTextIdentities));
             if (invalidStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTextIdentities));
 
-            if (plausibleStaticTextIdentities.Any()) this.ApplyEvent(new AnswersDeclaredPlausible(plausibleStaticTextIdentities));
-            if (implausibleStaticTextIdentities.Any()) this.ApplyEvent(new AnswersDeclaredImplausible(implausibleStaticTextIdentities));
+            if (plausibleStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredPlausible(plausibleStaticTextIdentities));
+            if (implausibleStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredImplausible(implausibleStaticTextIdentities));
 
             if (HasInvalidAnswers() || HasInvalidStaticTexts)
             {
