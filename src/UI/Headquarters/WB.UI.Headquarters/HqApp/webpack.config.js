@@ -8,7 +8,7 @@ const join = path.join.bind(path, baseDir);
 const config = {
     hq: {
         entry: "./src/hqapp/main.js",
-        locales: ["Details", "Pages", "WebInterviewUI", "WebInterview", "DataTables", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers", "UploadUsers", "MainMenu"]
+        locales: ["Details", "Pages", "WebInterviewUI", "WebInterview", "DataTables", "Common", "Users", "Assignments", "Strings", "Reports", "DevicesInterviewers", "UploadUsers", "MainMenu", "MapReport"]
     },
     webinterview: {
         entry: "./src/webinterview/main.js",

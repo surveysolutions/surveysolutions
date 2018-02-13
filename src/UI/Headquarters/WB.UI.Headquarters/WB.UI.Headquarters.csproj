@@ -1008,7 +1008,6 @@
     <Content Include="Scripts\dateRangePicker\daterangepicker.css" />
     <Content Include="Scripts\dateRangePicker\daterangepicker.js" />
     <Content Include="Scripts\director.js" />
-    <Content Include="Scripts\infobubble.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -1464,7 +1463,6 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\lodash.underscore.js" />
     <Content Include="Scripts\lodash.underscore.min.js" />
-    <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-langs.js" />
@@ -1508,7 +1506,6 @@
     <Content Include="Scripts\viewmodels\pages\interview\new\model.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\new-assignment.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
-    <Content Include="Scripts\viewmodels\pages\mapreport.js" />
     <Content Include="Scripts\viewmodels\pages\editable-users.js" />
     <Content Include="Scripts\viewmodels\pages\importquestionaires.js" />
     <Content Include="Scripts\viewmodels\pages\users.js" />

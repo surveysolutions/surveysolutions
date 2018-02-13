@@ -1,5 +1,6 @@
 import InterviewersAndDevices from "./InterviewersAndDevices"
 import StatusDuration from "./StatusDuration"
+import MapReport from "./MapReport"
 
 const store = {
     state: {
@@ -33,6 +34,9 @@ export default class ReportComponent {
             path: '/Reports/InterviewersAndDevices', component: InterviewersAndDevices
         }, {
             path: '/Reports/StatusDuration', component: StatusDuration
+        },
+        {
+            path: '/Reports/MapReport', component: MapReport
         }]
     }
 
