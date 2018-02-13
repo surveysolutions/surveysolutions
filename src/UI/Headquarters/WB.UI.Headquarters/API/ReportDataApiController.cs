@@ -141,11 +141,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        public ComboboxModel QuestionInfo(string questionnaireId)
+        [CamelCase]
+        public ComboboxOptionModel[] QuestionInfo(string id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             var variables = this.mapReport.GetVariablesForQuestionnaire(questionnaireIdentity);
-            return new ComboboxModel(variables.Select(x => new ComboboxOptionModel(x, x)).ToArray(), variables.Count);
+            return variables.Select(x => new ComboboxOptionModel(x, x)).ToArray();
         }
 
         [HttpGet]

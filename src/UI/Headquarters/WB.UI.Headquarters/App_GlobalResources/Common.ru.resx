@@ -295,4 +295,8 @@
     <value>Обработка...</value>
     <comment>Обработка...</comment>
   </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>Все GPS вопросы</value>
+    <comment>Все GPS вопросы</comment>
+  </data>
 </root>
