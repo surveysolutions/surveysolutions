@@ -9,14 +9,14 @@ namespace WB.UI.WebTester.Services.Implementation
 {
     public class WebTesterAggregateRootRepository : EventSourcedAggregateRootRepositoryWithWebCache
     {
-        private readonly IEvictionObserver notify;
+        private readonly IEvictionNotifier notify;
 
         public WebTesterAggregateRootRepository(
             IEventStore eventStore,
             ISnapshotStore snapshotStore,
             IDomainRepository repository,
             IAggregateLock aggregateLock,
-            IEvictionObserver notify,
+            IEvictionNotifier notify,
             IEvictionObservable evictionNotification) : base(eventStore, snapshotStore, repository, aggregateLock)
         {
             this.notify = notify;
