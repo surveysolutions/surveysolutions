@@ -132,4 +132,8 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Просмотреть интервью</value>
   </data>
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>В выбраном опроснике нет GPS вопросов</value>
+    <comment>В выбраном опроснике нет GPS вопросов</comment>
+  </data>
 </root>

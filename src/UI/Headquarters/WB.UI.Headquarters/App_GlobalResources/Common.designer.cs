@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All GPS questions.
+        /// </summary>
+        internal static string AllGpsQuestions {
+            get {
+                return ResourceManager.GetString("AllGpsQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All questionnaires.
         /// </summary>
         internal static string AllQuestionnaires {
