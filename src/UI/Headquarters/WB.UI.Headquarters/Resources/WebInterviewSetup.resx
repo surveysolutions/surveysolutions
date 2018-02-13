@@ -178,4 +178,7 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Header welcome text on initial page</value>
   </data>
+  <data name="CustomText">
+    <value>Use custom text</value>
+  </data>
 </root>
