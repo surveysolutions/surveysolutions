@@ -196,9 +196,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             get
             {
-                if (this.FailedValidations == null) return this.isValidWithoutFailedValidations;
+                if (this.FailedErrorValidations == null) return this.isValidWithoutFailedValidations;
                 
-                return this.FailedValidations.Count == 0; 
+                return this.FailedErrorValidations.Count == 0; 
             }
         }
 
@@ -207,7 +207,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.InterviewQuestion.RunImportInvariants(questionInvariants);
         }
 
-        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+        public IReadOnlyList<FailedValidationCondition> FailedErrorValidations { get; private set; }
 
         public void SetTitle(SubstitutionText title) 
         {
@@ -227,7 +227,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
-            this.FailedValidations = failedValidations?.ToReadOnlyCollection() ?? throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedErrorValidations = failedValidations?.ToReadOnlyCollection() ?? throw new ArgumentNullException(nameof(failedValidations));
         }
 
         [Obsolete("Since v6.0")]
@@ -238,7 +238,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkValid()
         {
             this.isValidWithoutFailedValidations = true;
-            this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+            this.FailedErrorValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+        }
+
+        public IReadOnlyList<FailedValidationCondition> FailedWarningValidations { get; }
+        public void MarkImplausibled(IEnumerable<FailedValidationCondition> failedValidations)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void MarkPlausibled()
+        {
+            throw new NotImplementedException();
         }
 
         public InterviewTreeDoubleQuestion GetAsInterviewTreeDoubleQuestion() => this.InterviewQuestion as InterviewTreeDoubleQuestion;
@@ -623,7 +634,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             clonedQuestion.Title = this.Title?.Clone();
             clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
-            clonedQuestion.FailedValidations = this.FailedValidations?
+            clonedQuestion.FailedErrorValidations = this.FailedErrorValidations?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
             clonedQuestion.AnswerComments = this.AnswerComments?

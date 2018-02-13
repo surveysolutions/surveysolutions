@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -278,8 +279,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 .Where(x => x != null)
                 .ToArray();
 
-            if (validationResult.Any())
-                staticText.MarkInvalid(validationResult);
+            var warningIndexes = questionnaire.GetValidationWarningsIndexes(staticText.Identity.Id).ToHashSet();
+
+            if (validationResult.Any(v => warningIndexes.Contains(v.FailedConditionIndex)))
+                staticText.MarkImplausibled(validationResult.Where(v => warningIndexes.Contains(v.FailedConditionIndex)));
+            else
+                staticText.MarkPlausibled();
+
+            if (validationResult.Any(v => !warningIndexes.Contains(v.FailedConditionIndex)))
+                staticText.MarkInvalid(validationResult.Where(v => !warningIndexes.Contains(v.FailedConditionIndex)));
             else
                 staticText.MarkValid();
         }
