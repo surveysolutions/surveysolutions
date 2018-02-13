@@ -141,4 +141,7 @@
   <data name="PageNotFoundDesc" xml:space="preserve">
     <value>Page not found. Please return to the Designer application and restart web test.</value>
   </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Interview data can't be applied to new version of questionnaire. Empty interview created</value>
+  </data>
 </root>

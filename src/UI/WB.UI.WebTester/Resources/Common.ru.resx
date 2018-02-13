@@ -141,4 +141,7 @@
   <data name="PageNotFoundDesc" xml:space="preserve">
     <value>Страница не найдена. Вернитесь на Дизайнер и запустите тест заново.</value>
   </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>Данные интервью не совместимы с новой версией опросника. Создано новое интервью</value>
+  </data>
 </root>

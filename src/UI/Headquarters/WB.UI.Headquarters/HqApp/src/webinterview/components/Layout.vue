@@ -14,11 +14,17 @@
     </div>
 </template>
 <script lang="js">
+    import modal from "./modal"
     export default {
         name: 'wb-layout',
         computed: {
             sidebarHidden() {
                 return this.$store.state.webinterview.sidebar.sidebarHidden
+            }
+        },
+        mounted() {
+            if(this.$config.loadedMessage) {
+                modal.alert(this.$config.loadedMessage);
             }
         }
     }
