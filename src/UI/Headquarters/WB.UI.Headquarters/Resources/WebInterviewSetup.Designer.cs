@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download ({0}).
+        ///   Looks up a localized string similar to Download ({{count}}).
         /// </summary>
         public static string DownloadTitle {
             get {
@@ -102,6 +102,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string ExportAssignmentsTitle {
             get {
                 return ResourceManager.GetString("ExportAssignmentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save all.
+        /// </summary>
+        public static string SaveAll {
+            get {
+                return ResourceManager.GetString("SaveAll", resourceCulture);
             }
         }
         
@@ -151,6 +160,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Text dispayed to respondents can be customized.
+        /// </summary>
+        public static string TextCustomize {
+            get {
+                return ResourceManager.GetString("TextCustomize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Texts updated.
+        /// </summary>
+        public static string TextsUpdated {
+            get {
+                return ResourceManager.GetString("TextsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable spam protection.
         /// </summary>
         public static string UseCaptcha {
@@ -178,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Web interview for {0} started.
+        ///   Looks up a localized string similar to Web interview for {{name}} started.
         /// </summary>
         public static string WebInterviewStarted {
             get {
