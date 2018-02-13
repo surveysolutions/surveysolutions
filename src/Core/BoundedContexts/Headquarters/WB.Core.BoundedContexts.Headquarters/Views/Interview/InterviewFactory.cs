@@ -127,28 +127,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"AND {AsAudioColumn} IS NOT NULL " +
                 $"AND {EnabledColumn} = true").ToArray();
 
-        public Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        public Guid[] GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(QuestionnaireIdentity questionnaireIdentity, Guid? responsibleId = null)
             => this.sessionProvider.GetSession().Connection.Query<Guid>(
-                $"SELECT {EntityIdColumn} " +
+                $"SELECT DISTINCT {EntityIdColumn} " +
                 $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                $"WHERE questionnaireidentity = '{questionnaireIdentity}' " +
-                $"AND {AsGpsColumn} is not null " +
-                $"GROUP BY {EntityIdColumn} ").ToArray();
+                $"WHERE {(responsibleId.HasValue ? $"s.teamleadid = '{responsibleId}' AND ": "")}" +
+                $"s.questionnaireidentity = '{questionnaireIdentity}' " +
+                $"AND i.{AsGpsColumn} is not null").ToArray();
 
-        public string[] GetQuestionnairesWithAnsweredGpsQuestions()
+        public string[] GetQuestionnairesWithAnsweredGpsQuestionsByResponsible(Guid? responsibleId = null)
             => this.sessionProvider.GetSession().Connection.Query<string>(
-                $"SELECT questionnaireidentity " +
+                $"SELECT DISTINCT s.questionnaireidentity " +
                 $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                $"WHERE {AsGpsColumn} is not null " +
-                $"GROUP BY questionnaireidentity").ToArray();
+                $"WHERE {(responsibleId.HasValue ? $"s.teamleadid = '{responsibleId}' AND " : "")}" +
+                $"i.{AsGpsColumn} is not null").ToArray();
 
         public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,
-            double northEastCornerLongtitude, double southWestCornerLongtitude)
+            double northEastCornerLongtitude, double southWestCornerLongtitude, Guid? responsibleId = null)
             => this.sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
                     $"SELECT i.{InterviewIdColumn}, {AsGpsColumn}->>'{nameof(GeoPosition.Latitude)}' as latitude, {AsGpsColumn}->>'{nameof(GeoPosition.Longitude)}' as longitude " +
                     $"FROM readside.interviewsummaries s INNER JOIN {InterviewsTableName} i ON(s.interviewid = i.{InterviewIdColumn}) " +
-                    $"WHERE questionnaireidentity = @Questionnaire " +
+                    $"WHERE {(responsibleId.HasValue ? $"s.teamleadid = '{responsibleId}' AND " : "")}" +
+                    $"questionnaireidentity = @Questionnaire " +
                     $"AND {EntityIdColumn} = @QuestionId " +
                     $"AND {AsGpsColumn} is not null " +
                     $"AND ({AsGpsColumn} ->> '{nameof(GeoPosition.Latitude)}')::double precision > @SouthWestCornerLatitude " +

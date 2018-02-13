@@ -870,7 +870,7 @@ namespace WB.Tests.Integration
             });
 
             //act
-            var allGpsQuestionIds = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetAnsweredGpsQuestionIdsByQuestionnaire(questionnaireId));
+            var allGpsQuestionIds = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(questionnaireId));
 
             //assert
             Assert.That(allGpsQuestionIds.Length, Is.EqualTo(3));
@@ -951,7 +951,7 @@ namespace WB.Tests.Integration
             });
 
             //act
-            var questionnaireIdentities = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetQuestionnairesWithAnsweredGpsQuestions());
+            var questionnaireIdentities = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetQuestionnairesWithAnsweredGpsQuestionsByResponsible());
 
             //assert
             Assert.That(questionnaireIdentities.Length, Is.EqualTo(2));

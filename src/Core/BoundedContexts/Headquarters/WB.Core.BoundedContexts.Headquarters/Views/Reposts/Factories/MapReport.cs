@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -17,19 +18,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
+        private readonly IAuthorizedUser authorizedUser;
         private const int MAXCOORDINATESCOUNTLIMIT = 50000;
 
         public MapReport(IInterviewFactory interviewFactory, IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor, IAuthorizedUser authorizedUser)
         {
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnairesAccessor = questionnairesAccessor;
+            this.authorizedUser = authorizedUser;
         }
 
-        public List<string> GetVariablesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        public List<string> GetGpsQuestionsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
-            var answeredGpsQuestionIds = this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaire(questionnaireIdentity);
+            var answeredGpsQuestionIds = this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(questionnaireIdentity, this.GetResponsibleId());
 
             if (!answeredGpsQuestionIds.Any()) return new List<string>();
 
@@ -49,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var gpsAnswers = this.interviewFactory.GetGpsAnswersByQuestionIdAndQuestionnaire(input.QuestionnaireIdentity,
                 gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude, input.SouthWestCornerLatitude,
-                input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude);
+                input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude, this.GetResponsibleId());
 
             return new MapReportView
             {
@@ -63,9 +66,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints()
         {
-            var questionnaireIdentities = this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestions();
+            var questionnaireIdentities = this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestionsByResponsible(this.GetResponsibleId());
 
            return this.questionnairesAccessor.Query(_ => _.Where(x => questionnaireIdentities.Contains(x.Id)).ToList());
         }
+
+        private Guid? GetResponsibleId() => this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator
+            ? null
+            : (Guid?)this.authorizedUser.Id;
     }
 }
