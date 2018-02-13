@@ -30,7 +30,7 @@
                     <strong>{{$t("Reports.CompletionDate")}} :</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
                 <div class="row-fluid" style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}} :</strong>&nbsp;
-                    <a v-bind:href="config.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.details")}}</a>
+                    <a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
             </div>
         </div>
@@ -91,19 +91,19 @@ export default {
     };
   },
   computed: {
-    config() {
+    model() {
       return this.$config.model;
     },
     questionnaires() {
-      return this.config.questionnaires;
+      return this.model.questionnaires;
     }
   },
   mounted() {
     this.setMapCanvasStyle();
     this.initializeMap();
 
-    if (this.config.questionnaires.length > 0)
-      this.selectQuestionnaire(this.config.questionnaires[0]);
+    if (this.questionnaires.length > 0)
+      this.selectQuestionnaire(this.questionnaires[0]);
   },
   methods: {
     setMapCanvasStyle() {
@@ -125,7 +125,7 @@ export default {
 
       const self = this;
       this.$http
-        .get(this.config.api.gpsQuestionsByQuestionnaireUrl + "/" + this.questionnaireId.key)
+        .get(this.model.api.gpsQuestionsByQuestionnaireUrl + "/" + this.questionnaireId.key)
         .then(response => {
           self.gpsQuestions = response.data;
           if (self.gpsQuestions.length > 0) {
@@ -247,7 +247,7 @@ export default {
 
       const self = this;
 
-      this.$http.post(self.config.api.mapReportUrl, request).then(response => {
+      this.$http.post(self.model.api.mapReportUrl, request).then(response => {
         var mapPoints = response.data.Points;
 
         if (mapPoints.length == 0) {
@@ -278,7 +278,7 @@ export default {
             google.maps.event.addListener(marker, "click", function() {
               var marker = this;
               self.$http
-                .post(self.config.api.interiewSummaryUrl, {
+                .post(self.model.api.interiewSummaryUrl, {
                   InterviewId: marker.interviewId
                 })
                 .then(response => {
