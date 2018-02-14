@@ -39,10 +39,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public AnswersDeclaredImplausible AnswersDeclaredImplausible(Identity questionId, int[] failedConditions)
         {
-            return new AnswersDeclaredImplausible(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>{
-            {
-                questionId, failedConditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection()
-            }});
+            return new AnswersDeclaredImplausible(new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>(){
+                {
+                    new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(questionId, failedConditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection())
+                }
+            });
         }
 
         public AnswersDeclaredValid AnswersDeclaredValid(params Identity[] questions)
@@ -262,10 +263,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public StaticTextsDeclaredImplausible StaticTextsDeclaredImplausible(Identity staticText, int[] conditions)
         {
-            return new StaticTextsDeclaredImplausible(new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>{
+            return new StaticTextsDeclaredImplausible(new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>()
             {
-                staticText, conditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection()
-            }});
+                new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(staticText, conditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection())
+            });
         }
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(int[] failedConditionIndexes,
