@@ -643,6 +643,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return staticText?.IsValid ?? false;
         }
 
+        public IEnumerable<string> GetFailedWarningMessages(Identity questionOrStaticTextId,
+            string defaltErrorMessageFallback)
+        {
+            return Enumerable.Empty<string>();
+        }
+
         public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
