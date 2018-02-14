@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
 
         public FeaturedAnswerView(Answer answer)
         {
-            this.Id = answer.PublicKey;
+            this.Id = Guid.NewGuid();
             this.Title = answer.AnswerText;
             this.AnswerValue = answer.AnswerValue;
         }

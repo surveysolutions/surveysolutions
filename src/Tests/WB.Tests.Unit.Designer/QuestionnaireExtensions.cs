@@ -145,7 +145,7 @@ namespace WB.Tests.Unit.Designer
                     Instructions = instructions, VariableLabel=variableLabel
                     
                 },
-                isPreFilled, scope, isInteger, false, countOfDecimalPlaces, new List<ValidationCondition>()));
+                isPreFilled, scope, isInteger, false, countOfDecimalPlaces, new List<ValidationCondition>(), null));
         }
 
         public static void AddGpsQuestion(

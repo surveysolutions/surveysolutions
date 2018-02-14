@@ -256,6 +256,7 @@
                         command.countOfDecimalPlaces = question.countOfDecimalPlaces;
                         command.maxValue = question.maxValue;
                         command.useFormatting = question.useFormatting;
+                        command.options = question.options;
                         break;
                     case "DateTime":
                         command.isTimestamp = question.isTimestamp;
