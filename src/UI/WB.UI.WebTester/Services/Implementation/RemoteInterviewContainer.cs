@@ -167,7 +167,9 @@ namespace WB.UI.WebTester.Services.Implementation
                     var aggregateid = CommandRegistry.GetAggregateRootIdResolver(deserializedCommand)
                         .Invoke(deserializedCommand);
 
-                    StatefulInterview interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
+                    if(CurrentInterview.Instance == null)
+                        CurrentInterview.Instance = ServiceLocator.Current.GetInstance<StatefulInterview>();
+                    StatefulInterview interview = CurrentInterview.Instance;
 
                     interview.SetId(aggregateid);
 
@@ -221,7 +223,7 @@ namespace WB.UI.WebTester.Services.Implementation
                                     itemsCount)>
                                 (jsonArg, CommandsSerializerSettings);
 
-                        var interview = ServiceLocator.Current.GetInstance<StatefulInterview>();
+                        var interview = CurrentInterview.Instance;
 
                         var result = interview.GetFirstTopFilteredOptionsForQuestion(
                             args.questionIdentity,
@@ -250,5 +252,15 @@ namespace WB.UI.WebTester.Services.Implementation
             Converters = new JsonConverter[]
                 {new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter()}
         };
+
+        public void Flush()
+        {
+            lock (this.context)
+            {
+                RemoteAction.Invoke(context.Domain, () => CurrentInterview.Instance = null);
+            }
+
+            
+        }
     }
 }

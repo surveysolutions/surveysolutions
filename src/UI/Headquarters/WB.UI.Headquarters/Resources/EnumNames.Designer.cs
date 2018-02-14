@@ -194,5 +194,68 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("UserRoles_Supervisor", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish Text.
+        /// </summary>
+        public static string WebInterviewUserMessages_FinishInterview {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_FinishInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome Invitation.
+        /// </summary>
+        public static string WebInterviewUserMessages_Invitation {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_Invitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume Invitation.
+        /// </summary>
+        public static string WebInterviewUserMessages_ResumeInvitation {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_ResumeInvitation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resume Header.
+        /// </summary>
+        public static string WebInterviewUserMessages_ResumeWelcome {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_ResumeWelcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Name.
+        /// </summary>
+        public static string WebInterviewUserMessages_SurveyName {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_SurveyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finish Header.
+        /// </summary>
+        public static string WebInterviewUserMessages_WebSurveyHeader {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_WebSurveyHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome Header.
+        /// </summary>
+        public static string WebInterviewUserMessages_WelcomeText {
+            get {
+                return ResourceManager.GetString("WebInterviewUserMessages_WelcomeText", resourceCulture);
+            }
+        }
     }
 }
