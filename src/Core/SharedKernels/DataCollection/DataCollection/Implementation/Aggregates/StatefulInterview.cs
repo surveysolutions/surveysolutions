@@ -674,7 +674,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
             if (staticText?.FailedErrorValidations != null)
             {
-                return GetValidationMessages(staticText.FailedWarningValidations, staticText.ValidationMessages,
+                return GetValidationMessages(staticText.FailedErrorValidations, staticText.ValidationMessages,
                     defaltErrorMessageFallback);
             }
 
@@ -693,7 +693,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
 
-            return failedConditions.Select(failedValidation =>
+             return failedConditions.Select(failedValidation =>
                 $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
         }
 
