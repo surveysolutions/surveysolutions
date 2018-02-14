@@ -68,8 +68,8 @@
         "bootbox": "^4.4.0",
         "bootstrap": "^3.3.7",
         "bootstrap-select": "^1.12.4",
-        "flatpickr": "^3.0.7",
         "es6-promise": "^4.2.2",
+        "flatpickr": "^3.0.7",
         "i18next": "^10.2.1",
         "jquery": "^3.2.1",
         "jquery-contextmenu": "^2.6.3",
@@ -87,6 +87,7 @@
         "vue": "^2.5.13",
         "vue-infinite-loading": "^2.2.3",
         "vue-router": "^3.0.1",
+        "vue2-editor": "^2.4.2",
         "vuex": "^3.0.1",
         "vuex-router-sync": "^5.0.0"
     },

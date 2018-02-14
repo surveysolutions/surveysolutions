@@ -2,7 +2,7 @@
 
 namespace WB.UI.WebTester.Services
 {
-    public interface IEvictionObserver
+    public interface IEvictionNotifier
     {
         void Evict(Guid token);
     }
