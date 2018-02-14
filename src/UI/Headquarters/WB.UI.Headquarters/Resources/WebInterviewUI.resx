@@ -399,4 +399,7 @@
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Loading questionnaire. Please wait...</value>
   </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Warnings</value>
+  </data>
 </root>
