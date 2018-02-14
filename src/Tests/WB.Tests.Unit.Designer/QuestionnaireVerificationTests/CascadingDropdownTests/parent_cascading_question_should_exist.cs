@@ -23,8 +23,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 StataExportCaption = "var",
                 Answers = new List<Answer>
                 {
-                    new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                    new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                    new Answer { AnswerText = "one", AnswerValue = "1" },
+                    new Answer { AnswerText = "two", AnswerValue = "2" }
                 }
             });
 

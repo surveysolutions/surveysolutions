@@ -66,8 +66,9 @@ namespace WB.UI.WebTester
             });
 
             registry.Bind<WebTesterStatefulInterview>();
+            registry.Bind<IInterviewFactory, InterviewFactory>();
 
-            registry.BindAsSingleton<IEvictionObservable, IEvictionObserver, TokenEviction>();
+            registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
 
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
@@ -80,9 +81,22 @@ namespace WB.UI.WebTester
             registry.Bind<IImageProcessingService, ImageProcessingService>();
             
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
-            registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
+            registry.BindAsSingleton<IAggregateRootCacheCleaner, WebTesterAggregateRootRepository>();
+
+            #if DEBUG
+
+            #endif
+
             registry.BindToMethod(() => Refit.RestService.For<IDesignerWebTesterApi>(
-                new HttpClient
+                new HttpClient(
+                    #if DEBUG
+                        new HttpClientHandler
+                        {
+                            ClientCertificateOptions = ClientCertificateOption.Manual,
+                            ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
+                        }
+                    #endif
+                    )
                 {
                     MaxResponseContentBufferSize = 2_000_000_000,
                     BaseAddress = new Uri(DesignerAddress()),
@@ -160,7 +174,6 @@ namespace WB.UI.WebTester
         {
             typeof(SignalrErrorHandler),
             typeof(WebInterviewStateManager),
-            typeof(DesignerTokenRenewalPipeline),
             typeof(WebInterviewConnectionsCounter)
         };
     }

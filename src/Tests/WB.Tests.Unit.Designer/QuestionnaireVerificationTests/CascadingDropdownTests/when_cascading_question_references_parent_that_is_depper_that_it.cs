@@ -30,8 +30,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                             QuestionType = QuestionType.SingleOption,
                             Answers = new List<Answer>
                             {
-                                new Answer {AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid()},
-                                new Answer {AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid()}
+                                new Answer {AnswerText = "one", AnswerValue = "1"},
+                                new Answer {AnswerText = "two", AnswerValue = "2"}
                             }
                         }
                     }),
@@ -48,14 +48,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                         {
                             AnswerText = "child 1",
                             AnswerValue = "1",
-                            PublicKey = Guid.NewGuid(),
                             ParentValue = "1"
                         },
                         new Answer
                         {
                             AnswerText = "child 2",
                             AnswerValue = "2",
-                            PublicKey = Guid.NewGuid(),
                             ParentValue = "2"
                         },
                     }
