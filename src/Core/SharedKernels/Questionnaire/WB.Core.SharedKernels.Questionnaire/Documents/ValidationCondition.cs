@@ -22,7 +22,10 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
 
         public ValidationCondition Clone()
         {
-            return new ValidationCondition(this.Expression, this.Message);
+            return new ValidationCondition(this.Expression, this.Message)
+            {
+                Severity = this.Severity
+            };
         }
     }
 }

@@ -391,4 +391,7 @@
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Загружаем опросник. Пожалуйста подождите...</value>
   </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Предупреждения</value>
+  </data>
 </root>

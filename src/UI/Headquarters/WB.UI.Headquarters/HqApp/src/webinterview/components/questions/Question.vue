@@ -25,8 +25,8 @@
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />
-            <wb-validation v-if="!noValidation && question.validity.messages.length > 0" :messages="question.validity.messages" blockClass="text-danger"/>
-            <wb-validation v-if="!noValidation && question.validity.warnings.length > 0" :messages="question.validity.warnings" blockClass="text-warning" />
+            <wb-validation v-if="!noValidation"/>
+            <wb-warnings v-if="!noValidation" />
             <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
         </div>
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
