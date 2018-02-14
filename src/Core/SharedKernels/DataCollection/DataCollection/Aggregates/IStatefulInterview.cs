@@ -79,6 +79,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
 
+        IEnumerable<string> GetFailedWarningMessages(Identity identity, string defaultText);
+
         bool IsEnabled(Identity entityIdentity);
 
         bool WasAnswered(Identity entityIdentity);
@@ -193,5 +195,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetAssignmentId();
         bool IsParentOf(Identity parentIdentity, Identity childIdentity);
+
     }
 }
