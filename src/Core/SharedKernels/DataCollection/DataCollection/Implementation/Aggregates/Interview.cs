@@ -372,7 +372,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(AnswersDeclaredImplausible @event)
         {
-            var questionsConditions = @event.FailedValidationConditions;
+            var questionsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var questionIdentity in questionsConditions.Keys)
                 this.Tree.GetQuestion(questionIdentity).MarkImplausibled(questionsConditions[questionIdentity]);
@@ -386,7 +386,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public virtual void Apply(StaticTextsDeclaredImplausible @event)
         {
-            var staticTextsConditions = @event.FailedValidationConditions;
+            var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
                 this.Tree.GetStaticText(staticTextIdentity).MarkImplausibled(staticTextsConditions[staticTextIdentity]);
@@ -2101,7 +2101,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var plausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
             var implausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedWarningValidations);
+                //.ToDictionary(x => x.Identity, x => x.FailedWarningValidations);
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedErrorValidations))
+                .ToList();
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
@@ -2110,7 +2112,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var plausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
             var implausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedWarningValidations);
+                //.ToDictionary(x => x.Identity, x => x.FailedWarningValidations);
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedErrorValidations))
+                .ToList();
 
 
             if (validQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredValid(validQuestionIdentities));
