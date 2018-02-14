@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 
@@ -80,15 +81,27 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             },
-            new QuestionnaireContentVersion()
+            new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                Version = 21,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<AbstractQuestion>(q => q.QuestionType == QuestionType.Audio).Any(),
                         Description = "Contains Audio Question"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<INumericQuestion>(q => q.Answers?.Any() ?? false).Any(),
+                        Description = "Numeric question with special values"
                     }
                 }
             }
