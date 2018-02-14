@@ -646,40 +646,55 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<string> GetFailedWarningMessages(Identity questionOrStaticTextId,
             string defaltErrorMessageFallback)
         {
+            var question = this.Tree.GetQuestion(questionOrStaticTextId);
+            if (question?.FailedWarningValidations != null)
+            {
+                return GetValidationMessages(question.FailedWarningValidations, question.ValidationMessages, defaltErrorMessageFallback);
+            }
+            
+            var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
+            if (staticText?.FailedWarningValidations != null)
+            {
+                return GetValidationMessages(staticText.FailedWarningValidations, staticText.ValidationMessages,
+                    defaltErrorMessageFallback);
+            }
+
             return Enumerable.Empty<string>();
         }
 
         public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
-            if (question?.FailedErrorValidations != null)
+            IReadOnlyList<FailedValidationCondition> questionFailedErrorValidations = question?.FailedErrorValidations;
+            if (questionFailedErrorValidations != null)
             {
-                var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
-                    .ToList();
-
-                if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
-
-                return question.FailedErrorValidations.Select(failedValidation =>
-                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
-
+                return GetValidationMessages(questionFailedErrorValidations, question.ValidationMessages, defaltErrorMessageFallback);
             }
-
+            
             var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
             if (staticText?.FailedErrorValidations != null)
             {
-                var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
-                    .ToList();
-
-                if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
-
-                return staticText.FailedErrorValidations.Select(failedValidation =>
-                    $"{staticTextValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
-                    $"[{failedValidation.FailedConditionIndex + 1}]");
+                return GetValidationMessages(staticText.FailedWarningValidations, staticText.ValidationMessages,
+                    defaltErrorMessageFallback);
             }
 
             return Enumerable.Empty<string>();
+        }
+
+        private IEnumerable<string> GetValidationMessages(IReadOnlyList<FailedValidationCondition> failedConditions,
+            SubstitutionText[] texts,
+            string defalutErrorMessageFallback)
+        {
+            var questionValidationMassages = texts
+                .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText)
+                    ? defalutErrorMessageFallback
+                    : substitutionText.BrowserReadyText)
+                .ToList();
+
+            if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
+
+            return failedConditions.Select(failedValidation =>
+                $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
         }
 
         public bool IsEnabled(Identity entityIdentity)
