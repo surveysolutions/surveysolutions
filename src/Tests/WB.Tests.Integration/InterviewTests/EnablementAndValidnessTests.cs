@@ -962,5 +962,105 @@ namespace WB.Tests.Integration.InterviewTests
             appDomainContext = null;
         }
 
+        [Test]
+        public void when_exists_condition_on_rowindex()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var intQuestionId = Guid.Parse("11111111111111111111111111111111");
+            var rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
+            var rosterIntQuestionId = Guid.Parse("33333333333333333333333333333333");
+            var rosterId = Guid.Parse("55555555555555555555555555555555");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "rsq"),
+                    Create.Entity.NumericRoster(rosterId, rosterSizeQuestionId: intQuestionId, rosterTitleQuestionId: rosterTitleQuestionId, variable: "r1", children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion(rosterIntQuestionId, variable: "riq"),
+                        Create.Entity.TextQuestion(rosterTitleQuestionId, variable: "rtq", enablementCondition: "@rowindex + riq == 5")
+                    })
+                );
+
+                var interview = SetupStatefullInterview(questionnaireDocument);
+
+                interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 10);
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(userId, rosterIntQuestionId, new RosterVector(new[] { 2 }), DateTime.UtcNow, 3);
+
+                    return new
+                    {
+                        QuestionsEnabledEvent = GetFirstEventByType<QuestionsEnabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.QuestionsEnabledEvent, Is.Not.Null);
+            Assert.That(results.QuestionsEnabledEvent.Questions.Length, Is.EqualTo(1));
+            Assert.That(results.QuestionsEnabledEvent.Questions.Single(i => i == Identity.Create(rosterTitleQuestionId, new int[] { 2 })), Is.Not.Null);
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        [Test]
+        public void when_exists_condition_on_rowcode()
+        {
+            var userId = Guid.Parse("11111111111111111111111111111111");
+
+            var questionnaireId = Guid.Parse("77778888000000000000000000000000");
+            var intQuestionId = Guid.Parse("11111111111111111111111111111111");
+            var rosterTitleQuestionId = Guid.Parse("22222222222222222222222222222222");
+            var rosterIntQuestionId = Guid.Parse("33333333333333333333333333333333");
+            var rosterId = Guid.Parse("55555555555555555555555555555555");
+
+            var appDomainContext = AppDomainContext.Create();
+
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+
+                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "rsq"),
+                    Create.Entity.NumericRoster(rosterId, rosterSizeQuestionId: intQuestionId, rosterTitleQuestionId: rosterTitleQuestionId, variable: "r1", children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion(rosterIntQuestionId, variable: "riq"),
+                        Create.Entity.TextQuestion(rosterTitleQuestionId, variable: "rtq", enablementCondition: "@rowcode + riq == 5")
+                    })
+                );
+
+                var interview = SetupStatefullInterview(questionnaireDocument);
+
+                interview.AnswerNumericIntegerQuestion(userId, intQuestionId, RosterVector.Empty, DateTime.UtcNow, 10);
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerNumericIntegerQuestion(userId, rosterIntQuestionId, new RosterVector(new[] { 2 }), DateTime.UtcNow, 3);
+
+                    return new
+                    {
+                        QuestionsEnabledEvent = GetFirstEventByType<QuestionsEnabled>(eventContext.Events)
+                    };
+                }
+            });
+
+            Assert.That(results, Is.Not.Null);
+            Assert.That(results.QuestionsEnabledEvent, Is.Not.Null);
+            Assert.That(results.QuestionsEnabledEvent.Questions.Length, Is.EqualTo(1));
+            Assert.That(results.QuestionsEnabledEvent.Questions.Single(i => i == Identity.Create(rosterTitleQuestionId, new int[] { 2 })), Is.Not.Null);
+
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
     }
 }
