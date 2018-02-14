@@ -2074,6 +2074,7 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
+    <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
