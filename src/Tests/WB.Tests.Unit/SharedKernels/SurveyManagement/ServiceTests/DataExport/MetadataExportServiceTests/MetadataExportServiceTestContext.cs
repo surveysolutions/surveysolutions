@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 QuestionType = type,
                 VariableName = Guid.NewGuid().ToString(),
                 PublicKey = questionId ?? Guid.NewGuid(),
-                Labels = labels.ToDictionary(x => Guid.NewGuid(), x => x)
+                Labels = labels.ToList()
             };
         }
 
