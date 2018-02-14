@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils
