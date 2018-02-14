@@ -26,8 +26,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 CascadeFromQuestionId = grandChildCascadingQuestion,
                 Answers = new List<Answer>
                     {
-                        new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                        new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" }
+                        new Answer { AnswerText = "one", AnswerValue = "1", ParentValue = "1" },
+                        new Answer { AnswerText = "two", AnswerValue = "2", ParentValue = "2" }
                     }
                 },
                 new SingleQuestion
@@ -38,8 +38,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     CascadeFromQuestionId = parentSingleOptionQuestionId,
                     Answers = new List<Answer>
                     {
-                        new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                        new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                        new Answer { AnswerText = "child 1", AnswerValue = "1", ParentValue = "1" },
+                        new Answer { AnswerText = "child 2", AnswerValue = "2", ParentValue = "2" },
                     }
                 },
                 new SingleQuestion
@@ -50,8 +50,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                     CascadeFromQuestionId = childCascadedComboboxId,
                     Answers = new List<Answer>
                     {
-                        new Answer { AnswerText = "child 1", AnswerValue = "1", PublicKey = Guid.NewGuid(), ParentValue = "1" },
-                        new Answer { AnswerText = "child 2", AnswerValue = "2", PublicKey = Guid.NewGuid(), ParentValue = "2" },
+                        new Answer { AnswerText = "child 1", AnswerValue = "1", ParentValue = "1" },
+                        new Answer { AnswerText = "child 2", AnswerValue = "2", ParentValue = "2" },
                     }
                 }
                 );
