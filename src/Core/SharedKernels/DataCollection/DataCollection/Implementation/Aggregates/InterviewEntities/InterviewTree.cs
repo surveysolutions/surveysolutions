@@ -526,7 +526,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
         {
-            return this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+            return this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue)?.Title;
         }
         
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)
