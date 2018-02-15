@@ -135,8 +135,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff) ||
                     IsEntityValid(diff as InterviewTreeValidateableDiff) ||
                     IsEntityInvalid(diff as InterviewTreeValidateableDiff) ||
-                    IsEntityPlausibled(diff as InterviewTreeValidateableDiff) ||
-                    IsEntityImplausibled(diff as InterviewTreeValidateableDiff) ||
+                    IsEntityPlausible(diff as InterviewTreeValidateableDiff) ||
+                    IsEntityImplausible(diff as InterviewTreeValidateableDiff) ||
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
                     IsOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
                     IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
@@ -200,10 +200,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private static bool IsEntityInvalid(InterviewTreeValidateableDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.ChangedNodeBecameInvalid;
 
-        private static bool IsEntityPlausibled(InterviewTreeValidateableDiff diffByEntity)
+        private static bool IsEntityPlausible(InterviewTreeValidateableDiff diffByEntity)
             => diffByEntity != null && diffByEntity.ChangedNodeBecamePlausibled;
 
-        private static bool IsEntityImplausibled(InterviewTreeValidateableDiff diffByEntity)
+        private static bool IsEntityImplausible(InterviewTreeValidateableDiff diffByEntity)
             => diffByEntity != null && diffByEntity.ChangedNodeBecameImplausibled;
 
         private static bool IsAnswerByQuestionChanged(InterviewTreeQuestionDiff diffByQuestion)

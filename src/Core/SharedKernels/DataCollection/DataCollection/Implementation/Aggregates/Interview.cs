@@ -367,7 +367,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersDeclaredPlausible @event)
         {
             foreach (var questionIdentity in @event.Questions)
-                this.Tree.GetQuestion(questionIdentity)?.MarkPlausibled();
+                this.Tree.GetQuestion(questionIdentity)?.MarkPlausible();
         }
 
         public virtual void Apply(AnswersDeclaredImplausible @event)
@@ -375,13 +375,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var questionIdentity in questionsConditions.Keys)
-                this.Tree.GetQuestion(questionIdentity).MarkImplausibled(questionsConditions[questionIdentity]);
+                this.Tree.GetQuestion(questionIdentity).MarkImplausible(questionsConditions[questionIdentity]);
         }
 
         public virtual void Apply(StaticTextsDeclaredPlausible @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
-                this.Tree.GetStaticText(staticTextIdentity).MarkPlausibled();
+                this.Tree.GetStaticText(staticTextIdentity).MarkPlausible();
         }
 
         public virtual void Apply(StaticTextsDeclaredImplausible @event)
@@ -389,7 +389,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
 
             foreach (var staticTextIdentity in staticTextsConditions.Keys)
-                this.Tree.GetStaticText(staticTextIdentity).MarkImplausibled(staticTextsConditions[staticTextIdentity]);
+                this.Tree.GetStaticText(staticTextIdentity).MarkImplausible(staticTextsConditions[staticTextIdentity]);
         }
 
         public void Apply(LinkedOptionsChanged @event)
@@ -818,11 +818,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedErrorValidations);
+                .ToDictionary(x => x.Identity, x => x.FailedErrors);
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedErrorValidations);
+                .ToDictionary(x => x.Identity, x => x.FailedErrors);
 
             if (validQuestionIdentities.Any()) expressionState.DeclareAnswersValid(validQuestionIdentities);
             if (invalidQuestionIdentities.Any()) expressionState.ApplyFailedValidations(invalidQuestionIdentities);
@@ -2097,23 +2097,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedErrorValidations);
+                .ToDictionary(x => x.Identity, x => x.FailedErrors);
 
             var plausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
             var implausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
-                //.ToDictionary(x => x.Identity, x => x.FailedWarningValidations);
-                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarningValidations))
+                //.ToDictionary(x => x.Identity, x => x.FailedWarnings);
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarnings))
                 .ToList();
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
-                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedErrorValidations))
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedErrors))
                 .ToList();
 
             var plausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
             var implausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
-                //.ToDictionary(x => x.Identity, x => x.FailedWarningValidations);
-                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarningValidations))
+                //.ToDictionary(x => x.Identity, x => x.FailedWarnings);
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarnings))
                 .ToList();
 
 
