@@ -399,6 +399,64 @@ namespace WB.Tests.Integration
         }
 
         [Test]
+        public void when_make_entities_with_warnings()
+        {
+            //arrange
+            var interviewId = Guid.NewGuid();
+
+            var questionId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2));
+            var staticTextId = Identity.Create(Guid.NewGuid(), Create.RosterVector(1, 2, 3));
+
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
+            {
+                Create.Entity.StaticText(staticTextId.Id),
+                Create.Entity.TextQuestion(questionId.Id)
+            });
+
+            var interviewSummaryRepository = GetInMemoryInterviewSummaryRepository(interviewId);
+            var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository,
+                questionnaireStorage: Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire));
+
+
+            var interviewState = Create.Entity.InterviewState(interviewId);
+            interviewState.Warnings = new Dictionary<InterviewStateIdentity, InterviewStateValidation>
+            {
+                {
+                    InterviewStateIdentity.Create(questionId),
+                    new InterviewStateValidation
+                    {
+                        Id = questionId.Id,
+                        RosterVector = questionId.RosterVector,
+                        Validations = new[] {1, 2, 3}
+                    }
+                },
+                {
+                    InterviewStateIdentity.Create(staticTextId),
+                    new InterviewStateValidation
+                    {
+                        Id = staticTextId.Id,
+                        RosterVector = staticTextId.RosterVector,
+                        Validations = new[] {1}
+                    }
+                }
+            };
+
+            //act
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                factory.Save(interviewState);
+            });
+
+            //assert
+            var interviewEntities = this.GetInterviewEntities(factory, interviewId);
+
+            Assert.That(interviewEntities.Length, Is.EqualTo(2));
+            Assert.That(new[] {questionId, staticTextId}, Is.EquivalentTo(interviewEntities.Select(x => x.Identity)));
+            Assert.That(interviewState.Warnings.Values.Select(x => x.Validations), Is.EquivalentTo(interviewEntities.Select(x => x.WarningValidations)));
+        }
+
+        [Test]
         public void when_add_rosters()
         {
             //arrange
