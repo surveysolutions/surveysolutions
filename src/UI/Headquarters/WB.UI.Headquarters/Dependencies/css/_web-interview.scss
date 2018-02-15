@@ -170,6 +170,9 @@
 	&.text-danger{
 		color: $red_error;
 	}
+    &.text-warning{
+        color: $warning_color;
+    }
 	&.roster-section-info{
 		padding-top: 5px;
 	}
