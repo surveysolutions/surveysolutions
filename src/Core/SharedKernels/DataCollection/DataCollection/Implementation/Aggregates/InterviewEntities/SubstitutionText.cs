@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 bool shouldEncode = true;
 
                 var treeEntity = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity);
-                if(!treeEntity.IsDisabled())
+                if(treeEntity != null && !treeEntity.IsDisabled())
                 {
                     switch (treeEntity)
                     {
@@ -96,8 +96,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                                     : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
                             }
                         
-                            break;
-                        case null:
                             break;
                     }
                 }
