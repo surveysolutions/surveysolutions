@@ -35,6 +35,10 @@ namespace WB.Enumerator.Native.WebInterview
         IEventHandler<AnswersRemoved>,
         IEventHandler<StaticTextsDeclaredInvalid>,
         IEventHandler<StaticTextsDeclaredValid>,
+        IEventHandler<AnswersDeclaredImplausible>,
+        IEventHandler<AnswersDeclaredPlausible>,
+        IEventHandler<StaticTextsDeclaredImplausible>,
+        IEventHandler<StaticTextsDeclaredPlausible>,
         IEventHandler<RosterInstancesAdded>,
         IEventHandler<RosterInstancesRemoved>,
         IEventHandler<RosterInstancesTitleChanged>,
@@ -70,6 +74,26 @@ namespace WB.Enumerator.Native.WebInterview
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt)
         {
             this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+        }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredImplausible> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.GetFailedValidationConditionsDictionary().Keys.ToArray());
+        }
+
+        public void Handle(IPublishedEvent<AnswersDeclaredPlausible> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+        }
+
+        public void Handle(IPublishedEvent<StaticTextsDeclaredImplausible> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.GetFailedValidationConditionsDictionary().Keys.ToArray());
+        }
+
+        public void Handle(IPublishedEvent<StaticTextsDeclaredPlausible> evnt)
+        {
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.StaticTexts);
         }
 
         public void Handle(IPublishedEvent<QuestionsDisabled> evnt)
