@@ -702,7 +702,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     : substitutionText.BrowserReadyText)
                 .ToList();
 
-            if (failedConditions.Count == 1) return new[] {questionValidationMassages[0]};
+            if (failedConditions.Count > 0 && questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
 
              return failedConditions.Select(failedValidation =>
                 $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
