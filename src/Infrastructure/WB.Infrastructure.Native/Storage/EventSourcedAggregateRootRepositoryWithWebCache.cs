@@ -64,7 +64,7 @@ namespace WB.Infrastructure.Native.Storage
             return cachedAggregate;
         }
 
-        private static Cache Cache => System.Web.HttpRuntime.Cache;
+        protected static Cache Cache => System.Web.HttpRuntime.Cache;
         protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)

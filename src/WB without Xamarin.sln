@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.Infrastructure", "Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Integration", "Tests\WB.Tests.Integration\WB.Tests.Integration.csproj", "{39A777F1-EF3F-457F-80EC-46470EF236E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Integration", "Tests\WB.Tests.Integration\WB.Tests.Integration.csproj", "{39A777F1-EF3F-457F-80EC-46470EF236E4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
 	EndProjectSection
@@ -73,7 +73,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Unit.Designer", "T
 		{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F} = {E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Tests.Abc", "Tests\WB.Tests.Abc\WB.Tests.Abc.csproj", "{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Tests.Abc", "Tests\WB.Tests.Abc\WB.Tests.Abc.csproj", "{E8409CAF-AF6F-489D-8FF6-FA1E03A80F7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.WebTester", "UI\WB.UI.WebTester\WB.UI.WebTester.csproj", "{4BF37870-0CEF-455E-ABF5-682F979D8D8B}"
 EndProject

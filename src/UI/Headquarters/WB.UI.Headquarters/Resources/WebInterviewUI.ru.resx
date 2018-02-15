@@ -391,4 +391,7 @@
   <data name="LoadingQuestionnaire" xml:space="preserve">
     <value>Загружаем опросник. Пожалуйста подождите...</value>
   </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Загрузить новый опросник</value>
+  </data>
 </root>
