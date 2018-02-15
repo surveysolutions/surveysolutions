@@ -76,6 +76,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasGroup(Identity group);
 
         bool IsEntityValid(Identity identity);
+        bool IsEntityPlausible(Identity identity);
 
         IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
 

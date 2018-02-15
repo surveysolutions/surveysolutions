@@ -203,6 +203,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
+        public bool IsPlausible => this.FailedWarnings.Count == 0;
+
         public void RunImportInvariantsOrThrow(InterviewQuestionInvariants questionInvariants)
         {
             this.InterviewQuestion.RunImportInvariants(questionInvariants);
