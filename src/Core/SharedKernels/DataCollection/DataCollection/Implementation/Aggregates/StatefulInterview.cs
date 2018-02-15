@@ -647,15 +647,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
-            if (question?.FailedWarningValidations != null)
+            if (question?.FailedWarnings != null)
             {
-                return GetValidationMessages(question.FailedWarningValidations, question.ValidationMessages, defaltErrorMessageFallback);
+                return GetValidationMessages(question.FailedWarnings, question.ValidationMessages, defaltErrorMessageFallback);
             }
             
             var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
-            if (staticText?.FailedWarningValidations != null)
+            if (staticText?.FailedWarnings != null)
             {
-                return GetValidationMessages(staticText.FailedWarningValidations, staticText.ValidationMessages,
+                return GetValidationMessages(staticText.FailedWarnings, staticText.ValidationMessages,
                     defaltErrorMessageFallback);
             }
 
@@ -665,16 +665,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
-            IReadOnlyList<FailedValidationCondition> questionFailedErrorValidations = question?.FailedErrorValidations;
+            IReadOnlyList<FailedValidationCondition> questionFailedErrorValidations = question?.FailedErrors;
             if (questionFailedErrorValidations != null)
             {
                 return GetValidationMessages(questionFailedErrorValidations, question.ValidationMessages, defaltErrorMessageFallback);
             }
             
             var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
-            if (staticText?.FailedErrorValidations != null)
+            if (staticText?.FailedErrors != null)
             {
-                return GetValidationMessages(staticText.FailedErrorValidations, staticText.ValidationMessages,
+                return GetValidationMessages(staticText.FailedErrors, staticText.ValidationMessages,
                     defaltErrorMessageFallback);
             }
 
@@ -787,7 +787,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (question.IsAnswered() && !question.IsValid)
                     {
                         invalidAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                        failedValidationConditions.Add(question.Identity, question.FailedErrorValidations.ToList());
+                        failedValidationConditions.Add(question.Identity, question.FailedErrors.ToList());
                     }
                     if (question.IsValid)
                     {
@@ -815,7 +815,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (!staticText.IsValid)
                     {
                         invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
-                            staticTextIdentity, staticText.FailedErrorValidations.ToList()));
+                            staticTextIdentity, staticText.FailedErrors.ToList()));
                     }
                 }
                 else

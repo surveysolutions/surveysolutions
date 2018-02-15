@@ -280,7 +280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (!question.IsAnswered())
             {
                 question.MarkValid();
-                question.MarkPlausibled();
+                question.MarkPlausible();
                 return;
             }
 
@@ -302,9 +302,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var warningIndexes = questionnaire.GetValidationWarningsIndexes(entity.Identity.Id).ToHashSet();
 
             if (validationResult.Any(v => warningIndexes.Contains(v.FailedConditionIndex)))
-                interviewTreeValidateable.MarkImplausibled(validationResult.Where(v => warningIndexes.Contains(v.FailedConditionIndex)));
+                interviewTreeValidateable.MarkImplausible(validationResult.Where(v => warningIndexes.Contains(v.FailedConditionIndex)));
             else
-                interviewTreeValidateable.MarkPlausibled();
+                interviewTreeValidateable.MarkPlausible();
 
             if (validationResult.Any(v => !warningIndexes.Contains(v.FailedConditionIndex)))
                 interviewTreeValidateable.MarkInvalid(validationResult.Where(v => !warningIndexes.Contains(v.FailedConditionIndex)));

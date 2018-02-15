@@ -24,24 +24,24 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool ChangedNodeBecamePlausibledImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
             if (this.IsNodeRemoved) return false;
-            return source == null || source.FailedWarningValidations.Count != 0 && result.FailedWarningValidations.Count == 0;
+            return source == null || source.FailedWarnings.Count != 0 && result.FailedWarnings.Count == 0;
         }
 
         private bool ChangedNodeBecameImplausibledImp(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
             if (this.IsNodeRemoved) return false;
-            var targetIsImplausibled = result.FailedWarningValidations.Count != 0;
-            return source == null ? targetIsImplausibled : source.FailedWarningValidations.Count == 0 && targetIsImplausibled;
+            var targetIsImplausibled = result.FailedWarnings.Count != 0;
+            return source == null ? targetIsImplausibled : source.FailedWarnings.Count == 0 && targetIsImplausibled;
         }
 
         private bool IsFailedWarningValidationIndexChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
             if (this.IsNodeRemoved) return false;
-            if (result.FailedWarningValidations.Count == 0) return false;
-            var targetChangedValidations = result.FailedWarningValidations ?? new List<FailedValidationCondition>();
+            if (result.FailedWarnings.Count == 0) return false;
+            var targetChangedValidations = result.FailedWarnings ?? new List<FailedValidationCondition>();
             if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
 
-            var sourceMessages = source?.FailedWarningValidations ?? new List<FailedValidationCondition>();
+            var sourceMessages = source?.FailedWarnings ?? new List<FailedValidationCondition>();
             return !targetChangedValidations.SequenceEqual(sourceMessages);
         }
 
@@ -72,10 +72,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsNodeRemoved) return false;
             if (result.IsValid) return false;
-            var targetChangedValidations = result.FailedErrorValidations ?? new List<FailedValidationCondition>();
+            var targetChangedValidations = result.FailedErrors ?? new List<FailedValidationCondition>();
             if (this.IsNodeAdded && !targetChangedValidations.Any()) return false;
 
-            var sourceMessages = source?.FailedErrorValidations ?? new List<FailedValidationCondition>();
+            var sourceMessages = source?.FailedErrors ?? new List<FailedValidationCondition>();
             return !targetChangedValidations.SequenceEqual(sourceMessages);
         }
 
@@ -95,13 +95,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         bool IsValid { get; }
         SubstitutionText[] ValidationMessages { get; }
 
-        IReadOnlyList<FailedValidationCondition> FailedErrorValidations { get; }
+        IReadOnlyList<FailedValidationCondition> FailedErrors { get; }
         void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations);
         void MarkValid();
 
-        IReadOnlyList<FailedValidationCondition> FailedWarningValidations { get; }
-        void MarkImplausibled(IEnumerable<FailedValidationCondition> failedValidations);
-        void MarkPlausibled();
+        IReadOnlyList<FailedValidationCondition> FailedWarnings { get; }
+        void MarkImplausible(IEnumerable<FailedValidationCondition> failedValidations);
+        void MarkPlausible();
 
         void AcceptValidity(IInterviewTreeUpdater updater);
     }
