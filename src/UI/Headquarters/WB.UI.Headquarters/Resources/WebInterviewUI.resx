@@ -402,4 +402,7 @@
   <data name="WarningsHeader" xml:space="preserve">
     <value>Warnings</value>
   </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Reload questionnaire</value>
+  </data>
 </root>

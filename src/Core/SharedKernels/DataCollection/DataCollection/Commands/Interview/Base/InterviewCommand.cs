@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
 {
     public abstract class InterviewCommand : CommandBase
     {
-        public Guid InterviewId { get; private set; }
+        public Guid InterviewId { get; set; }
 
         private Guid userId;
         public Guid UserId
