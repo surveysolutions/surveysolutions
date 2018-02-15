@@ -6585,6 +6585,17 @@ a.disabled {
           font-family: "RobotoLight"; }
     .navbar .navbar-collapse li.glow-animate > a:after {
       display: none; }
+  .navbar .btn-icon {
+    padding: 0;
+    margin: 21px 5px;
+    color: #7e898f; }
+    .navbar .btn-icon .glyphicon {
+      font-size: 22px;
+      line-height: 22px; }
+    .navbar .btn-icon:hover, .navbar .btn-icon:focus, .navbar .btn-icon:active {
+      color: #fff;
+      background: transparent;
+      border-color: transparent; }
 
 .navbar-default .navbar-collapse ul li a, .navbar-default .navbar-header .navbar-brand {
   color: #3f3f3f; }
@@ -6607,8 +6618,8 @@ a.disabled {
 
 .navbar-header {
   text-align: center; }
-  .navbar-header .badge.badge_nav {
-    display: none; }
+  .navbar-header .badge.badge_nav,
+  .navbar-header .btn-icon,
   .navbar-header .number-of-synchronized-interviews {
     display: none; }
 
@@ -6809,6 +6820,14 @@ a.disabled {
     .navbar .navbar-header {
       margin: 0;
       padding-top: 5px; }
+      .navbar .navbar-header .btn-icon,
+      .navbar .navbar-header .badge.badge_nav {
+        display: block;
+        float: right;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin: 10px; }
       .navbar .navbar-header .active-page {
         display: inline-block; }
       .navbar .navbar-header .navbar-brand .logo {
@@ -6820,11 +6839,6 @@ a.disabled {
         .navbar .navbar-header .navbar-brand .brand-name:after {
           display: none; }
       .navbar .navbar-header .badge.badge_nav {
-        display: block;
-        float: right;
-        position: relative;
-        top: 0;
-        left: 0;
         margin: 5px 15px 5px 10px; }
       .navbar .navbar-header .number-of-synchronized-interviews {
         display: block;
@@ -6876,6 +6890,8 @@ a.disabled {
         .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:hover, .navbar.navbar-fixed-top .navbar-collapse li .dropdown-menu li.active a:focus {
           font-family: "RobotoBold";
           background-color: #2a81cb; }
+      .navbar.navbar-fixed-top .navbar-collapse li .btn-icon {
+        margin: 21px 12px; }
     .navbar.navbar-fixed-top .navbar-right .badge.badge_nav {
       top: 0;
       left: 0;

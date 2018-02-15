@@ -11,14 +11,14 @@ namespace WB.UI.WebTester.Hub
     [HubName(@"interview")]
     public class WebInterviewHub : WebInterview
     {
-        private readonly IEvictionObserver evictionNotify;
+        private readonly IEvictionNotifier evictionNotify;
 
         public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, 
             ICommandService commandService, 
             IQuestionnaireStorage questionnaireRepository, 
             IWebInterviewNotificationService webInterviewNotificationService, 
             IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IEvictionObserver evictionNotify) : 
+            IEvictionNotifier evictionNotify) : 
             base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory)
         {
             this.evictionNotify = evictionNotify;

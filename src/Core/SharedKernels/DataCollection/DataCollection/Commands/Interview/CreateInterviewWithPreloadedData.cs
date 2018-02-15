@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         }
 
         public Guid Id { get; private set; }
-        public QuestionnaireIdentity QuestionnaireId { get; private set; }
+        public QuestionnaireIdentity QuestionnaireId { get; set; }
         public List<InterviewAnswer> Answers { get; private set; }
         public Guid SupervisorId { get; private set; }
         public Guid? InterviewerId { get; private set; }
