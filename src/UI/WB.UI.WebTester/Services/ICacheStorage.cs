@@ -7,6 +7,7 @@ namespace WB.UI.WebTester.Services
         TEntity Get(TKey id, Guid area = default(Guid));
 
         void Remove(TKey id, Guid area = default(Guid));
+
         void RemoveArea(Guid area);
 
         void Store(TEntity entity, TKey id, Guid area = default(Guid));

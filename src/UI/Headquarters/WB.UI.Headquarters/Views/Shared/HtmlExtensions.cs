@@ -9,6 +9,7 @@ using WB.UI.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.UI.Headquarters.Code;
 
 namespace ASP
 {
@@ -127,7 +128,7 @@ namespace ASP
 
             if (!string.IsNullOrWhiteSpace(titleString))
             {
-                script += $"window.CONFIG.title='{titleString}'";
+                script += $"window.CONFIG.title=\"{helper.ToSafeJavascriptMessage(titleString)}\"";
             }
 
             return new HtmlString($@"<script>{script};window.CONFIG.model={ model.AsJsonValue() }</script>");
