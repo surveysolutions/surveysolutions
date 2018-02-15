@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public StaticTextsDeclaredImplausible(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedValidationConditions)
         {
-            this.FailedValidationConditions = failedValidationConditions.Select(s => s).ToList();
+            this.FailedValidationConditions = failedValidationConditions;
         }
     }
 }
