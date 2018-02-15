@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public bool IsValid => this.FailedErrors.Count == 0;
+        public bool IsPlausible => this.FailedWarnings.Count == 0;
 
         public IReadOnlyList<FailedValidationCondition> FailedErrors { get; private set; }
         public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; }
