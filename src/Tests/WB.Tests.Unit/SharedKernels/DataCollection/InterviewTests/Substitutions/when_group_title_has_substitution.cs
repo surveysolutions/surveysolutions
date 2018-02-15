@@ -5,6 +5,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,7 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
 {
     internal class when_group_title_has_substitution : InterviewTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void SetUp()
         {
             rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             group1Id = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -33,10 +35,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
                         rosterSizeQuestionId: rosterSizeQuestionId,
                         title: "Roster",
                         children:
-                            new List<IComposite>
-                            {
-                                Create.Entity.Group(groupId: group2Id, title: "GroupC - %subst%")
-                            })
+                        new List<IComposite>
+                        {
+                            Create.Entity.Group(groupId: group2Id, title: "GroupC - %subst%")
+                        })
                 }.ToReadOnlyCollection()
             });
 
@@ -44,17 +46,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+            interview = CreateInterview(questionnaireId: questionnaireId,
+                questionnaireRepository: questionnaireRepository);
 
             events = new EventContext();
-        };
+            interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector,
+                DateTime.Now, 2);
+        }
 
-        Because of = () => interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
-
-        It should_raise_title_changed_event_for_3_groups = () =>
+        [Test]
+        public void should_raise_title_changed_event_for_3_groups() =>
             events.GetEvent<SubstitutionTitlesChanged>().Groups.Length.ShouldEqual(3);
 
-       It should_raise_title_changed_event_for_group_after_answer = () =>
+        [Test]
+        public void should_raise_title_changed_event_for_group_after_answer() =>
             events.GetEvent<SubstitutionTitlesChanged>().Groups.ShouldContainOnly(
                 Create.Entity.Identity(group2Id, Create.Entity.RosterVector(0)),
                 Create.Entity.Identity(group2Id, Create.Entity.RosterVector(1)),

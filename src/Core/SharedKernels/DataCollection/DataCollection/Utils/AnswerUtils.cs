@@ -33,9 +33,13 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
             if (answer is decimal decimalAnswer)
             {
-                return getCategoricalAnswerOptionText == null
+                if(getCategoricalAnswerOptionText == null)
+                    return decimalAnswer.ToString(CultureInfo.InvariantCulture);
+                var optionText = getCategoricalAnswerOptionText(decimalAnswer);
+
+                return String.IsNullOrEmpty(optionText)
                     ? decimalAnswer.ToString(CultureInfo.InvariantCulture)
-                    : getCategoricalAnswerOptionText(decimalAnswer);
+                    : optionText;
             }
 
             if (answer is decimal[] multiDecimalAnswer)
@@ -141,13 +145,16 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public static CategoricalOption GetOptionForQuestionByOptionValue(IQuestion question, decimal optionValue)
         {
+            if (!question.Answers.Any())
+                return null;
+
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
             {
-                return question.Answers.Single(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
+                return question.Answers.SingleOrDefault(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
             }
             else
             {
-                return question.Answers.Single(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
+                return question.Answers.SingleOrDefault(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
                     .ToCategoricalOption();
             }
 
