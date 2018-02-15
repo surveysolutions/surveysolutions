@@ -643,6 +643,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return staticText?.IsValid ?? false;
         }
 
+        public bool IsEntityPlausible(Identity identity)
+        {
+            var question = this.Tree.GetQuestion(identity);
+            if (question != null)
+            {
+                return !question.IsAnswered() || question.IsPlausible;
+            }
+            var staticText = this.Tree.GetStaticText(identity);
+            return staticText?.IsPlausible ?? false;
+        }
+
         public IEnumerable<string> GetFailedWarningMessages(Identity questionOrStaticTextId,
             string defaltErrorMessageFallback)
         {
