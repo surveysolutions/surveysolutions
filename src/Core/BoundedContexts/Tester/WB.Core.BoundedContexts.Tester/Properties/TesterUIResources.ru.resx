@@ -211,7 +211,7 @@
     <value>Обновить опросник</value>
   </data>
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
-    <value>Данные интервью не могут быть зааплаены на новую версию опросника. Будет открыто пустое интервью.</value>
+    <value>Данные интервью не совместимы с новой версией опросника. Создано новое интервью</value>
   </data>
   <data name="Prefs_ShowAnswerTime" xml:space="preserve">
     <value>Отображать время ответа</value>

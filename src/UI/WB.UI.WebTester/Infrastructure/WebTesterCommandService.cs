@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -20,6 +22,7 @@ namespace WB.UI.WebTester.Infrastructure
         private readonly ILiteEventBus eventBus;
         private readonly IAggregateLock aggregateLock;
         private readonly IServiceLocator serviceLocator;
+        private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
 
         public WebTesterCommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
@@ -27,7 +30,8 @@ namespace WB.UI.WebTester.Infrastructure
             IAppdomainsPerInterviewManager interviews,
             ILiteEventBus eventBus,
             IAggregateLock aggregateLock,
-            IServiceLocator serviceLocator)
+            IServiceLocator serviceLocator,
+            ICacheStorage<List<ICommand>, Guid> executedCommandsStorage)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.cacheFiller = cacheFiller;
@@ -35,6 +39,7 @@ namespace WB.UI.WebTester.Infrastructure
             this.eventBus = eventBus;
             this.aggregateLock = aggregateLock;
             this.serviceLocator = serviceLocator;
+            this.executedCommandsStorage = executedCommandsStorage;
         }
 
         public void Execute(ICommand command, string origin = null)
@@ -63,6 +68,10 @@ namespace WB.UI.WebTester.Infrastructure
                 aggregate.InitializeFromHistory(aggregateId, events);
 
                 eventBus.PublishCommittedEvents(events);
+
+                var commands = this.executedCommandsStorage.Get(interviewCommand.InterviewId, interviewCommand.InterviewId) ?? new List<ICommand>();
+                commands.Add(interviewCommand);
+                this.executedCommandsStorage.Store(commands, interviewCommand.InterviewId, interviewCommand.InterviewId);
             });
         }
 

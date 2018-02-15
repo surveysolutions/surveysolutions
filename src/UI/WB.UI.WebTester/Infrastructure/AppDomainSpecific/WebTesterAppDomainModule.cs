@@ -35,7 +35,7 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
             registry.BindAsSingleton<IQuestionnaireAssemblyAccessor, WebTesterQuestionnaireAssemblyAccessor>();
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
-            registry.BindAsSingleton<StatefulInterview, StatefulInterview>();
+            registry.Bind<StatefulInterview, StatefulInterview>();
             registry.BindAsSingleton<IWebTesterTranslationService, WebTesterTranslationStorage>();
 
              CommandRegistry
