@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -399,6 +400,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             var question = this.QuestionsCache[variableName];
 
             return this.GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
+        }
+
+        public int? GetMaxAnswersCount(string variableName)
+        {
+            var multipleChoiseQuestion = this.QuestionsCache[variableName] as IMultyOptionsQuestion;
+            return multipleChoiseQuestion?.MaxAllowedAnswers;
         }
 
         public bool IsRosterSizeQuestionForLongRoster(Guid questionId)
