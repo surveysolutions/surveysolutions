@@ -60,6 +60,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             string basePath,
             IProgress<int> progress)
         {
+            var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
+
+            
             string commentsFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
@@ -67,22 +70,28 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             long totalProcessed = 0;
             var stopwatch = Stopwatch.StartNew();
-            foreach (var interviewsChunk in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
+            var etaHelper = new EtaHelper(interviewIdsToExport.Count, batchSize, trackingStopwatch: stopwatch);
+            
+            foreach (var interviewsChunk in interviewIdsToExport.Batch(batchSize))
             {
                 var interviewIdsStrings = interviewsChunk.Select(x => x.FormatGuid()).ToArray();
+
                 Expression<Func<InterviewCommentaries, bool>> whereClauseForComments = 
                     x => interviewIdsStrings.Contains(x.InterviewId);
-
-
-                string[][] exportComments = this.transactionManager
+                
+                var exportComments = this.transactionManager
                                            .GetTransactionManager()
                                            .ExecuteInQueryTransaction(
                                                 () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
 
                 this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed += interviewIdsStrings.Length;
+
+                etaHelper.AddProgress(interviewIdsStrings.Length);
+
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
-                this.logger.Debug($"Exported batch of interview comments. Total interview comments processed {totalProcessed:N0} out of {interviewIdsToExport.Count:N0}");
+                this.logger.Debug($"Exported batch of interview comments. {etaHelper} " +
+                                  $"Total interview comments processed {totalProcessed:N0} out of {interviewIdsToExport.Count:N0}");
             }
             stopwatch.Stop();
             this.logger.Info($"Exported all interview comments. Took {stopwatch.Elapsed:g} to export {interviewIdsToExport.Count:N0} interviews");
@@ -104,11 +113,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
             commentsHeader.Add("Comment");
 
-            this.csvWriter.WriteData(commentsFilePath, new[] {commentsHeader.ToArray()},
-                ExportFileSettings.DataFileSeparator.ToString());
+            this.csvWriter.WriteData(commentsFilePath, new[] {commentsHeader.ToArray()}, ExportFileSettings.DataFileSeparator.ToString());
         }
 
-        private string[][] QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
+        private List<string[]> QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, 
+            int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
         {
             var comments = this.interviewCommentariesStorage.Query(
                             _ =>
@@ -159,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 result.Add(resultRow.ToArray());
             }
-            return result.ToArray();
+            return result;
         }
 
         private string GetUserRole(UserRoles userRole)

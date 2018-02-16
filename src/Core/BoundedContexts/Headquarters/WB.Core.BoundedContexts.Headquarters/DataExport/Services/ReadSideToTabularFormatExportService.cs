@@ -114,8 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             var interviewsToExport = GetInterviewsToExport(questionnaireIdentity, status, cancellationToken, fromDate, toDate).ToList();
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
-            Stopwatch exportWatch = new Stopwatch();
-            exportWatch.Start(); 
+            Stopwatch exportWatch = Stopwatch.StartNew();
 
             Task.WaitAll(new[] {
                 Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
@@ -186,7 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 queryable = queryable.Where(x => x.UpdateDate < filteredToDate);
             }
 
-            return queryable;
+            return queryable.OrderBy(q => q.UpdateDate);
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)

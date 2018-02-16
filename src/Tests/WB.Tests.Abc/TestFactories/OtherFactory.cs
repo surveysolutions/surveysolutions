@@ -1,4 +1,6 @@
 ﻿using System;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
@@ -11,6 +13,13 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class OtherFactory
     {
+        public Fixture AutoFixture()
+        {
+            var autoFixture = new Fixture();
+            autoFixture.Customize(new AutoMoqCustomization());
+            return autoFixture;
+        }
+
         public CommittedEvent CommittedEvent(UncommittedEvent evnt, Guid eventSourceId)
             => new CommittedEvent(Guid.NewGuid(),
                         evnt.Origin,
