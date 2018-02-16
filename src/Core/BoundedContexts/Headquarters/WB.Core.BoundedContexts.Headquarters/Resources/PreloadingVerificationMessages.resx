@@ -235,4 +235,7 @@
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>File with questionnaire level data is missing.</value>
   </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Answer to multiple choice question cannot contain more than {0} answers.</value>
+  </data>
 </root>
