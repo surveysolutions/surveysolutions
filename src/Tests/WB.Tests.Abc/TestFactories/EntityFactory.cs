@@ -682,7 +682,8 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null)
+            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null,
+            IEnumerable<Answer> options = null)
             => new NumericQuestion("Question N")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -693,7 +694,8 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionType = QuestionType.Numeric,
                 StataExportCaption = variableName,
                 Featured = prefilled,
-                QuestionText = title
+                QuestionText = title,
+                Answers = new List<Answer>(options ?? new Answer[] { })
             };
 
         public NumericQuestion NumericRealQuestion(Guid? id = null,
