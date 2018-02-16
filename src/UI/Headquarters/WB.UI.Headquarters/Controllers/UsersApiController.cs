@@ -328,8 +328,9 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                return this.Ok(this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
-                    .Take(8).Select(ToImportError).ToArray());
+                var importUserErrors = this.userImportService.VerifyAndSaveIfNoErrors(request.File.FileBytes, request.File.FileName)
+                    .Take(8).Select(ToImportError).ToArray();
+                return this.Ok(importUserErrors);
             }
             catch (UserPreloadingException e)
             {
