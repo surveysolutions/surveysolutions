@@ -1,4 +1,6 @@
 ﻿using System;
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc.TestFactories;
 
@@ -25,5 +27,12 @@ namespace WB.Tests.Abc
         public static Identity Identity(Guid? id = null, params int[] rosterVector) => Entity.Identity(id, rosterVector);
 
         public static RosterVector RosterVector(params int[] coordinates) =>  Entity.RosterVector(coordinates);
+
+        public static Fixture AutoFixture()
+        {
+            var autoFixture = new Fixture();
+            autoFixture.Customize(new AutoMoqCustomization());
+            return autoFixture;
+        }
     }
 }
