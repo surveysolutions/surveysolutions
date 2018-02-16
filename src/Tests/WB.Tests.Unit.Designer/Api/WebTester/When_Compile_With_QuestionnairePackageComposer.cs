@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         [SetUp]
         public void Arrange()
         {
-            fixture = new Fixture().Customize(new AutoMoqCustomization());
+            fixture = Abc.Create.Other.AutoFixture();
             document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
             questionnaireView = Create.QuestionnaireView(document);
 

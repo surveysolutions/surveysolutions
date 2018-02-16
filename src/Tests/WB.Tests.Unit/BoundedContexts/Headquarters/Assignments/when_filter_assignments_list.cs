@@ -80,6 +80,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(2));
         }
 
-        IFixture NewFixture() => Create.AutoFixture();
+        IFixture NewFixture() => Create.Other.AutoFixture();
     }
 }

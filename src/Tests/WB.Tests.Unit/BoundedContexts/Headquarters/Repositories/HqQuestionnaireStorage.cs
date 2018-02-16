@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
                     })
                 }));
 
-            var fixture = Create.AutoFixture();
+            var fixture = Create.Other.AutoFixture();
 
             var inmemory = new TestPlainStorage<QuestionnaireCompositeItem>();
             fixture.Register<IPlainStorageAccessor<QuestionnaireCompositeItem>>(() => inmemory);
