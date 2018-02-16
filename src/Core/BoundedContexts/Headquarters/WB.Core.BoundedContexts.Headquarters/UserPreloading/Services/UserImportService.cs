@@ -93,7 +93,18 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);
             var hasErrors = false;
 
-            foreach (var userToImport in this.csvReader.ReadAll<UserToImport>(new MemoryStream(data), csvDelimiter))
+            List<UserToImport> allUsersFromFile = new List<UserToImport>();
+            try
+            {
+                allUsersFromFile = this.csvReader.ReadAll<UserToImport>(new MemoryStream(data), csvDelimiter).ToList();
+            }
+            catch (CsvHelper.BadDataException dataException)
+            {
+                throw new UserPreloadingException(
+                    string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile, dataException.ReadingContext.Row));
+            }
+
+            foreach (var userToImport in allUsersFromFile)
             {
                 usersToImport.Add(userToImport);
 

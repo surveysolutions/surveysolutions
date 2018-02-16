@@ -1,11 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -406,6 +408,22 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             Assert.AreEqual(2, errors[0].RowNumber);
             Assert.AreEqual("FullName", errors[0].ColumnName);
             Assert.AreEqual(fullName, errors[0].CellValue);
+        }
+
+        [Test]
+        public void when_uploaded_file_contains_quot()
+        {
+            string data = @"login	password	email	fullname	phonenumber	role	supervisor
+            LmdYkeTihXA	P@$$w0rd	mytest@email.com	bPVEbCTaOiR""jZNdZgAAHUMcGOVNBFI	112233	supervisor";
+
+            var service = Create.Service.UserImportService(csvReader: new CsvReader());
+
+            // Act
+            TestDelegate act = () => service.VerifyAndSaveIfNoErrors(Encoding.UTF8.GetBytes(data), "file.txt").ToList();
+
+            // Assert
+            var excpectedError = string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile, 2);
+            Assert.That(act, Throws.Exception.TypeOf<UserPreloadingException>().With.Message.EqualTo(excpectedError)); 
         }
 
         private UserImportService CreateUserImportService(HqUser[] dbUsers = null, params UserToImport[] usersToImport)
