@@ -9,6 +9,31 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
+    public struct InterviewEntityDto
+    {
+        public Guid InterviewId { get; set; }
+        public Guid EntityId { get; set; }
+        public int[] RosterVector { get; set; }
+        public bool HasFlag { get; set; }
+        public bool IsEnabled { get; set; }
+        public int[] InvalidValidations { get; set; }
+        public bool IsReadonly { get; set; }
+        public int? AsInt { get; set; }
+        public double? AsDouble { get; set; }
+        public long? AsLong { get; set; }
+        public string AsString { get; set; }
+        public DateTime? AsDateTime { get; set; }
+        public bool? AsBool { get; set; }
+        public int[] AsIntArray { get; set; }
+        public string AsList { get; set; }
+        public string AsYesNo { get; set; }
+        public string AsIntMatrix { get; set; }
+        public string AsGps { get; set; }
+        public string AsAudio { get; set; }
+        public string AsArea { get; set; }
+    }
+
+
     public class InterviewEntity : IView
     {
         public virtual Guid InterviewId { get; set; }
