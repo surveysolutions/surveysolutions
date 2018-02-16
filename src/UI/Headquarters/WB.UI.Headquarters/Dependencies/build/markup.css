@@ -9378,9 +9378,6 @@ dl dd:after {
 .always-visible-scroll {
   overflow-y: scroll; }
 
-.google-maps {
-  position: inherit; }
-
 .left-column #log-in {
   text-align: left; }
 
