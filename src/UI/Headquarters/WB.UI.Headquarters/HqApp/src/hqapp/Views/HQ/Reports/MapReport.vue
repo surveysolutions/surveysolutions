@@ -27,7 +27,7 @@
                 <div class="row-fluid">
                     <strong>{{$t("Common.Status")}} :</strong>&nbsp;{{selectedTooltip.LastStatus}}</div>
                 <div class="row-fluid">
-                    <strong>{{$t("Reports.CompletionDate")}} :</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
+                    <strong>{{$t("Reports.LastUpdatedDate")}} :</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
                 <div class="row-fluid" style="white-space:nowrap;">
                     <strong>{{$t("MapReport.ViewInterviewContent")}} :</strong>&nbsp;
                     <a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.details")}}</a>
