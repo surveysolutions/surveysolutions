@@ -145,16 +145,21 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public static CategoricalOption GetOptionForQuestionByOptionValue(IQuestion question, decimal optionValue)
         {
-            if (!question.Answers.Any())
-                return null;
+            if (question.QuestionType == QuestionType.Numeric)
+            {
+                if (!question.Answers.Any())
+                    return null;
+
+                return question.Answers.SingleOrDefault(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
+            }
 
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
             {
-                return question.Answers.SingleOrDefault(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
+                return question.Answers.Single(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
             }
             else
             {
-                return question.Answers.SingleOrDefault(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
+                return question.Answers.Single(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
                     .ToCategoricalOption();
             }
 
