@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.Error = errorMessagesViewModel;
+            this.Warning = errorMessagesViewModel;
         }
 
         private string interviewId;
@@ -51,14 +51,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateValidState();
         }
         
-        private bool isInvalid;
-        public bool IsInvalid
+        private bool isImplausible;
+        public bool IsImplausible
         {
-            get => this.isInvalid;
-            private set => this.RaiseAndSetIfChanged(ref this.isInvalid, value);
+            get => this.isImplausible;
+            private set => this.RaiseAndSetIfChanged(ref this.isImplausible, value);
         }
 
-        public ErrorMessagesViewModel Error { get; }
+        public ErrorMessagesViewModel Warning { get; }
 
         private void UpdateValidState()
         {
@@ -72,11 +72,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     var validationMessages = interview.GetFailedWarningMessages(this.Identity, UIResources.Warning);
 
-                    this.Error.Caption = UIResources.Warnings;
-                    this.Error.ChangeValidationErrors(validationMessages);
+                    this.Warning.Caption = UIResources.Warnings;
+                    this.Warning.ChangeValidationErrors(validationMessages);
                 }
 
-                this.IsInvalid = isInvalidEntity;
+                this.IsImplausible = isInvalidEntity;
             });
         }
 
@@ -131,7 +131,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public void Dispose()
         {
             this.liteEventRegistry.Unsubscribe(this);
-            this.Error.Dispose();
+            this.Warning.Dispose();
         }
     }
 }

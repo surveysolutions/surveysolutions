@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     style="@style/Interview_Question_Errors"
-    local:MvxBind="Visible IsInvalid">
+    local:MvxBind="Visible IsImplausible">
   <TextView
     style="@style/Interview_Question_Warning_Title"
-    local:MvxBind="Text Error.Caption;
-                     Visible IsInvalid;
+    local:MvxBind="Text Warning.Caption;
                      Tag Format('WarningTitle_{0}', Identity)" />
   <MvxLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        local:MvxBind="ItemsSource Error.ValidationErrors;Visible IsInvalid"
+        local:MvxBind="ItemsSource Warning.ValidationErrors;"
         local:MvxItemTemplate="@layout/interview_question__warning"/>
 </LinearLayout>
