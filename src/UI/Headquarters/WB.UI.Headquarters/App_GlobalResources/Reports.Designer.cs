@@ -151,6 +151,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updated on.
+        /// </summary>
+        internal static string LastUpdatedDate {
+            get {
+                return ResourceManager.GetString("LastUpdatedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         internal static string Questionnaire {

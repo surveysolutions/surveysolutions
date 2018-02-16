@@ -261,4 +261,8 @@
     <value>Шаблон импорта пользователей</value>
     <comment>Шаблон импорта пользователей</comment>
   </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Обновлено</value>
+    <comment>Обновлено</comment>
+  </data>
 </root>

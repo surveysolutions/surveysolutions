@@ -17,13 +17,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Guid[] multimediaQuestionIds);
 
         InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(QuestionnaireIdentity questionnaireIdentity, Guid? responsibleId = null);
+        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
 
         InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
-            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude, Guid? responsibleId = null);
+            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude);
 
-        string[] GetQuestionnairesWithAnsweredGpsQuestionsByResponsible(Guid? responsibleId = null);
+        string[] GetQuestionnairesWithAnsweredGpsQuestions();
+
+        string[] GetQuestionnairesWithAnsweredGpsQuestionsBySupervisor(Guid supervisorId);
+
+        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaireAndSupervisor(QuestionnaireIdentity questionnaireIdentity, Guid supervisorId);
+
+        InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaireAndSupervisor(QuestionnaireIdentity questionnaireIdentity,
+            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
+            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude, Guid supervisorId);
 
         List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireIdentity questionnaireId, List<InterviewEntity> interviewEntities);

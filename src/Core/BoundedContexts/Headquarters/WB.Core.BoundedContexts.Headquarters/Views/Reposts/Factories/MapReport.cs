@@ -32,7 +32,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public List<string> GetGpsQuestionsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
-            var answeredGpsQuestionIds = this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaireAndResponsible(questionnaireIdentity, this.GetResponsibleId());
+            var answeredGpsQuestionIds = this.authorizedUser.IsSupervisor
+                ? this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaireAndSupervisor(questionnaireIdentity, this.authorizedUser.Id)
+                : this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaire(questionnaireIdentity);
 
             if (!answeredGpsQuestionIds.Any()) return new List<string>();
 
@@ -50,9 +52,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             if(!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
 
-            var gpsAnswers = this.interviewFactory.GetGpsAnswersByQuestionIdAndQuestionnaire(input.QuestionnaireIdentity,
-                gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude, input.SouthWestCornerLatitude,
-                input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude, this.GetResponsibleId());
+            var gpsAnswers = this.authorizedUser.IsSupervisor
+                ? this.interviewFactory.GetGpsAnswersByQuestionIdAndQuestionnaireAndSupervisor(
+                    input.QuestionnaireIdentity,
+                    gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude,
+                    input.SouthWestCornerLatitude,
+                    input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude, this.authorizedUser.Id)
+                : this.interviewFactory.GetGpsAnswersByQuestionIdAndQuestionnaire(input.QuestionnaireIdentity,
+                    gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude,
+                    input.SouthWestCornerLatitude,
+                    input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude);
 
             return new MapReportView
             {
@@ -66,13 +75,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints()
         {
-            var questionnaireIdentities = this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestionsByResponsible(this.GetResponsibleId());
+            var questionnaireIdentities = this.authorizedUser.IsSupervisor
+                ? this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestionsBySupervisor(this.authorizedUser.Id)
+                : this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestions();
 
            return this.questionnairesAccessor.Query(_ => _.Where(x => questionnaireIdentities.Contains(x.Id)).ToList());
         }
-
-        private Guid? GetResponsibleId() => this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator
-            ? null
-            : (Guid?)this.authorizedUser.Id;
     }
 }
