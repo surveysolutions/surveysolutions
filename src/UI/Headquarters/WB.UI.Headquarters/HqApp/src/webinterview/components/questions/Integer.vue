@@ -8,14 +8,30 @@
                         :placeholder="noAnswerWatermark" 
                         :title="noAnswerWatermark" 
                         :value="$me.answer" v-blurOnEnterKey 
-                        :disabled="!$me.acceptAnswer" @blur="answerIntegerQuestion" 
+                        :disabled="isSpecialValueSelected || !$me.acceptAnswer"
+                        @blur="answerIntegerQuestion" 
                         v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
-                        <wb-remove-answer :on-remove="removeAnswer"/>
-                        </button>
+                        <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
+                    </div>
+                </div>
+                <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                    <div class="field">
+                        <input class="wb-radio" 
+                            type="radio" 
+                            :id="$me.id + '_' + option.value" 
+                            :name="$me.id" 
+                            :value="option.value" 
+                            :disabled="!$me.acceptAnswer"
+                            v-model="specialValue">
+                        <label :for="$me.id + '_' + option.value">
+                            <span class="tick"></span> {{option.title}}
+                        </label>
+                        <wb-remove-answer :on-remove="removeAnswer" />
                     </div>
                 </div>
                 <wb-lock />
             </div>
+            
         </div>
     </wb-question>
 </template>
@@ -28,7 +44,17 @@
     export default {
         name: 'Integer',
         mixins: [entityDetails],
+        data() {
+            return {
+                //isSpecialValueSelected: undefined
+            }
+        },
         computed: { 
+            isSpecialValueSelected(){
+                if (this.$me.answer == null || this.$me.answer == undefined)
+                    return undefined;
+                return this.isSpecialValue(this.$me.answer);
+            },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.NumberEnter')
             },
@@ -40,16 +66,30 @@
                 }
 
                 return ''
-            }
+            },
+            specialValue: {
+                get() {
+                    return this.$me.answer
+                },
+                set(value) {
+                    this.saveAnswer(value, true);
+                }
+            },
         },
         methods: {
+            
             answerIntegerQuestion(evnt) {
-                this.sendAnswer(() => {
-                    const answerString = numerics.get($(evnt.target))
-                    const answer = answerString != undefined && answerString != ''
-                        ? parseInt(answerString)
-                        : null
+                const answerString = numerics.get($(evnt.target))
+                const answer = answerString != undefined && answerString != ''
+                    ? parseInt(answerString)
+                    : null;
 
+                const isSpecialValue = this.isSpecialValue(answer);
+                this.saveAnswer(answer, isSpecialValue);
+            },
+
+            saveAnswer(answer, isSpecialValue){
+                this.sendAnswer(() => {
                     if(this.handleEmptyAnswer(answer)) {
                         return
                     }
@@ -61,10 +101,11 @@
 
                     if (!this.$me.isRosterSize) {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                        this.updateInputs(isSpecialValue);
                         return
                     }
 
-                    if (answer < 0) {
+                    if (!isSpecialValue && answer < 0) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterError", { answer }))
                         return;
                     }
@@ -79,6 +120,7 @@
 
                     if (!isNeedRemoveRosters) {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                        this.updateInputs(isSpecialValue);
                         return
                     }
 
@@ -89,6 +131,7 @@
                     modal.confirm(confirmMessage, result => {
                         if (result) {
                             this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
+                            this.updateInputs(isSpecialValue);
                             return
                         } else {
                             this.fetch()
@@ -104,6 +147,7 @@
                 }
                 if (!this.$me.isRosterSize) {
                     this.$store.dispatch("removeAnswer", this.id)
+                    this.updateInputs(undefined);
                     return
                 }
 
@@ -113,10 +157,25 @@
                 modal.confirm(confirmMessage, result => {
                     if (result) {
                         this.$store.dispatch('removeAnswer', this.id)
+                        this.updateInputs(undefined);
                     } else {
                         this.fetch()
                     }
                 });
+            },
+            updateInputs(isSpecialValueSelected){
+               //this.isSpecialValueSelected = isSpecialValueSelected;
+            },
+            isSpecialValue(value){
+                const options = this.$me.options || [];
+                if (options.length == 0)
+                    return false;
+                for(let i=0;i<options.length;i++)
+                {
+                    if (options[i].value === value)
+                        return true;
+                }
+                return false;
             }
         }
     }

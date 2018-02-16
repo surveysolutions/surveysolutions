@@ -387,7 +387,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
         {
             bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption && question.QuestionType != QuestionType.Numeric;
 
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(
