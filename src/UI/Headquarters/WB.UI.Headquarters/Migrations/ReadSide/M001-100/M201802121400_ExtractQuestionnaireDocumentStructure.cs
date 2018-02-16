@@ -33,13 +33,14 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 CREATE INDEX questionnaire_entities_questionnaireid_idx ON {schema}.questionnaire_entities (questionnaireidentity);
                 CREATE INDEX questionnaire_entities_entityid_idx ON {schema}.questionnaire_entities (entityid);");
 
+            Execute.Sql(@"ALTER TABLE readside.questionnaire_entities ADD CONSTRAINT questionnaire_entities_un UNIQUE (questionnaireidentity,entityid)");
+
             Execute.WithConnection((db, dt) =>
             {
                 if(string.IsNullOrWhiteSpace(db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairedocuments')::text")))
                     return;
 
-                foreach (var documentRow in db.Query<(string id, string value)>(
-                    @"select id, value from plainstore.questionnairedocuments"))
+                foreach (var documentRow in db.Query<(string id, string value)>(@"select id, value from plainstore.questionnairedocuments"))
                 {
                     var doc = JObject.Parse(documentRow.value);
 
