@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
     public class HqQuestionnaireStorage : QuestionnaireStorage
     {
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
                 ITranslationStorage translationStorage,
                 IQuestionnaireTranslator translator,
