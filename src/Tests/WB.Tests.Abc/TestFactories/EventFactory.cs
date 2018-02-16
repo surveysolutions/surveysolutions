@@ -46,6 +46,9 @@ namespace WB.Tests.Abc.TestFactories
             });
         }
 
+        public AnswersDeclaredPlausible AnswersDeclaredPlausible(params Identity[] questions)
+            => new AnswersDeclaredPlausible(questions);
+
         public AnswersDeclaredValid AnswersDeclaredValid(params Identity[] questions)
             => new AnswersDeclaredValid(questions);
 
@@ -268,6 +271,9 @@ namespace WB.Tests.Abc.TestFactories
                 new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(staticText, conditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection())
             });
         }
+
+        public StaticTextsDeclaredPlausible StaticTextsDeclaredPlausible(params Identity[] staticTexts)
+            => new StaticTextsDeclaredPlausible(staticTexts);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(int[] failedConditionIndexes,
             params Identity[] staticTexts)
