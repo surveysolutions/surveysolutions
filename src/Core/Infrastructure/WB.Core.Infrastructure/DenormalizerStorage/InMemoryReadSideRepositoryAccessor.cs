@@ -86,8 +86,13 @@ namespace Main.DenormalizerStorage
         {
             foreach (var tuple in bulk)
             {
-                Store(tuple.Item1, tuple.Item2);                
+                Store(tuple.Item1, tuple.Item2);
             }
+        }
+
+        public void Flush()
+        {
+            
         }
 
         public void Clear()

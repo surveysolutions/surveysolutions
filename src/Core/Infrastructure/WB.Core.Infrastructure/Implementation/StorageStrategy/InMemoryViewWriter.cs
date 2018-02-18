@@ -42,6 +42,11 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
             }
         }
 
+        public void Flush()
+        {
+            
+        }
+
         public void Remove(string id)
         {
             this.view = null;
@@ -94,8 +99,10 @@ namespace WB.Core.Infrastructure.Implementation.StorageStrategy
                         if (this.view != null)
                             this.readSideRepositoryWriter.Remove(this.viewId);
                     }
-                }
 
+                    this.readSideRepositoryWriter.Flush();
+                }
+                
                 this.IsDisposed = true;
             }
         }
