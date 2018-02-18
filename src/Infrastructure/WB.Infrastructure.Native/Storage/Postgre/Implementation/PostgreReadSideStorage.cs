@@ -101,6 +101,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        public void Flush()
+        {
+            this.sessionProvider.GetSession().Flush();
+        }
+
         public virtual void Clear()
         {
             ISession session = this.sessionProvider.GetSession();

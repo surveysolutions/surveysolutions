@@ -47,5 +47,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public void Flush()
+        {
+            this.sessionProvider.GetSession().Flush();
+        }
     }
 }
