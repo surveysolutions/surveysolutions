@@ -233,7 +233,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var conn = sessionProvider.GetSession().Connection;
 
-            var id = summaryRepository.GetById(interviewId.FormatGuid()).Id;
+            var summary = this.summaryRepository.GetById(interviewId);
+
+            if(summary == null) throw new ArgumentException("Cannot find interview summary for interviewd: " + interviewId, nameof(interviewId));
+
+
+            //var id = summaryRepository.GetById(interviewId.FormatGuid()).Id;
 
             var idsList = string.Join(",", stateItems.Select(s => "'" + s.Identity.Id + "'").Distinct());
 
@@ -241,11 +246,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 ? new Dictionary<Guid, int>()
                 : conn.Query<(int id, Guid entityId)>($@"select q.id, q.entityId
                         from {Table.QuestionnaireEntities} q
-                        join {Table.InterviewSummaries} s on s.{Column.QuestionnaireIdentity} = q.{Column.QuestionnaireIdentity}
-                        where {Column.EntityId} in ({idsList}) and s.{Column.InterviewId} = '{interviewId}'")
+                        where q.{Column.QuestionnaireIdentity} = @QuestionnaireIdentity and {Column.EntityId} in ({idsList})"
+                    , new {summary.QuestionnaireIdentity})
                     .ToDictionary(q => q.entityId, q => q.id);
 
-            conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {id}");
+            conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {summary.Id}");
 
             var npgConnection = conn as NpgsqlConnection ?? throw new NotSupportedException("Cannot import over non Postgres connection");
 
@@ -259,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 foreach (var item in stateItems)
                 {
                     importer.StartRow();
-                    Write(id);
+                    Write(summary.Id);
                     Write(entityMap[item.Identity.Id]);
                     Write(item.Identity.RosterVector.Array);
                     Write(item.IsEnabled);

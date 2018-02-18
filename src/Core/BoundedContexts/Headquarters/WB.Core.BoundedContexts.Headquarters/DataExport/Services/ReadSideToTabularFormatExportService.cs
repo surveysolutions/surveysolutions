@@ -185,7 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 queryable = queryable.Where(x => x.UpdateDate < filteredToDate);
             }
 
-            return queryable.OrderBy(q => q.UpdateDate);
+            return queryable.OrderBy(q => q.Id);
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
