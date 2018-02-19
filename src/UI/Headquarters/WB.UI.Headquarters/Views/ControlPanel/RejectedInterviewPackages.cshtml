@@ -11,13 +11,14 @@
     @Scripts.Render("~/js/list", "~/js/brokeninterviewpackages")
     <script type="text/javascript">
         var $interviewPageUrl = '@Html.Raw(@Url.Action("Review", "Interview", new {area = ""}, Request.Url.Scheme))';
-        var controlPanelBrokenInperviewPackagesUrl = '@Html.Raw(@Url.Action("BrokenInterviewPackages", "ControlPanel", new { }, Request.Url.Scheme))';
-        var brokenInperviewPackagesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetBrokenInterviewPackages" })';
+        var controlPanelBrokenInperviewPackagesUrl = '@Html.Raw(@Url.Action("RejectedInterviewPackages", "ControlPanel", new { }, Request.Url.Scheme))';
+        var brokenInperviewPackagesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetRejectedInterviewPackages" })';
+        var exceptionTypesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetRejectedInterviewPackageExceptionTypes" })';
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Interviewers" })';
         var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Questionnaires" })';
         var reprocessSelectedUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "ReprocessSelectedBrokenPackages" })';
         $(function () {
-            var viewModel = new Supervisor.VM.ControlPanel.BrokenInterviewPackages(brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, null, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl);
+            var viewModel = new Supervisor.VM.ControlPanel.BrokenInterviewPackages(brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl);
             viewModel.load();
             ko.applyBindings(viewModel);
         });

@@ -1677,6 +1677,8 @@
     <Content Include="Views\Users\index.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="Views\Maps\UserMaps.cshtml" />
+    <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
+    <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
