@@ -117,10 +117,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             Stopwatch exportWatch = Stopwatch.StartNew();
 
             Task.WaitAll(new[] {
-                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
                 Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportCommentsProgress), cancellationToken),
                 Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken),
+            //}, cancellationToken);
+
+            //Task.WaitAll(new[] {
+                Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
             }, cancellationToken);
+
             exportWatch.Stop();
 
             this.logger.Info($"Export with all steps finished for questionnaire {questionnaireIdentity}. " +

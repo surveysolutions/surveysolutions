@@ -27,6 +27,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         question_type integer,
                         featured boolean,
                         question_scope integer,
+                        type text,
                         constraint PK_questionnaire_entities primary key(id));");
 
             Execute.Sql($@"
@@ -70,9 +71,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 ParentId = Guid.Parse(parentKey),
                                 QuestionType = (QuestionType?) item["QuestionType"]?.Value<long>(),
                                 QuestionnaireIdentity = documentRow.id,
-                                VariableName = item["VariableName"]?.Value<string>(),
+                                VariableName = item["StataExportCaption"]?.Value<string>(),
                                 Featured = item["Featured"]?.Value<bool>(),
-                                QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>()
+                                QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>() ?? 0,
+                                Type = item["$type"]?.Value<string>()
                             };
 
                             yield return entity;
@@ -85,9 +87,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     {
                         db.Execute(
                             $@"insert into {schema}.questionnaire_entities 
-                                (questionnaireidentity, entityid, parentid, question_type, variable_name, featured, question_scope)
+                                (questionnaireidentity, entityid, parentid, question_type, variable_name, featured, question_scope, type)
                             values(
-                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @VariableName, @Featured, @QuestionScope)",
+                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @VariableName, @Featured, @QuestionScope, @Type)",
                             entity);
                     }
                 }
@@ -125,6 +127,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             public string VariableName { get; set; }
             public bool? Featured { get; set; }
             public QuestionScope? QuestionScope { get; set; }
+            public string Type { get; set; }
         }
 
         public override void Down()
