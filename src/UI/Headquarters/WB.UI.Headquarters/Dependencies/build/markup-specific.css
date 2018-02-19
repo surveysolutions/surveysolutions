@@ -2050,7 +2050,8 @@ header > .red-line {
     left: 12px;
     -webkit-box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
             box-shadow: 20px 10px 40px 0px rgba(0, 0, 0, 0.2);
-    z-index: 5; }
+    z-index: 5;
+    overflow: auto; }
     .web-interview-for-supervisor.show-content .content .foldback-button {
       right: 10px;
       background-color: transparent; }
