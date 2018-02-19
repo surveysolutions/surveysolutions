@@ -124,7 +124,7 @@
     <value>أنجز</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+    <value>تنزيل ({{count}})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
     <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى المستجوب من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
@@ -139,7 +139,7 @@
     <value>تم البدء بالاستجواب الإلكتروني</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالاستجواب الإلكتروني لـ {0}</value>
+    <value>البدء بالاستجواب الإلكتروني لـ {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>إيقاف الاستجواب الإلكتروني</value>
@@ -154,6 +154,6 @@
     <value>تهيئة الاستجواب الإلكتروني</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالاستجواب الإلكتروني لـ {0}</value>
+    <value>تم البدء بالاستجواب الإلكتروني لـ {{name}}</value>
   </data>
 </root>

@@ -35,7 +35,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
@@ -110,29 +109,27 @@ namespace WB.UI.Headquarters
 
             Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
 
-            var kernel = new StandardKernel(
-                new NinjectSettings {InjectNonPublic = true},
-                new NLogLoggingModule().AsNinject(),
-                new ServiceLocationModule(),
-                new EventSourcedInfrastructureModule().AsNinject(),
-                new InfrastructureModule().AsNinject(),
-                new NcqrsModule().AsNinject(),
-                new WebConfigurationModule().AsNinject(),
-                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")).AsNinject(),
-                new QuestionnaireUpgraderModule().AsNinject(),
-                new FileInfrastructureModule().AsNinject(),
-                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly).AsNinject(),
-                new HeadquartersUIModule().AsWebNinject(),
-                new PostgresKeyValueModule(cacheSettings).AsNinject(),
+            var kernel = new NinjectKernel();
+            kernel.Load(
+                new NLogLoggingModule(),
+                new EventSourcedInfrastructureModule(),
+                new InfrastructureModule(),
+                new NcqrsModule(),
+                new WebConfigurationModule(),
+                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
+                new QuestionnaireUpgraderModule(),
+                new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
+                new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
                     PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
-                    mappingAssemblies).AsNinject()
+                    mappingAssemblies)
             );
-            
-            kernel.Bind<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner>().To<EventSourcedAggregateRootRepositoryWithWebCache>().InSingletonScope();
 
+            kernel.Load(new HeadquartersUIModule());
+            
             var eventStoreSettings = new PostgreConnectionSettings
             {
                 ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
@@ -140,7 +137,7 @@ namespace WB.UI.Headquarters
             };
 
             var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
-                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace)).AsNinject();
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
             var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
@@ -177,22 +174,21 @@ namespace WB.UI.Headquarters
                 settingsProvider.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
 
             //for assembly relocation during migration
-            kernel.Bind<LegacyAssemblySettings>().ToConstant(new LegacyAssemblySettings()
+            var legacyAssemblySettings = new LegacyAssemblySettings()
             {
                 FolderPath = basePath,
                 AssembliesDirectoryName = "QuestionnaireAssemblies"
-            });
+            };
 
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             var owinSecurityModule = new OwinSecurityModule();
-            var mainModule = new MainModule(settingsProvider, applicationSecuritySection);
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel);
+            var mainModule = new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings);
 
             kernel.Load(
-                new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 eventStoreModule,
-                new DataCollectionSharedKernelModule().AsNinject(),
+                new DataCollectionSharedKernelModule(),
                 new HeadquartersBoundedContextModule(basePath,
                     interviewDetailsDataLoaderSettings,
                     userPreloadingSettings,
@@ -201,23 +197,17 @@ namespace WB.UI.Headquarters
                     sampleImportSettings,
                     synchronizationSettings,
                     trackingSettings,
-                    interviewCountLimit).AsNinject(),
-                new QuartzModule().AsNinject(),
-                new WebInterviewModule().AsNinject(),
-                new HqWebInterviewModule().AsNinject(),
-                owinSecurityModule.AsNinject(),
-                mainModule.AsWebNinject());
+                    interviewCountLimit),
+                new QuartzModule(),
+                new WebInterviewModule(),
+                new HqWebInterviewModule(),
+                owinSecurityModule);
+            kernel.Load(mainModule);
 
-            ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-
-            kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
-            kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            CreateAndRegisterEventBus(kernel);
-
-            owinSecurityModule.Init(ServiceLocator.Current);
-            mainModule.Init(ServiceLocator.Current);
+            // init
+            kernel.Init();
             
-            return kernel;
+            return kernel.Kernel;
         }
 
         private static TrackingSettings GetTrackingSettings(SettingsProvider settingsProvider)
@@ -228,16 +218,6 @@ namespace WB.UI.Headquarters
                 return new TrackingSettings(timespan);
             }
             return new TrackingSettings(TimeSpan.FromMinutes(2));
-        }
-
-        private static void CreateAndRegisterEventBus(StandardKernel kernel)
-        {
-            kernel.Bind<IEventBus, ILiteEventBus, IEventDispatcher>()
-                .To<NcqrCompatibleEventDispatcher>()
-                .InSingletonScope()
-                .WithConstructorArgument(
-                    "eventBusSettings", 
-                    ctx => ctx.Kernel.Get<ISettingsProvider>().GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
     }
 }

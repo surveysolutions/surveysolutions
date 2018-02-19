@@ -124,6 +124,15 @@ namespace WB.UI.WebTester.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview data can&apos;t be applied to new version of questionnaire. Empty interview created.
+        /// </summary>
+        public static string ReloadInterviewErrorMessage {
+            get {
+                return ResourceManager.GetString("ReloadInterviewErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The World Bank Group.
         /// </summary>
         public static string TheWorldBankGroup {

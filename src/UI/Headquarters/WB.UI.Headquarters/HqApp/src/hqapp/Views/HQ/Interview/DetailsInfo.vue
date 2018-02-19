@@ -14,7 +14,7 @@
                             <span v-if="isInterviewerResponsible" class="data">
                                 <a :class="responsibleRole" :href="this.$config.model.responsibleProfileUrl">{{this.$config.model.responsible}}</a>
                             </span>
-                            <span v-if="!isInterviewerResponsible" class="data supervisor">{{this.$config.model.responsible}}</span>
+                            <span v-else class="data supervisor">{{this.$config.model.responsible}}</span>
                         </li>
                         <li>
                             <span class="data-label">{{this.$t('Users.Supervisor')}} : </span>
