@@ -9,7 +9,7 @@
 
 <h2>@Model.CustomMessages.GetText(WebInterviewUserMessages.WelcomeText)</h2>
 <p>
-    @(Html.Raw(string.Format(Model.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(), Model.QuestionnaireTitle)))
+    @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.Invitation).ToString(), Model.QuestionnaireTitle)
 </p>
 
 <div class="additional-info-block">

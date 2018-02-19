@@ -161,16 +161,16 @@
     <value>Text shown at final page when interview is completed</value>
   </data>
   <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
-    <value>Invitation text presented to user on initial page. {0} is substituted with questionnaire name</value>
+    <value>Invitation text presented to user on initial page. %QUESTIONNAIRE% is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
-    <value>Text shown to returning user when interview is resumed. {0} is substituted with questionnaire name</value>
+    <value>Text shown to returning user when interview is resumed. %QUESTIONNAIRE% is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
     <value>Header text shown to returning user before resume an interview</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Name of conducted survey. {0} - is substituted with questionnaire name</value>
+    <value>Name of conducted survey. %QUESTIONNAIRE% - is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
     <value>Header text shown after interview completion</value>
