@@ -11,9 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 {
     public interface IChangeStatusFactory
     {
-        ChangeStatusView Load(ChangeStatusInputModel input);
-
-        List<CommentedStatusHistroyView> GetFilteredStatuses(Guid interviewId);
+        List<CommentedStatusHistoryView> GetFilteredStatuses(Guid interviewId);
     }
 
     public class ChangeStatusFactory : IChangeStatusFactory
@@ -25,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
             this.interviews = interviews;
         }
 
-        public List<CommentedStatusHistroyView> GetFilteredStatuses(Guid interviewId)
+        public List<CommentedStatusHistoryView> GetFilteredStatuses(Guid interviewId)
         {
             var interviewStatusChangeHistory = this.interviews.GetById(interviewId);
 
@@ -37,28 +35,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus
 
             var filteredStatuses = statuses?
                 .Where(x => !IsAutomaticallyAssignedToSv(x) && !IsAutomaticallyAssignedToIn(x))
-                .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistroyView>();
+                .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistoryView>();
 
             return filteredStatuses;
         }
-            
-        public ChangeStatusView Load(ChangeStatusInputModel input)
-        {
-            var interviewStatusChangeHistory = this.interviews.GetById(input.InterviewId);
 
-            var commentedStatusHistroyViews = interviewStatusChangeHistory?.InterviewCommentedStatuses
-                .Where(i => i.Status.ConvertToInterviewStatus().HasValue)
-                .Select(CreateCommentedStatusHistroyView).ToList() ?? new List<CommentedStatusHistroyView>();
-            
-            return new ChangeStatusView
-            {
-                StatusHistory = commentedStatusHistroyViews
-            };
-        }
-
-        private CommentedStatusHistroyView CreateCommentedStatusHistroyView(InterviewCommentedStatus commentedStatus)
+        private CommentedStatusHistoryView CreateCommentedStatusHistroyView(InterviewCommentedStatus commentedStatus)
         {
-            return new CommentedStatusHistroyView
+            return new CommentedStatusHistoryView
             {
                 Comment = commentedStatus.Comment,
                 Date = commentedStatus.Timestamp,
