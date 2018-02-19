@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         public Guid InterviewId { get; set; }
         public Guid EntityId { get; set; }
-        public int[] RosterVector { get; set; }
+        public string RosterVector { get; set; }
         public bool HasFlag { get; set; }
         public bool IsEnabled { get; set; }
         public int[] InvalidValidations { get; set; }

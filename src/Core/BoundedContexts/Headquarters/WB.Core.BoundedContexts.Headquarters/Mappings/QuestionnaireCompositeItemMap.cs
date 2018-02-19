@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ParentId);
             Property(x => x.QuestionScope, p => p.Column("question_scope"));
             Property(x => x.QuestionType, p => p.Column("question_type"));
+            Property(x => x.Type);
             Property(x => x.QuestionnaireIdentity);
         }
     }

@@ -14,5 +14,6 @@ namespace WB.Enumerator.Native.Questionnaire
         public virtual string VariableName { get; set; }
         public virtual bool? Featured { get; set; }
         public virtual QuestionScope? QuestionScope { get; set; }
+        public virtual string Type { get; set; }
     }
 }
