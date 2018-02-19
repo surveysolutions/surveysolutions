@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages
         public int PageIndex { get; set; }
         public int PageSize { get; set; }
         public IEnumerable<OrderRequestItem> SortOrder { get; set; }
+        public bool ReturnOnlyUnknownExceptionType { get; set; }
     }
 }
