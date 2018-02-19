@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             CREATE TABLE readside.temp_interviews (
 	            interviewid int4 NOT NULL,
 	            entityid int4 NOT NULL,
-	            rostervector int4[] NOT NULL,
+	            rostervector text NULL,
 	            isenabled bool NOT NULL DEFAULT false,
 	            isreadonly bool NOT NULL DEFAULT false,
 	            invalidvalidations int4[] NULL,
@@ -36,31 +36,19 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(@"ANALYZE VERBOSE readside.interviewsummaries; ANALYZE VERBOSE readside.questionnaire_entities");
 
             Execute.Sql(@"
-                INSERT INTO readside.temp_interviews (interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, 
-                    asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag)
-                SELECT s.id as interviewid, q.id as entityid, rostervector, isenabled, isreadonly, invalidvalidations, 
+                INSERT INTO readside.temp_interviews (interviewid, entityid, rostervector, isenabled, isreadonly, 
+                    invalidvalidations, asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, 
+                    asgps, asbool, asyesno, asaudio, asarea, hasflag)
+                SELECT s.id as interviewid, 
+                    q.id as entityid, 
+                    array_to_string(i.rostervector,'-') as rostervector, 
+                    isenabled, isreadonly, 
+                    case when coalesce(array_length(invalidvalidations, 1), 0) = 0 then null else invalidvalidations end as invalidvalidations,
                     asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag
                 from readside.interviews i
                     inner join readside.interviewsummaries s on s.interviewid = i.interviewid 
                     inner join readside.questionnaire_entities q 
-                        on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity
-                where (i.isenabled = false 
-    	            and i.isreadonly = false
-    	            and coalesce(array_length(invalidvalidations, 1), 0) = 0
-    	            and hasflag = false
-    	            and asstring is null
-    	            and asint is null
-    	            and aslong is null
-    	            and asdatetime is null
-    	            and aslist is null
-    	            and asintarray is null
-    	            and asintmatrix is null
-    	            and asgps is null
-    	            and asbool is null
-    	            and asyesno is null
-    	            and asaudio is null
-    	            and asarea is null
-    	            ) = false;");
+                        on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity");
             
             //Delete.Table(@"interviews").InSchema(@"readside");
             Rename.Table(@"interviews").InSchema(@"readside").To(@"interviews_old");

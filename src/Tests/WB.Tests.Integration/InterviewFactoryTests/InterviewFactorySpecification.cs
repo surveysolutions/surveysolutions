@@ -35,6 +35,7 @@ namespace WB.Tests.Integration
         protected PostgresPlainStorageRepository<QuestionnaireCompositeItem> questionnaireItemsRepository;
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
+        private PostgresPlainStorageRepository<QuestionnaireCompositeItem> compositeItemsRepository;
 
 
         [OneTimeSetUp]
@@ -62,7 +63,7 @@ namespace WB.Tests.Integration
 
             this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>(), "summaryid");
             this.questionnaireItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.plainTransactionManager);
-
+            this.compositeItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.plainTransactionManager);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
@@ -101,7 +102,8 @@ namespace WB.Tests.Integration
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
                 questionnaireStorage: questionnaireStorage,
-                sessionProvider: this.plainTransactionManager);
+                sessionProvider: this.plainTransactionManager, 
+                questionnaireItems: compositeItemsRepository);
         }
     }
 }
