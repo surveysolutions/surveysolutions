@@ -9,6 +9,6 @@
 }
 @section footer{
     <script>
-        window.location = '@Url.Content("~/WebTester/Redirect/" + Model.Id)'
+        window.location = '@Url.Content("~/WebTester/Redirect/" + Model.Id + "?originalInterviewId=" + Model.OriginalInterviewId)'
     </script>
 }

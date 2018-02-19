@@ -1677,6 +1677,8 @@
     <Content Include="Views\Users\index.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="Views\Maps\UserMaps.cshtml" />
+    <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
+    <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1720,6 +1722,7 @@
       <DependentUpon>Maps.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\MainModule.cs" />
+    <Compile Include="App_Start\NinjectKernel.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
@@ -2073,6 +2076,7 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
+    <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>

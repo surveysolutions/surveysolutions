@@ -53,18 +53,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 VariableName = variableName,
                 QuestionType = QuestionType.Numeric,
                 ColumnHeaders = GetHeaderColumns(variableName,title),
-                Labels = (labels ?? new LabelItem[0]).ToDictionary((l)=>l.PublicKey,(l)=>l)
+                Labels = (labels ?? new LabelItem[0]).ToDictionary((l)=>Guid.NewGuid(),(l)=>l)
             };
         }
 
         protected static LabelItem CreateLabelItem(string caption="caption", string title="title")
         {
-            return new LabelItem() { PublicKey = Guid.NewGuid(), Caption = caption, Title = title };
+            return new LabelItem { Caption = caption, Title = title };
         }
 
         protected static List<HeaderColumn> GetHeaderColumns(string variableName, string title)
         {
-            return new List<HeaderColumn>() {new HeaderColumn() {Name = variableName, Title = title}};
+            return new List<HeaderColumn> {new HeaderColumn() {Name = variableName, Title = title}};
         }
     }
 }

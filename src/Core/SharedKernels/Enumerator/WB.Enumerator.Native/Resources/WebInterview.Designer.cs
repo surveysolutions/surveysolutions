@@ -421,7 +421,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have been invited to take part in the following survey: &quot;{0}&quot;.
+        ///   Looks up a localized string similar to You have been invited to take part in the following survey: &quot;%QUESTIONNAIRE%&quot;.
         /// </summary>
         public static string InvitationText {
             get {
@@ -511,7 +511,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can navigate to interview in the following survey: &quot;{0}&quot;.
+        ///   Looks up a localized string similar to You can navigate to interview in the following survey: &quot;%QUESTIONNAIRE%&quot;.
         /// </summary>
         public static string Resume_InvitationText {
             get {
@@ -565,7 +565,7 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Survey: &quot;{0}&quot;.
+        ///   Looks up a localized string similar to Survey: &quot;%QUESTIONNAIRE%&quot;.
         /// </summary>
         public static string SurveyFormatText {
             get {

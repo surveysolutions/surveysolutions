@@ -9,12 +9,10 @@ using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Api;
+using WB.UI.WebTester.Resources;
 using WB.UI.WebTester.Services;
 
 namespace WB.UI.WebTester.Controllers
@@ -22,58 +20,58 @@ namespace WB.UI.WebTester.Controllers
     public class WebTesterController : Controller
     {
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IEvictionObserver evictionService;
-        private readonly ICommandService commandService;
+        private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireImportService questionnaireImportService;
+        private readonly IInterviewFactory interviewFactory;
 
         public WebTesterController(
             IStatefulInterviewRepository statefulInterviewRepository,
-            IEvictionObserver evictionService,
+            IEvictionNotifier evictionService,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireStorage,
-            IQuestionnaireImportService questionnaireImportService)
+            IQuestionnaireImportService questionnaireImportService,
+            IInterviewFactory interviewFactory)
         {
             this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
             this.evictionService = evictionService;
-            this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireImportService = questionnaireImportService;
+            this.interviewFactory = interviewFactory;
         }
 
-        public ActionResult Run(Guid id) => this.View(new InterviewPageModel
+        public ActionResult Run(Guid id, string sid) => this.View(new InterviewPageModel
         {
-            Id = id.ToString()
+            Id = id.ToString(),
+            OriginalInterviewId = sid ?? string.Empty
         });
 
-        public async Task<ActionResult> Redirect(Guid id)
+        public async Task<ActionResult> Redirect(Guid id, string originalInterviewId)
         {
-            QuestionnaireIdentity questionnaireIdentity;
+            if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
+            {
+                evictionService.Evict(id);
+            }
 
             try
             {
-                if (this.statefulInterviewRepository.Get(id.FormatGuid()) != null)
+                if (!string.IsNullOrEmpty(originalInterviewId))
                 {
-                    evictionService.Evict(id);
+                    var result = await this.interviewFactory.CreateInterview(id, Guid.Parse(originalInterviewId));
+                    if (result != CreationResult.DataRestored)
+                    {
+                        TempData["Message"] = Common.ReloadInterviewErrorMessage;
+                    }
                 }
-
-                questionnaireIdentity = await this.questionnaireImportService.ImportQuestionnaire(id);
+                else
+                {
+                    await this.interviewFactory.CreateInterview(id);
+                }
             }
             catch (ApiException e) when (e.StatusCode == HttpStatusCode.PreconditionFailed)
             {
                 return this.RedirectToAction("QuestionnaireWithErrors", "Error");
             }
-
-            this.commandService.Execute(new CreateInterview(
-                interviewId: id,
-                userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                questionnaireId: questionnaireIdentity,
-                answers: new List<InterviewAnswer>(),
-                answersTime: DateTime.UtcNow,
-                supervisorId: Guid.NewGuid(),
-                interviewerId: Guid.NewGuid(),
-                interviewKey: new InterviewKey(new Random().Next(99999999)),
-                assignmentId: null));
 
             return this.Redirect($"~/WebTester/Interview/{id.FormatGuid()}/Cover");
         }
@@ -83,7 +81,7 @@ namespace WB.UI.WebTester.Controllers
             try
             {
                 var interviewPageModel = GetInterviewPageModel(id);
-                if (interviewPageModel == null) 
+                if (interviewPageModel == null)
                     throw new HttpException(404, string.Empty);
 
                 return View(interviewPageModel);
@@ -105,11 +103,14 @@ namespace WB.UI.WebTester.Controllers
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
+            var reloadQuestionnaireUrl =
+                $"{ConfigurationSource.Configuration["DesignerAddress"]}/WebTesterReload/Index/{interview.QuestionnaireIdentity.QuestionnaireId}?interviewId={id}";
             var interviewPageModel = new InterviewPageModel
             {
                 Id = id,
                 Title = $"{questionnaire.Title} | Web Tester",
-                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"]
+                GoogleMapsKey = ConfigurationSource.Configuration["GoogleMapApiKey"],
+                ReloadQuestionnaireUrl = reloadQuestionnaireUrl
             };
             return interviewPageModel;
         }
@@ -153,6 +154,8 @@ namespace WB.UI.WebTester.Controllers
         public string Title { get; set; }
         public string GoogleMapsKey { get; set; }
         public string Id { get; set; }
+        public string ReloadQuestionnaireUrl { get; set; }
+        public string OriginalInterviewId { get; set; }
     }
 
     public class ApiTestModel

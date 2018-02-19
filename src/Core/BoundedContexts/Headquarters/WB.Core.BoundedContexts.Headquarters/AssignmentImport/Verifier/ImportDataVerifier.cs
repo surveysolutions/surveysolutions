@@ -81,9 +81,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
 
             errors.AddRange(
-                this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
-                    PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
-                        preloadedDataService));
+                this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas, preloadedDataService)
+                );
+            errors.AddRange(this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption)(datas, preloadedDataService));
 
             if(this.ShouldVerificationBeContinued(errors))
                 errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
@@ -228,6 +228,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.Verifier(this.ColumnDuplications),
             this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
             this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
+            this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption),
                     
             this.ErrorsByResposibleName
         };
@@ -534,6 +535,45 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                         PreloadingVerificationMessages
                             .PL0033_LongitudeMustBeGeaterThenN180AndLessThen180,
                         this.CreateReference(longitudeColumnIndex, rowIndex, levelData));
+            }
+        }
+
+                
+        private IEnumerable<PanelImportVerificationError> ErrorsByMultipleChoiseQuestions(HeaderStructureForLevel level,
+            ExportedQuestionHeaderItem question,
+            PreloadedDataByFile levelData,
+            IPreloadedDataService preloadedDataService)
+        {
+            var maxAnswersCount = preloadedDataService.GetMaxAnswersCount(question.VariableName);
+            if (!maxAnswersCount.HasValue)
+            {
+                yield break;
+            }
+
+            for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
+            {
+                var exportedHeaderItem = level.HeaderItems[question.PublicKey];
+                List<decimal> answers = new List<decimal>();
+                foreach (var header in exportedHeaderItem.ColumnHeaders)
+                {
+                    var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, header.Name);
+
+                    var parsedValue = this.GetValue<decimal>(levelData.Content[rowIndex], levelData.Header,
+                        columnIndex, level, preloadedDataService);
+                    if (parsedValue.HasValue)
+                    {
+                        answers.Add(parsedValue.Value);
+
+                        if(answers.Count > maxAnswersCount)
+                        {
+                            yield return new PanelImportVerificationError("PL0041",
+                                string.Format(PreloadingVerificationMessages.PL0041_AnswerExceedsMaxAnswersCount, maxAnswersCount), 
+                                this.CreateReference(columnIndex, rowIndex, levelData));
+                            yield break;
+                        }
+                    }
+                }
+
             }
         }
 

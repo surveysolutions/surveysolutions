@@ -23,7 +23,6 @@ angular.module('designerApp')
                 combo: openCompilationPage,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 callback: function (event) {
-
                     window.open("../../questionnaire/expressiongeneration/" + $state.params.questionnaireId);
                     event.preventDefault();
                 }
@@ -34,13 +33,7 @@ angular.module('designerApp')
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 description: $i18next.t('HotkeysPrint'),
                 callback: function (event) {
-                    
-                    var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
-                    try{
-                        printWindow.focus();
-                    } catch(e) {
-                        notificationService.notice(e);//"Make sure popups are not blocked");
-                    }
+                    window.open("../../pdf/printpreview/" + $state.params.questionnaireId, "_blank");
                     event.preventDefault();
                 }
             });

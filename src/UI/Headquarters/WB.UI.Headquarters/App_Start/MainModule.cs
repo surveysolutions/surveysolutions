@@ -11,13 +11,18 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Enumerator.Native.JsonConversion;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Infrastructure.Native;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
@@ -40,17 +45,21 @@ namespace WB.UI.Headquarters
     {
         private readonly SettingsProvider settingsProvider;
         private readonly HqSecuritySection applicationSecuritySection;
+        private readonly LegacyAssemblySettings legacyAssemblySettings;
         
-        public MainModule(SettingsProvider settingsProvider, HqSecuritySection applicationSecuritySection)
+        public MainModule(SettingsProvider settingsProvider, HqSecuritySection applicationSecuritySection, LegacyAssemblySettings legacyAssemblySettings)
         {
             this.settingsProvider = settingsProvider;
             this.applicationSecuritySection = applicationSecuritySection;
+            this.legacyAssemblySettings = legacyAssemblySettings;
         }
 
         public void Load(IWebIocRegistry registry)
         {
             registry.Bind<ILiteEventRegistry, LiteEventRegistry>();
             registry.BindToConstant<ISettingsProvider>(() => settingsProvider);
+
+            registry.BindToConstant<LegacyAssemblySettings>(() => legacyAssemblySettings);
 
 
             registry.BindToConstant<ITokenVerifier>(() => new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
@@ -98,6 +107,12 @@ namespace WB.UI.Headquarters
             registry.Bind<IInterviewCreatorFromAssignment, InterviewCreatorFromAssignment>();
 
             registry.Bind<IMapService, MapService>();
+
+            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
+
+            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+                "eventBusSettings",
+                settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
 
 

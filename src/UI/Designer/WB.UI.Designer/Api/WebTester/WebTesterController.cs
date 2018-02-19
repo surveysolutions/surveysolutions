@@ -23,6 +23,7 @@ namespace WB.UI.Designer.Api.WebTester
         private readonly IAttachmentService attachmentService;
         private readonly IPlainStorageAccessor<TranslationInstance> translations;
         private readonly IWebTesterService webTesterService;
+      
 
         public WebTesterController(
             IQuestionnairePackageComposer questionnairePackageComposer,
