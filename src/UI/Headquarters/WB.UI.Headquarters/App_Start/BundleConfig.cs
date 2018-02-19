@@ -159,18 +159,6 @@ namespace WB.UI.Headquarters
                 "~/Scripts/spin.js",
                 "~/Scripts/knockout/ko.spin.js"
                 ));
-            bundles.Add(new ScriptBundle("~/js/details").Include(
-                "~/Scripts/bloodhound.js",
-                "~/Scripts/bootstrap3-typeahead.js",
-                "~/Scripts/components/typeahead-extended.js",
-                "~/Scripts/knockout/ko.typeahead.js",
-                "~/Scripts/components/bindings.js",
-                "~/Scripts/director.js",
-                "~/Scripts/viewmodels/pages/interview/details/config.js",
-                "~/Scripts/viewmodels/pages/interview/details/datacontext.js",
-                "~/Scripts/viewmodels/pages/interview/details/interviewdetailssettings.js",
-                "~/Scripts/viewmodels/pages/interview/details/details.js"
-                ));
             bundles.Add(new ScriptBundle("~/js/map-report").Include(
                 "~/Scripts/lodash.underscore.js",
                 "~/Scripts/markerclusterer_compiled.js",
