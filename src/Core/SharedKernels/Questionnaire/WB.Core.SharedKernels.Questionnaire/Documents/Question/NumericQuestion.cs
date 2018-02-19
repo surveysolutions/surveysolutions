@@ -11,7 +11,12 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public override void AddAnswer(Answer answer)
         {
-            throw new NotImplementedException();
+            if (answer == null)
+            {
+                return;
+            }
+
+            this.Answers.Add(answer);
         }
 
         public override T Find<T>(Guid publicKey)

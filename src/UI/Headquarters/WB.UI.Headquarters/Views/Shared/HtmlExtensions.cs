@@ -9,6 +9,7 @@ using WB.UI.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.UI.Headquarters.Code;
 
 namespace ASP
 {
@@ -39,6 +40,15 @@ namespace ASP
         public static string QuestionnaireNameVerstionFirst(this HtmlHelper html, string name, long version)
         {
             return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
+        }
+
+        public static IHtmlString SubstituteQuestionnaireName(this HtmlHelper html,
+            string template,
+            string questionnaireName)
+        {
+            if (string.IsNullOrWhiteSpace(template)) return MvcHtmlString.Empty;
+
+            return new MvcHtmlString(template.Replace("%QUESTIONNAIRE%", questionnaireName));
         }
 
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(
@@ -127,7 +137,7 @@ namespace ASP
 
             if (!string.IsNullOrWhiteSpace(titleString))
             {
-                script += $"window.CONFIG.title='{titleString}'";
+                script += $"window.CONFIG.title=\"{helper.ToSafeJavascriptMessage(titleString)}\"";
             }
 
             return new HtmlString($@"<script>{script};window.CONFIG.model={ model.AsJsonValue() }</script>");

@@ -489,7 +489,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new Answer
             {
-                PublicKey = id ?? Guid.NewGuid(),
                 AnswerText = text ?? "text",
                 ParentValue = parentValue,
                 AnswerCode = code
@@ -500,7 +499,6 @@ namespace WB.Tests.Unit.Designer
         {
             return new Answer
             {
-                PublicKey = id ?? Guid.NewGuid(),
                 AnswerText = text ?? "text",
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue
@@ -1144,7 +1142,7 @@ namespace WB.Tests.Unit.Designer
                 bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null)
             {
                 return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
-                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>());
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: null);
             }
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)

@@ -1,16 +1,14 @@
 using System;
-using System.Linq;
-using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -25,7 +23,8 @@ namespace WB.Tests.Integration.CommandServiceTests
             public void DoNothing(DoNothing command) {}
         }
 
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void Context()
         {
             CommandRegistry
                 .Setup<Aggregate>()
@@ -37,17 +36,18 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
             commandService = Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object);
-        };
 
-        Because of = () =>
+            // Act
             commandService.Execute(new DoNothing(), null);
+        }
 
-        It should_not_commit_events = () =>
+        [Test]
+        public void should_not_commit_events() =>
             eventBusMock.Verify(
                 bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()),
                 Times.Never());
-
-        It should_not_publish_events = () =>
+        [Test]
+        public void should_not_publish_events() =>
             eventBusMock.Verify(
                 bus => bus.PublishCommittedEvents(Moq.It.IsAny<CommittedEventStream>()),
                 Times.Never());

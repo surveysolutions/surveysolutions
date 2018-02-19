@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessUrl, reprocessSelectedUrl) {
+﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl) {
     Supervisor.VM.ControlPanel.BrokenInterviewPackages.superclass.constructor.apply(this, arguments);
 
     var dateFormat = "YYYY-MM-DD";
@@ -85,7 +85,7 @@
         
 
         if (Modernizr.history) {
-            window.history.pushState({}, "BrokenInterviewPackages", self.Url.toString());
+            window.history.pushState({}, null, self.Url.toString());
         }
 
         return {
@@ -127,28 +127,6 @@
             self.search();
 
         }, true, true);
-    };
-
-    self.reprocessAll = function () {
-        bootbox.dialog({
-            message: "Are you sure you want to reprocess ALL broken packages?",
-            title: "Confirmation",
-            buttons: {
-                cancel: {
-                    label: "No",
-                    className: "btn-primary"
-                },
-                ok: {
-                    label: "Yes",
-                    className: "btn-danger",
-                    callback: function () {
-                        self.SendRequest(reprocessUrl, {}, function () {
-                            self.search();
-                        }, true);
-                    }
-                }
-            }
-        });
     };
 
     self.reprocessSelected = function () {

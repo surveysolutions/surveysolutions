@@ -36,5 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
         bool IsRosterSizeQuestionForLongRoster(Guid questionId);
         IEnumerable<string> GetAllParentColumnNamesForLevel(ValueVector<Guid> levelScopeVector);
         bool IsVariableColumn(string columnName);
+
+        int? GetMaxAnswersCount(string variableName);
     }
 }

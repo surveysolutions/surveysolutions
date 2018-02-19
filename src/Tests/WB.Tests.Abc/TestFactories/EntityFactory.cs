@@ -637,7 +637,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? linkedToRosterId = null,
             bool areAnswersOrdered = false,
             string optionsFilter = null,
-            string linkedFilter = null)
+            string linkedFilter = null,
+            int? maxAllowedAnswers = null)
             => new MultyOptionsQuestion
             {
                 QuestionType = QuestionType.MultyOption,
@@ -651,6 +652,7 @@ namespace WB.Tests.Abc.TestFactories
                 ValidationExpression = validationExpression,
                 AreAnswersOrdered = areAnswersOrdered,
                 LinkedFilterExpression = linkedFilter,
+                MaxAllowedAnswers = maxAllowedAnswers,
                 Properties = { OptionsFilterExpression = optionsFilter }
             };
 
@@ -719,7 +721,6 @@ namespace WB.Tests.Abc.TestFactories
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
             => new Answer
             {
-                PublicKey = id ?? Guid.NewGuid(),
                 AnswerText = text ?? "text",
                 AnswerValue = value ?? "1",
                 ParentValue = parentValue

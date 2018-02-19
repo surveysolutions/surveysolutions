@@ -1261,7 +1261,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 command.Instructions,
                 command.Properties,
                 null,
-                null,
+                ConvertOptionsToAnswers(command.Options),
                 null,
                 null,
                 command.IsInteger,
@@ -2137,7 +2137,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             return new Answer
             {
-                PublicKey = option.Id,
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
                 ParentValue = option.ParentValue
@@ -2256,7 +2255,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             switch (questionType)
             {
                 case QuestionType.MultyOption:
-                    question = new MultyOptionsQuestion()
+                    question = new MultyOptionsQuestion
                     {
                         AreAnswersOrdered = areAnswersOrdered ?? false,
                         MaxAllowedAnswers = maxAllowedAnswers,
@@ -2265,39 +2264,39 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
                 case QuestionType.SingleOption:
-                case QuestionType.YesNo:
                     question = new SingleQuestion();
                     UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
 
                 case QuestionType.Text:
-                    question = new TextQuestion()
+                    question = new TextQuestion
                     {
                         Mask = mask
                     };
                     break;
                 case QuestionType.DateTime:
-                    question = new DateTimeQuestion()
+                    question = new DateTimeQuestion
                     {
                         IsTimestamp = isTimestamp
                     };
                     break;
                 case QuestionType.Numeric:
                 case QuestionType.AutoPropagate:
-                    question = new NumericQuestion()
+                    question = new NumericQuestion
                     {
                         IsInteger = questionType == QuestionType.AutoPropagate ? true : isInteger ?? false,
                         CountOfDecimalPlaces = countOfDecimalPlaces,
                         QuestionType = QuestionType.Numeric,
                         UseFormatting = questionProperties?.UseFormatting ?? false
                     };
+                    UpdateAnswerList(answers, question, linkedToQuestionId);
                     break;
                 case QuestionType.GpsCoordinates:
                     question = new GpsCoordinateQuestion();
                     break;
 
                 case QuestionType.TextList:
-                    question = new TextListQuestion()
+                    question = new TextListQuestion
                     {
                         MaxAnswerCount = maxAnswerCount
                     };

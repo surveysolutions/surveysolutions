@@ -77,8 +77,30 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationUsingForbiddenClasses, "WB0273", 
                 index => VerificationMessages.WB0273_ValidationConditionUsingForbiddenClasses, VerificationMessageLevel.Critical),
             Error<IVariable>(VariableUsingForbiddenClasses, "WB0274", VerificationMessages.WB0274_VariableUsingForbiddenClasses),
-            Error<IQuestion>(FilterExpressionUsingForbiddenClasses, "WB0275", VerificationMessages.WB0275_FilterExpressionIsUsingForbiddenClasses)
+            Error<IQuestion>(FilterExpressionUsingForbiddenClasses, "WB0275", VerificationMessages.WB0275_FilterExpressionIsUsingForbiddenClasses),
+            Error<IComposite>(ConditionsContainsRowname, "WB0276", VerificationMessages.WB0276_RownameIsNotSupported)
         };
+
+        private bool ConditionsContainsRowname(IComposite node, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            const string RowName = "@rowname";
+
+            if (node is IValidatable validatable && validatable.ValidationConditions.Any(vc => vc.Expression.Contains(RowName)))
+                return true;
+
+            if (node is IQuestion question
+                && (
+                    (question.LinkedFilterExpression?.Contains(RowName) ?? false)
+                    || (question.Properties.OptionsFilterExpression?.Contains(RowName) ?? false)
+                    || (question.ConditionExpression?.Contains(RowName) ?? false))
+                )
+                return true;
+
+            if (node is IVariable variable && variable.Expression.Contains(RowName))
+                return true;
+
+            return false;
+        }
 
         private bool FilterExpressionUsingForbiddenClasses(IQuestion node, MultiLanguageQuestionnaireDocument questionnaire)
         {

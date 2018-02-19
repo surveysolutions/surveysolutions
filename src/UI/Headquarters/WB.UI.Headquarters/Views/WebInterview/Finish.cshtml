@@ -1,27 +1,33 @@
-﻿@using WB.Enumerator.Native.Resources
-@model WB.Enumerator.Native.WebInterview.Models.FinishWebInterview
+﻿@using WB.Core.BoundedContexts.Headquarters.WebInterview
+@using WB.Enumerator.Native.Resources
+@using WB.UI.Headquarters.Models.WebInterview
+@model WB.UI.Headquarters.Models.WebInterview.FinishWebInterview
 @{
     Layout = "_WebInterviewLayout.cshtml";
     var dateFormat = "o";
 }
 <div class="centered-box-table">
-	<h2>@WebInterview.WebSurvey</h2>
-	<div class="additional-info-block">
-		<ul class="list-unstyled">
-			<li><strong>@WebInterview.FinishInterviewText</strong></li>
-			<li><strong>@string.Format(WebInterview.SurveyFormatText, Model.QuestionnaireTitle)</strong></li>
-		</ul>
-	</div>
-	<div class="additional-info-block">
-		<ul class="list-unstyled">
-		    @if (Model.StartedDate.HasValue)
-			{
-			<li>@WebInterview.InterviewStartDateFormatText <time datetime="@Model.StartedDate.Value.ToString(dateFormat)"></time></li>
-			}
-			@if (Model.CompletedDate.HasValue)
-			{
-			<li>@WebInterview.InterviewCompletionDateFormatText <time datetime="@Model.CompletedDate.Value.ToString(dateFormat)"></time></li>
-			}
-		</ul>
-	</div>
+    <h2>@Model.CustomMessages.GetText(WebInterviewUserMessages.WebSurveyHeader)</h2>
+    <div class="additional-info-block">
+        <ul class="list-unstyled">
+            <li>
+                @Model.CustomMessages.GetText(WebInterviewUserMessages.FinishInterview)
+            </li>
+            <li>
+                @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(), Model.QuestionnaireTitle)
+            </li>
+        </ul>
+    </div>
+    <div class="additional-info-block">
+        <ul class="list-unstyled">
+            @if (Model.StartedDate.HasValue)
+            {
+                <li>@WebInterview.InterviewStartDateFormatText <time datetime="@Model.StartedDate.Value.ToString(dateFormat)"></time></li>
+            }
+            @if (Model.CompletedDate.HasValue)
+            {
+                <li>@WebInterview.InterviewCompletionDateFormatText <time datetime="@Model.CompletedDate.Value.ToString(dateFormat)"></time></li>
+            }
+        </ul>
+    </div>
 </div>

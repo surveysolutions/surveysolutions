@@ -1057,4 +1057,7 @@
   <data name="Test" xml:space="preserve">
     <value>Test</value>
   </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Add special value</value>
+  </data>
 </root>
