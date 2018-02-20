@@ -22,6 +22,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                           create index interviews_gps_long_idx on readside.interviews using btree (((asgps ->> 'Longitude')::float8)) where asgps is not null;");
             
             Execute.Sql(@"Analyze readside.interviews");
+            Execute.Sql(@"cluster readside.interviews using interviews_interview_id_idx");
         }
 
         public override void Down()

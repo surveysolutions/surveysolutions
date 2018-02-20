@@ -101,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 };
             }
 
-            SaveInterviewStateItem(interviewId, perEntity.Values.Where(v=> !v.IsAllFieldsDefault()).ToList());
+            SaveInterviewStateItem(interviewId, perEntity.Values);
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -232,9 +232,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsArea = answer.AsArea;
             });
             
-            SaveInterviewStateItem(state.Id, perEntity.Values);
-        }
+            SaveInterviewStateItem(state.Id, perEntity.Values.Where(IsNeeded).ToList());
 
+            bool IsNeeded(InterviewEntity entity)
+            {
+                return entity.EntityType != EntityType.Section;
+            }
+        }
+        
         private Dictionary<Guid, int> GetQuestionnaireEntities(string questionnaireIdentity)
         {
             var cache = MemoryCache.Default;
@@ -321,7 +326,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
 
-            connection.Execute("set enable_seqscan=false"); // magic!
+            // for some reason Postgres decide that it's good to sequence scan whole interviews table
+            // following line will ensure that Postgres will not do that
+            connection.Execute("set enable_seqscan=false");
 
             var queryResult = connection.Query<InterviewEntityDto>(
                 "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, asstring, asint," +
@@ -420,17 +427,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 switch (entity.EntityType)
                 {
-                    case EntityType.Section when entity.IsEnabled == false:
-                        interviewLevel.DisabledGroups.Add(entity.Identity.Id);
-                        break;
+                    //case EntityType.Section when entity.IsEnabled == false:
+                    //    interviewLevel.DisabledGroups.Add(entity.Identity.Id);
+                    //    break;
                     case EntityType.Question:
                         var question = ToQuestion(entity);
                         interviewLevel.QuestionsSearchCache.Add(question.Id, question);
                         break;
-                    case EntityType.StaticText:
-                        var staticText = ToStaticText(entity);
-                        interviewLevel.StaticTexts.Add(staticText.Id, staticText);
-                        break;
+                    //case EntityType.StaticText:
+                    //    var staticText = ToStaticText(entity);
+                    //    interviewLevel.StaticTexts.Add(staticText.Id, staticText);
+                    //    break;
                     case EntityType.Variable:
                         interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
                         if(entity.IsEnabled == false)

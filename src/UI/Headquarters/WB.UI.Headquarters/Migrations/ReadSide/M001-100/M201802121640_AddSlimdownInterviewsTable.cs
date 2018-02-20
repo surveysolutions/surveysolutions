@@ -33,6 +33,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(@"ALTER TABLE readside.interviews DROP CONSTRAINT IF EXISTS interviews_pk;");
             Execute.Sql(@"DROP INDEX if exists readside.interviews_asgps_not_null_indx;");
 
+            //Execute.Sql(@"CREATE INDEX questionnaire_entities_type_idx ON readside.questionnaire_entities (""type"")");
             Execute.Sql(@"ANALYZE VERBOSE readside.interviewsummaries; ANALYZE VERBOSE readside.questionnaire_entities");
 
             Execute.Sql(@"
@@ -48,12 +49,12 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 from readside.interviews i
                     inner join readside.interviewsummaries s on s.interviewid = i.interviewid 
                     inner join readside.questionnaire_entities q 
-                        on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity");
+                        on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity
+                where not (q.""type"" = 'Group' or (q.""type"" = 'StaticText' and isenabled = false))");
             
             //Delete.Table(@"interviews").InSchema(@"readside");
             Rename.Table(@"interviews").InSchema(@"readside").To(@"interviews_old");
             Rename.Table(@"temp_interviews").InSchema(@"readside").To(@"interviews");
-
         }
 
         public override void Down()
