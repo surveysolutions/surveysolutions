@@ -6,6 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages
     {
         public int Id { get; set; }
         public Guid InterviewId { get; set; }
+        public string InterviewKey { get; set; }
         public DateTime IncomingDate { get; set; }
         public DateTime ProcessingDate { get; set; }
         public string ExceptionType { get; set; }
