@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invitation text presented to user on initial page. {0} is substituted with questionnaire name.
+        ///   Looks up a localized string similar to Invitation text presented to user on initial page. %QUESTIONNAIRE% is substituted with questionnaire name.
         /// </summary>
         public static string WebInterviewUserMessages_Invitation_Descr {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text shown to returning user when interview is resumed. {0} is substituted with questionnaire name.
+        ///   Looks up a localized string similar to Text shown to returning user when interview is resumed. %QUESTIONNAIRE% is substituted with questionnaire name.
         /// </summary>
         public static string WebInterviewUserMessages_ResumeInvitation_Descr {
             get {
@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of conducted survey. {0} - is substituted with questionnaire name.
+        ///   Looks up a localized string similar to Name of conducted survey. %QUESTIONNAIRE% - is substituted with questionnaire name.
         /// </summary>
         public static string WebInterviewUserMessages_SurveyName_Descr {
             get {

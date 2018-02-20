@@ -196,7 +196,7 @@
     <value>ინტერვიუს პროცესი მოითხოვს ინტერნეტ კავშირს. დამატებითი პროგრამული უზრუნველყოფა არ არის საჭირო.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>თქვენ მიწვეული ხართ მონაწილეობა მისაღებად შემდეგ კვლევაში: "{0}"</value>
+    <value>თქვენ მიწვეული ხართ მონაწილეობა მისაღებად შემდეგ კვლევაში: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>არ დაწყებულა</value>
@@ -223,7 +223,7 @@
     <value>ინტერვიუს პროცესი მოითხოვს ინტერნეტს, დამატებითი პროგრამული უზრუნველყოფა არ არის საჭირო</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>თქვენ შეგიძლიათ ინტერვიუს ნავიგაცია შემდეგ კვლევაში: "{0}"</value>
+    <value>თქვენ შეგიძლიათ ინტერვიუს ნავიგაცია შემდეგ კვლევაში: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>გამარჯობა და კეთილი იყოს თქვენი მობრძანება Survey Solutions ვებ კვლევაში</value>
@@ -241,7 +241,7 @@
     <value>ვებ კვლევა</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>კვლევა: "{0}"</value>
+    <value>კვლევა: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>ინტერვიუსთვის</value>

@@ -15,7 +15,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     internal class UserInteractionService : IUserInteractionService
     {
-
         private static readonly HashSet<Guid> userInteractions = new HashSet<Guid>();
         private static readonly object UserInteractionsLock = new object();
         private static TaskCompletionSource<object> userInteractionsAwaiter;
