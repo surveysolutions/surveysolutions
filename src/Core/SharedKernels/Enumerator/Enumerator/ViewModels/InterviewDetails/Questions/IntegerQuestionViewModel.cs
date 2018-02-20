@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -10,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -90,12 +87,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (isRosterSizeQuestion)
                 {
                     var amountOfRostersToRemove = this.previousAnswer;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                        amountOfRostersToRemove);
-                    if (!(await this.userInteractionService.ConfirmAsync(message)))
+                    if (this.previousAnswer > 0)
                     {
-                        this.Answer = this.previousAnswer;
-                        return;
+                        var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                            amountOfRostersToRemove);
+                        if (!(await this.userInteractionService.ConfirmAsync(message)))
+                        {
+                            this.Answer = this.previousAnswer;
+                            return;
+                        }
                     }
                 }
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
@@ -187,9 +187,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.Answer < 0)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, this.Answer);
-                    this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
-                    return;
+                    var interview = this.interviewRepository.Get(interviewId);
+
+                    if (interview.GetOptionForQuestionWithoutFilter(Identity, (int)this.Answer.Value, null) == null)
+                    {
+                        var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer,
+                            this.Answer);
+                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                        return;
+                    }
                 }
 
                 if (this.Answer > this.answerMaxValue)
@@ -199,14 +205,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
                 }
 
-                if (this.previousAnswer.HasValue && this.Answer < this.previousAnswer)
+                if (this.previousAnswer.HasValue && this.previousAnswer > 0)
                 {
-                    var amountOfRostersToRemove = this.previousAnswer - this.Answer;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                    if (!(await this.userInteractionService.ConfirmAsync(message)))
+                    var amountOfRostersToRemove = this.previousAnswer - Math.Max(this.Answer.Value, 0);
+                    if (amountOfRostersToRemove > 0)
                     {
-                        this.Answer = this.previousAnswer;
-                        return;
+                        var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                            amountOfRostersToRemove);
+                        if (!(await this.userInteractionService.ConfirmAsync(message)))
+                        {
+                            this.Answer = this.previousAnswer;
+                            return;
+                        }
                     }
                 }
             }
