@@ -237,4 +237,10 @@
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
     <value>in the {0} team</value>
   </data>
+  <data name="AverageInterviewingTime" xml:space="preserve">
+    <value>Average interviewing time</value>
+  </data>
+  <data name="AverageInterviewingTimeDescription" xml:space="preserve">
+    <value />
+  </data>
 </root>

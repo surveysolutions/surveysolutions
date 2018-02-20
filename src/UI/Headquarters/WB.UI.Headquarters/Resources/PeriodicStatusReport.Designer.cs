@@ -124,6 +124,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average interviewing time.
+        /// </summary>
+        public static string AverageInterviewingTime {
+            get {
+                return ResourceManager.GetString("AverageInterviewingTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string AverageInterviewingTimeDescription {
+            get {
+                return ResourceManager.GetString("AverageInterviewingTimeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average overall case processing time.
         /// </summary>
         public static string AverageOverallCaseProcessingTime {
