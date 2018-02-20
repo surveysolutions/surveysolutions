@@ -132,4 +132,7 @@
     <comment>Пожалуйста, подождите пока завершится предыдущая операция загрузки пользователей
 </comment>
   </data>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>Предоставленный файл содержит ошибку в строке {0} и не может быть распознан</value>
+  </data>
 </root>

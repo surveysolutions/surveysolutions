@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using CsvHelper;
 using CsvHelper.Configuration;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
@@ -31,7 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 new Configuration
                 {
                     MissingFieldFound = null,
-                    Delimiter = delimiter
+                    Delimiter = delimiter,
+                    BadDataFound = delegate(IReadingContext context) {  }
                 }))
             {
                 reader.Read();

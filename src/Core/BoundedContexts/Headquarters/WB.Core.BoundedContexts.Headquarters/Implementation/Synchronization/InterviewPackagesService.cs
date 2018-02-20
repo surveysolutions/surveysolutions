@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
     internal class InterviewPackagesService : IInterviewPackagesService
     {
+        public const string UnknownExceptionType = "Unexpected";
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly ILogger logger;
@@ -87,43 +88,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public virtual bool HasPendingPackageByInterview(Guid interviewId)
             => this.interviewPackageStorage.Query(
                 packages => packages.Any(package => package.InterviewId == interviewId));
-
-        public void ReprocessAllBrokenPackages()
-        {
-            List<BrokenInterviewPackage> chunkOfBrokenInterviewPackages;
-            do
-            {
-                chunkOfBrokenInterviewPackages =
-                    this.brokenInterviewPackageStorage.Query(brokenPackages => brokenPackages.Take(10).ToList());
-                foreach (var brokenInterviewPackage in chunkOfBrokenInterviewPackages)
-                {
-                    var interviewPackage = new InterviewPackage
-                    {
-                        ResponsibleId = brokenInterviewPackage.ResponsibleId,
-                        InterviewId = brokenInterviewPackage.InterviewId,
-                        IncomingDate = brokenInterviewPackage.IncomingDate,
-                        InterviewStatus = brokenInterviewPackage.InterviewStatus,
-                        IsCensusInterview = brokenInterviewPackage.IsCensusInterview,
-                        QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
-                        QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
-                        Events = brokenInterviewPackage.Events
-                    };
-
-                    if (this.syncSettings.UseBackgroundJobForProcessingPackages)
-                    {
-                        this.interviewPackageStorage.Store(interviewPackage, null);
-                    }
-                    else
-                    {
-                        this.ProcessPackage(interviewPackage);
-                    }
-
-                    CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
-
-                    this.brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
-                }
-            } while (chunkOfBrokenInterviewPackages.Any());
-        }
 
         public void ReprocessSelectedBrokenPackages(int[] packageIds)
         {
@@ -200,8 +164,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public void ProcessPackage(InterviewPackage interview)
         {
             Stopwatch innerwatch = Stopwatch.StartNew();
+            string existingInterviewKey = null;
             try
             {
+                existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
                 var serializedEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events)
                     .Select(e => e.Payload)
@@ -246,16 +212,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
             catch (Exception exception)
             {
-                this.logger.Error(
-                    $"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'",
-                    exception);
+                this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
+                
+
                 this.transactionManager.RollbackCommandTransaction();
 
-                var exceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? "Unexpected";
+                var exceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? UnknownExceptionType;
 
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
                     InterviewId = interview.InterviewId,
+                    InterviewKey = existingInterviewKey,
                     QuestionnaireId = interview.QuestionnaireId,
                     QuestionnaireVersion = interview.QuestionnaireVersion,
                     InterviewStatus = interview.InterviewStatus,
