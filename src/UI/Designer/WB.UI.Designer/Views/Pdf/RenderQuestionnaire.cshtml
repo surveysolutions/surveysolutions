@@ -173,6 +173,13 @@
 					<a href="#optoins_filters_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</a>
 				</dd>
 				}
+				@if (!questionnaire.IsSpecialValuesAppendixEmpty)
+				{
+					<dt>&nbsp;</dt>
+					<dd>
+						<a href="#options_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
+					</dd>
+				}
 
 				<dt>&nbsp;</dt>
 				<dd>
@@ -422,9 +429,9 @@
 					</a>
 					<p>
 						@PdfStrings.Options
-						@foreach (var option in question.Answers)
+						@for(var j = 0; j < question.Answers.Count; j ++)
 						{
-						<span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
+							<span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count -1 ? ",":"")</span>
 						}
 					</p>
 				</div>
@@ -433,35 +440,6 @@
 		</ul>
 	</article>
 	}
-
-	@if (!questionnaire.IsSpecialValuesAppendixEmpty)
-	{
-	<article class="appendix_section">
-		<h2 id="options_appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.OptionsAppendixIndex, "&#8212;")</h2>
-		<ul class="container">
-			@for (var i = 0; i < questionnaire.QuestionsWithLongSpecialValuesList.Count; i++)
-			{
-			var question = questionnaire.QuestionsWithLongSpecialValuesList[i];
-			<li>
-				<span class="number">[@(i + 1)]</span>
-				<div class="appendix_detail">
-					<a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
-						<span>@question.StataExportCaption</span>: @question.QuestionText
-					</a>
-					<p>
-						@(PdfStrings.SpecialValues):
-						@foreach (var option in question.Answers)
-						{
-						<span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
-						}
-					</p>
-				</div>
-			</li>
-			}
-		</ul>
-	</article>
-	}
-
 
 	@if (!questionnaire.IsVariablesAppendixEmpty)
 	{
@@ -510,8 +488,36 @@
 		</ul>
 	</article>
 	}
+	
+@if (!questionnaire.IsSpecialValuesAppendixEmpty)
+{
+	<article class="appendix_section">
+		<h2 id="options_appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@for (var i = 0; i < questionnaire.QuestionsWithLongSpecialValuesList.Count; i++)
+			{
+				var question = questionnaire.QuestionsWithLongSpecialValuesList[i];
+				<li>
+					<span class="number">[@(i + 1)]</span>
+					<div class="appendix_detail">
+						<a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
+							<span>@question.StataExportCaption</span>: @question.QuestionText
+						</a>
+						<p>
+							@(PdfStrings.SpecialValues):
+							@for(var j = 0; j < question.Answers.Count; j ++)
+							{
+								<span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count -1 ? ",":"")</span>
+							}
+						</p>
+					</div>
+				</li>
+			}
+		</ul>
+	</article>
+}
 
-	<article class="appendix_section legend">
+<article class="appendix_section legend">
 		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
 		<section>
 			<h3>@PdfStrings.PdfLegend</h3>
