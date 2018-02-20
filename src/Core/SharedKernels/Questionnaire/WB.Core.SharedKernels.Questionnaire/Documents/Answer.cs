@@ -37,7 +37,8 @@ namespace Main.Core.Entities.SubEntities
             {
                 AnswerText = answer.AnswerText,
                 AnswerValue = answer.AnswerValue,
-                ParentValue = answer.ParentValue
+                ParentValue = answer.ParentValue,
+                AnswerCode = answer.AnswerCode
             };
         }
     }
