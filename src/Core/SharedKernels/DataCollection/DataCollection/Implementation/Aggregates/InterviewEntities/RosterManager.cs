@@ -100,8 +100,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override List<Identity> CalcuateExpectedIdentities(Identity parentIdentity)
         {
             var rosterSizeQuestion = this.GetRosterSizeQuestion(parentIdentity, this.rosterSizeQuestionId)?.GetAsInterviewTreeIntegerQuestion();
-            var integerAnswer = rosterSizeQuestion?.IsAnswered() ?? false? rosterSizeQuestion.GetAnswer().Value : 0;
-            return Enumerable.Range(0, integerAnswer)
+            var rosterTriggerValue = rosterSizeQuestion?.IsAnswered() ?? false? Math.Max(rosterSizeQuestion.GetAnswer().Value, 0) : 0;
+            return Enumerable.Range(0, rosterTriggerValue)
                 .Select(index => 
                     new Identity(rosterId, parentIdentity.RosterVector.ExtendWithOneCoordinate(index)))
                 .ToList();

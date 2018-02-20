@@ -400,8 +400,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 return this;
 
             if (answer < 0)
-                throw new AnswerNotAcceptedException(
-                    $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is negative. {this.InfoForException}");
+            {
+                if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, answer) == null)
+                {
+                    throw new AnswerNotAcceptedException(
+                        $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is negative. {this.InfoForException}");
+                }
+            }
 
             return this;
         }
