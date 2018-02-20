@@ -387,6 +387,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     return this.VariableWithLongExpressions.FindIndex(x => x.PublicKey == entityId) + 1;
                 }
+                case "SV":
+                {
+                    return this.QuestionsWithLongSpecialValuesList.FindIndex(x => x.PublicKey == entityId) + 1;
+                }
             }
             return -1;
         }
@@ -456,5 +460,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
         public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
         public char OptionsFilterAppendixIndex => IsVariablesAppendixEmpty ? VariablesAppendixIndex : (char)(VariablesAppendixIndex + 1);
+
+        public char SpecialValuesAppendixIndex => IsVariablesAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
     }
 }
