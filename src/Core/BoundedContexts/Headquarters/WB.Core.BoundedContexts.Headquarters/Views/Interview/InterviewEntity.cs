@@ -66,16 +66,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public override int GetHashCode() => this.InterviewId.GetHashCode() ^ this.Identity.GetHashCode();
-
-        public bool IsAllFieldsDefault() 
-        {
-            return !IsEnabled
-                   && !IsReadonly
-                   && !HasFlag
-                   && (InvalidValidations == null || InvalidValidations.Length == 0)
-                   && AsArea == null && AsAudio == null && AsBool == null && AsDateTime == null && AsDouble == null
-                   && AsGps == null && AsInt == null && (AsIntArray == null || AsIntArray.Length == 0)
-                   && AsIntMatrix == null && AsList == null && AsString == null && AsYesNo == null;
-        }
     }
 }
