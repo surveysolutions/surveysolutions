@@ -301,6 +301,7 @@ namespace WB.UI.Headquarters.Controllers
 
         private readonly PeriodiceReportType[] speedReportTypesForSupervisor =
         {
+            PeriodiceReportType.AverageInterviewingTime,
             PeriodiceReportType.AverageInterviewDuration,
             PeriodiceReportType.AverageCaseAssignmentDuration,
         };
@@ -335,6 +336,8 @@ namespace WB.UI.Headquarters.Controllers
 
                 case PeriodiceReportType.AverageCaseAssignmentDuration:
                     return PeriodicStatusReport.AverageCaseAssignmentDurationDescription;
+                case PeriodiceReportType.AverageInterviewingTime:
+                    return PeriodicStatusReport.AverageInterviewingTimeDescription;
                 case PeriodiceReportType.AverageInterviewDuration:
                     return PeriodicStatusReport.AverageInterviewDurationDescription;
                 case PeriodiceReportType.AverageSupervisorProcessingTime:
