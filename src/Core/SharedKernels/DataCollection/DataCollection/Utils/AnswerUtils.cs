@@ -150,7 +150,10 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
                 if (!question.Answers.Any())
                     return null;
 
-                return question.Answers.SingleOrDefault(answer => answer.AnswerCode == optionValue).ToCategoricalOption();
+                return question.Answers.Any(x => x.AnswerCode.HasValue) ?
+                    question.Answers.SingleOrDefault(answer => answer.AnswerCode == optionValue).ToCategoricalOption() :
+                    question.Answers.SingleOrDefault(answer => optionValue == ParseAnswerOptionValueOrThrow(answer.AnswerValue, question.PublicKey))
+                        .ToCategoricalOption();
             }
 
             if (question.Answers.Any(x => x.AnswerCode.HasValue))
