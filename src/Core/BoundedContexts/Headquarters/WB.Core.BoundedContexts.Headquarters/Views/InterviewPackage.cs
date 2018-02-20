@@ -32,5 +32,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public virtual string ExceptionMessage { get; set; }
         public virtual string ExceptionStackTrace { get; set; }
         public virtual long PackageSize { get; set; }
+        public virtual string InterviewKey { get; set; }
     }
 }

@@ -164,8 +164,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public void ProcessPackage(InterviewPackage interview)
         {
             Stopwatch innerwatch = Stopwatch.StartNew();
+            string existingInterviewKey = null;
             try
             {
+                existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
                 var serializedEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events)
                     .Select(e => e.Payload)
@@ -210,9 +212,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
             catch (Exception exception)
             {
-                this.logger.Error(
-                    $"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'",
-                    exception);
+                this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
+                
+
                 this.transactionManager.RollbackCommandTransaction();
 
                 var exceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? UnknownExceptionType;
@@ -220,6 +222,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
                     InterviewId = interview.InterviewId,
+                    InterviewKey = existingInterviewKey,
                     QuestionnaireId = interview.QuestionnaireId,
                     QuestionnaireVersion = interview.QuestionnaireVersion,
                     InterviewStatus = interview.InterviewStatus,
