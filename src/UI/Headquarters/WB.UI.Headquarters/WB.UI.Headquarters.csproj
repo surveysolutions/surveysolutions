@@ -802,6 +802,7 @@
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
+    <EmbeddedResource Include="Migrations\ReadSide\M001-100\M201802151238_interview_update.sql" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1914,6 +1915,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201709251028_AddWasCompletedFlagToSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201711061216_RemovelastpublishedeventpositionforhandlersTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709291355_ChangeJsonToJsonB.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802151238_UpdateFunctionToUpdateInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802011630_SpeedupMapReport.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
