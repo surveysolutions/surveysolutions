@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace WB.UI.WebTester.Services.Implementation
 {
-    public class TokenEviction : IEvictionObserver, IEvictionObservable
+    public class TokenEviction : IEvictionNotifier, IEvictionObservable
     {
         private readonly Subject<Guid> subject;
 

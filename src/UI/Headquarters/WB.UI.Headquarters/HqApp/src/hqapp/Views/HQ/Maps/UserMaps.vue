@@ -6,7 +6,10 @@
                         <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
                     </li>
                 </ol>
-                    <h1>{{$t("Pages.MapList_UserMapsTitle")}}</h1>                     
+                    <h1>{{$t("Pages.MapList_UserMapsTitle")}}</h1> 
+                <p>
+                    <a :href="$config.model.userMapLinkingUrl">{{$t('Pages.MapList_UserLinking')}}</a>
+                </p>                   
         </div>   
         <DataTables ref="table" 
             :tableOptions="tableOptions">

@@ -6,7 +6,6 @@
     <EditTextPreference android:key="GpsDesiredAccuracy" android:numeric="integer"/>
     <CheckBoxPreference android:key="ShowLocationOnMap" />
     <CheckBoxPreference android:key="VibrateOnError" />
-    <CheckBoxPreference android:key="TestingConditions" />
   </PreferenceCategory>
 
   <PreferenceCategory android:key="connection_settings_category">

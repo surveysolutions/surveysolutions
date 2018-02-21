@@ -304,7 +304,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying GPS question requires Latitude and Longitude to be set..
+        ///   Looks up a localized string similar to GPS question requires Latitude and Longitude to be set..
         /// </summary>
         public static string PL0030_GpsMandatoryFilds {
             get {
@@ -399,6 +399,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0040_QuestionnaireDataIsNotFound {
             get {
                 return ResourceManager.GetString("PL0040_QuestionnaireDataIsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Answer to multiple choice question cannot contain more than {0} answers..
+        /// </summary>
+        public static string PL0041_AnswerExceedsMaxAnswersCount {
+            get {
+                return ResourceManager.GetString("PL0041_AnswerExceedsMaxAnswersCount", resourceCulture);
             }
         }
     }

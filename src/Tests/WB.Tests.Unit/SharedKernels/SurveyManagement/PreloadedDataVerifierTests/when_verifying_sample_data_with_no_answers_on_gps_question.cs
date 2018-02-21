@@ -1,11 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
@@ -13,35 +7,26 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 {
     internal class when_verifying_sample_data_with_no_answers_on_gps_question : PreloadedDataVerifierTestContext
     {
-        private Establish context = () =>
+        [Test]
+        public void should_return_no_errors()
         {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
             var gpsQuestion = Create.Entity.GpsCoordinateQuestion(gpsQuestionId, "gps");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
+            var questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId },
-                new string[][] { new string[] { "1" } },
+            var preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId },
+                new[] { new[] { "1" } },
                 "questionnaire.tab");
 
-            
-            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
+            var preloadedDataService =
+                Create.Service.PreloadedDataService(questionnaire);
 
-            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
-        };
+            var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
+            var result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataService);
 
-        Because of = () => result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataService).ToList();
-
-        It should_return_no_errors = () =>
-            result.Count().ShouldEqual(0);
-
-        private static ImportDataVerifier importDataVerifier;
-        private static List<PanelImportVerificationError> result;
-        private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-        private static Guid gpsQuestionId;
-        private static PreloadedDataByFile preloadedDataByFile;
-        private static ImportDataParsingService preloadedDataService;
+            Assert.That(result, Is.Empty);
+        }
     }
 }

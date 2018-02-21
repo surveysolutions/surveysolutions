@@ -23,7 +23,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo
             new VariableName(null, "self", null),
             new VariableName(null, "@optioncode", "int"),
             new VariableName(null, "@rowindex", "int"),
-            new VariableName(null, "@rowname", "string"),
             new VariableName(null, "@rowcode", "int")
         };
 
