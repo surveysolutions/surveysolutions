@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             this.Id = id;
             this.FailedValidationConditions = new List<FailedValidationCondition>();
+            this.FailedWarningConditions = new List<FailedValidationCondition>();
             this.IsInvalid = false;
             this.IsEnabled = true;
         }
@@ -26,5 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public IReadOnlyList<FailedValidationCondition> FailedValidationConditions { get; set; }
 
+        public IReadOnlyList<FailedValidationCondition> FailedWarningConditions { get; set; }
     }
 }

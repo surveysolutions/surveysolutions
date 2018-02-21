@@ -31,5 +31,22 @@
           local:MvxBind="ItemsSource QuestionState.Validity.Error.ValidationErrors"
           local:MvxItemTemplate="@layout/interview_question__validation_item"/>
   </LinearLayout>
+  <LinearLayout
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    style="@style/Interview_Question_Errors"
+    android:layout_marginBottom="@dimen/Interview_Entity_Title_margin_top"
+    local:MvxBind="Visible QuestionState.Warnings.IsImplausible">
+    <TextView
+      style="@style/Interview_Question_Warning_Title"
+      local:MvxBind="Text QuestionState.Warnings.Warning.Caption" />
+    <MvxLinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      local:MvxBind="ItemsSource QuestionState.Warnings.Warning.ValidationErrors"
+      local:MvxItemTemplate="@layout/interview_question__warning"/>
+  </LinearLayout>
   <View style="@style/Interview_Entity_Divider" />
 </LinearLayout>

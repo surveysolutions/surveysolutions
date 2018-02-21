@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
@@ -103,27 +105,37 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var ruValidationMessages = new List<ValidationCondition>(new []
             {
                 Create.Entity.ValidationCondition(message: "ошибка 1"),
-                Create.Entity.ValidationCondition(message: "ошибка 2")
+                Create.Entity.ValidationCondition(message: "ошибка 2"),
+                Create.Entity.ValidationCondition(message: "предупреждение 1", severity: ValidationSeverity.Warning)
             });
 
             var staticTextIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
 
             var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(new[]
             {
-                new KeyValuePair<string, IComposite[]>(null, new [] { Create.Entity.StaticText(staticTextIdentity.Id, "invariant text", validationConditions: new List<ValidationCondition>(new []
+                new KeyValuePair<string, IComposite[]>(null, new [] { 
+                    Create.Entity.StaticText(staticTextIdentity.Id, "invariant text",
+                        validationConditions: new List<ValidationCondition>(new []
             {
                 Create.Entity.ValidationCondition(message: "error 1"),
-                Create.Entity.ValidationCondition(message: "error 2")
+                Create.Entity.ValidationCondition(message: "error 2"),
+                Create.Entity.ValidationCondition(message: "warning 1", severity: ValidationSeverity.Warning)
             }))}),
                 new KeyValuePair<string, IComposite[]>(ruTranslationName, new [] { Create.Entity.StaticText(staticTextIdentity.Id, ruText, validationConditions: ruValidationMessages) })
             });
-            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(new[] {0, 1}, staticTextIdentity));
+
+            interview.Apply(Create.Event.StaticTextsDeclaredImplausible(staticTextIdentity, new[] {2}));
+            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(new[] {0, 1 }, staticTextIdentity));
+
             //act
             interview.SwitchTranslation(Create.Command.SwitchTranslation(ruTranslationName));
+
             //assert
             Assert.That(interview.GetTitleText(staticTextIdentity), Is.EqualTo(ruText));
             Assert.That(interview.GetFailedValidationMessages(staticTextIdentity, "Error"),
                 Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
+
+            Assert.That(interview.GetFailedWarningMessages(staticTextIdentity, "warning").Single(), Is.EqualTo($"{ruValidationMessages[2].Message} [3]"));
         }
 
         [Test]
@@ -241,7 +253,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var ruValidationMessages = new List<ValidationCondition>(new[]
             {
                 Create.Entity.ValidationCondition(message: "ошибка 1"),
-                Create.Entity.ValidationCondition(message: "ошибка 2")
+                Create.Entity.ValidationCondition(message: "ошибка 2"),
+                Create.Entity.ValidationCondition(message: "предупреждение 1", severity: ValidationSeverity.Warning),
             });
 
             var questionIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
@@ -251,10 +264,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 new KeyValuePair<string, IComposite[]>(null, new [] { Create.Entity.TextQuestion(questionIdentity.Id, text: "invariant title", validationConditions: new List<ValidationCondition>(new []
             {
                 Create.Entity.ValidationCondition(message: "error 1"),
-                Create.Entity.ValidationCondition(message: "error 2")
+                Create.Entity.ValidationCondition(message: "error 2"),
+                Create.Entity.ValidationCondition(message: "warning 2", severity: ValidationSeverity.Warning),
+
             }))}),
                 new KeyValuePair<string, IComposite[]>(ruTranslationName, new [] { Create.Entity.TextQuestion(questionIdentity.Id, text: ruText, validationConditions: ruValidationMessages) })
             });
+
+            interview.Apply(Create.Event.AnswersDeclaredImplausible(questionIdentity, new[] {2}));
             interview.Apply(Create.Event.AnswersDeclaredInvalid(
                 new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
                 {
@@ -272,6 +289,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             Assert.That(interview.GetTitleText(questionIdentity), Is.EqualTo(ruText));
             Assert.That(interview.GetFailedValidationMessages(questionIdentity, "Error"),
                 Is.EquivalentTo(new[] {$"{ruValidationMessages[0].Message} [1]", $"{ruValidationMessages[1].Message} [2]"}));
+
+            Assert.That(interview.GetFailedWarningMessages(questionIdentity, "warning").Single(), Is.EqualTo($"{ruValidationMessages[2].Message} [3]"));
         }
 
         [Test]
