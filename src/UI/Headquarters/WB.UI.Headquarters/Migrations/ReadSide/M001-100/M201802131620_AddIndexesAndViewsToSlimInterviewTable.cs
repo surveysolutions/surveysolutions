@@ -8,8 +8,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Execute.Sql(@"create or replace view readside.interviews_view as 
-                select s.interviewid, q.entityid, rostervector, isenabled, isreadonly, invalidvalidations, 
-                    asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, 
+                select s.interviewid, q.entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings,
+                    asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool,
                     asyesno, asaudio, asarea, hasflag
                 from readside.interviews i
                 join readside.interviewsummaries s on s.id = i.interviewid

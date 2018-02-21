@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private List<string[]> QueryActionsChunkFromReadSide(Expression<Func<InterviewSummary, bool>> queryActions)
         {
-            sessionProvider.GetSession().Connection.Execute("set enable_seqscan=false");
+            sessionProvider.GetSession()?.Connection?.Execute("set enable_seqscan=false");
 
             var interviews =
               this.interviewStatuses.Query(_ => _
