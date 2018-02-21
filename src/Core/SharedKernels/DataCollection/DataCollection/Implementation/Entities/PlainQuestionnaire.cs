@@ -387,7 +387,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
         {
             bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption && question.QuestionType != QuestionType.Numeric;
 
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(
@@ -823,6 +823,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
+
+        public IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId)
+        {
+            return GetEntityOrThrow(entityId).GetValidationConditions()
+                .Select((v, i) => new {index = i, validationCondition = v})
+                .Where(v => v.validationCondition.Severity == ValidationSeverity.Warning)
+                .Select(v => v.index)
+                .ToReadOnlyCollection();
+        }
+
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 

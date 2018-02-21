@@ -198,6 +198,9 @@
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
     <value>Answer is invalid</value>
   </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Warnings</value>
+  </data>
   <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
     <value>Answer was not saved</value>
   </data>
@@ -490,6 +493,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="AreaMap_Edit" xml:space="preserve">
     <value>Edit</value>
