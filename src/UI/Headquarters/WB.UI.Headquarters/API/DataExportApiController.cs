@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -29,18 +30,22 @@ namespace WB.UI.Headquarters.API
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
 
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IDdiMetadataAccessor ddiMetadataAccessor)
+            IDdiMetadataAccessor ddiMetadataAccessor,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
             this.exportedFilesAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         [HttpGet]
@@ -66,9 +71,14 @@ namespace WB.UI.Headquarters.API
             DataExportFormat format, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaireBrowseItem == null)
+                throw new HttpException(404, @"Questionnaire not found");
+
             try
             {
-                this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, null)
+                this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
                 {
                     FromDate = from?.ToUniversalTime(),
                     ToDate = to?.ToUniversalTime(),

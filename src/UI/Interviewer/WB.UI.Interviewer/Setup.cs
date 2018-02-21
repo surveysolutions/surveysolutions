@@ -132,7 +132,7 @@ namespace WB.UI.Interviewer
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
             // need remove in release this line and setting option
-            Interview.TestingConditions = ServiceLocator.Current.GetInstance<IInterviewerSettings>().TestingConditions;
+            Interview.TestingConditions = false;
 
             return container;
         }

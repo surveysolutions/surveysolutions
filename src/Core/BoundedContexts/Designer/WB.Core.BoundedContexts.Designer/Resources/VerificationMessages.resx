@@ -693,4 +693,7 @@
   <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
     <value>Filter expression is using forbidden type.</value>
   </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>@rowname variable is not supported anymore.</value>
+  </data>
 </root>

@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is should be between 3 and 15 characters, and should contain only letters, digits and the underscore symbol.
+        ///   Looks up a localized string similar to It should be between 3 and 15 characters, and can contain only letters, digits and the underscore symbol.
         /// </summary>
         public static string PLU0005Recomendation {
             get {

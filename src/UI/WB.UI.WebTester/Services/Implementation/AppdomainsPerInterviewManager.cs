@@ -50,6 +50,14 @@ namespace WB.UI.WebTester.Services.Implementation
             }
         }
 
+        public void Flush(Guid interviewId)
+        {
+            if(appDomains.TryGetValue(interviewId, out var interview))
+            {
+                interview.Value.Flush();
+            }
+        }
+
         public List<CommittedEvent> Execute(ICommand command)
         {
             var interviewCommand = command as InterviewCommand;

@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using CoreTester.CustomInfrastructure;
-using ICSharpCode.Decompiler;
-using ICSharpCode.Decompiler.CSharp;
-using ICSharpCode.Decompiler.TypeSystem;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -20,9 +13,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using AssemblyDefinition = Mono.Cecil.AssemblyDefinition;
-using IMemberDefinition = Mono.Cecil.IMemberDefinition;
-using IVariable = WB.Core.SharedKernels.QuestionnaireEntities.IVariable;
 
 namespace CoreTester.Commands
 {

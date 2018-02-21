@@ -56,7 +56,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             "self",
             "@optioncode",
             "@rowindex",
-            "@rowname",
             "@rowcode"
         };
     }
