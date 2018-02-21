@@ -6,7 +6,7 @@
 }
 @section Scripts{
     <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
+            src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
     </script>
     @Html.RenderHqConfig(Model)
 }
