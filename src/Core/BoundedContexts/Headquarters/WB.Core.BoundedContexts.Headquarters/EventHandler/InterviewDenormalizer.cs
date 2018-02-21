@@ -59,7 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateOrRemoveHandler<InterviewState, AudioQuestionAnswered>,
         IUpdateOrRemoveHandler<InterviewState, InterviewCreated>,
         IUpdateOrRemoveHandler<InterviewState, InterviewFromPreloadedDataCreated>,
-        IUpdateOrRemoveHandler<InterviewState, InterviewOnClientCreated>
+        IUpdateOrRemoveHandler<InterviewState, InterviewOnClientCreated>,
+        IUpdateOrRemoveHandler<InterviewState, AnswersDeclaredPlausible>,
+        IUpdateOrRemoveHandler<InterviewState, AnswersDeclaredImplausible>,
+        IUpdateOrRemoveHandler<InterviewState, StaticTextsDeclaredPlausible>,
+        IUpdateOrRemoveHandler<InterviewState, StaticTextsDeclaredImplausible>
     {
         public string Name => "Interview detalis";
         public object[] Readers => new object[0];
@@ -410,7 +414,20 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 Id = entityId.Id,
                 RosterVector = entityId.RosterVector,
-                Validations = invalidValidations
+                Validations = invalidValidations,
+            };
+        }
+
+        private void SetWarningInState(InterviewState state, InterviewStateIdentity entityId, int[] invalidValidations)
+        {
+            if (state.Removed.Contains(entityId))
+                state.Removed.Remove(entityId);
+
+            state.Warnings[entityId] = new InterviewStateValidation
+            {
+                Id = entityId.Id,
+                RosterVector = entityId.RosterVector,
+                Validations = invalidValidations,
             };
         }
 
@@ -436,5 +453,29 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         protected override void SaveState(InterviewState state) =>
             this.repository.Save(state);
+
+        public void Update(InterviewState state, IPublishedEvent<AnswersDeclaredPlausible> @event)
+        {
+            foreach (var question in @event.Payload.Questions)
+                this.SetWarningInState(state, InterviewStateIdentity.Create(question), null);
+        }
+
+        public void Update(InterviewState state, IPublishedEvent<AnswersDeclaredImplausible> @event)
+        {
+            foreach (var condition in @event.Payload.FailedValidationConditions)
+                this.SetWarningInState(state, InterviewStateIdentity.Create(condition.Key), condition.Value?.Select(y => y.FailedConditionIndex)?.ToArray());
+        }
+
+        public void Update(InterviewState state, IPublishedEvent<StaticTextsDeclaredPlausible> @event)
+        {
+            foreach (var staticText in @event.Payload.StaticTexts)
+                this.SetWarningInState(state, InterviewStateIdentity.Create(staticText), null);
+        }
+
+        public void Update(InterviewState state, IPublishedEvent<StaticTextsDeclaredImplausible> @event)
+        {
+            foreach (var condition in @event.Payload.FailedValidationConditions)
+                this.SetWarningInState(state, InterviewStateIdentity.Create(condition.Key), condition.Value?.Select(y => y.FailedConditionIndex)?.ToArray());
+        }
     }
 }

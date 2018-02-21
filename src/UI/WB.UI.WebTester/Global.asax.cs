@@ -9,14 +9,13 @@ namespace WB.UI.WebTester
 {
     public class MvcApplication : HttpApplication
     {
-        private Logger log;
+        private readonly Logger log = LogManager.GetCurrentClassLogger();
 
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            log = LogManager.GetCurrentClassLogger();
             AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
             {
                 log.Error(args.ExceptionObject.ToString());

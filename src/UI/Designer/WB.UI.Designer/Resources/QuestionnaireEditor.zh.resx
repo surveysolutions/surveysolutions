@@ -226,7 +226,7 @@
     <value>在问卷中没有发现此条目，请选择其它的。</value>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
-    <value>错误信息</value>
+    <value>错误或警告消息</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}}个错误</value>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -196,18 +197,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             get
             {
-                if (this.FailedValidations == null) return this.isValidWithoutFailedValidations;
+                if (this.FailedErrors == null) return this.isValidWithoutFailedValidations;
                 
-                return this.FailedValidations.Count == 0; 
+                return this.FailedErrors.Count == 0; 
             }
         }
+
+        public bool IsPlausible => this.FailedWarnings.Count == 0;
 
         public void RunImportInvariantsOrThrow(InterviewQuestionInvariants questionInvariants)
         {
             this.InterviewQuestion.RunImportInvariants(questionInvariants);
         }
 
-        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+        public IReadOnlyList<FailedValidationCondition> FailedErrors { get; private set; }
 
         public void SetTitle(SubstitutionText title) 
         {
@@ -227,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
-            this.FailedValidations = failedValidations?.ToReadOnlyCollection() ?? throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedErrors = failedValidations?.ToReadOnlyCollection() ?? throw new ArgumentNullException(nameof(failedValidations));
         }
 
         [Obsolete("Since v6.0")]
@@ -238,7 +241,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkValid()
         {
             this.isValidWithoutFailedValidations = true;
-            this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+            this.FailedErrors = Enumerable.Empty<FailedValidationCondition>().ToList();
+        }
+
+        public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; } = Enumerable.Empty<FailedValidationCondition>().ToReadOnlyCollection();
+
+        public void MarkPlausible()
+            => this.FailedWarnings = new List<FailedValidationCondition>();
+
+        public void MarkImplausible(IEnumerable<FailedValidationCondition> failedValidations)
+        {
+            if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedWarnings = failedValidations.ToReadOnlyCollection();
         }
 
         public InterviewTreeDoubleQuestion GetAsInterviewTreeDoubleQuestion() => this.InterviewQuestion as InterviewTreeDoubleQuestion;
@@ -366,7 +380,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString()
-            => $"{GetTypeAsText()} Question {this.Identity} '{this.Title}'. " +
+            => $"{GetTypeAsText()} Question {this.Identity} '{this.VariableName}'. " +
                $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
                $"{(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
                $"{(this.IsValid ? "Valid" : "Invalid")}";
@@ -623,7 +637,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             clonedQuestion.Title = this.Title?.Clone();
             clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
-            clonedQuestion.FailedValidations = this.FailedValidations?
+            clonedQuestion.FailedErrors = this.FailedErrors?
+                .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
+                .ToReadOnlyCollection();
+            clonedQuestion.FailedWarnings = this.FailedWarnings?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
             clonedQuestion.AnswerComments = this.AnswerComments?
