@@ -67,6 +67,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         {
             switch (reportType)
             {
+                case PeriodiceReportType.AverageInterviewingTime:
                 case PeriodiceReportType.AverageInterviewDuration:
                     return new[] { InterviewExportedAction.Completed };
                 case PeriodiceReportType.AverageSupervisorProcessingTime:

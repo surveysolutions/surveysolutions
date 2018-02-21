@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Status, pm => pm.Column(cm => cm.Index("InterviewSummaries_Status")));
             Property(x => x.Key);
             Property(x => x.QuestionnaireIdentity);
+            Property(x => x.InterviewingTotalTimeLong, ptp => ptp.Column("InterviewingTotalTime"));
             Property(x => x.ClientKey);
             Property(x => x.HasErrors);
             Property(x => x.AssignmentId);
@@ -58,17 +59,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                 {
                     listMap.Table("InterviewCommentedStatuses");
                     listMap.Index(index => index.Column("Position"));
+                    
                     listMap.Key(keyMap =>
                     {
                         keyMap.Column(clm =>
                         {
                             clm.Name("InterviewId");
-                            clm.Index("InterviewSummary_InterviewCommentedStatuses");
                         });
-                        keyMap.ForeignKey("FK_InterviewSummary_InterviewCommentedStatuses");
                     });
                     listMap.Lazy(CollectionLazy.Lazy);
                     listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    listMap.Inverse(true);
                 },
                 rel =>
                 {
@@ -96,6 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                             clm.Insert(false);
                             clm.Update(false);
                         });
+                        cmp.Parent(x => x.InterviewSummary);
                     });
                 }
             );
