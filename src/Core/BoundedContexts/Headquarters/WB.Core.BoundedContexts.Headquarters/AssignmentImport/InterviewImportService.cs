@@ -281,6 +281,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     ProcessedCount = 0,
                     ElapsedTime = 0,
                     EstimatedTime = 0,
+                    VerificationState = new ImportDataVerificationState(),
                     State = {Columns = new string[0], Errors = new List<InterviewImportError>()},
                     IsInProgress = true,
                     AssignmentImportType = assignmentImportType

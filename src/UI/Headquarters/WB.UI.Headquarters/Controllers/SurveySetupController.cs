@@ -217,19 +217,35 @@ namespace WB.UI.Headquarters.Controllers
 
             var preloadedDataService = this.CreatePreloadedDataService(questionnaireIdentity);
 
-            this.interviewImportService.Status.VerificationState.Errors = this.preloadedDataVerifier
-                .VerifyPanelFiles(allImportedFiles.ToArray(), preloadedDataService).Take(10).ToList();
-
-            if (this.interviewImportService.Status.VerificationState.Errors.Any())
+            try
             {
+                this.interviewImportService.Status.VerificationState.Errors = this.preloadedDataVerifier
+                    .VerifyPanelFiles(allImportedFiles.ToArray(), preloadedDataService).Take(10).ToList();
+
+                if (this.interviewImportService.Status.VerificationState.Errors.Any())
+                {
+                    return this.View("InterviewImportVerificationErrors",
+                        new ImportDataParsingErrorsView(
+                            model.QuestionnaireId,
+                            model.QuestionnaireVersion,
+                            questionnaireInfo?.Title,
+                            this.interviewImportService.Status.VerificationState.Errors.ToArray(),
+                            new InterviewImportError[0],
+                            false,
+                            AssignmentImportType.Panel,
+                            model.File.FileName));
+                }
+            }
+            catch (Exception e)
+            {
+                this.Logger.Error(@"Import panel assignments error", e);
+
                 return this.View("InterviewImportVerificationErrors",
-                    new ImportDataParsingErrorsView(
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
-                        this.interviewImportService.Status.VerificationState.Errors.ToArray(),
-                        new InterviewImportError[0],
-                        false,
+                        global::Resources.BatchUpload.Prerequisite_FileOpen,
                         AssignmentImportType.Panel,
                         model.File.FileName));
             }
@@ -327,22 +343,39 @@ namespace WB.UI.Headquarters.Controllers
 
             var preloadedDataService = this.CreatePreloadedDataService(questionnaireIdentity);
 
-            var verificationStatus = this.preloadedDataVerifier
-                .VerifyAssignmentsSample(preloadedSample, preloadedDataService)
-                .Take(10)
-                .ToArray();
-            
-            if (verificationStatus.Any())
+            try
             {
-                return this.View("InterviewImportVerificationErrors", new ImportDataParsingErrorsView(
-                    model.QuestionnaireId,
-                    model.QuestionnaireVersion,
-                    questionnaireInfo?.Title,
-                    verificationStatus,
-                    new InterviewImportError[0], 
-                    hasResponsibleNames,
-                    AssignmentImportType.Assignments,
-                    preloadedSample?.FileName));
+                var verificationStatus = this.preloadedDataVerifier
+                    .VerifyAssignmentsSample(preloadedSample, preloadedDataService)
+                    .Take(10)
+                    .ToArray();
+
+
+                if (verificationStatus.Any())
+                {
+                    return this.View("InterviewImportVerificationErrors", new ImportDataParsingErrorsView(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        questionnaireInfo?.Title,
+                        verificationStatus,
+                        new InterviewImportError[0],
+                        hasResponsibleNames,
+                        AssignmentImportType.Assignments,
+                        preloadedSample?.FileName));
+                }
+            }
+            catch (Exception e)
+            {
+                this.Logger.Error(@"Import assignments error", e);
+
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        model.QuestionnaireId,
+                        model.QuestionnaireVersion,
+                        questionnaireInfo?.Title,
+                        global::Resources.BatchUpload.Prerequisite_FileOpen,
+                        AssignmentImportType.Assignments,
+                        model.File.FileName));
             }
 
             this.preloadedDataRepository.Store(model.File.InputStream);
