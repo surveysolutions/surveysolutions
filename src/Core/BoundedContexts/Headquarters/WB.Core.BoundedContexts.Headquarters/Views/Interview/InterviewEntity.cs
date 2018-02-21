@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasFlag { get; set; }
         public virtual bool IsEnabled { get; set; }
         public virtual int[] InvalidValidations { get; set; }
+        public virtual int[] WarningValidations { get; set; }
         public virtual bool IsReadonly { get; set; }
         public virtual int? AsInt { get; set; }
         public virtual double? AsDouble { get; set; }

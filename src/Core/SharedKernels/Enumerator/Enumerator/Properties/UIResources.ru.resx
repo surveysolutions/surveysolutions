@@ -582,4 +582,12 @@
   <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
     <value>Скрыть</value>
   </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+    <comment>Предупреждение</comment>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Предупреждения</value>
+    <comment>Предупреждения</comment>
+  </data>
 </root>

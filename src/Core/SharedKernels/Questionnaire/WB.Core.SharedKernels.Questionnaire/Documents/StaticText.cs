@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace Main.Core.Entities.SubEntities
 {
+    [DebuggerDisplay("StaticText {PublicKey}")]
     public class StaticText : IStaticText
     {
         public StaticText(Guid publicKey, string text, string enablementCondition, 

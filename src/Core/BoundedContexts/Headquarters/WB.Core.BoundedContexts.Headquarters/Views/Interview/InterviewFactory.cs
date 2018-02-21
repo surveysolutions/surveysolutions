@@ -166,7 +166,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     enabled = state.Enablement.Where(x => x.Value).Select(x => x.Key).ToArray(),
                     disabled = state.Enablement.Where(x => !x.Value).Select(x => x.Key).ToArray(),
                     readonlyentities = state.ReadOnly.ToArray(),
-                    validations = state.Validity.Select(x => x.Value).ToArray(),
+                    errorvalidations = state.Validity.Select(x => x.Value).ToArray(),
+                    warningvalidations = state.Warnings.Select(x => x.Value).ToArray(),
                     answers = state.Answers.Select(x => x.Value).ToArray()
                 }, commandType: CommandType.StoredProcedure);
 
@@ -191,6 +192,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     IsReadonly = x.isreadonly,
                     HasFlag = x.hasflag,
                     InvalidValidations = x.invalidvalidations,
+                    WarningValidations = x.warnings,
                     AsString = x.asstring,
                     AsInt = x.asint,
                     AsBool = x.asbool,
@@ -294,6 +296,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Id = entity.Identity.Id,
                 Answer = objectAnswer,
                 FailedValidationConditions = entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
+                FailedWarningConditions = entity.WarningValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
                 QuestionState = ToQuestionState(entity, objectAnswer != null)
             };
         }
@@ -324,8 +327,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             Id = entity.Identity.Id,
             IsEnabled = entity.IsEnabled,
-            FailedValidationConditions = (entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)) ??
-                                          new FailedValidationCondition[0]).ToReadOnlyCollection()
+            FailedValidationConditions = (entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)) ?? new FailedValidationCondition[0]).ToReadOnlyCollection(),
+            FailedWarningConditions = (entity.WarningValidations?.Select(x => new FailedValidationCondition(x)) ?? new FailedValidationCondition[0]).ToReadOnlyCollection()
         };
 
         private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ?? 
