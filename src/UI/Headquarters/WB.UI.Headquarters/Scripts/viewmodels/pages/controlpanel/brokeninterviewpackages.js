@@ -31,6 +31,7 @@
     }
 
     self.Questionnaires = ko.observableArray([]);
+    self.InterviewKey = ko.observableArray([]);
     self.SelectedQuestionnaire = ko.observable();
     self.SelectedResponsible = ko.observable();
     self.SelectedExceptionType = ko.observable();
@@ -82,7 +83,7 @@
 
         self.Url.query['questionnaire'] = self.SelectedQuestionnaire() || "";
         self.Url.query['exceptiontype'] = self.SelectedExceptionType() || "";
-        
+        self.Url.query['interviewkey'] = self.InterviewKey() || "";
 
         if (Modernizr.history) {
             window.history.pushState({}, null, self.Url.toString());
@@ -93,8 +94,9 @@
             FromProcessingDateTime: startDate != null ? startDate.format(dateFormat) : null,
             ToProcessingDateTime: endDate.format(dateFormat),
             ResponsibleId: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId,
-            QuestionnaireIdentity: self.SelectedQuestionnaire()
-        };
+            QuestionnaireIdentity: self.SelectedQuestionnaire(),
+            InterviewKey: self.InterviewKey()
+    };
     };
 
     self.load = function () {
@@ -103,6 +105,7 @@
 
             self.SelectedQuestionnaire(self.QueryString['questionnaire']);
             self.SelectedExceptionType(self.QueryString['exceptiontype']);
+            self.InterviewKey(self.QueryString['interviewkey']);
 
             var fromPoint = self.QueryString['from'] || null;
             if (fromPoint != null) {
@@ -119,10 +122,12 @@
 
             self.Url.query['exceptiontype'] = self.QueryString['exceptiontype'] || "";
             self.Url.query['questionnaire'] = self.QueryString['questionnaire'] || "";
+            self.Url.query['interviewkey'] = self.QueryString['interviewkey'] || "";
 
             self.SelectedExceptionType.subscribe(self.filter);
             self.SelectedResponsible.subscribe(self.filter);
             self.SelectedQuestionnaire.subscribe(self.filter);
+            self.InterviewKey.subscribe(self.filter);
 
             self.search();
 
