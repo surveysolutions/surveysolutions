@@ -124,7 +124,7 @@
     <value>Achevé</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>Télécharger ({0})</value>
+    <value>Télécharger ({{count}})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
     <value>Vous pouvez télécharger la liste d'affectations qui ont été affectés aux enquêteurs afin d'envoyer des liens web aux répondants</value>
@@ -139,7 +139,7 @@
     <value>L'entretien Web a commencé</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Début de l'entretien sur le Web pour {0}</value>
+    <value>Début de l'entretien sur le Web pour {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Arrêtez l'entrevue Web</value>
@@ -154,6 +154,6 @@
     <value>Configuration de l'entretien Web</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Entretien Web pour {0} a commencé</value>
+    <value>Entretien Web pour {{name}} a commencé</value>
   </data>
 </root>

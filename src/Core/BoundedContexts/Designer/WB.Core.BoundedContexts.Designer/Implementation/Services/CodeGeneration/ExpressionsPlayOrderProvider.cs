@@ -26,7 +26,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         public Dictionary<Guid, Guid[]> GetDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)
         {
             var graph = this.expressionsGraphProvider.BuildDependencyGraph(questionnaire);
-            return graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
+            var dependencyGraph = graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
+
+            var sorter = new TopologicalSorter<Guid>();
+            var detectCycles = sorter.DetectCycles(dependencyGraph);
+            if (detectCycles.Any(c => c.Count > 1))
+                return null;
+
+            return dependencyGraph;
         }
 
         public Dictionary<Guid, Guid[]> GetValidationDependencyGraph(ReadOnlyQuestionnaireDocument questionnaire)

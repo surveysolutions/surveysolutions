@@ -1159,6 +1159,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add special value.
+        /// </summary>
+        public static string QuestionAddSpecialValues {
+            get {
+                return ResourceManager.GetString("QuestionAddSpecialValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cascading combo box.
         /// </summary>
         public static string QuestionCascading {

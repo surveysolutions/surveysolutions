@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             {
                 foreach (var answer in question.Answers)
                 {
-                    exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
+                    exportedHeaderItem.Labels.Add(Guid.NewGuid(), new LabelItem(answer));
                 }
             }
 
@@ -414,12 +414,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
                     
                 case QuestionType.MultyOption:
-                {
-                    return ExportValueType.NumericInt;
-                }
                 case QuestionType.SingleOption:
                 {
-                    return ExportValueType.NumericInt;
+                    return (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue) ? ExportValueType.String : ExportValueType.NumericInt;
                 }
                 default:
                         return ExportValueType.Unknown;

@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     questionnaire.Id, questionNumericId, responsibleId,
                     new CommonQuestionParameters() { Title = "title", VariableName = "variableName2" ,VariableLabel = "variableLabel", HideIfDisabled = true},
                     scope: QuestionScope.Interviewer, isInteger: true, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>(),
-                    isPreFilled:false,useFormatting:false));
+                    isPreFilled:false,useFormatting:false, options: null));
 
             questionnaire.UpdateDateTimeQuestion(
                 new UpdateDateTimeQuestion(questionnaireId: Guid.Parse("22222222222222222222222222222222"), questionId: questionDateTimeId, 

@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
                     this.dataExportProcessesService.AddDataExport(
-                        new DataExportProcessDetails(exportType, questionnaireIdentity, null)
+                        new DataExportProcessDetails(exportType, questionnaireIdentity, questionnaireBrowseItem.Title)
                         {
                             FromDate = from,
                             ToDate = to,
@@ -154,7 +154,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
             this.dataExportProcessesService.DeleteDataExport(
-                new DataExportProcessDetails(exportType, questionnaireIdentity, null)
+                new DataExportProcessDetails(exportType, questionnaireIdentity, questionnaireBrowseItem.Title)
                 {
                     FromDate = from,
                     ToDate = to,
