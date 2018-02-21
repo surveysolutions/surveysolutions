@@ -191,10 +191,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.View("SpeedAndQuantity", model);
         }
 
+        [ActivePage(MenuItem.SpeedOfCompletingInterviews)]
         public ActionResult SpeedByInterviewers(Guid? supervisorId, PeriodiceReportType reportType = PeriodiceReportType.AverageInterviewDuration)
         {
-            this.ViewBag.ActivePage = MenuItem.SpeedOfCompletingInterviews;
-
             var periodicStatusReportWebApiActionName =
              reportTypesWhichShouldBeReroutedToCustomStatusController.Contains(reportType)
                  ? PeriodicStatusReportWebApiActionName.BetweenStatusesByInterviewers
