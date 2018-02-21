@@ -20,11 +20,12 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
-    internal class InterviewPackagesService : IInterviewPackagesService
+    internal class InterviewPackagesService : IInterviewPackagesService, IInterviewBrokenPackagesService
     {
         public const string UnknownExceptionType = "Unexpected";
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
@@ -130,6 +131,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 .Query(packages => packages.Select(package => package.InterviewId).Take(count).ToList())
                 .Select(id => id.FormatGuid())
                 .ToReadOnlyCollection();
+        }
+
+        public bool HasBrokenPackageByInterview(Guid interviewId)
+        {
+            return this.brokenInterviewPackageStorage.Query(_ =>
+                _.Any(p => p.ExceptionType == UnknownExceptionType && p.InterviewId == interviewId)
+            );
         }
 
         public IReadOnlyCollection<int> GetTopBrokenPackageIdsAllowedToReprocess(int count)

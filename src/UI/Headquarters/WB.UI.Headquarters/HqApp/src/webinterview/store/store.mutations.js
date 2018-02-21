@@ -49,6 +49,7 @@ export default {
         state.receivedByInterviewer = interviewInfo.receivedByInterviewer
         state.interviewCannotBeChanged = interviewInfo.interviewCannotBeChanged
         state.isCurrentUserObserving = interviewInfo.isCurrentUserObserving
+        state.isExistsBrokenPackage = interviewInfo.isExistsBrokenPackage
     },
     SET_COVER_INFO(state, coverInfo) {
         state.coverInfo = coverInfo
