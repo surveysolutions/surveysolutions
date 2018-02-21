@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             {
                 IQueryable<BrokenInterviewPackage> query = queryable;
 
+                if (!string.IsNullOrWhiteSpace(filter.InterviewKey))
+                {
+                    query = query.Where(x => x.InterviewKey.Contains(filter.InterviewKey));
+                }
+
                 if (!filter.ReturnOnlyUnknownExceptionType)
                 {
                     query = query.Where(x => !knownExceptionTypes.Contains(x.ExceptionType));
@@ -83,6 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         Id = package.Id,
                         InterviewId = package.InterviewId,
                         IncomingDate = package.IncomingDate,
+                        InterviewKey = package.InterviewKey,
                         ProcessingDate = package.ProcessingDate,
                         ExceptionType = package.ExceptionType,
                         ExceptionMessage = package.ExceptionMessage,
