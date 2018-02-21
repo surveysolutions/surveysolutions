@@ -25,7 +25,8 @@
             <wb-title v-if="!noTitle" />
             <wb-instructions v-if="!noInstructions" />
             <slot />
-            <wb-validation v-if="!noValidation" />
+            <wb-validation v-if="!noValidation"/>
+            <wb-warnings v-if="!noValidation" />
             <wb-comments v-if="!noComments" :isShowingAddCommentDialog="isShowingAddCommentDialog" />
         </div>
         <wb-progress :visible="isFetchInProgress" :valuenow="valuenow" :valuemax="valuemax" />
