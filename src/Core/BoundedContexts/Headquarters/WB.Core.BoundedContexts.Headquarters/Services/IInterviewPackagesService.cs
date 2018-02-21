@@ -18,5 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void ReprocessSelectedBrokenPackages(int[] packageIds);
 
         IReadOnlyCollection<string> GetAllPackagesInterviewIds();
+        IReadOnlyCollection<int> GetTopBrokenPackageIdsAllowedToReprocess(int count);
     }
 }

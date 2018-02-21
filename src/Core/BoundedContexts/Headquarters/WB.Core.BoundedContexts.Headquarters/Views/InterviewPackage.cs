@@ -14,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public virtual bool IsCensusInterview { get; set; }
         public virtual DateTime IncomingDate { get; set; }
         public virtual string Events { get; set; }
+        public virtual int ProcessAttemptsCount { get; set; }
     }
 
     public class BrokenInterviewPackage
@@ -33,5 +34,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public virtual string ExceptionStackTrace { get; set; }
         public virtual long PackageSize { get; set; }
         public virtual string InterviewKey { get; set; }
+        public virtual int ReprocessAttemptsCount { get; set; }
     }
 }
