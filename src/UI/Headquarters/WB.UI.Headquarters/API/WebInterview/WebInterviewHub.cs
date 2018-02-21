@@ -25,8 +25,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory) : 
-            base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory)
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory, IInterviewBrokenPackagesService interviewBrokenPackagesService) : 
+            base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory, interviewBrokenPackagesService)
         {
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
