@@ -214,6 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Upsert(state.Enablement, (entity, value) => entity.IsEnabled = value);
             Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
             Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
+            Upsert(state.Warnings, (e,v) => e.Warnings = v.Validations);
 
             Upsert(state.Answers, (entity, answer) =>
             {
@@ -287,7 +288,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Write(item.Identity.RosterVector.ToString().Trim('_'));
                     Write(item.IsEnabled);
                     Write(item.IsReadonly);
-                    Write(item.InvalidValidations?.Length > 0 ? item.InvalidValidations : null);
+                    Write(item.InvalidValidations?.Length > 0 ? string.Join("-", item.InvalidValidations) : null);
                     Write(item.AsString);
                     Write(item.AsInt);
                     Write(item.AsLong);
@@ -335,16 +336,33 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag " +
                 $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})", commandTimeout: 0, buffered: false);
 
+            int[] ParseIntArray(string array, char delimeter = '-')
+            {
+                if (string.IsNullOrWhiteSpace(array) || string.IsNullOrWhiteSpace(array.Trim('_'))) return null;
+
+                var items = array.Split(delimeter);
+
+                var result = new int[items.Length];
+
+                for (int i = 0; i < items.Length; i++)
+                {
+                    result[i] = int.Parse(items[i]);
+                }
+
+                return result;
+            }
+
             foreach (var result in queryResult)
             {
                 var entity = new InterviewEntity();
 
                 entity.InterviewId = result.InterviewId;
-                entity.Identity = new Identity(result.EntityId, RosterVector.Parse(result.RosterVector));
+                entity.Identity = new Identity(result.EntityId, ParseIntArray(result.RosterVector) ?? RosterVector.Empty);
 
                 entity.IsEnabled = result.IsEnabled;
                 entity.IsReadonly = result.IsReadonly;
-                entity.InvalidValidations = result.InvalidValidations ?? Array.Empty<int>();
+                entity.InvalidValidations = ParseIntArray(result.InvalidValidations);
+                entity.Warnings = ParseIntArray(result.Warnings);
                 entity.AsString = result.AsString;
                 entity.AsInt = result.AsInt;
                 entity.AsLong = result.AsLong;

@@ -16,7 +16,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public string RosterVector { get; set; }
         public bool HasFlag { get; set; }
         public bool IsEnabled { get; set; }
-        public int[] InvalidValidations { get; set; }
+        public string InvalidValidations { get; set; }
+        public string Warnings { get; set; }
         public bool IsReadonly { get; set; }
         public int? AsInt { get; set; }
         public double? AsDouble { get; set; }
@@ -43,6 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual bool HasFlag { get; set; }
         public virtual bool IsEnabled { get; set; }
         public virtual int[] InvalidValidations { get; set; }
+        public virtual int[] Warnings { get; set; }
         public virtual bool IsReadonly { get; set; }
         public virtual int? AsInt { get; set; }
         public virtual double? AsDouble { get; set; }
