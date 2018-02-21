@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
@@ -79,6 +82,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
 
             Assert.That(contentVersion, Is.EqualTo(21));
+        }
+
+        [Test]
+        public void when_questionnaire_contains_question_with_warning_validation_Should_return_version_22()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.Question(questionType: QuestionType.Text, 
+                    validationConditions:new List<ValidationCondition>()
+                    {
+                        new ValidationCondition(){Severity = ValidationSeverity.Warning, Expression = "1!=1", Message = "Warning"}
+                    }));
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(22));
         }
     }
 }

@@ -116,7 +116,8 @@ namespace WB.Tests.Integration.InterviewTests
             var playOrderProvider = IntegrationCreate.ExpressionsPlayOrderProvider();
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
             questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
-            questionnaireDocument.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            var dependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+            questionnaireDocument.DependencyGraph = dependencyGraph ?? throw new ArgumentException("please check questionnire, you have cycle reference");
             questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
