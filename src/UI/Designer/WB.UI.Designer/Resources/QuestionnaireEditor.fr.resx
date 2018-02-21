@@ -223,7 +223,7 @@
     <value>Vous avez saisi plus que le maximum autorisé {{max}}</value>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
-    <value>Message d'erreur</value>
+    <value>Message d'erreur ou d'avertissement</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
     <value>Erreur {{count}}</value>

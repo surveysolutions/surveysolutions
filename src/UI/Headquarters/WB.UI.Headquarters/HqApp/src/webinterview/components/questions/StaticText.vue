@@ -7,6 +7,7 @@
             </div>
             <wb-attachment :contentId="$me.attachmentContent" :interviewId="interviewId" customCssClass="static-text-image" v-if="$me.attachmentContent && !$me.isDisabled" />
             <wb-validation />
+            <wb-warnings />
         </div>
     </div>
 </template>

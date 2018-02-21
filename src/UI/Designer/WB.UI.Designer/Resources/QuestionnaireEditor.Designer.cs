@@ -385,7 +385,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error message.
+        ///   Looks up a localized string similar to Error or warning message.
         /// </summary>
         public static string ErrorMessage {
             get {
@@ -736,7 +736,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error message is shown when validation condition evaluates to &quot;False&quot; or error occurres during expression evaluation..
+        ///   Looks up a localized string similar to Error or warning message is shown when validation condition evaluates to &quot;False&quot; or error occurres during expression evaluation..
         /// </summary>
         public static string HelpValidationMessage {
             get {

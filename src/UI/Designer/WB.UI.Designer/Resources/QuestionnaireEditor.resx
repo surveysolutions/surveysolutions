@@ -542,7 +542,7 @@
     <value>You entered more than maximum allowed {{max}}</value>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
-    <value>Error message</value>
+    <value>Error or warning message</value>
   </data>
   <data name="OptionsListError" xml:space="preserve">
     <value>You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
@@ -854,7 +854,7 @@
     <value>A logical expression that validates an answer to the current question. Might include values of other questions.</value>
   </data>
   <data name="HelpValidationMessage" xml:space="preserve">
-    <value>Error message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
+    <value>Error or warning message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
   </data>
   <data name="HelpVariableDescription" xml:space="preserve">
     <value>Text that will be shown next to a variable for testing purposes</value>
