@@ -23,6 +23,7 @@ using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -245,7 +246,7 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
-                        global::Resources.BatchUpload.Prerequisite_FileOpen,
+                        Pages.GlobalSettings_UnhandledExceptionMessage,
                         AssignmentImportType.Panel,
                         model.File.FileName));
             }
@@ -373,7 +374,7 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
-                        global::Resources.BatchUpload.Prerequisite_FileOpen,
+                        Pages.GlobalSettings_UnhandledExceptionMessage,
                         AssignmentImportType.Assignments,
                         model.File.FileName));
             }
