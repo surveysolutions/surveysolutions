@@ -319,12 +319,12 @@ namespace WB.UI.Headquarters.Controllers
         public IHttpActionResult ImportUsers(ImportUsersRequest request)
         {
             if (request?.File?.FileBytes == null)
-                this.BadRequest(BatchUpload.Prerequisite_FileOpen);
+                return this.BadRequest(BatchUpload.Prerequisite_FileOpen);
 
             var fileExtension = Path.GetExtension(request.File.FileName).ToLower();
 
             if (!new[] {TextExportFile.Extension, TabExportFile.Extention}.Contains(fileExtension))
-                this.BadRequest(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, TabExportFile.Extention, TextExportFile.Extension));
+                return this.BadRequest(string.Format(BatchUpload.UploadUsers_NotAllowedExtension, TabExportFile.Extention, TextExportFile.Extension));
 
             try
             {
