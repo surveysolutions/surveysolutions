@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public QuestionHeaderViewModel Header { get; private set; }
         public virtual ValidityViewModel Validity { get; private set; }
+        public virtual WarningsViewModel Warnings { get; }
         public EnablementViewModel Enablement { get; private set; }
         public CommentsViewModel Comments { get; private set; }
 
@@ -33,11 +34,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionHeaderViewModel questionHeaderViewModel,
             EnablementViewModel enablementViewModel,
             CommentsViewModel commentsViewModel,
-            AnswersRemovedNotifier answersRemovedNotifier)
+            AnswersRemovedNotifier answersRemovedNotifier,
+            WarningsViewModel warningsViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
             this.interviewRepository = interviewRepository;
             this.answersRemovedNotifier = answersRemovedNotifier;
+            this.Warnings = warningsViewModel;
             this.Validity = validityViewModel;
             this.Header = questionHeaderViewModel;
             this.Enablement = enablementViewModel;
@@ -60,6 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.answersRemovedNotifier.Init(interviewId, entityIdentity);
             this.Header.Init(interviewId, entityIdentity);
             this.Validity.Init(interviewId, entityIdentity);
+            this.Warnings.Init(interviewId, entityIdentity);
             this.Comments.Init(interviewId, entityIdentity, navigationState);
             this.Enablement.Init(interviewId, entityIdentity);
             this.Enablement.EntityEnabled += this.EnablementOnEntityEnabled;
@@ -116,6 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Header.ShowComments -= this.ShowCommentsCommand;
             Header.Dispose();
             Validity.Dispose();
+            Warnings.Dispose();
             Enablement.Dispose();
             this.answersRemovedNotifier.Dispose();
         }

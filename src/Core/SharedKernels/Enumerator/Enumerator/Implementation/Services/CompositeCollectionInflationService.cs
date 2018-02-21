@@ -39,11 +39,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                     compositeQuestionParts.Add(CompositeItemType.Self, new CompositeCollection<ICompositeEntity>());
 
-                    var compositeItemWithChildren = compositeQuestion as ICompositeQuestionWithChildren;
-                    if (compositeItemWithChildren != null)
+                    if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
                         compositeQuestionParts.Add(CompositeItemType.Childrens, new CompositeCollection<ICompositeEntity>());
 
                     compositeQuestionParts.Add(CompositeItemType.Validity, new CompositeCollection<ICompositeEntity>());
+                    compositeQuestionParts.Add(CompositeItemType.Warnings, new CompositeCollection<ICompositeEntity>());
                     compositeQuestionParts.Add(CompositeItemType.Comments, new CompositeCollection<ICompositeEntity>());
                     compositeQuestionParts.Add(CompositeItemType.AnsweringProgress, new CompositeCollection<ICompositeEntity>());
 
@@ -76,54 +76,52 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private void OnEnablementChanged(
             Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>> itemCompositeCollections,
             ICompositeQuestion compositeQuestion, 
-            CompositeCollection<ICompositeEntity> allVisibleGroupItems)
-        {
+            CompositeCollection<ICompositeEntity> allVisibleGroupItems) => 
             this.mainThreadDispatcher.RequestMainThreadAction(() =>
+        {
+            if (!itemCompositeCollections[CompositeItemType.Title].Contains(compositeQuestion.QuestionState.Header))
             {
-                if (!itemCompositeCollections[CompositeItemType.Title].Contains(compositeQuestion.QuestionState.Header))
-                {
-                    itemCompositeCollections[CompositeItemType.Title].Add(compositeQuestion.QuestionState.Header);
-                }
+                itemCompositeCollections[CompositeItemType.Title].Add(compositeQuestion.QuestionState.Header);
+            }
 
-                if (!compositeQuestion.QuestionState.Enablement.Enabled)
+            if (!compositeQuestion.QuestionState.Enablement.Enabled)
+            {
+                foreach (var itemCompositeCollection in itemCompositeCollections)
                 {
-                    foreach (var itemCompositeCollection in itemCompositeCollections)
+                    if (itemCompositeCollection.Key == CompositeItemType.Title &&
+                        !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
                     {
-                        if (itemCompositeCollection.Key == CompositeItemType.Title &&
-                            !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
-                        {
-                            allVisibleGroupItems.NotifyItemChanged(compositeQuestion.QuestionState.Header);
-                            continue;
-                        }
-
-                        itemCompositeCollection.Value.Clear();
-                    }
-                }
-                else
-                {
-                    if (itemCompositeCollections.ContainsKey(CompositeItemType.Instruction))
-                    {
-                        itemCompositeCollections[CompositeItemType.Instruction].Add(
-                            compositeQuestion.InstructionViewModel);
+                        allVisibleGroupItems.NotifyItemChanged(compositeQuestion.QuestionState.Header);
+                        continue;
                     }
 
-                    itemCompositeCollections[CompositeItemType.Self].Add(compositeQuestion);
-
-                    if (itemCompositeCollections.ContainsKey(CompositeItemType.Childrens))
-                    {
-                        var compositeItemWithChildren = compositeQuestion as ICompositeQuestionWithChildren;
-                        if (compositeItemWithChildren != null)
-                            itemCompositeCollections[CompositeItemType.Childrens].AddCollection(
-                                compositeItemWithChildren.Children);
-                    }
-
-                    itemCompositeCollections[CompositeItemType.Validity].Add(compositeQuestion.QuestionState.Validity);
-                    itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
-                    itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
+                    itemCompositeCollection.Value.Clear();
+                }
+            }
+            else
+            {
+                if (itemCompositeCollections.ContainsKey(CompositeItemType.Instruction))
+                {
+                    itemCompositeCollections[CompositeItemType.Instruction].Add(
+                        compositeQuestion.InstructionViewModel);
                 }
 
-            });
-        }
+                itemCompositeCollections[CompositeItemType.Self].Add(compositeQuestion);
+
+                if (itemCompositeCollections.ContainsKey(CompositeItemType.Childrens))
+                {
+                    if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
+                        itemCompositeCollections[CompositeItemType.Childrens].AddCollection(
+                            compositeItemWithChildren.Children);
+                }
+
+                itemCompositeCollections[CompositeItemType.Validity].Add(compositeQuestion.QuestionState.Validity);
+                itemCompositeCollections[CompositeItemType.Warnings].Add(compositeQuestion.QuestionState.Warnings);
+                itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
+                itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
+            }
+
+        });
 
         private enum CompositeItemType
         {
@@ -132,8 +130,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             Self = 3,
             Childrens = 4,
             Validity = 5,
-            Comments = 6,
-            AnsweringProgress = 7
+            Warnings = 6,
+            Comments = 7,
+            AnsweringProgress = 8
         }
     }
 }
