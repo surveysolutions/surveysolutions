@@ -25,11 +25,13 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Shared.Web.Filters;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [ApiNoCache]
     public partial class ReportDataApiController : BaseApiController
     {
         const int MaxPageSize = 1024;
