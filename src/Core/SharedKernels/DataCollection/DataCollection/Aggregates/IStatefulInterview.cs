@@ -76,8 +76,11 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasGroup(Identity group);
 
         bool IsEntityValid(Identity identity);
+        bool IsEntityPlausible(Identity identity);
 
         IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback);
+
+        IEnumerable<string> GetFailedWarningMessages(Identity identity, string defaultText);
 
         bool IsEnabled(Identity entityIdentity);
 
@@ -193,5 +196,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         int? GetAssignmentId();
         bool IsParentOf(Identity parentIdentity, Identity childIdentity);
+
     }
 }
