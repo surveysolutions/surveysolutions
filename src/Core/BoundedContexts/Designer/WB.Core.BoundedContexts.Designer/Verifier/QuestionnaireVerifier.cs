@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -26,22 +28,40 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private readonly ITranslationsService translationService;
         private readonly IQuestionnaireTranslator questionnaireTranslator;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
-        
+        private readonly ITopologicalSorter<Guid> topologicalSorter;
+        private readonly IExpressionsPlayOrderProvider graphProvider;
 
-        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, IFileSystemAccessor fileSystemAccessor, ISubstitutionService substitutionService, IKeywordsProvider keywordsProvider, IExpressionProcessorGenerator expressionProcessorGenerator, IDesignerEngineVersionService engineVersionService, IMacrosSubstitutionService macrosSubstitutionService, ILookupTableService lookupTableService, IAttachmentService attachmentService, ITopologicalSorter<string> topologicalSorter, ITranslationsService translationService, IQuestionnaireTranslator questionnaireTranslator, IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, IDynamicCompilerSettingsProvider compilerSettings)
+
+        public QuestionnaireVerifier(IExpressionProcessor expressionProcessor, 
+            IFileSystemAccessor fileSystemAccessor, 
+            ISubstitutionService substitutionService, 
+            IKeywordsProvider keywordsProvider, 
+            IExpressionProcessorGenerator expressionProcessorGenerator, 
+            IDesignerEngineVersionService engineVersionService, 
+            IMacrosSubstitutionService macrosSubstitutionService, 
+            ILookupTableService lookupTableService, 
+            IAttachmentService attachmentService, 
+            ITopologicalSorter<Guid> topologicalSorter, 
+            ITranslationsService translationService, 
+            IQuestionnaireTranslator questionnaireTranslator, 
+            IQuestionnaireCompilationVersionService questionnaireCompilationVersionService, 
+            IDynamicCompilerSettingsProvider compilerSettings,
+            IExpressionsPlayOrderProvider graphProvider)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.engineVersionService = engineVersionService;
             this.translationService = translationService;
             this.questionnaireTranslator = questionnaireTranslator;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
+            this.topologicalSorter = topologicalSorter;
+            this.graphProvider = graphProvider;
 
             verifiers = new IPartialVerifier[]
             {
                 new QuestionVerifications(),
                 new GroupVerifications(fileSystemAccessor),
                 new AttachmentVerifications(attachmentService), 
-                new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, topologicalSorter, compilerSettings), 
+                new ExpressionVerifications(macrosSubstitutionService, expressionProcessor, compilerSettings), 
                 new LookupVerifications(lookupTableService, keywordsProvider), 
                 new MacroVerifications(), 
                 new QuestionnaireVerifications(substitutionService, keywordsProvider), 
@@ -77,9 +97,16 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 verificationMessagesByQuestionnaire.AddRange(errors);
             }
 
+            var errorsCodeForSkipCircleReferanceVerifier = new HashSet<string>() { "WB0102", "WB0026" };
+            if (verificationMessagesByQuestionnaire.Any(er => errorsCodeForSkipCircleReferanceVerifier.Contains(er.Code)))
+                return verificationMessagesByQuestionnaire;
+
+            var errorsByCircleReferances = this.ErrorsByCircularReferences(questionnaire);
+            verificationMessagesByQuestionnaire.AddRange(errorsByCircleReferances);
+
             if (verificationMessagesByQuestionnaire.Any(e => e.MessageLevel == VerificationMessageLevel.Critical))
                 return verificationMessagesByQuestionnaire;
-            
+
             var verificationMessagesByCompiler = this.ErrorsByCompiler(questionnaire).ToList();
 
             return verificationMessagesByQuestionnaire.Concat(verificationMessagesByCompiler);
@@ -101,6 +128,22 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             foreach (var elementWithErrors in elementsWithErrorMessages)
             {
                 yield return CreateExpressionSyntaxError(new ExpressionLocation(elementWithErrors.Key), elementWithErrors.ToList());
+            }
+        }
+
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(QuestionnaireDocument questionnaire)
+        {
+            var dependencyGraph = graphProvider.GetDependencyGraph(questionnaire.AsReadOnly());
+            var cycles = topologicalSorter.DetectCycles(dependencyGraph);
+
+            foreach (var cycle in cycles)
+            {
+                var references =
+                    cycle.Select(guid => questionnaire.Find<IComposite>(guid))
+                        .Select(x => QuestionnaireNodeReference.CreateFrom(x))
+                        .ToArray();
+
+                yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
             }
         }
 
