@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
@@ -61,9 +62,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return new QuestionnaireNodeReference(
                 entity is IGroup
                     ? QuestionnaireVerificationReferenceType.Group
-                    : (entity is IStaticText
+                    : entity is IStaticText
                         ? QuestionnaireVerificationReferenceType.StaticText
-                        : QuestionnaireVerificationReferenceType.Question),
+                        : entity is IVariable
+                            ? QuestionnaireVerificationReferenceType.Variable
+                            : QuestionnaireVerificationReferenceType.Question,
                 entity.PublicKey)
             {
                 IndexOfEntityInProperty = failedValidationIndex
