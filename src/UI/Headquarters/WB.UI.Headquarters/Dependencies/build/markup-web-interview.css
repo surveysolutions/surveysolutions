@@ -487,6 +487,8 @@ span.image-zoom-box, span.image-option {
       white-space: pre-wrap; }
   .information-block.text-danger {
     color: #e74924; }
+  .information-block.text-warning {
+    color: #F9BD07; }
   .information-block.roster-section-info {
     padding-top: 5px; }
 

@@ -295,4 +295,7 @@
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (вер. {1})</value>
   </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
 </root>

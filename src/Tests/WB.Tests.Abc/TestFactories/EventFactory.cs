@@ -37,6 +37,18 @@ namespace WB.Tests.Abc.TestFactories
         public AnswersDeclaredInvalid AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedConditions)
             => new AnswersDeclaredInvalid(failedConditions);
 
+        public AnswersDeclaredImplausible AnswersDeclaredImplausible(Identity questionId, int[] failedConditions)
+        {
+            return new AnswersDeclaredImplausible(new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>(){
+                {
+                    new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(questionId, failedConditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection())
+                }
+            });
+        }
+
+        public AnswersDeclaredPlausible AnswersDeclaredPlausible(params Identity[] questions)
+            => new AnswersDeclaredPlausible(questions);
+
         public AnswersDeclaredValid AnswersDeclaredValid(params Identity[] questions)
             => new AnswersDeclaredValid(questions);
 
@@ -251,6 +263,17 @@ namespace WB.Tests.Abc.TestFactories
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> arg)
            => new StaticTextsDeclaredInvalid(arg);
+
+        public StaticTextsDeclaredImplausible StaticTextsDeclaredImplausible(Identity staticText, int[] conditions)
+        {
+            return new StaticTextsDeclaredImplausible(new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>()
+            {
+                new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(staticText, conditions.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection())
+            });
+        }
+
+        public StaticTextsDeclaredPlausible StaticTextsDeclaredPlausible(params Identity[] staticTexts)
+            => new StaticTextsDeclaredPlausible(staticTexts);
 
         public StaticTextsDeclaredInvalid StaticTextsDeclaredInvalid(int[] failedConditionIndexes,
             params Identity[] staticTexts)
