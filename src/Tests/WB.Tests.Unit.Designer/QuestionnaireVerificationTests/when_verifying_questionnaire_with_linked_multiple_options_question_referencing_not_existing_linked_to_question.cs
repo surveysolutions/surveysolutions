@@ -32,10 +32,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test]
-        public void should_return_1_message() =>
-            Assert.That(verificationMessages, Has.Count.EqualTo(1));
-
-        [NUnit.Framework.Test]
         public void should_return_messages_with_code_WB0011 () =>
             verificationMessages.ShouldContainCritical("WB0011");
 

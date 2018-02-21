@@ -48,13 +48,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0056");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.First().References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0056").References.Count().ShouldEqual(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
-            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0056").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
-            verificationMessages.First().References.First().Id.ShouldEqual(questionId);
+            verificationMessages.GetError("WB0056").References.First().Id.ShouldEqual(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
