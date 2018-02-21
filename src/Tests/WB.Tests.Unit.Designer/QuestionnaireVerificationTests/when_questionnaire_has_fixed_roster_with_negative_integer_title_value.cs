@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
-                Create.TextQuestion(),
+                Create.TextQuestion(variable: "tb"),
                 Create.FixedRoster(fixedRosterTitles: new[] { new FixedRosterTitle(-1, "-1"),  new FixedRosterTitle(11, "11")}),
             });
 

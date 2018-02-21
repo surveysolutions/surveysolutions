@@ -66,6 +66,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -1264,8 +1265,8 @@ namespace WB.Tests.Abc.TestFactories
         public UserImportVerificationError UserPreloadingVerificationError()
             => new UserImportVerificationError();
 
-        public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
-            => new ValidationCondition(expression, message);
+        public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered", ValidationSeverity severity = ValidationSeverity.Error)
+            => new ValidationCondition(expression, message) { Severity =  severity };
 
         public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
             => new Variable(
