@@ -53,8 +53,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity
                 where not (q.""type"" = 'Group' or (q.""type"" = 'StaticText' and isenabled = false))");
             
-            //Delete.Table(@"interviews").InSchema(@"readside");
-            Rename.Table(@"interviews").InSchema(@"readside").To(@"interviews_old");
+            Delete.Table(@"interviews").InSchema(@"readside");
+            // Rename.Table(@"interviews").InSchema(@"readside").To(@"interviews_old");
             Rename.Table(@"temp_interviews").InSchema(@"readside").To(@"interviews");
         }
 
