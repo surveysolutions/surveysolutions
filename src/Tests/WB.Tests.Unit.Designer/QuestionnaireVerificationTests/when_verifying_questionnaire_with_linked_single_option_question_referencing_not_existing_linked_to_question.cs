@@ -30,11 +30,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
-
-        [NUnit.Framework.Test] public void should_return_messages_with_code_WB0011 () =>
-            verificationMessages.ShouldEachConformTo(error => error.Code == "WB0011");  
+        [NUnit.Framework.Test] public void should_messages_with_code_WB0011() =>
+            verificationMessages.ShouldContainCritical("WB0011");
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;
