@@ -10,6 +10,12 @@
             </div>
         </div>
 
+        <div class="wrapper-info" v-if="hasBrokenPackage">
+            <div class="container-info">
+                <h2>has Broken Package</h2>
+            </div>
+        </div>
+
         <div class="wrapper-info" v-if="hasSupervisorComment">
             <div class="container-info">
                 <h4 class="gray-uppercase">{{ $t("WebInterviewUI.CoverSupervisorNote")}}</h4>
@@ -97,6 +103,9 @@ export default {
         },
         hasSupervisorComment() {
             return !isEmpty(this.$store.state.webinterview.coverInfo.supervisorRejectComment)
+        },
+        hasBrokenPackage() {
+            return this.$store.state.isExistsBrokenPackage;
         }
     },
     methods: {

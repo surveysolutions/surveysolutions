@@ -89,6 +89,7 @@
     <Compile Include="Questionnaire\ITranslationManagementService.cs" />
     <Compile Include="Questionnaire\TranslationInstance.cs" />
     <Compile Include="Questionnaire\Impl\TranslationManagementService.cs" />
+    <Compile Include="WebInterview\IInterviewBrokenPackagesService.cs" />
     <Compile Include="WebInterview\InterviewAccessException.cs" />
     <Compile Include="Resources\WebInterview.Designer.cs">
       <DependentUpon>WebInterview.resx</DependentUpon>
