@@ -24,6 +24,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             get { return ConfigurationManager.AppSettings.GetString("Google.Map.ApiKey"); }
         }
 
+        public string GoogleMapApiBaseUrl
+        {
+            get { return ConfigurationManager.AppSettings.GetString("Google.Map.BaseUrl", "https://maps.googleapis.com"); }
+        }
 
         public string AdminEmail
         {
