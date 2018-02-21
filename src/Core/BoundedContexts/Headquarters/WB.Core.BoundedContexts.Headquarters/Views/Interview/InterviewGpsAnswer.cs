@@ -32,5 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return hashCode;
             }
         }
+
+        public override string ToString() => $"lat:{this.Latitude}, long: {this.Longitude}, id: {this.InterviewId}";
     }
 }
