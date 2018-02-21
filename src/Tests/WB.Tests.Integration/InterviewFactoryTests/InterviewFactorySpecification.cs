@@ -25,7 +25,7 @@ using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
-namespace WB.Tests.Integration
+namespace WB.Tests.Integration.InterviewFactoryTests
 {
     internal class InterviewFactorySpecification
     {
@@ -96,6 +96,14 @@ namespace WB.Tests.Integration
                 this.questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
             });
         }
+
+        protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId, Guid questionnaireId, long version = 1) =>
+            this.plainTransactionManager.ExecuteInPlainTransaction(()
+                => factory.GetInterviewEntities(new QuestionnaireIdentity(questionnaireId, version), interviewId).ToArray());
+
+        protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, QuestionnaireIdentity questionnaireId, Guid interviewId) =>
+            this.plainTransactionManager.ExecuteInPlainTransaction(()
+                => factory.GetInterviewEntities(questionnaireId, interviewId).ToArray());
 
         protected InterviewFactory CreateInterviewFactory()
         {

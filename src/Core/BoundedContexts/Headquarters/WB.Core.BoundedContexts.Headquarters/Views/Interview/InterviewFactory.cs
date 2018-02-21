@@ -181,6 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public void Save(InterviewState state)
         {
             var rows = GetInterviewEntities(null, state.Id);
+
             
             var perEntity = rows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
 
@@ -214,7 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Upsert(state.Enablement, (entity, value) => entity.IsEnabled = value);
             Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
             Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
-            Upsert(state.Warnings, (e,v) => e.Warnings = v.Validations);
+            Upsert(state.Warnings, (e,v) => e.WarningValidations = v.Validations);
 
             Upsert(state.Answers, (entity, answer) =>
             {
@@ -275,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             using (var importer = npgConnection.BeginBinaryImport(@"copy 
                 readside.interviews (
-                    interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, asstring, asint, aslong, 
+                    interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint, aslong, 
                     asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag 
                 ) 
                 from stdin (format binary)"))
@@ -289,6 +290,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Write(item.IsEnabled);
                     Write(item.IsReadonly);
                     Write(item.InvalidValidations?.Length > 0 ? string.Join("-", item.InvalidValidations) : null);
+                    Write(item.WarningValidations?.Length > 0 ? string.Join("-", item.WarningValidations) : null);
                     Write(item.AsString);
                     Write(item.AsInt);
                     Write(item.AsLong);
@@ -332,7 +334,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             connection.Execute("set enable_seqscan=false");
 
             var queryResult = connection.Query<InterviewEntityDto>(
-                "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, asstring, asint," +
+                "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint," +
                 " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag " +
                 $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})", commandTimeout: 0, buffered: false);
 
@@ -362,7 +364,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.IsEnabled = result.IsEnabled;
                 entity.IsReadonly = result.IsReadonly;
                 entity.InvalidValidations = ParseIntArray(result.InvalidValidations);
-                entity.Warnings = ParseIntArray(result.Warnings);
+                entity.WarningValidations = ParseIntArray(result.Warnings);
                 entity.AsString = result.AsString;
                 entity.AsInt = result.AsInt;
                 entity.AsLong = result.AsLong;
@@ -476,6 +478,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Id = entity.Identity.Id,
                 Answer = objectAnswer,
                 FailedValidationConditions = entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
+                FailedWarningConditions = entity.WarningValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
                 QuestionState = ToQuestionState(entity, objectAnswer != null)
             };
         }
@@ -497,8 +500,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             Id = entity.Identity.Id,
             IsEnabled = entity.IsEnabled,
-            FailedValidationConditions = (entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)) ??
-                                          new FailedValidationCondition[0]).ToReadOnlyCollection()
+            FailedValidationConditions = (entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)) ?? new FailedValidationCondition[0]).ToReadOnlyCollection(),
+            FailedWarningConditions = (entity.WarningValidations?.Select(x => new FailedValidationCondition(x)) ?? new FailedValidationCondition[0]).ToReadOnlyCollection()
         };
 
         private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ??

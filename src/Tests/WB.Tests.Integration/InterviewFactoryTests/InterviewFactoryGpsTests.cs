@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Integration
+namespace WB.Tests.Integration.InterviewFactoryTests
 {
     internal class InterviewFactoryGpsTests : InterviewFactorySpecification
     {
