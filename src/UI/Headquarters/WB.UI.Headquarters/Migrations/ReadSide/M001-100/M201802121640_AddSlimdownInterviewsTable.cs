@@ -14,7 +14,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 	            rostervector text NULL,
 	            isenabled bool NOT NULL DEFAULT false,
 	            isreadonly bool NOT NULL DEFAULT false,
-	            invalidvalidations int4[] NULL,
+	            invalidvalidations text NULL,
+                warnings text null,
 	            asstring text NULL,
 	            asint int4 NULL,
 	            aslong int8 NULL,
@@ -44,7 +45,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     q.id as entityid, 
                     array_to_string(i.rostervector,'-') as rostervector, 
                     isenabled, isreadonly, 
-                    case when coalesce(array_length(invalidvalidations, 1), 0) = 0 then null else invalidvalidations end as invalidvalidations,
+                    array_to_string(invalidvalidations,'-') as invalidvalidations, 
                     asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag
                 from readside.interviews i
                     inner join readside.interviewsummaries s on s.interviewid = i.interviewid 
