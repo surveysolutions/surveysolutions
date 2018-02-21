@@ -10,6 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewQuestion()
         {
             this.FailedValidationConditions = new List<FailedValidationCondition>();
+            this.FailedWarningConditions = new List<FailedValidationCondition>();
         }
              
         public InterviewQuestion(Guid id):this()
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public List<InterviewQuestionComment> Comments { get; set; }
         public QuestionState QuestionState { get; set; }
         public IReadOnlyList<FailedValidationCondition> FailedValidationConditions { get; set; }
+        public IReadOnlyList<FailedValidationCondition> FailedWarningConditions { get; set; }
 
         public bool IsReadonly()
         {
