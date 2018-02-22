@@ -133,10 +133,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 .ToReadOnlyCollection();
         }
 
-        public bool HasBrokenPackageByInterview(Guid interviewId)
+        public bool IsNeedShowBrokenPackageNotificationForInterview(Guid interviewId)
         {
             return this.brokenInterviewPackageStorage.Query(_ =>
-                _.Any(p => p.ExceptionType == UnknownExceptionType && p.InterviewId == interviewId)
+                _.Any(p => p.ExceptionType == UnknownExceptionType 
+                    && p.InterviewId == interviewId
+                    && p.ReprocessAttemptsCount > 2)
             );
         }
 
