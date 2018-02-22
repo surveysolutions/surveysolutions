@@ -276,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
-            registry.Bind<IInterviewPackagesService, InterviewPackagesService>();
+            registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
             registry.BindAsSingleton<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>, EventStoreHealthChecker>();

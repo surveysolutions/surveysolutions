@@ -4,6 +4,6 @@ namespace WB.Enumerator.Native.WebInterview
 {
     public interface IInterviewBrokenPackagesService
     {
-        bool HasBrokenPackageByInterview(Guid interviewId);
+        bool IsNeedShowBrokenPackageNotificationForInterview(Guid interviewId);
     }
 }
