@@ -163,12 +163,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         protected IEnumerable<int> GetRosterVectorColumnIndexes(ValueVector<Guid> rosterScope,
             QuestionnaireExportStructure exportStructure, List<string> header, HeaderStructureForLevel levelStructure)
         {
-            var parenColumnsNames = exportStructure.GetAllParentColumnNamesForLevel(rosterScope)
+            var parentColumnsNames = exportStructure.GetAllParentColumnNamesForLevel(rosterScope)
                 .Union(new[] {levelStructure.LevelIdColumnName})
                 .Except(new[] {ServiceColumns.InterviewId, ServiceColumns.Key})
+                .Select(x => x.ToLowerInvariant())
                 .ToArray();
 
-            return parenColumnsNames.Select(parentColumnName => header.IndexOf(parentColumnName));
+            return parentColumnsNames.Select(parentColumnName => header.IndexOf(parentColumnName));
         }
 
         public override bool HasDataForInterview(string interviewId)
