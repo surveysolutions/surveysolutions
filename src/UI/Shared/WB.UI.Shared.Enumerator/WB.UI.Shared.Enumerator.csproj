@@ -282,6 +282,7 @@
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewPartialTextTargetBinding.cs" />
     <Compile Include="CustomBindings\AudioSizeByNoiseLevelBinding.cs" />
+    <Compile Include="CustomBindings\NumericDisableBinding.cs" />
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
@@ -1271,6 +1272,56 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\styles-interview-audio-dialog.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_list_item_disabed_editor_background.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_nonanswered_disabled.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_disabled.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_invalid_disabled.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_nonanswered_no_bottom_corners.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_nonanswered_disabled_no_bottom_corners.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_invalid_no_bottom_corners.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_invalid_disabled_no_bottom_corners.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_disabled_no_bottom_corners.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_text_question_no_bottom_corners.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
