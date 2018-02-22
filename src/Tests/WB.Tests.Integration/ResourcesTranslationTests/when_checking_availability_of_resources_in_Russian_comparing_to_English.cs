@@ -12,24 +12,26 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         {
            russianResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.ru.resx")
-                .Where(IsEnumeratorOrTesterOrInterviwerFile);
+                .Where(IsShouldBeTranslatedFile);
 
             englishResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.resx")
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"))
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"))
-                .Where(IsEnumeratorOrTesterOrInterviwerFile);
+                .Where(IsShouldBeTranslatedFile);
 
             russianResourceNames =
                 from resourceFile in russianResourceFiles
                 let resourceFileName = GetTranslatedResourceFileNameWithoutExtension(resourceFile)
                 from resourceName in GetStringResourceNamesFromResX(resourceFile)
+                where IsNotPluralForm(resourceName)
                 select $"{resourceFileName}: {resourceName}";
 
             englishResourceNames =
                 from resourceFile in englishResourceFiles
                 let resourceFileName = GetOriginalResourceFileNameWithoutExtension(resourceFile)
                 from resourceName in GetStringResourceNamesFromResX(resourceFile)
+                where IsNotPluralForm(resourceName)
                 select $"{resourceFileName}: {resourceName}";
         }
  
@@ -48,9 +50,45 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         private IEnumerable<string> russianResourceNames;
         private IEnumerable<string> englishResourceNames;
 
-        private static bool IsEnumeratorOrTesterOrInterviwerFile(string filePath)
+        private static bool IsNotPluralForm(string resourceName)
         {
-            return filePath.Contains("Enumerator") || filePath.Contains("Tester") || filePath.Contains("Interviewer");
+            return !resourceName.EndsWith("_plural");
+        }
+
+        private static bool IsShouldBeTranslatedFile(string filePath)
+        {
+            var isAdroidApp = filePath.Contains("Enumerator") || filePath.Contains("Tester") || filePath.Contains("Interviewer");
+            if (isAdroidApp)
+                return true;
+
+            var ignoreResxFiles = new[]
+            {
+                @"WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages",
+                @"WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages",
+                @"WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages",
+                @"WB.Core.GenericSubdomains.Portable\Properties\Resources",
+                @"WB.UI.Designer\Resources\QuestionnaireController",
+                @"WB.UI.Designer\Resources\QuestionnaireEditor",
+                @"Resources\BatchUpload",
+                @"Resources\HQ",
+                @"Resources\Reports",
+                @"Resources\Users",
+                @"Resources\TakeNewInterview",
+                @"Resources\Dashboard",
+                @"WB.UI.Headquarters\Resources\FieldsAndValidations",
+                @"WB.UI.Headquarters\Resources\Pages",
+                @"WB.UI.Headquarters\Resources\ReviewInterview",
+                @"WB.UI.Headquarters\Resources\SyncLogMessages",
+                @"WB.UI.Headquarters\Resources\WebInterviewSetup",
+                @"WB.UI.Headquarters\Resources\UserPreloadingVerificationMessages",
+                @"WB.UI.Shared.Web\Resources\Captcha",
+                @"WB.UI.Shared.Web\Resources\ErrorMessages",
+            };
+
+            if (ignoreResxFiles.Any(filePath.Contains))
+                return false;
+
+            return true;
         }
     }
 }
