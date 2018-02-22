@@ -237,7 +237,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 Answer = ToAnswerView(interviewQuestion),
                 IsFlagged = GetIsFlagged(interviewQuestion, flaggedQuestionIds),
                 FailedValidationMessages = GetFailedValidationMessages(
-                    interviewQuestion.FailedValidations?.Select(
+                    interviewQuestion.FailedErrors?.Select(
                         (x, index) => ToValidationView(interviewQuestion.ValidationMessages, x, index)),
                     questionnaireQuestion.ValidationConditions).ToList()
             };
@@ -496,7 +496,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 IsEnabled = !interviewStaticText.IsDisabled(),
                 IsValid = interviewStaticText.IsValid,
                 FailedValidationMessages = GetFailedValidationMessages(
-                    interviewStaticText.FailedValidations?.Select(
+                    interviewStaticText.FailedErrors?.Select(
                         (x, index) => ToValidationView(interviewStaticText.ValidationMessages, x, index)),
                     questionnaireStaticText.ValidationConditions).ToList(),
                 Attachment = attachment

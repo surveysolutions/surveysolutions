@@ -226,7 +226,7 @@
     <value>La entrada no se encontró en el cuestionario, favor seleccione otra</value>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
-    <value>Mensaje de error</value>
+    <value>Mensaje de error o advertencia</value>
   </data>
   <data name="ErrorsCounter" xml:space="preserve">
     <value>{{count}} error</value>
