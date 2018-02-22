@@ -27,12 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         {
             var graph = this.expressionsGraphProvider.BuildDependencyGraph(questionnaire);
             var dependencyGraph = graph.ToDictionary(x => x.Key, x => x.Value.ToArray());
-
-            var sorter = new TopologicalSorter<Guid>();
-            var detectCycles = sorter.DetectCycles(dependencyGraph);
-            if (detectCycles.Any(c => c.Count > 1))
-                return null;
-
             return dependencyGraph;
         }
 
