@@ -71,7 +71,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"WB.UI.Designer\Resources\QuestionnaireEditor",
                 @"Resources\BatchUpload",
                 @"Resources\HQ",
-                @"Resources\Reports",
 //                @"WB.UI.Headquarters\App_GlobalResources\BatchUpload",
 //                @"WB.UI.Headquarters\App_GlobalResources\HQ",
 //                @"WB.UI.Headquarters\App_GlobalResources\Reports",
