@@ -487,6 +487,8 @@ span.image-zoom-box, span.image-option {
       white-space: pre-wrap; }
   .information-block.text-danger {
     color: #e74924; }
+  .information-block.text-warning {
+    color: #F9BD07; }
   .information-block.roster-section-info {
     padding-top: 5px; }
 
@@ -595,7 +597,8 @@ span.image-zoom-box, span.image-option {
   .question-editor .block-with-data .btn-link {
     padding-left: 0; }
   .question-editor.answered .question-unit .options-group {
-    background-color: transparent; }
+    background-color: transparent;
+    font-size: 0; }
   .question-editor.has-error .question-unit .options-group {
     background-color: #f6d6d0; }
     .question-editor.has-error .question-unit .options-group .form-group {
@@ -610,6 +613,8 @@ span.image-zoom-box, span.image-option {
       border-color: transparent;
       -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580;
               box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; }
+    .question-editor.has-error .field-to-fill.special-value-selected {
+      color: transparent; }
   .question-editor .question-unit .radio, .question-editor .question-unit .form-group {
     border-color: #eeeff0; }
   .question-editor.answered .question-unit .radio, .question-editor.answered .question-unit .form-group {
