@@ -225,4 +225,22 @@
   <data name="PLU0005Recomendation" xml:space="preserve">
     <value>Разрешены только буквы, цифры и символ подчёркивания. Длина должна быть от 3 до 15 символов</value>
   </data>
+  <data name="PLU0001Recomendation" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PLU0002Recomendation" xml:space="preserve">
+    <value/>
+  </data>
+  <data name="PLU0007Recomendation" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PLU0008Recomendation" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PLU0010Recomendation" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="PLU0011Recomendation" xml:space="preserve">
+    <value></value>
+  </data>
 </root>
