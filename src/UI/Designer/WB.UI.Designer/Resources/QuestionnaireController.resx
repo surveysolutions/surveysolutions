@@ -213,6 +213,9 @@
   <data name="ExportAsPDF" xml:space="preserve">
     <value>Export as PDF</value>
   </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Export as Html</value>
+  </data>
   <data name="Forbidden" xml:space="preserve">
     <value>You don't have permission to edit this questionnaire</value>
   </data>
@@ -225,8 +228,14 @@
   <data name="GeneratingPdf" xml:space="preserve">
     <value>Generating pdf for "{0}"</value>
   </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Creating Html for "{0}"</value>
+  </data>
   <data name="GeneratePdf" xml:space="preserve">
     <value>Generate pdf</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Export Html</value>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
     <value>Please choose language to render pdf questionnaire on it</value>

@@ -7,7 +7,7 @@
                 <h4 class="modal-title">@Html.Raw(string.Format(QuestionnaireController.GeneratingPdf, "<span id=\"export-pdf-modal-questionnaire-title\">?</span>"))</h4>
             </div>
             <div class="modal-body">
-                <div class="start-pdf-generation">
+                <div class="start-pdf-generation" id="startPdf">
                     <p>@QuestionnaireController.ChooseLanguageTitle</p>
 
                     <div class="dropdown clearfix">
