@@ -295,4 +295,8 @@
     <value>Обработка...</value>
     <comment>Обработка...</comment>
   </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Доступна новая версия:</value>
+    <comment>Доступна новая версия:</comment>
+  </data>
 </root>
