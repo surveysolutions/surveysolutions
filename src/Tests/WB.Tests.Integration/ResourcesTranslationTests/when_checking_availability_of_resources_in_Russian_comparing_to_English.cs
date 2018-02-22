@@ -73,7 +73,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"Resources\HQ",
                 @"Resources\Reports",
                 @"Resources\Users",
-                @"Resources\TakeNewInterview",
 //                @"WB.UI.Headquarters\App_GlobalResources\BatchUpload",
 //                @"WB.UI.Headquarters\App_GlobalResources\HQ",
 //                @"WB.UI.Headquarters\App_GlobalResources\Reports",
