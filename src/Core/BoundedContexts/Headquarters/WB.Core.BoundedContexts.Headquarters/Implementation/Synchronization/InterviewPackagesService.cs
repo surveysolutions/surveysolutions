@@ -135,8 +135,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public bool IsNeedShowBrokenPackageNotificationForInterview(Guid interviewId)
         {
+            var undefined = InterviewDomainExceptionType.Undefined.ToString();
             return this.brokenInterviewPackageStorage.Query(_ =>
-                _.Any(p => p.ExceptionType == UnknownExceptionType 
+                _.Any(p => (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
                     && p.InterviewId == interviewId
                     && p.ReprocessAttemptsCount > 2)
             );
@@ -150,10 +151,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             var utcNow60Minutes = utcNow.AddMinutes(-60);
             var utcNow8Hours = utcNow.AddHours(-8);
             var utcNow24Hours = utcNow.AddHours(-24);
+            var undefined = InterviewDomainExceptionType.Undefined.ToString();
 
             return this.brokenInterviewPackageStorage.Query(_ =>
             {
-                var filteredByError = _.Where(p => p.ExceptionType == UnknownExceptionType
+                var filteredByError = _.Where(p => (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
                     && _.Count(d => d.InterviewId == p.InterviewId) == 1);
 
                 var filteredByTries = filteredByError.Where(p => 
