@@ -44,11 +44,6 @@
     export default {
         name: 'Integer',
         mixins: [entityDetails],
-        data() {
-            return {
-                //isSpecialValueSelected: undefined
-            }
-        },
         computed: { 
             isSpecialValueSelected(){
                 if (this.$me.answer == null || this.$me.answer == undefined)
@@ -77,7 +72,6 @@
             },
         },
         methods: {
-            
             answerIntegerQuestion(evnt) {
                 const answerString = numerics.get($(evnt.target))
                 const answer = answerString != undefined && answerString != ''
@@ -101,7 +95,6 @@
 
                     if (!this.$me.isRosterSize) {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                        this.updateInputs(isSpecialValue);
                         return
                     }
 
@@ -120,7 +113,6 @@
 
                     if (!isNeedRemoveRosters) {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                        this.updateInputs(isSpecialValue);
                         return
                     }
 
@@ -131,7 +123,6 @@
                     modal.confirm(confirmMessage, result => {
                         if (result) {
                             this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                            this.updateInputs(isSpecialValue);
                             return
                         } else {
                             this.fetch()
@@ -147,7 +138,6 @@
                 }
                 if (!this.$me.isRosterSize) {
                     this.$store.dispatch("removeAnswer", this.id)
-                    this.updateInputs(undefined);
                     return
                 }
 
@@ -157,14 +147,10 @@
                 modal.confirm(confirmMessage, result => {
                     if (result) {
                         this.$store.dispatch('removeAnswer', this.id)
-                        this.updateInputs(undefined);
                     } else {
                         this.fetch()
                     }
                 });
-            },
-            updateInputs(isSpecialValueSelected){
-               //this.isSpecialValueSelected = isSpecialValueSelected;
             },
             isSpecialValue(value){
                 const options = this.$me.options || [];
