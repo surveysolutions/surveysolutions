@@ -81,7 +81,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
 //                @"WB.UI.Headquarters\App_GlobalResources\Users",
 //                @"WB.UI.Headquarters\App_GlobalResources\TakeNewInterview",
 //                @"WB.UI.Headquarters\App_GlobalResources\Dashboard",
-                @"WB.UI.Headquarters\Resources\FieldsAndValidations",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
             };
 
