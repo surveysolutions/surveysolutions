@@ -75,14 +75,18 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"Resources\Users",
                 @"Resources\TakeNewInterview",
                 @"Resources\Dashboard",
+//                @"WB.UI.Headquarters\App_GlobalResources\BatchUpload",
+//                @"WB.UI.Headquarters\App_GlobalResources\HQ",
+//                @"WB.UI.Headquarters\App_GlobalResources\Reports",
+//                @"WB.UI.Headquarters\App_GlobalResources\Users",
+//                @"WB.UI.Headquarters\App_GlobalResources\TakeNewInterview",
+//                @"WB.UI.Headquarters\App_GlobalResources\Dashboard",
                 @"WB.UI.Headquarters\Resources\FieldsAndValidations",
                 @"WB.UI.Headquarters\Resources\Pages",
                 @"WB.UI.Headquarters\Resources\ReviewInterview",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
                 @"WB.UI.Headquarters\Resources\WebInterviewSetup",
                 @"WB.UI.Headquarters\Resources\UserPreloadingVerificationMessages",
-                @"WB.UI.Shared.Web\Resources\Captcha",
-                @"WB.UI.Shared.Web\Resources\ErrorMessages",
             };
 
             if (ignoreResxFiles.Any(filePath.Contains))
