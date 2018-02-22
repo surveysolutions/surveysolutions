@@ -85,7 +85,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"WB.UI.Headquarters\Resources\Pages",
                 @"WB.UI.Headquarters\Resources\ReviewInterview",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
-                @"WB.UI.Headquarters\Resources\WebInterviewSetup",
             };
 
             if (ignoreResxFiles.Any(filePath.Contains))
