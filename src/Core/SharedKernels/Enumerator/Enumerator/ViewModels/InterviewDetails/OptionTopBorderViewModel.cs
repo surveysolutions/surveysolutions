@@ -1,29 +1,25 @@
 ﻿using System;
 using MvvmCross.Core.ViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class OptionBorderViewModel<T> : 
-        MvxNotifyPropertyChanged,
-        ICompositeEntity where T : QuestionAnswered
+    public class OptionBorderViewModel : MvxNotifyPropertyChanged, ICompositeEntity
     {
         private bool hasOptions;
 
-        public OptionBorderViewModel(QuestionStateViewModel<T> questionState,
+        public OptionBorderViewModel(IQuestionStateViewModel questionState,
             bool isTop)
         {
-            if (questionState == null) throw new ArgumentNullException(nameof(questionState));
+            this.QuestionState = questionState ?? throw new ArgumentNullException(nameof(questionState));
 
-            this.QuestionState = questionState;
             this.IsTop = isTop;
             this.hasOptions = true;
         }
 
         public bool HasOptions
         {
-            get { return this.hasOptions; }
+            get => this.hasOptions;
             set
             {
                 this.hasOptions = value; 
@@ -31,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public QuestionStateViewModel<T> QuestionState { get; set; }
+        public IQuestionStateViewModel QuestionState { get; set; }
 
         public bool IsTop { get; set; }
     }

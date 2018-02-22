@@ -298,18 +298,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IObservableCollection<ICompositeEntity> Children
-        {
-            get
-            {
-                var result = new CompositeCollection<ICompositeEntity>();
-                if (this.specialValues.SpecialValues.Count > 0)
-                {
-                    result.AddCollection(this.specialValues.SpecialValues);
-                    result.Add(new OptionBorderViewModel<NumericIntegerQuestionAnswered>(this.questionState, false));
-                }
-                return result;
-            }
-        }
+        public IObservableCollection<ICompositeEntity> Children => specialValues.AsChildren;
     }
 }

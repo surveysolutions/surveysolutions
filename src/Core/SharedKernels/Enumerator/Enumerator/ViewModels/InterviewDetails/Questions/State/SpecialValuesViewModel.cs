@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher, 
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
             IStatefulInterviewRepository interviewRepository)
         {
             this.optionsViewModel = optionsViewModel;
@@ -52,15 +52,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void SpecialValueSelected(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel) sender;
-            var previousOption = this.SpecialValues.SingleOrDefault(option => option.Selected && option != selectedSpecialValue);
-            
+            var previousOption =
+                this.SpecialValues.SingleOrDefault(option => option.Selected && option != selectedSpecialValue);
+
             if (previousOption != null) previousOption.Selected = false;
-            
+
             this.SpecialValueChanged?.Invoke(selectedSpecialValue, EventArgs.Empty);
         }
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> SpecialValues { get; private set; }
-
+       
         public virtual void Init(string interviewId, Identity entityIdentity, IQuestionStateViewModel questionState)
         {
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
@@ -86,16 +87,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateSpecialValues()
         {
             var interview = this.interviewRepository.Get(interviewId);
-            var integerQuestion = interview.GetIntegerQuestion(this.questionIdentity);
+            
+            List<SingleOptionQuestionOptionViewModel> specialValuesViewModels;
 
-            var specialValuesViewModels =
-                this.optionsViewModel.GetOptions()
+            var integerQuestion = interview.GetIntegerQuestion(this.questionIdentity);
+            if (integerQuestion != null)
+            {
+                specialValuesViewModels = this.optionsViewModel.GetOptions()
                     .Select(model => this.ToViewModel(model, isSelected: integerQuestion.IsAnswered() && model.Value == integerQuestion.GetAnswer().Value))
                     .ToList();
+            }
+            else
+            {
+                var doubleQuestion = interview.GetDoubleQuestion(this.questionIdentity);
+                specialValuesViewModels = this.optionsViewModel.GetOptions()
+                    .Select(model => this.ToViewModel(model, isSelected: doubleQuestion.IsAnswered() && model.Value == doubleQuestion.GetAnswer().Value))
+                    .ToList();
+            }
 
             RemoveSpecialValues();
             specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
-            this.mvxMainThreadDispatcher.RequestMainThreadAction(() => { this.RaisePropertyChanged(() => this.SpecialValues); });
+            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+            {
+                this.RaisePropertyChanged(() => this.SpecialValues);
+            });
         }
 
         private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)
@@ -146,12 +161,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
                 {
                     UpdateSpecialValues();
-                    this.mvxMainThreadDispatcher.RequestMainThreadAction(() => { this.RaisePropertyChanged(() => this.SpecialValues); });
+                    this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                    {
+                        this.RaisePropertyChanged(() => this.SpecialValues);
+                    });
                 }
 
                 if (answeredOrSelectedValue.HasValue)
                 {
-                    var selectedOption = this.SpecialValues.FirstOrDefault(x => x.Value == answeredOrSelectedValue.Value);
+                    var selectedOption =
+                        this.SpecialValues.FirstOrDefault(x => x.Value == answeredOrSelectedValue.Value);
                     if (selectedOption != null && selectedOption.Selected == false)
                     {
                         selectedOption.Selected = true;
@@ -161,9 +180,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             else
             {
                 RemoveSpecialValues();
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() => { this.RaisePropertyChanged(() => this.SpecialValues); });
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    this.RaisePropertyChanged(() => this.SpecialValues);
+                });
             }
         }
+
+        public IObservableCollection<ICompositeEntity> AsChildren {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                
+                result.AddCollection(SpecialValues);
+                result.Add(new OptionBorderViewModel(this.questionState, false));
+                
+                return result;
+            }
+        }
+
 
         public void Dispose()
         {
