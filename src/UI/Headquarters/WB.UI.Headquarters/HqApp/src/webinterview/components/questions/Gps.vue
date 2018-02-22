@@ -47,12 +47,12 @@
         },
         computed: {
             googleMapPosition() {
-                return `https://maps.googleapis.com/maps/api/staticmap?center=${this.$me.answer.latitude},${this.$me.answer.longitude}`
+                return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${this.$me.answer.latitude},${this.$me.answer.longitude}`
                     + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${this.$me.answer.latitude},${this.$me.answer.longitude}`
                     + `&key=${this.$config.googleApiKey}`
             },
             goolgeMapUrl(){
-                return `https://www.google.com/maps?q=${this.$me.answer.latitude},${this.$me.answer.longitude}`
+                return `${this.$config.googleMapsBaseUrl}/maps?q=${this.$me.answer.latitude},${this.$me.answer.longitude}`
             }
         },
         methods: {

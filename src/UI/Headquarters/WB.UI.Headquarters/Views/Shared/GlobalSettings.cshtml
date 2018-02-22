@@ -1,6 +1,5 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.UI.Headquarters.Resources
 @using WB.UI.Shared.Web.Filters
 @using WB.UI.Headquarters.Code
 
@@ -41,7 +40,7 @@
                         lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
                     },
                     basePath: '@Url.Content("~/")',
-                    dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
+					dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
                 },
                 clientDateTimeFormat: '@Extensions.ClientDateTimeFormat'
             }
@@ -52,6 +51,8 @@
     window.CONFIG = {
         verboseMode: false,
         googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
+		googleMapsApiBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl',
+		googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',
         basePath: '@Url.Content(@"~/")',
         imageGetBase: '@Url.Content("~/api/WebInterviewResources")',
         audioGet: '@Url.Content("~/Resource/AudioRecord")',
