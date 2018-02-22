@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Main.Core.Entities.Composite;
 
 namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
+    [DebuggerDisplay("Variable {PublicKey}")]
     public class Variable : IVariable
     {
         //used for deserialization, change carefuly

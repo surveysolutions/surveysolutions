@@ -188,6 +188,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public bool IsValid { get; set; }
         public string[] Messages { get; set; }
+        public string[] Warnings { get; set; }
     }
 
     public class Comment
