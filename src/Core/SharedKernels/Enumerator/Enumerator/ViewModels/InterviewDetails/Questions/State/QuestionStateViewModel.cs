@@ -46,11 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         public virtual void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interviewId;
+            this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 
             this.liteEventRegistry.Subscribe(this, interviewId);
 

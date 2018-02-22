@@ -55,20 +55,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (VariableViewModel), Resource.Layout.interview_variable},
             {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
-            {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio}
+            {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
+            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner}
         };
 
         public int GetItemViewType(object forItemObject)
         {
             var typeOfViewModel = forItemObject.GetType();
-
-            if (typeOfViewModel.IsGenericType)
-            {
-                if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBorderViewModel<>))
-                {
-                    return Resource.Layout.interview_question_option_rounded_corner;
-                }
-            }
 
             var disabledViewModelTypes = new[]
             {
