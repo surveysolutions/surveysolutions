@@ -2455,8 +2455,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
 
 
-
-
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
@@ -2536,6 +2534,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             }
                         }
                     }
+
+                    this.UpdateRosterTitles(changedInterviewTree, questionnaire);
+                    this.UpdateLinkedQuestions(changedInterviewTree, updater);
                 }
             }
             else
@@ -2618,6 +2619,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     roster.UpdateRosterTitle((questionId, answerOptionValue) =>
                         questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
+                }
+            }
+        }
+
+        protected void UpdateLinkedQuestions(InterviewTree interviewTree, InterviewTreeUpdater updater)
+        {
+            foreach (InterviewTreeQuestion question in interviewTree.FindQuestions())
+            {
+                if (question.IsLinked)
+                {
+                    updater.UpdateLinkedQuestion(question);
+                }
+                else if (question.IsLinkedToListQuestion)
+                {
+                    updater.UpdateLinkedToListQuestion(question);
                 }
             }
         }

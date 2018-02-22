@@ -380,7 +380,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString()
-            => $"{GetTypeAsText()} Question {this.Identity} '{this.Title}'. " +
+            => $"{GetTypeAsText()} Question {this.Identity} '{this.VariableName}'. " +
                $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
                $"{(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
                $"{(this.IsValid ? "Valid" : "Invalid")}";
