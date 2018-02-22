@@ -10,11 +10,11 @@ namespace WB.UI.Shared.Enumerator.Converters
         {
             switch (value)
             {
-                case QuestionStateStyle.NonAnswered:
+                case QuestionStateStyle.NonAnsweredEnabled:
                     return Resource.Drawable.question_input_button;
 
-                case QuestionStateStyle.Invalid:
-                case QuestionStateStyle.Answered:
+                case QuestionStateStyle.InvalidEnabled:
+                case QuestionStateStyle.AnsweredEnabled:
                     return Resource.Drawable.question_input_button_answered;
 
                 default:

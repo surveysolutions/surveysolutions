@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -10,30 +8,32 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
-    public class IntegerQuestionViewModel : 
-        MvxNotifyPropertyChanged, 
-        IInterviewEntityViewModel, 
+    public class IntegerQuestionViewModel :
+        MvxNotifyPropertyChanged,
+        IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>,
-        ICompositeQuestion,
+        ICompositeQuestionWithChildren,
         IDisposable
     {
-        private readonly IPrincipal principal; 
+        private readonly IPrincipal principal;
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IUserInteractionService userInteractionService;
+        private readonly SpecialValuesViewModel specialValues;
         private Identity questionIdentity;
         private string interviewId;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
+        public SpecialValuesViewModel SpecialValues => this.specialValues;
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
@@ -43,30 +43,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private int answerMaxValue;
 
         private decimal? previousAnswer;
+
         private decimal? answer;
         public decimal? Answer
         {
-            get { return this.answer; }
+            get => this.answer;
             set
             {
-                if (this.answer != value)
-                {
-                    this.answer = value;
-                    this.RaisePropertyChanged();
-                }
+                if (this.answer == value) return;
+                this.answer = value;
+                this.RaisePropertyChanged();
             }
         }
-        
+
         public bool UseFormatting { get; set; }
 
         private IMvxCommand valueChangeCommand;
+
         public IMvxCommand ValueChangeCommand
         {
-            get { return this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync())); }
-        }  
-        
+            get
+            {
+                return this.valueChangeCommand ?? (this.valueChangeCommand =
+                           new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync()));
+            }
+        }
+
         private IMvxCommand answerRemoveCommand;
         private readonly QuestionStateViewModel<NumericIntegerQuestionAnswered> questionState;
+        
 
         public IMvxCommand RemoveAnswerCommand
         {
@@ -77,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+
         private async Task RemoveAnswer()
         {
             if (!questionState.IsAnswered)
@@ -85,6 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
                 return;
             }
+
             try
             {
                 if (isRosterSizeQuestion)
@@ -95,15 +102,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     if (!(await this.userInteractionService.ConfirmAsync(message)))
                     {
                         this.Answer = this.previousAnswer;
+                        this.SpecialValues.SetAnswer(this.previousAnswer);
                         return;
                     }
                 }
+
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
                     this.questionIdentity,
                     DateTime.UtcNow);
-                await this.Answering.SendRemoveAnswerCommandAsync(command);
 
+                await this.Answering.SendRemoveAnswerCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
@@ -118,9 +127,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             QuestionStateViewModel<NumericIntegerQuestionAnswered> questionStateViewModel,
             IUserInteractionService userInteractionService,
-            AnsweringViewModel answering, 
+            AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            ILiteEventRegistry liteEventRegistry)
+            ILiteEventRegistry liteEventRegistry,
+            SpecialValuesViewModel specialValues)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -131,26 +141,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
+            this.specialValues = specialValues;
         }
 
         public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+            this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interviewId;
             this.liteEventRegistry.Subscribe(this, interviewId);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
-            
 
             this.InstructionViewModel.Init(interviewId, entityIdentity);
 
-            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var questionnaire =
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.UseFormatting = questionnaire.ShouldUseFormatting(entityIdentity.Id);
 
@@ -160,6 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Answer = answerModel.GetAnswer().Value;
                 this.previousAnswer = this.Answer;
             }
+
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
             var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);
 
@@ -167,45 +177,71 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.answerMaxValue = Constants.MaxLongRosterRowCount;
             else
                 this.answerMaxValue = Constants.MaxRosterRowCount;
+
+            specialValues.Init(interviewId, entityIdentity, this.questionState);
+            this.specialValues.SpecialValueChanged += SpecialValueChanged;
+            this.specialValues.SpecialValueRemoved += SpecialValueRemoved;
+        }
+
+        private async void SpecialValueChanged(object sender, EventArgs eventArgs)
+        {
+            var selectedSpecialValue = (SingleOptionQuestionOptionViewModel)sender;
+            await SaveAnswer(selectedSpecialValue.Value, true);
+        }
+
+        private async void SpecialValueRemoved(object sender, EventArgs eventArgs)
+        {
+            await RemoveAnswer();
         }
 
         private async Task SendAnswerIntegerQuestionCommandAsync()
         {
-            if (this.Answer == null)
+            await SaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
+        }
+
+        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        {
+            if (answeredOrSelectedValue == null)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                    .Interview_Question_Integer_EmptyValueError);
                 return;
             }
-            
-            if (this.Answer > int.MaxValue || this.Answer < int.MinValue)
+
+            if (answeredOrSelectedValue > int.MaxValue || answeredOrSelectedValue < int.MinValue)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_ParsingError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                    .Interview_Question_Integer_ParsingError);
                 return;
             }
 
             if (this.isRosterSizeQuestion)
             {
-                if (this.Answer < 0)
+                if (!isSpecialValueSelected && answeredOrSelectedValue < 0)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer, this.Answer);
+                    var message = string.Format(UIResources.Interview_Question_Integer_NegativeRosterSizeAnswer,
+                        answeredOrSelectedValue);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
-                if (this.Answer > this.answerMaxValue)
+                if (answeredOrSelectedValue > this.answerMaxValue)
                 {
-                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue, this.Answer, this.answerMaxValue);
+                    var message = string.Format(UIResources.Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue,
+                        answeredOrSelectedValue, this.answerMaxValue);
                     this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
                     return;
                 }
 
-                if (this.previousAnswer.HasValue && this.Answer < this.previousAnswer)
+                if (this.previousAnswer.HasValue && answeredOrSelectedValue < this.previousAnswer)
                 {
-                    var amountOfRostersToRemove = this.previousAnswer - this.Answer;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                    var amountOfRostersToRemove = this.previousAnswer - answeredOrSelectedValue;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                        amountOfRostersToRemove);
                     if (!(await this.userInteractionService.ConfirmAsync(message)))
                     {
                         this.Answer = this.previousAnswer;
+                        this.specialValues.SetAnswer(this.previousAnswer);
                         return;
                     }
                 }
@@ -217,14 +253,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: (int)this.Answer);
+                answer: (int) answeredOrSelectedValue);
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                this.previousAnswer = this.Answer;
+                this.previousAnswer = answeredOrSelectedValue;
+
+                if (isSpecialValueSelected)
+                {
+                    this.Answer = null;
+                }
+
+                this.specialValues.SetAnswer(answeredOrSelectedValue);
             }
             catch (InterviewException ex)
             {
@@ -234,8 +277,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Dispose()
         {
-            this.liteEventRegistry.Unsubscribe(this); 
+            this.liteEventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+
+            this.specialValues.SpecialValueChanged -= SpecialValueChanged;
+            this.specialValues.SpecialValueRemoved -= SpecialValueRemoved;
+            this.specialValues.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)
@@ -245,9 +292,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.Answer = null;
-
                     this.previousAnswer = null;
+                    this.specialValues.ClearSelectionAndShowValues();
                 }
+            }
+        }
+
+        public IObservableCollection<ICompositeEntity> Children
+        {
+            get
+            {
+                var result = new CompositeCollection<ICompositeEntity>();
+                if (this.specialValues.SpecialValues.Count > 0)
+                {
+                    result.AddCollection(this.specialValues.SpecialValues);
+                    result.Add(new OptionBorderViewModel<NumericIntegerQuestionAnswered>(this.questionState, false));
+                }
+                return result;
             }
         }
     }

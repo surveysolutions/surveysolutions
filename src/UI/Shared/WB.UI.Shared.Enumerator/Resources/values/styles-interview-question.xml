@@ -166,6 +166,7 @@
     <item name="android:orientation">horizontal</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:background">@android:color/transparent</item>
   </style>
   <style name="Interview_Question_Answer_Recorded_RemoveAnswerWrapper">
     <item name="android:layout_height">fill_parent</item>
