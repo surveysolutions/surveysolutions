@@ -66,16 +66,9 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"WB.Core.BoundedContexts.Headquarters\Resources\ErrorMessages",
                 @"WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages",
                 @"WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages",
-                @"WB.Core.GenericSubdomains.Portable\Properties\Resources",
                 @"WB.UI.Designer\Resources\QuestionnaireController",
                 @"WB.UI.Designer\Resources\QuestionnaireEditor",
                 @"Resources\BatchUpload",
-//                @"WB.UI.Headquarters\App_GlobalResources\BatchUpload",
-//                @"WB.UI.Headquarters\App_GlobalResources\HQ",
-//                @"WB.UI.Headquarters\App_GlobalResources\Reports",
-//                @"WB.UI.Headquarters\App_GlobalResources\Users",
-//                @"WB.UI.Headquarters\App_GlobalResources\TakeNewInterview",
-//                @"WB.UI.Headquarters\App_GlobalResources\Dashboard",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
             };
 
