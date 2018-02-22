@@ -187,4 +187,8 @@
   <data name="TextsUpdated" xml:space="preserve">
     <value>Сообщения обновлены</value>
   </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Включить защиту от спама</value>
+    <comment>Включить защиту от спама</comment>
+  </data>
 </root>
