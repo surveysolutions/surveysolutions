@@ -75,14 +75,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> PrefilledVerifiers => new[]
         {
             this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
-            this.ErrorsByQuestionsWasntParsed,
-            this.ErrorsByQuantityColumn,
+            this.Verifier(this.ErrorsByQuestionsWasntParsed),
+            this.Verifier(this.ErrorsByQuantityColumn),
             this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
             this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
             this.Verifier(this.ColumnDuplications),
             this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption),
-                    
-            this.ErrorsByResposibleName
+            this.Verifier(this.ErrorsByResposibleName)
         };
 
         private IEnumerable<string> ColumnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData, IPreloadedDataService preloadedDataService)
@@ -493,184 +492,153 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 return null;
             }
         }
-        private IEnumerable<PanelImportVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile[] allLevels,
+
+        private IEnumerable<PanelImportVerificationError> ErrorsByQuestionsWasntParsed(PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
-            foreach (var levelData in allLevels)
+            var exportedLevel = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
+            if (exportedLevel == null)
+                yield break;
+
+            var parentColumnNames = preloadedDataService.GetAllParentColumnNamesForLevel(exportedLevel.LevelScopeVector)
+                .ToList();
+            for (int columnIndex = 0; columnIndex < levelData.Header.Length; columnIndex++)
             {
-                var exportedLevel = preloadedDataService.FindLevelInPreloadedData(levelData.FileName);
-                if(exportedLevel==null)
+                var columnName = levelData.Header[columnIndex];
+                if (parentColumnNames.Contains(columnName))
                     continue;
 
-                var parentColumnNames = preloadedDataService.GetAllParentColumnNamesForLevel(exportedLevel.LevelScopeVector).ToList();
-                for (int columnIndex = 0; columnIndex < levelData.Header.Length; columnIndex++)
+                if (preloadedDataService.IsVariableColumn(columnName))
+                    continue;
+
+                for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
                 {
-                    var columnName = levelData.Header[columnIndex];
-                    if (parentColumnNames.Contains(columnName))
+                    var row = levelData.Content[rowIndex];
+                    var answer = row[columnIndex];
+                    answer = answer?
+                        .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
+                        .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty);
+
+                    if (string.IsNullOrEmpty(answer))
                         continue;
 
-                    if (preloadedDataService.IsVariableColumn(columnName))
-                        continue;
+                    var parsedResult = preloadedDataService.ParseQuestionInLevel(answer, columnName, exportedLevel, out _);
 
-                    for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
+                    switch (parsedResult)
                     {
-                        var row = levelData.Content[rowIndex];
-                        var answer = row[columnIndex];
-                        answer = answer?
-                            .Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
-                            .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty);
-                        if (string.IsNullOrEmpty(answer))
+                        case ValueParsingResult.OK:
                             continue;
 
-                        var parsedResult = preloadedDataService.ParseQuestionInLevel(answer, columnName, exportedLevel, out _);
-
-                        switch (parsedResult)
-                        {
-                            case ValueParsingResult.OK:
-                                continue;
-
-                            case ValueParsingResult.AnswerAsDecimalWasNotParsed:
-                                yield return
-                                    new PanelImportVerificationError("PL0019",
-                                        messages.PL0019_ExpectedDecimalNotParsed,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.CommaIsUnsupportedInAnswer:
-                                yield return
-                                    new PanelImportVerificationError("PL0034",
-                                        messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.AnswerAsIntWasNotParsed:
-                                yield return
-                                    new PanelImportVerificationError("PL0018",
-                                        messages.PL0018_ExpectedIntNotParsed,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.AnswerAsGpsWasNotParsed:
-                                yield return
-                                    new PanelImportVerificationError("PL0017",
-                                        messages.PL0017_ExpectedGpsNotParsed,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.AnswerAsDateTimeWasNotParsed:
-                                yield return
-                                    new PanelImportVerificationError("PL0016",
-                                        messages.PL0016_ExpectedDateTimeNotParsed,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.QuestionTypeIsIncorrect:
-                                yield return
-                                    new PanelImportVerificationError("PL0015",
-                                        messages.PL0015_QuestionTypeIsIncorrect,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.ParsedValueIsNotAllowed:
-                                yield return
-                                    new PanelImportVerificationError("PL0014",
-                                        messages.PL0014_ParsedValueIsNotAllowed,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.ValueIsNullOrEmpty:
-                                yield return
-                                    new PanelImportVerificationError("PL0013",
-                                        messages.PL0013_ValueIsNullOrEmpty,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.QuestionWasNotFound:
-                                yield return
-                                    new PanelImportVerificationError("PL0012",
-                                        messages.PL0012_QuestionWasNotFound,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.UnsupportedLinkedQuestion:
-                                //yield return
-                                //    new PanelImportVerificationError("PL0010",
-                                //        messages.PL0010_UnsupportedLinkedQuestion,
-                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                //            PreloadedDataVerificationReferenceType.Cell,
-                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                //                row[columnIndex]),
-                                //            levelData.FileName));
-                                break;
-                            case ValueParsingResult.UnsupportedMultimediaQuestion:
-                                //yield return
-                                //    new PanelImportVerificationError("PL0023",
-                                //        messages.PL0023_UnsupportedMultimediaQuestion,
-                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                //            PreloadedDataVerificationReferenceType.Cell,
-                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                //                row[columnIndex]),
-                                //            levelData.FileName));
-                                break;
-                            case ValueParsingResult.UnsupportedAreaQuestion:
-                                yield return
-                                    new PanelImportVerificationError("PL0038",
-                                        messages.PL0038_UnsupportedAreaQuestion,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                            case ValueParsingResult.UnsupportedAudioQuestion:
-                                //yield return
-                                //    new PanelImportVerificationError("PL0039",
-                                //        messages.PL0039_UnsupportedAudioQuestion,
-                                //        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                //            PreloadedDataVerificationReferenceType.Cell,
-                                //            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                //                row[columnIndex]),
-                                //            levelData.FileName));
-                                break;
-                            case ValueParsingResult.GeneralErrorOccured:
-                            default:
-                                yield return
-                                    new PanelImportVerificationError("PL0011",
-                                        messages.PL0011_GeneralError,
-                                        new PreloadedDataVerificationReference(columnIndex, rowIndex,
-                                            PreloadedDataVerificationReferenceType.Cell,
-                                            string.Format("{0}:{1}", levelData.Header[columnIndex],
-                                                row[columnIndex]),
-                                            levelData.FileName));
-                                break;
-                        }
+                        case ValueParsingResult.AnswerAsDecimalWasNotParsed:
+                            yield return
+                                new PanelImportVerificationError("PL0019",
+                                    messages.PL0019_ExpectedDecimalNotParsed,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.CommaIsUnsupportedInAnswer:
+                            yield return
+                                new PanelImportVerificationError("PL0034",
+                                    messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.AnswerAsIntWasNotParsed:
+                            yield return
+                                new PanelImportVerificationError("PL0018",
+                                    messages.PL0018_ExpectedIntNotParsed,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.AnswerAsGpsWasNotParsed:
+                            yield return
+                                new PanelImportVerificationError("PL0017",
+                                    messages.PL0017_ExpectedGpsNotParsed,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.AnswerAsDateTimeWasNotParsed:
+                            yield return
+                                new PanelImportVerificationError("PL0016",
+                                    messages.PL0016_ExpectedDateTimeNotParsed,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.QuestionTypeIsIncorrect:
+                            yield return
+                                new PanelImportVerificationError("PL0015",
+                                    messages.PL0015_QuestionTypeIsIncorrect,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.ParsedValueIsNotAllowed:
+                            yield return
+                                new PanelImportVerificationError("PL0014",
+                                    messages.PL0014_ParsedValueIsNotAllowed,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.ValueIsNullOrEmpty:
+                            yield return
+                                new PanelImportVerificationError("PL0013",
+                                    messages.PL0013_ValueIsNullOrEmpty,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.QuestionWasNotFound:
+                            yield return
+                                new PanelImportVerificationError("PL0012",
+                                    messages.PL0012_QuestionWasNotFound,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        case ValueParsingResult.UnsupportedAreaQuestion:
+                            yield return
+                                new PanelImportVerificationError("PL0038",
+                                    messages.PL0038_UnsupportedAreaQuestion,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
+                        default:
+                            yield return
+                                new PanelImportVerificationError("PL0011",
+                                    messages.PL0011_GeneralError,
+                                    new PreloadedDataVerificationReference(columnIndex, rowIndex,
+                                        PreloadedDataVerificationReferenceType.Cell,
+                                        string.Format("{0}:{1}", levelData.Header[columnIndex],
+                                            row[columnIndex]),
+                                        levelData.FileName));
+                            break;
                     }
                 }
             }
@@ -738,114 +706,115 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private PreloadedDataVerificationReference CreateReference(int x, int y, PreloadedDataByFile levelData) 
             => new PreloadedDataVerificationReference(x, y, PreloadedDataVerificationReferenceType.Cell, $"{levelData.Header[x]}:{levelData.Content[y][x]}", levelData.FileName);
 
-        private IEnumerable<PanelImportVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PanelImportVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile levelData,
+            IPreloadedDataService preloadedDataService)
         {
-            foreach (var levelData in allLevels)
-            {
-                var quantityColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.AssignmentsCountColumnName);
+            var quantityColumnIndex =
+                preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.AssignmentsCountColumnName);
 
-                if (quantityColumnIndex < 0)
+            if (quantityColumnIndex < 0)
+                yield break;
+
+            for (int y = 0; y < levelData.Content.Length; y++)
+            {
+                var row = levelData.Content[y];
+                var quantityString = row[quantityColumnIndex]?.Trim();
+
+                if (String.IsNullOrWhiteSpace(quantityString))
                     continue;
 
-                for (int y = 0; y < levelData.Content.Length; y++)
+                if (quantityString == "-1" || quantityString == "INF")
+                    continue;
+
+                if (!int.TryParse(quantityString, out int quantity))
                 {
-                    var row = levelData.Content[y];
-                    var quantityString = row[quantityColumnIndex]?.Trim();
+                    yield return
+                        new PanelImportVerificationError("PL0035",
+                            messages.PL0035_QuantityNotParsed,
+                            new PreloadedDataVerificationReference(quantityColumnIndex, y,
+                                PreloadedDataVerificationReferenceType.Cell,
+                                "",
+                                levelData.FileName));
+                    continue;
+                }
 
-                    if (String.IsNullOrWhiteSpace(quantityString))
-                        continue;
-
-                    if (quantityString == "-1" || quantityString == "INF")
-                        continue;
-
-                    if (!int.TryParse(quantityString, out int quantity))
-                    {
-                        yield return
-                            new PanelImportVerificationError("PL0035",
-                                messages.PL0035_QuantityNotParsed,
-                                new PreloadedDataVerificationReference(quantityColumnIndex, y,
-                                    PreloadedDataVerificationReferenceType.Cell,
-                                    "",
-                                    levelData.FileName));
-                        continue;
-                    }
-
-                    if (quantity < -1)
-                    {
-                        yield return
-                            new PanelImportVerificationError("PL0036",
-                                messages.PL0036_QuantityShouldBeGreaterThanMinus1,
-                                new PreloadedDataVerificationReference(quantityColumnIndex, y,
-                                    PreloadedDataVerificationReferenceType.Cell,
-                                    "",
-                                    levelData.FileName));
-                        continue;
-                    }
+                if (quantity < -1)
+                {
+                    yield return
+                        new PanelImportVerificationError("PL0036",
+                            messages.PL0036_QuantityShouldBeGreaterThanMinus1,
+                            new PreloadedDataVerificationReference(quantityColumnIndex, y,
+                                PreloadedDataVerificationReferenceType.Cell,
+                                "",
+                                levelData.FileName));
+                    continue;
                 }
             }
         }
 
-        private IEnumerable<PanelImportVerificationError> ErrorsByResposibleName(PreloadedDataByFile[] allLevels, IPreloadedDataService preloadedDataService)
+        private IEnumerable<PanelImportVerificationError> ErrorsByResposibleName(PreloadedDataByFile levelData,
+            IPreloadedDataService preloadedDataService)
         {
-            foreach (var levelData in allLevels)
+            var usersToVerify = this.GetUserNames(levelData);
+            if (usersToVerify.Length == 0)
+                yield break;
+
+            var dbUsers = this.userViewFactory.GetUsersByUserNames(usersToVerify)
+                .ToDictionary(x => x.UserName.ToLower());
+
+            var responsibleNameIndex = this.GetResponsibleColumnIndex(levelData);
+
+            for (int y = 0; y < levelData.Content.Length; y++)
             {
-                var usersToVerify = this.GetUserNames(levelData);
-                if(usersToVerify.Length == 0)
-                    continue;
+                var userNameToVerify = levelData.Content[y][responsibleNameIndex]?.ToLower();
 
-                var dbUsers = this.userViewFactory.GetUsersByUserNames(usersToVerify).ToDictionary(x => x.UserName.ToLower());
-
-                var responsibleNameIndex = this.GetResponsibleColumnIndex(levelData);
-
-                for (int y = 0; y < levelData.Content.Length; y++)
+                if (string.IsNullOrWhiteSpace(userNameToVerify))
                 {
-                    var userNameToVerify = levelData.Content[y][responsibleNameIndex]?.ToLower();
+                    yield return new PanelImportVerificationError("PL0025",
+                        messages.PL0025_ResponsibleNameIsEmpty,
+                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
+                            PreloadedDataVerificationReferenceType.Cell,
+                            "",
+                            levelData.FileName));
+                    continue;
+                }
 
-                    if (string.IsNullOrWhiteSpace(userNameToVerify))
-                    {
-                        yield return new PanelImportVerificationError("PL0025",
-                            messages.PL0025_ResponsibleNameIsEmpty,
-                            new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                                PreloadedDataVerificationReferenceType.Cell,
-                                "",
-                                levelData.FileName));
-                        continue;
-                    }
+                var userState = dbUsers.ContainsKey(userNameToVerify) ? dbUsers[userNameToVerify] : null;
+                if (userState == null)
+                {
 
-                    var userState = dbUsers.ContainsKey(userNameToVerify) ? dbUsers[userNameToVerify] : null;
-                    if (userState == null)
-                    {
+                    yield return new PanelImportVerificationError("PL0026",
+                        messages.PL0026_ResponsibleWasNotFound,
+                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
+                            PreloadedDataVerificationReferenceType.Cell,
+                            "",
+                            levelData.FileName));
+                    continue;
+                }
 
-                        yield return new PanelImportVerificationError("PL0026",
-                            messages.PL0026_ResponsibleWasNotFound,
-                            new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                                PreloadedDataVerificationReferenceType.Cell,
-                                "",
-                                levelData.FileName));
-                        continue;
-                    }
-                    if (userState.IsLocked)
-                    {
-                        yield return new PanelImportVerificationError("PL0027",
-                            messages.PL0027_ResponsibleIsLocked,
-                            new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                                PreloadedDataVerificationReferenceType.Cell,
-                                "",
-                                levelData.FileName));
-                        continue;
-                    }
-                    if (!userState.IsSupervisorOrInterviewer)
-                    {
-                        yield return new PanelImportVerificationError("PL0028",
-                            messages.PL0028_UserIsNotSupervisorOrInterviewer,
-                            new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                                PreloadedDataVerificationReferenceType.Cell,
-                                "",
-                                levelData.FileName));
-                    }
+                if (userState.IsLocked)
+                {
+                    yield return new PanelImportVerificationError("PL0027",
+                        messages.PL0027_ResponsibleIsLocked,
+                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
+                            PreloadedDataVerificationReferenceType.Cell,
+                            "",
+                            levelData.FileName));
+                    continue;
+                }
+
+                if (!userState.IsSupervisorOrInterviewer)
+                {
+                    yield return new PanelImportVerificationError("PL0028",
+                        messages.PL0028_UserIsNotSupervisorOrInterviewer,
+                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
+                            PreloadedDataVerificationReferenceType.Cell,
+                            "",
+                            levelData.FileName));
                 }
             }
         }
+
 
         private string[] GetUserNames(PreloadedDataByFile data)
         {
