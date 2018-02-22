@@ -286,6 +286,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating Html for &quot;{0}&quot;.
+        /// </summary>
+        public static string CreatingHtml {
+            get {
+                return ResourceManager.GetString("CreatingHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -363,6 +372,15 @@ namespace WB.UI.Designer.Resources {
         public static string ErrorDescription {
             get {
                 return ResourceManager.GetString("ErrorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as Html.
+        /// </summary>
+        public static string ExportAsHtml {
+            get {
+                return ResourceManager.GetString("ExportAsHtml", resourceCulture);
             }
         }
         
@@ -447,6 +465,15 @@ namespace WB.UI.Designer.Resources {
         public static string GeneratingPdf {
             get {
                 return ResourceManager.GetString("GeneratingPdf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Html.
+        /// </summary>
+        public static string GetHtml {
+            get {
+                return ResourceManager.GetString("GetHtml", resourceCulture);
             }
         }
         
