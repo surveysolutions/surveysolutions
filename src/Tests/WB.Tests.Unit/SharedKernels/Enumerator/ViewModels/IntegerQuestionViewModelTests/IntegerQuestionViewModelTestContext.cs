@@ -7,7 +7,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -43,7 +42,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
-                Mock.Of<ILiteEventRegistry>());
+                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<SpecialValuesViewModel>());
         }
 
         protected static void SetUp()

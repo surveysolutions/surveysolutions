@@ -6,18 +6,21 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
 {
     public class LayoutBackgroundStyleValueCombiner : BaseValueCombiner<QuestionStateStyle>
     {
-        protected override int ExpectedParamsCount => 2;
+        protected override int ExpectedParamsCount => 3;
 
         protected override QuestionStateStyle GetValue(List<object> values)
         {
             bool isInvalid = values[0].ConvertToBoolean();
             bool isAnswered = values[1].ConvertToBoolean();
+            bool isDisabled = values[2].ConvertToBoolean();
 
-            return isInvalid
-                ? QuestionStateStyle.Invalid
-                : (isAnswered
-                    ? QuestionStateStyle.Answered
-                    : QuestionStateStyle.NonAnswered);
+            if (isInvalid)
+                return isDisabled ? QuestionStateStyle.InvalidDisabled : QuestionStateStyle.InvalidEnabled;
+
+            if (isAnswered)
+                return isDisabled ? QuestionStateStyle.AnsweredDisabled : QuestionStateStyle.AnsweredEnabled;
+            
+            return isDisabled ? QuestionStateStyle.NonAnsweredDisabled : QuestionStateStyle.NonAnsweredEnabled;
         }
     }
 }
