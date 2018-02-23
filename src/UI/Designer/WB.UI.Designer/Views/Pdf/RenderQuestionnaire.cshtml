@@ -177,7 +177,7 @@
 				{
 					<dt>&nbsp;</dt>
 					<dd>
-						<a href="#options_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
+						<a href="#special_values_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
 					</dd>
 				}
 
@@ -492,7 +492,7 @@
 @if (!questionnaire.IsSpecialValuesAppendixEmpty)
 {
 	<article class="appendix_section">
-		<h2 id="options_appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</h2>
+		<h2 id="special_values_appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</h2>
 		<ul class="container">
 			@for (var i = 0; i < questionnaire.QuestionsWithLongSpecialValuesList.Count; i++)
 			{
