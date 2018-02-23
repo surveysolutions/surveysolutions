@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
-using NHibernate.Util;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -27,16 +25,16 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             russianResourceNames =
                 from resourceFile in russianResourceFiles
                 let resourceFileName = GetTranslatedResourceFileNameWithoutExtension(resourceFile)
-                from resourceName in GetStringResourceNamesFromResX(resourceFile)
-                where IsNotPluralForm(resourceName)
-                select $"{resourceFileName}: {resourceName}";
+                from resource in GetStringResourcesFromResX(resourceFile)
+                where IsNotPluralForm(resource.Key) && !string.IsNullOrEmpty(resource.Value)
+                select $"{resourceFileName}: {resource.Key}";
 
             englishResourceNames =
                 from resourceFile in englishResourceFiles
                 let resourceFileName = GetOriginalResourceFileNameWithoutExtension(resourceFile)
-                from resourceName in GetStringResourceNamesFromResX(resourceFile)
-                where IsNotPluralForm(resourceName)
-                select $"{resourceFileName}: {resourceName}";
+                from resource in GetStringResourcesFromResX(resourceFile)
+                where IsNotPluralForm(resource.Key) && !string.IsNullOrEmpty(resource.Value)
+                select $"{resourceFileName}: {resource.Key}";
 
 
             //should_find_Russian_resource_files() => 
@@ -77,7 +75,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"WB.UI.Designer\Resources\QuestionnaireController",
                 @"Resources\BatchUpload",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
-                @"UserPreloadingVerificationMessages",
             };
 
             if (ignoreResxFiles.Any(filePath.Contains))
