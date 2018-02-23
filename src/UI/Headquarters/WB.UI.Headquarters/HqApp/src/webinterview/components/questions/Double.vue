@@ -3,14 +3,30 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field" :class="{ answered: $me.isAnswered}"> 
+                    <div class="field" :class="{ answered: $me.isAnswered }"> 
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
                             :placeholder="noAnswerWatermark" 
                             :title="noAnswerWatermark"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="!$me.acceptAnswer"
+                            :class="{ 'special-value-selected': isSpecialValueSelected }"
                             v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
                             <wb-remove-answer />
+                    </div>
+                </div>
+                <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                    <div class="field">
+                        <input class="wb-radio" 
+                            type="radio" 
+                            :id="$me.id + '_' + option.value" 
+                            :name="$me.id" 
+                            :value="option.value" 
+                            :disabled="!$me.acceptAnswer"
+                            v-model="specialValue">
+                        <label :for="$me.id + '_' + option.value">
+                            <span class="tick"></span> {{option.title}}
+                        </label>
+                        <wb-remove-answer />
                     </div>
                 </div>
                 <wb-lock />
@@ -21,11 +37,15 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
-
     export default {
         name: 'Double',
         mixins: [entityDetails],
         computed: {
+            isSpecialValueSelected(){
+                if (this.$me.answer == null || this.$me.answer == undefined)
+                    return undefined;
+                return this.isSpecialValue(this.$me.answer);
+            },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
             },
@@ -37,21 +57,33 @@
                 }
 
                 return ''
+            },
+            specialValue: {
+                get() {
+                    return this.$me.answer
+                },
+                set(value) {
+                    this.saveAnswer(value, true);
+                }
             }
         },
         methods: {
             answerDoubleQuestion(evnt) {
+                const answerString = $(evnt.target).autoNumeric('get');
+                if (answerString.replace(/[^0-9]/g, "").length > 15) {
+                    this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
+                    return
+                }
+
+                const answer = answerString != undefined && answerString != ''
+                    ? parseFloat(answerString)
+                    : null;
+
+                const isSpecialValue = this.isSpecialValue(answer);
+                this.saveAnswer(answer, isSpecialValue);
+            },
+            saveAnswer(answer, isSpecialValue){
                 this.sendAnswer(() => {
-                    const answerString = $(evnt.target).autoNumeric('get');
-                    if (answerString.replace(/[^0-9]/g, "").length > 15) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
-                        return
-                    }
-
-                    const answer = answerString != undefined && answerString != ''
-                        ? parseFloat(answerString)
-                        : null
-
                     if(this.handleEmptyAnswer(answer)) {
                         return
                     }
@@ -62,6 +94,17 @@
 
                     this.$store.dispatch('answerDoubleQuestion', { identity: this.id, answer: answer })
                 });
+            },
+            isSpecialValue(value){
+                const options = this.$me.options || [];
+                if (options.length == 0)
+                    return false;
+                for(let i=0;i<options.length;i++)
+                {
+                    if (options[i].value === value)
+                        return true;
+                }
+                return false;
             }
         }
     }
