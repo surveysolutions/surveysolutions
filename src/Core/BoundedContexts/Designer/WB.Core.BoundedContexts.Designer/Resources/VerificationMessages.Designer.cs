@@ -1205,7 +1205,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Special values supports only integer values in range from {0} to {1}..
+        ///   Looks up a localized string similar to Special values support only integer values in range from {0} to {1}..
         /// </summary>
         public static string WB0131_SpecialValuesHasNonIntegerOptionsValues {
             get {
