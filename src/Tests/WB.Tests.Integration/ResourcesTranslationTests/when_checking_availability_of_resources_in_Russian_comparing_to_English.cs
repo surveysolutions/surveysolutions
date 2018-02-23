@@ -5,10 +5,11 @@ using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
 {
+    [TestFixture]
     internal class when_checking_availability_of_resources_in_Russian_comparing_to_English : ResourcesTranslationTestsContext
     {
-        [OneTimeSetUp]
-        public void Because()
+        [Test]
+        public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English()
         {
            russianResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.ru.resx")
@@ -33,17 +34,17 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 from resourceName in GetStringResourceNamesFromResX(resourceFile)
                 where IsNotPluralForm(resourceName)
                 select $"{resourceFileName}: {resourceName}";
-        }
- 
-        [Test]
-        public void should_find_Russian_resource_files() => russianResourceFiles.Should().NotBeEmpty();
 
-        [Test]
-        public void should_find_English_resource_files () => englishResourceFiles.Should().NotBeEmpty();
+            //should_find_Russian_resource_files() => 
+            Assert.That(russianResourceFiles, Is.Not.Empty);
 
-        [Test]
-        public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
+            //should_find_English_resource_files() => 
+            Assert.That(englishResourceFiles, Is.Not.Empty);
+
+            // should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
             Assert.That(russianResourceNames, Is.EqualTo(englishResourceNames));
+        }
+
 
         private IEnumerable<string> russianResourceFiles;
         private IEnumerable<string> englishResourceFiles;
@@ -69,7 +70,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"WB.UI.Designer\Resources\QuestionnaireController",
                 @"Resources\BatchUpload",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
-                @"WB.UI.Headquarters\Resources\UserPreloadingVerificationMessages",
+                @"UserPreloadingVerificationMessages",
             };
 
             if (ignoreResxFiles.Any(filePath.Contains))
