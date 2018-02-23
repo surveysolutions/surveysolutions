@@ -245,7 +245,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
             var optionValue = decimal.Parse(optionValueAsString);
 
-            var values = options.Select(x => double.Parse(string.IsNullOrEmpty(x.AnswerValue)? x.AnswerValue : "0"));
+            var values = options.Select(x => double.Parse(!string.IsNullOrEmpty(x.AnswerValue)? x.AnswerValue : "0"));
             return FormatAsIntegerWithLeadingZeros(optionValue, values);
         }
 
