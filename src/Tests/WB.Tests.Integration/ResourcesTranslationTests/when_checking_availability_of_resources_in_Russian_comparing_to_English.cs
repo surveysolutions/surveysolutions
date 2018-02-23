@@ -71,7 +71,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 @"WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages",
                 @"WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages",
-                @"WB.UI.Designer\Resources\QuestionnaireController",
                 @"Resources\BatchUpload",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
             };
