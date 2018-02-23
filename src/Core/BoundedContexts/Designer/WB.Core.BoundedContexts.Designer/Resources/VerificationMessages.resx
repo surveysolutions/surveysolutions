@@ -678,9 +678,6 @@
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>You cannot use child entities in enablement condition for sections, subsection and rosters.</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value />
-  </data>
   <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
     <value>Enabling condition is using forbidden type.</value>
   </data>
