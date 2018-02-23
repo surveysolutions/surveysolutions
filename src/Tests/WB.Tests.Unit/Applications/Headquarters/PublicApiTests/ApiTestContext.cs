@@ -69,7 +69,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IUserViewFactory userViewFactory = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
             IStatefulInterviewRepository statefulInterviewRepository = null,
-            IStatefullInterviewSearcher statefullInterviewSearcher = null)
+            IStatefullInterviewSearcher statefullInterviewSearcher = null,
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
@@ -80,7 +81,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
                 interviewReferences ?? new TestInMemoryWriter<InterviewSummary>(),
                 statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>());
+                statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(), 
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
 
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(new HttpConfiguration());
