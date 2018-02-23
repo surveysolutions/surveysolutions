@@ -1833,5 +1833,14 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0275_FilterExpressionIsUsingForbiddenClasses", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @rowname variable is not supported anymore..
+        /// </summary>
+        public static string WB0276_RownameIsNotSupported {
+            get {
+                return ResourceManager.GetString("WB0276_RownameIsNotSupported", resourceCulture);
+            }
+        }
     }
 }

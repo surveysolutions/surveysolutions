@@ -88,14 +88,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public SynchronizationLogDevicesView SyncLogDevices(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.synchronizationLogViewFactory.GetDevices(pageSize: pageSize, searchBy: query);
 
+        [HttpGet]
+        [ApiNoCache]
+        public BrokenInterviewPackageExceptionTypesView GetRejectedInterviewPackageExceptionTypes(
+            string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+            => this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
+
         [HttpPost]
         public BrokenInterviewPackagesView GetBrokenInterviewPackages(BrokenInterviewPackageFilter filter)
             => this.brokenInterviewPackagesViewFactory.GetFilteredItems(filter);
 
-        [HttpGet]
-        public BrokenInterviewPackageExceptionTypesView GetBrokenInterviewPackageExceptionTypes(
-            string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
+        [HttpPost]
+        public BrokenInterviewPackagesView GetRejectedInterviewPackages(BrokenInterviewPackageFilter filter)
+        {
+            filter.ReturnOnlyUnknownExceptionType = true;
+            return this.brokenInterviewPackagesViewFactory.GetFilteredItems(filter);
+        }
 
         [HttpGet]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
@@ -108,9 +116,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
                 Identity = new QuestionnaireIdentity(questionnaire.TemplateId, questionnaire.TemplateVersion).ToString(),
                 Title = $"(ver. {questionnaire.TemplateVersion}) {questionnaire.TemplateName}"
             });
-
-        [HttpPost]
-        public void ReprocessBrokenPackages() => this.interviewPackagesService.ReprocessAllBrokenPackages();
 
         [HttpPost]
         public void ReprocessSelectedBrokenPackages(ReprocessSelectedBrokenPackagesRequestView request) 

@@ -122,8 +122,8 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
             Assert.That(expressionsPlayOrder[variableId], Is.EqualTo(new[] { intQuestionId, int2QuestionId }));
-            Assert.That(expressionsPlayOrder[int2QuestionId], Is.EqualTo(new[] { int2QuestionId }));
-            Assert.That(expressionsPlayOrder[textQuestionId], Is.EqualTo(new[] { textQuestionId }));
+            Assert.That(expressionsPlayOrder.ContainsKey(int2QuestionId), Is.False);
+            Assert.That(expressionsPlayOrder.ContainsKey(textQuestionId), Is.False);
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace WB.Tests.Unit.Designer.CodeGeneration
 
             var expressionsPlayOrder = expressionsPlayOrderProvider.GetValidationDependencyGraph(questionnaireDocument.AsReadOnly());
 
-            Assert.That(expressionsPlayOrder[intQuestionId], Is.EqualTo(new[] { intQuestionId }));
+            Assert.That(expressionsPlayOrder.ContainsKey(intQuestionId), Is.False);
         }
 
         [Test]

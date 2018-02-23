@@ -399,10 +399,11 @@ namespace WB.Tests.Unit.Designer
             string title = "test",
             params decimal[] answers)
         {
+            var publicKey = questionId ?? Guid.NewGuid();
             return new MultyOptionsQuestion("Question MO")
             {
-                PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = "mo_question",
+                PublicKey = publicKey,
+                StataExportCaption = GetNameForEntity("multi_option", publicKey),
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
@@ -442,16 +443,18 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = "numeric_question", string enablementCondition = null,
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
             string title = "test", string variableLabel = null, Option[] options = null)
         {
+            var publicKey = id ?? Guid.NewGuid();
+            var stataExportCaption = variable ?? "numeric_question"+publicKey;
             return new NumericQuestion
             {
                 QuestionType = QuestionType.Numeric,
-                PublicKey = id ?? Guid.NewGuid(),
-                StataExportCaption = variable,
+                PublicKey = publicKey,
+                StataExportCaption = stataExportCaption,
                 IsInteger = true,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
@@ -512,9 +515,10 @@ namespace WB.Tests.Unit.Designer
             string variable = null, string validationMessage = null, string text = "test", QuestionScope scope = QuestionScope.Interviewer, bool preFilled = false,
             bool hideIfDisabled = false)
         {
-            return new QRBarcodeQuestion() 
+            var publicKey = questionId ?? Guid.NewGuid();
+            return new QRBarcodeQuestion()
             {
-                PublicKey = questionId ?? Guid.NewGuid(),
+                PublicKey = publicKey,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
@@ -529,7 +533,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IQuestion Question(
             Guid? questionId = null,
-            string variable = "question",
+            string variable = null,
             string enablementCondition = null,
             string validationExpression = null,
             string validationMessage = null,
@@ -542,11 +546,13 @@ namespace WB.Tests.Unit.Designer
             QuestionScope scope = QuestionScope.Interviewer,
             params Answer[] answers)
         {
+            var publicKey = questionId ?? Guid.NewGuid();
+            var stataExportCaption = variable ?? GetNameForEntity("question", publicKey);
             return new TextQuestion(title)
             {
-                PublicKey = questionId ?? Guid.NewGuid(),
+                PublicKey = publicKey,
                 QuestionType = questionType,
-                StataExportCaption = variable,
+                StataExportCaption = stataExportCaption,
                 ConditionExpression = enablementCondition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
@@ -616,10 +622,12 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
             => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
 
-        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2", string label = null)
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", string label = null)
         {
-            return new Variable(publicKey: id ?? Guid.NewGuid(),
-                variableData: new VariableData(type: type, name: variableName, expression: expression, label: label));
+            var publicKey = id ?? Guid.NewGuid();
+            var name = variableName ?? GetNameForEntity("var", publicKey);
+            return new Variable(publicKey: publicKey, 
+                variableData: new VariableData(type: type, name: name, expression: expression, label: label));
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(
@@ -789,7 +797,7 @@ namespace WB.Tests.Unit.Designer
         public static Group Roster(
             Guid? rosterId = null,
             string title = "Roster X",
-            string variable = "roster_var",
+            string variable = null,
             string enablementCondition = null,
             string[] fixedTitles = null,
             IEnumerable<IComposite> children = null,
@@ -798,10 +806,11 @@ namespace WB.Tests.Unit.Designer
             Guid? rosterTitleQuestionId = null,
             FixedRosterTitle[] fixedRosterTitles = null)
         {
+            var id = rosterId ?? Guid.NewGuid();
             Group group = Create.Group(
-                groupId: rosterId,
+                groupId: id,
                 title: title,
-                variable: variable,
+                variable: variable ?? GetNameForEntity("roster_var",  id),
                 enablementCondition: enablementCondition,
                 children: children);
 
@@ -833,10 +842,11 @@ namespace WB.Tests.Unit.Designer
             Guid? linkedToQuestionId = null, Guid? cascadeFromQuestionId = null, decimal[] answerCodes = null, string title = null, bool hideIfDisabled = false, string linkedFilterExpression = null,
             Guid? linkedToRosterId = null, List<Answer> answers = null, bool isPrefilled = false, bool isComboBox = false)
         {
+            var publicKey = questionId ?? Guid.NewGuid();
             return new SingleQuestion
             {
-                PublicKey = questionId ?? Guid.NewGuid(),
-                StataExportCaption = variable ?? "single_option_question",
+                PublicKey = publicKey,
+                StataExportCaption = variable ?? GetNameForEntity("single_option", publicKey),
                 QuestionText = title ?? "SO Question",
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
@@ -920,7 +930,7 @@ namespace WB.Tests.Unit.Designer
 
         public static TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string mask = null,
-            string variable = "text_question",
+            string variable = null,
             string validationMessage = null,
             string text = "Question Text test",
             QuestionScope scope = QuestionScope.Interviewer,
@@ -931,9 +941,11 @@ namespace WB.Tests.Unit.Designer
             bool hideIfDisabled = false)
 
         {
+            var publicKey = questionId ?? Guid.NewGuid();
+            var stataExportCaption = variable ?? GetNameForEntity("text_quetion", publicKey);
             return new TextQuestion(text)
             {
-                PublicKey = questionId ?? Guid.NewGuid(),
+                PublicKey = publicKey,
                 ConditionExpression = enablementCondition,
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
@@ -941,7 +953,7 @@ namespace WB.Tests.Unit.Designer
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variable,
+                StataExportCaption = stataExportCaption,
                 QuestionScope = scope,
                 Featured = preFilled,
                 VariableLabel = label,
@@ -1310,7 +1322,7 @@ namespace WB.Tests.Unit.Designer
             IMacrosSubstitutionService macrosSubstitutionService = null,
             ILookupTableService lookupTableService = null,
             IAttachmentService attachmentService = null,
-            ITopologicalSorter<string> topologicalSorter = null,
+            ITopologicalSorter<Guid> topologicalSorter = null,
             IQuestionnaireTranslator questionnaireTranslator = null)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
@@ -1331,20 +1343,27 @@ namespace WB.Tests.Unit.Designer
 
             var attachmentServiceMock = Stub<IAttachmentService>.WithNotEmptyValues;
 
-            return new QuestionnaireVerifier(expressionProcessor ?? Create.RoslynExpressionProcessor(),
+            var expressionProcessorImp = expressionProcessor ?? Create.RoslynExpressionProcessor();
+            var macrosSubstitutionServiceImp = macrosSubstitutionService ?? Create.MacrosSubstitutionService();
+            var expressionsPlayOrderProvider = new ExpressionsPlayOrderProvider(
+                new ExpressionsGraphProvider(expressionProcessorImp, macrosSubstitutionServiceImp)
+            );
+
+            return new QuestionnaireVerifier(expressionProcessorImp,
                 fileSystemAccessorMock.Object,
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
                 new DesignerEngineVersionService(),
-                macrosSubstitutionService ?? Create.MacrosSubstitutionService(),
+                macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
-                topologicalSorter ?? Create.TopologicalSorter<string>(),
+                topologicalSorter ?? Create.TopologicalSorter<Guid>(),
                 Mock.Of<ITranslationsService>(),
                 questionnaireTranslator ?? Mock.Of<IQuestionnaireTranslator>(),
                 Mock.Of<IQuestionnaireCompilationVersionService>(), 
-                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()));
+                Mock.Of<IDynamicCompilerSettingsProvider>(x => x.GetAssembliesToReference() == DynamicCompilerSettingsProvider().GetAssembliesToReference()),
+                expressionsPlayOrderProvider);
         }
 
         public static IQuestionTypeToCSharpTypeMapper QuestionTypeToCSharpTypeMapper()
@@ -1355,6 +1374,15 @@ namespace WB.Tests.Unit.Designer
         public static JsonFormatter JsonFormatter(Version hqVersion)
         {
             return new JsonFormatter(new Func<Version>(() => hqVersion));
+        }
+
+        private static string GetNameForEntity(string prefix, Guid entityId)
+        {
+            var name = prefix + "_" + entityId.ToString("N");
+            if (name.Length > 32)
+                return name.Substring(0, 32);
+
+            return name;
         }
     }
 }

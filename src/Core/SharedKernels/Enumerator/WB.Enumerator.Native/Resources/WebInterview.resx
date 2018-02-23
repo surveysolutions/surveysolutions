@@ -157,8 +157,7 @@
     <value>The interview process requires an internet connection. No additional software is needed.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>You have been invited to take part in the following survey: "{0}"</value>
-    <comment>{0} - name of the questionnaire without version</comment>
+    <value>You have been invited to take part in the following survey: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="WelcomeText" xml:space="preserve">
     <value>Hello and Welcome to the Survey Solutions Web Survey</value>
@@ -182,8 +181,7 @@
     <value>This interview has not been completed</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Survey: "{0}"</value>
-    <comment>{0} - name of the questionnaire without version</comment>
+    <value>Survey: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="InterviewIdFormatText" xml:space="preserve">
     <value>Interview ID: {0}</value>
@@ -223,8 +221,7 @@
     <value>Interview process requires internet connection, no additional software is needed</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>You can navigate to interview in the following survey: "{0}"</value>
-    <comment>{0} - name of the questionnaire without version</comment>
+    <value>You can navigate to interview in the following survey: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Hello and Welcome to the Survey Solutions Web Survey</value>
@@ -297,6 +294,9 @@
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (ver. {1})</value>

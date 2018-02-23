@@ -409,6 +409,14 @@
     <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
   </style>
 
+  <style name="Interview_Question_Warning_Title" parent="Interview_Question_Errors_Title">
+    <item name="android:textColor">@color/warningTextColor</item>
+  </style>
+
+  <style name="Interview_Question_Warning_Details" parent="Interview_Question_Errors_Details">
+    <item name="android:textColor">@color/warningTextColor</item>
+  </style>
+
   <style name="Interview_Question_Comments">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>

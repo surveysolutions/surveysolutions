@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void ProcessPackage(string packageId);
         void ProcessPackage(InterviewPackage interview);
         bool HasPendingPackageByInterview(Guid interviewId);
-        void ReprocessAllBrokenPackages();
         void ReprocessSelectedBrokenPackages(int[] packageIds);
 
         IReadOnlyCollection<string> GetAllPackagesInterviewIds();

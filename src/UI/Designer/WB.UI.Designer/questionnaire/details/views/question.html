@@ -101,8 +101,11 @@
         <div class="form-group validation-group" ng-if="doesQuestionSupportValidations()" ng-repeat="validation in activeQuestion.validationConditions" id="validationCondition{{$index}}">
             <div class="validation-group-marker"></div>
             <label>{{'ValidationCondition' | i18next}} {{$index + 1}} <help key="validationExpression" /></label>
+			
+	        <input id="cb-isWarning{{$index}}" type="checkbox" class="wb-checkbox" ng-model="validation.severity" ng-true-value="'Warning'" ng-false-value="'Error'" />
+	        <label for="cb-isWarning{{$index}}"><span></span>{{'IsWarning' | i18next}}</label>
 
-            <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
+	        <button class="btn delete-btn-sm delete-validation-condition" ng-click="removeValidationCondition($index)" tabindex="-1"></button>
 
             <div class="pseudo-form-control">
                 <div ui-ace="{ onLoad : aceLoaded, require: ['ace/ext/language_tools'] }" 
