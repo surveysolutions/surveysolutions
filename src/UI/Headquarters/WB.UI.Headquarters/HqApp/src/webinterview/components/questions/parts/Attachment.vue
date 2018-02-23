@@ -1,10 +1,10 @@
 <template>
     <div class="image-zoom-box image-wrapper" :class="customCssClass">
-        <img :src="imageThumb" alt="custom photo" class="zoomImg"
+        <img :src="thumbPath" alt="custom photo" class="zoomImg"
             @click="showModal(true)" :style="previewStyle">
         <div class="modal-img" :style="modalView" @click="showModal(false)">
             <span class="close-zoomming-img">×</span>
-            <img class="modal-img-content" :src="imageFull" alt="">
+            <img class="modal-img-content" :src="fullPath" alt="">
             <span class="caption"></span>
         </div>
     </div>
@@ -21,11 +21,20 @@
             filename: {type: String},
             contentId: {type: String},
             interviewId: {type: String},
+            cache: { type: Number},
             thumb: { type: String }, // optional
             image: { type: String },
             customCssClass:{}
         },
         computed: {
+            thumbPath() {
+                if(this.isPreview) return this.imageThumb;
+                return this.imageThumb + `#${this.cache}`;                
+            },
+            fullPath() {
+                if(this.isPreview) return this.imageFull;
+                return this.imageFull + `#${this.cache}`;
+            },
             imageThumb() {
                 if(this.thumb) return this.thumb;
                 if(this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
