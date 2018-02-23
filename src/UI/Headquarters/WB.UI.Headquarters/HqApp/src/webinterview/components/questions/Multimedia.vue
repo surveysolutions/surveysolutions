@@ -3,7 +3,7 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="field" :class="{ answered: $me.isAnswered}" v-if="answerVisible">
-                    <wb-attachment :filename="$me.answer" :thumb="uploadingImage"></wb-attachment>
+                    <wb-attachment :filename="$me.answer" :thumb="uploadingImage" :cache="$me.version"></wb-attachment>
                     <wb-remove-answer @answerRemoved="answerRemoved" />
                 </div>
                 <input name="file" ref="uploader" v-show="false" accept="image/*" type="file" 
@@ -39,11 +39,13 @@
                 return false;
             }
         },
+
         watch:{
             "$me.answer"() {
                 this.uploadingImage = null
             }
         },
+
         methods: {
             answerRemoved() {
                 this.$refs.uploader.type = ''
