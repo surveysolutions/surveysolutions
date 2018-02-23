@@ -69,6 +69,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 @"WB.UI.Designer\Resources\QuestionnaireController",
                 @"Resources\BatchUpload",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
+                @"WB.UI.Headquarters\Resources\UserPreloadingVerificationMessages",
             };
 
             if (ignoreResxFiles.Any(filePath.Contains))
