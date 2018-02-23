@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessUrl, reprocessSelectedUrl) {
+﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl) {
     Supervisor.VM.ControlPanel.BrokenInterviewPackages.superclass.constructor.apply(this, arguments);
 
     var dateFormat = "YYYY-MM-DD";
@@ -31,6 +31,7 @@
     }
 
     self.Questionnaires = ko.observableArray([]);
+    self.InterviewKey = ko.observableArray([]);
     self.SelectedQuestionnaire = ko.observable();
     self.SelectedResponsible = ko.observable();
     self.SelectedExceptionType = ko.observable();
@@ -82,10 +83,10 @@
 
         self.Url.query['questionnaire'] = self.SelectedQuestionnaire() || "";
         self.Url.query['exceptiontype'] = self.SelectedExceptionType() || "";
-        
+        self.Url.query['interviewkey'] = self.InterviewKey() || "";
 
         if (Modernizr.history) {
-            window.history.pushState({}, "BrokenInterviewPackages", self.Url.toString());
+            window.history.pushState({}, null, self.Url.toString());
         }
 
         return {
@@ -93,8 +94,9 @@
             FromProcessingDateTime: startDate != null ? startDate.format(dateFormat) : null,
             ToProcessingDateTime: endDate.format(dateFormat),
             ResponsibleId: _.isUndefined(self.SelectedResponsible()) ? "" : self.SelectedResponsible().UserId,
-            QuestionnaireIdentity: self.SelectedQuestionnaire()
-        };
+            QuestionnaireIdentity: self.SelectedQuestionnaire(),
+            InterviewKey: self.InterviewKey()
+    };
     };
 
     self.load = function () {
@@ -103,6 +105,7 @@
 
             self.SelectedQuestionnaire(self.QueryString['questionnaire']);
             self.SelectedExceptionType(self.QueryString['exceptiontype']);
+            self.InterviewKey(self.QueryString['interviewkey']);
 
             var fromPoint = self.QueryString['from'] || null;
             if (fromPoint != null) {
@@ -119,36 +122,16 @@
 
             self.Url.query['exceptiontype'] = self.QueryString['exceptiontype'] || "";
             self.Url.query['questionnaire'] = self.QueryString['questionnaire'] || "";
+            self.Url.query['interviewkey'] = self.QueryString['interviewkey'] || "";
 
             self.SelectedExceptionType.subscribe(self.filter);
             self.SelectedResponsible.subscribe(self.filter);
             self.SelectedQuestionnaire.subscribe(self.filter);
+            self.InterviewKey.subscribe(self.filter);
 
             self.search();
 
         }, true, true);
-    };
-
-    self.reprocessAll = function () {
-        bootbox.dialog({
-            message: "Are you sure you want to reprocess ALL broken packages?",
-            title: "Confirmation",
-            buttons: {
-                cancel: {
-                    label: "No",
-                    className: "btn-primary"
-                },
-                ok: {
-                    label: "Yes",
-                    className: "btn-danger",
-                    callback: function () {
-                        self.SendRequest(reprocessUrl, {}, function () {
-                            self.search();
-                        }, true);
-                    }
-                }
-            }
-        });
     };
 
     self.reprocessSelected = function () {

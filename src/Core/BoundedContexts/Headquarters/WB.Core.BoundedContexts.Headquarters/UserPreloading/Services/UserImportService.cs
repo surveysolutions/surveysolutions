@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         private readonly Guid interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
         public UserImportService(
-            UserPreloadingSettings userPreloadingSettings, 
+            UserPreloadingSettings userPreloadingSettings,
             ICsvReader csvReader,
             IPlainStorageAccessor<UsersImportProcess> importUsersProcessRepository,
             IPlainStorageAccessor<UserToImport> importUsersRepository,
@@ -93,21 +93,39 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var validations = this.userImportVerifier.GetEachUserValidations(allInterviewersAndSupervisors);
             var hasErrors = false;
 
-            foreach (var userToImport in this.csvReader.ReadAll<UserToImport>(new MemoryStream(data), csvDelimiter))
+            using (var userToImports = this.csvReader.ReadAll<UserToImport>(new MemoryStream(data), csvDelimiter).GetEnumerator())
             {
-                usersToImport.Add(userToImport);
-
-                foreach (var validator in validations)
+                do
                 {
-                    if (!validator.ValidationFunction(userToImport)) continue;
+                    try
+                    {
+                        if (!userToImports.MoveNext())
+                        {
+                            break;
+                        }
+                    }
+                    catch (CsvHelper.BadDataException dataException)
+                    {
+                        throw new UserPreloadingException(
+                            string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile,
+                                dataException.ReadingContext.Row));
+                    }
 
-                    hasErrors = true;
-                    yield return ToVerificationError(validator, userToImport, usersToImport.Count);
-                }
+                    usersToImport.Add(userToImports.Current);
 
-                if (usersToImport.Count > userPreloadingSettings.MaxAllowedRecordNumber)
-                    throw new UserPreloadingException(string.Format(UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat,
+                    foreach (var validator in validations)
+                    {
+                        if (!validator.ValidationFunction(userToImports.Current)) continue;
+
+                        hasErrors = true;
+                        yield return ToVerificationError(validator, userToImports.Current, usersToImport.Count);
+                    }
+
+                    if (usersToImport.Count > userPreloadingSettings.MaxAllowedRecordNumber)
+                        throw new UserPreloadingException(string.Format(
+                            UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat,
                             this.userPreloadingSettings.MaxAllowedRecordNumber));
+                } while (userToImports.Current != null);
             }
 
             validations = this.userImportVerifier.GetAllUsersValidations(allInterviewersAndSupervisors, usersToImport);
@@ -126,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             }
 
             if (!hasErrors) this.Save(fileName, usersToImport);
-            
+
             usersImportTask.Run();
         }
 
@@ -214,7 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public UserToImport GetUserToImport() => this.importUsersRepository.Query(x => x.FirstOrDefault());
 
         public void RemoveImportedUser(UserToImport importedUser)
-            => this.importUsersRepository.Remove(new[] {importedUser});
+            => this.importUsersRepository.Remove(new[] { importedUser });
 
         private static UserImportVerificationError ToVerificationError(PreloadedDataValidator validator,
             UserToImport userToImport, int userIndex)

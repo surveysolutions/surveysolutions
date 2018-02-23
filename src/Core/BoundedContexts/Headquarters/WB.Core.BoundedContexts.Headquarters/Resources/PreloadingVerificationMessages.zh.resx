@@ -201,9 +201,6 @@
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
     <value>GPS问题要求纬度和经度列</value>
   </data>
-  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>预填写的GPS问题要求设置纬度和经度。</value>
-  </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
     <value>发现了重复的列名。</value>
   </data>

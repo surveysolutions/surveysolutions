@@ -286,8 +286,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Enumerator.Native.Resources.WebInterview.Error)
-                .ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error).ToArray();
+            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)

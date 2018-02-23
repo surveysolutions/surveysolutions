@@ -825,6 +825,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
+
+        public IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId)
+        {
+            return GetEntityOrThrow(entityId).GetValidationConditions()
+                .Select((v, i) => new {index = i, validationCondition = v})
+                .Where(v => v.validationCondition.Severity == ValidationSeverity.Warning)
+                .Select(v => v.index)
+                .ToReadOnlyCollection();
+        }
+
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 

@@ -234,6 +234,12 @@ namespace WB.Tests.Abc.TestFactories
                 mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
                 errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
 
+            var warningsViewModel = new WarningsViewModel(
+                liteEventRegistry: liteEventRegistry,
+                interviewRepository: interviewRepository,
+                mainThreadDispatcher: Create.Fake.MvxMainThreadDispatcher(),
+                errorMessagesViewModel: new ErrorMessagesViewModel(Stub<IDynamicTextViewModelFactory>.WithNotEmptyValues));
+
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
                                     commandService: Stub<ICommandService>.WithNotEmptyValues,
                                     principal: Stub<IPrincipal>.WithNotEmptyValues,
@@ -251,7 +257,8 @@ namespace WB.Tests.Abc.TestFactories
                     eventRegistry: liteEventRegistry,
                     questionnaireRepository: questionnaireRepository),
                 commentsViewModel: commentsViewModel,
-                answersRemovedNotifier: answersRemovedNotifier);
+                answersRemovedNotifier: answersRemovedNotifier, 
+                warningsViewModel: warningsViewModel);
         }
 
         private EnablementViewModel EnablementViewModel(IStatefulInterviewRepository interviewRepository,

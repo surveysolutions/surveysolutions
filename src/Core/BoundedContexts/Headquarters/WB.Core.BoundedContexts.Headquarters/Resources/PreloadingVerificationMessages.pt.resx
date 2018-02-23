@@ -201,9 +201,6 @@
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
     <value>GPS pergunta necessário colunas de Latitude e Longitude</value>
   </data>
-  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>Gps pré-carregadas pergunta requer a Latitude e Longitude, a ser definido.</value>
-  </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
     <value>Encontrado duplicado de nomes de colunas</value>
   </data>
