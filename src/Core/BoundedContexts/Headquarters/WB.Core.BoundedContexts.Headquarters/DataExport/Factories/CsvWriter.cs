@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
     internal class CsvWriter : ICsvWriter
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private static readonly Regex RemoveNewLineRegEx = new Regex(@"\t|\n|\r", RegexOptions.Compiled);
 
         public CsvWriter(IFileSystemAccessor fileSystemAccessor)
         {
@@ -37,8 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 {
                     foreach (var cell in dataRow)
                     {
-                        var valueToWrite = string.IsNullOrEmpty(cell) ? "" : RemoveNewLineRegEx.Replace(cell, "");
-                        tabWriter.WriteField(valueToWrite);
+                        tabWriter.WriteField(tabWriter.RemoveNewLine(cell));
                     }
 
                     tabWriter.NextRecord();
