@@ -802,6 +802,7 @@
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
+    <EmbeddedResource Include="Migrations\ReadSide\M001-100\M201802151238_interview_update.sql" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1677,6 +1678,8 @@
     <Content Include="Views\Users\index.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="Views\Maps\UserMaps.cshtml" />
+    <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
+    <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1894,6 +1897,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201711141615_ImportUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710161320_UserMaps.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201802201015.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -1914,6 +1918,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201709251028_AddWasCompletedFlagToSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201711061216_RemovelastpublishedeventpositionforhandlersTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709291355_ChangeJsonToJsonB.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802151238_UpdateFunctionToUpdateInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802011630_SpeedupMapReport.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />

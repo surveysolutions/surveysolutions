@@ -853,6 +853,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warnings.
+        /// </summary>
+        internal static string WarningsHeader {
+            get {
+                return ResourceManager.GetString("WarningsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Web interview.
         /// </summary>
         internal static string WebInterview {

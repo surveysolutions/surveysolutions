@@ -705,4 +705,7 @@
   <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
     <value>Фильтр использует запрещённый тип.</value>
   </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>@rowname переменная не поддерживается больше.</value>
+  </data>
 </root>

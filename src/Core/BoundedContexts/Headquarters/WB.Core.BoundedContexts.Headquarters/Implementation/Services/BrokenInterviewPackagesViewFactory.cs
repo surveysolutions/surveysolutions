@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Utils;
 
@@ -13,9 +16,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
     internal class BrokenInterviewPackagesViewFactory : IBrokenInterviewPackagesViewFactory
     {
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> plainStorageAccessor;
+        private readonly List<string> knownExceptionTypes;
+
         public BrokenInterviewPackagesViewFactory(IPlainStorageAccessor<BrokenInterviewPackage> plainStorageAccessor)
         {
             this.plainStorageAccessor = plainStorageAccessor;
+            knownExceptionTypes = knownExceptionTypes ??
+                                      Enum.GetValues(typeof(InterviewDomainExceptionType))
+                                          .Cast<InterviewDomainExceptionType>()
+                                          .Select(x => x.ToString()).ToList();
         }
 
         public BrokenInterviewPackagesView GetFilteredItems(BrokenInterviewPackageFilter filter)
@@ -23,6 +32,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return this.plainStorageAccessor.Query(queryable =>
             {
                 IQueryable<BrokenInterviewPackage> query = queryable;
+
+                if (!string.IsNullOrWhiteSpace(filter.InterviewKey))
+                {
+                    query = query.Where(x => x.InterviewKey.Contains(filter.InterviewKey));
+                }
+
+                if (!filter.ReturnOnlyUnknownExceptionType)
+                {
+                    query = query.Where(x => !knownExceptionTypes.Contains(x.ExceptionType));
+                }
+                else
+                {
+                    query = query.Where(x => knownExceptionTypes.Contains(x.ExceptionType));
+                }
 
                 if (filter.ResponsibleId.HasValue)
                 {
@@ -65,6 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         Id = package.Id,
                         InterviewId = package.InterviewId,
                         IncomingDate = package.IncomingDate,
+                        InterviewKey = package.InterviewKey,
                         ProcessingDate = package.ProcessingDate,
                         ExceptionType = package.ExceptionType,
                         ExceptionMessage = package.ExceptionMessage,
@@ -86,7 +110,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                 if (!string.IsNullOrEmpty(searchBy))
                     query = queryable.Where(x => x.ExceptionType.ToLower().Contains(searchBy.ToLower()));
 
-                var exceptionTypesByQuery = query.GroupBy(x => x.ExceptionType).Where(x => x.Count() > 0).Select(x => x.Key).ToList();
+                var exceptionTypesByQuery = query.Where(x => x.ExceptionType != InterviewPackagesService.UnknownExceptionType).GroupBy(x => x.ExceptionType)
+                                                 .Where(x => x.Count() > 0)
+                                                 .Select(x => x.Key).ToList();
 
                 return new BrokenInterviewPackageExceptionTypesView
                 {

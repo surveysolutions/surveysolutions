@@ -14,7 +14,7 @@
                 @Model.CustomMessages.GetText(WebInterviewUserMessages.FinishInterview)
             </li>
             <li>
-                @Html.Raw(string.Format(Model.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(), Model.QuestionnaireTitle)))
+                @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.SurveyName).ToString(), Model.QuestionnaireTitle)
             </li>
         </ul>
     </div>

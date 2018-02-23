@@ -11,7 +11,7 @@
         @Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeWelcome)
     </h2>
     <p>
-        @Html.Raw(string.Format(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle))
+        @Html.SubstituteQuestionnaireName(Model.CustomMessages.GetText(WebInterviewUserMessages.ResumeInvitation).ToString(), Model.QuestionnaireTitle)
     </p>
 
     <div class="additional-info-block">

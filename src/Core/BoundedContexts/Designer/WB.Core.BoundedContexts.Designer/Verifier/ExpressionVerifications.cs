@@ -26,20 +26,17 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
     {
         private readonly IMacrosSubstitutionService macrosSubstitutionService;
         private readonly IExpressionProcessor expressionProcessor;
-        private readonly ITopologicalSorter<string> topologicalSorter;
         private readonly IDynamicCompilerSettingsProvider compilerSettings;
 
         
         private static string WrapToClass(string expression) => $"using System; class __0c6e6226bbc84e43aae9324a93cd594f {{ bool __b1d0447f51874e3b83f145683aeec643() {{ return ({expression}); }} }} ";
 
         public ExpressionVerifications(IMacrosSubstitutionService macrosSubstitutionService,
-            IExpressionProcessor expressionProcessor, 
-            ITopologicalSorter<string> topologicalSorter,
+            IExpressionProcessor expressionProcessor,
             IDynamicCompilerSettingsProvider compilerSettings)
         {
             this.macrosSubstitutionService = macrosSubstitutionService;
             this.expressionProcessor = expressionProcessor;
-            this.topologicalSorter = topologicalSorter;
             this.compilerSettings = compilerSettings;
         }
 
@@ -62,7 +59,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IComposite>(this.ConditionExpressionHasLengthMoreThan10000Characters, "WB0094", string.Format(VerificationMessages.WB0094_ConditionExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Critical<IQuestion>(LinkedQuestionFilterExpressionHasLengthMoreThan10000Characters, "WB0108", string.Format(VerificationMessages.WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters, MaxExpressionLength)),
             Critical<IGroup>(GroupEnablementConditionReferenceChildItems,  "WB0130", VerificationMessages.WB0130_SubsectionOrRosterReferenceChildrendInCondition),
-            ErrorsByCircularReferences,
             WarningForCollection(FewQuestionsWithSameLongEnablement, "WB0235", VerificationMessages.WB0235_FewQuestionsWithSameLongEnablement),
             WarningForCollection(FewQuestionsWithSameLongValidation, "WB0236", VerificationMessages.WB0236_FewQuestionsWithSameLongValidation),
             Warning<IQuestionnaireEntity>(this.BitwiseAnd, "WB0237", VerificationMessages.WB0237_BitwiseAnd),
@@ -81,8 +77,30 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<IComposite, ValidationCondition>(GetValidationConditionsOrEmpty, ValidationUsingForbiddenClasses, "WB0273", 
                 index => VerificationMessages.WB0273_ValidationConditionUsingForbiddenClasses, VerificationMessageLevel.Critical),
             Error<IVariable>(VariableUsingForbiddenClasses, "WB0274", VerificationMessages.WB0274_VariableUsingForbiddenClasses),
-            Error<IQuestion>(FilterExpressionUsingForbiddenClasses, "WB0275", VerificationMessages.WB0275_FilterExpressionIsUsingForbiddenClasses)
+            Error<IQuestion>(FilterExpressionUsingForbiddenClasses, "WB0275", VerificationMessages.WB0275_FilterExpressionIsUsingForbiddenClasses),
+            Error<IComposite>(ConditionsContainsRowname, "WB0276", VerificationMessages.WB0276_RownameIsNotSupported)
         };
+
+        private bool ConditionsContainsRowname(IComposite node, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            const string RowName = "@rowname";
+
+            if (node is IValidatable validatable && validatable.ValidationConditions.Any(vc => vc.Expression.Contains(RowName)))
+                return true;
+
+            if (node is IQuestion question
+                && (
+                    (question.LinkedFilterExpression?.Contains(RowName) ?? false)
+                    || (question.Properties.OptionsFilterExpression?.Contains(RowName) ?? false)
+                    || (question.ConditionExpression?.Contains(RowName) ?? false))
+                )
+                return true;
+
+            if (node is IVariable variable && variable.Expression.Contains(RowName))
+                return true;
+
+            return false;
+        }
 
         private bool FilterExpressionUsingForbiddenClasses(IQuestion node, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -486,83 +504,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return expressionWithInlinedMacroses.Length > MaxExpressionLength;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByCircularReferences(
+        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable,
             MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var dependencies = new Dictionary<string, string[]>();
-            var questionsWithConditions = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.ConditionExpression));
-            var questionsWithOptionsFilter = questionnaire.Find<IQuestion>(question => !string.IsNullOrWhiteSpace(question.Properties.OptionsFilterExpression));
-            var variables = questionnaire.Find<IVariable>(question => !string.IsNullOrWhiteSpace(question.Expression));
-
-            void AddDependencies(string variable, IEnumerable<string> identifiers)
-            {
-                if (!dependencies.ContainsKey(variable))
-                {
-                    dependencies.Add(variable, identifiers.ToArray());
-                }
-                else
-                {
-                    var allDependencies = dependencies[variable].ToList().Union(identifiers).Distinct().ToArray();
-                    dependencies[variable] = allDependencies;
-                }
-            }
-
-            foreach (var question in questionsWithConditions)
-            {
-                if (question.StataExportCaption != null)
-                    AddDependencies(question.StataExportCaption, this.GetIdentifiersUsedInExpression(question.ConditionExpression, questionnaire).ToArray());
-            }
-
-            foreach (var question in questionsWithOptionsFilter)
-            {
-                if (question.StataExportCaption != null)
-                {
-                    var identifiers = this.GetIdentifiersUsedInExpression(question.Properties.OptionsFilterExpression, questionnaire);
-
-                    identifiers = ReplaceOwnVariableWithSelf(question, identifiers);
-                    
-                    AddDependencies(question.StataExportCaption, identifiers.ToArray());
-                }
-            }
-
-            foreach (var variable in variables)
-            {
-                if (variable.Name != null)
-                    AddDependencies(variable.Name, this.GetIdentifiersUsedInExpression(variable.Expression, questionnaire).ToArray());
-            }
-
-            var cycles = topologicalSorter.DetectCycles(dependencies);
-
-            foreach (var cycle in cycles)
-            {
-                var references =
-                    cycle.Select(variable => questionnaire.Questionnaire.GetEntityByVariable(variable))
-                        .Where(x => x != null)
-                        .Select(x => CreateReference(x))
-                        .ToArray();
-
-                yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
-            }
-        }
-
-        private bool VariableExpressionHasLengthMoreThan10000Characters(IVariable variable, MultiLanguageQuestionnaireDocument questionnaire)
             => this.DoesExpressionExceed1000CharsLimit(questionnaire, variable.Expression);
 
 
-        private static IEnumerable<string> ReplaceOwnVariableWithSelf(IQuestion question, IEnumerable<string> identifiers)
-        {
-            var questionVariable = question.VariableName;
-            return identifiers.Select(id => id == questionVariable ? "self" : id);
-        }
-
-        private bool EnablementUsesForbiddenDateTimeProperties(IConditional conditional, MultiLanguageQuestionnaireDocument questionnaire)
+        private bool EnablementUsesForbiddenDateTimeProperties(IConditional conditional,
+            MultiLanguageQuestionnaireDocument questionnaire)
             => ExpressionUsesForbiddenDateTimeProperties(conditional.ConditionExpression, questionnaire);
 
         protected bool ExpressionUsesForbiddenDateTimeProperties(string expression,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (string.IsNullOrWhiteSpace(expression)) return false;
-            return Enumerable.Contains(GetIdentifiersUsedInExpression(expression, questionnaire), RoslynExpressionProcessor.ForbiddenDatetimeNow);
+            return Enumerable.Contains(GetIdentifiersUsedInExpression(expression, questionnaire),
+                RoslynExpressionProcessor.ForbiddenDatetimeNow);
         }
 
         protected IEnumerable<string> GetIdentifiersUsedInExpression(string expression,

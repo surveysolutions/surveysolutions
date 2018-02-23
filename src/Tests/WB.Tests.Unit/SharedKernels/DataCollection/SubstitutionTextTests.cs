@@ -229,6 +229,38 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.That(substitionText.Text, Is.EqualTo("title: 5 test"));
         }
 
+        [Test]
+        public void when_substituting_disabled_question_Should_substibute_as_unanswered()
+        {
+            var substitutedQuestionId1 = Id.g1;
+
+            SubstitutionText text = CreateSubstitutionText(Create.Identity(Id.gA),
+                "%subst%",
+                new SubstitutionVariable
+                {
+                    Id = substitutedQuestionId1,
+                    Name = "subst"
+                }
+            );
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId1), 
+                    answer: "answer", 
+                    questionType: QuestionType.Text,
+                    isDisabled: true)
+            });
+
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection);
+            text.SetTree(tree);
+
+            // Act
+            text.ReplaceSubstitutions();
+            var browserReadyText = text.BrowserReadyText;
+
+            Assert.That(browserReadyText, Is.EqualTo($"[...]"));
+        }
+
         private SubstitutionText CreateSubstitutionText(
             Identity id,
             string template,

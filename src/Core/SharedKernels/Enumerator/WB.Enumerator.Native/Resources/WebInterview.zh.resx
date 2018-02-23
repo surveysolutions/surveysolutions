@@ -187,7 +187,7 @@
     <value>访谈过程需要互联网连接，但不需要其他软件。</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>您被邀请参加下面的调查：“{0}”</value>
+    <value>您被邀请参加下面的调查：“%QUESTIONNAIRE%”</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>尚未开始</value>
@@ -211,7 +211,7 @@
     <value>访谈过程需要互联网连接，但不需要其他软件。</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>您可以浏览以下调查中的访谈：“{0}”</value>
+    <value>您可以浏览以下调查中的访谈：“%QUESTIONNAIRE%”</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>您好，欢迎使用Survey Solutions网络访谈</value>
@@ -229,7 +229,7 @@
     <value>网络调查</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>调查：“{0}”</value>
+    <value>调查：“%QUESTIONNAIRE%”</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>进行访谈</value>

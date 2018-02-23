@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, List<Guid>> conditionalDependencies = BuildConditionalDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> structuralDependencies = BuildStructuralDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> rosterDependencies = BuildRosterDependencies(questionnaire);
-            Dictionary<Guid, Guid> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
+            Dictionary<Guid, List<Guid>> linkedQuestionByRosterDependencies = BuildLinkedQuestionByRosterDependencies(questionnaire);
             Dictionary<Guid, List<Guid>> susbtitutionDependencies = BuildSubstitutionDependencies(questionnaire);
 
             var mergedDependencies = new Dictionary<Guid, List<Guid>>();
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Union(rosterDependencies.Keys)
                     .Union(linkedQuestionByRosterDependencies.Keys)
                     .Union(susbtitutionDependencies.Keys)
-                    .Union(linkedQuestionByRosterDependencies.Values)
+                    .Union(linkedQuestionByRosterDependencies.SelectMany(x => x.Value))
                     .Union(structuralDependencies.SelectMany(x => x.Value))
                     .Union(conditionalDependencies.SelectMany(x => x.Value))
                     .Union(rosterDependencies.SelectMany(x => x.Value))
@@ -77,21 +77,30 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
             foreach (var linkedDependency in linkedQuestionByRosterDependencies)
             {
-                if (!mergedDependencies[linkedDependency.Value].Contains(linkedDependency.Key))
+                foreach (var entityId in linkedDependency.Value)
                 {
-                    mergedDependencies[linkedDependency.Value].Add(linkedDependency.Key);
+                    if (!mergedDependencies[entityId].Contains(linkedDependency.Key))
+                    {
+                        mergedDependencies[entityId].Add(linkedDependency.Key);
+                    }                    
                 }
             }
             return mergedDependencies;
         }
 
 
-        private Dictionary<Guid, Guid> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
+        private Dictionary<Guid, List<Guid>> BuildLinkedQuestionByRosterDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
             return questionnaire
-                .Find<IQuestion>(x => x.LinkedToQuestionId != null || x.LinkedToRosterId != null)
-                .ToDictionary(x => x.PublicKey, x => x.LinkedToQuestionId ?? x.LinkedToRosterId.Value);
-        }
+                    .Find<IQuestion>(x => x.LinkedToQuestionId.HasValue || x.LinkedToRosterId.HasValue)
+                    .Select(x => new { Key = x.PublicKey, Value = x.LinkedToQuestionId ?? x.LinkedToRosterId.Value })
+                .Union(questionnaire
+                    .Find<IQuestion>(x => x.LinkedToRosterId.HasValue)
+                    .Select(x => new { Id = x.PublicKey, RosterTitleQuestionId = questionnaire.GetRoster(x.LinkedToRosterId.Value)?.RosterTitleQuestionId })
+                    .Where(x => x.RosterTitleQuestionId.HasValue)
+                    .Select(x => new { Key = x.Id, Value = x.RosterTitleQuestionId.Value }))
+                .GroupBy(x => x.Key)
+                .ToDictionary(x => x.Key, x => x.Select(s => s.Value).ToList());        }
 
         private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
@@ -114,10 +123,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 questionnaire.Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
                         .Where(x => x.RosterSizeQuestionId.HasValue)
                         .Select(x => new { Key = x.RosterSizeQuestionId.Value, Value = x.PublicKey })
-                    .Union(questionnaire
-                        .Find<Group>(x => x.IsRoster && x.RosterSizeSource == RosterSizeSourceType.Question)
-                        .Where(x => x.RosterTitleQuestionId.HasValue)
-                        .Select(x => new { Key = x.RosterTitleQuestionId.Value, Value = x.PublicKey }))
                     .GroupBy(x => x.Key)
                     .ToDictionary(x => x.Key, x => x.Select(r => r.Value).ToList());
 
@@ -140,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (entity is IQuestion question)
                 {
-                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression);
+                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression, ignoreReferenceOnSelf: true);
                     FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.LinkedFilterExpression);
 
                     if (question.CascadeFromQuestionId != null)
@@ -198,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 {
                     foreach (var validationCondition in validatableEntity.ValidationConditions)
                     {
-                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression, includeReferenceOnSelf: true);
+                        FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, entity.PublicKey, validationCondition.Expression, ignoreReferenceOnSelf: true);
                     }
                 }
             }
@@ -211,12 +216,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
             Dictionary<Guid, Macro>.ValueCollection allMacroses, 
             Guid entityId, 
             string expression,
-            bool includeReferenceOnSelf = false)
+            bool ignoreReferenceOnSelf = false)
         {
             if (string.IsNullOrWhiteSpace(expression)) return;
 
             var conditionExpression = this.macrosSubstitutionService.InlineMacros(expression, allMacroses);
-            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, includeReferenceOnSelf);
+            var idsOfEntitesInvolvedInExpression = GetIdsOfEntitiesInvolvedInExpression(variableNamesByEntitiyIds, conditionExpression, entityId, ignoreReferenceOnSelf);
 
             if (!dependencies.TryGetValue(entityId, out List<Guid> depsList))
             {
@@ -234,17 +239,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
         IEnumerable<Guid> GetIdsOfEntitiesInvolvedInExpression(Dictionary<string, Guid> variableNamesByEntitiyIds, 
             string conditionExpression,
             Guid entityId,
-            bool includeReferenceOnSelf = false)
+            bool ignoreReferenceOnSelf = false)
         {
             var identifiersUsedInExpression = this.expressionProcessor.GetIdentifiersUsedInExpression(conditionExpression);
 
-            if (includeReferenceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
+            if (!ignoreReferenceOnSelf && identifiersUsedInExpression.Any(i => i == "self"))
                 yield return entityId;
 
             foreach (var variable in identifiersUsedInExpression)
             {
                 if (variableNamesByEntitiyIds.TryGetValue(variable, out var value))
                 {
+                    if (ignoreReferenceOnSelf && value == entityId)
+                        continue;
                     yield return value;
                 }
             }

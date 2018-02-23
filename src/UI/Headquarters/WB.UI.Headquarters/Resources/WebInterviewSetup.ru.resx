@@ -158,16 +158,16 @@
     <value>Текст отображаемый на финальной странице когда интервью завершено</value>
   </data>
   <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
-    <value>Текст приглашения отображаемый на первой странице до начала интервью. {0} заменяется на имя опросника</value>
+    <value>Текст приглашения отображаемый на первой странице до начала интервью. %QUESTIONNAIRE% заменяется на имя опросника</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
-    <value>Текст отображаемый пользователю прежде чем он сможет продолжить начатое интервью. {0} заменяется на имя опросника</value>
+    <value>Текст отображаемый пользователю прежде чем он сможет продолжить начатое интервью. %QUESTIONNAIRE% заменяется на имя опросника</value>
   </data>
   <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
     <value>Заголовок отображаемый пользователю прежде чем сможет продолжить начатое интервью</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Название проводимого обследования. {0} заменяется на имя опросника</value>
+    <value>Название проводимого обследования. %QUESTIONNAIRE% заменяется на имя опросника</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
     <value>Заголовк отображаемый на финальной странице когда интервью завершено</value>
