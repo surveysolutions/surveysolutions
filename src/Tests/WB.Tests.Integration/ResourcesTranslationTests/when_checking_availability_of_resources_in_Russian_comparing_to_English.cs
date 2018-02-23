@@ -70,7 +70,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             var ignoreResxFiles = new[]
             {
                 @"WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages",
-                @"WB.Core.BoundedContexts.Headquarters\Resources\SurveyManagementInterviewCommandValidatorMessages",
                 @"Resources\BatchUpload",
                 @"WB.UI.Headquarters\Resources\SyncLogMessages",
             };
