@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using NHibernate.Util;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -11,15 +12,17 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         [Test]
         public void should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English()
         {
-           russianResourceFiles = TestEnvironment
+            russianResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.ru.resx")
-                .Where(IsShouldBeTranslatedFile);
+                .Where(IsShouldBeTranslatedFile)
+                .ToList();
 
             englishResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.resx")
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"))
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"))
-                .Where(IsShouldBeTranslatedFile);
+                .Where(IsShouldBeTranslatedFile)
+                .ToList();
 
             russianResourceNames =
                 from resourceFile in russianResourceFiles
@@ -35,11 +38,15 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 where IsNotPluralForm(resourceName)
                 select $"{resourceFileName}: {resourceName}";
 
+
             //should_find_Russian_resource_files() => 
             Assert.That(russianResourceFiles, Is.Not.Empty);
 
             //should_find_English_resource_files() => 
             Assert.That(englishResourceFiles, Is.Not.Empty);
+
+            //should_be_the_same_set_of_resource_files_in_Russian_as_it_is_in_English() => 
+            Assert.That(russianResourceFiles.Select(f => f.Replace(".ru.", ".")), Is.EqualTo(englishResourceFiles));
 
             // should_be_the_same_set_of_resources_in_Russian_as_it_is_in_English() =>
             Assert.That(russianResourceNames, Is.EqualTo(englishResourceNames));
