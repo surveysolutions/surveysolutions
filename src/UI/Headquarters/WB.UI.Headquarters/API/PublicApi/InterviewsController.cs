@@ -14,8 +14,10 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
@@ -29,6 +31,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences;
+        private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
@@ -40,7 +44,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences,
+            IStatefulInterviewRepository statefulInterviewRepository,
+            IStatefullInterviewSearcher statefullInterviewSearcher)
             : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
@@ -50,6 +56,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.interviewReferences = interviewReferences;
+            this.statefulInterviewRepository = statefulInterviewRepository;
+            this.statefullInterviewSearcher = statefullInterviewSearcher;
         }
 
         [HttpGet]
@@ -84,6 +92,37 @@ namespace WB.UI.Headquarters.API.PublicApi
             var interviewDetails = new InterviewApiDetails(interview.InterviewDetails);
 
             return interviewDetails;
+        }
+
+        /// <summary>
+        /// Get statistics by interview
+        /// </summary>
+        /// <param name="id">Interview id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{id:guid}/stats")]
+        public InterviewApiStatistics Stats(Guid id)
+        {
+            var interview = this.statefulInterviewRepository.Get(id.ToString());
+            if (interview == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
+
+            return new InterviewApiStatistics
+            {
+                Answered = statistics[FilterOption.Answered],
+                NotAnswered = statistics[FilterOption.NotAnswered],
+                Valid = statistics[FilterOption.Valid],
+                Invalid = statistics[FilterOption.Invalid],
+                Flagged = statistics[FilterOption.Flagged],
+                NotFlagged = statistics[FilterOption.NotFlagged],
+                WithComments = statistics[FilterOption.WithComments],
+                ForInterviewer = statistics[FilterOption.ForInterviewer],
+                ForSupervisor = statistics[FilterOption.ForSupervisor]
+            };
         }
 
         [HttpGet]

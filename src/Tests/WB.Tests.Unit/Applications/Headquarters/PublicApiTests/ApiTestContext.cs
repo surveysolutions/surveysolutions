@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
@@ -66,7 +67,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             ICommandService commandService = null,
             IAuthorizedUser authorizedUser = null,
             IUserViewFactory userViewFactory = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
+            IStatefulInterviewRepository statefulInterviewRepository = null,
+            IStatefullInterviewSearcher statefullInterviewSearcher = null)
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
@@ -75,7 +78,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                interviewReferences ?? new TestInMemoryWriter<InterviewSummary>());
+                interviewReferences ?? new TestInMemoryWriter<InterviewSummary>(),
+                statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>());
 
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(new HttpConfiguration());
