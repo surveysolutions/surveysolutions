@@ -81,6 +81,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class InterviewMultimediaQuestion : GenericQuestion
     {
         public string Answer { get; set; }
+        public int Version { get; set; }
     }
 
     public class InterviewAudioQuestion : GenericQuestion

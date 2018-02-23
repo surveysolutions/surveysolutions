@@ -223,7 +223,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null)
         {
             var question = this.Tree.GetQuestion(questionIdentity);
-
             return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
         }
 
