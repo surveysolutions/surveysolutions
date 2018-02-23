@@ -192,4 +192,12 @@
   <data name="DeleteMap" xml:space="preserve">
     <value>Удалить карту</value>
   </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>Удалить пользователя карты</value>
+    <comment>Удалить пользователя карты</comment>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>Карты</value>
+    <comment>Карты</comment>
+  </data>
 </root>

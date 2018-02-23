@@ -857,6 +857,7 @@
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <Content Include="Views\Questionnaire\Shared.cshtml" />
+    <Content Include="Views\Shared\ExportHtmlModalDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
