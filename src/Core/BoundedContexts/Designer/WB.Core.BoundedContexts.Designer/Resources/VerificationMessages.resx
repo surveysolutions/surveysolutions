@@ -691,7 +691,7 @@
     <value>Filter expression is using forbidden type.</value>
   </data>
   <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
-    <value>Special values supports only integer values in range from {0} to {1}.</value>
+    <value>Special values support only integer values in range from {0} to {1}.</value>
   </data>
   <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
     <value>@rowname variable is not supported anymore.</value>
