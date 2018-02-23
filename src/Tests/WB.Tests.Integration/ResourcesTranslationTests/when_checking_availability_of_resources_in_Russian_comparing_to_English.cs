@@ -71,7 +71,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             {
                 @"WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages",
                 @"Resources\BatchUpload",
-                @"WB.UI.Headquarters\Resources\SyncLogMessages",
             };
 
             if (ignoreResxFiles.Any(filePath.Contains))
