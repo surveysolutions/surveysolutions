@@ -16,16 +16,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
         private readonly IStatefulInterviewRepository interviewRepository;
 
+        protected SpecialValuesViewModel()
+        {
+            this.SpecialValues = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
+            this.allSpecialValues = new HashSet<int>();
+        }
+
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository) : this()
         {
             this.optionsViewModel = optionsViewModel;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
             this.interviewRepository = interviewRepository;
-            this.SpecialValues = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
-            this.allSpecialValues = new HashSet<int>();
         }
 
         private bool? isSpecialValue;

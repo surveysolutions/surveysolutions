@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         ICompositeQuestionWithChildren,
         IDisposable
     {
-        const decimal jsonSerializerDecimalLimit = 9999999999999999;
+        const double jsonSerializerDecimalLimit = 9999999999999999;
         
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private double? answer;
         public double? Answer
         {
-            get { return this.answer; }
+            get => this.answer;
             set
             {
                 if (this.answer != value)
@@ -149,25 +149,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void SendAnswerRealQuestionCommand()
         {
-            var answeredOrSelectedValue = this.Answer.HasValue ? Convert.ToDecimal(this.Answer.Value) : (decimal?) null;
-            await SaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
-        }
-
-        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
-        {
-            if (answeredOrSelectedValue == null)
+            if (this.Answer == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .Interview_Question_Integer_EmptyValueError);
                 return;
             }
 
-            if (answeredOrSelectedValue > jsonSerializerDecimalLimit || answeredOrSelectedValue < -jsonSerializerDecimalLimit)
+            if (this.Answer > jsonSerializerDecimalLimit || this.Answer < -jsonSerializerDecimalLimit)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Real_ParsingError);
                 return;
             }
 
+            var answeredOrSelectedValue = Convert.ToDecimal(this.Answer.Value);
+            await SaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
+        }
+
+        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        {
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
