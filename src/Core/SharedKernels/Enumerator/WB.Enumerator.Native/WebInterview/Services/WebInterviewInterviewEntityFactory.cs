@@ -138,6 +138,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                             interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
+                            interviewDoubleQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                             result = interviewDoubleQuestion;
                         }
                         break;
@@ -158,7 +159,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         result = this.Map<InterviewMutliOptionQuestion>(question, res =>
                         {
                             res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                (question.GetAsInterviewTreeMultiOptionLinkedToListQuestion()).LinkedSourceId).ToList();
+                                question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().LinkedSourceId).ToList();
                         });
                         break;
                     case InterviewQuestionType.DateTime:

@@ -3,12 +3,13 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field" :class="{ answered: $me.isAnswered}">
+                    <div class="field" :class="{ answered: $me.isAnswered }">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" 
                         :placeholder="noAnswerWatermark" 
                         :title="noAnswerWatermark" 
                         :value="$me.answer" v-blurOnEnterKey 
                         :disabled="isSpecialValueSelected || !$me.acceptAnswer"
+                        :class="{ 'special-value-selected': isSpecialValueSelected }"
                         @blur="answerIntegerQuestion" 
                         v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
                         <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
@@ -69,7 +70,7 @@
                 set(value) {
                     this.saveAnswer(value, true);
                 }
-            },
+            }
         },
         methods: {
             answerIntegerQuestion(evnt) {
