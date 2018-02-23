@@ -196,25 +196,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SendAnswerIntegerQuestionCommandAsync()
         {
-            await SaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
-        }
-
-        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
-        {
-            if (answeredOrSelectedValue == null)
+            if (this.Answer == null)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .Interview_Question_Integer_EmptyValueError);
                 return;
             }
 
-            if (answeredOrSelectedValue > int.MaxValue || answeredOrSelectedValue < int.MinValue)
+            if (this.Answer > int.MaxValue || this.Answer < int.MinValue)
             {
                 this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
                     .Interview_Question_Integer_ParsingError);
                 return;
             }
 
+            await SaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
+        }
+
+        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        {
             if (this.isRosterSizeQuestion)
             {
                 if (!isSpecialValueSelected && answeredOrSelectedValue < 0)
