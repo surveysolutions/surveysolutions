@@ -240,8 +240,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetFormattedOptionValue(List<Answer> options, string optionValueAsString)
         {
-            var values = options.Select(x => double.Parse(x.AnswerValue));
+            if (string.IsNullOrEmpty(optionValueAsString))
+                return string.Empty;
+
             var optionValue = decimal.Parse(optionValueAsString);
+
+            var values = options.Select(x => double.Parse(string.IsNullOrEmpty(x.AnswerValue)? x.AnswerValue : "0"));
             return FormatAsIntegerWithLeadingZeros(optionValue, values);
         }
 
