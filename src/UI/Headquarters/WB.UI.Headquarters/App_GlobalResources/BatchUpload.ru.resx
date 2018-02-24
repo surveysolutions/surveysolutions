@@ -483,4 +483,102 @@
   <data name="ImportProgressFormat" xml:space="preserve">
     <value>{0} из {1}</value>
   </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>Назначено на {0} интервьюеров</value>
+    <comment>Назначено на {0} интервьюера(-ов)</comment>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>Назначено на {0} супервизоров
+</value>
+    <comment>Назначено на {0} супервизоров
+</comment>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>Назначено на 1 интервьюера</value>
+    <comment>Назначено на 1 интервьюера</comment>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>Назначено на 1 супервизора</value>
+    <comment>Назначено на 1 супервизора</comment>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>Никаких заданий не было создано</value>
+    <comment>Никаких заданий не было создано</comment>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Создать интервью</value>
+    <comment>Создать интервью</comment>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Данные для {0} интервью найдены</value>
+    <comment>Данные для {0} интервью найдены</comment>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>Данные для 1 интервью найдены</value>
+    <comment>Данные для 1 интервью найдены</comment>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 задание успешно проверено</value>
+    <comment>1 задание успешно проверено</comment>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 ошибка</value>
+    <comment>1 ошибка</comment>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{0} заданий успешно проверено</value>
+    <comment>{0} заданий успешно проверено</comment>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{0} ошибок</value>
+    <comment>{0} ошибок</comment>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Проверка данных заданий</value>
+    <comment>Проверка данных заданий</comment>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>Проверка заданий для опросника {0}</value>
+    <comment>Проверка заданий для опросника {0}</comment>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Проверка файла данных</value>
+    <comment>Проверка файла данных</comment>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>шаг {0} из {1}</value>
+    <comment>шаг {0} из {1}</comment>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Проверка файла данных выполнена успешно</value>
+    <comment>Проверка файла данных выполнена успешно</comment>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Создание заданий из данных в файле</value>
+    <comment>Создание заданий из данных в файле</comment>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Импорт</value>
+    <comment>Импорт</comment>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>Готово:</value>
+    <comment>Готово:</comment>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>Ничего не удалось</value>
+    <comment>Ничего не удалось</comment>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} интервью не удалось создать </value>
+    <comment>{0} интервью не удалось создать </comment>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} интервью создано</value>
+    <comment>{0} интервью создано</comment>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Проверка завершена</value>
+    <comment>Проверка завершена</comment>
+  </data>
 </root>
