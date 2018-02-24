@@ -12,14 +12,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         {
             russianResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.ru.resx")
-                .Where(IsShouldBeTranslatedFile)
                 .ToList();
 
             englishResourceFiles = TestEnvironment
                 .GetAllFilesFromSourceFolder(string.Empty, "*.resx")
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??.resx"))
                 .Except(TestEnvironment.GetAllFilesFromSourceFolder(string.Empty, "*.??-??.resx"))
-                .Where(IsShouldBeTranslatedFile)
                 .ToList();
 
             russianResourceNames =
@@ -59,23 +57,6 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         private static bool IsNotPluralForm(string resourceName)
         {
             return !resourceName.EndsWith("_plural");
-        }
-
-        private static bool IsShouldBeTranslatedFile(string filePath)
-        {
-            var isAdroidApp = filePath.Contains("Enumerator") || filePath.Contains("Tester") || filePath.Contains("Interviewer");
-            if (isAdroidApp)
-                return true;
-
-            var ignoreResxFiles = new[]
-            {
-                @"Resources\BatchUpload",
-            };
-
-            if (ignoreResxFiles.Any(filePath.Contains))
-                return false;
-
-            return true;
         }
     }
 }
