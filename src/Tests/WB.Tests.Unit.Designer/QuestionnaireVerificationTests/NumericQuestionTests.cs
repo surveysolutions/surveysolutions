@@ -90,5 +90,29 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 })
                 .ExpectError("WB0135");
         }
+
+        [Test]
+        public void special_values_has_empty_values()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(Id.g1, options: Create.Options(
+                    new Option(string.Empty, "A")
+                ))
+            )
+            .ExpectError("WB0136");
+        }
+
+        [Test]
+        public void special_values_has_not_unique_titles()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                    Create.NumericIntegerQuestion(Id.g1, options: Create.Options(
+                        Create.Option(1, "A"),
+                        Create.Option(2, "B"),
+                        Create.Option(3, "  B  ")
+                    ))
+                )
+                .ExpectError("WB0137");
+        }
     }
 }

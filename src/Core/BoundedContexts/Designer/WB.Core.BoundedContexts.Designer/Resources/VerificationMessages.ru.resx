@@ -508,10 +508,16 @@
     <value>Специальные значения должны быть уникальными.</value>
   </data>
   <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
-    <value>Содержит более {0} специалиных значений.</value>
+    <value>Содержит более {0} специальных значений.</value>
   </data>
   <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
     <value>Вопрос содержит специальное значение, которое слишком велико и не может быть использовано, поскольку вопрос определяет количество строк ростера.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>Вопрос содержит специальное значение с пустым значением.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Заголовки специальных значений должны быть уникальны.</value>
   </data>
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров.</value>
