@@ -32,9 +32,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
 
-            var result = importDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
+            var result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataService);
 
-            Assert.That(result.Errors, Has.Count.EqualTo(0));
+            Assert.That(result, Has.Count.EqualTo(0));
         }
     }
 }
