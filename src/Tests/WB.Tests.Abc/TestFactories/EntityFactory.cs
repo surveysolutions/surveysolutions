@@ -667,7 +667,8 @@ namespace WB.Tests.Abc.TestFactories
             bool useFormatting = false,
             string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null, 
-            Guid? linkedToRosterId = null)
+            Guid? linkedToRosterId = null,
+            IEnumerable<Answer> specialValues = null)
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
@@ -683,7 +684,7 @@ namespace WB.Tests.Abc.TestFactories
                 UseFormatting = useFormatting,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
-                
+                Answers = new List<Answer>(specialValues ?? new Answer[] { })
             };
 
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,

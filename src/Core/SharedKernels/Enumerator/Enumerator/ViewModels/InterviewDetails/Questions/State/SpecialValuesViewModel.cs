@@ -71,6 +71,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateSpecialValues();
 
             allSpecialValues = this.SpecialValues.Select(x => x.Value).ToHashSet();
+            if (this.SpecialValues.Any(x => x.Selected))
+                IsSpecialValue = true;
         }
 
         public bool IsSpecialValueSelected(decimal? value)
