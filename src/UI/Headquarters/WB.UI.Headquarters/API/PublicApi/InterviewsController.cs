@@ -131,13 +131,13 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         /// <summary>
-        /// Leave comment by answered question of interview
+        /// Leave a comment on a question
         /// </summary>
-        /// <param name="id">Interview id</param>
-        /// <param name="variable">Variable of question</param>
-        /// <param name="rosterVector">Position in rosters</param>
-        /// <param name="responsible">Responsible id or responsible name</param>
-        /// <param name="comment">Any comments about answer by specfied question</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="variable">Variable name. This is the variable name for a question in Designer or in an export file.</param>
+        /// <param name="rosterVector">Roster row. In simple rosters, the row code. In nested rosters, an array of row codes: first, the row code of the parent(s); followed by the row code of the target child roster (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1). For variables not in rosters, this parameter may be left blank.</param>
+        /// <param name="responsible">Responsible Id. Specify either the user name or the user ID (i.e., GUID from API)</param>
+        /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
@@ -148,6 +148,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
             var question = questionnaire.GetQuestionByVariable(variable);
+
             if (question == null)
                 throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
                     @"Question was not found."));
@@ -156,12 +157,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         /// <summary>
-        /// Leave comment by answered question of interview
+        /// Leave a comment on a question
         /// </summary>
-        /// <param name="id">Interview id</param>
-        /// <param name="questionId">Stringified question id and position in roster</param>
-        /// <param name="responsible">Responsible id or responsible name</param>
-        /// <param name="comment">Any comments about answer by specfied question</param>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="questionId">Question Id. Identifier of the question constructed as follows. First, take the question GUID from the JSON version of the questionnaire. Then, remove all dashes. If the question is not in a roster, use this as the question Id. If the question is in a roster, append its address to the question Id using the following pattern : [questionId]_#-#-#, where [questionId] is the question GUID without dashes, # represents the row code of each roster from the top level of the questionnaire to the current question, and only the needed number of row codes is used (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1).</param>
+        /// <param name="responsible">Responsible Id. Specify either the user name or the user ID (i.e., GUID from API)</param>
+        /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
@@ -169,7 +170,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
 
-            var questionIdentity = Identity.Parse(questionId);
+            if(!Identity.TryParse(questionId, out var questionIdentity))
+                return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $@"bad {nameof(questionId)} format");
 
             return CommentAnswer(id, questionIdentity, responsible, comment);
         }
