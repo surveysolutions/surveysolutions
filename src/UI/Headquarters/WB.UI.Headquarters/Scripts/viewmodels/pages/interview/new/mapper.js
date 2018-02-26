@@ -80,8 +80,8 @@
                     item.latitude.extend({ gps_latitude: true });
                     item.longitude.extend({ gps_longitude: true });
 
-                    item.showMapUrl = function() {
-                        return "http://maps.google.com/maps?q=" + item.latitude() + "," + item.longitude();
+					item.showMapUrl = function (googleBaseUrl) {
+						return googleBaseUrl + "/maps?q=" + item.latitude() + "," + item.longitude();
                     };
                     item.isMapVisible = function () {
                         return item.latitude.isValid() && item.longitude.isValid();
