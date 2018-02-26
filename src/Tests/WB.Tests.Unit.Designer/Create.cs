@@ -486,6 +486,11 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static Option[] Options(params Option[] options)
+        {
+            return options.ToArray();
+        }
+
         public static Option[] Options(params Answer[] options)
         {
             return options.Select(x => new Option(x.GetParsedValue().ToString(CultureInfo.InvariantCulture), x.AnswerText)).ToArray();

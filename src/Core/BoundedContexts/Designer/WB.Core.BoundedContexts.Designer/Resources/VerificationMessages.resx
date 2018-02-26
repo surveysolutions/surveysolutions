@@ -708,4 +708,10 @@
   <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
     <value>Question contains a special value, which is too large and can't be used in this question since it determines the size of a roster.</value>
   </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>Question has special value(s) with empty value.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Special values titles must be unique.</value>
+  </data>
 </root>
