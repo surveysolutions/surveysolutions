@@ -558,25 +558,28 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 {
                     var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, header.Name);
 
-                    var parsedValue = this.GetValue<decimal>(levelData.Content[rowIndex], levelData.Header,
-                        columnIndex, level, preloadedDataService);
-                    if (parsedValue.HasValue)
+                    if (columnIndex > -1)
                     {
-                        answers.Add(parsedValue.Value);
-
-                        if(answers.Count > maxAnswersCount)
+                        var parsedValue = this.GetValue<decimal>(levelData.Content[rowIndex], levelData.Header, columnIndex, level, preloadedDataService);
+                        if (parsedValue.HasValue)
                         {
-                            yield return new PanelImportVerificationError("PL0041",
-                                string.Format(PreloadingVerificationMessages.PL0041_AnswerExceedsMaxAnswersCount, maxAnswersCount), 
-                                this.CreateReference(columnIndex, rowIndex, levelData));
-                            yield break;
+                            answers.Add(parsedValue.Value);
+
+                            if (answers.Count > maxAnswersCount)
+                            {
+                                yield return new PanelImportVerificationError("PL0041",
+                                    string.Format(PreloadingVerificationMessages.PL0041_AnswerExceedsMaxAnswersCount,
+                                        maxAnswersCount),
+                                    this.CreateReference(columnIndex, rowIndex, levelData));
+                                yield break;
+                            }
                         }
                     }
                 }
 
             }
         }
-
+        
         private IEnumerable<PanelImportVerificationError> ErrorsByNumericQuestions(
             HeaderStructureForLevel level,
             ExportedQuestionHeaderItem numericExportedQuestion,
