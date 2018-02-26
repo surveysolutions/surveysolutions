@@ -766,6 +766,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool HasEmptyOptionValues(List<Answer> options)
         {
+            if (options == null)
+                return false;
             return options.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
         }
 
