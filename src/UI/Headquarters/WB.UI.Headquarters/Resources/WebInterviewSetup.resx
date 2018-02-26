@@ -170,7 +170,7 @@
     <value>Header text shown to returning user before resume an interview</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Name of conducted survey. %QUESTIONNAIRE% - is substituted with questionnaire name</value>
+    <value>Name of conducted survey. %QUESTIONNAIRE% is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
     <value>Header text shown after interview completion</value>
