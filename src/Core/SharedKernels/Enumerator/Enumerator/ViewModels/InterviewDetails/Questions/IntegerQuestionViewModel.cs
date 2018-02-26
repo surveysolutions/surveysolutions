@@ -236,13 +236,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.previousAnswer.HasValue && answeredOrSelectedValue < this.previousAnswer)
                 {
                     var amountOfRostersToRemove = this.previousAnswer - answeredOrSelectedValue;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                        amountOfRostersToRemove);
-                    if (!(await this.userInteractionService.ConfirmAsync(message)))
+                    if (amountOfRostersToRemove > 0)
                     {
-                        this.Answer = this.previousAnswer;
-                        this.specialValues.SetAnswer(this.previousAnswer);
-                        return;
+                        var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                            amountOfRostersToRemove);
+                        if (!await this.userInteractionService.ConfirmAsync(message))
+                        {
+                            this.Answer = this.previousAnswer;
+                            this.specialValues.SetAnswer(this.previousAnswer);
+                            return;
+                        }
                     }
                 }
             }
