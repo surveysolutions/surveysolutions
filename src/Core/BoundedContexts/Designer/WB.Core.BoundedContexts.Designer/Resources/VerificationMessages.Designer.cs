@@ -1250,6 +1250,24 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Question has special value(s) with empty value..
+        /// </summary>
+        public static string WB0136_SpecialValuesHaveOptionsWithEmptyValue {
+            get {
+                return ResourceManager.GetString("WB0136_SpecialValuesHaveOptionsWithEmptyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special values titles must be unique..
+        /// </summary>
+        public static string WB0137_SpecialValuesTitlesMustBeUnique {
+            get {
+                return ResourceManager.GetString("WB0137_SpecialValuesTitlesMustBeUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {

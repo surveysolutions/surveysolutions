@@ -59,6 +59,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<IQuestion>("WB0072", OptionTitlesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             ErrorForTranslation<IQuestion>("WB0045", QuestionHasOptionsWithEmptyValue, VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
             ErrorForTranslation<IQuestion>("WB0259", QuestionTitleIsTooLong, string.Format(VerificationMessages.WB0259_QuestionTitleIsTooLong, MaxTitleLength)),
+            ErrorForTranslation<INumericQuestion>("WB0136", QuestionHasSpecialValuesWithEmptyValue, VerificationMessages.WB0136_SpecialValuesHaveOptionsWithEmptyValue),
+            ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
             Error_ManyGpsPrefilledQuestions_WB0006,
@@ -626,13 +628,34 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                    (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private static bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool SpecialValueTitlesMustBeUnique(INumericQuestion question,
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
+            return HasUniqueOptionTitles(question.Answers);
+        }
+
+        private static bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question.CascadeFromQuestionId.HasValue) 
+                return false;
+
+            return HasUniqueOptionTitles(question.Answers);
+        }
+
+        private static bool HasUniqueOptionTitles(List<Answer> options)
+        {
+            if (options != null)
             {
-                return question.Answers.Where(x => x.AnswerText != null).Select(x => x.AnswerText.Trim()).Distinct()
-                           .Count() != question.Answers.Count;
+                var distinctTitlesCount = options
+                    .Where(x => x.AnswerText != null)
+                    .Select(x => x.AnswerText.Trim())
+                    .Distinct()
+                    .Count();
+
+                return distinctTitlesCount != options.Count;
             }
+
             return false;
         }
 
@@ -725,15 +748,25 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return !question.MaxAnswerCount.HasValue;
         }
 
+        private static bool QuestionHasSpecialValuesWithEmptyValue(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return HasEmptyOptionValues(question.Answers);
+        }
+
         private static bool QuestionHasOptionsWithEmptyValue(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
+            if (!(question is SingleQuestion || question is IMultyOptionsQuestion || question is INumericQuestion))
                 return false;
 
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
                 return false;
 
-            return question.Answers.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
+            return HasEmptyOptionValues(question.Answers);
+        }
+
+        private static bool HasEmptyOptionValues(List<Answer> options)
+        {
+            return options.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
         }
 
         private static bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
