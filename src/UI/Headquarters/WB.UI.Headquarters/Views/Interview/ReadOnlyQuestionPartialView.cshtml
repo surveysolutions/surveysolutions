@@ -91,7 +91,7 @@
         {
             var geoLocationAnswer = Model.Answer as GeoPosition;
 
-            <a class="geo-nav" title="show on map" target="_blank" href="@string.Format("https://www.google.com/maps?q={0},{1}", geoLocationAnswer.Latitude, geoLocationAnswer.Longitude)">
+            <a class="geo-nav" title="show on map" target="_blank" href="@string.Format("@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl)/maps?q={0},{1}", geoLocationAnswer.Latitude, geoLocationAnswer.Longitude)">
                 <span class="icon-maps"></span>
             </a>
                         
