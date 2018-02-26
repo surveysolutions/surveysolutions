@@ -150,10 +150,6 @@
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Ответ на вопрос не может содержать более чем {0} отвеченных опций.</value>
   </data>
-  <data name="PL0001_NoQuestionnaire" xml:space="preserve">
-    <value>[PL0001] Опросник отсутствует на сервере</value>
-    <comment>[PL0001] Опросник отсутствует на сервере</comment>
-  </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
     <comment>[PL0002] N/A</comment>
