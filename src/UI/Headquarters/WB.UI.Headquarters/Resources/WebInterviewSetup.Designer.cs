@@ -250,7 +250,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of conducted survey. %QUESTIONNAIRE% - is substituted with questionnaire name.
+        ///   Looks up a localized string similar to Name of conducted survey. %QUESTIONNAIRE% is substituted with questionnaire name.
         /// </summary>
         public static string WebInterviewUserMessages_SurveyName_Descr {
             get {
