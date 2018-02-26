@@ -1045,4 +1045,24 @@
   <data name="QuestionAddSpecialValues" xml:space="preserve">
     <value>Добавить специальное значение</value>
   </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>Элемент не был найден в опроснике, пожалуйста, выберите другой.</value>
+    <comment>Элемент не был найден в опроснике, пожалуйста, выберите другой.</comment>
+  </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>Некоректный вопрос заголовка для ростера</value>
+    <comment>Некоректный вопрос заголовка для ростера</comment>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>Запрос завершился неудачно.</value>
+    <comment>Запрос завершился неудачно.</comment>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>Выбранный недопустимый элемент. Почини это.</value>
+    <comment>Выбранный недопустимый элемент. Почини это.</comment>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>Выберите элемент из списка</value>
+    <comment>Выберите элемент из списка</comment>
+  </data>
 </root>

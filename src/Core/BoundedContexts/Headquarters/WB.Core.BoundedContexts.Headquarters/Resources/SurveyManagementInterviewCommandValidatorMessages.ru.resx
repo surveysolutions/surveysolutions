@@ -117,41 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CreateOneMore" xml:space="preserve">
-    <value>Создайте еще один?</value>
-  </data>
-  <data name="InterviewWasCreated" xml:space="preserve">
-    <value>пользователей было создано.</value>
-  </data>
-  <data name="NoPermission" xml:space="preserve">
-    <value>Не удалось обновить данные пользователя, потому что у вас нет разрешения на выполнение этой операции.</value>
-  </data>
-  <data name="ObserverCreatedFormat" xml:space="preserve">
-    <value>Наблюдатель &lt;b&gt;{0}&lt;/b&gt; был успешно создан.</value>
-  </data>
-  <data name="QuestionnaireClonedAndRenamedFormat" xml:space="preserve">
-    <value>Вопросник «{0}» успешно клонирован с новым названием «{1}».</value>
-  </data>
-  <data name="QuestionnaireClonedFormat" xml:space="preserve">
-    <value>Вопросник «{0}» успешно клонирован.</value>
-  </data>
-  <data name="QuestionnaireNotFoundFormat" xml:space="preserve">
-    <value>Анкета с id {0} и версия {1} не найден.</value>
-  </data>
-  <data name="SuccessfullyCreatedFormat" xml:space="preserve">
-    <value>Супервизор &lt;b&gt;{0}&lt;/b&gt; был успешно создан.</value>
-  </data>
-  <data name="UserNotExists" xml:space="preserve">
-    <value>Не удалось обновить данные пользователя, поскольку пользователь не существует</value>
-  </data>
-  <data name="UserWasCreatedFormat" xml:space="preserve">
-    <value>Хедквотер пользователь &lt;b&gt;{0}&lt;/b&gt; был успешно создан.</value>
-  </data>
-  <data name="UserWasUpdatedFormat" xml:space="preserve">
-    <value>Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
-  </data>
-  <data name="SupervisorNotFound" xml:space="preserve">
-    <value>Не может создать интервьюера. Выбранный супервизор не существует.</value>
-    <comment>Не может создать интервьюера. Выбранный супервизор не существует.</comment>
+  <data name="LimitIsReachedErrorMessageFormat" xml:space="preserve">
+    <value>Было создано больше интервью, чем разрешенный лимит. Установленный лимит для этого обследования - {0}. Свяжитесь с отделом Survey Solutions, если вам нужно создать больше интервью.</value>
   </data>
 </root>

@@ -119,6 +119,7 @@ namespace WB.UI.Headquarters.Controllers
             model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
                 new {controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString()});
             model.UpdateTextsUrl = Url.Action("UpdateMessages", new {id = questionnaireIdentity.ToString()});
+            model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
 
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
 
