@@ -175,12 +175,11 @@
 				}
 				@if (!questionnaire.IsSpecialValuesAppendixEmpty)
 				{
-					<dt>&nbsp;</dt>
-					<dd>
-						<a href="#special_values_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
-					</dd>
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#special_values_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
+				</dd>
 				}
-
 				<dt>&nbsp;</dt>
 				<dd>
 					<a href="#legend_appendix" class="section_name appendix">@PdfStrings.Legend</a>
