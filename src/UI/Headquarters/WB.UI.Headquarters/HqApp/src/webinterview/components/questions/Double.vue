@@ -8,10 +8,10 @@
                             :placeholder="noAnswerWatermark" 
                             :title="noAnswerWatermark"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
-                            :disabled="!$me.acceptAnswer"
+                            :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
                             v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
-                            <wb-remove-answer />
+                            <wb-remove-answer v-if="!isSpecialValueSelected" />
                     </div>
                 </div>
                 <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
