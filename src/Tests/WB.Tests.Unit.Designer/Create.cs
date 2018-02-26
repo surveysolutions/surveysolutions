@@ -521,7 +521,7 @@ namespace WB.Tests.Unit.Designer
             bool hideIfDisabled = false)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new QRBarcodeQuestion()
+            return new QRBarcodeQuestion
             {
                 PublicKey = publicKey,
                 ConditionExpression = enablementCondition,
