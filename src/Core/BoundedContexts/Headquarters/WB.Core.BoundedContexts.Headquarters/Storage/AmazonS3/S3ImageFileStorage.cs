@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Amazon.S3;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -20,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return this.fileStorage.GetBinary(GetPath(interviewId, filename));
         }
 
-        private string GetPath(Guid interviewId, string filename = null) => $"{interviewId}/{filename ?? String.Empty}";
+        private string GetPath(Guid interviewId, string filename = null) => $"{interviewId.FormatGuid()}/{filename ?? String.Empty}";
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {
@@ -30,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return files.Select(file =>
             {
                 var filename = file.Path.Substring(prefix.Length);
-                return new InterviewBinaryDataDescriptor(interviewId, filename, "image/jpg", 
+                return new InterviewBinaryDataDescriptor(interviewId, filename, "image/jpg",
                     () => this.GetInterviewBinaryData(interviewId, GetPath(interviewId, filename)));
             }).ToList();
         }

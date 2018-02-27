@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
@@ -46,6 +47,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             watch.Stop();
             this.logger.Info($"Done creation {Path.GetFileName(archiveFilePath)} archive. Spent: {watch.Elapsed:g}");
+        }
+
+        public IZipArchive CreateExportArchive(Stream outputStream)
+        {
+            var password = this.GetPasswordFromSettings();
+            return new IonicZipArchive(outputStream, password);
         }
 
         private string GetPasswordFromSettings()

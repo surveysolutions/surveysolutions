@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
@@ -8,22 +7,21 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation
 {
-    internal class SpssFormatExportHandler : TabBasedFormatExportHandler
+    internal class StataFormatExportHandler : TabBasedFormatExportHandler
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
-        public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-            InterviewDataExportSettings interviewDataExportSettings, 
-            ITabularFormatExportService tabularFormatExportService, 
+        public StataFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService, 
-            IDataExportProcessesService dataExportProcessesService,
+            InterviewDataExportSettings interviewDataExportSettings, 
+            IDataExportProcessesService dataExportProcessesService, 
+            ITabularFormatExportService tabularFormatExportService, 
+            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
             ILogger logger,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
@@ -31,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
 
-        protected override DataExportFormat Format => DataExportFormat.SPSS;
+        protected override DataExportFormat Format => DataExportFormat.STATA;
 
         protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
@@ -39,21 +37,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             var tabFiles = this.CreateTabularDataFiles(settings.QuestionnaireId, settings.InterviewStatus,
                 settings.ExportDirectory, progress, cancellationToken, settings.FromDate, settings.ToDate);
 
-            this.CreateSpssDataFilesFromTabularDataFiles(settings.QuestionnaireId, tabFiles, progress, cancellationToken);
+            this.CreateStataDataFilesFromTabularDataFiles(settings.QuestionnaireId, tabFiles, progress, cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
-            this.GenerateDescriptionTxt(settings.QuestionnaireId, settings.ExportDirectory, ExportFileSettings.SpssDataFileExtension);
+            this.GenerateDescriptionTxt(settings.QuestionnaireId, settings.ExportDirectory, ExportFileSettings.StataDataFileExtension);
         }
 
-        private void CreateSpssDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,
+        private void CreateStataDataFilesFromTabularDataFiles(QuestionnaireIdentity questionnaireIdentity, string[] tabDataFiles,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
             var exportProgress = new Progress<int>();
             exportProgress.ProgressChanged +=
-                (sender, donePercent) => progress.Report(50 + (donePercent / 2));
+                (sender, donePercent) => progress.Report(50 + (donePercent/2));
 
-            tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(
+           tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(
                 questionnaireIdentity.QuestionnaireId,
                 questionnaireIdentity.Version,
                 tabDataFiles,
