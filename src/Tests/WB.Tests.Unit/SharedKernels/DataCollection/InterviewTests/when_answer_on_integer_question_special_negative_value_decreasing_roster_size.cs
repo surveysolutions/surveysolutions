@@ -5,6 +5,7 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -26,8 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
                 children: new IComposite[]
                 {
-                    Create.Entity.NumericQuestion(questionId: questionWhichDecreasesRosterSizeId, isInteger:true, options: new List<Answer>(){new Answer(){AnswerCode = -1, AnswerText = "-1", AnswerValue = "-1"}}),
-
+                    Create.Entity.NumericQuestion(questionId: questionWhichDecreasesRosterSizeId, 
+                        isInteger:true, 
+                        options: Create.Entity.Options(-1) ),
                     Create.Entity.Roster(rosterId: rosterGroupId,
                         rosterSizeQuestionId: questionWhichDecreasesRosterSizeId),
                 }));
@@ -37,12 +39,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId,
                 questionnaireRepository: questionnaireRepository);
-            interview.AnswerNumericIntegerQuestion(userId, questionWhichDecreasesRosterSizeId, new decimal[] { },
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichDecreasesRosterSizeId, RosterVector.Empty, 
                 DateTime.Now, 1);
             eventContext = new EventContext();
 
             //AA
-            interview.AnswerNumericIntegerQuestion(userId, questionWhichDecreasesRosterSizeId, new decimal[] { },
+            interview.AnswerNumericIntegerQuestion(userId, questionWhichDecreasesRosterSizeId, RosterVector.Empty,
                 DateTime.Now, -1);
         }
 
