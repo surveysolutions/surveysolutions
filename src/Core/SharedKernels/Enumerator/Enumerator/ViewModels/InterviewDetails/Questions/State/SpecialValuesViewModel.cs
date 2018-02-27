@@ -16,16 +16,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
         private readonly IStatefulInterviewRepository interviewRepository;
 
-        protected SpecialValuesViewModel()
-        {
-            this.SpecialValues = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
-            this.allSpecialValues = new HashSet<int>();
-        }
+        protected SpecialValuesViewModel(){}
 
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
             IMvxMainThreadDispatcher mvxMainThreadDispatcher,
-            IStatefulInterviewRepository interviewRepository) : this()
+            IStatefulInterviewRepository interviewRepository) 
         {
             this.optionsViewModel = optionsViewModel;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
@@ -36,8 +32,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
         private IQuestionStateViewModel questionState;
-        private HashSet<int> allSpecialValues;
+        private HashSet<int> allSpecialValues = new HashSet<int>();
 
+        public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> SpecialValues { get; } = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
 
         public bool? IsSpecialValue
         {
@@ -63,9 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.SpecialValueChanged?.Invoke(selectedSpecialValue, EventArgs.Empty);
         }
-
-        public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> SpecialValues { get; private set; }
-       
+        
         public virtual void Init(string interviewId, Identity entityIdentity, IQuestionStateViewModel questionState)
         {
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
