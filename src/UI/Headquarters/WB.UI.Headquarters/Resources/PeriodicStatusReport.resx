@@ -205,7 +205,7 @@
     <value>Average time from when a supervisor approves an interview to when that interview is either approved or rejected by HQ.</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Average time from when an interviewer records the first answer on a tablet to when that interviewer presses the Complete button.</value>
+    <value>Average time that interview was presented on screen of interviewer before completion.</value>
   </data>
   <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
     <value>Average time from when the interview is first assigned to when HQ approves that interview.</value>
@@ -236,11 +236,5 @@
   </data>
   <data name="InTheSupervisorTeamFormat" xml:space="preserve">
     <value>in the {0} team</value>
-  </data>
-  <data name="AverageInterviewingTime" xml:space="preserve">
-    <value>Average interviewing time</value>
-  </data>
-  <data name="AverageInterviewingTimeDescription" xml:space="preserve">
-    <value />
   </data>
 </root>
