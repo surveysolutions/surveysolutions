@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private readonly MemoryCache questionnaireCache = new MemoryCache("QuestionnaireCache");
 
-        private  QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        private QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
             string key = questionnaireId.ToString() + questionnaireVersion.ToString();
             if (this.questionnaireCache.Contains(key))
@@ -403,13 +403,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             if (interview.LastResumeEventUtcTimestamp.HasValue)
             {
                 TimeSpan timeDiffWithLastEvent = endTimestamp - interview.LastResumeEventUtcTimestamp.Value;
-                if (interview.InterviewingTotalTime.HasValue)
+                if (interview.InterviewDuration.HasValue)
                 {
-                    interview.InterviewingTotalTime += timeDiffWithLastEvent;
+                    interview.InterviewDuration += timeDiffWithLastEvent;
                 }
                 else
                 {
-                    interview.InterviewingTotalTime = timeDiffWithLastEvent;
+                    interview.InterviewDuration = timeDiffWithLastEvent;
                 }
 
                 interview.LastResumeEventUtcTimestamp = null;
