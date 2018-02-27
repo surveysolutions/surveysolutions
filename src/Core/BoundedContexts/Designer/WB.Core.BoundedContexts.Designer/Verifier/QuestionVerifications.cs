@@ -637,6 +637,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private static bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
+            if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
+                return false;
+
             if (question.CascadeFromQuestionId.HasValue) 
                 return false;
 
@@ -755,7 +758,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static bool QuestionHasOptionsWithEmptyValue(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (!(question is SingleQuestion || question is IMultyOptionsQuestion || question is INumericQuestion))
+            if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
                 return false;
 
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
