@@ -136,7 +136,7 @@
     <value>Средняя продолжительность интервью</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Временной промежуток между первым отвеченным вопросом и завершением интервью на планшете.</value>
+    <value>Средняя продолжительность интервью до завершения.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Среднее время обработки</value>

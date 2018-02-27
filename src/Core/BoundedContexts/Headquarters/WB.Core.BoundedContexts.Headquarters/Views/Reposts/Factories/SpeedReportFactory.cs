@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         IReport<SpeedBetweenStatusesBySupervisorsReportInputModel>
     {
         SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input);
-        SpeedByResponsibleReportView Load(InterviewDuractionByInterviewersReportInputModel input);
         SpeedByResponsibleReportView Load(SpeedBySupervisorsReportInputModel input);
         SpeedByResponsibleReportView Load(SpeedBetweenStatusesByInterviewersReportInputModel input);
         SpeedByResponsibleReportView Load(SpeedBetweenStatusesBySupervisorsReportInputModel input);
@@ -145,8 +144,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return this.interviewStatusesStorage.Query(_ =>
                 _.Where(x => questionnaireId == Guid.Empty || x.QuestionnaireIdentity == questionnaireIdentity.ToString())
                     .SelectMany(x => x.InterviewCommentedStatuses
-                        .Where(c => c.Status == InterviewExportedAction.Completed &&
-                                    c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.Completed).Min(y => y.Timestamp))
+                        .Where(c => c.Status == InterviewExportedAction.FirstAnswerSet &&
+                                    c.Timestamp == x.InterviewCommentedStatuses.Where(y => y.Status == InterviewExportedAction.FirstAnswerSet).Min(y => y.Timestamp))
                     )
                     .Where(ics =>
                         ics.Timestamp >= fromDate &&
@@ -244,29 +243,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
         public SpeedByResponsibleReportView Load(SpeedByInterviewersReportInputModel input)
         {
-            if (input.ReportType == PeriodiceReportType.AverageInterviewingTime)
-            {
-                return this.Load(
-                    reportStartDate: input.From,
-                    timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
-                    period: input.Period,
-                    columnCount: input.ColumnCount,
-                    page: input.Page,
-                    pageSize: input.PageSize,
-                    questionnaireId: input.QuestionnaireId,
-                    questionnaireVersion: input.QuestionnaireVersion,
-                    query: this.QueryNonEmptyInterviewDurations,
-                    selectUser: u => u.InterviewerId.Value,
-                    restrictUser: i => i.SupervisorId == input.SupervisorId,
-                    userIdSelector: i => new UserAndTimestampAndTimespan
-                    {
-                        UserId = i.InterviewerId,
-                        Timestamp = i.Timestamp,
-                        Timespan = i.InterviewSummary.InterviewingTotalTimeLong ?? 0,
-                        UserName = i.InterviewerName
-                    });
-            }
-
             return this.Load(
                 reportStartDate: input.From,
                 timezoneAdjastmentMins: input.TimezoneOffsetMinutes,
@@ -276,10 +252,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 pageSize: input.PageSize,
                 questionnaireId: input.QuestionnaireId,
                 questionnaireVersion: input.QuestionnaireVersion,
-                query: (questionnaireId, questionnaireVersion, from, to) => this.QueryInterviewStatuses(questionnaireId, questionnaireVersion, from, to, input.InterviewStatuses),
+                query: this.QueryNonEmptyInterviewDurations,
                 selectUser: u => u.InterviewerId.Value,
                 restrictUser: i => i.SupervisorId == input.SupervisorId,
-                userIdSelector: i => new UserAndTimestampAndTimespan { UserId = i.InterviewerId, Timestamp = i.Timestamp, Timespan = i.TimespanWithPreviousStatusLong.Value, UserName = i.InterviewerName });
+                userIdSelector: i => new UserAndTimestampAndTimespan
+                {
+                    UserId = i.InterviewerId,
+                    Timestamp = i.Timestamp,
+                    Timespan = i.InterviewSummary.InterviewingTotalTimeLong ?? 0,
+                    UserName = i.InterviewerName
+                });
+
         }
 
         public SpeedByResponsibleReportView Load(InterviewDuractionByInterviewersReportInputModel input)
