@@ -320,12 +320,12 @@
 				border-color: transparent;
 				box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #f19580; 
 			}
-			&.special-value-selected{
-				color: $transparent-font;
-			}
 		}
 	}
-
+	.special-value-selected{
+		color: $transparent-font;
+		font-size: 0;
+	}
 	.question-unit{
 		.radio, .form-group{
 			border-color: #eeeff0;
