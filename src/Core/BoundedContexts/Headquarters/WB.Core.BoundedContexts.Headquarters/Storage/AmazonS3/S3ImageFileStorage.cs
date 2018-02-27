@@ -10,24 +10,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
     public class S3ImageFileStorage : IImageFileStorage
     {
-        private readonly IFileStorage fileStorage;
+        private readonly IExternalFileStorage externalFileStorage;
 
-        public S3ImageFileStorage(IFileStorage fileStorage)
+        public S3ImageFileStorage(IExternalFileStorage externalFileStorage)
         {
-            this.fileStorage = fileStorage;
+            this.externalFileStorage = externalFileStorage;
         }
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string filename)
         {
-            return this.fileStorage.GetBinary(GetPath(interviewId, filename));
+            return this.externalFileStorage.GetBinary(GetPath(interviewId, filename));
         }
 
-        private string GetPath(Guid interviewId, string filename = null) => $"{interviewId.FormatGuid()}/{filename ?? String.Empty}";
+        private string GetPath(Guid interviewId, string filename = null) => $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {
             var prefix = GetPath(interviewId);
-            var files = this.fileStorage.List(prefix);
+            var files = this.externalFileStorage.List(prefix);
 
             return files.Select(file =>
             {
@@ -39,12 +39,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            fileStorage.Store(GetPath(interviewId, fileName), data, contentType);
+            externalFileStorage.Store(GetPath(interviewId, fileName), data, contentType);
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            fileStorage.Remove(GetPath(interviewId, fileName));
+            externalFileStorage.Remove(GetPath(interviewId, fileName));
         }
     }
 }

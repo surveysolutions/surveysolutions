@@ -1,40 +1,35 @@
 ﻿using System.IO;
 using System.Text;
 using Ionic.Zip;
+using Ionic.Zlib;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
     public class IonicZipArchive : IZipArchive
     {
-        private readonly Stream outputStream;
-        private readonly ZipFile zipFile;
+        private readonly ZipOutputStream zipStream;
 
-        public IonicZipArchive(Stream outputStream, string password)
+        public IonicZipArchive(Stream outputStream, string password, CompressionLevel compressionLevel = CompressionLevel.BestSpeed)
         {
-            this.outputStream = outputStream;
-            zipFile = new ZipFile
-            {
-                ParallelDeflateThreshold = -1,
-                AlternateEncoding = Encoding.UTF8,
-                AlternateEncodingUsage = ZipOption.Always,
-                UseZip64WhenSaving = Zip64Option.AsNecessary
-            };
+            this.zipStream = new ZipOutputStream(outputStream);
+            zipStream.CompressionLevel = compressionLevel;
 
             if (!string.IsNullOrWhiteSpace(password))
             {
-                zipFile.Password = password;
+                zipStream.Password = password;
             }
         }
 
         public void Dispose()
         {
-            zipFile.Save(outputStream);
+            zipStream.Dispose();
         }
 
         public void CreateEntry(string path, byte[] content)
         {
-            zipFile.AddEntry(path, content);
+            zipStream.PutNextEntry(path);
+            zipStream.Write(content, 0, content.Length);
         }
     }
 }
