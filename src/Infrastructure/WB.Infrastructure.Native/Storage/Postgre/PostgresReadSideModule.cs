@@ -130,7 +130,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         private ISessionFactory BuildSessionFactory()
         {
-            File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
+            //File.WriteAllText(@"D:\Temp\Mapping.xml" ,Serialize(this.GetMappings())); // Can be used to check mappings
             var cfg = new Configuration();
             cfg.DataBaseIntegration(db =>
             {
