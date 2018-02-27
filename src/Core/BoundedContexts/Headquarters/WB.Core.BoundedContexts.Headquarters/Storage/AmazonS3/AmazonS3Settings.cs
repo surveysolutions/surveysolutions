@@ -5,18 +5,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
     public class AmazonS3Settings
     {
-        public bool IsEnabled { get; set; }
         public string BucketName { get; set; }
         public string Region { get; set; } = "us-east-1";
         public string Prefix { get; set; }
         public string Endpoint { get; set; }
         public string Folder { get; set; } = "hq";
 
-        public AmazonS3Config Config() => new AmazonS3Config
+        public string BasePath => $"{Folder}/{Prefix}";
+
+        public AmazonS3Config Config()
         {
-            RegionEndpoint = RegionEndpoint.GetBySystemName(Region),
-            ServiceURL = Endpoint,
-            ForcePathStyle = true
-        };
+            var config = new AmazonS3Config();
+            config.RegionEndpoint = RegionEndpoint.GetBySystemName(Region);
+
+            // support for local dev env endpoints
+            if (!string.IsNullOrWhiteSpace(Endpoint))
+            {
+                config.ServiceURL = Endpoint;
+                config.ForcePathStyle = true;
+            }
+
+            return config;
+        }
     }
 }

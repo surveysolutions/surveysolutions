@@ -10,10 +10,9 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation
 {
     internal class TabularFormatDataExportHandler : AbstractDataExportHandler
     {

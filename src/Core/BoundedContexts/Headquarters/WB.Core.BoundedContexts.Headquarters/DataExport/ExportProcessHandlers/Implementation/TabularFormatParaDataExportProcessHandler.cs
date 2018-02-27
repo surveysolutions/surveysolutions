@@ -23,7 +23,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation
 {
     internal class TabularFormatParaDataExportProcessHandler: AbstractDataExportHandler
     {

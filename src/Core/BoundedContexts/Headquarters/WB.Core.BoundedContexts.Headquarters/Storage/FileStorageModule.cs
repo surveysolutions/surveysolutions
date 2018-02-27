@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
         {
             registry.Bind<IAudioFileStorage, AudioFileStorage>();
 
-            var isS3Enabled = ConfigurationManager.AppSettings["Storage.S3.Enable"].ToBool(false);
+            var isS3Enabled = ConfigurationManager.AppSettings["Storage.S3.Enable"].ToBool(true);
 
             if (isS3Enabled)
             {
@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 
                     return new AmazonS3Settings
                     {
-                        IsEnabled = settings["Storage.S3.Enable"].ToBool(false),
                         BucketName = settings["Storage.S3.BucketName"],
                         Region = settings["Storage.S3.Region"],
                         Prefix = settings["Storage.S3.Prefix"],
