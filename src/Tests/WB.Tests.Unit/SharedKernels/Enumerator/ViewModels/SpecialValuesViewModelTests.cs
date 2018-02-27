@@ -187,7 +187,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             //Assert
             Assert.That(model.SpecialValues.Count, Is.EqualTo(2));
-            Assert.That(model.IsSpecialValue, Is.False);
+            Assert.That(model.IsSpecialValue, Is.Null);
         }
     }
 }
