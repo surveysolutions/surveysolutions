@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -69,38 +71,48 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
 
             cancellationToken.ThrowIfCancellationRequested();
 
+            BlockingCollection<(string path, byte[] content)> filesToZip = new BlockingCollection<(string, byte[])>(50);
+
+            var zipTask = Task.Factory.StartNew(() =>
+            {
+                foreach (var entry in filesToZip.GetConsumingEnumerable())
+                {
+                    archive.CreateEntry(entry.path, entry.content);
+                }
+            }, cancellationToken);
+
             long totalInterviewsProcessed = 0;
             foreach (var interviewId in interviewIds)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 
-                foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId)
-                    .Select(x => x.Answer))
+                foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId).Select(x => x.Answer))
                 {
                     var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
 
                     if (fileContent == null) continue;
 
                     var path = this.fileSystemAccessor.CombinePath(interviewId.FormatGuid(), imageFileName);
-                    archive.CreateEntry(path, fileContent);
+                    filesToZip.Add((path, fileContent), cancellationToken);
                 }
 
-                foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId)
-                    .Select(x => x.Answer))
+                foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId).Select(x => x.Answer))
                 {
                     var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager()
-                        .ExecuteInQueryTransaction(
-                            () => audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName));
+                        .ExecuteInQueryTransaction(() => audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName));
 
                     if (fileContent == null) continue;
 
                     var path = this.fileSystemAccessor.CombinePath(interviewId.FormatGuid(), audioFileName);
-                    archive.CreateEntry(path, fileContent);
+                    filesToZip.Add((path, fileContent), cancellationToken);
                 }
 
                 totalInterviewsProcessed++;
                 progress.Report(totalInterviewsProcessed.PercentOf(interviewIds.Count));
             }
+
+            filesToZip.CompleteAdding();
+            zipTask.Wait(cancellationToken);
         }
     }
 }
