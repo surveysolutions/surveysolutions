@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Moq;
+using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandlerTests;
@@ -53,7 +54,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
-                .Returns<string, string>((p1, p2) => p2);
+                .Returns<string, string>((p1, p2) => p1 + p2);
+            fileSystemAccessor.Setup(x => x.GetFileName(It.IsAny<string>())).Returns<string>(p => p);
             fileSystemAccessor.Setup(x=>x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>())).Throws<ArgumentNullException>();
 
             var dataExportFileAccessor = CrerateDataExportFileAccessor(fileSystemAccessor.Object);
@@ -61,12 +63,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var manager = new Mock<IPlainTransactionManager>();
             var plainTransactionManagerProvider = new Mock<IPlainTransactionManagerProvider>();
             plainTransactionManagerProvider.Setup(t => t.GetPlainTransactionManager()).Returns(manager.Object);
+            
+            var exportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
+            exportedDataAccessor.Setup(f => f.GetArchiveFilePathForExportedData(
+                    It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Binary, null, null, null))
+                .Returns("TestFileData");
 
             var binaryFormatDataExportHandler =
                 CreateBinaryFormatDataExportHandler(
                     interviewSummaries: interviewSummaryStorage,
                     interviewFactory: mockOfInterviewFactory.Object,
                     imageFileRepository: plainInterviewFileStorageMock.Object,
+                    filebasedExportedDataAccessor: exportedDataAccessor.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,
                     dataExportFileAccessor: dataExportFileAccessor,
                     plainTransactionManagerProvider: plainTransactionManagerProvider.Object,

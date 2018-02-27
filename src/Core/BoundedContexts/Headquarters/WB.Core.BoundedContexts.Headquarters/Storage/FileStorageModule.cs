@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 
             if (isS3Enabled)
             {
-                registry.Bind<IFileStorage, S3FileStorage>();
+                registry.Bind<IExternalFileStorage, S3FileStorage>();
 
                 registry.BindToMethodInSingletonScope(ctx =>
                 {
@@ -50,6 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             }
             else
             {
+                registry.Bind<IExternalFileStorage, NoExternalFileSystemStorage>();
+
                 registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>(
                     "rootDirectoryPath", this.currentFolderPath);
             }

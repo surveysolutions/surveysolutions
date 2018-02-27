@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Impl
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
             return new DataExportFileAccessor(Mock.Of<IExportSettings>(),
                 Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 archiveUtils ?? Mock.Of<IProtectedArchiveUtils>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(), Mock.Of<IExternalFileStorage>());
         }
     }
 }
