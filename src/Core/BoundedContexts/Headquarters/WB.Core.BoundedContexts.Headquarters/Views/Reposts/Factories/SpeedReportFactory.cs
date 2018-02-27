@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 {
                     UserId = i.InterviewerId,
                     Timestamp = i.Timestamp,
-                    Timespan = i.InterviewSummary.InterviewingTotalTimeLong ?? 0,
+                    Timespan = i.InterviewSummary.InterviewDurationLong ?? 0,
                     UserName = i.InterviewerName
                 });
 

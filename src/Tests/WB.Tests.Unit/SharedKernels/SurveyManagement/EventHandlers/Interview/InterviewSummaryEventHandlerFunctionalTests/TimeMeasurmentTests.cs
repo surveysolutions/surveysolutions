@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
-            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewingTotalTime)).EqualTo(TimeSpan.FromHours(1)));
+            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewDuration)).EqualTo(TimeSpan.FromHours(1)));
         }
 
         [Test]
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
-            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewingTotalTime)).EqualTo(TimeSpan.FromHours(1)));
+            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewDuration)).EqualTo(TimeSpan.FromHours(1)));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
-            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewingTotalTime)).EqualTo(TimeSpan.FromHours(1)));
+            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewDuration)).EqualTo(TimeSpan.FromHours(1)));
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
-            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewingTotalTime)).EqualTo(TimeSpan.FromHours(1)));
+            Assert.That(updatedModel, Has.Property(nameof(updatedModel.InterviewDuration)).EqualTo(TimeSpan.FromHours(1)));
         }
     }
 }
