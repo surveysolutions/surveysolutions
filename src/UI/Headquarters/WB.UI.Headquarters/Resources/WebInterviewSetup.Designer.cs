@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom message should not contain more than {0} characters (including html).
+        /// </summary>
+        public static string CustomMessageTooLong {
+            get {
+                return ResourceManager.GetString("CustomMessageTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use custom text.
         /// </summary>
         public static string CustomText {
@@ -250,7 +259,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name of conducted survey. %QUESTIONNAIRE% - is substituted with questionnaire name.
+        ///   Looks up a localized string similar to Name of conducted survey. %QUESTIONNAIRE% is substituted with questionnaire name.
         /// </summary>
         public static string WebInterviewUserMessages_SurveyName_Descr {
             get {
