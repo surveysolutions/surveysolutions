@@ -191,4 +191,7 @@
     <value>Включить защиту от спама</value>
     <comment>Включить защиту от спама</comment>
   </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Сообщение не должно содержать более чем {0} символов (включая html)</value>
+  </data>
 </root>
