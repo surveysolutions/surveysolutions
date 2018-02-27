@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Status, pm => pm.Column(cm => cm.Index("InterviewSummaries_Status")));
             Property(x => x.Key);
             Property(x => x.QuestionnaireIdentity);
-            Property(x => x.InterviewingTotalTimeLong, ptp => ptp.Column("InterviewingTotalTime"));
+            Property(x => x.InterviewDurationLong, ptp => ptp.Column("interviewduration"));
             Property(x => x.LastResumeEventUtcTimestamp);
             Property(x => x.ClientKey);
             Property(x => x.HasErrors);
