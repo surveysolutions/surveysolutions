@@ -9,6 +9,10 @@
                         <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
                     <ul class="list-unstyled pull-left">
+                        <li v-if="this.$config.model.interviewDuration">
+                            <span class="data-label">{{this.$t('Details.Duration')}}:</span>
+                            <span class="data">{{this.$config.model.interviewDuration}}</span>
+                        </li>
                         <li>
                             <span class="data-label">{{this.$t('Details.Responsible')}}: </span>
                             <span v-if="isInterviewerResponsible" class="data">
@@ -17,7 +21,7 @@
                             <span v-else class="data supervisor">{{this.$config.model.responsible}}</span>
                         </li>
                         <li>
-                            <span class="data-label">{{this.$t('Users.Supervisor')}} : </span>
+                            <span class="data-label">{{this.$t('Users.Supervisor')}}: </span>
                             <span class="data supervisor">{{this.$config.model.supervisor}}</span>
                         </li>
                     </ul>
