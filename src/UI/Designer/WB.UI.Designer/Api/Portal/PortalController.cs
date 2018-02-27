@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
+using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Api.Portal
 {
@@ -14,16 +15,19 @@ namespace WB.UI.Designer.Api.Portal
     {
         private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IAccountRepository accountRepository;
+        private readonly IQuestionnaireHelper questionnaireHelper;
 
         public PortalController(
             IQuestionnaireListViewFactory viewFactory, 
-            IAccountRepository accountRepository)
+            IAccountRepository accountRepository, 
+            IQuestionnaireHelper questionnaireHelper)
         {
             this.viewFactory = viewFactory;
             this.accountRepository = accountRepository;
+            this.questionnaireHelper = questionnaireHelper;
         }
 
-        [Route("{userId:string}/questionnaires")]
+        [Route("{userId}/questionnaires")]
         [HttpGet]
         public PagedQuestionnaireCommunicationPackage QuestionnairesForUser(string userId, string filter)
         {
@@ -31,24 +35,25 @@ namespace WB.UI.Designer.Api.Portal
 
             var account = this.accountRepository.GetByNameOrEmail(userId);
 
-            var input = new QuestionnaireListInputModel
-            {
-                ViewerId = account.ProviderUserKey,
-                IsAdminMode = false,
-                Page = 0,
-                PageSize = 20,
-                SearchFor = filter
-            };
+            var questionnaires = questionnaireHelper.GetQuestionnaires(
+                viewerId: account.ProviderUserKey,
+                isAdmin: false, 
+                type: QuestionnairesType.My, 
+                folderId: null, 
+                pageIndex: 1,
+                sortBy: null, 
+                sortOrder: null, 
+                searchFor: filter);
 
-            var questionnaireListView = this.viewFactory.Load(input);
+           
 
             return new PagedQuestionnaireCommunicationPackage
             {
-                TotalCount = questionnaireListView.TotalCount,
-                Items = questionnaireListView.Items.Select(questionnaireListItem =>
+                TotalCount = questionnaires.TotalCount,
+                Items = questionnaires.Select(questionnaireListItem =>
                     new QuestionnaireListItem
                     {
-                        Id = questionnaireListItem.PublicId,
+                        Id = Guid.Parse(questionnaireListItem.Id),
                         Title = questionnaireListItem.Title
                     }).ToList()
             };
