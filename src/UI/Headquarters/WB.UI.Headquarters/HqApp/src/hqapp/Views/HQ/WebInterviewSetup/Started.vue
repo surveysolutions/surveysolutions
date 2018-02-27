@@ -58,7 +58,7 @@
                         <button type="button" class="btn btn-success" value="save all" @click="updateMessages" :disabled="submitting">
                             {{$t('WebInterviewSetup.SaveAll')}}
                         </button>
-                        <span class="text-success">{{updatedMessage}}</span>
+                        <span :class="updateFailed ? 'text-danger' : 'text-success'">{{updatedMessage}}</span>
                     </div>
                 </div>
             </form>
@@ -98,7 +98,8 @@ export default {
         ["clean"]
       ],
       submitting: false,
-      updatedMessage: null
+      updatedMessage: null,
+      updateFailed: false
     };
   },
   mounted() {
@@ -138,12 +139,15 @@ export default {
         response => {
           this.submitting = false;
           this.updatedMessage = this.$t("WebInterviewSetup.TextsUpdated");
+          this.updateFailed = false;
           setTimeout(() => {
               this.updatedMessage = null;
           }, 5000);
         },
         response => {
+          this.updateFailed = true;
           this.submitting = false;
+          this.updatedMessage = response.response.statusText;
         }
       );
     }
