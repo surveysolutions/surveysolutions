@@ -9,7 +9,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         
         AverageCaseAssignmentDuration = 4,
         AverageInterviewDuration = 5,
-        AverageInterviewingTime = 9,
         AverageSupervisorProcessingTime = 6,
         AverageHQProcessingTime = 7,
         AverageOverallCaseProcessingTime = 8

@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         return;
 
                     var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
-                    if (question == null || question.Answers == null)
+                    if (question?.Answers == null)
                         return;
 
                     var optionStrings = answers.Select(answerValue => question.Answers.First(x => decimal.Parse(x.AnswerValue) == answerValue).AnswerText)
@@ -132,7 +132,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private readonly MemoryCache questionnaireCache = new MemoryCache("QuestionnaireCache");
 
-        private QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
+        private  QuestionnaireDocument GetQuestionnaire(Guid questionnaireId, long questionnaireVersion)
         {
             string key = questionnaireId.ToString() + questionnaireVersion.ToString();
             if (this.questionnaireCache.Contains(key))
