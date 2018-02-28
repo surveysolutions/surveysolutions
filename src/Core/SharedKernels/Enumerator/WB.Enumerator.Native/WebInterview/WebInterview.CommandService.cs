@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
@@ -126,6 +127,29 @@ namespace WB.Enumerator.Native.WebInterview
         public void RemoveAnswer(string questionId)
         {
             Identity identity = Identity.Parse(questionId);
+
+            try
+            {
+                var questionnaire = this.GetCallerQuestionnaire();
+                var questionType = questionnaire.GetQuestionType(identity.Id);
+
+                if (questionType == QuestionType.Multimedia)
+                {
+                    var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}{string.Join(@"-", identity.RosterVector.Select(rv => rv))}.jpg";
+                    this.imageFileStorage.RemoveInterviewBinaryData(this.GetCallerInterview().Id, fileName);
+                }
+                else if (questionType == QuestionType.Audio)
+                {
+                    var fileName = $@"{questionnaire.GetQuestionVariableName(identity.Id)}__{identity.RosterVector}.m4a";
+                    this.audioFileStorage.RemoveInterviewBinaryData(this.GetCallerInterview().Id, fileName);
+                }
+            }
+            catch (Exception e)
+            {
+                var message = GetUiMessageFromException(e);
+                this.Clients.Caller.markAnswerAsNotSaved(identity.ToString(), message);
+            }
+
             this.ExecuteQuestionCommand(new RemoveAnswerCommand(this.GetCallerInterview().Id, CommandResponsibleId, identity, DateTime.UtcNow));
         }
 
