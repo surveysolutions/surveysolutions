@@ -238,4 +238,8 @@
   <data name="LastDateToShowLabel" xml:space="preserve">
     <value>Начиная с</value>
   </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Средняя продолжительность интервью до завершения.</value>
+    <comment>Средняя продолжительность интервью до завершения.</comment>
+  </data>
 </root>
