@@ -236,9 +236,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     return;
                 }
 
-                if (this.previousAnswer.HasValue && answeredOrSelectedValue < this.previousAnswer)
+                if (this.previousAnswer.HasValue && this.previousAnswer > 0)
                 {
-                    var amountOfRostersToRemove = this.previousAnswer - answeredOrSelectedValue;
+                    var amountOfRostersToRemove = this.previousAnswer - Math.Max(this.Answer.Value, 0);
                     if (amountOfRostersToRemove > 0)
                     {
                         var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
