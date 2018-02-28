@@ -321,6 +321,10 @@
 			}
 		}
 	}
+	.special-value-selected{
+		color: $transparent-font;
+		font-size: 0;
+	}
 	.question-unit{
 		.radio, .form-group{
 			border-color: #eeeff0;
