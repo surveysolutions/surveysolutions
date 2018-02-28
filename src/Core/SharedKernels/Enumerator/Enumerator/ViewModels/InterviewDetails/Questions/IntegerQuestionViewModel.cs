@@ -97,13 +97,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (isRosterSizeQuestion)
                 {
                     var amountOfRostersToRemove = this.previousAnswer;
-                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                        amountOfRostersToRemove);
-                    if (!(await this.userInteractionService.ConfirmAsync(message)))
+                    if (this.previousAnswer > 0)
                     {
-                        this.Answer = this.previousAnswer;
-                        this.SpecialValues.SetAnswer(this.previousAnswer);
-                        return;
+                        var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
+                            amountOfRostersToRemove);
+                        if (!(await this.userInteractionService.ConfirmAsync(message)))
+                        {
+                            this.Answer = this.previousAnswer;
+                            this.SpecialValues.SetAnswer(this.previousAnswer);
+                            return;
+                        }
                     }
                 }
 
