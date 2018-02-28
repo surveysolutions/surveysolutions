@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -58,7 +57,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
                 fileSystemAccessor.CreateDirectory(directoryPath);
 
-            fileSystemAccessor.WriteAllBytes(this.GetPathToFile(interviewId, fileName), data);
+            var filePath = this.GetPathToFile(interviewId, fileName);
+
+            if (fileSystemAccessor.IsFileExists(filePath))
+                fileSystemAccessor.DeleteFile(filePath);
+
+            fileSystemAccessor.WriteAllBytes(filePath, data);
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
