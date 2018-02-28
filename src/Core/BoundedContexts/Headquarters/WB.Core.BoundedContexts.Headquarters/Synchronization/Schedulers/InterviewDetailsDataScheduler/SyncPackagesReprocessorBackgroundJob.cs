@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
@@ -17,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
     internal class SyncPackagesReprocessorBackgroundJob : IJob
     {
         ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SyncPackagesReprocessorBackgroundJob>();
-        IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
+        IInterviewBrokenPackagesService InterviewBrokenPackagesService => ServiceLocator.Current.GetInstance<IInterviewBrokenPackagesService>();
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
                 IReadOnlyCollection<int> packageIds = this.ExecuteInQueryTransaction(() =>
-                    this.interviewPackagesService.GetTopBrokenPackageIdsAllowedToReprocess(this.interviewPackagesJobSetings.SynchronizationBatchCount));
+                    this.InterviewBrokenPackagesService.GetTopBrokenPackageIdsAllowedToReprocess(this.interviewPackagesJobSetings.SynchronizationBatchCount));
 
                 if (packageIds == null || !packageIds.Any()) return;
 
@@ -45,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     {
                         this.ExecuteInPlainTransaction(() =>
                         {
-                            this.interviewPackagesService.ReprocessSelectedBrokenPackages(new[] { packageId });
+                            this.InterviewBrokenPackagesService.ReprocessSelectedBrokenPackages(new[] { packageId });
                         });
                     });
 

@@ -139,7 +139,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             return this.brokenInterviewPackageStorage.Query(_ =>
                 _.Any(p => (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
                     && p.InterviewId == interviewId
-                    && p.ReprocessAttemptsCount > 2)
+                    && (p.ReprocessAttemptsCount > 2 || _.Count(d => d.InterviewId == interviewId) > 1)
+                )
             );
         }
 
