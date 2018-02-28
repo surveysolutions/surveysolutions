@@ -104,9 +104,9 @@ export default {
             return !isEmpty(this.$store.state.webinterview.coverInfo.supervisorRejectComment)
         },
         hasBrokenPackage() {
-            return this.$store.state.webinterview.isExistsBrokenPackage == undefined 
+            return this.$store.state.webinterview.doesBrokenPackageExist == undefined 
                 ? false
-                : this.$store.state.webinterview.isExistsBrokenPackage;
+                : this.$store.state.webinterview.doesBrokenPackageExist;
         },
         coverStatusClass() {
             return [
