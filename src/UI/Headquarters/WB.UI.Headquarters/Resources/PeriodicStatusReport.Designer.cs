@@ -124,6 +124,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average time from when an interviewer records the first answer on a tablet to when that interviewer presses the Complete button..
+        /// </summary>
+        public static string AverageInterviewDurationForSupervisors {
+            get {
+                return ResourceManager.GetString("AverageInterviewDurationForSupervisors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average overall case processing time.
         /// </summary>
         public static string AverageOverallCaseProcessingTime {
