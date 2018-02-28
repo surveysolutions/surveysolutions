@@ -68,7 +68,7 @@ namespace WB.Enumerator.Native.WebInterview
 
         public void Handle(IPublishedEvent<AnswersDeclaredInvalid> evnt)
         {
-            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.Questions);
+            this.webInterviewNotificationService.RefreshEntities(evnt.EventSourceId, evnt.Payload.FailedValidationConditions.Keys.ToArray());
         }
 
         public void Handle(IPublishedEvent<AnswersDeclaredValid> evnt)
