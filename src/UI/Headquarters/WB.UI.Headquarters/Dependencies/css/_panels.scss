@@ -48,36 +48,27 @@
 	}
 }
 @media (max-width: $screen-sm-min){
-    .panel-table {
-        padding: 0 10px;
-
-        label {
-            font-size: 12px;
-            line-height: 14px;
-            padding-right: 10px;
-
-            .tick {
-                margin-right: 10px;
-            }
-        }
-
-        .panel-body .btn {
-            margin-bottom: 10px;
-            padding: 5px;
-            font-size: 10px;
-
-            &.reject {
-                padding-top: 3px;
-                padding-bottom: 3px;
-            }
-
-            &:last-of-type {
-                margin-bottom: 0;
-            }
-
-            &.last-btn:last-of-type {
-                margin-bottom: 10px;
-            }
-        }
-    } 
+	.panel-table{
+		padding: 0 10px;
+		label{
+			font-size: 12px;
+			line-height: 14px;
+			padding-right: 10px;
+			.tick{
+				margin-right: 10px;
+			}
+		}
+		.panel-body .btn{
+			margin-bottom: 10px;
+			padding: 5px;
+			font-size: 10px;
+			&.reject{
+				padding-top: 3px;
+				padding-bottom: 3px;
+			}
+			&:last-of-type{
+				margin-bottom: 0;
+			}
+		}
+	} 
 }
