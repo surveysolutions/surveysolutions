@@ -250,4 +250,40 @@
   <data name="InterviewerIssues" xml:space="preserve">
     <value>Проблемы</value>
   </data>
+  <data name="AccountCreationDateTooltip" xml:space="preserve">
+    <value>Дата создания учетной записи</value>
+    <comment>Дата создания учетной записи</comment>
+  </data>
+  <data name="HeadquarterAccountCreationDate" xml:space="preserve">
+    <value>Дата создания учетной записи хедквотера</value>
+    <comment>Дата создания учетной записи хедквотера</comment>
+  </data>
+  <data name="HeadquartersEmail" xml:space="preserve">
+    <value>Электронная почта хедквотера</value>
+    <comment>Электронная почта хедквотера</comment>
+  </data>
+  <data name="NotLinkedToDeviceTitle" xml:space="preserve">
+    <value>Количество интервьюеров, которые еще не успели синхронизировать свои планшеты с сервером</value>
+    <comment>Количество интервьюеров, которые еще не успели синхронизировать свои планшеты с сервером</comment>
+  </data>
+  <data name="NumberOfInterviewersInTeam" xml:space="preserve">
+    <value>Количество интервьюеров в команде</value>
+    <comment>Количество интервьюеров в команде</comment>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Удалить</value>
+    <comment>Удалить</comment>
+  </data>
+  <data name="SupervisorAccountCreationDate" xml:space="preserve">
+    <value>Дата создания учетной записи супервизора</value>
+    <comment>Дата создания учетной записи супервизора</comment>
+  </data>
+  <data name="SupervisorsInTeam" xml:space="preserve">
+    <value>супервизоры в вашей команде</value>
+    <comment>супервизоры в вашей команде</comment>
+  </data>
+  <data name="TryLater" xml:space="preserve">
+    <value>Пожалуйста, повторите попытку позже</value>
+    <comment>Пожалуйста, повторите попытку позже</comment>
+  </data>
 </root>

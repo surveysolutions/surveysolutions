@@ -170,7 +170,7 @@
     <value>Header text shown to returning user before resume an interview</value>
   </data>
   <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
-    <value>Name of conducted survey. %QUESTIONNAIRE% - is substituted with questionnaire name</value>
+    <value>Name of conducted survey. %QUESTIONNAIRE% is substituted with questionnaire name</value>
   </data>
   <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
     <value>Header text shown after interview completion</value>
@@ -178,16 +178,19 @@
   <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
     <value>Header welcome text on initial page</value>
   </data>
-  <data name="CustomText">
+  <data name="CustomText" xml:space="preserve">
     <value>Use custom text</value>
   </data>
-  <data name="TextsUpdated">
+  <data name="TextsUpdated" xml:space="preserve">
     <value>Texts updated</value>
   </data>
-  <data name="SaveAll">
+  <data name="SaveAll" xml:space="preserve">
     <value>Save all</value>
   </data>
-  <data name="TextCustomize">
+  <data name="TextCustomize" xml:space="preserve">
     <value>Text dispayed to respondents can be customized</value>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Custom message should not contain more than {0} characters (including html)</value>
   </data>
 </root>
