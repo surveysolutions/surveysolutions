@@ -12,7 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly StreamWriter streamWriter;
         private readonly CsvWriter csvWriter;
         private readonly string delimiter = ",";
-        private static readonly Regex RemoveNewLineRegEx = new Regex(@"\t|\n|\r", RegexOptions.Compiled);
 
         public CsvWriterService(Stream stream, string delimiter = ",")
         {
@@ -45,11 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public void NextRecord()
         {
             this.csvWriter.NextRecord();
-        }
-
-        public string RemoveNewLine(string cell)
-        {
-            return string.IsNullOrEmpty(cell) ? string.Empty : RemoveNewLineRegEx.Replace(cell, " ");
         }
     }
 }
