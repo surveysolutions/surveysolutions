@@ -7,24 +7,30 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
     public class S3FileStorage : IExternalFileStorage
     {
         private const string AmazonExceptionCodeNoSuchKey = "NoSuchKey";
+
         private readonly AmazonS3Settings s3Settings;
         private readonly IAmazonS3 client;
+        private readonly ITransferUtility transferUtility;
         private readonly string storageBasePath;
         private readonly ILogger log;
 
-        public S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 amazonS3Client, ILoggerProvider loggerProvider)
+        public S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 amazonS3Client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
         {
             log = loggerProvider.GetForType(GetType());
             this.s3Settings = s3Settings;
             client = amazonS3Client;
+            this.transferUtility = transferUtility;
             storageBasePath = $"{s3Settings.BasePath}/";
         }
+
+        private string GetKey(string key) => storageBasePath + key;
 
         public byte[] GetBinary(string key)
         {
@@ -33,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 var getObject = new GetObjectRequest
                 {
                     BucketName = s3Settings.BucketName,
-                    Key = storageBasePath + key
+                    Key = GetKey(key)
                 };
 
                 using (var response = client.GetObject(getObject))
@@ -63,10 +69,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 var listObjects = new ListObjectsV2Request
                 {
                     BucketName = s3Settings.BucketName,
-                    Prefix = storageBasePath + prefix
+                    Prefix = GetKey(prefix)
                 };
 
-                var response = client.ListObjectsV2(listObjects);
+                ListObjectsV2Response response = client.ListObjectsV2(listObjects);
                 return response.S3Objects.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(storageBasePath.Length),
@@ -87,34 +93,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         private void LogError(string message, Exception exception)
         {
             log.Error($"{message}. " +
-                           $"Bucket: {s3Settings.BucketName}. " +
-                           $"BasePath: {s3Settings.BasePath} " +
-                           $"EndPoint: {s3Settings.Endpoint} ", exception);
+                      $"Bucket: {s3Settings.BucketName}. " +
+                      $"BasePath: {s3Settings.BasePath} " +
+                      $"EndPoint: {s3Settings.Endpoint} ", exception);
         }
 
         public bool IsEnabled() => true;
 
-        public string GetDirectLink(string path, TimeSpan expiration)
+        public string GetDirectLink(string key, TimeSpan expiration)
         {
+            var protocol = string.IsNullOrWhiteSpace(s3Settings.Endpoint) || s3Settings.Endpoint.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+                ? Protocol.HTTPS
+                : Protocol.HTTP;
+
             return client.GetPreSignedURL(new GetPreSignedUrlRequest
             {
-                Protocol = string.IsNullOrWhiteSpace(s3Settings.Endpoint) ? Protocol.HTTPS : Protocol.HTTP,
+                Protocol = protocol,
                 BucketName = s3Settings.BucketName,
-                Key = storageBasePath + path,
+                Key = GetKey(key),
                 Expires = DateTime.UtcNow.Add(expiration)
             });
         }
 
-        public FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null)
+        public FileObject Store(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
         {
             try
             {
-                var tu = new TransferUtility(client);
-
-                var uploadRequest = new TransferUtilityUploadRequest()
+                var uploadRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = s3Settings.BucketName,
-                    Key = storageBasePath + path,
+                    Key = GetKey(key),
                     ContentType = contentType,
                     AutoResetStreamPosition = false,
                     InputStream = inputStream
@@ -122,13 +130,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
                 if (progress != null)
                 {
-                    uploadRequest.UploadProgressEvent += (sender, args) =>
-                    {
-                        progress.Report(args.PercentDone);
-                    };
+                    uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
 
-                tu.Upload(uploadRequest);
+                transferUtility.Upload(uploadRequest);
 
                 return new FileObject
                 {
@@ -138,16 +143,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (Exception e)
             {
-                LogError($"Unable to store object in S3. Path: {path}", e);
+                LogError($"Unable to store object in S3. Path: {key}", e);
                 throw;
             }
         }
 
-        public bool IsExist(string path)
+        public bool IsExist(string key)
         {
             try
             {
-                var response = client.GetObjectMetadata(s3Settings.BucketName, storageBasePath + path);
+                var response = client.GetObjectMetadata(s3Settings.BucketName, GetKey(key));
                 if (response.HttpStatusCode == HttpStatusCode.OK) return true;
             }
             catch (AmazonS3Exception e) when (e.ErrorCode == AmazonExceptionCodeNoSuchKey)
@@ -156,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (Exception e)
             {
-                LogError($"Unable to remove object in S3. Path: {path}", e);
+                LogError($"Unable to remove object in S3. Path: {key}", e);
                 throw;
             }
 
@@ -175,10 +180,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
         {
             try
             {
-                client.DeleteObject(s3Settings.BucketName, storageBasePath + path);
+                client.DeleteObject(s3Settings.BucketName, GetKey(path));
             }
             catch (AmazonS3Exception e) when (e.ErrorCode == AmazonExceptionCodeNoSuchKey)
-            { 
+            {
                 // ignore
             }
             catch (Exception e)
