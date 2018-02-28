@@ -117,19 +117,24 @@
                         return
                     }
 
-                    const amountOfRostersToRemove = previousAnswer - answer;
-
+                    const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0);
                     const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
-                    modal.confirm(confirmMessage, result => {
-                        if (result) {
-                            this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                            return
-                        } else {
-                            this.fetch()
-                            return
-                        }
-                    });
+                    if(amountOfRostersToRemove > 0){
+                        modal.confirm(confirmMessage, result => {
+                            if (result) {
+                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
+                                return
+                            } else {
+                                this.fetch()
+                                return
+                            }
+                        });
+                    }
+                    else{
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
+                        return
+                    }
                 });
             },
 
