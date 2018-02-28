@@ -98,9 +98,13 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        public ActionResult PrintPreview(Guid id)
+        public ActionResult PrintPreview(Guid id, Guid? translation)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation: null, useDefaultTranslation: true);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation: translation, useDefaultTranslation: true);
+            if (questionnaire == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
             return this.View("RenderQuestionnaire", questionnaire);
         }
 

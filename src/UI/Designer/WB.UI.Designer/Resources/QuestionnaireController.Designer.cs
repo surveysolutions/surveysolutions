@@ -70,15 +70,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agree to make this questionnaire pubic.
-        /// </summary>
-        public static string AgreeToMakeThisQuestionnairePublic {
-            get {
-                return ResourceManager.GetString("AgreeToMakeThisQuestionnairePublic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Assign.
         /// </summary>
         public static string Assign {
@@ -187,15 +178,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Consultant.
-        /// </summary>
-        public static string Consultant {
-            get {
-                return ResourceManager.GetString("Consultant", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Copy {
@@ -210,24 +192,6 @@ namespace WB.UI.Designer.Resources {
         public static string CopyQuestionnaire {
             get {
                 return ResourceManager.GetString("CopyQuestionnaire", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Country.
-        /// </summary>
-        public static string Country {
-            get {
-                return ResourceManager.GetString("Country", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Coverage.
-        /// </summary>
-        public static string Coverage {
-            get {
-                return ResourceManager.GetString("Coverage", resourceCulture);
             }
         }
         
@@ -282,6 +246,15 @@ namespace WB.UI.Designer.Resources {
         public static string CreateSubFolder {
             get {
                 return ResourceManager.GetString("CreateSubFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating Html for &quot;{0}&quot;.
+        /// </summary>
+        public static string CreatingHtml {
+            get {
+                return ResourceManager.GetString("CreatingHtml", resourceCulture);
             }
         }
         
@@ -367,6 +340,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export as Html.
+        /// </summary>
+        public static string ExportAsHtml {
+            get {
+                return ResourceManager.GetString("ExportAsHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export as PDF.
         /// </summary>
         public static string ExportAsPDF {
@@ -424,15 +406,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Funding.
-        /// </summary>
-        public static string Funding {
-            get {
-                return ResourceManager.GetString("Funding", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Generate pdf.
         /// </summary>
         public static string GeneratePdf {
@@ -451,6 +424,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Html.
+        /// </summary>
+        public static string GetHtml {
+            get {
+                return ResourceManager.GetString("GetHtml", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hi, {0}.
         /// </summary>
         public static string Hello {
@@ -465,33 +447,6 @@ namespace WB.UI.Designer.Resources {
         public static string Initializing {
             get {
                 return ResourceManager.GetString("Initializing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Keywords.
-        /// </summary>
-        public static string Keywords {
-            get {
-                return ResourceManager.GetString("Keywords", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Kind of data.
-        /// </summary>
-        public static string KindOfData {
-            get {
-                return ResourceManager.GetString("KindOfData", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Language.
-        /// </summary>
-        public static string Language {
-            get {
-                return ResourceManager.GetString("Language", resourceCulture);
             }
         }
         
@@ -523,15 +478,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Mode of Data Collection.
-        /// </summary>
-        public static string ModeOfDataCollection {
-            get {
-                return ResourceManager.GetString("ModeOfDataCollection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to My Questionnaires.
         /// </summary>
         public static string MyQuestionnaires {
@@ -550,15 +496,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Notes.
-        /// </summary>
-        public static string Notes {
-            get {
-                return ResourceManager.GetString("Notes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Open {
@@ -568,29 +505,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Primary Investigator.
-        /// </summary>
-        public static string PrimaryInvestigator {
-            get {
-                return ResourceManager.GetString("PrimaryInvestigator", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Public Questionnaires.
         /// </summary>
         public static string PublicQuestionnaires {
             get {
                 return ResourceManager.GetString("PublicQuestionnaires", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Questionnaire Subtitle.
-        /// </summary>
-        public static string QuestionnaireSubTitle {
-            get {
-                return ResourceManager.GetString("QuestionnaireSubTitle", resourceCulture);
             }
         }
         
@@ -658,15 +577,6 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Study Type.
-        /// </summary>
-        public static string StudyType {
-            get {
-                return ResourceManager.GetString("StudyType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Questionnaire &quot;{0}&quot; successfully deleted.
         /// </summary>
         public static string SuccessDeleteMessage {
@@ -694,56 +604,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unit of analysis.
-        /// </summary>
-        public static string UnitOfAnalysis {
-            get {
-                return ResourceManager.GetString("UnitOfAnalysis", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Universe.
-        /// </summary>
-        public static string Universe {
-            get {
-                return ResourceManager.GetString("Universe", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Untitled.
         /// </summary>
         public static string Untitled {
             get {
                 return ResourceManager.GetString("Untitled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Version.
-        /// </summary>
-        public static string Version {
-            get {
-                return ResourceManager.GetString("Version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Version Notes.
-        /// </summary>
-        public static string VersionNotes {
-            get {
-                return ResourceManager.GetString("VersionNotes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Year.
-        /// </summary>
-        public static string Year {
-            get {
-                return ResourceManager.GetString("Year", resourceCulture);
             }
         }
         

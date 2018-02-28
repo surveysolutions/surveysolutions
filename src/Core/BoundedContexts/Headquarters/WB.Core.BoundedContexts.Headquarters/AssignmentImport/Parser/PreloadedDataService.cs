@@ -404,6 +404,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
         public int? GetMaxAnswersCount(string variableName)
         {
+            if (!this.QuestionsCache.ContainsKey(variableName))
+                return null;
+
             var multipleChoiseQuestion = this.QuestionsCache[variableName] as IMultyOptionsQuestion;
             return multipleChoiseQuestion?.MaxAllowedAnswers;
         }
