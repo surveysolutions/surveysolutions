@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Storage
+﻿namespace WB.Core.SharedKernels.DataCollection.Repositories
 {
     public class FileObject
     {

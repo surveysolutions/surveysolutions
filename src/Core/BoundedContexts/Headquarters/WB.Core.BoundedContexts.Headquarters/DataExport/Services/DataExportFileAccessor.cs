@@ -4,11 +4,11 @@ using System.Diagnostics;
 using System.IO;
 using Ionic.Zlib;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -60,6 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return new IonicZipArchive(outputStream, password, compressionLevel);
         }
 
+        public string GetExternalStoragePath(string name) => $"export/" + name;
+
         public void PubishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress)
         {
             if (externalFileStorage.IsEnabled())
@@ -67,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 using (var file = File.OpenRead(archiveFile))
                 {
                     var name = Path.GetFileName(archiveFile);
-                    this.externalFileStorage.Store($"export/{name}", file, "application/zip", exportProgress);
+                    this.externalFileStorage.Store(GetExternalStoragePath(name), file, "application/zip", exportProgress);
                 }
             }
         }

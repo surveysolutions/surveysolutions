@@ -1,24 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.Storage
 {
-    public interface IExternalFileStorage
-    {
-        bool IsEnabled();
-        string GetDirectLink(string path, TimeSpan expiration);
-        byte[] GetBinary(string key);
-        List<FileObject> List(string prefix);
-
-        void Remove(string path);
-
-        FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null);
-        FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
-
-        bool IsExist(string path);
-    }
-
     class NoExternalFileSystemStorage : IExternalFileStorage
     {
         public bool IsEnabled => false;

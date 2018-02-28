@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using Amazon.S3;
+using Amazon.S3.Transfer;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Modularity;
@@ -45,6 +46,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
                     var s3Settings = c.Get<AmazonS3Settings>();
                     return new AmazonS3Client(s3Settings.Config());
                 });
+
+                registry.BindToMethod<ITransferUtility>(c => new TransferUtility(c.Get<IAmazonS3>()));
 
                 registry.BindAsSingleton<IImageFileStorage, S3ImageFileStorage>();
             }
