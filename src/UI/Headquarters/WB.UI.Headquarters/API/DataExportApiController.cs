@@ -12,9 +12,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Filters;
 
@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters.API
 
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private readonly IDataExportFileAccessor exportFileAccessor;
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
         private readonly IExternalFileStorage externalFileStorage;
@@ -38,6 +39,7 @@ namespace WB.UI.Headquarters.API
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService,
+            IDataExportFileAccessor exportFileAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IDdiMetadataAccessor ddiMetadataAccessor,
             IExternalFileStorage externalFileStorage,
@@ -46,6 +48,7 @@ namespace WB.UI.Headquarters.API
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
+            this.exportFileAccessor = exportFileAccessor;
             this.exportedFilesAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.externalFileStorage = externalFileStorage;
@@ -72,9 +75,11 @@ namespace WB.UI.Headquarters.API
             if (format == DataExportFormat.Binary && externalFileStorage.IsEnabled())
             {
                 var filename = this.fileSystemAccessor.GetFileName(filenameFullPath);
-                if (this.externalFileStorage.IsExist($@"export/{filename}"))
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(filename);
+
+                if (this.externalFileStorage.IsExist(externalStoragePath))
                 {
-                    var directLink = this.externalFileStorage.GetDirectLink($@"export/{filename}", TimeSpan.FromMinutes(30));
+                    var directLink = this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromMinutes(30));
 
                     var response = Request.CreateResponse(HttpStatusCode.Moved);
                     response.Headers.Location = new Uri(directLink);
@@ -141,8 +146,6 @@ namespace WB.UI.Headquarters.API
 
         private HttpResponseMessage CreateFile(string filePath)
         {
-
-
             if (!fileSystemAccessor.IsFileExists(filePath))
                 throw new HttpException(404, @"file is absent");
 
