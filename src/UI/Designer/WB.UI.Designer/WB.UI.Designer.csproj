@@ -213,6 +213,7 @@
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
+    <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\QuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\WebTesterController.cs" />

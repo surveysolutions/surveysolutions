@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 {
                     foreach (var cell in dataRow)
                     {
-                        tabWriter.WriteField(tabWriter.RemoveNewLine(cell));
+                        tabWriter.WriteField(Utils.RemoveNewLine(cell));
                     }
 
                     tabWriter.NextRecord();
