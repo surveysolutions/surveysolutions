@@ -119,6 +119,7 @@ namespace WB.UI.Headquarters.Controllers
             model.DownloadAssignmentsUrl = Url.HttpRouteUrl("DefaultApiWithAction",
                 new {controller = "LinksExport", action = "Download", id = questionnaireIdentity.ToString()});
             model.UpdateTextsUrl = Url.Action("UpdateMessages", new {id = questionnaireIdentity.ToString()});
+            model.SurveySetupUrl = Url.Action("Index", "SurveySetup");
 
             var config = this.webInterviewConfigProvider.Get(questionnaireIdentity);
 
@@ -140,9 +141,15 @@ namespace WB.UI.Headquarters.Controllers
             foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
             {
                 var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
-                if (!string.IsNullOrWhiteSpace(Request.Unvalidated[fieldNameInRequest]))
+                var customMessage = Request.Unvalidated[fieldNameInRequest];
+                if (customMessage.Length > 400)
                 {
-                    customMessages[(WebInterviewUserMessages) customMessageName] = Request.Unvalidated[fieldNameInRequest];
+                    return new HttpStatusCodeResult(413, string.Format(WebInterviewSetup.CustomMessageTooLong, 400));
+                }
+                if (!string.IsNullOrWhiteSpace(customMessage))
+                {
+                    customMessages[(WebInterviewUserMessages) customMessageName] =
+                         customMessage;
                 }
             }
 
