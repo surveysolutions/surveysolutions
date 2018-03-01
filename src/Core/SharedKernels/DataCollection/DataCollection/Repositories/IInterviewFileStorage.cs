@@ -10,5 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId);
         void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType);
         void RemoveInterviewBinaryData(Guid interviewId, string fileName);
+
+        //string GetFileName(string questionVariableName, RosterVector vector);
     }
 }

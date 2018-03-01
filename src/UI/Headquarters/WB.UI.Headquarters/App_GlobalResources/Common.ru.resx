@@ -299,4 +299,8 @@
     <value>Все GPS вопросы</value>
     <comment>Все GPS вопросы</comment>
   </data>
+  <data name="NewVersionAvailable" xml:space="preserve">
+    <value>Доступна новая версия:</value>
+    <comment>Доступна новая версия:</comment>
+  </data>
 </root>
