@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Core.ViewModels;
@@ -22,6 +23,25 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class FakeFactory
     {
+        internal class MemoryStreamWithDisposeCallback : MemoryStream
+        {
+            private readonly Action<byte[]> callback;
+
+            public MemoryStreamWithDisposeCallback(Action<byte[]> callback)
+            {
+                this.callback = callback;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing && this.CanRead) callback(this.ToArray());
+                base.Dispose(disposing);
+            }
+        }
+
+        public MemoryStreamWithDisposeCallback MemoryStreamWithCallback(Action<byte[]> disposeCallback) 
+            => new MemoryStreamWithDisposeCallback(disposeCallback);
+
         public IAggregateSnapshotter AggregateSnapshotter(EventSourcedAggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
             => Mock.Of<IAggregateSnapshotter>(_
                 => _.TryLoadFromSnapshot(It.IsAny<Type>(), It.IsAny<Snapshot>(), It.IsAny<CommittedEventStream>(), out aggregateRoot) == isARLoadedFromSnapshotSuccessfully);

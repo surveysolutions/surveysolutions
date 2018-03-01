@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             try
             {
-                using (var archiveFile = File.Create(tempArchivePath))
+                using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(tempArchivePath, false))
                 {
                     using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, 0))
                     {
@@ -40,10 +40,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     }
                 }
 
-                if (File.Exists(archiveName)) File.Delete(archiveName);
-
-                File.Move(tempArchivePath, archiveName);
-
+                fileSystemAccessor.DeleteFile(archiveName);
+                fileSystemAccessor.MoveFile(tempArchivePath, archiveName);
+                
                 this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
                 this.dataExportFileAccessor.PubishArchiveToExternalStorage(archiveName, exportProgress);
