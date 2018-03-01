@@ -76,29 +76,37 @@
 			cache: false,
 			method: "POST"
 		}).done(function (result) {
+		    if (result.length && result.length > 1) {
+		        var typeaheadCtrl = $(".languages-combobox-html");
+		        typeaheadCtrl.empty();
 
-			var typeaheadCtrl = $(".languages-combobox-html");
-			typeaheadCtrl.empty();
+		        for (var i = 0; i < result.length; i++) {
+		            var translationItem = result[i];
+		            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' +
+		                translationItem.Value +
+		                '">' +
+		                translationItem.Name +
+		                '</a></li>');
+		        }
 
-			for (var i = 0; i < result.length; i++) {
-				var translationItem = result[i];
-				typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + translationItem.Value + '">' + translationItem.Name + '</a></li>');
-			}
+		        typeaheadCtrl.unbind('click');
+		        typeaheadCtrl.click(function(evn) {
+		            var link = $(evn.target);
+		            self.selectedTransalationHtml = link.attr('value');
+		            $('#dropdownMenuButtonHtml').text(link.text());
+		            $('#htmlGenerateButton').prop('disabled', false);
+		        });
 
-			typeaheadCtrl.unbind('click');
-			typeaheadCtrl.click(function (evn) {
-				var link = $(evn.target);
-				self.selectedTransalationHtml = link.attr('value');
-				$('#dropdownMenuButtonHtml').text(link.text());
-				$('#htmlGenerateButton').prop('disabled', false);
-			});
-
-			$('#htmlGenerateButton').prop('disabled', true);
-			$('#htmlGenerateButton').unbind('click');
-			$('#htmlGenerateButton').click(function (evn) {
-				window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
-				$('#htmlCancelButton').click();
-			});
+		        $('#htmlGenerateButton').prop('disabled', true);
+		        $('#htmlGenerateButton').unbind('click');
+		        $('#htmlGenerateButton').click(function(evn) {
+		            window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
+		            $('#htmlCancelButton').click();
+		        });
+		    } else {
+		        window.open(self.htmlDownloadUrl + '?translation=' + result[0].Value, '_blank');
+		        $('#htmlCancelButton').click();
+		    }
 		});
 	};
 
