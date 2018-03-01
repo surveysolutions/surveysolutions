@@ -1,12 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
-using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
+using Ionic.Zip;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -15,13 +17,27 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandlerTests
 {
-    internal class when_export_all_binary_data: BinaryFormatDataExportHandlerTestContext
+    internal class when_export_all_binary_data : BinaryFormatDataExportHandlerTestContext
     {
-        private Establish context = () =>
+        private static BinaryFormatDataExportHandler binaryFormatDataExportHandler;
+        private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+        private static Guid interviewId = Guid.NewGuid();
+
+        private static Mock<IImageFileStorage> plainInterviewFileStorageMock;
+        private static Mock<IAudioFileStorage> audioFileStorage;
+        private static Mock<IFileSystemAccessor> fileSystemAccessor;
+
+        private const string audioFileName = "test.wav";
+        private const string ImageFileName = "var.jpg";
+
+        private ZipFile resultingArchive;
+        private string tempFolder;
+        
+        [SetUp]
+        public void Establish()
         {
             var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -29,28 +45,38 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     Create.Entity.MultimediaQuestion()));
 
             var interviewSummary = Create.Entity.InterviewSummary(
-                interviewId: interviewId, 
-                questionnaireId: questionnaireIdentity.QuestionnaireId,
-                questionnaireVersion: questionnaireIdentity.Version);
+                interviewId,
+                questionnaireIdentity.QuestionnaireId,
+                questionnaireIdentity.Version);
 
             var mockOfInterviewFactory = new Mock<IInterviewFactory>();
             var interviewSummaryStorage = new TestInMemoryWriter<InterviewSummary>();
 
             interviewSummaryStorage.Store(interviewSummary, interviewId.FormatGuid());
-            mockOfInterviewFactory.Setup(x => x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, Moq.It.IsAny<Guid[]>())).Returns(new[]
-                {new InterviewStringAnswer {InterviewId = interviewId, Answer = "var.jpg"}});
+            mockOfInterviewFactory
+                .Setup(x => x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, It.IsAny<Guid[]>())).Returns(
+                    new[]
+                        {new InterviewStringAnswer {InterviewId = interviewId, Answer = ImageFileName}});
             mockOfInterviewFactory.Setup(x => x.GetAudioAnswersByQuestionnaire(questionnaireIdentity)).Returns(new[]
                 {new InterviewStringAnswer {InterviewId = interviewId, Answer = audioFileName}});
-            
+
             plainInterviewFileStorageMock = new Mock<IImageFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
                 .Returns(new[] {Create.Entity.InterviewBinaryDataDescriptor()}.ToList());
 
             audioFileStorage = new Mock<IAudioFileStorage>();
-            
-            fileSystemAccessor =new Mock<IFileSystemAccessor>();
-            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
-                .Returns<string, string>((p1, p2) => p2);
+
+            fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>()))
+                .Returns<string, string>(Path.Combine);
+            fileSystemAccessor.Setup(x => x.GetFileName(It.IsAny<string>())).Returns<string>(Path.GetFileName);
+
+            var ms = Create.Fake.MemoryStreamWithCallback(data =>
+                resultingArchive = ZipFile.Read(new MemoryStream(data)));
+
+            fileSystemAccessor
+                .Setup(x => x.OpenOrCreateFile(It.IsAny<string>(), false))
+                .Returns(ms);
 
             var dataExportFileAccessor = CrerateDataExportFileAccessor(fileSystemAccessor.Object);
 
@@ -58,37 +84,54 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             var plainTransactionManagerProvider = new Mock<IPlainTransactionManagerProvider>();
             plainTransactionManagerProvider.Setup(t => t.GetPlainTransactionManager()).Returns(manager.Object);
 
+            var filebasedExportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
+            filebasedExportedDataAccessor.Setup(s => s.GetArchiveFilePathForExportedData(
+                    It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Binary, null, null, null))
+                .Returns("Name.zip");
+
+            tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().FormatGuid());
+
             binaryFormatDataExportHandler =
                 CreateBinaryFormatDataExportHandler(
                     interviewSummaries: interviewSummaryStorage,
                     interviewFactory: mockOfInterviewFactory.Object,
                     imageFileRepository: plainInterviewFileStorageMock.Object,
+                    filebasedExportedDataAccessor: filebasedExportedDataAccessor.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,
+                    interviewDataExportSettings: new InterviewDataExportSettings(tempFolder, true),
                     dataExportFileAccessor: dataExportFileAccessor,
-                    audioFileStorage : audioFileStorage.Object,
+                    audioFileStorage: audioFileStorage.Object,
                     plainTransactionManagerProvider: plainTransactionManagerProvider.Object,
                     questionnaireStorage: questionnaireStorage);
-        };
 
-        Because of = () => binaryFormatDataExportHandler.ExportData(Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity));
+            Because();
+        }
 
-        It should_request_binary_data_for_answered_multimedia_question =
-            () => plainInterviewFileStorageMock.Verify(x=>x.GetInterviewBinaryData(interviewId, "var.jpg"), Times.Once);
+        public void Because()
+        {
+            binaryFormatDataExportHandler.ExportData(Create.Entity.DataExportProcessDetails(questionnaireIdentity));
+        }
 
-        It should_write_answered_multimedia_question =
-          () => fileSystemAccessor.Verify(x => x.WriteAllBytes("var.jpg", Moq.It.IsAny<byte[]>()), Times.Once);
-
-        It should_write_answered_audio_question =
-            () => fileSystemAccessor.Verify(x => x.WriteAllBytes(audioFileName, Moq.It.IsAny<byte[]>()), Times.Once);
-
-        private static BinaryFormatDataExportHandler binaryFormatDataExportHandler;
-        private static QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
-        private static Guid interviewId = Guid.NewGuid();
-        private static Mock<IImageFileStorage> plainInterviewFileStorageMock;
-        private static Mock<IAudioFileStorage> audioFileStorage;
+        [Test]
+        public void should_request_binary_data_for_answered_multimedia_question()
+        {
+            plainInterviewFileStorageMock.Verify(x => x.GetInterviewBinaryData(interviewId, ImageFileName), Times.Once);
+        }
         
-        private static Mock<IFileSystemAccessor> fileSystemAccessor;
+        [Test]
+        public void should_write_answered_audio_question()
+        {
+            Assert.That(resultingArchive.Entries, Has.One
+                .Property(nameof(ZipEntry.FileName))
+                .EqualTo($"{interviewId.FormatGuid()}/{audioFileName}"));
+        }
 
-        private static string audioFileName = "test.wav";
+        [Test]
+        public void should_write_answered_multimedia_question()
+        {
+            Assert.That(resultingArchive.Entries, Has.One
+                .Property(nameof(ZipEntry.FileName))
+                .EqualTo($"{interviewId.FormatGuid()}/{ImageFileName}"));
+        }
     }
 }

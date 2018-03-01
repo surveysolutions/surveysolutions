@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using Moq;
 using NSubstitute.ReturnsExtensions;
@@ -13,7 +14,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandlerTests;
@@ -43,27 +43,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var interviewSummaryStorage = new TestInMemoryWriter<InterviewSummary>();
 
             interviewSummaryStorage.Store(interviewSummary, interviewId.FormatGuid());
-            mockOfInterviewFactory.Setup(x => x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, Moq.It.IsAny<Guid[]>()))
-                .Returns(new[] {new InterviewStringAnswer{InterviewId = interviewId, Answer = "var.jpg"}});
+            mockOfInterviewFactory.Setup(x =>
+                    x.GetMultimediaAnswersByQuestionnaire(questionnaireIdentity, Moq.It.IsAny<Guid[]>()))
+                .Returns(new[] {new InterviewStringAnswer {InterviewId = interviewId, Answer = "var.jpg"}});
 
             var plainInterviewFileStorageMock = new Mock<IImageFileStorage>();
             plainInterviewFileStorageMock.Setup(x => x.GetBinaryFilesForInterview(interviewId))
                 .Returns(new[] {Create.Entity.InterviewBinaryDataDescriptor()}.ToList());
             plainInterviewFileStorageMock.Setup(x => x.GetInterviewBinaryData(interviewId, Moq.It.IsAny<string>()))
-                .Returns((byte[])null);
+                .Returns((byte[]) null);
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Returns<string, string>((p1, p2) => p1 + p2);
             fileSystemAccessor.Setup(x => x.GetFileName(It.IsAny<string>())).Returns<string>(p => p);
-            fileSystemAccessor.Setup(x=>x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>())).Throws<ArgumentNullException>();
+            fileSystemAccessor.Setup(x => x.WriteAllBytes(Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()))
+                .Throws<ArgumentNullException>();
+            fileSystemAccessor.Setup(x => x.OpenOrCreateFile(It.IsAny<string>(), It.IsAny<bool>()))
+                .Returns(() => new MemoryStream());
 
             var dataExportFileAccessor = CrerateDataExportFileAccessor(fileSystemAccessor.Object);
 
             var manager = new Mock<IPlainTransactionManager>();
             var plainTransactionManagerProvider = new Mock<IPlainTransactionManagerProvider>();
             plainTransactionManagerProvider.Setup(t => t.GetPlainTransactionManager()).Returns(manager.Object);
-            
+
             var exportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
             exportedDataAccessor.Setup(f => f.GetArchiveFilePathForExportedData(
                     It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Binary, null, null, null))
@@ -83,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             //act
             //assert
             Assert.DoesNotThrow(() => binaryFormatDataExportHandler.ExportData(
-                    Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity)));
+                Create.Entity.DataExportProcessDetails(questionnaireIdentity: questionnaireIdentity)));
         }
     }
 }
