@@ -136,12 +136,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         /// <param name="variable">Variable name. This is the variable name for a question in Designer or in an export file.</param>
         /// <param name="rosterVector">Roster row. In simple rosters, the row code. In nested rosters, an array of row codes: first, the row code of the parent(s); followed by the row code of the target child roster (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1). For variables not in rosters, this parameter may be left blank.</param>
-        /// <param name="responsible">Responsible Id. Specify either the user name or the user ID (i.e., GUID from API)</param>
         /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment-by-variable/{variable}")]
-        public HttpResponseMessage CommentByVariable(Guid id, string variable, RosterVector rosterVector, string responsible, string comment)
+        public HttpResponseMessage CommentByVariable(Guid id, string variable, RosterVector rosterVector, string comment)
         {
             var questionnaireIdentity = this.GetQuestionnaireIdByInterviewOrThrow(id);
 
@@ -153,7 +152,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
                     @"Question was not found."));
 
-            return this.CommentAnswer(id, Identity.Create(question.PublicKey, rosterVector), responsible, comment);
+            return this.CommentAnswer(id, Identity.Create(question.PublicKey, rosterVector), comment);
         }
 
         /// <summary>
@@ -161,26 +160,23 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         /// <param name="questionId">Question Id. Identifier of the question constructed as follows. First, take the question GUID from the JSON version of the questionnaire. Then, remove all dashes. If the question is not in a roster, use this as the question Id. If the question is in a roster, append its address to the question Id using the following pattern : [questionId]_#-#-#, where [questionId] is the question GUID without dashes, # represents the row code of each roster from the top level of the questionnaire to the current question, and only the needed number of row codes is used (e.g., a question in a second-level roster needs 2 row codes, a question in a first-level roster only 1).</param>
-        /// <param name="responsible">Responsible Id. Specify either the user name or the user ID (i.e., GUID from API)</param>
         /// <param name="comment">Comment. Comment to be posted to the chosen question </param>
         /// <returns></returns>
         [HttpPost]
         [Route("{id:guid}/comment/{questionId}")]
-        public HttpResponseMessage CommentByIdentity(Guid id, string questionId, string responsible, string comment)
+        public HttpResponseMessage CommentByIdentity(Guid id, string questionId, string comment)
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
 
             if(!Identity.TryParse(questionId, out var questionIdentity))
                 return this.Request.CreateErrorResponse(HttpStatusCode.BadRequest, $@"bad {nameof(questionId)} format");
 
-            return CommentAnswer(id, questionIdentity, responsible, comment);
+            return CommentAnswer(id, questionIdentity, comment);
         }
 
-        private HttpResponseMessage CommentAnswer(Guid id, Identity questionIdentity, string responsible, string comment)
+        private HttpResponseMessage CommentAnswer(Guid id, Identity questionIdentity, string comment)
         {
-            var responsibleId = this.GetResponsibleIdOrThrow(responsible);
-
-            var command = new CommentAnswerCommand(id, responsibleId, questionIdentity.Id,
+            var command = new CommentAnswerCommand(id, this.authorizedUser.Id, questionIdentity.Id,
                 questionIdentity.RosterVector, DateTime.UtcNow, comment);
 
             return this.TryExecuteCommand(command);
@@ -327,23 +323,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return interviewRefs;
-        }
-
-        private Guid GetResponsibleIdOrThrow(string responsible)
-        {
-            Guid? responsibleId = Guid.TryParse(responsible, out var parsedResponsibleId)
-                ? (Guid?)parsedResponsibleId
-                : null;
-
-            var userInfo = this.userViewFactory.GetUser(responsibleId.HasValue
-                ? new UserViewInputModel(responsibleId.Value)
-                : new UserViewInputModel(responsible, null));
-
-            if (userInfo == null)
-                throw new HttpResponseException(this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable,
-                    @"User was not found."));
-
-            return userInfo.PublicKey;
         }
     }
 }
