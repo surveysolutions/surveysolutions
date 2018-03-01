@@ -313,6 +313,9 @@
     <EmbeddedResource Update="Resources\SurveyManagementInterviewCommandValidatorMessages.zh.resx">
       <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SurveyManagementInterviewCommandValidatorMessages.ru.resx">
+      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\TroubleshootingMessages.es.resx">
       <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
     </EmbeddedResource>

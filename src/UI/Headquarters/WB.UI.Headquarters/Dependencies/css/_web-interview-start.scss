@@ -1,7 +1,25 @@
+html body.dynamic-content{
+	height: 100%;
+	.footer{
+		position: static;
+		bottom: auto;
+	}
+}
 .start-web-interview{
+	display: table;
+    height: calc(100% - 100px);
+	width: 100%;
+	.content-wrapper{
+		display: table-cell;
+		vertical-align: middle;
+	}
 	.two-columns-form{
 		font-size: 16px;
 		line-height: 18px;
+		display: table;
+		transform: none;
+		position: static;
+		margin: 0 auto;
 		p{
 			margin-bottom: 20px;
 		}
@@ -20,6 +38,11 @@
 		.form-actions{
 			margin-top: 20px;
 			margin-bottom: 20px;
+		}
+		.left-column,
+		.right-column{
+			display: table-cell;
+			vertical-align: middle;
 		}
 		 .left-column{
 		 	padding-top: 20px;
@@ -48,7 +71,6 @@ div.no-cookies{
 	padding: 10px;
 	color: #b20000;
 	box-shadow: 9px 9px 3px rgba(0, 0, 0, 0.1), 0 0 3px #323232;
-
 }
 body.no-cookies{
 	div.no-cookies{
@@ -62,15 +84,19 @@ body.no-cookies{
 }
 @media (max-width: $screen-sm-min){
 	.start-web-interview{
-		.left-column{
-	    	display: none;
-	    }
-	    .right-column .centered-box-table{
-	    	text-align: left;
-	    	h2, p, .form-actions{
-	    		max-width: 350px;
-	    	}
-	    }
+		padding-left: 20px;
+		padding-right: 15px;
+		.two-columns-form{
+			.left-column{
+				display: none;
+			}
+			.right-column .centered-box-table{
+				text-align: left;
+				h2, p, .form-actions{
+					max-width: 350px;
+				}
+			}
+		}
 	    .additional-info-block, h2, p, .form-actions{
 	    	margin-left: auto;
 	    	margin-right: auto;

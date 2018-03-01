@@ -230,6 +230,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Captcha.ka.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
+    </EmbeddedResource>    
+	<EmbeddedResource Include="Resources\Captcha.ru.resx">
+      <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Captcha.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -254,6 +257,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>    
+	<EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

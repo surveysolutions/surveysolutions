@@ -213,6 +213,9 @@
   <data name="ExportAsPDF" xml:space="preserve">
     <value>Export as PDF</value>
   </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Export as Html</value>
+  </data>
   <data name="Forbidden" xml:space="preserve">
     <value>You don't have permission to edit this questionnaire</value>
   </data>
@@ -225,8 +228,14 @@
   <data name="GeneratingPdf" xml:space="preserve">
     <value>Generating pdf for "{0}"</value>
   </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Creating Html for "{0}"</value>
+  </data>
   <data name="GeneratePdf" xml:space="preserve">
     <value>Generate pdf</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Export Html</value>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
     <value>Please choose language to render pdf questionnaire on it</value>
@@ -269,60 +278,6 @@
   </data>
   <data name="QuestionnaireTitle" xml:space="preserve">
     <value>Questionnaire Title</value>
-  </data>
-  <data name="QuestionnaireSubTitle" xml:space="preserve">
-    <value>Questionnaire Subtitle</value>
-  </data>
-  <data name="StudyType" xml:space="preserve">
-    <value>Study Type</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>Version</value>
-  </data>
-  <data name="VersionNotes" xml:space="preserve">
-    <value>Version Notes</value>
-  </data>
-  <data name="KindOfData" xml:space="preserve">
-    <value>Kind of data</value>
-  </data>
-  <data name="Country" xml:space="preserve">
-    <value>Country</value>
-  </data>
-  <data name="Year" xml:space="preserve">
-    <value>Year</value>
-  </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language</value>
-  </data>
-  <data name="Coverage" xml:space="preserve">
-    <value>Coverage</value>
-  </data>
-  <data name="Universe" xml:space="preserve">
-    <value>Universe</value>
-  </data>
-  <data name="UnitOfAnalysis" xml:space="preserve">
-    <value>Unit of analysis</value>
-  </data>
-  <data name="PrimaryInvestigator" xml:space="preserve">
-    <value>Primary Investigator</value>
-  </data>
-  <data name="Funding" xml:space="preserve">
-    <value>Funding</value>
-  </data>
-  <data name="Consultant" xml:space="preserve">
-    <value>Consultant</value>
-  </data>
-  <data name="ModeOfDataCollection" xml:space="preserve">
-    <value>Mode of Data Collection</value>
-  </data>
-  <data name="Notes" xml:space="preserve">
-    <value>Notes</value>
-  </data>
-  <data name="Keywords" xml:space="preserve">
-    <value>Keywords</value>
-  </data>
-  <data name="AgreeToMakeThisQuestionnairePublic" xml:space="preserve">
-    <value>Agree to make this questionnaire pubic</value>
   </data>
   <data name="RestoreQuestionnaire" xml:space="preserve">
     <value>Restore questionnaire</value>

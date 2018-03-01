@@ -265,4 +265,8 @@
     <value>Обновлено</value>
     <comment>Обновлено</comment>
   </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Количество дней интервью в Статусе</value>
+    <comment>Количество дней интервью в Статусе</comment>
+  </data>
 </root>
