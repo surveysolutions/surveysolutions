@@ -141,9 +141,10 @@ namespace WB.UI.Headquarters.Controllers
             foreach (var customMessageName in Enum.GetValues(typeof(WebInterviewUserMessages)))
             {
                 var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
-                if (!string.IsNullOrWhiteSpace(Request.Unvalidated[fieldNameInRequest]))
+                var customMessage = Request.Unvalidated[fieldNameInRequest];
+                if (!string.IsNullOrWhiteSpace(customMessage))
                 {
-                    customMessages[(WebInterviewUserMessages) customMessageName] = Request.Unvalidated[fieldNameInRequest];
+                    customMessages[(WebInterviewUserMessages) customMessageName] = customMessage;
                 }
             }
 

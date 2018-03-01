@@ -21,9 +21,8 @@
 }
 @using (Html.BeginForm())
 {
-    <div class="form-group">
-        @Html.AntiForgeryToken()
-    </div>
+    @Html.AntiForgeryToken()
+
     if (Model.UseCaptcha && !Model.ServerUnderLoad)
     {
         if (ViewData.ModelState.ContainsKey("InvalidCaptcha") && ViewData.ModelState["InvalidCaptcha"].Errors.Any())
