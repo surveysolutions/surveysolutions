@@ -59,6 +59,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         }
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>
-            this.questionnairesAccessor.Query(_ => _.ToList());
+            this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted).ToList());
     }
 }
