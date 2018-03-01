@@ -15,9 +15,9 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
 {
     [Subject(typeof(SpssFormatExportHandler))]
-    internal class SpssFormatExportHandlerTestContext
+    public class SpssFormatExportHandlerTestContext
     {
-        protected static SpssFormatExportHandler CreateSpssFormatExportHandler(
+        internal static SpssFormatExportHandler CreateSpssFormatExportHandler(
             IFileSystemAccessor fileSystemAccessor = null,
             IProtectedArchiveUtils archiveUtils = null,
             ITabularFormatExportService tabularFormatExportService = null,

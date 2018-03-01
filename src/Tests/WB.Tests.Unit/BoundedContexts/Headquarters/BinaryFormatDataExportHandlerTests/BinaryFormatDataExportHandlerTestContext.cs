@@ -33,13 +33,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IDataExportProcessesService dataExportProcessesService = null,
             IDataExportFileAccessor dataExportFileAccessor = null,
             IAudioFileStorage audioFileStorage = null,
+            InterviewDataExportSettings interviewDataExportSettings = null,
             IPlainTransactionManagerProvider plainTransactionManagerProvider = null)
         {
             return new BinaryFormatDataExportHandler(
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 imageFileRepository ?? Mock.Of<IImageFileStorage>(),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
-                new InterviewDataExportSettings(),
+                interviewDataExportSettings ?? new InterviewDataExportSettings(),
                 Mock.Of<ITransactionManager>(), 
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(), 
