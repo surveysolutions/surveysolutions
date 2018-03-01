@@ -13,7 +13,7 @@ namespace WB.UI.Headquarters.Code
 
         public static IHtmlString ToSafeJavascriptMessage(this HtmlHelper page, string sourceMessage)
         {
-            return page.Raw(Encoder.JavaScriptEncode(sourceMessage));
+            return page.Raw(Encoder.JavaScriptEncode(sourceMessage, false));
         }
     }
 }
