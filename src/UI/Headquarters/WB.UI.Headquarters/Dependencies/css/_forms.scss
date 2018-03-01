@@ -50,7 +50,8 @@ input.wb-checkbox,
 input.checkbox-filter,
 input.double-checkbox,
 input.double-checkbox-white,
-.radio input.wb-radio{
+.radio input.wb-radio,
+input.radio-row{
 	display: block;
     position: absolute;
 	left: -999999px;
@@ -233,6 +234,36 @@ input.double-checkbox-white{
 	    	background-position: -531px 2px;
 	  	}
     }
+}
+input.radio-row{
+	@extend %questionnaire-sprite;
+	& + label,
+	& + label .format-data{
+		font-family: "RobotoRegular";
+		font-weight: normal;
+	}
+	&:checked + label,
+	&:checked + label .format-data{
+		color:  $gray_text;
+		font-family: "RobotoBold";
+	}
+	& + label .tick {
+		background-position: -326px 2px;
+	}
+
+	& + label:hover .tick,
+	&:focus + label .tick,
+	  & + label:focus .tick{
+		background-position: -367px 2px;
+	  }
+	  &:checked + label .tick {
+		background-position: -735px 2px;
+	  }
+	  &:checked + label:hover .tick,
+	  &:checked + label:focus .tick,
+		&:checked:focus + label .tick {
+			background-position: -449px 2px;
+	  }
 }
 .control-label{
 	font-size: 14px;
