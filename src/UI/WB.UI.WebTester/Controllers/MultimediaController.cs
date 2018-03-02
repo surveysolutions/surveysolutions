@@ -136,9 +136,7 @@ namespace WB.UI.WebTester.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    fileName = $@"{question.VariableName}{
-                            string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))
-                        }{DateTime.UtcNow.GetHashCode()}.jpg";
+                    fileName = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
                     this.mediaStorage.Store(new MultimediaFile
