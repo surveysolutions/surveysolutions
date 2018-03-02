@@ -92,6 +92,7 @@ namespace WB.UI.Designer.Code
                 CanOpen = (showPublic || x.CreatedBy == viewerId || x.SharedPersons.Any(s => s.UserId == viewerId)) && !x.IsDeleted,
                 CanSynchronize = isAdmin,
                 CanExportToPdf = true,
+                CanExportToHtml = true,
                 Location = location != null
                            ? x.Title + "\r\n" + @QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location
                            : null,
@@ -116,6 +117,7 @@ namespace WB.UI.Designer.Code
                 CanEdit = false,
                 CanSynchronize = false,
                 CanExportToPdf = false,
+                CanExportToHtml = false,
                 Location = location != null ? QuestionnaireController.Location + QuestionnaireController.PublicQuestionnaires + " / " + location : null,
                 Owner = GlobalHelper.EmptyString
             };
