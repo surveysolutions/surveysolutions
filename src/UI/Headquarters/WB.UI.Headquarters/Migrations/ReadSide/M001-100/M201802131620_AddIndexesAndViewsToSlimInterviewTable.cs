@@ -10,7 +10,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(@"create or replace view readside.interviews_view as 
                 select s.interviewid, q.entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings,
                     asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool,
-                    asyesno, asaudio, asarea, hasflag
+                    asyesno, asaudio, asarea, hasflag, q.""type"", q.parentid
                 from readside.interviews i
                 join readside.interviewsummaries s on s.id = i.interviewid
                 join readside.questionnaire_entities q on q.id = i.entityid");

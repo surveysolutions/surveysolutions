@@ -15,7 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Id(x => x.Id, map => map.Generator(Generators.Identity));
 
             Property(x => x.EntityId);
-            Property(x => x.VariableName, p => p.Column("variable_name"));
             Property(x => x.Featured);
             Property(x => x.ParentId);
             Property(x => x.QuestionScope, p => p.Column("question_scope"));

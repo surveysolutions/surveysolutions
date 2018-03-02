@@ -152,9 +152,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                             {
                                 getDbDataStopwatch.Restart();
 
-                                var interviews = interviewFactory.GetInterviewEntities(
-                                    questionnaireExportStructure.Identity,
-                                    batch.Keys);
+                                var interviews = interviewFactory.GetInterviewEntities(batch.Keys);
 
                                 foreach (var interviewEntity in interviews)
                                 {

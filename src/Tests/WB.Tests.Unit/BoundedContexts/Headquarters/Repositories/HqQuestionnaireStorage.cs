@@ -48,21 +48,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
             var results = inmemory.Query(q => q).ToList();
 
             results.Should().Contain(q => q.EntityId == textQuestion
-                                          && q.VariableName == "textQ"
                                           && q.Featured == false
                                           && q.QuestionType == QuestionType.Text
                                           && q.ParentId == Id.gA
                                           && q.QuestionScope == QuestionScope.Interviewer);
 
             results.Should().Contain(q => q.EntityId == numericQuestion
-                                          && q.VariableName == "numeric"
                                           && q.Featured == true
                                           && q.QuestionType == QuestionType.Numeric
                                           && q.ParentId == Id.gA
                                           && q.QuestionScope == QuestionScope.Interviewer);
 
             results.Should().Contain(q => q.EntityId == multimediaQuestion
-                                          && q.VariableName == "multimedia"
                                           && q.Featured == false
                                           && q.QuestionType == QuestionType.Multimedia
                                           && q.ParentId == Id.gB

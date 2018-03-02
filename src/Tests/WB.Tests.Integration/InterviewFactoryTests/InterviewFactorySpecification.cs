@@ -99,11 +99,11 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId, Guid questionnaireId, long version = 1) =>
             this.plainTransactionManager.ExecuteInPlainTransaction(()
-                => factory.GetInterviewEntities(new QuestionnaireIdentity(questionnaireId, version), interviewId).ToArray());
+                => factory.GetInterviewEntities(interviewId).ToArray());
 
         protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, QuestionnaireIdentity questionnaireId, Guid interviewId) =>
             this.plainTransactionManager.ExecuteInPlainTransaction(()
-                => factory.GetInterviewEntities(questionnaireId, interviewId).ToArray());
+                => factory.GetInterviewEntities(interviewId).ToArray());
 
         protected InterviewFactory CreateInterviewFactory()
         {
