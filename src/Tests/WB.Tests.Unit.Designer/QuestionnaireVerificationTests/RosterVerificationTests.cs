@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Services;
+using WB.Tests.Abc;
 using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
@@ -33,6 +30,20 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             verificationMessages.ShouldNotContainError("WB0056");
             verificationMessages.GetError("WB0056").ShouldBeNull();
+        }
+
+        [Test]
+        public void should_validate_location_of_roster_title()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.FixedRoster(title: "Roster %rostertitle%",
+                    rosterId: Id.gA,
+                    children: new IComposite[]
+                    {
+                        Create.NumericIntegerQuestion(variable: "test1", id: Id.g1)
+                    }
+                ))
+                .ExpectError("WB0059");
         }
     }
 }
