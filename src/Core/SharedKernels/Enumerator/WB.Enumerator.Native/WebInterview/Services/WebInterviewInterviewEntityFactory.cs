@@ -204,10 +204,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         });
                         break;
                     case InterviewQuestionType.Multimedia:
-                        result = this.Map<InterviewMultimediaQuestion>(question, m =>
-                        {
-                            m.Version = callerInterview.Version;
-                        });
+                        result = this.Map<InterviewMultimediaQuestion>(question);
                         break;
                     case InterviewQuestionType.QRBarcode:
                         InterviewTreeQuestion barcodeQuestion = callerInterview.GetQuestion(identity);
