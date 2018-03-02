@@ -237,4 +237,19 @@
   <data name="ExportExplanation" xml:space="preserve">
     <value>Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press Generate button again to create a new archive.</value>
   </data>
+    <data name="ZipFile" xml:space="preserve">
+    <value>Zip file</value>
+  </data>
+    <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+    <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+    <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Save binary data to:</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.API
 {
@@ -128,6 +129,25 @@ namespace WB.UI.Headquarters.API
             };
 
             return result;
+        }
+
+        [HttpPost]
+        public void ExportToExternalStorage(ExportToExternalStorageModel model)
+        {
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(model.Questionnaire);
+
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            if (questionnaireBrowseItem == null)
+                throw new HttpException(404, @"Questionnaire not found");
+
+            this.dataExportProcessesService.AddDataExport(new ExportToExternalStorage(DataExportFormat.Binary, questionnaireIdentity, questionnaireBrowseItem.Title));
+        }
+
+        public class ExportToExternalStorageModel
+        {
+            public ExternalStorageType Type { get; set; }
+            public string Access_token { get; set; }
+            public string Questionnaire { get; set; }
         }
     }
 }
