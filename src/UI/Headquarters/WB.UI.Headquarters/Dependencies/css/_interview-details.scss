@@ -301,6 +301,22 @@
 	  	}
 	}
 }
+.error {
+	h4{
+		font-family: "RobotoRegular";
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
+	p{
+		font-family: "RobotoBold";
+		&:only-of-type{
+			margin-bottom: 30px !important;
+		}
+	}
+	h2{
+		margin-bottom: 30px;
+	}
+}
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
 		.filters{

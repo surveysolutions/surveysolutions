@@ -91,9 +91,7 @@
         padding-top: 3px;
         padding-bottom: 3px; }
       .panel-table .panel-body .btn:last-of-type {
-        margin-bottom: 0; }
-      .panel-table .panel-body .btn.last-btn:last-of-type {
-        margin-bottom: 10px; } }
+        margin-bottom: 0; } }
 
 .questionnaire-statistics {
   margin-bottom: 30px; }
@@ -330,9 +328,6 @@ main .flex-row {
 
 .btn-file input {
   display: none; }
-
-.action-block {
-  margin-top: 30px; }
 
 .action-buttons {
   margin-top: 40px;
@@ -1854,6 +1849,19 @@ header > .red-line {
 .readonly input.wb-radio:checked:disabled + label:hover .tick,
 .readonly input.wb-radio:checked:disabled + label:focus .tick {
   background-position: -777px 2px; }
+
+.error h4, .error .import-progress {
+  font-family: "RobotoRegular";
+  margin-top: 20px;
+  margin-bottom: 10px; }
+
+.error p {
+  font-family: "RobotoBold"; }
+  .error p:only-of-type {
+    margin-bottom: 30px !important; }
+
+.error h2 {
+  margin-bottom: 30px; }
 
 @media only screen and (max-width: 1525px) {
   .web-interview-for-supervisor .filters {

@@ -4,7 +4,8 @@
     self.itemName = "";
     self.itemType = "";
     self.pdfStatusUrl = '';
-    self.selectedTransalation = null;
+	self.selectedTransalation = null;
+	self.selectedTransalationHtml = null;
 
     self.deleteItem = function (id, type, name) {
         var encName = decodeURIComponent(name);
@@ -52,7 +53,62 @@
         dropButton.text(dropButton[0].title);
 
         self.getLanguages(getLanguagesUrl);
-    };
+	};
+
+	self.exportItemAsHtml = function (id, type, name, htmlDownloadUrl,  getLanguagesUrl) {
+		var encName = decodeURIComponent(name);
+		self.itemName = encName;
+		self.itemType = type;
+		self.itemId = id;
+		self.htmlDownloadUrl = htmlDownloadUrl;
+		self.getLanguagesUrl = getLanguagesUrl;
+		
+		$('#export-html-modal-questionnaire-id').val(self.itemId);
+		$('#export-html-modal-questionnaire-title').text(self.itemName);
+		
+		self.ExportDialogClosed = false;
+		self.selectedTransalationHtml = null;
+		var dropButton = $('#dropdownMenuButtonHtml');
+		dropButton.text(dropButton[0].title);
+
+		$.ajax({
+			url: getLanguagesUrl,
+			cache: false,
+			method: "POST"
+		}).done(function (result) {
+		    if (result.length && result.length > 1) {
+		        var typeaheadCtrl = $(".languages-combobox-html");
+		        typeaheadCtrl.empty();
+
+		        for (var i = 0; i < result.length; i++) {
+		            var translationItem = result[i];
+		            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' +
+		                translationItem.Value +
+		                '">' +
+		                translationItem.Name +
+		                '</a></li>');
+		        }
+
+		        typeaheadCtrl.unbind('click');
+		        typeaheadCtrl.click(function(evn) {
+		            var link = $(evn.target);
+		            self.selectedTransalationHtml = link.attr('value');
+		            $('#dropdownMenuButtonHtml').text(link.text());
+		            $('#htmlGenerateButton').prop('disabled', false);
+		        });
+
+		        $('#htmlGenerateButton').prop('disabled', true);
+		        $('#htmlGenerateButton').unbind('click');
+		        $('#htmlGenerateButton').click(function(evn) {
+		            window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
+		            $('#htmlCancelButton').click();
+		        });
+		    } else {
+		        window.open(self.htmlDownloadUrl + '?translation=' + result[0].Value, '_blank');
+		        $('#htmlCancelButton').click();
+		    }
+		});
+	};
 
     self.retryPdfExport = function() {
         $.post(self.pdfRetryUrl, { id: self.itemId, translation: self.selectedTransalation });
@@ -61,7 +117,7 @@
     };
 
     self.updateExportPdfStatus = function (translationId) {
-        if (self.pdfStatusUrl == '') return { always: function() {} };
+        if (self.pdfStatusUrl === '') return { always: function() {} };
         return $.ajax({
             url: self.pdfStatusUrl + '?translation=' + translationId,
             cache: false
@@ -92,9 +148,10 @@
     }
 
     self.updateExportPdfStatusNeverending = function (translation) {
-        $.when(self.updateExportPdfStatus(translation)).done(function () {
-            if (!self.ExportDialogClosed)
-                setTimeout(self.updateExportPdfStatusNeverending(translation), 1000);
+	    $.when(self.updateExportPdfStatus(translation)).done(function () {
+			if (!self.ExportDialogClosed) {
+				setTimeout(function() { self.updateExportPdfStatusNeverending(translation) }, 1500);
+		    }
         });
     }
 
@@ -112,8 +169,8 @@
             method: "POST"
         }).done(function (result) {
             if (result.length && result.length > 1) {
-                self.initLanguageComboBox(result);
-                $('.start-pdf-generation').show();
+				self.initLanguageComboBox(result);
+                $('#startPdf').show();
                 $('#export-pdf-modal-status').hide();
                 $('#pdfDownloadButton').hide();
             } else {
@@ -147,19 +204,19 @@
         $('#pdfGenerateButton').click(function(evn) {
             self.startExportProcess(self.selectedTransalation);
         });
-    }
+	}
 
     self.startExportProcess = function (translation) {
-        $('.start-pdf-generation').hide();
+		$('#startPdf').hide();
         $('#export-pdf-modal-status').show();
 
-        self.updateExportPdfStatusNeverending(self.selectedTransalation);
+	    self.updateExportPdfStatusNeverending(translation);
 
-        $('.close-pdf-dialog').unbind('click');
-        $('.close-pdf-dialog').click(function (evn) {
-            self.ExportDialogClosed = true;
-            self.setPdfMessage('');
-        });
+		$('.close-pdf-dialog').unbind('click');
+		$('.close-pdf-dialog').click(function(evn) {
+		    self.ExportDialogClosed = true;
+			self.setPdfMessage('');
+		});
     }
 }
 
