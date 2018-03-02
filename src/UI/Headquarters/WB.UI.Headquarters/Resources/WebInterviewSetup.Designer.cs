@@ -70,6 +70,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom message should not contain more than {0} characters (including html).
+        /// </summary>
+        public static string CustomMessageTooLong {
+            get {
+                return ResourceManager.GetString("CustomMessageTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use custom text.
         /// </summary>
         public static string CustomText {

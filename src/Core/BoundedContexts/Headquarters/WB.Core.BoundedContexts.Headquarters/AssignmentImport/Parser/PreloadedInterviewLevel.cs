@@ -163,12 +163,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         protected IEnumerable<int> GetRosterVectorColumnIndexes(ValueVector<Guid> rosterScope,
             QuestionnaireExportStructure exportStructure, List<string> header, HeaderStructureForLevel levelStructure)
         {
-            var parenColumnsNames = exportStructure.GetAllParentColumnNamesForLevel(rosterScope)
+            var parentColumnsNames = exportStructure.GetAllParentColumnNamesForLevel(rosterScope)
                 .Union(new[] {levelStructure.LevelIdColumnName})
                 .Except(new[] {ServiceColumns.InterviewId, ServiceColumns.Key})
+                .Select(x => x.ToLowerInvariant())
                 .ToArray();
 
-            return parenColumnsNames.Select(parentColumnName => header.IndexOf(parentColumnName));
+            return parentColumnsNames.Select(parentColumnName => header.IndexOf(parentColumnName));
         }
 
         public override bool HasDataForInterview(string interviewId)
@@ -181,13 +182,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             return DataByInterviewId[interviewId];
         }
 
-        public TextListAnswerRow[] GetRowCodeAndTitlesPairs(string interviewId)
+        public TextListAnswerRow[] GetRowCodeAndTitlesPairs(string interviewId, RosterVector rosterVector)
         {
             if (!DataByInterviewId.ContainsKey(interviewId))
                 return null;
             var rosterRows = DataByInterviewId[interviewId];
 
-            return rosterRows.Select(x => new TextListAnswerRow(x.Rowcode, x.RosterTitle)).ToArray();
+            return rosterRows
+                .Where(x => x.RosterVector.Take(rosterVector.Length) == rosterVector)
+                .Select(x => new TextListAnswerRow(x.Rowcode, x.RosterTitle)).ToArray();
         }
     }
 

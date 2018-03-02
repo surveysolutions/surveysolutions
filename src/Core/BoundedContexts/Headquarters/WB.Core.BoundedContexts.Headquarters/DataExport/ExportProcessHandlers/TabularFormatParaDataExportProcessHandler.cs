@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                             writer.WriteField(evnt.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
                             foreach (var value in evnt.Parameters.Values)
                             {
-                                writer.WriteField(writer.RemoveNewLine(value));
+                                writer.WriteField(Utils.RemoveNewLine(value));
                             }
                             writer.NextRecord();
                         }

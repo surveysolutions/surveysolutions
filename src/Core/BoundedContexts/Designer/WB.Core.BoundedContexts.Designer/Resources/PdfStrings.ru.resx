@@ -145,7 +145,7 @@
     <value>Условие включения:</value>
   </data>
   <data name="GeneratedBy" xml:space="preserve">
-    <value>Этот PDF сгенерирован: {0}</value>
+    <value>Сгенерирован: {0}</value>
   </data>
   <data name="LastEdited" xml:space="preserve">
     <value>{0} отредактирован {1}</value>

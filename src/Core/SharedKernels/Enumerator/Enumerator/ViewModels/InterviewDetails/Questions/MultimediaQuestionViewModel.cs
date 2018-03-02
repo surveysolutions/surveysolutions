@@ -175,6 +175,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
+                var pictureFileName = this.GetPictureFileName();
+                this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,

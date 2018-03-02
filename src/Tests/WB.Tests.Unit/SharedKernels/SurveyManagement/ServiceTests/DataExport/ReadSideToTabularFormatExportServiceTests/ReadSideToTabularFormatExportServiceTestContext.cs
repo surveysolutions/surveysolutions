@@ -187,7 +187,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         {
             private readonly List<object[]> recorderRows = new List<object[]>();
             private readonly List<object> currentRow = new List<object>();
-            private static readonly Regex RemoveNewLineRegEx = new Regex(@"\t|\n|\r", RegexOptions.Compiled);
 
             public void Dispose()
             {
@@ -203,12 +202,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 recorderRows.Add(currentRow.ToArray());
                 currentRow.Clear();
             }
-
-            public string RemoveNewLine(string cell)
-            {
-                return string.IsNullOrEmpty(cell) ? string.Empty : RemoveNewLineRegEx.Replace(cell, " ");
-            }
-
+            
             public List<object[]> Rows
             {
                 get
