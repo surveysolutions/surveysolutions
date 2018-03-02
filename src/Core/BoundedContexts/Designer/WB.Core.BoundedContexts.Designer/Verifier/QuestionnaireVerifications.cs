@@ -246,7 +246,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {
-                if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
+                if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0 || 
+                   vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 1 && vectorOfRosterQuestionsByEntityWithSubstitutions[0] == traslatedEntityWithSubstitution.Entity.PublicKey)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
                         VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,

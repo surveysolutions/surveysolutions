@@ -23,5 +23,8 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+	<Content Include="Properties\Resources.ru.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Content>
   </ItemGroup>
 </Project>

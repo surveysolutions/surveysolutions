@@ -27,6 +27,8 @@
 
         public bool CanExportToPdf { get; set; }
 
+        public bool CanExportToHtml { get; set; }
+
         public virtual bool CanAssignFolder { get; set; }
 
         public virtual bool CanCopy { get; set; }

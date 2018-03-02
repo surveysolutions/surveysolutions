@@ -636,8 +636,12 @@
     <Content Include="App_GlobalResources\TakeNewInterview.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>TakeNewInterview.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.zh.resx">
+      <DependentUpon>TakeNewInterview.resx</DependentUpon>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.ru.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\Users.es.resx">
@@ -969,6 +973,9 @@
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ReviewInterview.zh.resx">
+      <DependentUpon>ReviewInterview.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.ru.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.es.resx">

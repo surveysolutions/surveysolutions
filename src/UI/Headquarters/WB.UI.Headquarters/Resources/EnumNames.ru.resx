@@ -180,4 +180,8 @@
   <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
     <value>Приветствие заголовок</value>
   </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Хедквотер</value>
+    <comment>Хедквотер</comment>
+  </data>
 </root>

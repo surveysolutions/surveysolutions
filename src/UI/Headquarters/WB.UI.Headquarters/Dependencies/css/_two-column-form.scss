@@ -1,5 +1,5 @@
 .two-columns-form, .flex-row{
-    display: flex;
+    @include flexbox();
 }
 .form-inside{
     min-height: 500px;
