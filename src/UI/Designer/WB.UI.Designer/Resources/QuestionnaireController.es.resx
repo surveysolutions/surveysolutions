@@ -147,9 +147,6 @@
   <data name="ChooseLanguage" xml:space="preserve">
     <value>Escoger idioma</value>
   </data>
-  <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>Favor elija el idioma para presentar el cuestionario enPDF</value>
-  </data>
   <data name="Close" xml:space="preserve">
     <value>Cerrar</value>
   </data>
