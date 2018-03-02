@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
-        private const int MAXCOORDINATESCOUNTLIMIT = 10000;
+        private const int MAXCOORDINATESCOUNTLIMIT = 50000;
 
         public MapReport(IInterviewFactory interviewFactory, IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor)

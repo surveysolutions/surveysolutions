@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     ParentId = composite.GetParent()?.PublicKey,
                     QuestionType = question?.QuestionType,
                     QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString(),
-                    VariableName = question?.VariableName ?? question?.StataExportCaption,
                     Featured = question?.Featured,
                     QuestionScope = question?.QuestionScope,
                     Type = composite.GetType().Name

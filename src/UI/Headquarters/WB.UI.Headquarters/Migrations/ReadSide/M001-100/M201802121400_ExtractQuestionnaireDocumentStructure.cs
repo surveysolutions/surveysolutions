@@ -23,7 +23,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         questionnaireidentity varchar(255) not null,
                         entityid uuid not null,
                         parentid uuid,
-                        variable_name text,
                         question_type integer,
                         featured boolean,
                         question_scope integer,
@@ -71,7 +70,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 ParentId = Guid.Parse(parentKey),
                                 QuestionType = (QuestionType?) item["QuestionType"]?.Value<long>(),
                                 QuestionnaireIdentity = documentRow.id,
-                                VariableName = item["StataExportCaption"]?.Value<string>(),
                                 Featured = item["Featured"]?.Value<bool>(),
                                 QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>() ?? 0,
                                 Type = item["$type"]?.Value<string>()
@@ -87,9 +85,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     {
                         db.Execute(
                             $@"insert into {schema}.questionnaire_entities 
-                                (questionnaireidentity, entityid, parentid, question_type, variable_name, featured, question_scope, type)
+                                (questionnaireidentity, entityid, parentid, question_type, featured, question_scope, type)
                             values(
-                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @VariableName, @Featured, @QuestionScope, @Type)",
+                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @Featured, @QuestionScope, @Type)",
                             entity);
                     }
                 }

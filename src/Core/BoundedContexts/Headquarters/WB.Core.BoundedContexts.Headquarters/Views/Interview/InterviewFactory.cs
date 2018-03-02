@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
 using Dapper;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Npgsql;
@@ -21,11 +22,38 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
+    public static class QuestionTypeExtractor
+    {
+        private static readonly Dictionary<string, Type> map;
+        
+        static QuestionTypeExtractor()
+        {
+            var types = typeof(IQuestion).Assembly.GetTypes()
+                .Where(p => typeof(IComposite).IsAssignableFrom(p));
+
+            map = types.ToDictionary(t => t.Name);
+        }
+
+        public static EntityType FromName(string name)
+        {
+            if (map.TryGetValue(name, out var type))
+            {
+                if (typeof(IQuestion).IsAssignableFrom(type)) return EntityType.Question;
+                if (typeof(IVariable).IsAssignableFrom(type)) return EntityType.Variable;
+                if (typeof(IStaticText).IsAssignableFrom(type)) return EntityType.StaticText;
+                if (typeof(IGroup).IsAssignableFrom(type)) return EntityType.Section;
+            }
+
+            throw new ArgumentException($@"Unsupported questionnaire entity type provided: {name}", nameof(name));
+        }
+    }
+
     public class InterviewFactory : IInterviewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
@@ -48,25 +76,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
             Identity sectionId)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaire(questionnaireId, null);
-            var questionsInSection = questionnaire.GetChildQuestions(sectionId.Id);
-
-            if (!questionsInSection.Any()) return Array.Empty<Identity>();
-
-            return sessionProvider.GetSession().Connection.Query<(Guid entityid, string rostervector)>(
-                    $@"SELECT {Column.EntityId}, {Column.RosterVector}
+            return sessionProvider.GetSession().Connection.Query<(Guid entityId, string rosterVector)>(
+                    $@"SELECT {Column.EntityId} as Id, {Column.RosterVector}
                        FROM {Table.InterviewsView}
                        WHERE {Column.InterviewId} = @InterviewId
                         AND {Column.HasFlag} = true
-                        AND {Column.EntityId} IN (@questionsInSection)
+                        AND parentid = @sectionId
                         AND {Column.RosterVector} = @RosterVector",
                     new
                     {
                         InterviewId = interviewId,
                         RosterVector = sectionId.RosterVector.ToString(),
-                        questionsInSection
+                        SectionId = sectionId.Id
                     })
-                .Select(x => Identity.Create(x.entityid, RosterVector.Parse(x.rostervector)))
+                .Select(x => Identity.Create(x.entityId, RosterVector.Parse(x.rosterVector)))
                 .ToArray();
         }
 
@@ -82,7 +105,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             ThrowIfInterviewDeletedOrReadOnly(interviewId);
             
-            var stateRows = GetInterviewEntities(null, interviewId);
+            var stateRows = GetInterviewEntities(interviewId);
 
             var perEntity = stateRows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
 
@@ -180,8 +203,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         
         public void Save(InterviewState state)
         {
-            var rows = GetInterviewEntities(null, state.Id);
-
+            var rows = GetInterviewEntities(state.Id);
             
             var perEntity = rows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
 
@@ -321,10 +343,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
         }
        
-        public IEnumerable<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, IEnumerable<Guid> interviews)
+        public IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews)
         {
-            var questionnaire = questionnaireId != null ? questionnaireStorage.GetQuestionnaire(questionnaireId, null) : null;
-
             var connection = sessionProvider.GetSession().Connection;
 
             var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
@@ -335,7 +355,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var queryResult = connection.Query<InterviewEntityDto>(
                 "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint," +
-                " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag " +
+                " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag, \"type\" " +
                 $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})", commandTimeout: 0, buffered: false);
 
             int[] ParseIntArray(string array, char delimeter = '-')
@@ -380,9 +400,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsYesNo = Deserialize<AnsweredYesNoOption[]>(result.AsYesNo);
                 entity.AsAudio = Deserialize<AudioAnswer>(result.AsAudio);
                 entity.AsArea = Deserialize<Area>(result.AsArea);
-
-                if (questionnaire != null)
-                    entity.EntityType = GetEntityType(entity.Identity.Id, questionnaire);
+                entity.EntityType = QuestionTypeExtractor.FromName(result.Type);
 
                 T Deserialize<T>(string value) where T : class
                 {
@@ -395,19 +413,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         #region Obsolete InterviewData
-        public List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviews)
+        public List<InterviewEntity> GetInterviewEntities(Guid interviews)
         {
-            return GetInterviewEntities(questionnaireId, new[] { interviews }).ToList();
-        }
-
-        private EntityType GetEntityType(Guid entityid, IQuestionnaire questionnaire)
-        {
-            if (questionnaire.IsQuestion(entityid)) return EntityType.Question;
-            if (questionnaire.IsVariable(entityid)) return EntityType.Variable;
-            if (questionnaire.IsStaticText(entityid)) return EntityType.StaticText;
-            if (questionnaire.HasGroup(entityid)) return EntityType.Section;
-
-            throw new NotSupportedException("Unknown entity type");
+            return GetInterviewEntities(new[] { interviews }).ToList();
         }
 
         public Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire, List<InterviewEntity> interviewEntities)
@@ -447,17 +455,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             {
                 switch (entity.EntityType)
                 {
-                    //case EntityType.Section when entity.IsEnabled == false:
-                    //    interviewLevel.DisabledGroups.Add(entity.Identity.Id);
-                    //    break;
                     case EntityType.Question:
                         var question = ToQuestion(entity);
                         interviewLevel.QuestionsSearchCache.Add(question.Id, question);
                         break;
-                    //case EntityType.StaticText:
-                    //    var staticText = ToStaticText(entity);
-                    //    interviewLevel.StaticTexts.Add(staticText.Id, staticText);
-                    //    break;
                     case EntityType.Variable:
                         interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
                         if(entity.IsEnabled == false)
@@ -495,15 +496,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             return state;
         }
-
-        private InterviewStaticText ToStaticText(InterviewEntity entity) => new InterviewStaticText
-        {
-            Id = entity.Identity.Id,
-            IsEnabled = entity.IsEnabled,
-            FailedValidationConditions = (entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)) ?? new FailedValidationCondition[0]).ToReadOnlyCollection(),
-            FailedWarningConditions = (entity.WarningValidations?.Select(x => new FailedValidationCondition(x)) ?? new FailedValidationCondition[0]).ToReadOnlyCollection()
-        };
-
+        
         private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ??
                                                                  entity.AsDateTime ?? entity.AsLong ??
                                                                  entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
