@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
@@ -28,50 +27,25 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
-    public static class QuestionTypeExtractor
-    {
-        private static readonly Dictionary<string, Type> map;
-        
-        static QuestionTypeExtractor()
-        {
-            var types = typeof(IQuestion).Assembly.GetTypes()
-                .Where(p => typeof(IComposite).IsAssignableFrom(p));
-
-            map = types.ToDictionary(t => t.Name);
-        }
-
-        public static EntityType FromName(string name)
-        {
-            if (map.TryGetValue(name, out var type))
-            {
-                if (typeof(IQuestion).IsAssignableFrom(type)) return EntityType.Question;
-                if (typeof(IVariable).IsAssignableFrom(type)) return EntityType.Variable;
-                if (typeof(IStaticText).IsAssignableFrom(type)) return EntityType.StaticText;
-                if (typeof(IGroup).IsAssignableFrom(type)) return EntityType.Section;
-            }
-
-            throw new ArgumentException($@"Unsupported questionnaire entity type provided: {name}", nameof(name));
-        }
-    }
-
     public class InterviewFactory : IInterviewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ISessionProvider sessionProvider;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
         
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            IQuestionnaireStorage questionnaireStorage,
             ISessionProvider sessionProvider, 
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.summaryRepository = summaryRepository;
-            this.questionnaireStorage = questionnaireStorage;
             this.sessionProvider = sessionProvider;
             this.questionnaireItems = questionnaireItems;
         }
+
+        private static readonly Dictionary<string, Type> EntityTypeMap = typeof(IQuestion).Assembly.GetTypes()
+            .Where(p => typeof(IComposite).IsAssignableFrom(p))
+            .ToDictionary(t => t.Name);
 
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
             Identity sectionId)
@@ -86,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     new
                     {
                         InterviewId = interviewId,
-                        RosterVector = sectionId.RosterVector.ToString(),
+                        RosterVector = sectionId.RosterVector.ToString().Trim('_'),
                         SectionId = sectionId.Id
                     })
                 .Select(x => Identity.Create(x.entityId, RosterVector.Parse(x.rosterVector)))
@@ -103,28 +77,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public void SetFlagToQuestion(Guid interviewId, Identity questionIdentity, bool flagged)
         {
-            ThrowIfInterviewDeletedOrReadOnly(interviewId);
+            var interview = summaryRepository.GetById(interviewId);
+
+            if (interview == null)
+                throw new InterviewException($"Interview {interviewId} not found.");
+
+            ThrowIfInterviewApprovedByHq(interview);
+            ThrowIfInterviewReceivedByInterviewer(interview);
             
-            var stateRows = GetInterviewEntities(interviewId);
+            var entityMap = GetQuestionnaireEntities(interview.QuestionnaireIdentity);
 
-            var perEntity = stateRows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
-
-            var id = InterviewStateIdentity.Create(questionIdentity);
-            if (perEntity.TryGetValue(id, out var row))
+            var row = new
             {
-                row.HasFlag = flagged;
-            }
-            else
-            {
-                perEntity[id] = new InterviewEntity
-                {
-                    Identity = questionIdentity,
-                    IsEnabled = true,
-                    HasFlag = flagged
-                };
-            }
+                interview.Id,
+                entityId = entityMap[questionIdentity.Id],
+                rosterVector = questionIdentity.RosterVector.ToString().Trim('_'),
+                hasFlag = flagged
+            };
 
-            SaveInterviewStateItem(interviewId, perEntity.Values);
+            var flaggedRows = sessionProvider.GetSession().Connection
+                .Query<(int interviewId, int entityId, string rosterVector, bool hasFlag)>
+                ($"select interviewid, entityid, rostervector, hasflag from {Table.Interviews} " +
+                 $"where interviewid = @id and entityid = @entityid and rostervector = @rostervector", row).ToList();
+
+            switch (flaggedRows.Count)
+            {
+                // do not add new row with false value
+                case 0 when flagged == false:
+                    return;
+                case 0:
+                    sessionProvider.GetSession().Connection.Execute(
+                        $@"INSERT INTO {Table.Interviews} (interviewid, entityid, rostervector, isenabled, hasflag)
+                       VALUES(@id, @entityid, @rostervector, true, @hasFlag)", row);
+                    break;
+                default:
+                    sessionProvider.GetSession().Connection.Execute(
+                        $@"UPDATE {Table.Interviews} SET hasflag=@hasFlag where interviewid=@id and entityid=@entityid and rostervector=@rostervector", row);
+                    break;
+            }
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -400,7 +390,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsYesNo = Deserialize<AnsweredYesNoOption[]>(result.AsYesNo);
                 entity.AsAudio = Deserialize<AudioAnswer>(result.AsAudio);
                 entity.AsArea = Deserialize<Area>(result.AsArea);
-                entity.EntityType = QuestionTypeExtractor.FromName(result.Type);
+                entity.EntityType = GetFromEntityTypeName(result.Type);
 
                 T Deserialize<T>(string value) where T : class
                 {
@@ -410,6 +400,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
                 yield return entity;
             }
+        }
+
+        public static EntityType GetFromEntityTypeName(string name)
+        {
+            if (EntityTypeMap.TryGetValue(name, out var type))
+            {
+                if (typeof(IQuestion).IsAssignableFrom(type)) return EntityType.Question;
+                if (typeof(IVariable).IsAssignableFrom(type)) return EntityType.Variable;
+                if (typeof(IStaticText).IsAssignableFrom(type)) return EntityType.StaticText;
+                if (typeof(IGroup).IsAssignableFrom(type)) return EntityType.Section;
+            }
+
+            throw new ArgumentException($@"Unsupported questionnaire entity type provided: {name}", nameof(name));
         }
 
         #region Obsolete InterviewData
@@ -511,17 +514,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return vector.CreateLeveKeyFromPropagationVector();
         }
         #endregion
-
-        private void ThrowIfInterviewDeletedOrReadOnly(Guid interviewId)
-        {
-            var interview = summaryRepository.GetById(interviewId);
-
-            if (interview == null)
-                throw new InterviewException($"Interview {interviewId} not found.");
-
-            ThrowIfInterviewApprovedByHq(interview);
-            ThrowIfInterviewReceivedByInterviewer(interview);
-        }
 
         private static void ThrowIfInterviewReceivedByInterviewer(InterviewSummary interview)
         {

@@ -50,12 +50,15 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     SummaryId = interviewId.FormatGuid(),
                     InterviewId = interviewId,
                     Status = InterviewStatus.Completed,
+                    QuestionnaireIdentity = questionnaireId.ToString(),
                     ReceivedByInterviewer = false
                 }, interviewId.FormatGuid()));
 
             var factory = CreateInterviewFactory();
 
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId.QuestionnaireId,
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                id: questionnaireId.QuestionnaireId,
+
                 children: new IComposite[]
                 {
                         Create.Entity.TextQuestion(questionIdentities[0].Id),
@@ -63,10 +66,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 });
 
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
-            StoreInterviewSummary(new InterviewSummary(questionnaire)
-            {
-                InterviewId = interviewId
-            }, questionnaireId);
 
             foreach (var questionIdentity in questionIdentities)
                 this.plainTransactionManager.ExecuteInPlainTransaction(()
@@ -76,8 +75,65 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var flaggedIdentites = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetFlaggedQuestionIds(interviewId));
 
             //assert
-            Assert.AreEqual(flaggedIdentites.Length, 2);
+            Assert.AreEqual(2, flaggedIdentites.Length);
             Assert.That(flaggedIdentites, Is.EquivalentTo(questionIdentities));
+        }
+
+        [Test]
+        public void when_setting_flags_should_get_proper_one()
+        {
+            //arrange
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 5);
+
+            var questionIdentities = new[]
+            {
+                Identity.Create(Guid.NewGuid(), Create.RosterVector()),
+                Identity.Create(Guid.NewGuid(), Create.RosterVector(1))
+            };
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                interviewSummaryRepository.Store(new InterviewSummary
+                {
+                    SummaryId = interviewId.FormatGuid(),
+                    InterviewId = interviewId,
+                    Status = InterviewStatus.Completed,
+                    QuestionnaireIdentity = questionnaireId.ToString(),
+                    ReceivedByInterviewer = false
+                }, interviewId.FormatGuid()));
+
+            var factory = CreateInterviewFactory();
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                id: questionnaireId.QuestionnaireId,
+
+                children: new IComposite[]
+                {
+                        Create.Entity.TextQuestion(questionIdentities[0].Id),
+                        Create.Entity.TextQuestion(questionIdentities[1].Id),
+                });
+
+            PrepareQuestionnaire(questionnaire, questionnaireId.Version);
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                foreach (var questionIdentity in questionIdentities)
+                {
+                    factory.SetFlagToQuestion(interviewId, questionIdentity, true);
+                }
+            });
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                factory.SetFlagToQuestion(interviewId, questionIdentities[0], false);
+            });
+
+            //act
+            var flaggedIdentites = this.plainTransactionManager.ExecuteInPlainTransaction(() => factory.GetFlaggedQuestionIds(interviewId));
+
+            //assert
+            Assert.AreEqual(1, flaggedIdentites.Length);
+            Assert.That(flaggedIdentites, Is.EquivalentTo(new[] {questionIdentities[1]}));
         }
 
         [Test]
@@ -774,7 +830,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 1);
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                null, questionnaireId.QuestionnaireId, 
+                null, questionnaireId.QuestionnaireId,
                     Create.Entity.StaticText(staticTextId.Id),
                     Create.Entity.TextQuestion(questionId.Id));
 
@@ -786,7 +842,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 StoreInterviewSummary(new InterviewSummary(questionnaire)
                 {
                     InterviewId = interviewId,
-                    QuestionnaireIdentity  = questionnaireId.ToString()
+                    QuestionnaireIdentity = questionnaireId.ToString()
                 }, questionnaireId);
             });
 

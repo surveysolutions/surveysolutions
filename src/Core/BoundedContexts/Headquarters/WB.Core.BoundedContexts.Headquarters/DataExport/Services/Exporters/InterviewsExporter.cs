@@ -115,6 +115,54 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             errorsExportFilePath = Path.ChangeExtension(errorsExportFilePath, dataFileExtension);
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
+        
+        void ReadInterviewsFromDatabase(BlockingCollection<List<InterviewToExport>> interviewsToProcess,
+            List<InterviewToExport> interviewIdsToExport, int batchSize, Action<string> log,
+            CancellationToken cancellationToken)
+        {
+            log("Start db read process");
+            var dbEta = new EtaHelper(interviewIdsToExport.Count, batchSize);
+
+            try
+            {
+                foreach (IEnumerable<InterviewToExport> batchIds in interviewIdsToExport.Batch(batchSize))
+                {
+                    var batch = batchIds.ToDictionary(b => b.Id);
+
+                    this.TransactionManager.ExecuteInQueryTransaction(() =>
+                    {
+                        try
+                        {
+                            getDbDataStopwatch.Restart();
+
+                            var interviews = interviewFactory.GetInterviewEntities(batch.Keys);
+
+                            foreach (var interviewEntity in interviews)
+                            {
+                                batch[interviewEntity.InterviewId].Entities.Add(interviewEntity);
+                            }
+
+                            getDbDataStopwatch.Stop();
+
+                            var eta = dbEta.AddProgress(getDbDataStopwatch.Elapsed.TotalMilliseconds, batch.Count);
+                            log($"DB read batch of {batch.Count} interviews in {getDbDataStopwatch.Elapsed:g}. "
+                                + $"ETA to read out db: {eta:g} ({dbEta.ItemsPerHour} interviews/hour).");
+
+                            interviewsToProcess.Add(batch.Values.ToList(), cancellationToken);
+                        }
+                        catch (Exception e)
+                        {
+                            this.logger.Error("Error occur while reading interviews from DB", e);
+                            throw;
+                        }
+                    });
+                }
+            }
+            finally
+            {
+                interviewsToProcess.CompleteAdding();
+            }
+        }
 
         private void ExportInterviews(List<InterviewToExport> interviewIdsToExport,
             string basePath,
@@ -134,53 +182,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             // producer/consumer queue with backpressure limitation
             // it will block collection till there is 3 batches in queue, but make sure that we don't pause DB read for data processing
             var interviewsToProcess = new BlockingCollection<List<InterviewToExport>>(3);
-
-            var dbReaderTask = Task.Run(() =>
-            {
-                LogDebug("Start db read process");
-                var dbEta = new EtaHelper(interviewIdsToExport.Count, batchSize);
-
-                try
-                {
-                    foreach (IEnumerable<InterviewToExport> batchIds in interviewIdsToExport.Batch(batchSize))
-                    {
-                        var batch = batchIds.ToDictionary(b => b.Id);
-
-                        this.TransactionManager.ExecuteInQueryTransaction(() =>
-                        {
-                            try
-                            {
-                                getDbDataStopwatch.Restart();
-
-                                var interviews = interviewFactory.GetInterviewEntities(batch.Keys);
-
-                                foreach (var interviewEntity in interviews)
-                                {
-                                    batch[interviewEntity.InterviewId].Entities.Add(interviewEntity);
-                                }
-
-                                getDbDataStopwatch.Stop();
-
-                                var eta = dbEta.AddProgress(getDbDataStopwatch.Elapsed.TotalMilliseconds, batch.Count);
-                                LogDebug(
-                                    $"DB read batch of {batch.Count} interviews in {getDbDataStopwatch.Elapsed:g}. " +
-                                    $"ETA to read out db: {eta:g} ({dbEta.ItemsPerHour} interviews/hour).");
-
-                                interviewsToProcess.Add(batch.Values.ToList(), cancellationToken);
-                            }
-                            catch (Exception e)
-                            {
-                                this.logger.Error("Error occur while reading interviews from DB", e);
-                                throw;
-                            }
-                        });
-                    }
-                }
-                finally
-                {
-                    interviewsToProcess.CompleteAdding();
-                }
-            }, cancellationToken);
+            
+            var dbReaderTask = Task.Factory.StartNew(
+                () => ReadInterviewsFromDatabase(interviewsToProcess, interviewIdsToExport, batchSize, LogDebug, cancellationToken), 
+                cancellationToken);
 
             IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireExportStructure.Identity, null);
             
@@ -204,7 +209,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                     interview.Entities.Clear(); // needed to free ram as yearly as possible
 
-                    Interlocked.Increment(ref totalInterviewsProcessed);
+                    ++totalInterviewsProcessed;
                     progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
                 }
 
@@ -216,7 +221,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
                 LogDebug($"Exported {totalInterviewsProcessed:N0} of {interviewIdsToExport.Count:N0} interviews in {batchWatch.Elapsed:g}. {processingEta}. " +
                          $"Write to file: {writeToFilesWatch.Elapsed:g}");
-                
             }
 
             dbReaderTask.Wait(cancellationToken);
@@ -351,9 +355,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 InterviewId = interviewId.Id.FormatGuid(),
                 Data = interviewData,
             };
-
-
-
+            
             return interviewExportedData;
         }
 

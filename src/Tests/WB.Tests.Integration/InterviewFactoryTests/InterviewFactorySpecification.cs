@@ -109,7 +109,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                questionnaireStorage: questionnaireStorage,
                 sessionProvider: this.plainTransactionManager, 
                 questionnaireItems: compositeItemsRepository);
         }
