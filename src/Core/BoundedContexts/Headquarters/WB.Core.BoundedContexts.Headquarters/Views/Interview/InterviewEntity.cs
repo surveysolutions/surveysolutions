@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public string AsGps { get; set; }
         public string AsAudio { get; set; }
         public string AsArea { get; set; }
+        public string Type { get; set; }
     }
 
 
@@ -59,7 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual GeoPosition AsGps { get; set; }
         public virtual AudioAnswer AsAudio { get; set; }
         public virtual Area AsArea { get; set; }
-
+        
         public override bool Equals(object obj)
         {
             if (!(obj is InterviewEntity target)) return false;

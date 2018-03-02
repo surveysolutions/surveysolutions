@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -25,8 +24,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         string[] GetQuestionnairesWithAnsweredGpsQuestions();
 
-        IEnumerable<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, IEnumerable<Guid> interviews);
-        List<InterviewEntity> GetInterviewEntities(QuestionnaireIdentity questionnaireId, Guid interviewId);
+        IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews);
+        List<InterviewEntity> GetInterviewEntities(Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire, List<InterviewEntity> interviewEntities);
         void Save(InterviewState interviewState);
     }
