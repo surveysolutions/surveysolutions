@@ -124,6 +124,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     BucketName = s3Settings.BucketName,
                     Key = GetKey(key),
                     ContentType = contentType,
+                    AutoCloseStream = false,
                     AutoResetStreamPosition = false,
                     InputStream = inputStream
                 };
