@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasErrors { get; }
         bool IsCompleted { get; }
-        int Version { get; }
 
         bool HasEditableIdentifyingQuestions { get; }
 

@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     break;
 
                 case QuestionType.Multimedia:
-                    this.InterviewQuestion = new InterviewTreeMultimediaQuestion(answer);
+                    this.InterviewQuestion = new InterviewTreeMultimediaQuestion(answer, null);
                     break;
                 case QuestionType.Numeric:
                     {
@@ -454,7 +454,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsInteger) { ((InterviewTreeIntegerQuestion)this.InterviewQuestion).SetAnswer(NumericIntegerAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsDouble) { ((InterviewTreeDoubleQuestion)this.InterviewQuestion).SetAnswer(NumericRealAnswer.FromDouble(Convert.ToDouble(answer))); return; }
             if (this.IsDateTime) { ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).SetAnswer(DateTimeAnswer.FromDateTime((DateTime)answer)); return; }
-            if (this.IsMultimedia) { ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).SetAnswer(MultimediaAnswer.FromString(answer as string)); return; }
+            if (this.IsMultimedia) { ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).SetAnswer(MultimediaAnswer.FromString(answer as string, null)); return; }
             if (this.IsQRBarcode) { ((InterviewTreeQRBarcodeQuestion)this.InterviewQuestion).SetAnswer(QRBarcodeAnswer.FromString(answer as string)); return; }
             if (this.IsGps) { ((InterviewTreeGpsQuestion)this.InterviewQuestion).SetAnswer(GpsAnswer.FromGeoPosition((GeoPosition)answer)); return; }
             if (this.IsSingleFixedOption || this.IsCascading) { ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
@@ -840,9 +840,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public InterviewTreeMultimediaQuestion(object answer):base(InterviewQuestionType.Multimedia)
+        public InterviewTreeMultimediaQuestion(object answer, DateTime? answerTime):base(InterviewQuestionType.Multimedia)
         {
-            this.answer = MultimediaAnswer.FromString(answer as string);
+            this.answer = MultimediaAnswer.FromString(answer as string, answerTime);
         }
 
         public override bool IsAnswered() => this.answer != null;
