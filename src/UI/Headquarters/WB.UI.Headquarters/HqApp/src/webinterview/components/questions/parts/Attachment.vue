@@ -11,6 +11,12 @@
 </template>
 <script lang="js">
 
+    function appendSearchParam(uri, name, value) {
+        var url = new URL(uri, window.location)
+        url.searchParams.append(name, value)
+        return url
+    }
+
     export default {
         data() {
             return {
@@ -29,11 +35,11 @@
         computed: {
             thumbPath() {
                 if(this.isPreview) return this.imageThumb;
-                return this.imageThumb + `#${this.cache}`;                
+                return this.appendCache(this.imageThumb)
             },
             fullPath() {
                 if(this.isPreview) return this.imageFull;
-                return this.imageFull + `#${this.cache}`;
+                return this.appendCache(this.imageFull)
             },
             imageThumb() {
                 if(this.thumb) return this.thumb;
@@ -65,6 +71,9 @@
             }
         },
         methods: {
+            appendCache(uri) {
+                return appendSearchParam(uri, 'cache', this.cache)
+            },
             showModal(show) {
                 this.modal = show
             }
