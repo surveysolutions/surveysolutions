@@ -136,7 +136,7 @@
     <value>Средняя продолжительность интервью</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Средняя продолжительность интервью до завершения.</value>
+    <value>Средняя продолжительность заполнения с момента создания интервью до его завершения.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Среднее время обработки</value>
@@ -239,7 +239,6 @@
     <value>Начиная с</value>
   </data>
   <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
-    <value>Средняя продолжительность интервью до завершения.</value>
-    <comment>Средняя продолжительность интервью до завершения.</comment>
+    <value>Средняя продолжительность заполнения интервью с момента ответа на первый вопрос до его завершения.</value>
   </data>
 </root>
