@@ -1,6 +1,6 @@
 <template>
     <div class="unit-section">
-        <search-breabcrumbs :sections="search.sections" />
+        <search-breabcrumbs :sections="search.sections"/>
 
         <router-link 
             v-for="link in search.questions" :key="link.target"
