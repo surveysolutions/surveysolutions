@@ -241,4 +241,24 @@
     <value>По</value>
     <comment>По</comment>
   </data>
+    <data name="ZipFile" xml:space="preserve">
+    <value>Zip архив</value>
+    <comment>Zip архив</comment>
+  </data>
+    <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+    <comment>Dropbox</comment>
+  </data>
+    <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+    <comment>OneDrive</comment>
+  </data>
+    <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Диск</value>
+    <comment>Google Диск</comment>
+  </data>
+    <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Сохранить бинарные данные в:</value>
+    <comment>Сохранить бинарные данные в:</comment>
+  </data>
 </root>
