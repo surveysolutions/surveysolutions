@@ -21,7 +21,7 @@
     self.fromDateSelected.subscribe(function(newValue) {
         if (newValue == null) return;
 
-        const picker = $("#to-date").data('datetimepickr_inst');
+        var picker = $("#to-date").data('datetimepickr_inst');
         picker.config.minDate = newValue;
 
         self.updateDataExportInfo(false);
@@ -30,7 +30,7 @@
     self.toDateSelected.subscribe(function(newValue) {
         if (newValue == null) return;
 
-        const picker = $("#from-date").data('datetimepickr_inst');
+        var picker = $("#from-date").data('datetimepickr_inst');
         picker.config.maxDate = newValue;
 
         self.updateDataExportInfo(false);
@@ -53,7 +53,7 @@
     });
     
     self.getRequestQuery = function (format) {
-        const request = {
+        var request = {
             id: self.selectedTemplateId(),
             version: self.selectedTemplate().version,
             status: self.selectedStatus().status
