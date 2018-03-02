@@ -77,7 +77,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 errorsExporter.Object,
                 Mock.Of<IInterviewFactory>(),
                 exportViewFactory.Object,
-                Mock.Of<IQuestionnaireStorage>(qs => qs.GetQuestionnaire(questionnaireExportStructure.Identity, It.IsAny<string>()) == plQuestionnaire));
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(plQuestionnaire.QuestionnaireId, plQuestionnaire));
 
             //act
             exporter.Export(questionnaireExportStructure, interviewIdsToExport, "", new Progress<int>(), CancellationToken.None);
