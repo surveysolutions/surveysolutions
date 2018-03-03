@@ -118,8 +118,8 @@ export default {
     selectQuestionnaire(value) {
       this.questionnaireId = value;
 
-      this.gpsQuestions = null;
       this.selectGpsQuestion(null);
+      this.gpsQuestions = [];
 
       if (_.isNull(value)) return;
 
