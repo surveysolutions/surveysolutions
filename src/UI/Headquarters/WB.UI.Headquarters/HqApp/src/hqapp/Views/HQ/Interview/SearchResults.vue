@@ -14,9 +14,10 @@
             
 
             <search-section-result 
-                v-for="search in searchResult.results"
-                :key="search.sectionId"
-                :search="search"></search-section-result>
+                v-for="(search, index) in searchResult.results"
+                :key="search.sectionId + index"
+                :search="search">               
+            </search-section-result>
 
             <infinite-loading ref="loader" v-if="searchResultsAreVisible" @infinite="infiniteHandler" :distance="250">
                  <span slot="no-more"></span>
