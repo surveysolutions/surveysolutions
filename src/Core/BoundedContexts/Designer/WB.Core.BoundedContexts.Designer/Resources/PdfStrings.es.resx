@@ -144,9 +144,6 @@
   <data name="EnablementCondition" xml:space="preserve">
     <value>Condición habilitante:</value>
   </data>
-  <data name="GeneratedBy" xml:space="preserve">
-    <value>Archivo PDF creado por {0}</value>
-  </data>
   <data name="LastEdited" xml:space="preserve">
     <value>{0} ultimo editado {1}</value>
   </data>
