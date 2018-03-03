@@ -1,5 +1,6 @@
 using System;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -27,7 +28,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
             try
             {
-                this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
+                if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
+                    this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType).ExportData(exportToExternalStorageProcess);
+                else
+                    this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
 
                 this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
 
@@ -42,6 +46,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             {
                 ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                 ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
+            }
+        }
+
+        private AbstractExternalStorageDataExportHandler GetExternalStorageExportHandler(ExternalStorageType storageType)
+        {
+            switch (storageType)
+            {
+                case ExternalStorageType.OneDrive:
+                    return ServiceLocator.Current.GetInstance<OnedriveBinaryDataExportHandler>();
+                case ExternalStorageType.Dropbox:
+                    return ServiceLocator.Current.GetInstance<DropboxBinaryDataExportHandler>();
+                case ExternalStorageType.GoogleDrive:
+                    return ServiceLocator.Current.GetInstance<GoogleDriveBinaryDataExportHandler>();
+                default:
+                    throw new NotSupportedException($"Export handler for '{Enum.GetName(typeof(ExternalStorageType), storageType)}' not found");
             }
         }
 
