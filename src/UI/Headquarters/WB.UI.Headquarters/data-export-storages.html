@@ -9,9 +9,10 @@
 
             if (qs.state) {
                 var state = window.atob(qs.state).split(';');
-                var type = state[0].split('=')[1];
-                var redirectUrl = decodeURIComponent(state[1].split('=')[1]);
-                var processingUrl = decodeURIComponent(state[2].split('=')[1]);
+                
+                var redirectUrl = decodeURIComponent(state[0]);
+                var processingUrl = decodeURIComponent(state[1]);
+                var dataExportState = state[2];
 
                 var xhr = new XMLHttpRequest();
                 
@@ -22,7 +23,7 @@
                     
                     window.location = redirectUrl;
                 };
-                xhr.send('type=' + type + '&access_token=' + qs.access_token);
+                xhr.send('state=' + dataExportState + '&access_token=' + qs.access_token);
             }
         }
         function getHashQueryString() {

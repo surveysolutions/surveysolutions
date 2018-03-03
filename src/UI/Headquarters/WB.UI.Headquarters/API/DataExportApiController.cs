@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -32,6 +33,7 @@ namespace WB.UI.Headquarters.API
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly ISerializer serializer;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -39,7 +41,8 @@ namespace WB.UI.Headquarters.API
             IDataExportProcessesService dataExportProcessesService,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IDdiMetadataAccessor ddiMetadataAccessor,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            ISerializer serializer)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
@@ -47,6 +50,7 @@ namespace WB.UI.Headquarters.API
             this.exportedFilesAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.serializer = serializer;
         }
 
         [HttpGet]
@@ -134,20 +138,38 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         public void ExportToExternalStorage(ExportToExternalStorageModel model)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(model.Questionnaire);
+            var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
+            if(state == null)
+                throw new HttpException((int)HttpStatusCode.BadRequest, @"Export parameters not found");
 
-            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(state.QuestionnaireIdentity);
             if (questionnaireBrowseItem == null)
                 throw new HttpException(404, @"Questionnaire not found");
 
-            this.dataExportProcessesService.AddDataExport(new ExportToExternalStorage(DataExportFormat.Binary, questionnaireIdentity, questionnaireBrowseItem.Title));
+            this.dataExportProcessesService.AddDataExport(new ExportBinaryToExternalStorage(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
+            {
+                AccessToken = model.Access_token,
+                InterviewStatus = state.InterviewStatus,
+                FromDate = state.FromDate,
+                ToDate = state.ToDate,
+                StorageType = state.Type
+            });
         }
 
         public class ExportToExternalStorageModel
         {
-            public ExternalStorageType Type { get; set; }
             public string Access_token { get; set; }
-            public string Questionnaire { get; set; }
+            public string State { get; set; }
+        }
+
+        public class ExternalStorageStateModel
+        {
+            public ExternalStorageType Type { get; set; }
+            public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+            public InterviewStatus? InterviewStatus { get; set; }
+            public DateTime? FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+
         }
     }
 }
