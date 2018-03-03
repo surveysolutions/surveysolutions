@@ -16,12 +16,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         }
 
         public void SaveAttachmentContent(string contentHash, string contentType, byte[] content)
-            => this.attachmentContentStorage.Store(new AttachmentContent
+        {
+            var existingAttachment = this.attachmentContentStorage.GetById(contentHash);
+            if (existingAttachment == null)
             {
-                ContentHash = contentHash,
-                ContentType = contentType,
-                Content = content
-            }, contentHash);
+                this.attachmentContentStorage.Store(new AttachmentContent
+                {
+                    ContentHash = contentHash,
+                    ContentType = contentType,
+                    Content = content
+                }, contentHash);
+            }
+        }
 
         public void DeleteAttachmentContent(string contentHash) => this.attachmentContentStorage.Remove(contentHash);
 
