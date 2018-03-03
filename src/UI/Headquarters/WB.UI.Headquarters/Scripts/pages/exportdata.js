@@ -124,11 +124,22 @@
                             var requestUpdate = self.requestDataUpdate(4 /* binary export*/, false);
                             requestUpdate();
                         } else {
+                            var state = {
+                                questionnaireIdentity: {
+                                    questionnaireId: self.selectedTemplateId(),
+                                    version: self.selectedTemplate().version
+                                },
+                                interviewStatus: self.selectedStatus().status,
+                                fromDate: self.fromDateSelected(),
+                                toDate: self.toDateSelected() === undefined ? undefined : moment(self.toDateSelected()).add(1, 'days').utc(),
+                                type: storages.selectedStorage().type
+                            };
+
                             var request = {
                                 response_type: storages.response_type,
                                 redirect_uri: encodeURIComponent(storages.redirect_uri),
                                 client_id: storages.selectedStorage().client_id,
-                                state: window.btoa("type=" + storages.selectedStorage().type + ";redirectUrl=" + window.location.href + ";processingUrl=" + $exportToExternalStorageUrl),
+                                state: window.btoa(window.location.href + ";" + $exportToExternalStorageUrl + ";" + JSON.stringify(state)),
                                 scope: storages.selectedStorage().scope
                             };
 
