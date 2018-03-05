@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Graph;
+using Microsoft.OneDrive.Sdk;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -29,19 +32,24 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
         }
 
-        protected override void ConnectToExternalStorage(string accessToken)
+        protected override IDisposable GetClient(string accessToken)
         {
-            
+            throw new NotImplementedException();
         }
 
-        protected override void SendImage(Guid interviewId, byte[] fileContent, string fileName)
+        protected override string CreateApplicationFolder()
         {
-            
+            throw new NotImplementedException();
         }
 
-        protected override void SendAudio(Guid interviewId, byte[] fileContent, string fileName)
+        protected override string CreateFolder(string applicatioFolder, string folderName)
         {
-            
+            throw new NotImplementedException();
+        }
+
+        protected override void UploadFile(string folder, byte[] fileContent, string fileName)
+        {
+            throw new NotImplementedException();
         }
     }
 }
