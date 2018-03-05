@@ -343,20 +343,6 @@ namespace WB.UI.Headquarters.Controllers
                     verificationState.FileName));
             }
 
-            this.TempData[$"InterviewImportConfirmation-{interviewImportProcessId}"] = new PreloadedDataConfirmationModel
-            {
-                QuestionnaireId = questionnaireId,
-                Version = version,
-                QuestionnaireTitle = status.QuestionnaireTitle,
-                WasResponsibleProvided = verificationState.WasResponsibleProvided,
-                Id = interviewImportProcessId,
-                AssignmentImportType = AssignmentImportType.Panel,
-                FileName = verificationState.FileName,
-                EnumeratorsCount = verificationState.EnumeratorsCount,
-                SupervisorsCount = verificationState.SupervisorsCount,
-                EntitiesCount = verificationState.EntitiesCount
-            };
-
             return RedirectToAction("InterviewImportConfirmation", new { id = interviewImportProcessId, questionnaireId = questionnaireId, version = version });
         }
 
@@ -383,41 +369,44 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (this.interviewImportService.Status.IsInProgress)
             {
-                return RedirectToAction("InterviewImportIsInProgress", new { questionnaireId = questionnaireId, version = version });
+                return RedirectToAction("InterviewImportIsInProgress",
+                    new {
+                        questionnaireId = questionnaireId, 
+                        version = version
+                    });
             }
 
-            var key = $"InterviewImportConfirmation-{id}";
-            PreloadedDataConfirmationModel model = null;
-            if (this.TempData.ContainsKey(key))
+            AssignmentImportStatus status = this.interviewImportService.Status;
+            // load persisted state in future
+            var questionnaireInfo =
+                this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+            if (questionnaireInfo.IsDeleted)
             {
-                model = this.TempData[key] as PreloadedDataConfirmationModel;
+                return this.View("InterviewImportVerificationErrors",
+                    ImportDataParsingErrorsView.CreatePrerequisiteError(
+                        questionnaireId,
+                        version,
+                        questionnaireInfo.Title,
+                        global::Resources.BatchUpload.Prerequisite_Questionnaire,
+                        AssignmentImportType.Panel,
+                        null));
             }
-            if (model == null)
+
+            var verificationState = status.VerificationState;
+            var model = new PreloadedDataConfirmationModel
             {
-                // load persisted state in future
-                var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
-
-
-                if (questionnaireInfo.IsDeleted)
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        ImportDataParsingErrorsView.CreatePrerequisiteError(
-                            questionnaireId,
-                            version,
-                            questionnaireInfo?.Title,
-                            global::Resources.BatchUpload.Prerequisite_Questionnaire,
-                            AssignmentImportType.Panel,
-                            null));
-                }
-
-                model = new PreloadedDataConfirmationModel
-                {
-                    Id = id,
-                    QuestionnaireId = questionnaireId,
-                    Version = version,
-                    QuestionnaireTitle = questionnaireInfo?.Title
-                };
-            }
+                QuestionnaireId = questionnaireId,
+                Version = version,
+                QuestionnaireTitle = questionnaireInfo.Title,
+                WasResponsibleProvided = verificationState.WasResponsibleProvided,
+                Id = status.InterviewImportProcessId,
+                AssignmentImportType = AssignmentImportType.Panel,
+                FileName = verificationState.FileName,
+                EnumeratorsCount = verificationState.EnumeratorsCount,
+                SupervisorsCount = verificationState.SupervisorsCount,
+                EntitiesCount = verificationState.EntitiesCount
+            };
 
             return this.View(model);
         }

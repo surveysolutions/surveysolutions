@@ -238,10 +238,10 @@
     <value>Export Html</value>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>Please choose language to render pdf questionnaire on it</value>
+    <value>Please choose translation</value>
   </data>
   <data name="ChooseLanguage" xml:space="preserve">
-    <value>Choose language</value>
+    <value>Choose translation</value>
   </data>
   <data name="Initializing" xml:space="preserve">
     <value>Initializing</value>
