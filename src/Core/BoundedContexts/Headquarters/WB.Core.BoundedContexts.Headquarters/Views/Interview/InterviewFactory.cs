@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Caching;
 using Dapper;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Npgsql;
 using NpgsqlTypes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Caching;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -21,8 +21,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -42,11 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.sessionProvider = sessionProvider;
             this.questionnaireItems = questionnaireItems;
         }
-
-        private static readonly Dictionary<string, Type> EntityTypeMap = typeof(IQuestion).Assembly.GetTypes()
-            .Where(p => typeof(IComposite).IsAssignableFrom(p))
-            .ToDictionary(t => t.Name);
-
+        
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
             Identity sectionId)
         {
@@ -345,7 +339,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var queryResult = connection.Query<InterviewEntityDto>(
                 "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint," +
-                " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag, \"type\" " +
+                " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag, entity_type as EntityType " +
                 $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})", commandTimeout: 0, buffered: false);
 
             int[] ParseIntArray(string array, char delimeter = '-')
@@ -390,7 +384,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsYesNo = Deserialize<AnsweredYesNoOption[]>(result.AsYesNo);
                 entity.AsAudio = Deserialize<AudioAnswer>(result.AsAudio);
                 entity.AsArea = Deserialize<Area>(result.AsArea);
-                entity.EntityType = GetFromEntityTypeName(result.Type);
+                entity.EntityType = result.EntityType;
 
                 T Deserialize<T>(string value) where T : class
                 {
@@ -401,20 +395,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 yield return entity;
             }
         }
-
-        public static EntityType GetFromEntityTypeName(string name)
-        {
-            if (EntityTypeMap.TryGetValue(name, out var type))
-            {
-                if (typeof(IQuestion).IsAssignableFrom(type)) return EntityType.Question;
-                if (typeof(IVariable).IsAssignableFrom(type)) return EntityType.Variable;
-                if (typeof(IStaticText).IsAssignableFrom(type)) return EntityType.StaticText;
-                if (typeof(IGroup).IsAssignableFrom(type)) return EntityType.Section;
-            }
-
-            throw new ArgumentException($@"Unsupported questionnaire entity type provided: {name}", nameof(name));
-        }
-
+        
         #region Obsolete InterviewData
         public List<InterviewEntity> GetInterviewEntities(Guid interviews)
         {

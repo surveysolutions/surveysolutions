@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         question_type integer,
                         featured boolean,
                         question_scope integer,
-                        type text,
+                        entity_type int,
                         constraint PK_questionnaire_entities primary key(id));");
 
             Execute.Sql($@"
@@ -64,6 +64,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         {
                             var parentKey = parent["PublicKey"].Value<string>();
 
+                            var type = item["$type"]?.Value<string>();
+                            EntityType? entityType = type == null ? (EntityType?) null : EntityMap[type];
+
                             var entity = new QuestionnaireEntity
                             {
                                 EntityId = Guid.Parse(item["PublicKey"].Value<string>()),
@@ -72,7 +75,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 QuestionnaireIdentity = documentRow.id,
                                 Featured = item["Featured"]?.Value<bool>(),
                                 QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>() ?? 0,
-                                Type = item["$type"]?.Value<string>()
+                                EntityType = entityType
                             };
 
                             yield return entity;
@@ -85,14 +88,13 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     {
                         db.Execute(
                             $@"insert into {schema}.questionnaire_entities 
-                                (questionnaireidentity, entityid, parentid, question_type, featured, question_scope, type)
+                                (questionnaireidentity, entityid, parentid, question_type, featured, question_scope, entity_type)
                             values(
-                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @Featured, @QuestionScope, @Type)",
+                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @Featured, @QuestionScope, @EntityType)",
                             entity);
                     }
                 }
             });
-
         }
 
         private enum QuestionScope { Interviewer = 0, Supervisor = 1, Headquarter = 2, Hidden = 3 }
@@ -122,11 +124,37 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             public Guid EntityId { get; set; }
             public Guid? ParentId { get; set; }
             public QuestionType? QuestionType { get; set; }
-            public string VariableName { get; set; }
             public bool? Featured { get; set; }
             public QuestionScope? QuestionScope { get; set; }
-            public string Type { get; set; }
+            public EntityType? EntityType { get; set; }
         }
+
+        private enum EntityType
+        {
+            Section = 1,
+            Question = 2,
+            StaticText = 3,
+            Variable = 4
+        }
+
+        private static readonly Dictionary<string, EntityType> EntityMap = new Dictionary<string, EntityType>
+        {
+            {"QuestionnaireDocument", EntityType.Section},
+            {"Group", EntityType.Section},
+            {"StaticText", EntityType.StaticText},
+            {"AreaQuestion", EntityType.Question},
+            {"AudioQuestion", EntityType.Question},
+            {"DateTimeQuestion", EntityType.Question},
+            {"GpsCoordinateQuestion", EntityType.Question},
+            {"MultimediaQuestion", EntityType.Question},
+            {"MultyOptionsQuestion", EntityType.Question},
+            {"NumericQuestion", EntityType.Question},
+            {"QRBarcodeQuestion", EntityType.Question},
+            {"SingleQuestion", EntityType.Question},
+            {"TextListQuestion", EntityType.Question},
+            {"TextQuestion", EntityType.Question},
+            {"Variable", EntityType.Variable}
+        };
 
         public override void Down()
         {
