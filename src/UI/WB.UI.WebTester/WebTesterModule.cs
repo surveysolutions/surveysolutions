@@ -154,7 +154,10 @@ namespace WB.UI.WebTester
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.BindAsSingleton<IQuestionnaireImportService, QuestionnaireImportService>();
-            
+
+            registry.Bind<IAudioFileStorage, WebTesterAudioFileStorage>();
+            registry.Bind<IImageFileStorage, WebTesterImageFileStorage>();
+
             registry.Bind<EvictionService>();
 
             // TODO: Find a generic place for each of the dependencies below

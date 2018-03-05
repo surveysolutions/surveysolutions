@@ -142,14 +142,9 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var fieldNameInRequest = customMessageName.ToString().ToCamelCase();
                 var customMessage = Request.Unvalidated[fieldNameInRequest];
-                if (customMessage.Length > 400)
-                {
-                    return new HttpStatusCodeResult(413, string.Format(WebInterviewSetup.CustomMessageTooLong, 400));
-                }
                 if (!string.IsNullOrWhiteSpace(customMessage))
                 {
-                    customMessages[(WebInterviewUserMessages) customMessageName] =
-                         customMessage;
+                    customMessages[(WebInterviewUserMessages) customMessageName] = customMessage;
                 }
             }
 

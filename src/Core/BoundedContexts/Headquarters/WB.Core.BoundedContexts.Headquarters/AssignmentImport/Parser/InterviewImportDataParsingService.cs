@@ -128,7 +128,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                             questionnaire.IsRosterSizeQuestion(questionId))
                         {
                             var rostersTriggeredByListQuestion = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToHashSet();
-                            UpdateListValuesWithRowcodes(textListAnswer, levels, interviewId, rostersTriggeredByListQuestion);
+                            UpdateListValuesWithRowcodes(textListAnswer, levels, interviewId, interviewRow.RosterVector, rostersTriggeredByListQuestion);
                         }
 
                         result.Add(new InterviewAnswer
@@ -145,13 +145,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         private void UpdateListValuesWithRowcodes(
             TextListAnswer textListAnswer,
             List<PreloadedInterviewBaseLevel> levels,
-            string interviewId, 
+            string interviewId,
+            RosterVector rosterVector, 
             HashSet<Guid> rosterIds)
         {
             if (!(levels.Where(x => x is PreloadedInterviewLevel).Cast<PreloadedInterviewLevel>().FirstOrDefault(x => rosterIds.Contains(x.RosterId)) is PreloadedInterviewLevel rosterLevel))
                 return;
 
-            var listRowsWithNewCodes = rosterLevel.GetRowCodeAndTitlesPairs(interviewId);
+            var listRowsWithNewCodes = rosterLevel.GetRowCodeAndTitlesPairs(interviewId, rosterVector);
 
             if (listRowsWithNewCodes == null) return;
 

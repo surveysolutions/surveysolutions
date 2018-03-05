@@ -101,10 +101,11 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
             QuestionnaireChangeHistoricalRecord record, MvcHtmlString recordLink)
         {
             var historicalRecordReference = record.HistoricalRecordReferences.FirstOrDefault();
-
+            var targetType = historicalRecordReference?.Type.ToString() ?? "Section";
             return string.Format(
-                QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}_To_{historicalRecordReference.Type}"),
+                QuestionnaireHistoryResources.ResourceManager.GetString($"{record.TargetType}_{record.ActionType}_To_{targetType}"),
                 recordLink,
+                historicalRecordReference == null ? MvcHtmlString.Empty :
                 BuildQuestionnaireItemLink(helper, urlHelper, questionnaireId,
                     historicalRecordReference.Id, historicalRecordReference.ParentId,
                     historicalRecordReference.Title, historicalRecordReference.IsExist,
