@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public string AsGps { get; set; }
         public string AsAudio { get; set; }
         public string AsArea { get; set; }
-        public string Type { get; set; }
+        public EntityType EntityType { get; set; }
     }
 
 

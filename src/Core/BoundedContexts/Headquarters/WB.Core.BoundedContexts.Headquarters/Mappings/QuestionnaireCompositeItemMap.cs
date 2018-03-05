@@ -1,7 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Enumerator.Native.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {
@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.ParentId);
             Property(x => x.QuestionScope, p => p.Column("question_scope"));
             Property(x => x.QuestionType, p => p.Column("question_type"));
-            Property(x => x.Type);
+            Property(x => x.EntityType, p => p.Column("entity_type"));
             Property(x => x.QuestionnaireIdentity);
         }
     }

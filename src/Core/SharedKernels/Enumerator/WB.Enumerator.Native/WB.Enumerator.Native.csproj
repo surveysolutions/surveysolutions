@@ -87,7 +87,6 @@
     <Compile Include="JsonConversion\FilteredCamelCasePropertyNamesContractResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questionnaire\ITranslationManagementService.cs" />
-    <Compile Include="Questionnaire\QuestionnaireCompositeItem.cs" />
     <Compile Include="Questionnaire\TranslationInstance.cs" />
     <Compile Include="Questionnaire\Impl\TranslationManagementService.cs" />
     <Compile Include="WebInterview\InterviewAccessException.cs" />

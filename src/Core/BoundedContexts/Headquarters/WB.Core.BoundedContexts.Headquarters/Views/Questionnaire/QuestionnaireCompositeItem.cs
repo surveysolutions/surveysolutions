@@ -1,7 +1,8 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 
-namespace WB.Enumerator.Native.Questionnaire
+namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 {
     public class QuestionnaireCompositeItem
     {
@@ -13,6 +14,6 @@ namespace WB.Enumerator.Native.Questionnaire
         public virtual QuestionType? QuestionType { get; set; }
         public virtual bool? Featured { get; set; }
         public virtual QuestionScope? QuestionScope { get; set; }
-        public virtual string Type { get; set; }
+        public virtual EntityType EntityType { get; set; }
     }
 }

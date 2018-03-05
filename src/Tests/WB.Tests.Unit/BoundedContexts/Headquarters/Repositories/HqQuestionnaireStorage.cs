@@ -6,9 +6,9 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Enumerator.Native.Questionnaire;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
