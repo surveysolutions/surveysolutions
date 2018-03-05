@@ -71,19 +71,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.ExportDataIntoDirectory(exportSettings, exportProgress,
                 dataExportProcessDetails.CancellationToken);
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            if (this.CompressExportedData)
+            {
+                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
-            var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus,
-                dataExportProcessDetails.FromDate, dataExportProcessDetails.ToDate);
-            
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
-            this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
+                var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
+                    dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus,
+                    dataExportProcessDetails.FromDate, dataExportProcessDetails.ToDate);
 
-            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, exportProgress);
+                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
+                this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId,
+                    DataExportStatus.Compressing);
+
+                this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName,
+                    exportProgress);
+            }
 
             this.DeleteExportTempDirectory();
         }
+
+        protected virtual bool CompressExportedData { get; } = true;
         
         protected abstract DataExportFormat Format { get; }
 
