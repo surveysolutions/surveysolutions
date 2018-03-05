@@ -29,7 +29,8 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
                 Create.Fake.DataExportFileAccessor(),
                 Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ => _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                         questionnaireExportStructure), externalFileStorage);
+                         questionnaireExportStructure), 
+                externalFileStorage ?? Mock.Of<IExternalFileStorage>());
         }
     }
 }
