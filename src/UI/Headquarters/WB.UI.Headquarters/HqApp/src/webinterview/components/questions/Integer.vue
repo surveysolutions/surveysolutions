@@ -131,7 +131,8 @@
                             }
                         });
                     }
-                    else{
+                    else
+                    {
                         this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
                         return
                     }
@@ -148,15 +149,21 @@
                 }
 
                 const amountOfRostersToRemove = this.$me.answer;
-                const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+                if(amountOfRostersToRemove > 0){
+                    const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
-                modal.confirm(confirmMessage, result => {
-                    if (result) {
-                        this.$store.dispatch('removeAnswer', this.id)
-                    } else {
-                        this.fetch()
-                    }
-                });
+                    modal.confirm(confirmMessage, result => {
+                        if (result) {
+                            this.$store.dispatch('removeAnswer', this.id)
+                        } else {
+                            this.fetch()
+                        }
+                    });
+                }
+                else
+                {
+                    this.$store.dispatch('removeAnswer', this.id)
+                }
             },
             isSpecialValue(value){
                 const options = this.$me.options || [];
