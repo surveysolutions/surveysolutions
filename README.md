@@ -1,4 +1,6 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
+# 5.27
+- After deployment of relase there is a script that should be executed from Gateway or Build server to sync images from disk to s3 storage - [deploy-tools/utils/upload-tos3.ps1](https://bitbucket.org/wbcapi/deploy-tools/src/master/utils/upload-tos3.ps1?at=master&fileviewer=file-view-default)
 # 5.26
 - .net framework 4.7.1 is required
 # 5.19
