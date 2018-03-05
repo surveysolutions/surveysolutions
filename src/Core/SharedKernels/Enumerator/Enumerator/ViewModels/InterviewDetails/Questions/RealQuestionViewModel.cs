@@ -50,20 +50,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand => this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.SendAnswerRealQuestionCommand));
+        public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand(this.SendAnswerRealQuestionCommand);
 
-        private IMvxCommand answerRemoveCommand;
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswer);
+
         private readonly QuestionStateViewModel<NumericRealQuestionAnswered> questionState;
 
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return this.answerRemoveCommand ??
-                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
-            }
-        }
+     
 
         private async Task RemoveAnswer()
         {
@@ -147,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await RemoveAnswer();
         }
 
-        private async void SendAnswerRealQuestionCommand()
+        private async Task SendAnswerRealQuestionCommand()
         {
             if (this.Answer == null)
             {

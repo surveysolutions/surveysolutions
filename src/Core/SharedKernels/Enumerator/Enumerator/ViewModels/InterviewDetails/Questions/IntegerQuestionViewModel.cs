@@ -58,30 +58,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool UseFormatting { get; set; }
 
-        private IMvxCommand valueChangeCommand;
+        public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand(this.SendAnswerIntegerQuestionCommandAsync);
 
-        public IMvxCommand ValueChangeCommand
-        {
-            get
-            {
-                return this.valueChangeCommand ?? (this.valueChangeCommand =
-                           new MvxCommand(async () => await this.SendAnswerIntegerQuestionCommandAsync()));
-            }
-        }
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswer);
 
-        private IMvxCommand answerRemoveCommand;
         private readonly QuestionStateViewModel<NumericIntegerQuestionAnswered> questionState;
-        
-
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return this.answerRemoveCommand ??
-                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
-            }
-        }
-
 
         private async Task RemoveAnswer()
         {
