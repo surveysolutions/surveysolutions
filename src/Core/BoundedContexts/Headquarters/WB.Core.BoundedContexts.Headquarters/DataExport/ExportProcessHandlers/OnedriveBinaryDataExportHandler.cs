@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Graph;
 using Microsoft.OneDrive.Sdk;
@@ -32,24 +34,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
         }
 
+        private OneDriveClient oneDriveClient;
         protected override IDisposable GetClient(string accessToken)
         {
-            throw new NotImplementedException();
+            oneDriveClient = new OneDriveClient(
+                new DelegateAuthenticationProvider(
+                    async (requestMessage) => requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken)));
+
+            return null;
         }
 
-        protected override string CreateApplicationFolder()
-        {
-            throw new NotImplementedException();
-        }
+        protected override string CreateApplicationFolder() => "Survey Solutions";
 
-        protected override string CreateFolder(string applicatioFolder, string folderName)
-        {
-            throw new NotImplementedException();
-        }
+        protected override string CreateFolder(string applicatioFolder, string folderName) => $"{applicatioFolder}/{folderName}";
 
-        protected override void UploadFile(string folder, byte[] fileContent, string fileName)
-        {
-            throw new NotImplementedException();
-        }
+        protected override void UploadFile(string folder, byte[] fileContent, string fileName) 
+            => oneDriveClient.Drive.Root.ItemWithPath($"{folder}/{fileName}").Content.Request().PutAsync<Item>(new MemoryStream(fileContent));
     }
 }

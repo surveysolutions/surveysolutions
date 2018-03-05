@@ -49,6 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         }
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
+        protected override bool CompressExportedData => false;
 
         protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)

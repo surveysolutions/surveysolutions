@@ -261,4 +261,8 @@
     <value>Сохранить бинарные данные в:</value>
     <comment>Сохранить бинарные данные в:</comment>
   </data>
+    <data name="ExportBtn" xml:space="preserve">
+    <value>Экспорт</value>
+    <comment>Экспортировать</comment>
+  </data>
 </root>
