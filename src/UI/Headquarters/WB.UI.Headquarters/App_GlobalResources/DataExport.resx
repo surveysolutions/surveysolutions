@@ -252,4 +252,7 @@
     <data name="SaveBinaryDataTo" xml:space="preserve">
     <value>Save binary data to:</value>
   </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>Export</value>
+  </data>
 </root>

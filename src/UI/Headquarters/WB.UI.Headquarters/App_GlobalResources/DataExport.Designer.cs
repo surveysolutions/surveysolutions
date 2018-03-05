@@ -196,6 +196,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string ExportBtn {
+            get {
+                return ResourceManager.GetString("ExportBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pressing Generate button creates a data archive of interviews available on the server at that time. The time of archive creation and the archive size are shown in the table. The last generated data archive can be downloaded by pressing Download button. Press Generate button again to create a new archive..
         /// </summary>
         internal static string ExportExplanation {
