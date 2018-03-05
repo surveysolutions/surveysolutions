@@ -13,8 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 {
     public class S3FileStorage : IExternalFileStorage
     {
-        private const string AmazonExceptionCodeNoSuchKey = "NoSuchKey";
-
         private readonly AmazonS3Settings s3Settings;
         private readonly IAmazonS3 client;
         private readonly ITransferUtility transferUtility;
@@ -51,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                     }
                 }
             }
-            catch (AmazonS3Exception e) when (e.ErrorCode == AmazonExceptionCodeNoSuchKey)
+            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
             }
@@ -76,10 +74,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 return response.S3Objects.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(storageBasePath.Length),
-                    Size = s3.Size
+                    Size = s3.Size,
+                    LastModified = s3.LastModified
                 }).ToList();
             }
-            catch (AmazonS3Exception e) when (e.ErrorCode == AmazonExceptionCodeNoSuchKey)
+            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 return null;
             }
@@ -139,7 +138,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 return new FileObject
                 {
                     Path = uploadRequest.Key,
-                    Size = inputStream.Position
+                    Size = inputStream.Position,
+                    LastModified = DateTime.UtcNow
                 };
             }
             catch (Exception e)
@@ -149,16 +149,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
         }
 
-        public bool IsExist(string key)
+        public FileObject GetObjectMetadata(string key)
         {
             try
             {
                 var response = client.GetObjectMetadata(s3Settings.BucketName, GetKey(key));
-                if (response.HttpStatusCode == HttpStatusCode.OK) return true;
+
+                if (response.HttpStatusCode == HttpStatusCode.OK) return new FileObject
+                {
+                    Path = key,
+                    Size = response.ContentLength,
+                    LastModified = response.LastModified
+                };
             }
-            catch (AmazonS3Exception e) when (e.ErrorCode == AmazonExceptionCodeNoSuchKey)
+            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
-                return false;
+                return null;
             }
             catch (Exception e)
             {
@@ -166,7 +172,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
                 throw;
             }
 
-            return false;
+            return null;
+        }
+
+        
+        public bool IsExist(string key)
+        {
+            return GetObjectMetadata(key) != null;
         }
 
         public FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null)
@@ -183,7 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             {
                 client.DeleteObject(s3Settings.BucketName, GetKey(path));
             }
-            catch (AmazonS3Exception e) when (e.ErrorCode == AmazonExceptionCodeNoSuchKey)
+            catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
                 // ignore
             }

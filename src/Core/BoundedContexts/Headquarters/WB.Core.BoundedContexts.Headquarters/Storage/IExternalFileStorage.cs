@@ -44,6 +44,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             throw new NotImplementedException();
         }
 
+        public FileObject GetObjectMetadata(string key)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsExist(string path)
         {
             throw new NotImplementedException();
