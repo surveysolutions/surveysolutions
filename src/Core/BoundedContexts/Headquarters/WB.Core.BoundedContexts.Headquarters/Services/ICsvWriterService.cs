@@ -6,7 +6,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     {
         void WriteField<T>(T cellValue);
         void NextRecord();
-
-        string RemoveNewLine(string cell);
     }
 }
