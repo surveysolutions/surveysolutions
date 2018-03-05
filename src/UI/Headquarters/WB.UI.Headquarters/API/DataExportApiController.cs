@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
@@ -66,6 +67,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
+        [NoCache]
         public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             var filenameFullPath = this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
