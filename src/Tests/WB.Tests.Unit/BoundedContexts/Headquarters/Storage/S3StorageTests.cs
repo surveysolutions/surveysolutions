@@ -166,7 +166,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         public void should_return_false_if_no_key_for_exists_check()
         {
             client.Setup(c => c.GetObjectMetadata(It.IsAny<string>(), It.IsAny<string>()))
-                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.OK));
+                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
 
             Assert.DoesNotThrow(() => Assert.That(this.storage.IsExist("somePath"), Is.EqualTo(false)));
         }

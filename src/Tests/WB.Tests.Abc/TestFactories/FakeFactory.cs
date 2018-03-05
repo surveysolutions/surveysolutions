@@ -13,6 +13,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -124,6 +125,16 @@ namespace WB.Tests.Abc.TestFactories
                 return true;
             }
         }
+
+        public IDataExportFileAccessor DataExportFileAccessor()
+        {
+            var exportFileAccessor = new Mock<IDataExportFileAccessor>();
+            exportFileAccessor
+                .Setup(s => s.GetExternalStoragePath(It.IsAny<string>()))
+                .Returns<string>(name => $"export/" + name);
+            return exportFileAccessor.Object;
+        }
+        
 
         public IMvxMainThreadDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
 

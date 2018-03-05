@@ -323,6 +323,8 @@ namespace WB.Tests.Abc.TestFactories
             IDataExportProcessesService dataExportProcessesService = null,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
             IFileSystemAccessor fileSystemAccessor = null,
+            IDataExportFileAccessor dataExportFileAccessor = null,
+            IExternalFileStorage externalFileStorage = null,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
         {
             return new DataExportStatusReader(
@@ -330,6 +332,8 @@ namespace WB.Tests.Abc.TestFactories
                 filebasedExportedDataAccessor: filebasedExportedDataAccessor ??
                                                Substitute.For<IFilebasedExportedDataAccessor>(),
                 fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
+                externalFileStorage: externalFileStorage ?? Substitute.For<IExternalFileStorage>(),
+                exportFileAccessor: dataExportFileAccessor ?? Substitute.For<IDataExportFileAccessor>(),
                 questionnaireExportStructureStorage: questionnaireExportStructureStorage ??
                                                      Substitute.For<IQuestionnaireExportStructureStorage>());
         }
