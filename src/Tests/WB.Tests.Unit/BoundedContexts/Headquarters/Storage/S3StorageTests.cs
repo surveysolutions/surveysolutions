@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Storage
         public void should_not_throw_if_key_no_found_when_get_binary()
         {
             client.Setup(c => c.GetObject(It.IsAny<GetObjectRequest>()))
-                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.OK));
+                .Throws(new AmazonS3Exception("Error", ErrorType.Sender, "NoSuchKey", "", HttpStatusCode.NotFound));
 
             Assert.DoesNotThrow(() => Assert.IsNull(this.storage.GetBinary("somePath")));
         }
