@@ -34,10 +34,9 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(@"ALTER TABLE readside.interviews DROP CONSTRAINT IF EXISTS interviews_pk;");
             Execute.Sql(@"DROP INDEX if exists readside.interviews_asgps_not_null_indx;");
 
-            //Execute.Sql(@"CREATE INDEX questionnaire_entities_type_idx ON readside.questionnaire_entities (""type"")");
             Execute.Sql(@"ANALYZE VERBOSE readside.interviewsummaries; ANALYZE VERBOSE readside.questionnaire_entities");
 
-            Execute.Sql(@"
+            Execute.Sql($@"
                 INSERT INTO readside.temp_interviews (interviewid, entityid, rostervector, isenabled, isreadonly, 
                     invalidvalidations, asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, 
                     asgps, asbool, asyesno, asaudio, asarea, hasflag)
@@ -51,11 +50,19 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     inner join readside.interviewsummaries s on s.interviewid = i.interviewid 
                     inner join readside.questionnaire_entities q 
                         on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity
-                where not (q.""type"" = 'Group' or (q.""type"" = 'StaticText' and isenabled = false))");
+                where not (q.entity_type = {(int)EntityType.Section})");
             
             Delete.Table(@"interviews").InSchema(@"readside");
             // Rename.Table(@"interviews").InSchema(@"readside").To(@"interviews_old");
             Rename.Table(@"temp_interviews").InSchema(@"readside").To(@"interviews");
+        }
+
+        private enum EntityType
+        {
+            Section = 1,
+            Question = 2,
+            StaticText = 3,
+            Variable = 4
         }
 
         public override void Down()

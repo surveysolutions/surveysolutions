@@ -1,13 +1,14 @@
 ﻿using System;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Enumerator.Native.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString(),
                     Featured = question?.Featured,
                     QuestionScope = question?.QuestionScope,
-                    Type = composite.GetType().Name
+                    EntityType = composite.GetEntityType()
                 }, composite.PublicKey);
             }
         }
