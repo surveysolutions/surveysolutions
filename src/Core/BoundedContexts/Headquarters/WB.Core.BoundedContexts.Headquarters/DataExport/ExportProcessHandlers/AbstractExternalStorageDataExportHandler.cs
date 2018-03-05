@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
@@ -71,48 +72,58 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            this.ConnectToExternalStorage(this.AccessToken);
-
             long totalInterviewsProcessed = 0;
-            foreach (var interviewId in interviewIds)
+
+            if (!interviewIds.Any()) return;
+
+            using (this.GetClient(this.accessToken))
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                var applicationFolder = this.CreateApplicationFolder();
 
-                foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId)
-                    .Select(x => x.Answer))
+                foreach (var interviewId in interviewIds)
                 {
-                    var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    if (fileContent != null)
-                        this.SendImage(interviewId, fileContent, imageFileName);
+                    var interviewFolderPath = this.CreateFolder(applicationFolder, interviewId.ToString());
+
+                    foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId)
+                        .Select(x => x.Answer))
+                    {
+                        var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
+
+                        if (fileContent != null)
+                            this.UploadFile(interviewFolderPath, fileContent, imageFileName);
+                    }
+
+                    foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId)
+                        .Select(x => x.Answer))
+                    {
+                        var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager()
+                            .ExecuteInQueryTransaction(
+                                () => audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName));
+
+                        if (fileContent != null)
+                            this.UploadFile(interviewFolderPath, fileContent, audioFileName);
+                    }
+
+                    totalInterviewsProcessed++;
+                    progress.Report(totalInterviewsProcessed.PercentOf(interviewIds.Count));
                 }
-
-                foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId)
-                    .Select(x => x.Answer))
-                {
-                    var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager()
-                        .ExecuteInQueryTransaction(
-                            () => audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName));
-
-                    if (fileContent != null)
-                        this.SendAudio(interviewId, fileContent, audioFileName);
-                }
-
-                totalInterviewsProcessed++;
-                progress.Report(totalInterviewsProcessed.PercentOf(interviewIds.Count));
             }
         }
 
         public void ExportData(ExportBinaryToExternalStorage process)
         {
-            this.AccessToken = process.AccessToken;
+            this.accessToken = process.AccessToken;
             base.ExportData(process);
         }
 
-        public string AccessToken { get; private set; }
+        protected abstract IDisposable GetClient(string accessToken);
+        private string accessToken;
 
-        protected abstract void ConnectToExternalStorage(string accessToken);
-        protected abstract void SendImage(Guid interviewId, byte[] fileContent, string fileName);
-        protected abstract void SendAudio(Guid interviewId, byte[] fileContent, string fileName);
+        protected abstract string CreateApplicationFolder();
+        protected abstract string CreateFolder(string applicatioFolder, string folderName);
+
+        protected abstract void UploadFile(string folder, byte[] fileContent, string fileName);
     }
 }
