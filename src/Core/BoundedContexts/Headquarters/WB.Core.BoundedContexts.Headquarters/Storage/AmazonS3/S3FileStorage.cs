@@ -51,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
+                log.Trace($"Cannot get object from S3. " + GetKey(key), e);
                 return null;
             }
             catch (Exception e)
@@ -80,6 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
+                log.Trace($"Cannot list objects from S3. " + GetKey(prefix), e);
                 return null;
             }
             catch (Exception e)
@@ -164,6 +166,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
+                log.Trace($"Cannot get object metadata from S3. " + GetKey(key), e);
                 return null;
             }
             catch (Exception e)
