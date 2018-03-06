@@ -184,29 +184,7 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
             => new InterviewAnswersCommandValidator(
                 interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
-
-        public InterviewDetailsViewFactory InterviewDetailsViewFactory(
-            IUserViewFactory userStore = null,
-            IChangeStatusFactory changeStatusFactory = null,
-            IInterviewPackagesService incomingSyncPackagesQueue = null,
-            IQuestionnaireStorage questionnaireStorage = null,
-            IStatefulInterviewRepository statefulInterviewRepository = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
-            ISubstitutionService substitutionService = null,
-            IInterviewFactory interviewFactory = null)
-        {
-            var userView = Create.Entity.UserView();
-            return new InterviewDetailsViewFactory(
-                userStore ?? Mock.Of<IUserViewFactory>(_ => _.GetUser(It.IsAny<UserViewInputModel>()) == userView),
-                changeStatusFactory ?? Mock.Of<IChangeStatusFactory>(),
-                incomingSyncPackagesQueue ?? Mock.Of<IInterviewPackagesService>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                substitutionService ?? this.SubstitutionService(),
-                interviewFactory ?? Mock.Of<IInterviewFactory>());
-        }
-
+        
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IInterviewerEventStorage eventStore = null,

@@ -223,15 +223,6 @@ namespace WB.Enumerator.Native.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Old interview details.
-        /// </summary>
-        public static string Filters_OldDetailsLink {
-            get {
-                return ResourceManager.GetString("Filters_OldDetailsLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Filter Questions.
         /// </summary>
         public static string Filters_Title {
