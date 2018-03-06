@@ -30,17 +30,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
         private readonly ISessionProvider sessionProvider;
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
-        
+
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            ISessionProvider sessionProvider, 
+            ISessionProvider sessionProvider,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
         {
             this.summaryRepository = summaryRepository;
             this.sessionProvider = sessionProvider;
             this.questionnaireItems = questionnaireItems;
         }
-        
+
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
             Identity sectionId)
         {
@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             ThrowIfInterviewApprovedByHq(interview);
             ThrowIfInterviewReceivedByInterviewer(interview);
-            
+
             var entityMap = GetQuestionnaireEntities(interview.QuestionnaireIdentity);
 
             var row = new
@@ -128,10 +128,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             and s.{Column.QuestionnaireIdentity} = @questionnaireIdentity
                        join {Table.QuestionnaireEntities} q on q.id = i.{Column.EntityId}
                         where i.{Column.AsString} is not null and q.question_type = @questionType", new
-                        {
-                            questionType = QuestionType.Multimedia,
-                            questionnaireIdentity = questionnaireIdentity.ToString()
-                        })
+                    {
+                        questionType = QuestionType.Multimedia,
+                        questionnaireIdentity = questionnaireIdentity.ToString()
+                    })
                 .ToArray();
         }
 
@@ -143,52 +143,90 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"AND {Column.AsAudio} IS NOT NULL " +
                 $"AND {Column.IsEnabled} = true").ToArray();
 
-        public Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => sessionProvider.GetSession().Connection.Query<Guid>(
-                $"SELECT {Column.EntityId} " +
-                $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
-                $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
-                $"AND {Column.AsGpsColumn} is not null " +
-                $"GROUP BY {Column.EntityId} ").ToArray();
 
-        public string[] GetQuestionnairesWithAnsweredGpsQuestions()
-            => sessionProvider.GetSession().Connection.Query<string>(
-                $@"select distinct {Column.QuestionnaireIdentity} from {Table.InterviewSummaries}").ToArray();
-
-        public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(
-            QuestionnaireIdentity questionnaireIdentity,
-            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude, double southWestCornerLatitude,
-            double northEastCornerLongtitude, double southWestCornerLongtitude)
-            => sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
-                    $@"select interviewid, latitude, longitude
+        public InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
+            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
+            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude,
+            Guid? supervisorId)
+        {
+            var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
+                $@"select interviewid, latitude, longitude
                         from (
 	                        select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
                             from readside.interviews i
                             join {Table.QuestionnaireEntities} q on q.id = i.entityid
                             join readside.interviewsummaries s on s.id = i.interviewid
-                                where i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId            
+                            where 
+                                i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId
+                                and (@supervisorId is null OR s.teamleadid = @supervisorId)
 	                        ) as q
-                        where  latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
+                        where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
                             and longitude > @SouthWestCornerLongtitude
                                 {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
                                 longitude < @NorthEastCornerLongtitude
                         limit @MaxCount",
-                    new
-                    {
-                        Questionnaire = questionnaireIdentity.ToString(),
-                        QuestionId = gpsQuestionId,
-                        MaxCount = maxAnswersCount,
-                        SouthWestCornerLatitude = southWestCornerLatitude,
-                        NorthEastCornerLatitude = northEastCornerLatitude,
-                        SouthWestCornerLongtitude = southWestCornerLongtitude,
-                        NorthEastCornerLongtitude = northEastCornerLongtitude
-                    })
-                .ToArray();
-        
+                new
+                {
+                    supervisorId,
+                    Questionnaire = questionnaireIdentity.ToString(),
+                    QuestionId = gpsQuestionId,
+                    MaxCount = maxAnswersCount,
+                    SouthWestCornerLatitude = southWestCornerLatitude,
+                    NorthEastCornerLatitude = northEastCornerLatitude,
+                    SouthWestCornerLongtitude = southWestCornerLongtitude,
+                    NorthEastCornerLongtitude = northEastCornerLongtitude
+                })
+            .ToArray();
+            return result;
+        }
+
+        //public InterviewGpsAnswer[] GetGpsAnswers(
+        //    => sessionProvider.GetSession().Connection.Query<Guid>(
+        //        $"SELECT {Column.EntityId} " +
+        //        $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
+        //        $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
+        //        $"AND {Column.AsGpsColumn} is not null " +
+        //        $"GROUP BY {Column.EntityId} ").ToArray();
+        //    QuestionnaireIdentity questionnaireIdentity,
+        //    Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
+        //    double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude,
+        //    Guid? supervisorId)
+        //    => sessionProvider.GetSession().Connection.Query<string>(
+        //        $@"select distinct {Column.QuestionnaireIdentity} from {Table.InterviewSummaries}").ToArray();
+        //public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(
+        //    QuestionnaireIdentity questionnaireIdentity,
+        //    => sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
+        //            $@"select interviewid, latitude, longitude
+        //                from (
+        //                 select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
+        //                    from readside.interviews i
+        //            $"WHERE {(supervisorId.HasValue ? $"s.teamleadid = '{supervisorId}' AND s.status NOT IN ({(int)InterviewStatus.ApprovedBySupervisor}, {(int)InterviewStatus.ApprovedByHeadquarters}) AND " : "")}" +
+        //            $"questionnaireidentity = @Questionnaire " +
+        //                    join {Table.QuestionnaireEntities} q on q.id = i.entityid
+        //                    join readside.interviewsummaries s on s.id = i.interviewid
+        //                        where i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId            
+        //                 ) as q
+        //                where  latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
+        //                    and longitude > @SouthWestCornerLongtitude
+        //                        {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
+        //                        longitude < @NorthEastCornerLongtitude
+        //                limit @MaxCount",
+        //            new
+        //            {
+        //                Questionnaire = questionnaireIdentity.ToString(),
+        //                QuestionId = gpsQuestionId,
+        //                MaxCount = maxAnswersCount,
+        //                SouthWestCornerLatitude = southWestCornerLatitude,
+        //                NorthEastCornerLatitude = northEastCornerLatitude,
+        //                SouthWestCornerLongtitude = southWestCornerLongtitude,
+        //                NorthEastCornerLongtitude = northEastCornerLongtitude
+        //            })
+        //        .ToArray();
+
         public void Save(InterviewState state)
         {
             var rows = GetInterviewEntities(state.Id);
-            
+
             var perEntity = rows.ToDictionary(r => InterviewStateIdentity.Create(r.Identity));
 
             foreach (var removed in state.Removed)
@@ -221,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Upsert(state.Enablement, (entity, value) => entity.IsEnabled = value);
             Upsert(state.ReadOnly.ToDictionary(r => r, v => true), (e, v) => e.IsReadonly = v);
             Upsert(state.Validity, (e, v) => e.InvalidValidations = v.Validations);
-            Upsert(state.Warnings, (e,v) => e.WarningValidations = v.Validations);
+            Upsert(state.Warnings, (e, v) => e.WarningValidations = v.Validations);
 
             Upsert(state.Answers, (entity, answer) =>
             {
@@ -239,7 +277,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsAudio = answer.AsAudio;
                 entity.AsArea = answer.AsArea;
             });
-            
+
             SaveInterviewStateItem(state.Id, perEntity.Values.Where(IsNeeded).ToList());
 
             bool IsNeeded(InterviewEntity entity)
@@ -247,7 +285,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 return entity.EntityType != EntityType.Section;
             }
         }
-        
+
         private Dictionary<Guid, int> GetQuestionnaireEntities(string questionnaireIdentity)
         {
             var cache = MemoryCache.Default;
@@ -261,8 +299,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .Select(w => new { w.Id, w.EntityId })
                 .ToList());
 
-            var entitiesMap =  entities.ToDictionary(q => q.EntityId, q => q.Id);
-                cache.Add(cacheKey, entitiesMap, new CacheItemPolicy {SlidingExpiration = TimeSpan.FromMinutes(10)});
+            var entitiesMap = entities.ToDictionary(q => q.EntityId, q => q.Id);
+            cache.Add(cacheKey, entitiesMap, new CacheItemPolicy { SlidingExpiration = TimeSpan.FromMinutes(10) });
 
             return entitiesMap;
         }
@@ -273,7 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             var summary = summaryRepository.GetById(interviewId)
                 ?? throw new ArgumentException($@"Cannot find interview summary for interviewd: {interviewId}", nameof(interviewId));
-            
+
             var entityMap = GetQuestionnaireEntities(summary.QuestionnaireIdentity);
 
             conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {summary.Id}");
@@ -311,7 +349,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     WriteJson(item.AsAudio);
                     WriteJson(item.AsArea);
                     Write(item.HasFlag);
-                    
+
                     void Write<T>(T value)
                     {
                         if (value == null) importer.WriteNull();
@@ -326,7 +364,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 }
             }
         }
-       
+
         public IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews)
         {
             var connection = sessionProvider.GetSession().Connection;
@@ -395,7 +433,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 yield return entity;
             }
         }
-        
+
         #region Obsolete InterviewData
         public List<InterviewEntity> GetInterviewEntities(Guid interviews)
         {
@@ -445,7 +483,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         break;
                     case EntityType.Variable:
                         interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
-                        if(entity.IsEnabled == false)
+                        if (entity.IsEnabled == false)
                             interviewLevel.DisabledVariables.Add(entity.Identity.Id);
                         break;
                 }
@@ -480,7 +518,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             return state;
         }
-        
+
         private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ??
                                                                  entity.AsDateTime ?? entity.AsLong ??
                                                                  entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??

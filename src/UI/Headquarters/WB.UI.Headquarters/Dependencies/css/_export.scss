@@ -286,11 +286,39 @@
 .gray-block{
 	background-color: $gray-highlighting;
 	border-radius: 5px;
-	margin-bottom: 7px;
-	padding: 15px;
+	margin-bottom: 10px;
 	position: relative;
 	.close{
 		opacity: 1;
+		margin-right: 10px;
+		margin-top: 10px;
+	}
+	.wrapper-data{
+		border-radius: 5px;
+		&:first-of-type{
+			padding-bottom: 0;
+		}
+		&:last-of-type{
+			background-color: #e6e9e9;
+		}
+		&.download-block{
+			background-color: #d1dfeb;
+		}
+		&.block-contains-error{
+			background-color: $red-super-light;
+		}
+		.format-data{
+			&:before{
+				top: calc(50% - 20px);
+			}
+			.action-block{
+				margin-top: 15px;
+				&.wrapper-progress{
+					margin-top: 20px;
+					margin-bottom: 5px;
+				}
+			}
+		}
 	}	
 }
 .selected-data-range,
@@ -327,6 +355,26 @@
 		background-position: 15px -165px;
 	}
 }
+.export-row{
+	.format-data{
+		&:before{
+			background: url("#{$assetsPath}/img/Exprt-icons.png") no-repeat;
+			background-size: 63px 240px;
+			@include image-2x("#{$assetsPath}/img/Exprt-icons.png", 63px, 240px);
+			background-position: 5px -175px;
+		}
+		&.onedrive-icon:before{
+			background-position: 5px -5px;
+		}
+		&.dropbox-icon:before{
+			background-position: 5px -63px;
+		}
+		&.ftp-icon:before{
+			background-position: 5px -120px;
+		}
+	}
+}
+
 .export {
 	.page-header{
 		margin-bottom: 30px;
@@ -351,8 +399,7 @@
 		}
 	}
 	.wrapper-data{
-		padding-right: 30px;
-		padding-left: 90px;
+		padding: 10px 40px 10px 100px;
 	}
 	.gray-text-row{
 		margin-bottom: 10px;
@@ -371,15 +418,19 @@
 	.allign-left{
 		float: left;
 	}
+	.download{
+		margin-right: 10px;
+		margin-bottom: 5px;
+	}
 }
 .archive-info{
 	font: 12px/18px "RobotoRegular";
-	color: $gray_light;
+	color: #969a9a;
 	letter-spacing: 1px;
-	max-width: 410px;
-	float: left;
-	margin-left: 10px;
 	word-break: break-word;
+	&:only-child{
+		max-width: auto;
+	}
 }
 .structure-block{
 	margin-bottom: 30px;
@@ -417,31 +468,37 @@
 		}
 	}
 }
-.data-type-row {
-	margin-left: -10px;
-	position: relative;
-	background-color: #edeff0;
-	label{	
-		display: block;
-		cursor: pointer;
-		width: 100%;
-		margin-bottom: 0;
-		padding: 10px 15px;
-		height: 61px;
+.structure-block{
+	.data-type-row {
+		margin-left: -10px;
+		position: relative;
+		background-color: #edeff0;
+		label{	
+			display: block;
+			cursor: pointer;
+			width: 100%;
+			margin-bottom: 0;
+			padding: 10px 15px;
+			height: 61px;
+		}
+		&:nth-of-type(2n){
+			background-color: #f8f9f9;
+		}
+		.format-data{
+			max-width: calc(100% - 30px);
+			float: left;
+			padding-top: 11px;
+			padding-bottom: 11px;
+		}
+		.tick{
+			float: left;
+			margin-top: 11px;
+		}
 	}
-	&:nth-of-type(2n){
-		background-color: #f8f9f9;
-	}
-	.format-data{
-		max-width: calc(100% - 30px);
-		float: left;
-		padding-top: 11px;
-		padding-bottom: 11px;
-	}
-	.tick{
-		float: left;
-		margin-top: 11px;
-	}
+}
+.export-row{
+	@extend .data-type-row;
+	
 }
 @media (max-width: $screen-sm-min){
 	.report{
@@ -457,17 +514,10 @@
 		}
 	}
 }
-@media (max-width: 764px){
-	.report{
-		.archive-info{
-			max-width: 250px;
-		}
-		
-	}
-}
 @media (max-width: 600px){
 	.report{
 		.archive-info{
+			float: left;
 			max-width: 100%;
 			margin-left: 0;
 			margin-top: 10px;

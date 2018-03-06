@@ -79,6 +79,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no any Geo Locations in chosen questionnaire.
+        /// </summary>
+        internal static string NoGpsQuestionsByQuestionnaire {
+            get {
+                return ResourceManager.GetString("NoGpsQuestionsByQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not all markers were loaded for current zoom level. Please zoom in and reload markers..
         /// </summary>
         internal static string NotAllMarkers {

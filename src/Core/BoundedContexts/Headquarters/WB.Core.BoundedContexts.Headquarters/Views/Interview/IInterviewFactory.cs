@@ -16,13 +16,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
 
         InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-        Guid[] GetAnsweredGpsQuestionIdsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity);
-
-        InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
+        
+        InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
-            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude);
-
-        string[] GetQuestionnairesWithAnsweredGpsQuestions();
+            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude, Guid? supervisorId);
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
