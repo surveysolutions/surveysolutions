@@ -31,11 +31,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             return new UserView() { PublicKey = userId, UserName = userName };
         }
 
-        protected static DetailsViewModel CreateInterviewDetailsView(Guid interviewId)
-        {
-            return new DetailsViewModel() {InterviewDetails = new InterviewDetailsView() {PublicKey = interviewId}};
-        }
-
         protected static UsersController CreateUsersController(
             ILogger logger = null,
             IUserViewFactory userViewViewFactory = null)
@@ -62,20 +57,20 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
         protected static InterviewsController CreateInterviewsController(
             ILogger logger = null,
             IAllInterviewsFactory allInterviewsViewViewFactory = null,
-            IInterviewDetailsViewFactory interviewDetailsView = null,
             ICommandService commandService = null,
             IAuthorizedUser authorizedUser = null,
             IUserViewFactory userViewFactory = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null)
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
+            IStatefulInterviewRepository statefulInterviewRepository = null)
         {
             var controller = new InterviewsController(
                 logger ?? Mock.Of<ILogger>(),
-                allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(),
-                interviewDetailsView ?? Mock.Of<IInterviewDetailsViewFactory>(), Mock.Of<IInterviewHistoryFactory>(),
+                allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(), Mock.Of<IInterviewHistoryFactory>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                interviewReferences ?? new TestInMemoryWriter<InterviewSummary>());
+                interviewReferences ?? new TestInMemoryWriter<InterviewSummary>(), 
+                statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
 
             controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
             controller.Request.SetConfiguration(new HttpConfiguration());

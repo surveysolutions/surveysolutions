@@ -1015,7 +1015,6 @@
     <Content Include="Scripts\dateRangePicker\daterangepicker.css" />
     <Content Include="Scripts\dateRangePicker\daterangepicker.js" />
     <Content Include="Scripts\director.js" />
-    <Content Include="Scripts\infobubble.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -1471,7 +1470,6 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\lodash.underscore.js" />
     <Content Include="Scripts\lodash.underscore.min.js" />
-    <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-langs.js" />
@@ -1505,17 +1503,12 @@
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
     <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\config.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\details.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
     <Content Include="Scripts\viewmodels\pages\interview\hq.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\mapper.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\model.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\new-assignment.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
-    <Content Include="Scripts\viewmodels\pages\mapreport.js" />
     <Content Include="Scripts\viewmodels\pages\editable-users.js" />
     <Content Include="Scripts\viewmodels\pages\importquestionaires.js" />
     <Content Include="Scripts\viewmodels\pages\users.js" />
@@ -1585,19 +1578,6 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\HealthCheck\Index.cshtml" />
-    <Content Include="Views\Interview\ApproveRejectPartialView.cshtml" />
-    <Content Include="Views\Interview\AttachmentPartialView.cshtml" />
-    <Content Include="Views\Interview\Details.cshtml" />
-    <Content Include="Views\Interview\DetailsQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\DetailsReadOnlyQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\EditableMultiOptionsQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\EditableSupervisorsQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\HistoryOfStatusesPartialView.cshtml" />
-    <Content Include="Views\Interview\InterviewHistory.cshtml" />
-    <Content Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\StaticTextPartialView.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
@@ -1622,7 +1602,6 @@
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
-    <Content Include="Views\Interview\CommentTemplatePartialView.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
@@ -1660,7 +1639,6 @@
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\Shared\typeahead.cshtml" />
-    <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewVerificationProgress.cshtml" />
     <Content Include="Views\Shared\InterviewerMainMenu.cshtml" />
@@ -1686,6 +1664,7 @@
     <Content Include="Views\Maps\UserMaps.cshtml" />
     <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
+    <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1928,6 +1907,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802121400_ExtractQuestionnaireDocumentStructure.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802201614_AddInterviewingTotalTime.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802121510_AddIdToInterviewSummaryId.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802121640_AddSlimdownInterviewsTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802131620_AddIndexesAndViewsToSlimInterviewTable.cs" />
@@ -2222,7 +2202,6 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
-    <Compile Include="Views\Interview\HtmlExtensions.cs" />
     <Compile Include="Views\Shared\HtmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
