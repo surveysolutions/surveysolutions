@@ -253,17 +253,23 @@
 	.btn-default.btn-action-questionnaire{
 		color: lighten($blue, 10%) !important;
 	}
-	&.answered.question-editor{
-		.radio,
-		.question-unit .form-group{
-			border-color: lighten($blue, 10%);
+	&.answered{
+		.question-unit{
+			.radio,
+			.form-group,
+			.options-group{
+				border-color: lighten($blue, 10%);
+			}
+			.btn-default.btn-action-questionnaire{
+				border-color: $blue !important;
+			}
+		}
+		&.has-error .question-unit{
+			.radio, .form-group{
+				border-color: #f6d6d0;
+			}
 		}
 	} 
-	&.answered{
-		.btn-default.btn-action-questionnaire{
-			border-color: $blue !important;
-		}
-	}
 	
 	&.has-error {
 		.question-unit .options-group{
