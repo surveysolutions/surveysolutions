@@ -37,7 +37,9 @@
         verboseLogging: false,
         supportedTransports: ["webSockets", "longPolling"],
         appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
-        googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
+		googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
+        googleMapsApiBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl',
+		googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',
         hqLink : @Html.Raw(this.User.Identity.IsAuthenticated && this.User.IsInRole("Interviewer")
                      ? "'" + Url.Content(@"~/InterviewerHq/Started") + "'"
                      : "null")

@@ -136,7 +136,7 @@ namespace WB.UI.Headquarters.Controllers
             return interviewSummary;
         }
 
-        [Authorize(Roles = "Administrator, Headquarter")]
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public InterviewSummaryForMapPointView InterviewSummaryForMapPoint(InterviewSummaryForMapPointViewModel data)
         {
             if (data == null)

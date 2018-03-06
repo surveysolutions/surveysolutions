@@ -159,12 +159,6 @@ namespace WB.UI.Headquarters
                 "~/Scripts/spin.js",
                 "~/Scripts/knockout/ko.spin.js"
                 ));
-            bundles.Add(new ScriptBundle("~/js/map-report").Include(
-                "~/Scripts/lodash.underscore.js",
-                "~/Scripts/markerclusterer_compiled.js",
-                "~/Scripts/infobubble.js",
-                "~/Scripts/viewmodels/pages/mapreport.js"
-                ));
             bundles.Add(new ScriptBundle("~/js/periodicstatusreport").Include(
                 "~/Dependencies/js/ajax.js",
                 "~/Scripts/ko.pager.js",
