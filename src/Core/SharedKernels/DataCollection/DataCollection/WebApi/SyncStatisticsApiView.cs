@@ -13,6 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         
         public int NewAssignmentsCount { get; set; }
         public int RemovedAssignmentsCount { get; set; }
+        public int RemovedInterviewsCount { get; set; }
 
         public long TotalUploadedBytes { get; set; }
         public long TotalDownloadedBytes { get; set; }
