@@ -49,7 +49,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewSummaryMap),
                     typeof(QuestionnaireCompositeItemMap),
                     typeof(QuestionAnswerMap),
-                    typeof(TimeSpanBetweenStatusesMap)
+                    typeof(TimeSpanBetweenStatusesMap),
+                    typeof(InterviewCommentedStatusMap)
                 }, true, PostgresReadSideModule.ReadSideSchemaName);
 
             this.plainTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
