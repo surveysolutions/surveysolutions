@@ -109,6 +109,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 UploadedInterviewsCount = statistics.UploadedInterviewsCount,
                 NewInterviewsOnDeviceCount = statistics.NewInterviewsOnDeviceCount,
                 RejectedInterviewsOnDeviceCount = statistics.RejectedInterviewsOnDeviceCount,
+                RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,
                 SyncFinishDate = DateTime.UtcNow,
                 TotalConnectionSpeed = statistics.TotalConnectionSpeed,
                 TotalDownloadedBytes = statistics.TotalDownloadedBytes,
