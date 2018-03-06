@@ -1,7 +1,8 @@
 param([string]$VersionPrefix,
     [INT]$BuildNumber,
     [string]$KeystorePassword,
-    [string]$BuildConfiguration = "Release")
+    [string]$BuildConfiguration = "Release",
+    [string]$branch = "master")
 
 $ErrorActionPreference = "Stop"
 
@@ -18,7 +19,7 @@ $SupportToolSolution = 'src\Tools\support\support.sln'
 versionCheck
 
 $versionString = (GetVersionString 'src\core')
-UpdateProjectVersion $BuildNumber -ver $versionString
+UpdateProjectVersion $BuildNumber -ver $versionString -branch $branch
 Write-Host "##teamcity[setParameter name='system.VersionString' value='$versionString']"
 
 $artifactsFolder = (Get-Location).Path + "\Artifacts"
