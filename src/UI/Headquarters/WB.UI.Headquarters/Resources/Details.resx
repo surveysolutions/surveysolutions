@@ -130,7 +130,7 @@
     <value>Not flagged</value>
   </data>
   <data name="LastUpdated" xml:space="preserve">
-    <value>Updated {{ date }}</value>
+    <value>Updated</value>
   </data>
   <data name="NoAnswer" xml:space="preserve">
     <value>Not answered</value>
@@ -139,7 +139,7 @@
     <value>No items found</value>
   </data>
   <data name="Responsible" xml:space="preserve">
-    <value>Responsible </value>
+    <value>Responsible</value>
   </data>
   <data name="SearchResult_Count" xml:space="preserve">
     <value>{{ count }} item found:</value>
@@ -152,5 +152,8 @@
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire: {{ name }}</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
   </data>
 </root>

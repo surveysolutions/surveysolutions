@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Humanizer;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -148,6 +149,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 AssignmentId = interviewSummary.AssignmentId,
                 QuestionnaireTitle = interviewSummary.QuestionnaireTitle,
                 QuestionnaireVersion = interviewSummary.QuestionnaireVersion,
+                InterviewDuration = interviewSummary.InterviewDuration?.Humanize(),
                 ResponsibleRole = interviewSummary.ResponsibleRole.ToString(),
                 ResponsibleProfileUrl = interviewSummary.ResponsibleRole == UserRoles.Interviewer ?
                                             Url.Action("Profile", "Interviewer", new {id = interviewSummary.ResponsibleId}) : 
@@ -236,5 +238,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         public int? AssignmentId { get; set; }
         public string QuestionnaireTitle { get; set; }
         public long QuestionnaireVersion { get; set; }
+        public string InterviewDuration { get; set; }
     }
 }
