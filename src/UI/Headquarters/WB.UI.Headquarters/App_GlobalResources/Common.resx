@@ -285,6 +285,9 @@
   <data name="AllQuestionnaires" xml:space="preserve">
     <value>All questionnaires</value>
   </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>All GPS questions</value>
+  </data>
   <data name="OpenResponsiblesProfile" xml:space="preserve">
     <value>Open responsible's profile</value>
   </data>

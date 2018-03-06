@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities.Question;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -17,28 +18,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IInterviewFactory interviewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
+        private readonly IAuthorizedUser authorizedUser;
         private const int MAXCOORDINATESCOUNTLIMIT = 50000;
 
         public MapReport(IInterviewFactory interviewFactory, IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor, IAuthorizedUser authorizedUser)
         {
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnairesAccessor = questionnairesAccessor;
+            this.authorizedUser = authorizedUser;
         }
 
-        public List<string> GetVariablesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-        {
-            var answeredGpsQuestionIds = this.interviewFactory.GetAnsweredGpsQuestionIdsByQuestionnaire(questionnaireIdentity);
-
-            if (!answeredGpsQuestionIds.Any()) return new List<string>();
-
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            var gpsQuestions = questionnaire.Find<GpsCoordinateQuestion>().ToArray();
-
-            return answeredGpsQuestionIds.Select(questionId =>
-                gpsQuestions.FirstOrDefault(y => y.PublicKey == questionId).StataExportCaption).ToList();
-        }
+        public List<string> GetGpsQuestionsByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+            => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity)
+                .Find<GpsCoordinateQuestion>().Select(question => question.StataExportCaption).ToList();
 
         public MapReportView Load(MapReportInputModel input)
         {
@@ -47,9 +41,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             if(!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
 
-            var gpsAnswers = this.interviewFactory.GetGpsAnswersByQuestionIdAndQuestionnaire(input.QuestionnaireIdentity,
-                gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude, input.SouthWestCornerLatitude,
-                input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude);
+            var gpsAnswers = this.interviewFactory.GetGpsAnswers(
+                input.QuestionnaireIdentity,
+                gpsQuestionId.Value, MAXCOORDINATESCOUNTLIMIT, input.NorthEastCornerLatitude,
+                input.SouthWestCornerLatitude,
+                input.NorthEastCornerLongtitude, input.SouthWestCornerLongtitude,
+                this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
 
             return new MapReportView
             {
@@ -61,11 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             };
         }
 
-        public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints()
-        {
-            var questionnaireIdentities = this.interviewFactory.GetQuestionnairesWithAnsweredGpsQuestions();
-
-           return this.questionnairesAccessor.Query(_ => _.Where(x => questionnaireIdentities.Contains(x.Id)).ToList());
-        }
+        public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>
+            this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted).ToList());
     }
 }

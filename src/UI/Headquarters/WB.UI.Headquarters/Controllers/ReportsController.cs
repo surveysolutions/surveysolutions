@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -91,19 +92,24 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(usersAndQuestionnaires.Questionnaires);
         }
 
-        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        [AuthorizeOr403(Roles = "Administrator, Supervisor, Headquarter")]
+        [ActivePage(MenuItem.MapReport)]
         public ActionResult MapReport()
         {
-            this.ViewBag.ActivePage = MenuItem.MapReport;
-
             var questionnaires = this.mapReport.GetQuestionnaireIdentitiesWithPoints();
 
-            return this.View(new MapReportModel
+            return View(new
             {
-                Questionnaires = new ComboboxModel(questionnaires
-                    .OrderBy(x => x.Title).ThenBy(x => x.Version)
+                Api = new
+                {
+                    GpsQuestionsByQuestionnaireUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuestionInfo" }),
+                    MapReportUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" }),
+                    InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoint" }),
+                    InterviewDetailsUrl = Url.Action("Review", "Interview")
+                },
+                Questionnaires = questionnaires.OrderBy(x => x.Title).ThenBy(x => x.Version)
                     .Select(x => new ComboboxOptionModel(x.Id, $"(ver. {x.Version}) {x.Title}"))
-                    .ToArray(), questionnaires.Count)
+                    .ToArray()
             });
         }
 

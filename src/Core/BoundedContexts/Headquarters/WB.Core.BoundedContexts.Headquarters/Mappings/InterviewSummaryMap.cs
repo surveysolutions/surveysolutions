@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.SupervisorId);
             Property(x => x.InterviewerId);
             Property(x => x.StatusChangeOriginatorId);
-            Property(x => x.Timestamp);
+            Property(x => x.Timestamp, tm => tm.Column("timestamp"));
             Property(x => x.StatusChangeOriginatorName);
             Property(x => x.StatusChangeOriginatorRole);
             Property(x => x.Status);
