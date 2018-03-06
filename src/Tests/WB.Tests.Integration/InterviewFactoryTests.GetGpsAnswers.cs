@@ -154,7 +154,6 @@ namespace WB.Tests.Integration
 
         [TestCase(InterviewStatus.ApprovedBySupervisor)]
         [TestCase(InterviewStatus.ApprovedByHeadquarters)]
-        [Ignore("They are not passing together, only one by one")]
         public void when_getting_gps_answers_by_questionnaire_id_and_question_id_and_teamlead_id_and_interview_status_not_allowed_should_not_return_answers(InterviewStatus status)
         {
             //arrange
