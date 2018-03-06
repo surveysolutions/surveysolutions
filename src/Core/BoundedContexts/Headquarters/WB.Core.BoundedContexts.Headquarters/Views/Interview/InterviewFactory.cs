@@ -151,20 +151,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
                 $@"select interviewid, latitude, longitude
-                        from (
-	                        select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
-                            from readside.interviews i
-                            join {Table.QuestionnaireEntities} q on q.id = i.entityid
-                            join readside.interviewsummaries s on s.id = i.interviewid
-                            where 
-                                i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId
-                                and (@supervisorId is null OR s.teamleadid = @supervisorId)
-	                        ) as q
-                        where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
-                            and longitude > @SouthWestCornerLongtitude
-                                {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
-                                longitude < @NorthEastCornerLongtitude
-                        limit @MaxCount",
+                    from (
+	                    select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
+                        from readside.interviews i
+                        join {Table.QuestionnaireEntities} q on q.id = i.entityid
+                        join readside.interviewsummaries s on s.id = i.interviewid
+                        where 
+                            i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId
+                            and (@supervisorId is null OR s.teamleadid = @supervisorId)
+                            and s.status not in ({(int)InterviewStatus.ApprovedBySupervisor}, {(int)InterviewStatus.ApprovedByHeadquarters})
+	                    ) as q
+                    where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
+                        and longitude > @SouthWestCornerLongtitude
+                            {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
+                            longitude < @NorthEastCornerLongtitude
+                    limit @MaxCount",
                 new
                 {
                     supervisorId,
@@ -179,49 +180,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             .ToArray();
             return result;
         }
-
-        //public InterviewGpsAnswer[] GetGpsAnswers(
-        //    => sessionProvider.GetSession().Connection.Query<Guid>(
-        //        $"SELECT {Column.EntityId} " +
-        //        $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
-        //        $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
-        //        $"AND {Column.AsGpsColumn} is not null " +
-        //        $"GROUP BY {Column.EntityId} ").ToArray();
-        //    QuestionnaireIdentity questionnaireIdentity,
-        //    Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
-        //    double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude,
-        //    Guid? supervisorId)
-        //    => sessionProvider.GetSession().Connection.Query<string>(
-        //        $@"select distinct {Column.QuestionnaireIdentity} from {Table.InterviewSummaries}").ToArray();
-        //public InterviewGpsAnswer[] GetGpsAnswersByQuestionIdAndQuestionnaire(
-        //    QuestionnaireIdentity questionnaireIdentity,
-        //    => sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
-        //            $@"select interviewid, latitude, longitude
-        //                from (
-        //                 select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
-        //                    from readside.interviews i
-        //            $"WHERE {(supervisorId.HasValue ? $"s.teamleadid = '{supervisorId}' AND s.status NOT IN ({(int)InterviewStatus.ApprovedBySupervisor}, {(int)InterviewStatus.ApprovedByHeadquarters}) AND " : "")}" +
-        //            $"questionnaireidentity = @Questionnaire " +
-        //                    join {Table.QuestionnaireEntities} q on q.id = i.entityid
-        //                    join readside.interviewsummaries s on s.id = i.interviewid
-        //                        where i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId            
-        //                 ) as q
-        //                where  latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
-        //                    and longitude > @SouthWestCornerLongtitude
-        //                        {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
-        //                        longitude < @NorthEastCornerLongtitude
-        //                limit @MaxCount",
-        //            new
-        //            {
-        //                Questionnaire = questionnaireIdentity.ToString(),
-        //                QuestionId = gpsQuestionId,
-        //                MaxCount = maxAnswersCount,
-        //                SouthWestCornerLatitude = southWestCornerLatitude,
-        //                NorthEastCornerLatitude = northEastCornerLatitude,
-        //                SouthWestCornerLongtitude = southWestCornerLongtitude,
-        //                NorthEastCornerLongtitude = northEastCornerLongtitude
-        //            })
-        //        .ToArray();
 
         public void Save(InterviewState state)
         {
