@@ -289,9 +289,6 @@
   <data name="Filters_ClearSelection" xml:space="preserve">
     <value>Сбросить фильтры</value>
   </data>
-  <data name="Filters_OldDetailsLink" xml:space="preserve">
-    <value>Деталика интервью (старый дизайн)</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
