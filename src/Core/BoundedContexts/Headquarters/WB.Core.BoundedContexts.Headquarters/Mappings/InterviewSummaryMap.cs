@@ -27,6 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.Status, pm => pm.Column(cm => cm.Index("InterviewSummaries_Status")));
             Property(x => x.Key);
             Property(x => x.QuestionnaireIdentity);
+            Property(x => x.InterviewDurationLong, ptp => ptp.Column("interviewduration"));
+            Property(x => x.LastResumeEventUtcTimestamp);
             Property(x => x.ClientKey);
             Property(x => x.HasErrors);
             Property(x => x.AssignmentId);
@@ -59,50 +61,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     rel.OneToMany();
                 });
 
-            List(x => x.InterviewCommentedStatuses, listMap =>
+            Bag(x => x.InterviewCommentedStatuses, listMap =>
                 {
                     listMap.Table("InterviewCommentedStatuses");
-                    listMap.Index(index => index.Column("Position"));
+                    
                     listMap.Key(keyMap =>
                     {
                         keyMap.Column(clm =>
                         {
                             clm.Name("InterviewId");
-                            clm.Index("InterviewSummary_InterviewCommentedStatuses");
                         });
-                        keyMap.ForeignKey("FK_InterviewSummary_InterviewCommentedStatuses");
                     });
                     listMap.Lazy(CollectionLazy.Lazy);
                     listMap.Cascade(Cascade.All | Cascade.DeleteOrphans);
+                    listMap.Inverse(true);
+                    listMap.OrderBy(x => x.Position);
                 },
-                rel =>
-                {
-                    rel.Component(cmp =>
-                    {
-                        cmp.Property(x => x.Id);
-                        cmp.Property(x => x.SupervisorId);
-                        cmp.Property(x => x.InterviewerId);
-                        cmp.Property(x => x.StatusChangeOriginatorId);
-                        cmp.Property(x => x.Timestamp);
-                        cmp.Property(x => x.StatusChangeOriginatorName);
-                        cmp.Property(x => x.StatusChangeOriginatorRole);
-                        cmp.Property(x => x.Status);
-                        cmp.Property(x => x.Comment);
-                        cmp.Property(x => x.TimespanWithPreviousStatusLong, clm =>
-                        {
-                            clm.Column("TimeSpanWithPreviousStatus");
-                        });
-                        cmp.Property(x => x.SupervisorName);
-                        cmp.Property(x => x.InterviewerName);
-                        cmp.Property(x => x.Position, clm =>
-                        {
-                            clm.Formula("Position");
-                            clm.Access(Accessor.ReadOnly);
-                            clm.Insert(false);
-                            clm.Update(false);
-                        });
-                    });
-                }
+                rel => rel.OneToMany()
             );
 
             Set(x => x.TimeSpansBetweenStatuses, set => {
@@ -123,6 +98,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                     rel.OneToMany();
                 }
             );
+        }
+    }
+
+    public class InterviewCommentedStatusMap : ClassMapping<InterviewCommentedStatus>
+    {
+        public InterviewCommentedStatusMap()
+        {
+            Id(x => x.Id, idMap =>
+            {
+                idMap.Generator(Generators.Assigned);
+            });
+            Property(x => x.SupervisorId);
+            Property(x => x.InterviewerId);
+            Property(x => x.StatusChangeOriginatorId);
+            Property(x => x.Timestamp);
+            Property(x => x.StatusChangeOriginatorName);
+            Property(x => x.StatusChangeOriginatorRole);
+            Property(x => x.Status);
+            Property(x => x.Comment);
+            Property(x => x.TimespanWithPreviousStatusLong, clm =>
+            {
+                clm.Column("TimeSpanWithPreviousStatus");
+            });
+            Property(x => x.SupervisorName);
+            Property(x => x.InterviewerName);
+
+            Property(x => x.Position);
+
+            ManyToOne(x => x.InterviewSummary, mto => mto.Column("InterviewId"));
         }
     }
 

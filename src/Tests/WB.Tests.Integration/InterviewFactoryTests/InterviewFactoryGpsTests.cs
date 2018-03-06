@@ -83,8 +83,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = this.plainTransactionManager.ExecuteInPlainTransaction(
-                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(questionnaireId, gpsQuestionId.Id, 10, 90,
-                    -90, 180, -180));
+                () => factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 10,
+                    90, -90, 180, -180, null));
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(2));
@@ -132,8 +132,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(
-                    questionnaireId, gpsQuestionId.Id, 10, 90, 2, 180, -180));
+                () => factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 10, 90, 2, 180, -180, null));
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -144,43 +144,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     Longitude = allGpsAnswers[2].Answer.Longitude,
                     Latitude = allGpsAnswers[2].Answer.Latitude
                 });
-        }
-
-        [Test]
-        public void when_getting_question_ids_of_answered_gps_questions_by_questionnaire_id()
-        {
-            //arrange
-            var interviewId = Guid.NewGuid();
-
-            var expectedGpsAnswers = new[]
-            {
-                new GpsAnswer
-                {
-                    InterviewId = interviewId,
-                    QuestionId = gpsQuestionId,
-                    QuestionnaireId = questionnaireId,
-                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
-                },
-                new GpsAnswer
-                {
-                    InterviewId = interviewId,
-                    QuestionnaireId = questionnaireId,
-                    QuestionId = anotherGpsQuestionId,
-                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2, Altitude = 2, Timestamp = DateTimeOffset.Now}
-                }
-            };
-
-            PrepareAnswers(expectedGpsAnswers);
-
-            //act
-            var allGpsQuestionIds = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                return factory.GetAnsweredGpsQuestionIdsByQuestionnaire(questionnaireId);
-            });
-
-            //assert
-            Assert.That(allGpsQuestionIds.Length, Is.EqualTo(2));
-            Assert.That(allGpsQuestionIds, Is.EquivalentTo(expectedGpsAnswers.Select(x => x.QuestionId.Id)));
         }
 
         [Test]
@@ -216,16 +179,87 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //act
             var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswersByQuestionIdAndQuestionnaire(
-                    questionnaireId, gpsQuestionId.Id, 1, 90, -90, 180, -180));
+                () => factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 1, 90, -90, 180, -180, null));
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
         }
 
+        [Test]
+        public void when_getting_gps_answers_by_questionnaire_id_and_question_id_and_supervisorid()
+        {
+            var supervisorId = Id.g1;
+            //arrange
+            var allGpsAnswers = new[]
+            {
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    TeamLeadId = supervisorId,
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1,
+                        Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    TeamLeadId =  supervisorId,
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 2, Latitude = 2, Accuracy = 2,
+                        Altitude = 2, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    TeamLeadId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    TeamLeadId = Guid.NewGuid(),
+                    QuestionnaireId = otherQuestionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    TeamLeadId = supervisorId,
+                    QuestionnaireId = otherQuestionnaireId,
+                    QuestionId = anotherGpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            PrepareAnswers(allGpsAnswers);
+
+            //act
+            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
+                () => factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId));
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(2));
+
+            Assert.That(gpsAnswers,
+                Has.One.Property(nameof(InterviewGpsAnswer.InterviewId)).EqualTo(allGpsAnswers[0].InterviewId));
+            Assert.That(gpsAnswers,
+                Has.One.Property(nameof(InterviewGpsAnswer.InterviewId)).EqualTo(allGpsAnswers[1].InterviewId));
+
+            Assert.That(gpsAnswers,
+                Has.None.Property(nameof(InterviewGpsAnswer.InterviewId)).EqualTo(allGpsAnswers[2].InterviewId));
+        }
+
         protected class GpsAnswer
         {
             public Guid InterviewId { get; set; }
+            public Guid? TeamLeadId { get; set; }
             public QuestionnaireIdentity QuestionnaireId { get; set; }
             public InterviewStateIdentity QuestionId { get; set; }
             public GeoPosition Answer { get; set; }
@@ -239,6 +273,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 {
                     interviewSummaryRepository.Store(new InterviewSummary
                     {
+                        TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
                         InterviewId = gpsAnswer.InterviewId,
                         Status = InterviewStatus.Completed,
                         ReceivedByInterviewer = false,

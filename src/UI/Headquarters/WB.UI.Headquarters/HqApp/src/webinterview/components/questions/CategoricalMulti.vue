@@ -3,32 +3,46 @@
         <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="form-group" v-for="option in $me.options" :key="$me.id + '_' + option.value">
-                    <input class="wb-checkbox" type="checkbox" 
-                        :id="$me.id + '_' + option.value" 
-                        :name="$me.id" 
-                        :value="option.value"
-                        :disabled="!$me.acceptAnswer"
-                        v-model="answer"
-                        v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
-                        <label :for="$me.id + '_' + option.value">
-                            <span class="tick"></span> {{option.title}}
-                        </label>
+                <div class="form-group" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
+                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" :disabled="!$me.acceptAnswer" v-model="answer" v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
+                    <label :for="$me.id + '_' + option.value">
+                        <span class="tick"></span> {{option.title}}
+                    </label>
                     <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
                 </div>
+                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                    <span></span>
+                </button>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
-            <wb-lock />
-            </div>            
+                <wb-lock />
+            </div>
         </div>
     </wb-question>
 </template>
 <script lang="js">
     import { entityDetails } from "../mixins"
     import modal from "../modal"
+    import { filter } from "lodash"
 
     export default {
         name: 'CategoricalMulti',
+        data(){
+            return {
+                showAllOptions: false
+            }
+        },
         computed: {
+            shouldShowAnsweredOptionsOnly(){
+                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer.length > 0 && 
+                        this.$me.answer.length < this.$me.options.length;
+            },
+            answeredOrAllOptions(){
+                if(!this.shouldShowAnsweredOptionsOnly)
+                    return this.$me.options;
+                
+                var self = this;
+                return filter(this.$me.options, function(o) { return self.$me.answer.indexOf(o.value) >= 0; });
+            },
             answer: {
                 get() {
                     return this.$me.answer
@@ -40,13 +54,16 @@
                 }
             },
             noOptions() {
-                return this.$me.options == null || this.$me.options.length == 0
+                return this.$me.options == null || this.$me.options.length == 0;
             },
             allAnswersGiven() {
                 return this.$me.maxSelectedAnswersCount && this.$me.answer.length >= this.$me.maxSelectedAnswersCount;                                
             }
         },
         methods: {
+            toggleOptions(){
+                this.showAllOptions = !this.showAllOptions;
+            },
             getAnswerOrder(answerValue) {
                 var answerIndex = this.$me.answer.indexOf(answerValue)
                 return answerIndex > -1 ? answerIndex + 1 : ""

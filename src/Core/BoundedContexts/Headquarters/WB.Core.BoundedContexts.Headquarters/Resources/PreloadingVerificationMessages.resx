@@ -238,4 +238,7 @@
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Answer to multiple choice question cannot contain more than {0} answers.</value>
   </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Id column doesn't have any value.</value>
+  </data>
 </root>
