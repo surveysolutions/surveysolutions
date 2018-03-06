@@ -67,6 +67,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
+        [ApiNoCache]
         public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             var filenameFullPath = this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
@@ -83,11 +84,6 @@ namespace WB.UI.Headquarters.API
                     var directLink = this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromMinutes(30));
 
                     var response = Request.CreateResponse(HttpStatusCode.Moved);
-                    response.Headers.CacheControl = new CacheControlHeaderValue
-                    {
-                        NoCache = true,
-                        MustRevalidate = true
-                    };
                     response.Headers.Location = new Uri(directLink);
                     return response;
                 }
