@@ -1929,6 +1929,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201802011630_SpeedupMapReport.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802201614_AddInterviewingTotalTime.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />

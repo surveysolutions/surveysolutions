@@ -135,9 +135,6 @@
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Entrevista de média duração</value>
   </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Uma diferença de tempo entre o momento quando a primeira resposta é gravada em um tablet, e quando é pressionado o botão completo.</value>
-  </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Tempo médio de processamento geral caso</value>
   </data>
