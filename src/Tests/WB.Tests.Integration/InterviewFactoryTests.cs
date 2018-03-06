@@ -48,6 +48,7 @@ namespace WB.Tests.Integration
                 new List<Type>
                 {
                     typeof(InterviewSummaryMap),
+                    typeof(InterviewCommentedStatusMap),
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap)
                 }, true, PostgresReadSideModule.ReadSideSchemaName);
