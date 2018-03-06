@@ -52,6 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                           device.Statistics.DownloadedInterviewsCount +
                           device.Statistics.UploadedInterviewsCount +
                           device.Statistics.DownloadedQuestionnairesCount +
+                          device.Statistics.RemovedInterviewsCount +
+                          device.Statistics.RemovedAssignmentsCount +
                           device.Statistics.RejectedInterviewsOnDeviceCount > 0)
                 group device by device.InterviewerId
                 into grouping
