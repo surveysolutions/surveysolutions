@@ -455,6 +455,7 @@ namespace WB.Tests.Abc.TestFactories
             int? assignmentId = null,
             bool wasCompleted = false,
             bool hasErrors = false,
+            TimeSpan? interviewingTotalTime = null,
             IEnumerable<InterviewCommentedStatus> statuses = null,
             IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
@@ -479,6 +480,7 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,
                 HasErrors = hasErrors,
+                InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
                 TimeSpansBetweenStatuses = timeSpans?.ToHashSet() ?? new HashSet<TimeSpanBetweenStatuses>()
             };
