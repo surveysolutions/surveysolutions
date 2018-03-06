@@ -135,9 +135,6 @@
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>Durée moyenne de l'entretien</value>
   </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>La durée moyenne entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme terminé.</value>
-  </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Délai moyen de traitement global</value>
   </data>
