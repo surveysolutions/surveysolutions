@@ -132,4 +132,7 @@
   <data name="MapReportTitle" xml:space="preserve">
     <value>Map Report</value>
   </data>
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>There are no any Geo Locations in chosen questionnaire</value>
+  </data>
 </root>
