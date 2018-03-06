@@ -316,19 +316,23 @@ function CopyCapi($Project, $source, $cleanUp) {
     Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
-function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
-
+function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
+    if($branch.ToLower() -eq 'release') {
+        $branch = ""
+    } else {
+        $branch = " $branch"
+    }
     $ver = $Version + "." + $BuildNumber
     $NewVersion = 'AssemblyVersion("' + $ver + '")';
     $NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
-    $NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (build ' + $BuildNumber + ')")'
+    $NewInformationalVerson = "AssemblyInformationalVersion(""$Version (build $BuildNumber)$branch"")"
 
     $TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
 
     get-content $file | 
         % {$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
         % {$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } |
-        % {$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(build [0-9]+\)"\)', $NewInformationalVerson } > $TmpFile
+        % {$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(build [0-9]+\).*"\)', $NewInformationalVerson } > $TmpFile
 
     move-item $TmpFile $file -force
     Write-Host "##teamcity[message text='Updated $file to version $ver']"
@@ -341,11 +345,11 @@ function GetVersionString([string]$Project) {
     return $ret
 }
 
-function UpdateProjectVersion([string]$BuildNumber, [string]$ver) {
+function UpdateProjectVersion([string]$BuildNumber, [string]$ver, [string] $branch) {
     $foundFiles = get-childitem -include *AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue | `
         ? { $_.fullname -notmatch "\\*.Tests\\?" }
     foreach ($file in $foundFiles) {
-        UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
+        UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file -Branch $branch
     }
 }
 
