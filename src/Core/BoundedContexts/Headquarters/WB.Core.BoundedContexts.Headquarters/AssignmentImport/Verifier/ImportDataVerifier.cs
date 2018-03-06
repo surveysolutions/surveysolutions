@@ -229,7 +229,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
             this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
             this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption),
-                    
+            this.Verifier(this.IdIsEmpty, "PL0042", PreloadingVerificationMessages.PL0042_IdIsEmpty),
+
             this.ErrorsByResposibleName
         };
 
@@ -1033,6 +1034,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             return responsiblesCache[userNameLowerCase];
+        }
+
+        private IEnumerable<PreloadedDataVerificationReference> IdIsEmpty(PreloadedDataByFile levelData, 
+            PreloadedDataByFile[] allLevels,
+            IPreloadedDataService preloadedDataService)
+        {
+            var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
+
+            if (parentDataFile != null)
+                yield break;
+
+            var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
+            if (idColumnIndex < 0)
+                yield break;
+
+            for (int y = 0; y < levelData.Content.Length; y++)
+            {
+                var idValue = levelData.Content[y][idColumnIndex];
+                if (string.IsNullOrEmpty(idValue))
+                {
+                    yield return new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "", levelData.FileName);
+                }
+            }
         }
     }
 }
