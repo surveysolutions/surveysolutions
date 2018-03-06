@@ -150,9 +150,9 @@ namespace WB.Tests.Abc.TestFactories
             return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
         }
 
-        public CommentedStatusHistroyView CommentedStatusHistroyView(
+        public CommentedStatusHistoryView CommentedStatusHistroyView(
             InterviewStatus status = InterviewStatus.InterviewerAssigned, string comment = null, DateTime? timestamp = null)
-            => new CommentedStatusHistroyView
+            => new CommentedStatusHistoryView
             {
                 Status = status,
                 Comment = comment,
