@@ -36,8 +36,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         Because of =
             () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
-        It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+        It should_result_has_2_errors = () =>
+            status.VerificationState.Errors.Count.ShouldEqual(2);
 
         It should_return_single_PL0006_error = () =>
             status.VerificationState.Errors.First().Code.ShouldEqual("PL0006");
