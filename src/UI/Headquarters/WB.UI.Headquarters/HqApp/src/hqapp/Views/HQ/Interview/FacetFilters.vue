@@ -33,11 +33,6 @@
                 </button>
             </filters-block>
         </div>
-        <div class="preset-filters-container">
-            <div class="block-filter">
-                <a :href="oldPageUrl">{{ $t("WebInterview.Filters_OldDetailsLink")}}</a>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -50,10 +45,6 @@ export default {
     computed: {
         state() {
             return this.$store.getters.filteringState;
-        },
-
-        oldPageUrl() {
-            return  `${this.$store.getters.basePath}Interview/Details/${this.$route.params.interviewId}`;
         }
     },
     methods: {
