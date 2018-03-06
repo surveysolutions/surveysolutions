@@ -15,4 +15,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
         public InterviewExportedAction[] InterviewStatuses { get; set; }
         public PeriodiceReportType ReportType { get; set; }
     }
+
+    public class InterviewDuractionByInterviewersReportInputModel : PeriodicReportInputModelBase
+    {
+        public string Period { get; set; }
+        public Guid SupervisorId { get; set; }
+    }
 }
