@@ -239,6 +239,6 @@
     <value>Answer to multiple choice question cannot contain more than {0} answers.</value>
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
-    <value>Id columnt doesn't have any value.</value>
+    <value>Id column doesn't have any value.</value>
   </data>
 </root>
