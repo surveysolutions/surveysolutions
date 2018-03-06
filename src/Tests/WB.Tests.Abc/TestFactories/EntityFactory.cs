@@ -261,8 +261,9 @@ namespace WB.Tests.Abc.TestFactories
         public FixedRosterTitle FixedTitle(int value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
 
-        public GeoPosition GeoPosition()
-            => new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984, 4, 18)));
+        public GeoPosition GeoPosition(double? latitude = null, double? longitude = null, double? accuracy = null, double? altitude = null,
+            DateTimeOffset? timestamp = null)
+            => new GeoPosition(latitude ?? 1, longitude ?? 2, accuracy ?? 3, altitude ?? 4, timestamp ?? new DateTimeOffset(new DateTime(1984, 4, 18)));
 
         public GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
             string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null)
