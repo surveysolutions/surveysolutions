@@ -317,13 +317,19 @@ function CopyCapi($Project, $source, $cleanUp) {
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
-
+    $branch = git symbolic-ref --short HEAD
+    
+    if($branch -eq 'release') {
+        $branch = ""
+    } else {
+        $branch = ".$branch"
+    }
     $ver = $Version + "." + $BuildNumber
     $NewVersion = 'AssemblyVersion("' + $ver + '")';
     $NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
-    $NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (build ' + $BuildNumber + ')")'
+    $NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (build ' + $BuildNumber + $branch +')")'
 
-    $TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
+    $TmpFile = [System.IO.Path]::GetTempFileName()
 
     get-content $file | 
         % {$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
@@ -337,8 +343,9 @@ function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
 function GetVersionString([string]$Project) {
     $file = get-childitem $Project
     $file = Join-Path $file.directoryname ".version"
+    $branch = git symbolic-ref --short HEAD
     $ret = Get-Content $file
-    return $ret
+    return "$ret+$branch"
 }
 
 function UpdateProjectVersion([string]$BuildNumber, [string]$ver) {
