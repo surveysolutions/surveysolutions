@@ -39,7 +39,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             oneDriveClient = new OneDriveClient(
                 new DelegateAuthenticationProvider(
+#pragma warning disable 1998 // TODO ROMA
                     async (requestMessage) => requestMessage.Headers.Authorization = new AuthenticationHeaderValue("bearer", accessToken)));
+#pragma warning restore 1998
 
             return null;
         }
