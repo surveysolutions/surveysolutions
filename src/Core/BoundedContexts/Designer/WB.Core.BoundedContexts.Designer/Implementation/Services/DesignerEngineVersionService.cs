@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                Version = ApiVersion.MaxQuestionnaireVersion,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -108,6 +108,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IValidatable>(q => q.ValidationConditions.Any(x => x.Severity == ValidationSeverity.Warning)).Any(),
                         Description = "Contains Validation Warnings"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion()
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, /*When adding new version, it should be changed to previous value of ApiVersion.MaxQuestionnaireVersion*/
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Find<IMultimediaQuestion>(q => q.IsSignature).Any(),
+                        Description = "Contains Signature Question"
                     }
                 }
             }
