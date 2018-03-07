@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose language.
+        ///   Looks up a localized string similar to Choose translation.
         /// </summary>
         public static string ChooseLanguage {
             get {
@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose language to render pdf questionnaire on it.
+        ///   Looks up a localized string similar to Please choose translation.
         /// </summary>
         public static string ChooseLanguageTitle {
             get {

@@ -43,7 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, InterviewReceivedByInterviewer>,
         IUpdateHandler<InterviewSummary, InterviewReceivedBySupervisor>,
         IUpdateHandler<InterviewSummary, AreaQuestionAnswered>,
-        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>
+        IUpdateHandler<InterviewSummary, AudioQuestionAnswered>,
+        IUpdateHandler<InterviewSummary, InterviewPaused>,
+        IUpdateHandler<InterviewSummary, InterviewResumed>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory users;
@@ -86,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                         return;
 
                     var question = questionnaire.FirstOrDefault<IQuestion>(q => q.PublicKey == questionId);
-                    if (question == null || question.Answers == null)
+                    if (question?.Answers == null)
                         return;
 
                     var optionStrings = answers.Select(answerValue => question.Answers.First(x => decimal.Parse(x.AnswerValue) == answerValue).AnswerText)
@@ -97,8 +99,14 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             });
         }
 
-        private InterviewSummary CreateInterviewSummary(Guid userId, Guid questionnaireId, long questionnaireVersion,
-            Guid eventSourceId, DateTime eventTimeStamp, bool wasCreatedOnClient, int? assignmentId)
+        private InterviewSummary CreateInterviewSummary(Guid userId,
+            Guid questionnaireId,
+            long questionnaireVersion,
+            Guid eventSourceId,
+            DateTime eventTimeStamp,
+            bool wasCreatedOnClient,
+            int? assignmentId, 
+            DateTime? creationTime)
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
             var questionnarie = this.GetQuestionnaire(questionnaireId, questionnaireVersion);
@@ -115,7 +123,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 ResponsibleId = userId, // Creator is responsible
                 ResponsibleName = responsible != null ? responsible.UserName : "<UNKNOWN USER>",
                 ResponsibleRole = responsible.Roles.First(),
-                AssignmentId = assignmentId
+                AssignmentId = assignmentId,
+                LastResumeEventUtcTimestamp = creationTime
             };
 
             return interviewSummary;
@@ -137,19 +146,19 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId, @event.Payload.CreationTime);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewFromPreloadedDataCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId);
+                @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, false, @event.Payload.AssignmentId, @event.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewOnClientCreated> @event)
         {
             return this.CreateInterviewSummary(@event.Payload.UserId, @event.Payload.QuestionnaireId,
-             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true, assignmentId: @event.Payload.AssignmentId);
+             @event.Payload.QuestionnaireVersion, @event.EventSourceId, @event.EventTimeStamp, wasCreatedOnClient: true, assignmentId: @event.Payload.AssignmentId, creationTime: null);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewStatusChanged> @event)
@@ -172,6 +181,11 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 if (!state.WasCompleted && @event.Payload.Status == InterviewStatus.Completed)
                 {
                     state.WasCompleted = true;
+                }
+
+                if (@event.Payload.Status == InterviewStatus.Completed)
+                {
+                    LogInterviewTotalInterviewingTime(interview, @event.Payload.UtcTime ?? @event.EventTimeStamp);
                 }
             });
         }
@@ -359,6 +373,47 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             {
                 interview.ReceivedByInterviewer = false;
             });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewPaused> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                LogInterviewTotalInterviewingTime(interview, @event.Payload.UtcTime);
+            });
+        }
+
+        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewResumed> @event)
+        {
+            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
+            {
+                if (!state.LastResumeEventUtcTimestamp.HasValue)
+                {
+                    state.LastResumeEventUtcTimestamp = @event.Payload.UtcTime;
+                }
+                else if (state.LastResumeEventUtcTimestamp > @event.Payload.UtcTime)
+                {
+                    state.LastResumeEventUtcTimestamp = @event.Payload.UtcTime;
+                }
+            });
+        }
+
+        private static void LogInterviewTotalInterviewingTime(InterviewSummary interview, DateTime endTimestamp)
+        {
+            if (interview.LastResumeEventUtcTimestamp.HasValue)
+            {
+                TimeSpan timeDiffWithLastEvent = endTimestamp - interview.LastResumeEventUtcTimestamp.Value;
+                if (interview.InterviewDuration.HasValue)
+                {
+                    interview.InterviewDuration += timeDiffWithLastEvent;
+                }
+                else
+                {
+                    interview.InterviewDuration = timeDiffWithLastEvent;
+                }
+
+                interview.LastResumeEventUtcTimestamp = null;
+            }
         }
 
         private string GetResponsibleIdName(Guid responsibleId)

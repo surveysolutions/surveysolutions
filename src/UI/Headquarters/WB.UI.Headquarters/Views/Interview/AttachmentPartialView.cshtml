@@ -1,9 +1,0 @@
-﻿@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewAttachmentViewModel
-
-@if (Model != null)
-{
-    <div class="width100">
-        <img src="@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Attachments", action = "Content", id = Model.ContentId, maxSize=700})" class="img-responsive" alt="@Model.ContentName" />
-    </div>
-
-}

@@ -5,10 +5,10 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -29,40 +29,35 @@ namespace WB.UI.Headquarters.API.PublicApi
     public class InterviewsController : BaseApiServiceController
     {
         private readonly IAllInterviewsFactory allInterviewsViewFactory;
-        private readonly IInterviewDetailsViewFactory interviewDetailsViewFactory;
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IUserViewFactory userViewFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
-        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IQuestionnaireStorage questionnaireStorage;
-
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
         public InterviewsController(ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
-            IInterviewDetailsViewFactory interviewDetailsViewFactory, 
             IInterviewHistoryFactory interviewHistoryViewFactory,
-            ICommandService commandService,
-            IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IStatefullInterviewSearcher statefullInterviewSearcher,
-            IQuestionnaireStorage questionnaireStorage)
-            : base(logger)
+            IQuestionnaireStorage questionnaireStorage,
+            ICommandService commandService,
+            IAuthorizedUser authorizedUser,
+            IStatefullInterviewSearcher statefullInterviewSearcher) : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
-            this.interviewDetailsViewFactory = interviewDetailsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
-            this.commandService = commandService;
-            this.authorizedUser = authorizedUser;
             this.userViewFactory = userViewFactory;
             this.interviewReferences = interviewReferences;
             this.statefulInterviewRepository = statefulInterviewRepository;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.questionnaireStorage = questionnaireStorage;
+            this.commandService = commandService;
+            this.authorizedUser = authorizedUser;
+            this.statefullInterviewSearcher = statefullInterviewSearcher;
         }
 
         [HttpGet]
@@ -89,14 +84,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("{id:guid}/details")]
         public InterviewApiDetails InterviewDetails(Guid id)
         {
-            var interview = this.interviewDetailsViewFactory.GetInterviewDetails(interviewId: id, questionsTypes: InterviewDetailsFilter.All);
+            var interview = this.statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
-            {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-            var interviewDetails = new InterviewApiDetails(interview.InterviewDetails);
 
-            return interviewDetails;
+            return new InterviewApiDetails(interview);
         }
 
         /// <summary>
