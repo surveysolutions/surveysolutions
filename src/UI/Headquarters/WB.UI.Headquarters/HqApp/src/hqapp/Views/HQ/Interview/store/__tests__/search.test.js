@@ -37,11 +37,11 @@ describe("filters search", () => {
             searchResults.forEach(sr => filtersStore.mutations.SET_SEARCH_RESULT(state, sr))
 
             it("should have 8 section results", () => {
-                expect(state.search.results.length).toEqual(8);
+                expect(state.search.results.length).toEqual(5);
             });
 
-            it("should merge sections having same id", () => {
-                const section2 = _.find(state.search.results, {id: 2})
+            it("should merge sections having same sectionId", () => {
+                const section2 = _.find(state.search.results, {sectionId: "f133fdc78a81dbafbe6507952bf06384_1"})
                 
                 expect(section2.questions.length).toBe(2) // More info about Kenshi
                 expect(section2.questions[0].target).toBe("6a639942539484e7b0caf8bef1d245a4_1"); // Specify the best combo

@@ -271,4 +271,8 @@
     <value>Звуковой вопрос не может быть предварительно загружен.</value>
     <comment>Звуковой вопрос не может быть предварительно загружен.</comment>
   </data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Отсутствует значение для поля Id интервью</value>
+    <comment>Отсутствует значение для поля Id интервью</comment>
+  </data>
 </root>

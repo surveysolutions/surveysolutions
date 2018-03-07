@@ -136,7 +136,7 @@
     <value>Средняя продолжительность интервью</value>
   </data>
   <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>Временной промежуток между первым отвеченным вопросом и завершением интервью на планшете.</value>
+    <value>Средняя продолжительность заполнения с момента создания интервью до его завершения.</value>
   </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>Среднее время обработки</value>
@@ -237,5 +237,8 @@
   </data>
   <data name="LastDateToShowLabel" xml:space="preserve">
     <value>Начиная с</value>
+  </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Средняя продолжительность заполнения интервью с момента ответа на первый вопрос до его завершения.</value>
   </data>
 </root>
