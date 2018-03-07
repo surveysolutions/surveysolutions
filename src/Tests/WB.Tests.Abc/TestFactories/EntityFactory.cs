@@ -150,9 +150,9 @@ namespace WB.Tests.Abc.TestFactories
             return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
         }
 
-        public CommentedStatusHistroyView CommentedStatusHistroyView(
+        public CommentedStatusHistoryView CommentedStatusHistroyView(
             InterviewStatus status = InterviewStatus.InterviewerAssigned, string comment = null, DateTime? timestamp = null)
-            => new CommentedStatusHistroyView
+            => new CommentedStatusHistoryView
             {
                 Status = status,
                 Comment = comment,
@@ -261,8 +261,9 @@ namespace WB.Tests.Abc.TestFactories
         public FixedRosterTitle FixedTitle(int value, string title = null)
             => new FixedRosterTitle(value, title ?? $"Fixed title {value}");
 
-        public GeoPosition GeoPosition()
-            => new GeoPosition(1, 2, 3, 4, new DateTimeOffset(new DateTime(1984, 4, 18)));
+        public GeoPosition GeoPosition(double? latitude = null, double? longitude = null, double? accuracy = null, double? altitude = null,
+            DateTimeOffset? timestamp = null)
+            => new GeoPosition(latitude ?? 1, longitude ?? 2, accuracy ?? 3, altitude ?? 4, timestamp ?? new DateTimeOffset(new DateTime(1984, 4, 18)));
 
         public GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
             string enablementCondition = null, string validationExpression = null, bool hideIfDisabled = false, string label=null)
@@ -455,6 +456,7 @@ namespace WB.Tests.Abc.TestFactories
             int? assignmentId = null,
             bool wasCompleted = false,
             bool hasErrors = false,
+            TimeSpan? interviewingTotalTime = null,
             IEnumerable<InterviewCommentedStatus> statuses = null,
             IEnumerable<TimeSpanBetweenStatuses> timeSpans = null)
         {
@@ -479,6 +481,7 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,
                 HasErrors = hasErrors,
+                InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
                 TimeSpansBetweenStatuses = timeSpans?.ToHashSet() ?? new HashSet<TimeSpanBetweenStatuses>()
             };

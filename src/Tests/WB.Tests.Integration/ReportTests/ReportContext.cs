@@ -25,7 +25,12 @@ namespace WB.Tests.Integration.ReportTests
 
         protected PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, 
+                new[] { typeof(InterviewSummaryMap), 
+                        typeof(TimeSpanBetweenStatusesMap), 
+                        typeof(QuestionAnswerMap),
+                        typeof(InterviewCommentedStatusMap)
+                }, true);
             transactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
