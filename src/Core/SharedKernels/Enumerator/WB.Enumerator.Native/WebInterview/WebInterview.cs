@@ -18,6 +18,8 @@ namespace WB.Enumerator.Native.WebInterview
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
+        private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioFileStorage audioFileStorage;
 
         protected string CallerInterviewId => this.Context.QueryString[@"interviewId"];
         private string CallerSectionid => this.Clients.Caller.sectionId;
@@ -40,7 +42,9 @@ namespace WB.Enumerator.Native.WebInterview
             IQuestionnaireStorage questionnaireRepository,
             IWebInterviewNotificationService webInterviewNotificationService,
             IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IInterviewBrokenPackagesService interviewBrokenPackagesService)
+            IImageFileStorage imageFileStorage,
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            IAudioFileStorage audioFileStorage)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.commandService = commandService;
@@ -48,6 +52,8 @@ namespace WB.Enumerator.Native.WebInterview
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.interviewEntityFactory = interviewEntityFactory;
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
+            this.audioFileStorage = audioFileStorage;
+            this.imageFileStorage = imageFileStorage;
         }
 
         public void FillExceptionData(Dictionary<string, string> data)

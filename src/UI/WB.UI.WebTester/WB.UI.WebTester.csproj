@@ -276,7 +276,9 @@
     <Compile Include="Services\ICacheStorage.cs" />
     <Compile Include="Services\IEvictionObservable.cs" />
     <Compile Include="Services\IEvictionNotifier.cs" />
+    <Compile Include="Services\Implementation\WebTesterAudioFileStorage.cs" />
     <Compile Include="Services\Implementation\EvictionService.cs" />
+    <Compile Include="Services\Implementation\WebTesterInterviewFileStorage.cs" />
     <Compile Include="Services\Implementation\QuestionnaireImportService.cs" />
     <Compile Include="Services\Implementation\RemoteInterviewContainer.cs" />
     <Compile Include="Services\IQuestionnaireImportService.cs" />

@@ -25,8 +25,19 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
+<<<<<<< HEAD
         public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory, IInterviewBrokenPackagesService interviewBrokenPackagesService) : 
             base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory, interviewBrokenPackagesService)
+=======
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, 
+            IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, 
+            IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, 
+            IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory, 
+            IImageFileStorage imageFileStorage,
+            IAudioFileStorage audioFileStorage) : 
+            base(statefulInterviewRepository, commandService, questionnaireRepository, 
+                webInterviewNotificationService, interviewEntityFactory, imageFileStorage, audioFileStorage)
+>>>>>>> master
         {
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
@@ -68,7 +79,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
-        public List<CommentedStatusHistroyView> GetStatusesHistory()
+        public List<CommentedStatusHistoryView> GetStatusesHistory()
         {
             var statefulInterview = this.GetCallerInterview();
             return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
