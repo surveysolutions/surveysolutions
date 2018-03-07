@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace Main.Core.Entities.SubEntities.Question
 {
-    public interface IMultimediaQuestion : IQuestion {}
+    public interface IMultimediaQuestion : IQuestion
+    {
+        bool IsSignature { get; }
+    }
 }
