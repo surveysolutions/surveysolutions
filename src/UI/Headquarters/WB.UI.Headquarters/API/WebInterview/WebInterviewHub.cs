@@ -74,7 +74,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
-        public List<CommentedStatusHistroyView> GetStatusesHistory()
+        public List<CommentedStatusHistoryView> GetStatusesHistory()
         {
             var statefulInterview = this.GetCallerInterview();
             return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
