@@ -300,6 +300,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 NewInterviewsOnDeviceCount =
                     this.interviewViewRepository.Count(
                         inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted),
+                RemovedInterviewsCount = statistics.DeletedInterviewsCount,
 
                 NewAssignmentsCount = statistics.NewAssignmentsCount,
                 RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,

@@ -419,5 +419,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0041_AnswerExceedsMaxAnswersCount", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id column doesn&apos;t have any value..
+        /// </summary>
+        public static string PL0042_IdIsEmpty {
+            get {
+                return ResourceManager.GetString("PL0042_IdIsEmpty", resourceCulture);
+            }
+        }
     }
 }
