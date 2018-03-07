@@ -316,7 +316,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     : statusOriginator.Roles.First(),
                 timeSpanWithPreviousStatus,
                 supervisorName,
-                interviewerName));
+                interviewerName,
+                state.InterviewCommentedStatuses.Count,
+                state));
 
             return state;
         }
