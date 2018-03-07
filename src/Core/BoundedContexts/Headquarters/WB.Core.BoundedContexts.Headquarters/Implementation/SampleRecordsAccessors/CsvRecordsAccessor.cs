@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAcces
                     using (var csvReader = new CsvReader(fileReader))
                     {
                         csvReader.Configuration.Delimiter = this.delimiter;
-
+                        csvReader.Configuration.IgnoreQuotes = true;
                         csvReader.Read();
                         csvReader.ReadHeader();
                         
