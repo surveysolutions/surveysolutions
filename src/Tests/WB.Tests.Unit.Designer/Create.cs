@@ -1174,6 +1174,23 @@ namespace WB.Tests.Unit.Designer
             {
                 return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
             }
+
+            public static UpdateMultimediaQuestion UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string instructions, string enablementCondition, string variableLabel, bool hideIfDisabled, Guid responsibleId, QuestionScope scope, QuestionProperties properties, bool isSignature)
+            {
+                return new UpdateMultimediaQuestion(Guid.NewGuid(), questionId, responsibleId, new CommonQuestionParameters
+                {
+                    EnablementCondition = enablementCondition,
+                    HideIfDisabled = hideIfDisabled,
+                    Title = title,
+                    Instructions = instructions,
+                    VariableName = variableName,
+                    VariableLabel = variableLabel,
+                    HideInstructions = properties.HideInstructions
+                }, scope)
+                {
+                    IsSignature = isSignature
+                };
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
