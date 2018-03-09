@@ -59,6 +59,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsRosterSize { get; set; }
         public int? AnswerMaxValue { get; set; }
         public bool UseFormatting { get; set; }
+        public List<CategoricalOption> Options { get; set; }
     }
 
     public class InterviewDoubleQuestion : GenericQuestion
@@ -66,6 +67,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public double? Answer { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public bool UseFormatting { get; set; }
+        public List<CategoricalOption> Options { get; set; }
     }
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion
