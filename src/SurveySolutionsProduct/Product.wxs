@@ -391,29 +391,6 @@
                               Name="value"
                               Value="true"
                               Sequence='17'/>
-
-                <!-- <add key="Storage.S3.Enable" value="false" /> -->
-                <util:XmlFile Id="CreateElementStorageS3Enabled"
-                                File="[CONFIGFOLDER]\Headquarters.Web.config"
-                                Action="createElement"
-                                ElementPath="//configuration/appSettings"
-                                Name="add" Sequence='15'/>
-
-                <util:XmlFile Id="AddKeyElementStorageS3Enabled"
-                                File="[CONFIGFOLDER]\Headquarters.Web.config"
-                                Action="setValue"
-                                ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
-                                Name="key"
-                                Value="Storage.S3.Enable"
-                                Sequence="16"/>
-
-                <util:XmlFile Id="UpdateValueElementStorageS3Enabled"
-                                File="[CONFIGFOLDER]\Headquarters.Web.config"
-                                Action="setValue"
-                                ElementPath="//configuration/appSettings/add[\[]@key='Storage.S3.Enable'[\]]"
-                                Name="value"
-                                Value="false"
-                                Sequence='17'/>
             </Component>
         </ComponentGroup>
 
