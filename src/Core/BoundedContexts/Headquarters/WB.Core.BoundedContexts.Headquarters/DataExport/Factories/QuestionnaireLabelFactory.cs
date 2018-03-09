@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
                     if (hasLabels)
                     {
-                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels.Values.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
+                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
                     }
 
                     variableLabels.Add(new DataExportVariable(headerColumn.Name, headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
