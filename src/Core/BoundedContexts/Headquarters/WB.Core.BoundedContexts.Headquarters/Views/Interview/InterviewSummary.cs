@@ -72,6 +72,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual bool WasCompleted { get; set; }
 
+
+
+        public virtual TimeSpan? InterviewDuration
+        {
+            get => InterviewDurationLong != null ? new TimeSpan(this.InterviewDurationLong.Value) : (TimeSpan?)null;
+            set => this.InterviewDurationLong = value?.Ticks;
+        }
+        public virtual long? InterviewDurationLong { get; protected set; }
+        
+        public virtual DateTime? LastResumeEventUtcTimestamp { get; set; }
+
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }

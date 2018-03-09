@@ -4,7 +4,7 @@
             <div class="row">
                 <slot name="filters" />
                 <div :class="information">
-                    <div class="page-header clearfix">
+                    <div class="page-header clearfix" v-if="hasHeader">
                       <slot name="headers">
                         <h1>
                             {{title}}
@@ -31,6 +31,10 @@ export default {
     props: {
         title: String,
         subtitle: String,
+        hasHeader: {
+            type: Boolean,
+            default() { return true; }
+        },
         hasFilter: {
             type: Boolean,
             default() { return false; }
