@@ -11,7 +11,7 @@ const config = {
         locales: ["Details", "Pages", "WebInterviewUI",
                   "WebInterview", "DataTables", "Common", "Users", "Assignments",
                    "Strings", "Reports", "DevicesInterviewers", "UploadUsers", 
-                   "MainMenu", "WebInterviewSetup"]
+                   "MainMenu", "WebInterviewSetup", "MapReport"]
     },
     webinterview: {
         entry: "./src/webinterview/main.js",

@@ -130,7 +130,7 @@
     <value>Без флага</value>
   </data>
   <data name="LastUpdated" xml:space="preserve">
-    <value>Обновлено {{ date }}</value>
+    <value>Обновлено</value>
   </data>
   <data name="NoAnswer" xml:space="preserve">
     <value>Не отвечен</value>
@@ -150,5 +150,8 @@
   <data name="Questionnaire" xml:space="preserve">
     <value>Опросник: {{ name }}</value>
     <comment>Опросник: {{ questionnaireTitle }}</comment>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Длительность</value>
   </data>
 </root>

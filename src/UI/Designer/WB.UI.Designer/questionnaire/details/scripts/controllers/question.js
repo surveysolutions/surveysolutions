@@ -262,7 +262,13 @@
                 }
 
                 if (type !== "SingleOption" && type !== "MultyOption") {
-                    $scope.setLinkSource(null,null);
+                    $scope.setLinkSource(null, null);
+                }
+
+                if (type === 'MultyOption' || type === "SingleOption") {
+                    if ($scope.activeQuestion.options.length === 0) {
+                        $scope.addOption();
+                    }
                 }
 
                 if (!$scope.doesQuestionSupportOptionsFilters()) {
@@ -271,7 +277,6 @@
                 }
 
                 markFormAsChanged();
-
             };
 
             $scope.cancelQuestion = function () {
