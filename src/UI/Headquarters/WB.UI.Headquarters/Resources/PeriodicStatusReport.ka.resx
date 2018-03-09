@@ -135,9 +135,6 @@
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>ინტერვიუს საშუალო ხანგრძლივობა</value>
   </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>საშუალო დრო, ინტერვიუერის ინტერვიუს პირველი პასუხის ჩაწერიდან - დასრულების ღილაკის დაჭერამდე.</value>
-  </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>საშუალო საერთო დამუშავების დრო</value>
   </data>

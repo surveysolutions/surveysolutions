@@ -559,7 +559,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return string.Empty;
         }
 
-        internal static object GetAnswerAsObject(InterviewTreeQuestion question)
+        public static object GetAnswerAsObject(InterviewTreeQuestion question)
         {
             //for backward compatibility answers were casted to other types
             //please take into concideration in case of changes

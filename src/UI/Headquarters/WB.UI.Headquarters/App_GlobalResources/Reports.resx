@@ -252,4 +252,7 @@
   <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
     <value>Number of interview transactions by Supervisor</value>
   </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Updated on</value>
+  </data>
 </root>

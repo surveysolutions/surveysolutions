@@ -10,19 +10,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
         }
 
-        public InterviewCommentedStatus(
-            Guid id,
-            Guid statusChangeOriginatorId, 
+        public InterviewCommentedStatus(Guid id,
+            Guid statusChangeOriginatorId,
             Guid? supervisorId,
             Guid? interviewerId,
-            InterviewExportedAction status, 
-            DateTime timestamp, 
-            string comment, 
+            InterviewExportedAction status,
+            DateTime timestamp,
+            string comment,
             string statusChangeOriginatorName,
             UserRoles statusChangeOriginatorRole,
             TimeSpan? timeSpanWithPreviousStatus,
             string supervisorName,
-            string interviewerName)
+            string interviewerName, 
+            int position,
+            InterviewSummary summary)
         {
             this.Id = id;
             this.StatusChangeOriginatorId = statusChangeOriginatorId;
@@ -36,6 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus;
             this.SupervisorName = supervisorName;
             this.InterviewerName = interviewerName;
+            this.InterviewSummary = summary;
+            this.Position = position;
         }
         public virtual Guid Id { get; set; }
         public virtual Guid? SupervisorId { get; set; }
