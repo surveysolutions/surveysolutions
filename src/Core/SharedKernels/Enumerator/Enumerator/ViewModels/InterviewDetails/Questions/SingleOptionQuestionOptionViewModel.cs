@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using MvvmCross.Core.ViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -42,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxCommand RemoveAnswerCommand => new MvxCommand(OnAnswerRemoved);
 
-        public QuestionStateViewModel<SingleOptionQuestionAnswered> QuestionState { get; set; }
+        public IQuestionStateViewModel QuestionState { get; set; }
 
         public string ItemTag => this.QuestionState.Header.Identity + "_Opt_" + Value;
 

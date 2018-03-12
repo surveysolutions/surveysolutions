@@ -7,6 +7,7 @@
         ValidationMessage = 2,
         Instruction = 3,
         OptionTitle = 4,
-        FixedRosterTitle = 5
+        FixedRosterTitle = 5,
+        SpecialValue = 6
     }
 }
