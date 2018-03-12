@@ -69,22 +69,22 @@
                             this.response_type = "@storages.OAuth2.ResponseType",
                             this.storages = [
                                 {
-                                    name: "@DataExport.ZipFile",
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.ZipFile)",
                                     is_local: true
                                 }, {
-                                    name: "@DataExport.OneDrive",
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.OneDrive)",
                                     client_id: "@storages.OAuth2.OneDrive.ClientId",
                                     type: "@ExternalStorageType.OneDrive",
                                     scope: "@storages.OAuth2.OneDrive.Scope",
                                     authorization_uri: "@storages.OAuth2.OneDrive.AuthorizationUri"
                                 }, {
-                                    name: "@DataExport.Dropbox",
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.Dropbox)",
                                     client_id: "@storages.OAuth2.Dropbox.ClientId",
                                     type: "@ExternalStorageType.Dropbox",
                                     scope: "@storages.OAuth2.Dropbox.Scope",
                                     authorization_uri: "@storages.OAuth2.Dropbox.AuthorizationUri"
                                 }, {
-                                    name: "@DataExport.GoogleDrive",
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.GoogleDrive)",
                                     client_id: "@storages.OAuth2.GoogleDrive.ClientId",
                                     type: "@ExternalStorageType.GoogleDrive",
                                     scope: "@storages.OAuth2.GoogleDrive.Scope",
@@ -108,7 +108,7 @@
         });
 
         $('#umbrella').hide();
-    </script>
+</script>
 }
 
 <main class="export hold-transition">
