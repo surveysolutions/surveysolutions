@@ -38,8 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected Identity questionIdentity;
         protected bool areAnswersOrdered;
         protected readonly QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState;
-        private OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered> optionsTopBorderViewModel;
-        private OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered> optionsBottomBorderViewModel;
+        private OptionBorderViewModel optionsTopBorderViewModel;
+        private OptionBorderViewModel optionsBottomBorderViewModel;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -196,13 +196,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                this.optionsTopBorderViewModel = new OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered>(this.questionState, true)
+                this.optionsTopBorderViewModel = new OptionBorderViewModel(this.questionState, true)
                 {
                     HasOptions = HasOptions
                 };
                 result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(this.Options);
-                this.optionsBottomBorderViewModel = new OptionBorderViewModel<MultipleOptionsLinkedQuestionAnswered>(this.questionState, false)
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.questionState, false)
                 {
                     HasOptions = HasOptions
                 };

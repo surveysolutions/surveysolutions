@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -87,6 +88,56 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
 
             //assert
             Assert.That(numericRoster.RosterTitle, Is.EqualTo("Option 1, Option 3"));
+        }
+
+        [Test]
+        public void when_NumericRosterManager_Calculates_with_nagative_special_value_for_trigger()
+        {
+            //arrange
+            var parentEntityId = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"),
+                Create.Entity.RosterVector());
+
+            var rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            var rosterTitleQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            var rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+
+            var rosterSizeQuestionIdentity = Identity.Create(rosterSizeQuestionId, RosterVector.Empty);
+            var rosterIdentity = Identity.Create(rosterId, Create.Entity.RosterVector(1, 2));
+            var rosterTitleQuestionIdentity = Identity.Create(rosterTitleQuestionId, Create.RosterVector(1, 2));
+
+            var rosterTitleQuestion = Create.Entity.InterviewTreeQuestion(rosterTitleQuestionIdentity,
+                questionType: QuestionType.MultyOption, answer: new decimal[] { 1, 3 });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(parentEntityId.Id,
+                    children: new IComposite[]
+                    {
+                        Create.Entity.NumericQuestion(questionId:rosterSizeQuestionId, isInteger:true, options:new List<Answer>(){new Answer(){AnswerCode = -1, AnswerValue = "-1", AnswerText = "-1"}}),
+                        Create.Entity.NumericRoster(rosterId, rosterSizeQuestionId: rosterSizeQuestionId,
+                            rosterTitleQuestionId: rosterTitleQuestionId, children: new IComposite[]
+                            {
+                                Create.Entity.MultyOptionsQuestion(rosterTitleQuestionId, options: Create.Entity.Options(1, 3))
+                            })
+                    }));
+
+            var numericQuestion = Create.Entity.InterviewTreeQuestion(rosterSizeQuestionIdentity,questionType:QuestionType.Numeric, answer:-1);
+
+            var numericRoster = Create.Entity.InterviewTreeRoster(rosterIdentity, rosterType: RosterType.Numeric,
+                rosterSizeQuestion: rosterSizeQuestionId, rosterTitleQuestionIdentity: rosterTitleQuestionIdentity,
+                children: rosterTitleQuestion);
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(sectionIdentity: parentEntityId,
+                children: new IInterviewTreeNode[] { numericQuestion, numericRoster});
+
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection, questionnaire: questionnaire);
+
+            var roster = new NumericRosterManager(tree, questionnaire, rosterId, Create.Service.SubstitutionTextFactory());
+
+            //act
+            var entities = roster.CalcuateExpectedIdentities(rosterIdentity);
+
+            //assert
+            Assert.That(entities.Count, Is.EqualTo(0));
         }
     }
 }
