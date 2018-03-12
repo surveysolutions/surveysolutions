@@ -255,9 +255,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                result.Add(new OptionBorderViewModel<YesNoQuestionAnswered>(this.questionState, true));
+                result.Add(new OptionBorderViewModel(this.questionState, true));
                 result.AddCollection(this.Options);
-                result.Add(new OptionBorderViewModel<YesNoQuestionAnswered>(this.questionState, false));
+                result.Add(new OptionBorderViewModel(this.questionState, false));
                 return result;
             }
         }

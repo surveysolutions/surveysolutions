@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
     public class SubstitutionTextTests
     {
         [Test]
-        public void When_ReplaceSubstitutions_for_element_with_referancec_on_parent_rosters_Then_should_return_text_with_roster_titles()
+        public void When_ReplaceSubstitutions_for_element_with_referance_on_parent_rosters_Then_should_return_text_with_roster_titles()
         {
             //arrange
             var rosterId1 = Guid.Parse("22222222222222222222222222222222");
@@ -187,6 +187,46 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var browserReadyText = text.BrowserReadyText;
 
             Assert.That(browserReadyText, Is.EqualTo($"<time date=\"2010-04-06\">2010-04-06</time> <time datetime=\"2010-04-06T04:30:50\">2010-04-06 04:30:50</time>"));
+        }
+        
+        [Test]
+        public void when_numeric_question_with_special_value_is_used_in_substitutions()
+        {
+            var questionId = Guid.Parse("44444444444444444444444444444444");
+
+            var substitutedQuestionId1 = Id.g1;
+            var substitutedQuestionId2 = Id.g2;
+
+            var questionnireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.NumericQuestion(substitutedQuestionId1, variableName:"numeric1"),
+                Create.Entity.NumericQuestion(substitutedQuestionId2, variableName:"numeric2",options: new List<Answer>(){new Answer(){AnswerCode = 6, AnswerText = "test"}}),
+                Create.Entity.NumericQuestion(questionId, title:"%numeric1% %numeric2%")
+            });
+
+            var questionnire = Create.Entity.PlainQuestionnaire(questionnireDocument);
+
+            var numericAnswer1 = 5;
+            var numericAnswer2 = 6;
+
+            var sourceTreeMainSection = Create.Entity.InterviewTreeSection(children: new IInterviewTreeNode[]
+            {
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId1), answer: numericAnswer1, questionType: QuestionType.Numeric),
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(substitutedQuestionId2), answer: numericAnswer2, questionType: QuestionType.Numeric),
+                Create.Entity.InterviewTreeQuestion(Create.Entity.Identity(questionId), questionType:QuestionType.Numeric)
+            });
+
+            var tree = Create.Entity.InterviewTree(sections: sourceTreeMainSection, questionnaire:questionnire);
+
+            var substitionTextFactory = Create.Service.SubstitutionTextFactory();
+            var questionIdentity = Create.Entity.Identity(questionId, RosterVector.Empty);
+            var substitionText = substitionTextFactory.CreateText(questionIdentity, "title: %numeric1% %numeric2%", questionnire);
+            substitionText.SetTree(tree);
+
+            // Act
+            substitionText.ReplaceSubstitutions();
+            
+            Assert.That(substitionText.Text, Is.EqualTo("title: 5 test"));
         }
 
         [Test]

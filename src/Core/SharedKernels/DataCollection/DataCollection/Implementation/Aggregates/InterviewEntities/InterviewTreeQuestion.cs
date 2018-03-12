@@ -501,8 +501,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultimedia) return ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).GetAnswer()?.FileName;
             if (this.IsQRBarcode) return ((InterviewTreeQRBarcodeQuestion)this.InterviewQuestion).GetAnswer()?.DecodedText;
             if (this.IsArea) return ((InterviewTreeAreaQuestion)this.InterviewQuestion).GetAnswer()?.Value.ToString();
-            if (this.IsInteger) return AnswerUtils.AnswerToString(((InterviewTreeIntegerQuestion)this.InterviewQuestion).GetAnswer()?.Value);
-            if (this.IsDouble) return AnswerUtils.AnswerToString(((InterviewTreeDoubleQuestion)this.InterviewQuestion).GetAnswer()?.Value);
+            if (this.IsInteger)
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeIntegerQuestion)this.InterviewQuestion).GetAnswer()?.Value), GetCategoricalAnswerOptionText);
+            if (this.IsDouble)
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeDoubleQuestion)this.InterviewQuestion).GetAnswer()?.Value), GetCategoricalAnswerOptionText);
             if (this.IsDateTime)
             {
                 var interviewTreeDateTimeQuestion = (InterviewTreeDateTimeQuestion)this.InterviewQuestion;
@@ -531,9 +533,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             string GetCategoricalAnswerOptionText(decimal answerOptionValue) =>
                 this.Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
 
-            if (this.IsSingleFixedOption || this.IsCascading) return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer()?.SelectedValue), GetCategoricalAnswerOptionText);
-            if (this.IsMultiFixedOption) return AnswerUtils.AnswerToString(((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
-            if (this.IsYesNo) return AnswerUtils.AnswerToString(((InterviewTreeYesNoQuestion)this.InterviewQuestion).GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), GetCategoricalAnswerOptionText);
+            if (this.IsSingleFixedOption || this.IsCascading)
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer()?.SelectedValue), GetCategoricalAnswerOptionText);
+            if (this.IsMultiFixedOption)
+                return AnswerUtils.AnswerToString(((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
+            if (this.IsYesNo)
+                return AnswerUtils.AnswerToString(((InterviewTreeYesNoQuestion)this.InterviewQuestion).GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), GetCategoricalAnswerOptionText);
 
             if (this.IsSingleLinkedToList)
             {
