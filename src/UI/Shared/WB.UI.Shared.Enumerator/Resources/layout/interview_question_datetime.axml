@@ -5,7 +5,7 @@
               android:layout_height="wrap_content"
               local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
   <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+                local:MvxBind="BackgroundStyle QuestionEditorStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
       <EditText
         android:editable="false"
