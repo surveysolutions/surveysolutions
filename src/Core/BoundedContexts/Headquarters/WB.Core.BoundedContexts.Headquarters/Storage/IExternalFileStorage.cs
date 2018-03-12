@@ -7,11 +7,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
 {
     class NoExternalFileSystemStorage : IExternalFileStorage
     {
-        public bool IsEnabled => false;
-        
-        bool IExternalFileStorage.IsEnabled()
+        public bool IsEnabled()
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public string GetDirectLink(string path, TimeSpan expiration)
