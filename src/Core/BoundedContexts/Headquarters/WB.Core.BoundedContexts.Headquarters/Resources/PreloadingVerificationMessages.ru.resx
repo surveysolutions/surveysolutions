@@ -275,4 +275,16 @@
     <value>Отсутствует значение для поля Id интервью</value>
     <comment>Отсутствует значение для поля Id интервью</comment>
   </data>
+  <data name="PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+    <value>Несоответствие найдено между количеством записей в файле {0},  который содержит {1}  записей и вопросом-источником {2}, который содержит {3} строки. Код интервью: {4}</value>
+  </data>
+  <data name="PL0042_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
+    <value>Несоответствие найдено между списком в файле с данными {0} и вопросом {1}. Элементы, присутствующие в списковом вопсрое и отсутствующие в файле: {2}. Строки из файла с данными, отсутствующие в списке: {3}. Код интервью: {4}</value>
+  </data>
+  <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
+    <value>Вопрос со списком {0} содержит неуникальные элементы: {1}. Код интервью: {2}</value>
+  </data>
+  <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
+    <value>Вопрос со списком {0} содержит неуникальные коды: {1}. Код интервью: {2}</value>
+  </data>
 </root>
