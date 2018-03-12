@@ -990,6 +990,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear 1.
+        /// </summary>
+        public static string Interview_SignatureClear {
+            get {
+                return ResourceManager.GetString("Interview_SignatureClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign here 1.
+        /// </summary>
+        public static string Interview_SignatureSignHere {
+            get {
+                return ResourceManager.GetString("Interview_SignatureSignHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor comment.
         /// </summary>
         public static string Interview_Supervisor_Comment_Caption {

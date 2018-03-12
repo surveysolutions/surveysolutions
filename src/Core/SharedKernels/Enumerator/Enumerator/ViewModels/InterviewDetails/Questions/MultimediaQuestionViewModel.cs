@@ -1,13 +1,18 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Newtonsoft.Json;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -30,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPictureChooser pictureChooser;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IImageFileStorage imageFileStorage;
+        private readonly IInterviewFileStorage imageFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
         private Guid interviewId;
         private Identity questionIdentity;
@@ -65,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public byte[] Answer
         {
-            get { return this.answer; }
+            get => this.answer;
             set
             {
                 this.answer = value;
@@ -80,9 +85,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
         private readonly QuestionStateViewModel<PictureQuestionAnswered> questionState;
+        public bool IsSignature { get; private set; }
         public IQuestionStateViewModel QuestionState => this.questionState;
 
-        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
+        public void Init(string interviewId, 
+            Identity entityIdentity, 
+            NavigationState navigationState)
         {
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
@@ -93,10 +101,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             this.variableName = questionnaire.GetQuestionVariableName(entityIdentity.Id);
+            this.IsSignature = questionnaire.IsSignature(entityIdentity.Id);
             var multimediaQuestion = interview.GetMultimediaQuestion(entityIdentity);
             if (multimediaQuestion.IsAnswered())
             {
-                this.Answer = this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaQuestion.GetAnswer().FileName);
+                var multimediaAnswer = multimediaQuestion.GetAnswer();
+                this.Answer = this.imageFileStorage.GetInterviewBinaryData(this.interviewId, multimediaAnswer.FileName);
             }
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -106,67 +116,99 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var pictureFileName = this.GetPictureFileName();
 
-            var choosen = await this.userInteractionService.SelectOneOptionFromList(UIResources.Multimedia_PictureSource, new[]
+            if (this.IsSignature)
             {
-                UIResources.Multimedia_TakePhoto,
-                UIResources.Multimedia_PickFromGallery
-            });
+                if (this.Answer?.Length > 0)
+                {
+                    this.StorePictureFile(new MemoryStream(this.Answer), pictureFileName);
 
-            try
-            {
-                Stream pictureStream = null;
-                if (choosen == UIResources.Multimedia_TakePhoto)
-                {
-                    pictureStream = await this.pictureChooser.TakePicture();
-                }
-                else if (choosen == UIResources.Multimedia_PickFromGallery)
-                {
-                    pictureStream = await this.pictureChooser.ChoosePictureGallery();
-                }
+                    var command = new AnswerPictureQuestionCommand(
+                        this.interviewId,
+                        this.userId,
+                        this.questionIdentity.Id,
+                        this.questionIdentity.RosterVector,
+                        DateTime.UtcNow,
+                        pictureFileName);
 
-                if (pictureStream != null)
-                {
-                    using (pictureStream)
+                    try
                     {
-                        this.StorePictureFile(pictureStream, pictureFileName);
-
-                        var command = new AnswerPictureQuestionCommand(
-                            this.interviewId,
-                            this.userId,
-                            this.questionIdentity.Id,
-                            this.questionIdentity.RosterVector,
-                            DateTime.UtcNow,
-                            pictureFileName);
-
-                        try
-                        {
-                            await this.Answering.SendAnswerQuestionCommandAsync(command);
-                            this.Answer =
-                                this.imageFileStorage.GetInterviewBinaryData(this.interviewId,
-                                    pictureFileName);
-                            this.QuestionState.Validity.ExecutedWithoutExceptions();
-                        }
-                        catch (InterviewException ex)
-                        {
-                            this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
-                            this.QuestionState.Validity.ProcessException(ex);
-                        }
+                        await this.Answering.SendAnswerQuestionCommandAsync(command);
+                        this.QuestionState.Validity.ExecutedWithoutExceptions();
+                    }
+                    catch (InterviewException ex)
+                    {
+                        this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                        this.QuestionState.Validity.ProcessException(ex);
                     }
                 }
             }
-            catch (MissingPermissionsException mpe)
+            else
             {
-                switch (mpe.Permission)
+                var choosen = await this.userInteractionService.SelectOneOptionFromList(
+                    UIResources.Multimedia_PictureSource, new[]
+                    {
+                        UIResources.Multimedia_TakePhoto,
+                        UIResources.Multimedia_PickFromGallery
+                    });
+
+                try
                 {
-                    case Permission.Camera:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Camera);
-                        break;
-                    case Permission.Storage:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.MissingPermissions_Storage);
-                        break;
-                    default:
-                        this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
-                        break;
+                    Stream pictureStream = null;
+                    if (choosen == UIResources.Multimedia_TakePhoto)
+                    {
+                        pictureStream = await this.pictureChooser.TakePicture();
+                    }
+                    else if (choosen == UIResources.Multimedia_PickFromGallery)
+                    {
+                        pictureStream = await this.pictureChooser.ChoosePictureGallery();
+                    }
+
+                    if (pictureStream != null)
+                    {
+                        using (pictureStream)
+                        {
+                            this.StorePictureFile(pictureStream, pictureFileName);
+
+                            var command = new AnswerPictureQuestionCommand(
+                                this.interviewId,
+                                this.userId,
+                                this.questionIdentity.Id,
+                                this.questionIdentity.RosterVector,
+                                DateTime.UtcNow,
+                                pictureFileName);
+
+                            try
+                            {
+                                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                                this.Answer =
+                                    this.imageFileStorage.GetInterviewBinaryData(this.interviewId,
+                                        pictureFileName);
+                                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                            }
+                            catch (InterviewException ex)
+                            {
+                                this.imageFileStorage.RemoveInterviewBinaryData(this.interviewId, pictureFileName);
+                                this.QuestionState.Validity.ProcessException(ex);
+                            }
+                        }
+                    }
+                }
+                catch (MissingPermissionsException mpe)
+                {
+                    switch (mpe.Permission)
+                    {
+                        case Permission.Camera:
+                            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                                .MissingPermissions_Camera);
+                            break;
+                        case Permission.Storage:
+                            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                                .MissingPermissions_Storage);
+                            break;
+                        default:
+                            this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(mpe.Message);
+                            break;
+                    }
                 }
             }
         }
@@ -213,6 +255,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        private string GetSignaturePointsFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}__signature.json";
         private string GetPictureFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}.jpg";
 
         public void Dispose()
