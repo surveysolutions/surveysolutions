@@ -29,7 +29,7 @@
       <Button style="@style/Interview_Question_InputButton"
               local:MvxBind="HideKeyboardOnClick .; 
                                 Click RequestAnswerCommand; 
-                                Text 'Take signature';
+                                Text Localization('Interview_TakeSignature');
                                 BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
                                 Tag Format('btnAnswer_{0}', Identity);
                                 Hidden QuestionState.IsAnswered" />

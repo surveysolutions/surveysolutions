@@ -1017,6 +1017,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Store signature.
+        /// </summary>
+        public static string Interview_TakeSignature {
+            get {
+                return ResourceManager.GetString("Interview_TakeSignature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Survey Solutions Interviewer.
         /// </summary>
         public static string Interviewer_ApplicationName {

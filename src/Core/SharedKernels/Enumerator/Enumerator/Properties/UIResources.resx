@@ -584,4 +584,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_SignatureSignHere" xml:space="preserve">
     <value>Sign here 1</value>
   </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Store signature</value>
+  </data>
 </root>
