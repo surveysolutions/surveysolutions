@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
-using CsQuery.Engine.PseudoClassSelectors;
-using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -12,11 +10,9 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
@@ -212,7 +208,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
 
             //assert
             Assert.That(ex, Is.Not.Null);
-            Assert.That(ex.Code, Is.EqualTo("PL0042"));
+            Assert.That(ex.Code, Is.EqualTo("PL0046"));
             Assert.That(ex.Message, Is.EqualTo("Inconsistency detected between the items lists in the data file list_roster and question list. Items present in the text list and absent in the file: AB. Rows from data file absent in text list question: ABC. Interview id: 111111"));
         }
 
@@ -258,7 +254,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
 
             //assert
             Assert.That(ex, Is.Not.Null);
-            Assert.That(ex.Code, Is.EqualTo("PL0041"));
+            Assert.That(ex.Code, Is.EqualTo("PL0045"));
             Assert.That(ex.Message, Is.EqualTo("Inconsistency detected between the number of records in the data file list_roster, which has 3 records, and the trigger question list, which has 2 rows. Interview id: 111111"));
         }
 
