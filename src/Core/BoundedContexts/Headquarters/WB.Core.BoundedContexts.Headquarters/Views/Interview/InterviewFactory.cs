@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                        join {Table.InterviewSummaries} s on s.id = i.{Column.InterviewId} 
                             and s.{Column.QuestionnaireIdentity} = @questionnaireIdentity
                        join {Table.QuestionnaireEntities} q on q.id = i.{Column.EntityId}
-                        where i.{Column.AsString} is not null and q.question_type = @questionType", new
+                        where i.{Column.IsEnabled} and i.{Column.AsString} is not null and q.question_type = @questionType", new
                     {
                         questionType = QuestionType.Multimedia,
                         questionnaireIdentity = questionnaireIdentity.ToString()
@@ -143,6 +143,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"AND {Column.AsAudio} IS NOT NULL " +
                 $"AND {Column.IsEnabled} = true").ToArray();
 
+        private static readonly int[] DisabledForGpsStatuses =
+        {
+            (int) InterviewStatus.ApprovedBySupervisor,
+            (int) InterviewStatus.ApprovedByHeadquarters
+        };
 
         public InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
@@ -159,7 +164,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         where 
                             i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId
                             and (@supervisorId is null OR s.teamleadid = @supervisorId)
-                            and s.status not in ({(int)InterviewStatus.ApprovedBySupervisor}, {(int)InterviewStatus.ApprovedByHeadquarters})
+                            and i.{Column.IsEnabled} = true
+                            and s.status not in ({string.Join(", ", DisabledForGpsStatuses)})
 	                    ) as q
                     where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
                         and longitude > @SouthWestCornerLongtitude

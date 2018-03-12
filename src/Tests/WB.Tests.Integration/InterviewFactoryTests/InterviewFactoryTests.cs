@@ -656,7 +656,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                  {
                      QuestionId = InterviewStateIdentity.Create(multimediaQuestionId, Create.RosterVector(1)),
                      Answer = new InterviewStringAnswer {Answer = "path to photo 2", InterviewId = interviewId},
-                     Enabled = true,
+                     Enabled = false,
                      QuestionnaireId = questionnaireId
                  },
                  new
@@ -723,8 +723,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 () => factory.GetMultimediaAnswersByQuestionnaire(questionnaireId));
 
             //assert
-            Assert.That(allMultimediaAnswers.Length, Is.EqualTo(3));
-            Assert.That(allMultimediaAnswers, Is.EquivalentTo(expectedMultimediaAnswers.Where(x => x.QuestionnaireId == questionnaireId && x.Enabled).Select(x => x.Answer)));
+            Assert.That(allMultimediaAnswers.Length, Is.EqualTo(2));
+            Assert.That(allMultimediaAnswers, Is.EquivalentTo(expectedMultimediaAnswers
+                .Where(x => x.QuestionnaireId == questionnaireId && x.Enabled).Select(x => x.Answer)));
         }
 
         [Test]

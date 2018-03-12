@@ -147,6 +147,45 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         }
 
         [Test]
+        public void when_getting_gps_answers_should_return_only_enabled()
+        {
+            //arrange
+
+            var allGpsAnswers = new[]
+            {
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 1, Latitude = 1, Accuracy = 1, Altitude = 1, Timestamp = DateTimeOffset.Now}
+                },
+                new GpsAnswer
+                {
+                    InterviewId = Guid.NewGuid(),
+                    QuestionnaireId = questionnaireId,
+                    IsEnabled = false,
+                    QuestionId = gpsQuestionId,
+                    Answer = new GeoPosition{Longitude = 3, Latitude = 3, Accuracy = 3, Altitude = 3, Timestamp = DateTimeOffset.Now}
+                }
+            };
+
+            PrepareAnswers(allGpsAnswers);
+
+            //act
+            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
+                () => factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 10, 90, 0, 180, -180, null));
+
+            //assert
+            Assert.That(gpsAnswers.Length, Is.EqualTo(1));
+
+            Assert.That(gpsAnswers[0], Has.Property(nameof(InterviewGpsAnswer.InterviewId)).EqualTo(allGpsAnswers[0].InterviewId));
+            Assert.That(gpsAnswers[0], Has.Property(nameof(InterviewGpsAnswer.Longitude)).EqualTo(allGpsAnswers[0].Answer.Longitude));
+            Assert.That(gpsAnswers[0], Has.Property(nameof(InterviewGpsAnswer.Latitude)).EqualTo(allGpsAnswers[0].Answer.Latitude));
+        }
+
+        [Test]
         public void when_getting_gps_answers_by_questionnaire_id_and_question_id_and_limit_by_answers_count()
         {
             //arrange
@@ -309,7 +348,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected class GpsAnswer
         {
-
+            public bool IsEnabled { get; set; } = true;
             public Guid InterviewId { get; set; }
             public Guid? TeamLeadId { get; set; }
             public QuestionnaireIdentity QuestionnaireId { get; set; }
@@ -346,7 +385,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         RosterVector = x.QuestionId.RosterVector,
                         AsGps = x.Answer
                     });
-
+                    interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.IsEnabled);
                     factory.Save(interviewState);
                 }
             });
