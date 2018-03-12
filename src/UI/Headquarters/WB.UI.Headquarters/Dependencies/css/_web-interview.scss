@@ -301,6 +301,7 @@
 	&.answered .question-unit{
 		.options-group{
 			background-color: transparent;
+			font-size: 0;
 		}
 	}
 	&.has-error {

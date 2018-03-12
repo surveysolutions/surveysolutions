@@ -151,9 +151,37 @@
                 </div>
                 break;
             case QuestionType.Numeric:
-                <div class="answer-editor">
-                    <input type="number" class="dashes">
-                </div>
+	            <div class="answer-editor">
+		            <input type="number" class="dashes">
+	            </div>
+	            if (question.Answers.Count > 0)
+	            {
+		             <div class="question-meta more">
+			             <div class="type">
+				             @PdfStrings.SpecialValues
+			             </div>
+		             </div>
+			         <div class="question-meta">
+
+				             @foreach (var option in question.Answers.Take(questionnaire.Settings.OptionsExcerptCount))
+				             {
+					             <div class="option">
+						             <div class="option-value"><span>@questionnaire.GetFormattedOptionValue(question.Answers, @option.AnswerValue)</span></div>
+						             <div class="option-text">
+							             <label for="@question.StataExportCaption-@option.AnswerValue">@option.AnswerText</label>
+						             </div>
+					             </div>
+				             }
+				             @if (question.Answers.Count > questionnaire.Settings.OptionsExcerptCount)
+				             {
+					             <div class="more">
+						             <a href="#@questionnaire.GetOptionsRef(question.PublicKey)">
+							             @Pdf.Format(PdfStrings.AppendixLink, question.Answers.Count - questionnaire.Settings.OptionsExcerptCount, questionnaire.GetEntityIndexInAppendix(question.PublicKey, "SV"))
+						             </a>
+					             </div>
+				             }
+			         </div>
+	            }
                 break;
             case QuestionType.DateTime:
                 <div class="answer-editor">

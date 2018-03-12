@@ -669,7 +669,9 @@ namespace WB.Tests.Abc.TestFactories
             bool hideIfDisabled = false,
             bool useFormatting = false,
             string questionText = null,
-            IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null)
+            IEnumerable<ValidationCondition> validationConditions = null, 
+            Guid? linkedToRosterId = null,
+            IEnumerable<Answer> specialValues = null)
             => new NumericQuestion
             {
                 QuestionText = questionText ?? "text",
@@ -685,10 +687,12 @@ namespace WB.Tests.Abc.TestFactories
                 UseFormatting = useFormatting,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
+                Answers = new List<Answer>(specialValues ?? new Answer[] { })
             };
 
         public NumericQuestion NumericQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
-            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null)
+            bool isInteger = false, int? countOfDecimalPlaces = null, string variableName = "var1", bool prefilled = false, string title = null,
+            IEnumerable<Answer> options = null)
             => new NumericQuestion("Question N")
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
@@ -699,7 +703,8 @@ namespace WB.Tests.Abc.TestFactories
                 QuestionType = QuestionType.Numeric,
                 StataExportCaption = variableName,
                 Featured = prefilled,
-                QuestionText = title
+                QuestionText = title,
+                Answers = new List<Answer>(options ?? new Answer[] { })
             };
 
         public NumericQuestion NumericRealQuestion(Guid? id = null,
