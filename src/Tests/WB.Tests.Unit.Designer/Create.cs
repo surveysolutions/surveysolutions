@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -445,7 +446,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test", string variableLabel = null)
+            string title = "test", string variableLabel = null, Option[] options = null)
         {
             var publicKey = id ?? Guid.NewGuid();
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
@@ -463,7 +464,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
                 QuestionText = title,
-                VariableLabel = variableLabel
+                VariableLabel = variableLabel,
+                Answers = options?.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title}).ToList()
             };
         }
 
@@ -484,8 +486,17 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static Option[] Options(params Option[] options)
+        {
+            return options.ToArray();
+        }
 
-        public static Answer Option(int code, string text = null, string parentValue = null, Guid? id = null)
+        public static Option[] Options(params Answer[] options)
+        {
+            return options.Select(x => new Option(x.GetParsedValue().ToString(CultureInfo.InvariantCulture), x.AnswerText)).ToArray();
+        }
+
+        public static Answer Option(int code, string text = null, string parentValue = null)
         {
             return new Answer
             {
@@ -495,7 +506,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
+        public static Answer Option(string value = null, string text = null, string parentValue = null)
         {
             return new Answer
             {
@@ -510,7 +521,7 @@ namespace WB.Tests.Unit.Designer
             bool hideIfDisabled = false)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new QRBarcodeQuestion()
+            return new QRBarcodeQuestion
             {
                 PublicKey = publicKey,
                 ConditionExpression = enablementCondition,
@@ -573,14 +584,8 @@ namespace WB.Tests.Unit.Designer
 
         public static Questionnaire Questionnaire(Guid responsible, QuestionnaireDocument document)
         {
-            var questionnaire = new Questionnaire(
-                Mock.Of<ILogger>(),
-                Mock.Of<IClock>(),
-                Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnireHistoryVersionsService>());
-            questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
+            var questionnaire = Questionnaire();
+            questionnaire.Initialize(document.PublicKey, document, new List<SharedPerson> {Create.SharedPerson(responsible)});
             return questionnaire;
         }
 
@@ -1139,10 +1144,11 @@ namespace WB.Tests.Unit.Designer
 
             public static UpdateNumericQuestion UpdateNumericQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId, 
                 string title, bool isPreFilled = false, QuestionScope scope = QuestionScope.Interviewer, bool isInteger = false, 
-                bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null)
+                bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null,
+                Option[] options = null)
             {
                 return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
-                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: null);
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options);
             }
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)
