@@ -3,18 +3,21 @@
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
     [Migration(201802121510)]
-    public class M201802121510_AddIdToInterviewSummaryId : Migration
+    public class M201802121510_AddInterviewsIdMap : Migration
     {
         public override void Up()
         {
-            Execute.Sql(@"ALTER TABLE readside.interviewsummaries ADD id serial NOT NULL");
-            Execute.Sql(@"CREATE UNIQUE INDEX if not exists interviewsummaries_id_idx ON readside.interviewsummaries USING btree (id);");
-            Execute.Sql(@"CREATE UNIQUE INDEX if not exists interviewsummaries_interviewid_idx ON readside.interviewsummaries USING btree (interviewid);");
+            Create.Table("interviews_id")
+                .WithColumn("id").AsCustom("serial").PrimaryKey()
+                .WithColumn("interviewid").AsGuid().NotNullable();
+
+            Execute.Sql(@"insert into readside.interviews_id (interviewid) select interviewid from readside.interviewsummaries");
+            Execute.Sql(@"create unique index if not exists interviewsid_interviewid_un on readside.interviews_id (interviewid)");
         }
 
         public override void Down()
         {
-            Execute.Sql(@"ALTER TABLE readside.interviewsummaries DROP COLUMN id");
+            
         }
     }
 }
