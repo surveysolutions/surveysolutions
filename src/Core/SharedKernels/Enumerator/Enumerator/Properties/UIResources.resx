@@ -579,10 +579,10 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Dismiss</value>
   </data>
   <data name="Interview_SignatureClear" xml:space="preserve">
-    <value>Clear 1</value>
+    <value>Clear</value>
   </data>
   <data name="Interview_SignatureSignHere" xml:space="preserve">
-    <value>Sign here 1</value>
+    <value>Sign here</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Store signature</value>

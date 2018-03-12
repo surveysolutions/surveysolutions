@@ -46,6 +46,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(SignaturePadView control, byte[] value)
         {
+            if (value == null || value.Length == 0)
+            {
+                this.Target.Clear();
+            }
         }
 
         protected override void Dispose(bool isDisposing)
@@ -55,6 +59,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (Target?.SignaturePadCanvas != null)
             {
                 Target.SignaturePadCanvas.StrokeCompleted -= SignaturePadCanvasOnStrokeCompleted;
+                Target.SignaturePadCanvas.Cleared -= SignaturePadCanvasOnStrokeCompleted;
             }
         }
     }

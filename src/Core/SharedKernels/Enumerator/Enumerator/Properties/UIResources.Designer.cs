@@ -990,7 +990,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear 1.
+        ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string Interview_SignatureClear {
             get {
@@ -999,7 +999,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign here 1.
+        ///   Looks up a localized string similar to Sign here.
         /// </summary>
         public static string Interview_SignatureSignHere {
             get {
