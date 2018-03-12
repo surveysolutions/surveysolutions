@@ -1036,7 +1036,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return responsiblesCache[userNameLowerCase];
         }
 
-        private IEnumerable<PreloadedDataVerificationReference> IdIsEmpty(PreloadedDataByFile levelData, 
+        private IEnumerable<InterviewImportReference> IdIsEmpty(PreloadedDataByFile levelData, 
             PreloadedDataByFile[] allLevels,
             IPreloadedDataService preloadedDataService)
         {
@@ -1054,7 +1054,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 var idValue = levelData.Content[y][idColumnIndex];
                 if (string.IsNullOrEmpty(idValue))
                 {
-                    yield return new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "", levelData.FileName);
+                    yield return new InterviewImportReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "", levelData.FileName);
                 }
             }
         }
