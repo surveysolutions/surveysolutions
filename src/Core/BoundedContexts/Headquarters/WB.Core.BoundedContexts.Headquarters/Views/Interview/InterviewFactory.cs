@@ -79,11 +79,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             ThrowIfInterviewApprovedByHq(interview);
             ThrowIfInterviewReceivedByInterviewer(interview);
 
+            var interviewInfo = GetInterviewId(interviewId);
+
             var entityMap = GetQuestionnaireEntities(interview.QuestionnaireIdentity);
 
             var row = new
             {
-                interview.Id,
+                interviewInfo.id,
                 entityId = entityMap[questionIdentity.Id],
                 rosterVector = questionIdentity.RosterVector.ToString().Trim('_'),
                 hasFlag = flagged
@@ -112,22 +114,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public void RemoveInterview(Guid interviewId)
-            => sessionProvider.GetSession().Connection.Execute(
-                $@"DELETE FROM {Table.Interviews} i
-                    USING {Table.InterviewSummaries} s
+        {
+            var conn = sessionProvider.GetSession().Connection;
+            conn.Execute($@"DELETE FROM {Table.Interviews} i
+                    USING {Table.InterviewsId} s
                     WHERE i.{Column.InterviewId} = s.id AND s.{Column.InterviewId} = @InterviewId",
+            new { InterviewId = interviewId });
+
+            conn.Execute($@"DELETE FROM {Table.InterviewsId} i WHERE i.{Column.InterviewId} = @InterviewId",
                 new { InterviewId = interviewId });
+        }
 
         public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
             return sessionProvider.GetSession().Connection
                 .Query<InterviewStringAnswer>(
-                    $@"select s.{Column.InterviewId}, i.{Column.AsString} as answer
-                       from {Table.Interviews} i
-                       join {Table.InterviewSummaries} s on s.id = i.{Column.InterviewId} 
+                    $@"select i.{Column.InterviewId}, i.{Column.AsString} as answer
+                       from {Table.InterviewsView} i
+                       join {Table.InterviewSummaries} s on s.{Column.InterviewId} = i.{Column.InterviewId} 
                             and s.{Column.QuestionnaireIdentity} = @questionnaireIdentity
-                       join {Table.QuestionnaireEntities} q on q.id = i.{Column.EntityId}
-                        where i.{Column.IsEnabled} and i.{Column.AsString} is not null and q.question_type = @questionType", new
+                        where i.{Column.IsEnabled} and i.{Column.AsString} is not null and i.question_type = @questionType", new
                     {
                         questionType = QuestionType.Multimedia,
                         questionnaireIdentity = questionnaireIdentity.ToString()
@@ -158,11 +164,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $@"select interviewid, latitude, longitude
                     from (
 	                    select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
-                        from readside.interviews i
-                        join {Table.QuestionnaireEntities} q on q.id = i.entityid
-                        join readside.interviewsummaries s on s.id = i.interviewid
+                        from {Table.InterviewsView} i
+                        join {Table.InterviewSummaries} s on s.interviewid = i.interviewid
                         where 
-                            i.asgps is not null and s.questionnaireidentity = @Questionnaire and q.entityid = @QuestionId
+                            i.asgps is not null and s.questionnaireidentity = @Questionnaire and i.entityid = @QuestionId
                             and (@supervisorId is null OR s.teamleadid = @supervisorId)
                             and i.{Column.IsEnabled} = true
                             and s.status not in ({string.Join(", ", DisabledForGpsStatuses)})
@@ -253,32 +258,54 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private Dictionary<Guid, int> GetQuestionnaireEntities(string questionnaireIdentity)
         {
             var cache = MemoryCache.Default;
-            var cacheKey = "Questionnaire_" + questionnaireIdentity;
+            var cacheKey = "Questionnaire_" + (questionnaireIdentity ?? "<null>");
             var cacheValue = cache.Get(cacheKey);
 
             if (cacheValue is Dictionary<Guid, int> cached) return cached;
 
-            var entities = questionnaireItems.Query(q => q
-                .Where(w => w.QuestionnaireIdentity == questionnaireIdentity)
-                .Select(w => new { w.Id, w.EntityId })
-                .ToList());
-
-            var entitiesMap = entities.ToDictionary(q => q.EntityId, q => q.Id);
+            var entities = this.sessionProvider.GetSession().Connection
+                .Query<(int id, Guid entityId)>(
+                    @"SELECT id, entityid FROM readside.questionnaire_entities where questionnaireidentity = @questionnaireIdentity",
+                    new { questionnaireIdentity });
+            
+            var entitiesMap = entities.ToDictionary(q => q.entityId, q => q.id);
             cache.Add(cacheKey, entitiesMap, new CacheItemPolicy { SlidingExpiration = TimeSpan.FromMinutes(10) });
 
             return entitiesMap;
+        }
+
+        private (int id, string questionnaireId) GetInterviewId(Guid interviewId)
+        {
+            var conn = sessionProvider.GetSession().Connection;
+            var id = interviewId.FormatGuid();
+            return conn.QuerySingleOrDefault<(int id, string questionnaireId)>(
+                // https://stackoverflow.com/a/42217872/41483
+                // will return id for new @interviewid or select existing
+                $@"WITH input_rows(interviewid) AS (values (uuid '{id}'))
+                , ins AS (
+                   INSERT INTO readside.interviews_id (interviewid) 
+                   SELECT * FROM input_rows
+                   ON CONFLICT (interviewid) DO NOTHING
+                   RETURNING id )
+             select ids.id, s.questionnaireidentity
+             from (
+                SELECT id FROM ins 
+                UNION  ALL
+                SELECT c.id FROM input_rows
+                JOIN readside.interviews_id c USING (interviewid) 
+             ) as ids
+                left join readside.interviewsummaries s on s.interviewid = '{id}'");
         }
 
         private void SaveInterviewStateItem(Guid interviewId, IEnumerable<InterviewEntity> stateItems)
         {
             var conn = sessionProvider.GetSession().Connection;
 
-            var summary = summaryRepository.GetById(interviewId)
-                ?? throw new ArgumentException($@"Cannot find interview summary for interviewd: {interviewId}", nameof(interviewId));
+            var interview = GetInterviewId(interviewId);
+            
+            var entityMap = GetQuestionnaireEntities(interview.questionnaireId);
 
-            var entityMap = GetQuestionnaireEntities(summary.QuestionnaireIdentity);
-
-            conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {summary.Id}");
+            conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {interview.id}");
 
             var npgConnection = conn as NpgsqlConnection ?? throw new NotSupportedException("Cannot import over non Postgres connection");
 
@@ -292,7 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 foreach (var item in stateItems)
                 {
                     importer.StartRow();
-                    Write(summary.Id);
+                    Write(interview.id);
                     Write(entityMap[item.Identity.Id]);
                     Write(item.Identity.RosterVector.ToString().Trim('_'));
                     Write(item.IsEnabled);
@@ -517,7 +544,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             public const string RosterVector = "rostervector";
             public const string HasFlag = "hasflag";
             public const string IsEnabled = "isenabled";
-            public const string AsGpsColumn = "asgps";
             public const string AsString = "asstring";
             public const string AsAudio = "asaudio";
             public const string QuestionnaireIdentity = "questionnaireidentity";
@@ -526,6 +552,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private static class Table
         {
             public const string Interviews = "readside.interviews";
+            public const string InterviewsId = "readside.interviews_id";
             public const string InterviewSummaries = "readside.interviewsummaries";
             public const string QuestionnaireEntities = "readside.questionnaire_entities";
             public const string InterviewsView = "readside.interviews_view";

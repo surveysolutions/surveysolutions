@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -17,9 +18,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
 
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
-                ITranslationStorage translationStorage,
-                IQuestionnaireTranslator translator,
-                IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+            ITranslationStorage translationStorage,
+            IQuestionnaireTranslator translator,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
             : base(repository, translationStorage, translator)
         {
             this.questionnaireItems = questionnaireItems;
@@ -29,20 +30,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         {
             base.StoreQuestionnaire(id, version, questionnaireDocument);
 
-            foreach (var composite in questionnaireDocument.Children.TreeToEnumerable(d => d.Children))
-            {
-                var question = composite as IQuestion;
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString();
 
-                questionnaireItems.Store(new QuestionnaireCompositeItem
+            if (!questionnaireItems.Query(_ => _.Any(x => x.QuestionnaireIdentity == questionnaireIdentity)))
+            {
+                foreach (var composite in questionnaireDocument.Children.TreeToEnumerable(d => d.Children))
                 {
-                    EntityId = composite.PublicKey,
-                    ParentId = composite.GetParent()?.PublicKey,
-                    QuestionType = question?.QuestionType,
-                    QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString(),
-                    Featured = question?.Featured,
-                    QuestionScope = question?.QuestionScope,
-                    EntityType = composite.GetEntityType()
-                }, composite.PublicKey);
+                    var question = composite as IQuestion;
+
+                    questionnaireItems.Store(new QuestionnaireCompositeItem
+                    {
+                        EntityId = composite.PublicKey,
+                        ParentId = composite.GetParent()?.PublicKey,
+                        QuestionType = question?.QuestionType,
+                        QuestionnaireIdentity = questionnaireIdentity,
+                        Featured = question?.Featured,
+                        QuestionScope = question?.QuestionScope,
+                        EntityType = composite.GetEntityType()
+                    }, composite.PublicKey);
+                }
             }
         }
     }
