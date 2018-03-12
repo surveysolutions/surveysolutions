@@ -835,6 +835,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToReadOnlyCollection();
         }
 
+        public bool IsSignature(Guid entityIdentityId)
+        {
+            var question = this.GetQuestion(entityIdentityId) as IMultimediaQuestion;
+            return question?.IsSignature ?? false;
+        }
+
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 
