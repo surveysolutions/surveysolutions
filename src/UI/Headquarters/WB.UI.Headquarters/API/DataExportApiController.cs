@@ -136,6 +136,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public void ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
