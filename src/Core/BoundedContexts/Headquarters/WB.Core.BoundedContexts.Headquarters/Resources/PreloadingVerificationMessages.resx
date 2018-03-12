@@ -235,4 +235,16 @@
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>File with questionnaire level data is missing.</value>
   </data>
+  <data name="PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+    <value>Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}</value>
+  </data>
+  <data name="PL0042_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
+    <value>Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}</value>
+  </data>
+  <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
+    <value>Text list question {0} has non-unique items: {1}. Interview id: {2}</value>
+  </data>
+  <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
+    <value>Text list question {0} has non-unique item codes: {1}. Interview id: {2}</value>
+  </data>
 </root>
