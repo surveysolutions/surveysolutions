@@ -34,8 +34,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             Execute.Sql(@"ALTER TABLE readside.interviews DROP CONSTRAINT IF EXISTS interviews_pk;");
             Execute.Sql(@"DROP INDEX if exists readside.interviews_asgps_not_null_indx;");
 
-            Execute.Sql(@"ANALYZE VERBOSE readside.interviewsummaries; ANALYZE VERBOSE readside.questionnaire_entities");
-
             Execute.Sql($@"
                 INSERT INTO readside.temp_interviews (interviewid, entityid, rostervector, isenabled, isreadonly, 
                     invalidvalidations, asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, 
@@ -47,9 +45,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     array_to_string(invalidvalidations,'-') as invalidvalidations, 
                     asstring, asint, aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag
                 from readside.interviews i
-                    inner join readside.interviewsummaries s on s.interviewid = i.interviewid 
+                    inner join readside.interviews_id s on s.interviewid = i.interviewid
+                    inner join readside.interviewsummaries sum on sum.interviewid = i.interviewid
                     inner join readside.questionnaire_entities q 
-                        on q.entityid = i.entityid  and q.questionnaireidentity = s.questionnaireidentity
+                        on q.entityid = i.entityid  and q.questionnaireidentity = sum.questionnaireidentity
                 where not (q.entity_type = {(int)EntityType.Section})");
             
             Delete.Table(@"interviews").InSchema(@"readside");
@@ -67,7 +66,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
         public override void Down()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
