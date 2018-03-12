@@ -596,4 +596,7 @@
   <data name="Interview_SignatureSignHere" xml:space="preserve">
     <value>Подпись</value>
   </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Сохранить подпись</value>
+  </data>
 </root>
