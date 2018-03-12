@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -9,8 +8,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
@@ -18,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class RealQuestionViewModel : MvxNotifyPropertyChanged,
         IInterviewEntityViewModel,
         ILiteEventHandler<AnswersRemoved>, 
-        ICompositeQuestion,
+        ICompositeQuestionWithChildren,
         IDisposable
     {
         const double jsonSerializerDecimalLimit = 9999999999999999;
@@ -27,10 +26,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IQuestionnaireStorage questionnaireRepository;
+        private readonly SpecialValuesViewModel specialValues;
         private Identity questionIdentity;
         private string interviewId;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
+        public SpecialValuesViewModel SpecialValues => this.specialValues;
 
         public AnsweringViewModel Answering { get; }
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private double? answer;
         public double? Answer
         {
-            get { return this.answer; }
+            get => this.answer;
             set
             {
                 if (this.answer != value)
@@ -49,20 +50,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private IMvxCommand valueChangeCommand;
-        public IMvxCommand ValueChangeCommand => this.valueChangeCommand ?? (this.valueChangeCommand = new MvxCommand(this.SendAnswerRealQuestionCommand));
+        public IMvxAsyncCommand ValueChangeCommand => new MvxAsyncCommand(this.SendAnswerRealQuestionCommand);
 
-        private IMvxCommand answerRemoveCommand;
+        public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswer);
+
         private readonly QuestionStateViewModel<NumericRealQuestionAnswered> questionState;
 
-        public IMvxCommand RemoveAnswerCommand
-        {
-            get
-            {
-                return this.answerRemoveCommand ??
-                       (this.answerRemoveCommand = new MvxCommand(async () => await this.RemoveAnswer()));
-            }
-        }
+     
 
         private async Task RemoveAnswer()
         {
@@ -91,7 +85,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<NumericRealQuestionAnswered> questionStateViewModel,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            IQuestionnaireStorage questionnaireRepository, ILiteEventRegistry liteEventRegistry)
+            IQuestionnaireStorage questionnaireRepository, 
+            ILiteEventRegistry liteEventRegistry, 
+            SpecialValuesViewModel specialValues)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -101,17 +97,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.questionnaireRepository = questionnaireRepository;
             this.liteEventRegistry = liteEventRegistry;
+            this.specialValues = specialValues;
         }
 
         public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+            this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interviewId;
             this.liteEventRegistry.Subscribe(this, interviewId);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
@@ -128,17 +123,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.Answer = doubleQuestion.GetAnswer().Value;
             }
+
+            specialValues.Init(interviewId, entityIdentity, this.questionState);
+            this.specialValues.SpecialValueChanged += SpecialValueChanged;
+            this.specialValues.SpecialValueRemoved += SpecialValueRemoved;
         }
 
-        private async void SendAnswerRealQuestionCommand()
+        private async void SpecialValueChanged(object sender, EventArgs eventArgs)
+        {
+            var selectedSpecialValue = (SingleOptionQuestionOptionViewModel)sender;
+            await SaveAnswer(selectedSpecialValue.Value, true);
+        }
+
+        private async void SpecialValueRemoved(object sender, EventArgs eventArgs)
+        {
+            await RemoveAnswer();
+        }
+
+        private async Task SendAnswerRealQuestionCommand()
         {
             if (this.Answer == null)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Integer_EmptyValueError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources
+                    .Interview_Question_Integer_EmptyValueError);
                 return;
             }
-
-            
 
             if (this.Answer > jsonSerializerDecimalLimit || this.Answer < -jsonSerializerDecimalLimit)
             {
@@ -146,18 +155,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
+            var answeredOrSelectedValue = Convert.ToDecimal(this.Answer.Value);
+            await SaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
+        }
+
+        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        {
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
-                answer: this.Answer.Value);
+                answer: Convert.ToDouble(answeredOrSelectedValue.Value));
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                if (isSpecialValueSelected)
+                {
+                    this.Answer = null;
+                }
+
+                this.specialValues.SetAnswer(answeredOrSelectedValue);
             }
             catch (InterviewException ex)
             {
@@ -169,6 +191,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.liteEventRegistry.Unsubscribe(this); 
             this.QuestionState.Dispose();
+
+            this.specialValues.SpecialValueChanged -= SpecialValueChanged;
+            this.specialValues.SpecialValueRemoved -= SpecialValueRemoved;
+            this.specialValues.Dispose();
         }
 
         public void Handle(AnswersRemoved @event)
@@ -178,8 +204,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.Answer = null;
+                    this.specialValues.ClearSelectionAndShowValues();
                 }
             }
         }
+
+        public IObservableCollection<ICompositeEntity> Children => specialValues.AsChildren;
     }
 }

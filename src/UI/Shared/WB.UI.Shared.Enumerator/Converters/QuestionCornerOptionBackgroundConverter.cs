@@ -11,13 +11,13 @@ namespace WB.UI.Shared.Enumerator.Converters
             bool isTop = (bool)parameter;
             switch (value)
             {
-                case QuestionStateStyle.NonAnswered:
+                case QuestionStateStyle.NonAnsweredEnabled:
                     return isTop ? Resource.Drawable.question_option_top_border_nonanswered : Resource.Drawable.question_option_bottom_border_nonanswered;
 
-                case QuestionStateStyle.Invalid:
+                case QuestionStateStyle.InvalidEnabled:
                     return isTop ? Resource.Drawable.question_option_top_border_invalid : Resource.Drawable.question_option_bottom_border_invalid;
 
-                case QuestionStateStyle.Answered:
+                case QuestionStateStyle.AnsweredEnabled:
                     return Resource.Drawable.question_option_corner_answered;
 
                 default:

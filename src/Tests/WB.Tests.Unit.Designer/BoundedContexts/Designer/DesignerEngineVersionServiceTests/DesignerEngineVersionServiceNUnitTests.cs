@@ -101,5 +101,20 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             Assert.That(contentVersion, Is.EqualTo(22));
         }
+        
+        [Test]
+        public void when_questionnaire_contains_numeric_with_soecial_values_question_Should_return_version_22()
+        {
+            QuestionnaireDocument questionnaire = Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(options: Create.Options(Create.Option(1, "Hello"), Create.Option(2, "World"))
+            ));
+
+            var service = this.CreateDesignerEngineVersionService();
+
+            // act 
+            var contentVersion = service.GetQuestionnaireContentVersion(questionnaire);
+
+            Assert.That(contentVersion, Is.EqualTo(22));
+        }
     }
 }

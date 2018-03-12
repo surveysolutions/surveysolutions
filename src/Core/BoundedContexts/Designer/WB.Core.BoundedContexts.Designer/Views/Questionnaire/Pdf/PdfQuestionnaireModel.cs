@@ -78,6 +78,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public List<IQuestion> QuestionsWithLongOptionsList { get; internal set; }
 
+        public List<IQuestion> QuestionsWithLongSpecialValuesList { get; internal set; }
+
         public List<IQuestion> QuestionsWithLongInstructions { get; internal set; }
 
         public List<IQuestion> QuestionsWithLongOptionsFilterExpression { get; internal set; }
@@ -238,8 +240,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public string GetFormattedOptionValue(List<Answer> options, string optionValueAsString)
         {
-            var values = options.Select(x => double.Parse(x.AnswerValue));
+            if (string.IsNullOrEmpty(optionValueAsString))
+                return string.Empty;
+
             var optionValue = decimal.Parse(optionValueAsString);
+
+            var values = options.Select(x => string.IsNullOrEmpty(x.AnswerValue) ? 0 : double.Parse(x.AnswerValue));
             return FormatAsIntegerWithLeadingZeros(optionValue, values);
         }
 
@@ -385,6 +391,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                 {
                     return this.VariableWithLongExpressions.FindIndex(x => x.PublicKey == entityId) + 1;
                 }
+                case "SV":
+                {
+                    return this.QuestionsWithLongSpecialValuesList.FindIndex(x => x.PublicKey == entityId) + 1;
+                }
             }
             return -1;
         }
@@ -446,11 +456,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
         public bool IsOptionsAppendixEmpty => QuestionsWithLongOptionsList.Count == 0;
         public bool IsVariablesAppendixEmpty => VariableWithLongExpressions.Count == 0;
 
+        public bool IsSpecialValuesAppendixEmpty => QuestionsWithLongSpecialValuesList.Count == 0;
+
         public char ConditionsAppendixIndex => 'A';
         public char ValidationsAppendixIndex => IsConditionsAppendixEmpty ? ConditionsAppendixIndex : (char)(ConditionsAppendixIndex + 1);
         public char InstructionsAppendixIndex => IsValidationsAppendixEmpty ? ValidationsAppendixIndex : (char)(ValidationsAppendixIndex + 1);
         public char OptionsAppendixIndex => IsInstructionsAppendixEmpty ? InstructionsAppendixIndex : (char)(InstructionsAppendixIndex + 1);
         public char VariablesAppendixIndex => IsOptionsAppendixEmpty ? OptionsAppendixIndex : (char)(OptionsAppendixIndex + 1);
         public char OptionsFilterAppendixIndex => IsVariablesAppendixEmpty ? VariablesAppendixIndex : (char)(VariablesAppendixIndex + 1);
+
+        public char SpecialValuesAppendixIndex => IsVariablesAppendixEmpty ? OptionsFilterAppendixIndex : (char)(OptionsFilterAppendixIndex + 1);
     }
 }

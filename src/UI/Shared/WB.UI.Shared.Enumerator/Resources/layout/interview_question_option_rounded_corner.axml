@@ -5,5 +5,5 @@
               android:orientation="horizontal"
               local:MvxBind="
                 Visible HasOptions;
-                BackgroundStyle QuestionCornerOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered), IsTop);">
+                BackgroundStyle QuestionCornerOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false), IsTop);">
 </LinearLayout>
