@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Code
             registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();
             registry.Bind<IExpressionsPlayOrderProvider, ExpressionsPlayOrderProvider>();
             registry.Bind<IQuestionnaireInfoFactory, QuestionnaireInfoFactory>();
-            registry.Bind<ICommentsFactory, CommentsFactory>();
+            registry.Bind<ICommentsService, CommentsService>();
             registry.BindToConstant<PdfSettings>(() => pdfSettings);
             registry.BindToConstant<DeskSettings>(() => deskSettings);
             registry.BindToConstant<QuestionnaireHistorySettings>(() => historySettings);

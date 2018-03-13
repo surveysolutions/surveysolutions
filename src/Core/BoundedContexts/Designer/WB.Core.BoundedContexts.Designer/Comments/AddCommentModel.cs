@@ -8,5 +8,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         public Guid EntityId { get; set; }
         public Guid QuestionnaireId { get; set; }
         public string Comment { get; set; }
+        public string UserName { get; set; }
+        public string UserEmail { get; set; }
     }
 }
