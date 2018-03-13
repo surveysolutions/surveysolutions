@@ -1059,85 +1059,93 @@
                 padding: 8px 24px 0 18px;
             }
 
-            > .question-editor {
-                position: relative;
-                height: 100%;
-                background: white;
-                padding: 0;
+        }
+    }
+}
 
-                > form {
-                    width: 100%;
-                    height: 100%;
+.question-editor {
+    position: relative;
+    height: 100%;
+    background: white;
+    padding: 0;
+
+    form {
+        width: 100%;
+        height: 100%;
 
 
 
-                    > .form-holder {
-                        padding: 10px 20px;
-                        height: @form-holder-height;
-                        overflow: auto;
+        > .form-holder {
+            padding: 10px 20px;
+            height: @form-holder-height;
+            overflow: auto;
 
-                        .breadcrumbs-container {
-                            min-height: 25px;
-                            margin-bottom: 5px;
+            .breadcrumbs-container {
+                min-height: 25px;
+                margin-bottom: 5px;
 
-                            .breadcrumbs {
-                                .wb-breadcrumbs('gray');
-                            }
-                        }
+                .breadcrumbs {
+                    .wb-breadcrumbs('gray');
+                }
+            }
 
-                        .gray {
-                            padding: 8px;
-                            background: #f1f2f3;
-                            border-radius: 4px;
-                            .clearfix();
-                        }
+            .gray {
+                padding: 8px;
+                background: #f1f2f3;
+                border-radius: 4px;
+                .clearfix();
+            }
 
-                        .form-group {
-                            > label {
-                                .lucida-console-font();
-                                font-size: 14px;
-                                color: #5d5d5d;
-                                font-weight: normal;
-                            }
-                        }
-                    }
-
-                    > .form-buttons-holder {
-                        background-color: #fff;
-                        padding: 10px 20px;
-                        position: absolute;
-                        width: 100%;
-                        height: @form-btns-hldr-height;
-                        bottom: 0;
-                        left: 0;
-                        //margin: 16px 0px;
-                        .clearfix();
-
-                        .pull-left, .pull-right {
-                            height: 42px;
-                        }
-
-                        .pull-left {
-                            > * {
-                                margin-right: 12px;
-                            }
-                        }
-
-                        .pull-right {
-                            > * {
-                                margin-left: 12px;
-                            }
-                        }
-
-                        > div > a {
-                            cursor: pointer;
-                            .inline-button-fontstyle();
-                        }
-                    }
+            .form-group {
+                > label {
+                    .lucida-console-font();
+                    font-size: 14px;
+                    color: #5d5d5d;
+                    font-weight: normal;
                 }
             }
         }
+
+        > .form-buttons-holder {
+            background-color: #fff;
+            padding: 10px 20px;
+            position: absolute;
+            width: 100%;
+            height: @form-btns-hldr-height;
+            bottom: 0;
+            left: 0;
+            //margin: 16px 0px;
+            .clearfix();
+
+            .pull-left, .pull-right {
+                height: 42px;
+            }
+
+            .pull-left {
+                > * {
+                    margin-right: 12px;
+                }
+            }
+
+            .pull-right {
+                > * {
+                    margin-left: 12px;
+                }
+            }
+
+            > div > a {
+                cursor: pointer;
+                .inline-button-fontstyle();
+            }
+        }
     }
+}
+
+.question-editor.commenting {
+    height: 50%;
+}
+.comments-editor {
+    height: 50%;
 }
 
 .highlighted-add {
