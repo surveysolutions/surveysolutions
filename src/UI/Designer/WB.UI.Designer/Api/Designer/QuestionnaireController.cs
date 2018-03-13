@@ -240,6 +240,5 @@ namespace WB.UI.Designer.Api
 
             return questionnaire;
         }
-
     }
 }

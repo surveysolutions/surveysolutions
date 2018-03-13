@@ -33,6 +33,7 @@
 
             $scope.highlightedId = null;
             $scope.isSearchInFocus = false;
+            $scope.isCommentsBlockVisible = false;
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
@@ -377,6 +378,11 @@
                         });
                     }
                 });
+            };
+
+            $scope.toggleComments = function (item) {
+                var itemIdToComment = item.itemId || $state.params.itemId;
+                $scope.isCommentsBlockVisible = !$scope.isCommentsBlockVisible;
             };
 
             $scope.deleteVariable = function (item) {
