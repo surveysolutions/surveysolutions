@@ -19,6 +19,11 @@ namespace WB.Infrastructure.Native.Logging
             this.logger = LogManager.GetLogger(name);
         }
 
+        public void Trace(string message, Exception exception = null)
+        {
+            this.logger.Trace(exception, message);
+        }
+
         public void Debug(string message, Exception exception = null)
         {
             this.logger.Debug(exception, message);
