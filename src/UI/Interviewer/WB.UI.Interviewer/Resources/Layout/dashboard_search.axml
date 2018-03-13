@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    local:MvxBind="StatusBarColorByInterviewStatus TypeOfInterviews;">
+
+  <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+      local:layout_scrollFlags="scroll|enterAlways"
+      local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
+        <LinearLayout style="@style/Dashboard_SearchView_Container" local:MvxBind="Enabled Not(IsInProgressLongOperation); Clickable IsInProgressLongOperation;">
+            <EditText style="@style/Dashboard_SearchView_FilterInput"
+                      local:MvxBind="SetFocus Not(Or(IsInProgressLongOperation, IsInProgressLongOperation)); 
+                                     Watermark EmptySearchText; 
+                                     TextChanged SearchCommand;
+                                     Enabled Not(IsInProgressLongOperation); Clickable IsInProgressLongOperation;" />
+            <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
+                         local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable IsInProgressLongOperation;"/>
+        </LinearLayout>
+    </android.support.v7.widget.Toolbar>
+  </android.support.design.widget.AppBarLayout>
+
+  <FrameLayout android:layout_width="match_parent"
+               android:layout_height="match_parent">
+
+    <ProgressBar style="@style/Dashboard_Progress_Indicator"
+            local:MvxBind="ShowProgress Or(IsInProgressLongOperation, IsInProgressItemsLoading); Visibility VisibleOrInvisible(Or(IsInProgressLongOperation, IsInProgressItemsLoading))" />
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:orientation="vertical"
+      android:layout_height="match_parent">
+
+        <FrameLayout android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+            <LinearLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:descendantFocusability="blocksDescendants">
+              <MvxRecyclerView
+                  style="@style/FullWidthWrappingLayout"
+                  android:id="@+id/dashboard_tab_recycler"
+                  android:scrollbars="vertical"
+                  local:MvxTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
+                  local:MvxBind="ItemsSource UiItems;" />
+            </LinearLayout>
+            <LinearLayout style="@style/Interview_GroupWithDivider"
+                          local:MvxBind="Enabled Not(Or(IsInProgressLongOperation, IsInProgressItemsLoading)); Clickable Or(IsInProgressLongOperation, IsInProgressItemsLoading);"
+                          android:layout_height="match_parent">
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+  </FrameLayout>
+</LinearLayout>

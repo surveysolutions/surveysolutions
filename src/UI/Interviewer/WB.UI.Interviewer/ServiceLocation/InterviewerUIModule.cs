@@ -75,6 +75,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<MapSynchronizationViewModel>();
             registry.Bind<RelinkDeviceViewModel>();
             registry.Bind<DashboardViewModel>();
+            registry.Bind<DashboardSearchViewModel>();
             registry.Bind<MapsViewModel>();
             registry.Bind<CompletedInterviewsViewModel>();
             registry.Bind<RejectedInterviewsViewModel>();
