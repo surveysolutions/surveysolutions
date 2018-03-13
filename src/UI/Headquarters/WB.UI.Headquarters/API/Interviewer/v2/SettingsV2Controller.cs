@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.CompanyLogo;
@@ -12,20 +13,23 @@ using WB.UI.Headquarters.Models.CompanyLogo;
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-    public class CompanyLogoApiV2Controller : ApiController
+    public class SettingsV2Controller : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
+        private readonly IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage;
 
-        public CompanyLogoApiV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
+        public SettingsV2Controller(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage, 
+            IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
             this.appSettingsStorage = appSettingsStorage;
+            this.interviewerSettingsStorage = interviewerSettingsStorage;
         }
 
         [HttpGet]
-        public HttpResponseMessage Get()
+        public HttpResponseMessage CompanyLogo()
         {
             var incomingEtag = Request.Headers.IfNoneMatch.FirstOrDefault()?.Tag ?? "";
-            var companyLogo = this.appSettingsStorage.GetById(CompanyLogo.CompanyLogoStorageKey);
+            var companyLogo = this.appSettingsStorage.GetById(AppSetting.CompanyLogoStorageKey);
 
             if (companyLogo == null) return Request.CreateResponse(HttpStatusCode.NoContent);
 
@@ -42,5 +46,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
             return response;
         }
+
+        [HttpGet]
+        public bool AutoUpdateEnabled() =>
+            this.interviewerSettingsStorage.GetById(AppSetting.InterviewerSettings)?.AutoUpdateEnabled ?? true;
     }
 }
