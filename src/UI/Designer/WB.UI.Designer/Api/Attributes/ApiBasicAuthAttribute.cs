@@ -90,7 +90,7 @@ namespace WB.UI.Designer.Api.Attributes
                         var clientIpAddress = ipAddressProvider.GetClientIpAddress();
                         if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
                         {
-                            this.ThrowForbiddenException(actionContext, ErrorMessages.UserNeedToContactSupportFormat);
+                            this.ThrowForbiddenException(actionContext, string.Format(ErrorMessages.UserNeedToContactSupportFormat, clientIpAddress));
                             return;
                         }
                     }
