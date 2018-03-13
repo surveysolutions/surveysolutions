@@ -2,6 +2,7 @@ using System;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -45,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             }
         }
 
-        private AbstractDataExportHandler GetExportHandler(DataExportFormat format)
+        private BaseAbstractDataExportHandler GetExportHandler(DataExportFormat format)
         {
             switch (format)
             {
