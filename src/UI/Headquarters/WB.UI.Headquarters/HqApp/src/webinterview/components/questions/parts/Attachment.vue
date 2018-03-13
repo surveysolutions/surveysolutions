@@ -10,11 +10,11 @@
     </div>
 </template>
 <script lang="js">
+    import appendquery from "append-query"
 
     function appendSearchParam(uri, name, value) {
-        var url = new URL(uri, window.location)
-        url.searchParams.append(name, value)
-        return url
+        const args = { [name]: value } // keep in separate line to make IE happy
+        return appendquery(uri, args);
     }
 
     export default {
