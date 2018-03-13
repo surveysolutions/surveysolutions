@@ -16,11 +16,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 
         public InterviewDataExportSettings(string directoryPath, 
             bool enableInterviewHistory, 
-            int maxRecordsCountPerOneExportQuery, 
-            int limitOfCachedItemsByDenormalizer,
-            int interviewsExportParallelTasksLimit,
-            int interviewIdsQueryBatchSize,
-            int errorsExporterBatchSize)
+            int maxRecordsCountPerOneExportQuery = 1000, 
+            int limitOfCachedItemsByDenormalizer = 100,
+            int interviewsExportParallelTasksLimit = 1,
+            int interviewIdsQueryBatchSize = 0,
+            int errorsExporterBatchSize = 0)
         {
             this.EnableInterviewHistory = enableInterviewHistory;
             this.MaxRecordsCountPerOneExportQuery = maxRecordsCountPerOneExportQuery;
