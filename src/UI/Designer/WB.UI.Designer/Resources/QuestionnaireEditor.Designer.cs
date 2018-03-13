@@ -376,6 +376,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New comment.
+        /// </summary>
+        public static string EntityComment {
+            get {
+                return ResourceManager.GetString("EntityComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entry was not found in questionnaire, please select another..
         /// </summary>
         public static string EntryWasNotFound {
@@ -696,6 +705,15 @@ namespace WB.UI.Designer.Resources {
         public static string HelpMask {
             get {
                 return ResourceManager.GetString("HelpMask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to add comment.
+        /// </summary>
+        public static string HelpNewComment {
+            get {
+                return ResourceManager.GetString("HelpNewComment", resourceCulture);
             }
         }
         

@@ -8980,6 +8980,17 @@ textarea#edit-group-description {
 }
 .comments-editor {
   height: 50%;
+  padding: 0;
+  border-top: 2px solid #f1f2f3;
+}
+.comments-editor form {
+  width: 100%;
+  height: 100%;
+}
+.comments-editor form .form-holder {
+  padding: 10px 20px;
+  height: 100%;
+  overflow: auto;
 }
 .highlighted-add {
   border-radius: 4px 4px 0 0;
