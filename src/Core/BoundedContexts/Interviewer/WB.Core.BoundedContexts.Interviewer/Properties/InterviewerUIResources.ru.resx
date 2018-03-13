@@ -720,4 +720,20 @@
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>
   </data>
+    <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>Найдено {0} элементов по введенному тексту</value>
+    <comment>Найдено {0} элементов по введенному тексту</comment>
+  </data>
+    <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Введите текст для поиска</value>
+    <comment>Введите текст для поиска</comment>
+  </data>
+    <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Ничего не найдено по введенному тексту</value>
+    <comment>Ничего не найдено по введенному тексту</comment>
+  </data>
+    <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Выполните поиск для отображения результатов</value>
+    <comment>Выполните поиск для отображения результатов</comment>
+  </data>
 </root>
