@@ -1060,4 +1060,10 @@
   <data name="QuestionAddSpecialValues" xml:space="preserve">
     <value>Add special value</value>
   </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>New comment</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>add comment</value>
+  </data>
 </root>
