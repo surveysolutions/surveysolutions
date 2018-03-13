@@ -160,6 +160,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         {
                             res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
                                 question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().LinkedSourceId).ToList();
+                            var callerQuestionnaire = questionnaire;
+                            res.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                         });
                         break;
                     case InterviewQuestionType.DateTime:

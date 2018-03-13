@@ -44,6 +44,9 @@
                 <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
                     {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
                 </button>
+                <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
+                    {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
+                </button>
             </div>
         </div>
         <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal" />
@@ -55,7 +58,9 @@
             <span class="countDown">{{approveCharsLeft}}</span>
         </Confirm>
 
-        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" :title="$t('Pages.ApproveRejectPartialView_RejectLAbel')" :disableOk="interviewerShouldbeSelected && !newResponsibleId">
+        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" 
+                :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')" 
+                :disableOk="interviewerShouldbeSelected && !newResponsibleId">
             <form v-if="interviewerShouldbeSelected" onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{ $t("Details.ChooseResponsibleInterviewer") }}</label>
@@ -137,6 +142,9 @@ export default {
         this.$config.model.approveReject.supervisorApproveAllowed ||
         this.$config.model.approveReject.hqOrAdminApproveAllowed
       );
+    },
+    showUnapproveButton() {
+        return this.$config.model.approveReject.hqOrAdminUnapproveAllowed;
     },
     showRejectButton() {      
       return (
