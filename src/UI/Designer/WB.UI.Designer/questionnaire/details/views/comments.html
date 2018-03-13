@@ -1,0 +1,16 @@
+﻿<form role="form" id="comments-editor" name="staticTextForm" unsaved-warning-form>
+    <div class="form-holder">
+        <div ng-repeat="comment in comments">
+            <span>{{comment.userEmail}}</span><span class="text-success"><em ng-i18next="[i18next]({dateTime: comment.date})SavedAtTimestamp"></em></span>
+            <p>{{comment.comment}}</p>
+        </div>
+    </div>
+    <div class="form-buttons-holder">
+        <div class="pull-left">
+            
+        </div>
+        <div class="pull-right">
+
+        </div>
+    </div>
+</form>

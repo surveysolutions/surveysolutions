@@ -210,6 +210,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Api\Designer\CommentsController.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
@@ -460,6 +461,8 @@
     <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
+    <Content Include="questionnaire\details\scripts\controllers\comments.js" />
+    <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
@@ -469,11 +472,13 @@
     <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
+    <Content Include="questionnaire\details\scripts\services\commentsService.js" />
     <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
+    <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -928,6 +933,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
