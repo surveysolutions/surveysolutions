@@ -315,7 +315,6 @@
     <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
       <SubType>Designer</SubType>
     </AndroidResource>

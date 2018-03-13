@@ -10,7 +10,6 @@
 
 namespace WB.Core.BoundedContexts.Interviewer.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources", typeof(InterviewerUIResources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources", typeof(InterviewerUIResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -198,6 +197,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Perform search to display results.
+        /// </summary>
+        public static string Dashboard_NeedTextForSearch {
+            get {
+                return ResourceManager.GetString("Dashboard_NeedTextForSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New ({0}).
         /// </summary>
         public static string Dashboard_NewItemsLinkText {
@@ -250,6 +258,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_NoNewItemsLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_NoNewItemsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing found for entered text.
+        /// </summary>
+        public static string Dashboard_NotFoundSearchResult {
+            get {
+                return ResourceManager.GetString("Dashboard_NotFoundSearchResult", resourceCulture);
             }
         }
         
@@ -314,6 +331,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_Reopen {
             get {
                 return ResourceManager.GetString("Dashboard_Reopen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} elements found for entered text.
+        /// </summary>
+        public static string Dashboard_SearchResult {
+            get {
+                return ResourceManager.GetString("Dashboard_SearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter text for search.
+        /// </summary>
+        public static string Dashboard_SearchWatermark {
+            get {
+                return ResourceManager.GetString("Dashboard_SearchWatermark", resourceCulture);
             }
         }
         

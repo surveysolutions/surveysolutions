@@ -714,7 +714,19 @@ Downloaded {3}%</value>
     <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
     <value>Map synchronization succesfuly finished</value>
   </data>
-    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
     <value>Map sync error</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} elements found for entered text</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Nothing found for entered text</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Perform search to display results</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Enter text for search</value>
   </data>
 </root>

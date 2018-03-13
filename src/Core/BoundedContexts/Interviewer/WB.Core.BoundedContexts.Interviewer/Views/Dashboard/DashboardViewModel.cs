@@ -257,5 +257,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
             }
         }
+
+        public IMvxCommand ShowSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateTo<DashboardSearchViewModel>());
     }
 }
