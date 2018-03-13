@@ -138,6 +138,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var selectedOption = this.GetOptionByFilter(optionText);
 
+            if (selectedOption == null)
+                throw new InvalidOperationException($"Option was not found for value '{optionText}'");
+
             if (this.answer == selectedOption.Value)
             {
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
