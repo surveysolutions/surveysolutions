@@ -32,18 +32,6 @@ namespace WB.UI.Designer.Api
             public string Command { get; set; }
         }
 
-        public class CommandProcessResult
-        {
-            public CommandProcessResult(HttpResponseMessage httpResponseMessage, bool hasErrors = true)
-            {
-                this.Response = httpResponseMessage;
-                this.HasErrors = hasErrors;
-            }
-
-            public bool HasErrors { get; set; }
-            public HttpResponseMessage Response { get; set; }
-        }
-
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly ILogger logger;
@@ -288,5 +276,17 @@ namespace WB.UI.Designer.Api
 
             return new CommandProcessResult(this.Request.CreateResponse(new JsonResponseResult()), false);
         }
+    }
+
+    public class CommandProcessResult
+    {
+        public CommandProcessResult(HttpResponseMessage httpResponseMessage, bool hasErrors = true)
+        {
+            this.Response = httpResponseMessage;
+            this.HasErrors = hasErrors;
+        }
+
+        public bool HasErrors { get; set; }
+        public HttpResponseMessage Response { get; set; }
     }
 }

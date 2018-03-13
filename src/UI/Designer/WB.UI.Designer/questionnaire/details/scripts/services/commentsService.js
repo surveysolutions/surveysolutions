@@ -1,20 +1,47 @@
 ﻿(function() {
     'use strict';
-    angular.module('designerApp')
-        .factory('commentsService', [
-            '$http', 'commandService', 'utilityService',
-            function($http, commandService, string) {
+    angular.module('designerApp').factory('commentsService', 
+        function($http, commandService, utilityService, blockUI, $q) {
+        var urlBase = '../../questionnaire/{0}';
+        var commentsService = {};
 
-                var urlBase = '../../api/comments';
-                var commentsService = {};
+        function post(url, data) {
+            return sendRequest('POST', url, data);
+        }
+        function patch(url, data) {
+            return sendRequest('PATCH', url, data);
+        }
+        function sendRequest(method, url, data) {
+            blockUI.start();
+            return $http({
+                method: method,
+                url: url,
+                data: data,
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            }).then(function (response) {
+                blockUI.stop();
+                return response;
+            }, function (response) {
+                blockUI.stop();
+                return $q.reject(response);
+            });
+        }
 
-                commentsService.getItemCommentsById = function(questionnaireId, itemId) {
-                    var url = string.format('{0}/get/{1}?itemId={2}', urlBase, questionnaireId, itemId);
-                    return $http.get(url);
-                };
+        commentsService.getItemCommentsById = function(questionnaireId, itemId) {
+            var url = utilityService.format('{0}/entity/{1}/comments', utilityService.format(urlBase, questionnaireId), itemId);
+            return $http.get(url);
+        };
 
-                return commentsService;
-            }
-        ]);
+        commentsService.resolveComment = function(questionnaireId, commentId) {
+            var url = utilityService.format('{0}/comment/resolve/{1}', utilityService.format(urlBase, questionnaireId), commentId);
+            return patch(url);
+        };
 
+        commentsService.postComment = function(questionnaireId, itemId, comment) {
+            var url = utilityService.format('{0}/entity/{1}/addComment', utilityService.format(urlBase, questionnaireId), itemId);
+            return post(url, comment);
+        };
+
+        return commentsService;
+    });
 }());

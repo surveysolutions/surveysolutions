@@ -383,6 +383,9 @@
             $scope.toggleComments = function (item) {
                 var itemIdToComment = item.itemId || $state.params.itemId;
                 $scope.isCommentsBlockVisible = !$scope.isCommentsBlockVisible;
+                if ($scope.isCommentsBlockVisible) {
+                    $rootScope.$broadcast("commentsOpened", {});
+                }
             };
 
             $scope.deleteVariable = function (item) {

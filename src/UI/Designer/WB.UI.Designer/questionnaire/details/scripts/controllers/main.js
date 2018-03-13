@@ -589,7 +589,8 @@ angular.module('designerApp')
             };
 
             userService.getCurrentUserName().then(function(result) {
-                $scope.currentUserName = result.data;
+                $scope.currentUserName = result.data.userName;
+                $scope.currentUserEmail = result.data.email;
             });
 
             getQuestionnaire();

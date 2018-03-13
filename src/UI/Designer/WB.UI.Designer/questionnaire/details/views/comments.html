@@ -1,16 +1,19 @@
-﻿<form role="form" id="comments-editor" name="staticTextForm" unsaved-warning-form>
+﻿<form role="form" id="comments-editor" name="addCommentForm" unsaved-warning-form>
     <div class="form-holder">
         <div ng-repeat="comment in comments">
-            <span>{{comment.userEmail}}</span><span class="text-success"><em ng-i18next="[i18next]({dateTime: comment.date})SavedAtTimestamp"></em></span>
+            <button ng-hide="comment.isResolved" type="button" class="btn btn-sm btn-link pull-right" ng-click="resolveComment(comment)">Resolve</button>
+            <span>{{comment.userEmail}}</span><span class="text-success">{{comment.date}}</span>
             <p>{{comment.comment}}</p>
         </div>
-    </div>
-    <div class="form-buttons-holder">
-        <div class="pull-left">
-            
-        </div>
-        <div class="pull-right">
 
+        <div class="row" id="edit-entity-comment-row">
+            <div class="form-group col-xs-12">
+                <label for="edit-entity-comment"> {{'EntityComment' | i18next}} <help key="newComment" /></label>
+                <textarea id="edit-entity-comment" ng-model="activeComment.comment" class="form-control" required msd-elastic></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="edit-post-comment-button" class="btn btn-lg " ng-class="{ 'btn-primary': addCommentForm.$dirty }" unsaved-warning-clear ng-click="postComment()" ng-disabled="!addCommentForm.$valid" ng-i18next>Add comment</button>
         </div>
     </div>
 </form>
