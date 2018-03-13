@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
@@ -68,9 +69,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         }
 
         SettingsV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
-            string requestEtag = null)
+            string requestEtag = null, IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage = null)
         {
-            var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(), TODO);
+            var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
+                interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>());
             var httpRequestMessage = new HttpRequestMessage();
             if (requestEtag != null)
             {
