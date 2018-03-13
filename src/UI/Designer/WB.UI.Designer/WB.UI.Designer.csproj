@@ -255,6 +255,7 @@
     <Compile Include="Implementation\Services\WebTesterSettings.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M022_AddCommentsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
