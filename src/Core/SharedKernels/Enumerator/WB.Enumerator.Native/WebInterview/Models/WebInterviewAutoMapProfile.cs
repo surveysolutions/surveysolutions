@@ -164,6 +164,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
             this.CreateMap<InterviewTreeQuestion, InterviewMultimediaQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
+                .ForMember(x => x.AnswerTimeUtc, opts => opts.MapFrom(x => x.GetAsInterviewTreeMultimediaQuestion().GetAnswer().AnswerTimeUtc))
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => $@"?interviewId={x.Tree.InterviewId}&questionId={x.Identity}&filename={x.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName}"));
         }
 
