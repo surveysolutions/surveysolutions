@@ -78,7 +78,11 @@
                 @foreach (InterviewImportError error in Model.ImportErrors)
                 {
                     <div class="error-block">
-                        <h5 class="error-text">@error.ErrorMessage</h5>
+                        <h5 class="error-text"><span>@error.ErrorCode</span>: @error.ErrorMessage</h5>
+                        @foreach (var reference in error.References)
+                        {
+                            <p>@BatchUpload.FileName: @reference.DataFile</p>
+                        }
                     </div>
                 }
                 <div class="action-buttons">

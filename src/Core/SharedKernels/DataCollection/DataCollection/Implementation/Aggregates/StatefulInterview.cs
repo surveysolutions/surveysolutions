@@ -910,18 +910,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Pause(PauseInterviewCommand command)
         {
-            var invariants = new InterviewPropertiesInvariants(properties);
-            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-
-            ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
+            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
+            {
+                ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
+            }
         }
 
         public void Resume(ResumeInterviewCommand command)
         {
-            var invariants = new InterviewPropertiesInvariants(properties);
-            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-
-            ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
+            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
+            {
+                ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
+            }
         }
 
         public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)
