@@ -910,7 +910,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Pause(PauseInterviewCommand command)
         {
-            if (Status != InterviewStatus.Completed)
+            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
             {
                 ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
             }
@@ -918,7 +918,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Resume(ResumeInterviewCommand command)
         {
-            if (Status != InterviewStatus.Completed)
+            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
             {
                 ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
             }
