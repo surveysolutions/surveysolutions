@@ -230,6 +230,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
             this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption),
             this.Verifier(this.IdIsEmpty, "PL0042", PreloadingVerificationMessages.PL0042_IdIsEmpty),
+            this.ErrorsByQuantityColumn,
 
             this.ErrorsByResposibleName
         };
