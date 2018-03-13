@@ -12,7 +12,7 @@ using WB.UI.Headquarters.Models.CompanyLogo;
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {
     [TestFixture]
-    [TestOf(typeof(CompanyLogoApiV2Controller))]
+    [TestOf(typeof(SettingsV2Controller))]
     public class CompanyLogoApiV2ControllerTests
     {
         [Test]
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var controller = this.GetController();
 
             // act
-            var response = controller.Get();
+            var response = controller.CompanyLogo();
             
             // assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var controller = this.GetController(logoStorage);
 
             // act
-            var response = controller.Get();
+            var response = controller.CompanyLogo();
 
             // assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -60,17 +60,17 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var controller = this.GetController(logoStorage, requestEtag: $"\"{logo.GetEtagValue()}\"");
 
             // act
-            var response = controller.Get();
+            var response = controller.CompanyLogo();
 
             // assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotModified));
             Assert.That(response.Content, Is.Null);
         }
 
-        CompanyLogoApiV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
+        SettingsV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
             string requestEtag = null)
         {
-            var companyLogoApiV2Controller = new CompanyLogoApiV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>());
+            var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(), TODO);
             var httpRequestMessage = new HttpRequestMessage();
             if (requestEtag != null)
             {
