@@ -1723,7 +1723,7 @@
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\InterviewerApkInfo.cs" />
-    <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
+    <Compile Include="API\Interviewer\v2\SettingsV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
     <Compile Include="API\ProgressiveDownload.cs" />
