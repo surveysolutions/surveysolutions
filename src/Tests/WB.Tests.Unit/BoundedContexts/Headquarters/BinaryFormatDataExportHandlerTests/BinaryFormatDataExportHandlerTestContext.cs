@@ -2,9 +2,11 @@
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -31,13 +33,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             IDataExportProcessesService dataExportProcessesService = null,
             IDataExportFileAccessor dataExportFileAccessor = null,
             IAudioFileStorage audioFileStorage = null,
+            InterviewDataExportSettings interviewDataExportSettings = null,
             IPlainTransactionManagerProvider plainTransactionManagerProvider = null)
         {
             return new BinaryFormatDataExportHandler(
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 imageFileRepository ?? Mock.Of<IImageFileStorage>(),
                 filebasedExportedDataAccessor ?? Mock.Of<IFilebasedExportedDataAccessor>(),
-                new InterviewDataExportSettings(),
+                interviewDataExportSettings ?? new InterviewDataExportSettings(),
                 Mock.Of<ITransactionManager>(), 
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 dataExportProcessesService ?? Mock.Of<IDataExportProcessesService>(), 
@@ -53,7 +56,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
             return new DataExportFileAccessor(Mock.Of<IExportSettings>(),
                 Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 archiveUtils ?? Mock.Of<IProtectedArchiveUtils>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(),
+                Mock.Of<IExternalFileStorage>());
         }
     }
 }

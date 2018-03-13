@@ -161,7 +161,7 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (RestException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
             {
-                this.ModelState.AddModelError("AccessForbidden", Resources.LoginToDesigner.AccessForbidden);
+                this.ModelState.AddModelError("AccessForbidden", $"{Resources.LoginToDesigner.AccessForbidden} {ex.Message}");
             }
             catch (RestException ex)
             {
