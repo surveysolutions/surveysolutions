@@ -8,6 +8,8 @@
     self.regenPasswordUrl = $regenPasswordUrl;
 
     self.isEnabled = ko.observable(false);
+    self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
+
     self.password = ko.observable('');
     self.message = ko.observable('');
     self.messageUpdated = ko.observable(false);
@@ -20,8 +22,11 @@
 
         self.SendRequest($messageUrl,
             {},
-            function(data) {
-                self.message(data.Message);
+            function (data) {
+                if (!data) return;
+
+                self.isInterviewerAutomaticUpdatesEnabled(data.InterviewerAutoUpdatesEnabled);
+                self.message(data.GlobalNotice);
             }, true, true);
     };
 
@@ -56,10 +61,9 @@
     });
 
     self.updateMessage = function() {
-        ajax.sendRequest($messageUrl, "POST", { message: self.message() }, false,
+        ajax.sendRequest($messageUrl, "POST", { globalNotice: self.message(), interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled() }, false,
             //onSuccess
             function() {
-                self.messageUpdated(true);
                 location.reload();
             });
     };
