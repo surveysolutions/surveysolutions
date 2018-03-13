@@ -99,6 +99,26 @@
         </div>
         <div class="row extra-margin-bottom contain-input">
             <div class="col-sm-7">
+                <h2>
+                    @Settings.InterviewerSettings_Title
+                </h2>
+                <p>
+                    @Settings.InterviewerSettings_Description
+                </p>
+            </div>
+            <div class="col-sm-12">
+                <div class="block-filter">
+                    <div class="form-group">
+                        <input class="checkbox-filter single-checkbox" data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateMessage" id="interviewerAutomaticUpdatesEnabled" type="checkbox">
+                        <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
+                            <span class="tick"></span>@Settings.InterviewerAutoUpdate
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row extra-margin-bottom contain-input">
+            <div class="col-sm-7">
                 <h2>@Settings.LogoSettings</h2>
                 <p>
                     @Settings.LogoSettings_Description
@@ -144,6 +164,6 @@
                 @Settings.GlobalNoteClearingConfirm
             </h3>
         </script>
-        
+
     </div>
 </main>
