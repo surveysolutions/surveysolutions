@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
 {
     public class PanelImportVerificationError
     {
-        public PanelImportVerificationError(string code, string message, params PreloadedDataVerificationReference[] references)
+        public PanelImportVerificationError(string code, string message, params InterviewImportReference[] references)
         {
             this.Code = code;
             this.Message = message;
@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
 
         public string Code { get; }
         public string Message { get; }
-        public IEnumerable<PreloadedDataVerificationReference> References { get; }
+        public IEnumerable<InterviewImportReference> References { get; }
 
         public override string ToString() => $"{this.Code}: {this.Message}";
     }

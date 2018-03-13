@@ -1,8 +1,8 @@
-﻿using System.Threading;
+﻿using System;
 using System.Windows.Input;
 using Android.Views;
-using Android.Views.InputMethods;
 using MvvmCross.Binding;
+using MvvmCross.Platform.Droid.WeakSubscription;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -10,6 +10,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     public class InstantAutoCompleteTextViewOnFocusOutBinding : BaseBinding<InstantAutoCompleteTextView, ICommand>
     {
         private ICommand command;
+        private IDisposable subscribtion;
 
         public InstantAutoCompleteTextViewOnFocusOutBinding(InstantAutoCompleteTextView androidControl) : base(androidControl)
         {
@@ -31,20 +32,22 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (autoComplete == null)
                 return;
 
-            autoComplete.FocusChange += this.OnFocusChange;
+            subscribtion = autoComplete.WeakSubscribe<InstantAutoCompleteTextView, View.FocusChangeEventArgs>(nameof(autoComplete.FocusChange), this.OnFocusChange);
         }
 
         private void OnFocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            if(!e.HasFocus) this.command.Execute(null);
+            if (!e.HasFocus)
+            {
+                this.command?.Execute(null);
+            }
         }
 
         protected override void Dispose(bool isDisposing)
         {
             if (isDisposing)
             {
-                if (this.Target != null)
-                    this.Target.FocusChange -= this.OnFocusChange;
+                this.subscribtion.Dispose();
             }
             base.Dispose(isDisposing);
         }
