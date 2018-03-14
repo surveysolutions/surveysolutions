@@ -1,34 +1,29 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
     internal class when_GetParentDataFile_is_called_for_top_level_of_questionnaire : PreloadedDataServiceTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_result_be_null()
         {
-            questionnaireDocument =
+            var questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                        obsoleteFixedTitles: new[] {"1"}, title: "Roster Group"));
+                    Create.Entity.FixedRoster(rosterId: Id.g1,
+                        obsoleteFixedTitles: new[] { "1" }, title: "Roster Group"));
 
-            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
-        };
+            var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
 
-        Because of =
-           () =>
-               result =
-                   importDataParsingService.GetParentDataFile(questionnaireDocument.Title, Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(null, null, "Roster Group"), CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
+            // Act
+            var result =
+                importDataParsingService.GetParentDataFile(questionnaireDocument.Title, 
+                    Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(null, null, "Roster Group"), 
+                        CreatePreloadedDataByFile(null, null, questionnaireDocument.Title)));
 
-        It should_result_be_null = () =>
-           result.ShouldBeNull();
-
-        private static ImportDataParsingService importDataParsingService;
-        private static QuestionnaireDocument questionnaireDocument;
-        private static PreloadedDataByFile result;
-        private static Guid rosterGroupId = Guid.NewGuid();
+            // Assert
+            result.Should().BeNull();
+        }
     }
 }
