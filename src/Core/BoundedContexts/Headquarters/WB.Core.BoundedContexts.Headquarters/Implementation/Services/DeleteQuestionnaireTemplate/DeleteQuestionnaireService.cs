@@ -138,12 +138,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         {
             ServiceLocator.Current.ExecuteInPlainTransaction(serviceLocator =>
             {
-                var questionnaireStorage = serviceLocator.GetInstance<IQuestionnaireStorage>()
-                    .GetQuestionnaireDocument(questionnaireIdentity);
-
+                var questionnaireStorage = serviceLocator.GetInstance<IQuestionnaireStorage>();
                 var lookupTablesStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
-                foreach (var lookupTableInfo in questionnaireStorage.LookupTables)
+                var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+                
+                foreach (var lookupTableInfo in questionnaireDocument.LookupTables)
                 {
                     var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
                     lookupTablesStorage.Remove(id);
