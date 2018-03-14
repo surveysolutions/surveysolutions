@@ -444,7 +444,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
-                Mock.Of<IAudioFileStorage>());
+                Mock.Of<IAudioFileStorage>(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<IInterviewerSettings>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
