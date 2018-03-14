@@ -131,11 +131,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     items.AddRange(newItems);
                     var countOfItems = items.Count - 1;
                     subTitle.Title = countOfItems > 0
-                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, items.Count - 1)
+                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
                         : InterviewerUIResources.Dashboard_NotFoundSearchResult;
                 }
 
+                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
                 this.UiItems.ReplaceWith(items);
+                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
             }
             catch (Exception e)
             {
@@ -148,7 +150,27 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         });
-        
+
+        private void InterviewItemRemoved(object sender, EventArgs eventArgs)
+        {
+            var item = (InterviewDashboardItemViewModel)sender;
+            item.OnItemRemoved -= InterviewItemRemoved;
+
+            if (item.AssignmentId.HasValue)
+            {
+                var assesment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
+                if (assesment?.CreatedInterviewsCount != null)
+                    assesment.CreatedInterviewsCount--;
+            }
+
+            UiItems.Remove(item);
+
+            var countOfItems = UiItems.Count - 1;
+            UiItems.OfType<DashboardSubTitleViewModel>().First().Title = countOfItems > 0
+                ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
+                : InterviewerUIResources.Dashboard_NotFoundSearchResult;
+        }
+
 
         protected IEnumerable<IDashboardItem> GetUiItems(string searctText)
         {
@@ -162,7 +184,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 {
                     var assignmentItemViewModel = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
                     assignmentItemViewModel.Init(assignmentItem);
-
                     yield return assignmentItemViewModel;
                 }
 
@@ -191,9 +212,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 {
                     var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
                     interviewDashboardItem.Init(interviewView, details);
-
-                    //this.OnItemCreated(interviewDashboardItem);
-
                     yield return interviewDashboardItem;
                 }
             }
