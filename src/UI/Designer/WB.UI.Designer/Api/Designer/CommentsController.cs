@@ -29,6 +29,14 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpGet]
         [CamelCase]
+        [Route("commentThreads")]
+        public List<CommentThread> commentThreads(Guid id)
+        {
+            return this.commentsService.LoadCommentThreads(id);
+        }
+
+        [HttpGet]
+        [CamelCase]
         [Route("entity/{itemId:Guid}/comments")]
         public List<CommentView> Get(Guid id, Guid itemId)
         {

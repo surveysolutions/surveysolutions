@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return question.YesNoView && (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private static IEnumerable<QuestionnaireNodeReference[]> SameTitle(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> SameTitle(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
                 .GroupBy(question => question.QuestionText)
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return question.QuestionText.IndexOf("email", StringComparison.InvariantCultureIgnoreCase) >= 0;
         }
 
-        private static IEnumerable<QuestionnaireNodeReference[]> FiveOrMoreQuestionsWithSameEnabling(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> FiveOrMoreQuestionsWithSameEnabling(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
                 .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
@@ -184,7 +184,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return diffsByPrevNextOptionValues.Contains(2);
         }
 
-        private static IEnumerable<QuestionnaireNodeReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> SameCascadingParentQuestion(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<SingleQuestion>(question => question.CascadeFromQuestionId.HasValue)
                 .GroupBy(question => question.CascadeFromQuestionId)
@@ -881,7 +881,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> WarningForCollection(
-            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireNodeReference[]>> getReferences, string code, string message)
+            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireEntityReference[]>> getReferences, string code, string message)
         {
             return questionnaire
                 => getReferences(questionnaire)

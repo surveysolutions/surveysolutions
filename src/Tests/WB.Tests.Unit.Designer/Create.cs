@@ -34,6 +34,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -968,22 +969,22 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireNodeReference[] questionnaireNodeReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireEntityReference[] questionnaireEntityReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireNodeReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireEntityReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireEntityReference[] questionnaireEntityReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, questionnaireNodeReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, questionnaireEntityReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
+        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireEntityReference[] questionnaireEntityReferences)
         {
-            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireNodeReferences);
+            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireEntityReferences);
         }
 
-        public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
+        public static VerificationMessage VerificationMessage(string code, string message, params QuestionnaireEntityExtendedReference[] extendedReferences)
         {
             return new VerificationMessage
             {
@@ -993,20 +994,20 @@ namespace WB.Tests.Unit.Designer
                 {
                     new VerificationMessageError()
                     {
-                        References = references.ToList()
+                        References = extendedReferences.ToList()
                     }
                 }
             };
         }
 
-        public static QuestionnaireNodeReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
+        public static QuestionnaireEntityReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
         {
-            return new QuestionnaireNodeReference(type, id ?? Guid.NewGuid());
+            return new QuestionnaireEntityReference(type, id ?? Guid.NewGuid());
         }
 
-        public static VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
+        public static QuestionnaireEntityExtendedReference VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
         {
-            return new VerificationReferenceEnriched
+            return new QuestionnaireEntityExtendedReference
             {
                 Type = type,
                 ItemId = id.FormatGuid(),

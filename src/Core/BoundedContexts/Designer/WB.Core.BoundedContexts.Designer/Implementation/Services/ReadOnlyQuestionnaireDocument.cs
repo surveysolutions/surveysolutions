@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -167,8 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IComposite entity = questionnaireEntity;
             while (entity != null && !(entity is QuestionnaireDocument))
             {
-                IGroup group = entity as IGroup;
-                if (group!=null)
+                if (entity is IGroup @group)
                 {
                     yield return group;
                 }
@@ -249,8 +247,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public  bool IsNumericRosterSizeQuestion(IQuestion question)
         {
-            var numericQuestion = question as NumericQuestion;
-            return numericQuestion != null && numericQuestion.IsInteger;
+            return question is NumericQuestion numericQuestion && numericQuestion.IsInteger;
         }
 
         public bool IsCategoricalRosterSizeQuestion(IQuestion question)

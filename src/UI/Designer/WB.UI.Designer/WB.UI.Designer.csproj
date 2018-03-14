@@ -285,7 +285,6 @@
     <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
-    <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\Paging.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -18,7 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         }
 
         private void BecauseOf() =>
-            result = mapper.EnrichVerificationErrors(verificationMessages, document);
+            result = mapper.EnrichVerificationErrors(verificationMessages, document.AsReadOnly());
 
         [NUnit.Framework.Test] public void should_return_1_error () => 
             result.Length.ShouldEqual(1);

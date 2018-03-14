@@ -1,7 +1,19 @@
 ﻿angular.module('designerApp')
     .controller('CommentsCtrl', 
-        function ($rootScope, $scope, $state, $i18next, commandService, utilityService, $log, confirmService, questionnaireService, hotkeys) {
+        function ($rootScope, $scope, $state, $i18next, commandService, utilityService, commentsService, hotkeys, $log, confirmService) {
             'use strict';
+
+            $scope.commentThreads = [];
+
+            $scope.loadCommentThreads = function() {
+                if ($scope.questionnaire === null)
+                    return;
+                commentsService.getCommentThreads($state.params.questionnaireId)
+                    .then(function(result) {
+                        $scope.commentThreads = result.data;
+                        console.log(result.data);
+                    });
+            };
 
             var hideCommentsPane = 'ctrl+alt+c';
 
@@ -13,9 +25,7 @@
                 event.preventDefault();
                 $scope.foldback();
             });
-
-            $scope.commentThreads = [];
-
+            
             $scope.isFolded = false;
 
             $scope.unfold = function () {
@@ -37,8 +47,12 @@
             $scope.$on('closeCommentsRequested', function () {
                 $scope.foldback();
             });
+            
+            $rootScope.$on('newCommentPosted', function (comment) {
+                $scope.loadCommentThreads();
+            });
 
             $rootScope.$on('questionnaireLoaded', function () {
-                //$scope.loadLookupTables();
+                $scope.loadCommentThreads();
             });
         });
