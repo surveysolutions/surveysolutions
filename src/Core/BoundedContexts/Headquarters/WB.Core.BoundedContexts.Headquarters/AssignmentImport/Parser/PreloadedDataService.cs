@@ -176,12 +176,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
-                var multiOptionAnswer = rosterSizeAnswer as CategoricalFixedMultiOptionAnswer;
-                if (multiOptionAnswer != null)
+                if (rosterSizeAnswer is CategoricalFixedMultiOptionAnswer multiOptionAnswer)
                     return multiOptionAnswer.CheckedValues.ToArray();
 
-                var yesNoAnswer = rosterSizeAnswer as YesNoAnswer;
-                if (yesNoAnswer != null)
+                if (rosterSizeAnswer is YesNoAnswer yesNoAnswer)
                     return yesNoAnswer.CheckedOptions.Where(v => v.Yes).Select(v => v.Value).ToArray();
             }
 

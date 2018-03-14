@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
         public IEnumerator<T> GetEnumerator()
         {
             foreach (var coll in this.collections)
-                foreach (var item in coll)
+                foreach (var item in coll ?? Enumerable.Empty<T>())
                     yield return item;
         }
 
