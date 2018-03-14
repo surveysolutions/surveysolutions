@@ -231,6 +231,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 return;
             }
 
+            logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
             this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
             this.OnItemRemoved(this, EventArgs.Empty);
         }
@@ -253,7 +254,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
                 }
 
-                logger.Warn($"Open Interview {this.interview.InterviewId} in {DateTime.Now}");
+                logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
                 this.ViewModelNavigationService.NavigateTo<LoadingViewModel>(new { interviewId = this.interview.InterviewId });
             }
             finally

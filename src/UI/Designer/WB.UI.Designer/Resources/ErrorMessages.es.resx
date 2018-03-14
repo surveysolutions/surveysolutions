@@ -225,8 +225,8 @@
   <data name="UserName_required" xml:space="preserve">
     <value>El login es requerido</value>
   </data>
-  <data name="UserNeedToContactSupport" xml:space="preserve">
-    <value>No está autorizado para ejecutar esta acción. Favor contactar a soporte</value>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>No está autorizado para ejecutar esta acción. Favor contactar a soporte. IP: {0}</value>
   </data>
   <data name="UserNotApproved" xml:space="preserve">
     <value>Su cuenta no ha sido aprobada. Favor confirmarla primero, le hemos mandado un enlace de confirmación a {0}</value>

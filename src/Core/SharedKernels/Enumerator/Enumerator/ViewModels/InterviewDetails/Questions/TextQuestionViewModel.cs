@@ -148,15 +148,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer(string text)
         {
+            //if app crashed and automatically restored 
+            //the state could be broken
+            if (principal?.CurrentUserIdentity == null)
+                return;
+
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
+                this.QuestionState?.Validity?.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
                 return;
             }
 
             if(string.IsNullOrWhiteSpace(text))
             {
-                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
+                this.QuestionState?.Validity?.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
                 return;
             }
 
@@ -171,11 +176,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                this.QuestionState?.Validity?.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState.Validity.ProcessException(ex);
+                this.QuestionState?.Validity?.ProcessException(ex);
             }
         }
 

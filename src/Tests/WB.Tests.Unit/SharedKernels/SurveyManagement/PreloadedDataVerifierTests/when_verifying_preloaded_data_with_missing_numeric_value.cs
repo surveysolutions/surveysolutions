@@ -1,32 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_preloaded_data_with_missing_numeric_value : PreloadedDataVerifierTestContext
     {
-        private Establish context = () =>
+        [Test]
+        public void should_result_has_0_error()
         {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            questionId = Guid.Parse("21111111111111111111111111111111");
-            questionnaire =
-                CreateQuestionnaireDocumentWithOneChapter(new NumericQuestion()
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var questionId = Guid.Parse("21111111111111111111111111111111");
+            var questionnaire =
+                CreateQuestionnaireDocumentWithOneChapter(new NumericQuestion
                 {
                     StataExportCaption = "q1",
                     PublicKey = questionId,
@@ -34,38 +28,38 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                     QuestionType = QuestionType.Numeric
                 });
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "q1"},
-                new string[][] { new string[] { "1", ExportFormatSettings.MissingNumericQuestionValue } },
+            var preloadedDataByFile = CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "q1"},
+                new[] {new[] {"1", ExportFormatSettings.MissingNumericQuestionValue}},
                 "questionnaire.csv");
 
-            preloadedDataServiceMock = new Mock<IPreloadedDataService>();
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(Moq.It.IsAny<string>()))
-                .Returns(new HeaderStructureForLevel()
+            var preloadedDataServiceMock = new Mock<IPreloadedDataService>();
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(It.IsAny<string>()))
+                .Returns(new HeaderStructureForLevel
                 {
                     LevelIdColumnName = ServiceColumns.InterviewId,
                     HeaderItems =
                         new Dictionary<Guid, IExportedHeaderItem>
                         {
-                            { Guid.NewGuid(), new ExportedQuestionHeaderItem() { VariableName = "q1", ColumnHeaders = new List<HeaderColumn>(){new HeaderColumn(){Name = "q1"}} } }
+                            {
+                                Guid.NewGuid(),
+                                new ExportedQuestionHeaderItem
+                                {
+                                    VariableName = "q1",
+                                    ColumnHeaders = new List<HeaderColumn> {new HeaderColumn {Name = "q1"}}
+                                }
+                            }
                         }
                 });
 
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
-            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
-        };
+            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, It.IsAny<string>()))
+                .Returns(-1);
+            var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
-        Because of =
-            () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            // Act
+            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
-        It should_result_has_0_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(0);
-
-        private static ImportDataVerifier importDataVerifier;
-        private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-        private static Guid questionId;
-        private static PreloadedDataByFile preloadedDataByFile;
-
-        private static Mock<IPreloadedDataService> preloadedDataServiceMock;
+            // Assert
+            status.VerificationState.Errors.Should().HaveCount(0);
+        }
     }
 }
