@@ -60,7 +60,10 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnViewModelSet();
         }
 
-        public override void OnBackPressed() {}
+        public override void OnBackPressed()
+        {
+            base.OnBackPressed();
+        }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
