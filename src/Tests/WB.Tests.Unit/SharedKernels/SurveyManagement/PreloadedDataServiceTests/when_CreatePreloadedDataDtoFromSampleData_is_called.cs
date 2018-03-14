@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -11,7 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
     internal class when_CreatePreloadedDataDtoFromSampleData_is_called : PreloadedDataServiceTestContext
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
@@ -28,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         PublicKey = Guid.NewGuid()
                     },
                     Create.Entity.FixedRoster(rosterId: rosterGroupId,
-                        obsoleteFixedTitles: new[] {"a"},
+                        obsoleteFixedTitles: new[] { "a" },
                         children: new IComposite[]
                         {
                             new NumericQuestion()
@@ -40,20 +42,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         }));
 
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() =>
                 result =
-                    importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(CreatePreloadedDataByFile(new[] { "Id", "nq1" }, 
-                    new[] { new[] { "1", "2" } }, 
+                    importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(CreatePreloadedDataByFile(new[] { "Id", "nq1" },
+                    new[] { new[] { "1", "2" } },
                     "some file name"));
 
-        It should_return_not_null_result = () =>
-            result.ShouldNotBeNull();
+        [NUnit.Framework.Test]
+        public void should_return_not_null_result() =>
+            result.Should().NotBeNull();
 
-        It should_result_has_1_items = () =>
-           result.Length.ShouldEqual(1);
+        [NUnit.Framework.Test]
+        public void should_result_has_1_items() =>
+           result.Length.Should().Be(1);
 
         private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -95,13 +96,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             try
             {
-                var preloadedPanelDataParser = this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
+                var preloadedPanelDataParser =
+                    this.preloadedDataRepository.GetPreloadedDataOfPanel(interviewImportProcessId);
 
-                this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, preloadedPanelDataParser, this.Status);
+                this.preloadedDataVerifier.VerifyPanelFiles(questionnaireIdentity.QuestionnaireId,
+                    questionnaireIdentity.Version, preloadedPanelDataParser, this.Status);
 
                 void VerifyAssignmentAction(AssignmentImportData assignmentRecord)
                 {
-                    var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(), questionnaire);
+                    var result = VerifyAssignment(assignmentRecord.PreloadedData.Answers.GroupedByLevels(),
+                        questionnaire);
                     if (!result.Status)
                         throw new InterviewException(result.ErrorMessage);
                 }
@@ -116,7 +120,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 this.Status.TotalCount = this.Status.VerificationState.EntitiesCount;
                 this.Status.Stage = AssignmentImportStage.AssignmentDataVerification;
 
-                AssignmentImportData[] assignmentImportData = this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId, questionnaireIdentity, AssignmentImportType.Panel);
+                AssignmentImportData[] assignmentImportData =
+                    this.interviewImportDataParsingService.GetAssignmentsData(interviewImportProcessId,
+                        questionnaireIdentity, AssignmentImportType.Panel);
 
                 if (assignmentImportData == null)
                 {
@@ -126,10 +132,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
             }
+            catch (InterviewImportException ex)
+            {
+                this.logger.Error("Fail validation preloading", ex);
+                this.Status.State.Errors.Add(new InterviewImportError(ex.Code, ex.Message, ex.References));
+                FinishImportProcess();
+            }
             catch (Exception ex)
             {
                 this.logger.Error("Fail validation preloading", ex);
-                this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile });
+                this.Status.State.Errors.Add(new InterviewImportError("PL0011", Interviews.ImportInterviews_IncorrectDatafile));
                 FinishImportProcess();
             }
         }
@@ -181,10 +193,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 if (!responsibleId.HasValue && !assignmentRecord.SupervisorId.HasValue)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(assignmentRecord))
-                    });
+                    this.Status.State.Errors.Add(new InterviewImportError("PL0025",string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(assignmentRecord))));
                     return;
                 }
 
@@ -223,10 +232,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (isQuestionnaireRemoved)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
-                    });
+                    this.Status.State.Errors.Add(new InterviewImportError("PL0001", Interviews.ImportInterviews_QuestionaireNotFound));
 
                     return;
                 }
@@ -235,10 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (records == null)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile
-                    });
+                    this.Status.State.Errors.Add(new InterviewImportError("PL0011", Interviews.ImportInterviews_IncorrectDatafile));
 
                     return;
                 }
@@ -264,7 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                             this.logger.Error(errorMessage, ex);
 
-                            this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = errorMessage });
+                            this.Status.State.Errors.Add(new InterviewImportError("PL0011", errorMessage));
                         }
                         finally
                         {

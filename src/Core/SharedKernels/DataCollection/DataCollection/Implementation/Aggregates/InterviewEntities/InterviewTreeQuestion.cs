@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -135,7 +136,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     break;
 
                 case QuestionType.Multimedia:
-                    this.InterviewQuestion = new InterviewTreeMultimediaQuestion(answer);
+                    this.InterviewQuestion = new InterviewTreeMultimediaQuestion(answer, null);
                     break;
                 case QuestionType.Numeric:
                     {
@@ -454,7 +455,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsInteger) { ((InterviewTreeIntegerQuestion)this.InterviewQuestion).SetAnswer(NumericIntegerAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsDouble) { ((InterviewTreeDoubleQuestion)this.InterviewQuestion).SetAnswer(NumericRealAnswer.FromDouble(Convert.ToDouble(answer))); return; }
             if (this.IsDateTime) { ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).SetAnswer(DateTimeAnswer.FromDateTime((DateTime)answer)); return; }
-            if (this.IsMultimedia) { ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).SetAnswer(MultimediaAnswer.FromString(answer as string)); return; }
+            if (this.IsMultimedia) { ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).SetAnswer(MultimediaAnswer.FromString(answer as string, null)); return; }
             if (this.IsQRBarcode) { ((InterviewTreeQRBarcodeQuestion)this.InterviewQuestion).SetAnswer(QRBarcodeAnswer.FromString(answer as string)); return; }
             if (this.IsGps) { ((InterviewTreeGpsQuestion)this.InterviewQuestion).SetAnswer(GpsAnswer.FromGeoPosition((GeoPosition)answer)); return; }
             if (this.IsSingleFixedOption || this.IsCascading) { ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
@@ -845,9 +846,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public InterviewTreeMultimediaQuestion(object answer):base(InterviewQuestionType.Multimedia)
+        public InterviewTreeMultimediaQuestion(object answer, DateTime? answerTime):base(InterviewQuestionType.Multimedia)
         {
-            this.answer = MultimediaAnswer.FromString(answer as string);
+            this.answer = MultimediaAnswer.FromString(answer as string, answerTime);
         }
 
         public override bool IsAnswered() => this.answer != null;
@@ -1415,6 +1416,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetQuestion(InterviewTreeQuestion question)
         {
             this.question = question;
+        }
+
+        public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            var questionnaire = this.question.Tree.Questionnaire;
+            questionInvariants.RequireFixedSingleOptionAnswerAllowed(GetAnswer().SelectedValue, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
 
         public override string ToString() => string.Join(", ", this.GetCascadingParentQuestion()?.GetAnswer());
