@@ -736,4 +736,8 @@
     <value>Выполните поиск для отображения результатов</value>
     <comment>Выполните поиск для отображения результатов</comment>
   </data>
+    <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Поиск</value>
+    <comment>Поиск</comment>
+  </data>
 </root>
