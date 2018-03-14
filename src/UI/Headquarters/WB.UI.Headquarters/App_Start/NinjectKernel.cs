@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Web.Modules
         }
 
         public IKernel Kernel { get; set; }
-        private List<IInitModule> initModules = new List<IInitModule>();
+        private readonly List<IInitModule> initModules = new List<IInitModule>();
 
         public void Load(params IModule[] modules)
         {

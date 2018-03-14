@@ -4,7 +4,9 @@ using System.IO;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -128,7 +130,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                             questionnaire.IsRosterSizeQuestion(questionId))
                         {
                             var rostersTriggeredByListQuestion = questionnaire.GetRosterGroupsByRosterSizeQuestion(questionId).ToHashSet();
-                            UpdateListValuesWithRowcodes(textListAnswer, levels, interviewId, interviewRow.RosterVector, rostersTriggeredByListQuestion);
+                            var questionVariableName = questionnaire.GetQuestionVariableName(questionId);
+                            UpdateListValuesWithRowcodes(textListAnswer, levels, interviewId, interviewRow.RosterVector, rostersTriggeredByListQuestion, questionVariableName);
                         }
 
                         result.Add(new InterviewAnswer
@@ -142,19 +145,37 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             return result;
         }
 
-        private void UpdateListValuesWithRowcodes(
-            TextListAnswer textListAnswer,
+        private void UpdateListValuesWithRowcodes(TextListAnswer textListAnswer,
             List<PreloadedInterviewBaseLevel> levels,
             string interviewId,
             RosterVector rosterVector, 
-            HashSet<Guid> rosterIds)
+            HashSet<Guid> rosterIds, 
+            string questionVariableName)
         {
             if (!(levels.Where(x => x is PreloadedInterviewLevel).Cast<PreloadedInterviewLevel>().FirstOrDefault(x => rosterIds.Contains(x.RosterId)) is PreloadedInterviewLevel rosterLevel))
                 return;
 
             var listRowsWithNewCodes = rosterLevel.GetRowCodeAndTitlesPairs(interviewId, rosterVector);
 
-            if (listRowsWithNewCodes == null) return;
+            var hasNoRostersInformationForListQuestion = listRowsWithNewCodes == null || listRowsWithNewCodes.Length == 0;
+            if (hasNoRostersInformationForListQuestion) return;
+
+            var hasDifferentAmountOfRecordsInListAndRosters = textListAnswer.Rows.Count != listRowsWithNewCodes.Length;
+            if (hasDifferentAmountOfRecordsInListAndRosters)
+            {
+                throw new InterviewImportException("PL0045", string.Format(PreloadingVerificationMessages.PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile, 
+                    rosterLevel.Name, listRowsWithNewCodes.Length, questionVariableName, textListAnswer.Rows.Count, interviewId));
+            }
+
+            var listItemsAbsentInRosterFile = textListAnswer.Rows.Select(x => x.Text).Except(listRowsWithNewCodes.Select(x => x.Text)).ToArray();
+            var rosterRowsAbsentInListQuestion = listRowsWithNewCodes.Select(x => x.Text).Except(textListAnswer.Rows.Select(x => x.Text)).ToArray();
+            var hasDifferentTextsInListAndRosterTitles = listItemsAbsentInRosterFile.Any();
+            if (hasDifferentTextsInListAndRosterTitles)
+            {
+                throw new InterviewImportException("PL0046", string.Format(
+                    PreloadingVerificationMessages.PL0046_HasDifferentTextsInListAndRosterTitles,
+                    rosterLevel.Name, questionVariableName, string.Join(", ", listItemsAbsentInRosterFile), string.Join(", ", rosterRowsAbsentInListQuestion), interviewId));
+            }
 
             foreach (var listRow in listRowsWithNewCodes)
             {
@@ -165,6 +186,24 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
                     continue;
 
                 textListAnswerRow.Value = listRow.Value;
+            }
+
+            if (textListAnswer.Rows.Select(x => x.Text).Distinct().Count() != textListAnswer.Rows.Count)
+            {
+                var duplicatedRecords = textListAnswer.Rows.Select(x => x.Text).GroupBy(x => x)
+                    .Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
+                throw new InterviewImportException("PL0043", string.Format(
+                    PreloadingVerificationMessages.PL0043_TextListAnswerHasDuplicatesInTexts, 
+                    questionVariableName, string.Join(", ", duplicatedRecords), interviewId));
+            }
+
+            if (textListAnswer.Rows.Select(x => x.Value).Distinct().Count() != textListAnswer.Rows.Count)
+            {
+                var duplicatedRecords = textListAnswer.Rows.Select(x => x.Value).GroupBy(x => x)
+                    .Where(x => x.Count() > 1).Select(x => x.Key).ToArray();
+                throw new InterviewImportException("PL0044", string.Format(
+                    PreloadingVerificationMessages.PL0044_TextListAnswerHasDuplicatesInCodes, 
+                    questionVariableName, string.Join(", ", duplicatedRecords), interviewId));
             }
         }
         
