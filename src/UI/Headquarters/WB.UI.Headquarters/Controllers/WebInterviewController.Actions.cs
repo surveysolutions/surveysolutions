@@ -82,9 +82,10 @@ namespace WB.UI.Headquarters.Controllers
                     filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}.jpg";
                     var responsibleId = interview.CurrentResponsibleId;
 
-                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
                         responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+
+                    this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                 }
             }
             catch (Exception e)

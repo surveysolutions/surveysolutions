@@ -1,32 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_panel_preloaded_data_and_questionnaire_is_absent : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_return_single_PL0024_error()
         {
-            importDataVerifier = CreatePreloadedDataVerifier();
-        };
+            var importDataVerifier = CreatePreloadedDataVerifier();
 
-        Because of = () => importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]), status);
+            // Act
+            importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]), status);
 
-        It should_result_has_1_error = () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
-
-        It should_return_single_PL0001_error = () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0024");
-
-        private static ImportDataVerifier importDataVerifier;
+            // Assert
+            status.VerificationState.Errors.Should().HaveCount(1);
+            status.VerificationState.Errors.First().Code.Should().Be("PL0024");
+        }
     }
 }

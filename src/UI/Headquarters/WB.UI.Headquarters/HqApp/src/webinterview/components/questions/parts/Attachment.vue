@@ -1,15 +1,21 @@
 <template>
     <div class="image-zoom-box image-wrapper" :class="customCssClass">
-        <img :src="imageThumb" alt="custom photo" class="zoomImg"
+        <img :src="thumbPath" alt="custom photo" class="zoomImg"
             @click="showModal(true)" :style="previewStyle">
         <div class="modal-img" :style="modalView" @click="showModal(false)">
             <span class="close-zoomming-img">×</span>
-            <img class="modal-img-content" :src="imageFull" alt="">
+            <img class="modal-img-content" :src="fullPath" alt="">
             <span class="caption"></span>
         </div>
     </div>
 </template>
 <script lang="js">
+    import appendquery from "append-query"
+
+    function appendSearchParam(uri, name, value) {
+        const args = { [name]: value } // keep in separate line to make IE happy
+        return appendquery(uri, args);
+    }
 
     export default {
         data() {
@@ -21,11 +27,20 @@
             filename: {type: String},
             contentId: {type: String},
             interviewId: {type: String},
+            cache: { type: Number},
             thumb: { type: String }, // optional
             image: { type: String },
             customCssClass:{}
         },
         computed: {
+            thumbPath() {
+                if(this.isPreview) return this.imageThumb;
+                return this.appendCache(this.imageThumb)
+            },
+            fullPath() {
+                if(this.isPreview) return this.imageFull;
+                return this.appendCache(this.imageFull)
+            },
             imageThumb() {
                 if(this.thumb) return this.thumb;
                 if(this.filename) return `${this.$config.imageGetBase}/Image/${this.filename}`
@@ -56,6 +71,9 @@
             }
         },
         methods: {
+            appendCache(uri) {
+                return appendSearchParam(uri, 'cache', this.cache)
+            },
             showModal(show) {
                 this.modal = show
             }
