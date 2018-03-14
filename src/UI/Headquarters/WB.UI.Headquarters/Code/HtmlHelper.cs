@@ -1,5 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
+using Microsoft.Security.Application;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -12,7 +13,7 @@ namespace WB.UI.Headquarters.Code
 
         public static IHtmlString ToSafeJavascriptMessage(this HtmlHelper page, string sourceMessage)
         {
-            return page.Raw(sourceMessage.Replace(@"""", @"'"));
+            return page.Raw(Encoder.JavaScriptEncode(sourceMessage, false));
         }
     }
 }

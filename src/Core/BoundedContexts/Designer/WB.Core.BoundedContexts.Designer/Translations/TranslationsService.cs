@@ -9,12 +9,12 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using OfficeOpenXml;
+using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Designer.Translations
 {
@@ -32,7 +32,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
         private readonly TranslationType[] translationTypesWithIndexes =
         {
-            TranslationType.FixedRosterTitle, TranslationType.OptionTitle, TranslationType.ValidationMessage
+            TranslationType.FixedRosterTitle,
+            TranslationType.OptionTitle,
+            TranslationType.ValidationMessage,
+            TranslationType.SpecialValue
         };
 
         private const string EntityIdColumnName = "Entity Id";
@@ -138,14 +141,18 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                                 var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
                                 if (!idsOfAllQuestionnaireEntities.Contains(questionnaireEntityId)) continue;
 
+                                var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
+
+                                var cleanedValue = this.GetCleanedValue(translationType, importedTranslation.Translation);
+
                                 var translationInstance = new TranslationInstance
                                 {
                                     QuestionnaireId = questionnaireId,
                                     TranslationId = translationId,
                                     QuestionnaireEntityId = questionnaireEntityId,
-                                    Value = System.Web.HttpUtility.HtmlDecode(importedTranslation.Translation.RemoveHtmlTags()),
+                                    Value = cleanedValue,
                                     TranslationIndex = importedTranslation.OptionValueOrValidationIndexOrFixedRosterId,
-                                    Type = (TranslationType)Enum.Parse(typeof(TranslationType), importedTranslation.Type)
+                                    Type = translationType
                                 };
 
                                 translationInstances.Add(translationInstance);
@@ -167,6 +174,20 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                 {
                     throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
+            }
+        }
+
+        private string GetCleanedValue(TranslationType translationType, string value)
+        {
+            switch (translationType)
+            {
+                case TranslationType.Title:
+                case TranslationType.Instruction:
+                    return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value));
+                case TranslationType.SpecialValue:
+                case TranslationType.OptionTitle:
+                default:
+                    return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value, true));
             }
         }
 
@@ -429,9 +450,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                    select new TranslationRow
                    {
                        EntityId = question.PublicKey.FormatGuid(),
-                       Type = TranslationType.OptionTitle.ToString("G"),
+                       Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue.ToString("G") : TranslationType.OptionTitle.ToString("G"),
                        OriginalText = option.AnswerText,
-                       Translation = translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
+                       Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
                        OptionValueOrValidationIndexOrFixedRosterId = option.AnswerValue,
                        Sheet = isLongOptionsList ? $"{OptionsWorksheetPreffix}{question.StataExportCaption}" : WorksheetName
                    };

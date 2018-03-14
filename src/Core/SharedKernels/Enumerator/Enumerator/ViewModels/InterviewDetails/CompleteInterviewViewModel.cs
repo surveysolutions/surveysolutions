@@ -49,6 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public virtual void Init(string interviewId,
             NavigationState navigationState)
         {
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = Guid.Parse(interviewId);
 
             this.InterviewState.Init(interviewId, null);
