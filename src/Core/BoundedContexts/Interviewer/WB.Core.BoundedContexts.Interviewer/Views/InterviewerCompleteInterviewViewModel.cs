@@ -1,3 +1,4 @@
+using System;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override void Init(string interviewId, NavigationState navigationState)
         {
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             base.Init(interviewId, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);

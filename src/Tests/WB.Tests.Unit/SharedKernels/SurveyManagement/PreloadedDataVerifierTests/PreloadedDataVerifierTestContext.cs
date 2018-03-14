@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
@@ -33,6 +34,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     [Subject(typeof(ImportDataVerifier))]
+    [TestOf(typeof(ImportDataVerifier))]
     internal class PreloadedDataVerifierTestContext
     {
         protected static ImportDataVerifier CreatePreloadedDataVerifier(
