@@ -22,9 +22,10 @@
                       local:MvxBind="SetFocus Not(Or(IsInProgressLongOperation, IsInProgressLongOperation)); 
                                      Watermark EmptySearchText; 
                                      TextChanged SearchCommand;
-                                     Enabled Not(IsInProgressLongOperation); Clickable IsInProgressLongOperation;" />
+                                     Enabled Not(IsInProgressLongOperation); 
+                                     Clickable Not(IsInProgressLongOperation);" />
             <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
-                         local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable IsInProgressLongOperation;"/>
+                         local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation)"/>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>
   </android.support.design.widget.AppBarLayout>
