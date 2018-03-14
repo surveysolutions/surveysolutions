@@ -15,7 +15,6 @@
                 commentsService.getItemCommentsById($state.params.questionnaireId, $state.params.itemId)
                     .then(function(result) {
                         var data = result.data;
-                        console.log(data);
                         $scope.comments = data || [];
 
                         _.forEach($scope.comments, function(comment) {
@@ -44,6 +43,7 @@
                         comment.userName = $scope.currentUserName;
                         comment.userEmail = $scope.currentUserEmail;
                         $scope.comments.push(comment);
+                        $rootScope.$broadcast("newCommentPosted", comment);
                         $scope.activeComment = createNewComment();
                     });
             }

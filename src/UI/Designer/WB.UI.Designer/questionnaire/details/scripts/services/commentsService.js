@@ -26,6 +26,11 @@
                 return $q.reject(response);
             });
         }
+            
+        commentsService.getCommentThreads = function(questionnaireId) {
+            var url = utilityService.format('{0}/commentThreads', utilityService.format(urlBase, questionnaireId));
+            return $http.get(url);
+        };
 
         commentsService.getItemCommentsById = function(questionnaireId, itemId) {
             var url = utilityService.format('{0}/entity/{1}/comments', utilityService.format(urlBase, questionnaireId), itemId);

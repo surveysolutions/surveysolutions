@@ -3,10 +3,10 @@ using System.Linq;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -74,11 +74,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             errorsMapperMock = new Mock<IVerificationErrorsMapper>();
 
             errorsMapperMock
-                .Setup(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument))
+                .Setup(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument.AsReadOnly()))
                 .Returns(mappedAndEnrichedVerificationErrors);
 
             errorsMapperMock
-               .Setup(x => x.EnrichVerificationErrors(verificationWarnings, questionnaireDocument))
+               .Setup(x => x.EnrichVerificationErrors(verificationWarnings, questionnaireDocument.AsReadOnly()))
                .Returns(mappedAndEnrichedVerificationWarnings);
 
             controller = CreateQuestionnaireController(
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
 
         [NUnit.Framework.Test] public void should_call_errors_mapper_once () =>
-            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument), Times.Once);
+            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument.AsReadOnly()), Times.Once);
 
         [NUnit.Framework.Test] public void should_return_messages_created_by_mapper_as_action_result () =>
             result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);

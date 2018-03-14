@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId);
         void PostComment(AddCommentModel comment);
         void ResolveComment(Guid commentdId);
+        List<CommentThread> LoadCommentThreads(Guid questionnaireId);
     }
 }

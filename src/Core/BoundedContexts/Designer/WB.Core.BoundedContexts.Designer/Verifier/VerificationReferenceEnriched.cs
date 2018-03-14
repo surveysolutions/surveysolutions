@@ -1,8 +1,8 @@
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.UI.Designer.Models
+namespace WB.Core.BoundedContexts.Designer.Verifier
 {
-    public class VerificationReferenceEnriched
+    public class QuestionnaireEntityExtendedReference
     {
         public QuestionnaireVerificationReferenceType Type { get; set; }
         public string ItemId { get; set; }
