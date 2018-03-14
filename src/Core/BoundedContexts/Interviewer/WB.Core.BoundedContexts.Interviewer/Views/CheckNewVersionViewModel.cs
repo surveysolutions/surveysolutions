@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     progress =>
                     {
                         this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
-                                                     + $" ({progress.ProgressPercentage}%)";
+                                                     + $" ({(int)progress.ProgressPercentage}%)";
                     });
 
                 this.CheckNewVersionResult = null;
