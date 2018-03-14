@@ -448,6 +448,9 @@ for further instructions</value>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
   </data>
