@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Core.ViewModels;
@@ -12,6 +13,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -22,6 +24,25 @@ namespace WB.Tests.Abc.TestFactories
 {
     internal class FakeFactory
     {
+        internal class MemoryStreamWithDisposeCallback : MemoryStream
+        {
+            private readonly Action<byte[]> callback;
+
+            public MemoryStreamWithDisposeCallback(Action<byte[]> callback)
+            {
+                this.callback = callback;
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing && this.CanRead) callback(this.ToArray());
+                base.Dispose(disposing);
+            }
+        }
+
+        public MemoryStreamWithDisposeCallback MemoryStreamWithCallback(Action<byte[]> disposeCallback) 
+            => new MemoryStreamWithDisposeCallback(disposeCallback);
+
         public IAggregateSnapshotter AggregateSnapshotter(EventSourcedAggregateRoot aggregateRoot = null, bool isARLoadedFromSnapshotSuccessfully = false)
             => Mock.Of<IAggregateSnapshotter>(_
                 => _.TryLoadFromSnapshot(It.IsAny<Type>(), It.IsAny<Snapshot>(), It.IsAny<CommittedEventStream>(), out aggregateRoot) == isARLoadedFromSnapshotSuccessfully);
@@ -104,6 +125,16 @@ namespace WB.Tests.Abc.TestFactories
                 return true;
             }
         }
+
+        public IDataExportFileAccessor DataExportFileAccessor()
+        {
+            var exportFileAccessor = new Mock<IDataExportFileAccessor>();
+            exportFileAccessor
+                .Setup(s => s.GetExternalStoragePath(It.IsAny<string>()))
+                .Returns<string>(name => $"export/" + name);
+            return exportFileAccessor.Object;
+        }
+        
 
         public IMvxMainThreadDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
 

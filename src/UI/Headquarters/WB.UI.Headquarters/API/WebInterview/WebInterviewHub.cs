@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
@@ -126,8 +127,16 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
             if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
-                var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
-                this.commandService.Execute(command);
+                if (this.GetCallerInterview().Status == InterviewStatus.ApprovedByHeadquarters)
+                {
+                    var command = new UnapproveByHeadquartersCommand(GetCallerInterview().Id, this.CommandResponsibleId, comment);
+                    this.commandService.Execute(command);
+                }
+                else
+                {
+                    var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
+                    this.commandService.Execute(command);
+                }
             }
 
         }
