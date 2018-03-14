@@ -52,14 +52,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
 
-        protected static QuestionnaireNodeReference CreateReference(IQuestionnaireEntity entity)
+        protected static QuestionnaireEntityReference CreateReference(IQuestionnaireEntity entity)
         {
-            return QuestionnaireNodeReference.CreateFrom(entity);
+            return QuestionnaireEntityReference.CreateFrom(entity);
         }
 
-        protected static QuestionnaireNodeReference CreateReference(IComposite entity, int? failedValidationIndex)
+        protected static QuestionnaireEntityReference CreateReference(IComposite entity, int? failedValidationIndex)
         {
-            return new QuestionnaireNodeReference(
+            return new QuestionnaireEntityReference(
                 entity is IGroup
                     ? QuestionnaireVerificationReferenceType.Group
                     : entity is IStaticText

@@ -203,7 +203,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .SelectMany(condition => this.GetReferencedQuestions(condition, questionnaire))
                 .Distinct();
 
-        private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> ConsecutiveUnconditionalSingleChoiceQuestionsWith2Options(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<SingleQuestion>()
                 .Where(IsUnconditionalWith2Options)
@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             => string.IsNullOrWhiteSpace(question.ConditionExpression)
                && question.Answers.Count == 2;
 
-        private static IEnumerable<QuestionnaireNodeReference[]> ConsecutiveQuestionsWithIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> ConsecutiveQuestionsWithIdenticalEnablementConditions(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
                 .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
@@ -372,7 +372,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool BitwiseAnd(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseAnd);
         private bool BitwiseOr(IQuestionnaireEntity entity) => entity.GetAllExpressions().Any(this.expressionProcessor.ContainsBitwiseOr);
 
-        private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongValidation(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> FewQuestionsWithSameLongValidation(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
                 .Where(question => question.ValidationConditions != null)
@@ -383,7 +383,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Where(grouping => grouping.Select(x => x.question).Distinct().Count() >= 2)
                 .Select(grouping => grouping.Select(x => CreateReference(x.question)).ToArray());
 
-        private static IEnumerable<QuestionnaireNodeReference[]> FewQuestionsWithSameLongEnablement(MultiLanguageQuestionnaireDocument questionnaire)
+        private static IEnumerable<QuestionnaireEntityReference[]> FewQuestionsWithSameLongEnablement(MultiLanguageQuestionnaireDocument questionnaire)
             => questionnaire
                 .Find<IQuestion>()
                 .Where(question => !string.IsNullOrWhiteSpace(question.ConditionExpression))
@@ -654,7 +654,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> WarningForCollection(
-            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireNodeReference[]>> getReferences, string code, string message)
+            Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireEntityReference[]>> getReferences, string code, string message)
         {
             return questionnaire
                 => getReferences(questionnaire)

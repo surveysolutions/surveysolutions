@@ -685,6 +685,78 @@
   left: inherit;
   right: 0;
 }
+.comments-panel {
+  height: 100%;
+}
+.comments-panel ul {
+  margin: 0;
+  padding: 0 10px;
+  list-style: none;
+}
+.comments-panel .reference-item {
+  margin-top: 3px;
+  border-radius: 4px 4px 0 0;
+  padding-left: 18px;
+  white-space: nowrap;
+  height: 36px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  background: #f2f3f5;
+  position: relative;
+  display: block;
+  color: #404040;
+}
+.comments-panel .reference-item span {
+  display: inline-block;
+}
+.comments-panel .reference-item .icon {
+  position: absolute;
+  left: 18px;
+  top: 7px;
+}
+.comments-panel .reference-item .title {
+  display: block;
+  padding-left: 29px;
+  line-height: 34px;
+  overflow: hidden;
+}
+.comments-panel .reference-item .title-gradient {
+  position: absolute;
+  right: 0;
+  padding-right: 16px;
+  top: 6px;
+  background: #f2f3f5;
+}
+.comments-panel .reference-item .variable {
+  position: absolute;
+  right: 0;
+  padding-right: 8px;
+  padding-left: 8px;
+  top: 6px;
+  color: #3da802;
+  background: #f2f3f5;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.comments-panel .reference-item .variable:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 55px;
+  top: 0px;
+  left: -55px;
+  background-image: -webkit-linear-gradient(left, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
+  background-image: -o-linear-gradient(left, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
+  background-image: linear-gradient(to right, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f2f3f5', endColorstr='#fff2f3f5', GradientType=1);
+}
+.comments-panel .comments-in-thread {
+  background: #fff;
+  border-radius: 0 0 4px 4px;
+}
 #designer-editor.container {
   width: 100%;
   min-width: 1280px;

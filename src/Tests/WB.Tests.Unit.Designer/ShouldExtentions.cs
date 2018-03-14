@@ -144,10 +144,10 @@ namespace WB.Tests.Unit.Designer
         private static string FormatForAssertion(QuestionnaireVerificationMessage message, int index)
             => $"{index + 1}. {message.MessageLevel} {message.Code}{Environment.NewLine}{FormatForAssertion(message.References)}";
 
-        private static string FormatForAssertion(IEnumerable<QuestionnaireNodeReference> references)
+        private static string FormatForAssertion(IEnumerable<QuestionnaireEntityReference> references)
             => string.Join(Environment.NewLine, references.Select(FormatForAssertion));
 
-        private static string FormatForAssertion(QuestionnaireNodeReference reference)
+        private static string FormatForAssertion(QuestionnaireEntityReference reference)
             => $"  {reference.Type} {reference.ItemId}";
     }
 }

@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return questionnaire => questionnaire
                 .Translations
                 .Where(entity => hasError(entity, questionnaire))
-                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForTranslation(entity.Id)));
+                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireEntityReference.CreateForTranslation(entity.Id)));
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)

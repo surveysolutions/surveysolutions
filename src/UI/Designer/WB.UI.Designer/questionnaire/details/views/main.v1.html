@@ -635,6 +635,21 @@
                     </div>
                     <ul ng-model="commentThreads">
                         <li class="comment-thread" ng-repeat="commentThread in commentThreads">
+                            <a class="reference-item" href="javascript:void(0);" ng-click="navigateTo(commentThread.entity)">
+                                <span ng-if="commentThread.entity.type == 'Question'" class="icon {{commentThread.entity.questionType}} "></span>
+                                <span ng-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group'" class="icon icon-{{commentThread.entity.type.toLowerCase()}}"></span>
+                                <span class="title">{{commentThread.entity.title | escape}}</span>
+                                <span class="variable" ng-bind-html="commentThread.entity.variable || '&nbsp;'">&nbsp;</span>
+                            </a>
+                            <div class="comments-in-thread">
+                                <ul>
+                                    <li ng-repeat="comment in commentThread.comments">
+                                        <span>{{comment.userEmail}}</span>
+                                        <span>{{comment.date}}</span>
+                                        <p>{{comment.comment}}</p>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                     </ul>
                 </perfect-scrollbar>
@@ -685,7 +700,7 @@
                             <ul class="verification-items" ng-class="{singleError: !error.isGroupedMessage}">
                                 <empty-tag ng-repeat="referencesWithErrors in error.errors">
                                     <li class="verification-item-container" ng-repeat="reference in referencesWithErrors.references" ng-click="navigateTo(reference)">
-                                        <a class="verification-item" href="javascript:void(0);" 
+                                        <a class="verification-item" href="javascript:void(0);"
                                            tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                             <span ng-if="reference.type == 'Question'" class="icon {{reference.questionType}}  icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Macro'" class="icon icon-macro icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>

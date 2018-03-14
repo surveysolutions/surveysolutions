@@ -32,6 +32,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         static readonly Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static readonly Guid staticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        static IEnumerable<QuestionnaireNodeReference> matches;
+        static IEnumerable<QuestionnaireEntityReference> matches;
     }
 } 

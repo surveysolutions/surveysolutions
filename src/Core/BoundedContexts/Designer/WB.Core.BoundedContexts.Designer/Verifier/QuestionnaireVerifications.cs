@@ -321,7 +321,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     QuestionnaireVerificationMessage.Critical(
                         "WB0102",
                         VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
-                        group.Select(x => new QuestionnaireNodeReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
+                        group.Select(x => new QuestionnaireEntityReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
         }
 
 

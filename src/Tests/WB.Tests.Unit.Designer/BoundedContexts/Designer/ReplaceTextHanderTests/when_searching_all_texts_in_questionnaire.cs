@@ -183,6 +183,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         const string searchFor = "to_replace";
 
-        private static IEnumerable<QuestionnaireNodeReference> foundReferences;
+        private static IEnumerable<QuestionnaireEntityReference> foundReferences;
     }
 }
