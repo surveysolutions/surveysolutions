@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PreloadingVerificationMessages {
@@ -408,6 +408,42 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0040_QuestionnaireDataIsNotFound {
             get {
                 return ResourceManager.GetString("PL0040_QuestionnaireDataIsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}.
+        /// </summary>
+        public static string PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile {
+            get {
+                return ResourceManager.GetString("PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}.
+        /// </summary>
+        public static string PL0042_HasDifferentTextsInListAndRosterTitles {
+            get {
+                return ResourceManager.GetString("PL0042_HasDifferentTextsInListAndRosterTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text list question {0} has non-unique items: {1}. Interview id: {2}.
+        /// </summary>
+        public static string PL0043_TextListAnswerHasDuplicatesInTexts {
+            get {
+                return ResourceManager.GetString("PL0043_TextListAnswerHasDuplicatesInTexts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text list question {0} has non-unique item codes: {1}. Interview id: {2}.
+        /// </summary>
+        public static string PL0044_TextListAnswerHasDuplicatesInCodes {
+            get {
+                return ResourceManager.GetString("PL0044_TextListAnswerHasDuplicatesInCodes", resourceCulture);
             }
         }
     }
