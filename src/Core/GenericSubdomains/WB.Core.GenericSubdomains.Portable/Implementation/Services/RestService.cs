@@ -350,7 +350,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                         if (onDownloadProgressChanged == null) continue;
                         
                         if (contentLength != null)
-                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal) (100 * ms.Length) / contentLength.Value);
+                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal) (100 * ms.Length) / contentLength.Value, 2);
 
                         downloadProgressChangedEventArgs.BytesReceived = ms.Length;
                         onDownloadProgressChanged(downloadProgressChangedEventArgs);
