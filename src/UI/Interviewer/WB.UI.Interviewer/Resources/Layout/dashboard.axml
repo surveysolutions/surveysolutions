@@ -20,18 +20,9 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
       local:layout_scrollFlags="scroll|enterAlways"
       local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
-<!--      <TextView
+      <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Text DashboardTitle;" />-->
-
-        <RelativeLayout
-            style="@style/ToolbarTitle_Container">
-            <TextView style="@style/ToolbarTitle"
-                      android:id="@+id/dashboadr_page_title"
-                      local:MvxBind="Text DashboardTitle;" />
-        </RelativeLayout>
-        <ImageButton style="@style/Dashboard_SearchView_SearchButton"
-                     local:MvxBind="Click ShowSearchCommand;"/>
+        local:MvxBind="Text DashboardTitle;" />
     </android.support.v7.widget.Toolbar>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
