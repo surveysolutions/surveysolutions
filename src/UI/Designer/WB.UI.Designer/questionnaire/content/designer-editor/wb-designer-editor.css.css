@@ -98,7 +98,7 @@
   background: url('../i/designer-left-icons-2-3.png') 0 -50px no-repeat;
 }
 #left-menu ul li a.left-menu-comments {
-  background: url('../i/designer-left-icons-2-3.png') 0 -50px no-repeat;
+  background: url('../i/designer-left-icons-2-3.png') 0 -300px no-repeat;
 }
 #left-menu ul li a:hover {
   background-color: #dbdfe2;
@@ -685,12 +685,12 @@
   left: inherit;
   right: 0;
 }
-.comments-panel {
+.comments-panel .comments {
   height: 100%;
 }
 .comments-panel ul {
   margin: 0;
-  padding: 0 10px;
+  padding: 0 20px 0 10px;
   list-style: none;
 }
 .comments-panel .reference-item {

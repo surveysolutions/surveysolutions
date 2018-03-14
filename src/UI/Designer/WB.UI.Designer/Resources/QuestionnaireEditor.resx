@@ -1066,4 +1066,13 @@
   <data name="HelpNewComment" xml:space="preserve">
     <value>add comment</value>
   </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Comment thread:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Comment threads:</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>You will see comments here</value>
+  </data>
 </root>

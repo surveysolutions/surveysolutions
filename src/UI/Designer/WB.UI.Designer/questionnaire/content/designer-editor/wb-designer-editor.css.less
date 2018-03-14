@@ -115,7 +115,7 @@
             }
 
             &.left-menu-comments {
-                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*1 no-repeat;
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*6 no-repeat;
             }
 
             &:hover {
@@ -829,11 +829,14 @@
 }
 
 .comments-panel {
-    height: 100%;
+    
+    .comments{
+        height: 100%;
+    }
 
     ul {
         margin: 0;
-        padding: 0 10px;
+        padding: 0 20px 0 10px;
         list-style: none;
     }
 
