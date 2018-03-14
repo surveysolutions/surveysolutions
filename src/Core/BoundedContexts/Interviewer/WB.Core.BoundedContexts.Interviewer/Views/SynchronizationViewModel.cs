@@ -24,84 +24,50 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public SynchronizationStatistics Statistics
         {
-            get { return statistics; }
-            set
-            {
-                statistics = value;
-                this.RaisePropertyChanged();
-            }
+            get => statistics;
+            set => this.RaiseAndSetIfChanged(ref this.statistics, value);
         }
 
         public SynchronizationStatus Status
         {
-            get { return this.status; }
-            set
-            {
-                this.status = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.status;
+            set => this.RaiseAndSetIfChanged(ref this.status, value);
         }
 
         public bool SynchronizationErrorOccured
         {
-            get { return this.synchronizationErrorOccured; }
-            set
-            {
-                this.synchronizationErrorOccured = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.synchronizationErrorOccured;
+            set => this.RaiseAndSetIfChanged(ref this.synchronizationErrorOccured, value);
         }
 
         public bool IsSynchronizationInfoShowed
         {
-            get { return this.isSynchronizationInfoShowed; }
-            set
-            {
-                this.isSynchronizationInfoShowed = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.isSynchronizationInfoShowed;
+            set => this.RaiseAndSetIfChanged(ref this.isSynchronizationInfoShowed, value);
         }
 
         public bool IsSynchronizationInProgress
         {
-            get { return this.isSynchronizationInProgress; }
-            set
-            {
-                this.isSynchronizationInProgress = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.isSynchronizationInProgress;
+            set => this.RaiseAndSetIfChanged(ref this.isSynchronizationInProgress, value);
         }
 
         public bool HasUserAnotherDevice
         {
-            get { return this.hasUserAnotherDevice; }
-            set
-            {
-                this.hasUserAnotherDevice = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.hasUserAnotherDevice;
+            set => this.RaiseAndSetIfChanged(ref this.hasUserAnotherDevice, value);
         }
 
         public string ProcessOperation
         {
-            get { return this.processOperation; }
-            set
-            {
-                if (this.processOperation == value) return;
-
-                this.processOperation = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.processOperation;
+            set => this.RaiseAndSetIfChanged(ref this.processOperation, value);
         }
 
         public string ProcessOperationDescription
         {
-            get { return this.processOperationDescription; }
-            set
-            {
-                this.processOperationDescription = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.processOperationDescription;
+            set => this.RaiseAndSetIfChanged(ref this.processOperationDescription, value);
         }
 
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
@@ -130,10 +96,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.Statistics = syncProgressInfo.Statistics;
 
                 this.Status = syncProgressInfo.Status;
-                this.SynchronizationErrorOccured = SynchronizationErrorOccured || syncProgressInfo.HasErrors;
+                this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
 
-                this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
                 this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
+
                 if (!syncProgressInfo.IsRunning)
                 {
                     this.OnSyncCompleted();
