@@ -1329,6 +1329,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking application updates.
+        /// </summary>
+        public static string Synchronization_CheckNewVersionOfApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_CheckNewVersionOfApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string Synchronization_Done {
@@ -1370,6 +1379,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Download_Title {
             get {
                 return ResourceManager.GetString("Synchronization_Download_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading application updates.
+        /// </summary>
+        public static string Synchronization_DownloadApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received {0} of {1} at {2} ({3}%).
+        /// </summary>
+        public static string Synchronization_DownloadApplication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadApplication_Description", resourceCulture);
             }
         }
         
