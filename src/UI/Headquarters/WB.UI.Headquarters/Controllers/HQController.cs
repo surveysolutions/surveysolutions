@@ -133,6 +133,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.RedirectToAction("Index", "SurveySetup");
         }
 
+        [ObserverNotAllowed]
+        [AuthorizeOr403(Roles = "Administrator")]
         public ActionResult ExportQuestionnaire(Guid id, long version)
         {
             var file = questionnaireExporter.CreateZipExportFile(new QuestionnaireIdentity(id, version));
