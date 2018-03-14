@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -218,6 +219,7 @@ namespace WB.UI.Headquarters
                     trackingSettings,
                     interviewCountLimit,
                     externalStoragesSettings: externalStoragesSettings),
+                new FileStorageModule(basePath),
                 new QuartzModule(),
                 new WebInterviewModule(),
                 new HqWebInterviewModule(),
