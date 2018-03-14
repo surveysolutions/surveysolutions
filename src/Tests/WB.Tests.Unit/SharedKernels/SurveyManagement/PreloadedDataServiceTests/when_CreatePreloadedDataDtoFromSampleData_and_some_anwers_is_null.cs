@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -9,7 +10,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
     internal class when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null : PreloadedDataServiceTestContext
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
         {
             questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
@@ -21,15 +23,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     });
 
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() => importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(
-                CreatePreloadedDataByFile(header: new[] {"Id", "nq1"},
-                    content: new[] {new[] {"1", null}},
+        private void BecauseOf() => exception = Catch.Exception(() => importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(
+                CreatePreloadedDataByFile(header: new[] { "Id", "nq1" },
+                    content: new[] { new[] { "1", null } },
                     fileName: "some file name")));
 
-        It should_not_throw_null_reference_exception = () =>
-            exception.ShouldBeNull();
+        [NUnit.Framework.Test]
+        public void should_not_throw_null_reference_exception() =>
+            exception.Should().BeNull();
 
         private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;

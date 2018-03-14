@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
+        private readonly ILogger logger;
 
         public InterviewFromAssignmentCreatorService(IMvxMessenger messenger,
             ICommandService commandService,
@@ -41,7 +42,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IInterviewAnswerSerializer answerSerializer,
             IAssignmentDocumentsStorage assignmentsRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
-            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage,
+            ILogger logger)
         {
             this.messenger = messenger;
             this.commandService = commandService;
@@ -51,6 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.assignmentsRepository = assignmentsRepository;
             this.keyGenerator = keyGenerator;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
+            this.logger = logger;
         }
 
         public async Task CreateInterviewAsync(int assignmentId)
@@ -82,6 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 assignmentsRepository.Store(assignment);
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
+                logger.Warn($"Created interview {interviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
                 this.viewModelNavigationService.NavigateToPrefilledQuestions(formatGuid);
             }
             catch (InterviewException e)

@@ -370,5 +370,16 @@ namespace WB.Tests.Abc.TestFactories
                 Value = value ?? 0
             };
         }
+
+        public SpecialValuesViewModel SpecialValues(
+            FilteredOptionsViewModel optionsViewModel = null,
+            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IStatefulInterviewRepository interviewRepository = null)
+        {
+            return new SpecialValuesViewModel(
+                optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
+                mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+        }
     }
 }
