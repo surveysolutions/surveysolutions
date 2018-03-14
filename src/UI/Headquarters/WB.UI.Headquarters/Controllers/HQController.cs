@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Controllers
@@ -33,6 +34,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IQuestionnaireExporter questionnaireExporter;
 
         public HQController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
@@ -40,7 +42,8 @@ namespace WB.UI.Headquarters.Controllers
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage, 
+            IQuestionnaireExporter questionnaireExporter)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -48,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.questionnaireStorage = questionnaireStorage;
+            this.questionnaireExporter = questionnaireExporter;
         }
 
         public ActionResult Index()
@@ -127,6 +131,12 @@ namespace WB.UI.Headquarters.Controllers
                     : string.Format(HQ.QuestionnaireClonedAndRenamedFormat, model.OriginalTitle, model.NewTitle));
 
             return this.RedirectToAction("Index", "SurveySetup");
+        }
+
+        public ActionResult ExportQuestionnaire(Guid id, long version)
+        {
+            var file = questionnaireExporter.CreateZipExportFile(new QuestionnaireIdentity(id, version));
+            return File(file.FileStream, "application/zip", file.Filename);
         }
 
         public ActionResult TakeNew(Guid id, long version)

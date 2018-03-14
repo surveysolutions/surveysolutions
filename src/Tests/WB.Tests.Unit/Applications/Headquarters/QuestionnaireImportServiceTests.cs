@@ -175,6 +175,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
                 Mock.Of<ITranslationManagementService>(),
+                Mock.Of<IPlainKeyValueStorage < QuestionnaireLookupTable >>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IAuditLog>(),

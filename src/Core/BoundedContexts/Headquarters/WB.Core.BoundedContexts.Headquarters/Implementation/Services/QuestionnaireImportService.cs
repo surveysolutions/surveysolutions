@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly DesignerUserCredentials designerUserCredentials;
 
-        public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider, 
+        public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider,
             IRestService restService,
             IStringCompressor zipUtils,
             IAttachmentContentService attachmentContentService,
@@ -136,12 +136,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         var lookupTable = await this.restService.GetAsync<QuestionnaireLookupTable>(
                             url: $"{this.apiPrefix}/lookup/{questionnaire.PublicKey}/{lookupId}",
                             credentials: credentials);
-                        lookupTable.Id = questionnaireIdentity;
-
-                        lookupTablesStorage.Store(lookupTable, questionnaireIdentity.ToString());
+                        
+                        lookupTablesStorage.Store(lookupTable, questionnaireIdentity, lookupId);
                     }
                 }
-                
+
                 this.commandService.Execute(new ImportFromDesigner(
                     this.authorizedUser.Id,
                     questionnaire,
