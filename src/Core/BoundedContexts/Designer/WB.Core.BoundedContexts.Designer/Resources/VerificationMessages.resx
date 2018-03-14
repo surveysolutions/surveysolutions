@@ -715,6 +715,6 @@
     <value>Special values titles must be unique.</value>
   </data>
   <data name="WB0280_ComboboxShouldNotHaveParentValue" xml:space="preserve">
-    <value>Combobox question options should not cantain reference to parent value.</value>
+    <value>Combobox question options should not contain reference to parent value.</value>
   </data>
 </root>
