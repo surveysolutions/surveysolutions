@@ -63,6 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
+            Error<SingleQuestion>("WB0280", ComboboxShouldNotHaveParentValue, VerificationMessages.WB0280_ComboboxShouldNotHaveParentValue),
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
             Warning(TooManyQuestions, "WB0205", string.Format(VerificationMessages.WB0205_TooManyQuestions, MaxQuestionsCountInQuestionnaire)),
@@ -84,10 +85,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<GpsCoordinateQuestion>(Any, "WB0264", VerificationMessages.WB0264_GpsQuestion),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
+            
             Warning(MoreThan30PercentQuestionsAreText, "WB0265", string.Format(VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText, TextQuestionsLengthInPercents)),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
         };
+
+        private bool ComboboxShouldNotHaveParentValue(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question.IsFilteredCombobox.GetValueOrDefault() && question.CascadeFromQuestionId == null)
+            {
+                return question.Answers.Any(x => x.ParentCode != null || x.ParentValue != null);
+            }
+
+            return false;
+        }
 
         private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {

@@ -3,6 +3,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -63,9 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
                     throw new NotSupportedException($"Export handler for '{Enum.GetName(typeof(ExternalStorageType), storageType)}' not found");
             }
         }
-
-        private AbstractDataExportHandler GetExportHandler(DataExportFormat format)
-        {
+        private BaseAbstractDataExportHandler GetExportHandler(DataExportFormat format)        {
             switch (format)
             {
                     case DataExportFormat.Binary:

@@ -222,8 +222,8 @@
   <data name="NoAccessToQuestionnaire" xml:space="preserve">
     <value>У Вас нет прав на просмотр запрашиваемого опросника</value>
   </data>
-  <data name="UserNeedToContactSupport" xml:space="preserve">
-    <value>У вас нет прав на совершение данного действия. Пожалуйста, обратитесь в службу поддержки</value>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>У вас нет прав на совершение данного действия. Пожалуйста, обратитесь в службу поддержки. IP: {0}</value>
   </data>
   <data name="Email_required" xml:space="preserve">
     <value>Введите адрес электронной почты</value>
