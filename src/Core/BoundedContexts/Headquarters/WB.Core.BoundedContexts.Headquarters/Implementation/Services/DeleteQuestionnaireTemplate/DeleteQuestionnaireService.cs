@@ -18,6 +18,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Threading;
 
@@ -31,7 +32,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
-
         private readonly IInterviewImportService importService;
         private readonly IAuditLog auditLog;
 
@@ -57,8 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         {
             this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
-            var questionnaire =
-                this.questionnaireBrowseItemReader.GetById(questionnaireIdentity.ToString());
+            var questionnaire = this.questionnaireBrowseItemReader.GetById(questionnaireIdentity.ToString());
 
             if (questionnaire != null)
             {
@@ -85,11 +84,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             });
         }
 
-        private void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId,
-            long questionnaireVersion, Guid? userId)
+        private void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
-
+             
             lock (DeleteInProcessLockObject)
             {
                 if (DeleteInProcess.Contains(questionnaireKey))
@@ -103,6 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 this.DeleteInterviews(questionnaireId, questionnaireVersion, userId);
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
+                this.DeleteLookupTables(questionnaireIdentity);
 
                 var isAssignmentImportIsGoing = importService.Status.IsInProgress &&
                                                 importService.Status.QuestionnaireId.Equals(questionnaireIdentity);
@@ -111,8 +110,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
 
-                    IPlainTransactionManager plainTransactionManager = ServiceLocator.Current
-                        .GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+                    IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+
                     plainTransactionManager.ExecuteInPlainTransaction(() =>
                         this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
                             userId)));
@@ -135,10 +134,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             sessionProvider.Delete(questionnaireIdentity);
         }
 
+        private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity)
+        {
+            ServiceLocator.Current.ExecuteInPlainTransaction(serviceLocator =>
+            {
+                var questionnaireStorage = serviceLocator.GetInstance<IQuestionnaireStorage>()
+                    .GetQuestionnaireDocument(questionnaireIdentity);
+
+                var lookupTablesStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
+
+                foreach (var lookupTableInfo in questionnaireStorage.LookupTables)
+                {
+                    var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
+                    lookupTablesStorage.Remove(id);
+                }
+            });
+        }
+
         private void DeleteTranslations(Guid questionnaireId, long questionnaireVersion)
         {
-            IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-            plainTransactionManager.ExecuteInPlainTransaction(() =>
+            ServiceLocator.Current.ExecuteInPlainTransaction(() =>
             {
                 this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
             });
