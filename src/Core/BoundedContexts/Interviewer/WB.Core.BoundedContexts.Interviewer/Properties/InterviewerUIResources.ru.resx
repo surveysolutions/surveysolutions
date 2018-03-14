@@ -720,7 +720,18 @@
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>
   </data>
-  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Загрузка обновлений</value>
+    <comment>Загрузка обновлений</comment>
+  </data>
+    <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Проверка обновлений</value>
+    <comment>Проверка обновлений</comment>
+  </data>
+    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Загружено {0} из {1} при {2} ({3}%)</value>
+    <comment>Загружено {0} из {1} ({2}%)</comment>
+  </data>  <data name="Dashboard_SearchResult" xml:space="preserve">
     <value>Найдено {0} элементов</value>
     <comment>Найдено {0} элементов по введенному тексту</comment>
   </data>
