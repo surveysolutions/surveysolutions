@@ -11,6 +11,11 @@
                 commentsService.getCommentThreads($state.params.questionnaireId)
                     .then(function(result) {
                         $scope.commentThreads = result.data;
+                        _.forEach($scope.commentThreads, function(commentThread) {
+                            _.forEach(commentThread.comments, function(comment) {
+                                comment.date = moment(comment.date).format("LLL");
+                            });
+                        });
                         console.log(result.data);
                     });
             };

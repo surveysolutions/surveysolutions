@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                 .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList())
                 .Select(x => new CommentThread
                 {
-                    Comments = x.Select(CreateCommentView).ToArray(),
+                    Comments = x.Select(CreateCommentView).OrderByDescending(x => x.Date).ToArray(),
                     Entity = CreateCommentedEntity(questionnaire, x.Key)
                 })
                 .ToList();

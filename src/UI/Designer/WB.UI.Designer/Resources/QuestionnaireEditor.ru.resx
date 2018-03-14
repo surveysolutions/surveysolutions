@@ -1065,4 +1065,17 @@
     <value>Выберите элемент из списка</value>
     <comment>Выберите элемент из списка</comment>
   </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>Новый комментарий</value>
+    <comment> </comment>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Ветвь обсуждения:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Ветвей обсуждения:</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>Тут вы увидите комментарии</value>
+  </data>
 </root>
