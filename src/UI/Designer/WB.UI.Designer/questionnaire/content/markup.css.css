@@ -8023,6 +8023,9 @@ textarea#edit-group-description {
 #left-menu ul li a.left-menu-translations {
   background: url('i/designer-left-icons-2-3.png') 0 -50px no-repeat;
 }
+#left-menu ul li a.left-menu-comments {
+  background: url('i/designer-left-icons-2-3.png') 0 -50px no-repeat;
+}
 #left-menu ul li a:hover {
   background-color: #dbdfe2;
 }
@@ -8046,6 +8049,7 @@ textarea#edit-group-description {
   color: #c1c7cb;
 }
 .left-side-panel .left-side-panel-content {
+  width: 85%;
   background: #e5e8ea;
   height: 100%;
   position: relative;
@@ -8090,23 +8094,9 @@ textarea#edit-group-description {
 .left-side-panel .foldback-region {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 85%;
   right: 0;
   bottom: 0;
-  background: url(i/left-panel-shadow.png) repeat-y;
-}
-.left-side-panel.macroses .foldback-region {
-  left: 85%;
-  background: url(i/left-panel-shadow-small.png) repeat-y;
-}
-.left-side-panel.chapters .foldback-region {
-  left: 75%;
-}
-.left-side-panel.lookup-tables .foldback-region {
-  left: 75%;
-}
-.left-side-panel.attachments .foldback-region {
-  left: 75%;
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
 .left-side-panel .foldback-button {
@@ -8180,9 +8170,6 @@ textarea#edit-group-description {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
-}
-.lookup-tables-panel {
-  width: 75%;
 }
 .lookup-tables-panel .lookup-tables {
   height: 100%;
@@ -8294,7 +8281,6 @@ textarea#edit-group-description {
   position: static;
 }
 .translations-panel {
-  width: 75%;
   min-width: 538px;
 }
 .translations-panel .translations {
@@ -8374,7 +8360,6 @@ textarea#edit-group-description {
   display: block;
 }
 .attachments-panel {
-  width: 75%;
   min-width: 538px;
 }
 .attachments-panel .attachments {
@@ -8527,9 +8512,6 @@ textarea#edit-group-description {
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item:hover .actions .permanent-actions {
   display: block;
 }
-.macros-panel {
-  width: 85%;
-}
 .macros-panel .macroses {
   height: 100%;
 }
@@ -8607,9 +8589,6 @@ textarea#edit-group-description {
 }
 .macros-panel .macroses ul li button:hover {
   background: #e6e6e6;
-}
-.chapter-panel {
-  width: 75%;
 }
 .chapter-panel .ul-holder {
   width: 100%;
@@ -9843,11 +9822,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   background-repeat: no-repeat;
 }
 .metadata-panel {
-  width: 75%;
+  width: 85%;
   min-width: 538px;
 }
 .left-side-panel.metadata .left-side-panel-content h3 {
-  margin-left: 50px;
+  margin-left: 20px;
 }
 .metadata-panel .metadata {
   padding-left: 30px;
@@ -9856,14 +9835,13 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   margin: 18px 24px 20px 18px;
 }
 .left-side-panel.metadata .foldback-region {
-  left: 75%;
+  left: 85%;
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
 .metadata-blocks {
   margin-bottom: 25px;
 }
 .metadata-blocks > li {
-  margin-left: 30px;
   margin-right: 35px;
   background: #fff;
   margin-bottom: 7px;
@@ -10040,7 +10018,7 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   background-position: 0px -180px;
 }
 .metadata .form-buttons-holder {
-  margin-left: 60px;
+  margin-left: 13px;
   margin-bottom: 30px;
 }
 .metadata-panel .dropdown-toggle {

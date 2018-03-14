@@ -114,6 +114,10 @@
                 background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*1 no-repeat;
             }
 
+            &.left-menu-comments {
+                background: url(@leftpanel-icons-sprite) 0 -@leftpanel-icon-height*1 no-repeat;
+            }
+
             &:hover {
                 background-color: #dbdfe2;
             }
@@ -126,10 +130,7 @@
     }
 }
 
-@macroses-panel-width: 85%;
-@attachments-panel-width: 75%;
-@chapters-panel-width: 75%;
-@lookup-tables-panel-width: 75%;
+@panel-width: 85%;
 @divider-width: 275px;
 @foldback-button-size: 50px;
 @light-grey: #c1c7cb;
@@ -149,6 +150,7 @@
     }
 
     .left-side-panel-content {
+        width: @panel-width;
         background: @selected-panel-bg-color;
         height: 100%;
         position: relative;
@@ -193,29 +195,12 @@
     .foldback-region {
         position: absolute;
         top: 0;
-        left: 0;
+        left: @panel-width;
         right: 0;
         bottom: 0;
-        background: url(../i/left-panel-shadow.png) repeat-y;
-    }
-
-    &.macroses .foldback-region {
-        left: @macroses-panel-width;
         background: url(../i/left-panel-shadow-small.png) repeat-y;
     }
 
-    &.chapters .foldback-region {
-        left: @chapters-panel-width;
-    }
-
-    &.lookup-tables .foldback-region {
-        left: @lookup-tables-panel-width;
-    }
-
-    &.attachments .foldback-region {
-        left: @attachments-panel-width;
-        background: url(../i/left-panel-shadow-small.png) repeat-y;
-    }
 
     .foldback-button {
         display: none;
@@ -295,8 +280,6 @@
 }
 
 .lookup-tables-panel {
-    width: @lookup-tables-panel-width;
-
     @lookup-panel-padding-left: 20px;
     @lookup-panel-table-item-bg: #fff;
     @lookup-accent-color: #e004c9;
@@ -427,7 +410,6 @@
 
 .translations-panel
 {
-    width: @attachments-panel-width;
     min-width: (1280px) / 2 - @left-menu-width - @foldback-button-size;
 
     @attachments-panel-padding-left: 20px;
@@ -530,7 +512,6 @@
 }
 
 .attachments-panel {
-    width: @attachments-panel-width;
     min-width: (1280px) / 2 - @left-menu-width - @foldback-button-size;
 
     @attachments-panel-padding-left: 20px;
@@ -719,8 +700,6 @@
 }
 
 .macros-panel {
-    width: @macroses-panel-width;
-
     @macroses-panel-padding-left: 20px;
     @macroses-panel-macros-bg: #fff;
 
@@ -822,8 +801,6 @@
 }
 
 .chapter-panel {
-    width: @chapters-panel-width;
-
     .ul-holder {
         width: 100%;
         height: 100%;
