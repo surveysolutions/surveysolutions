@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.ResourcesTranslationTests
@@ -30,10 +30,10 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
             select $"{resourceFileName}: {inconsistentResource}";
 
         [Test]
-        public void should_find_translated_resource_files() => translatedResourceFiles.ShouldNotBeEmpty();
+        public void should_find_translated_resource_files() => translatedResourceFiles.Should().NotBeEmpty();
         
         [Test]
-        public void should_find_no_inconsistencies () => translatedResourceStringsNotCorrespondingToOriginal.ShouldBeEmpty();
+        public void should_find_no_inconsistencies () => translatedResourceStringsNotCorrespondingToOriginal.Should().BeEmpty();
 
         private IEnumerable<string> translatedResourceFiles;
         private IEnumerable<string> translatedResourceStringsNotCorrespondingToOriginal;

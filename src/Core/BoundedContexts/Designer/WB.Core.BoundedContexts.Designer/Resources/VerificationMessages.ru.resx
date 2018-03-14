@@ -498,6 +498,27 @@
   <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
     <value>Нельзя ссылаться на дочерние элементы во включающих условиях секций, подсекций и ростеров.</value>
   </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>Специальные значения могут быть только целыми числами в диапазоне от {0} до {1}.</value>
+  </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>Заголовоки специальных значений пустые или слишком длинные. Длина заголовка должна быть от {0} до {1} символов.</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>Специальные значения должны быть уникальными.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>Содержит более {0} специальных значений.</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>Вопрос содержит специальное значение, которое слишком велико и не может быть использовано, поскольку вопрос определяет количество строк ростера.</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>Вопрос содержит специальное значение с пустым значением.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Заголовки специальных значений должны быть уникальны.</value>
+  </data>
   <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
     <value>Создано большое количество ростеров. Экспорт этих структур в файлы данных может быть проблематичным. Подумайте об уменьшении количества ростеров.</value>
   </data>
@@ -692,5 +713,8 @@
   </data>
   <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
     <value>@rowname переменная не поддерживается больше.</value>
+  </data>
+  <data name="WB0280_ComboboxShouldNotHaveParentValue" xml:space="preserve">
+    <value>Вопрос список не может содержать ссылки на родительский вопрос в опциях.</value>
   </data>
 </root>

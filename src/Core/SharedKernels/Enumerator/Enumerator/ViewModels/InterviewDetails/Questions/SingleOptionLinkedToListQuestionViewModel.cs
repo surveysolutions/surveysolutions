@@ -64,8 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid linkedToQuestionId;
         private CovariantObservableCollection<SingleOptionQuestionOptionViewModel> options;
         private readonly QuestionStateViewModel<SingleOptionQuestionAnswered> questionState;
-        private OptionBorderViewModel<SingleOptionQuestionAnswered> optionsTopBorderViewModel;
-        private OptionBorderViewModel<SingleOptionQuestionAnswered> optionsBottomBorderViewModel;
+        private OptionBorderViewModel optionsTopBorderViewModel;
+        private OptionBorderViewModel optionsBottomBorderViewModel;
 
         public CovariantObservableCollection<SingleOptionQuestionOptionViewModel> Options
         {
@@ -249,14 +249,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var result = new CompositeCollection<ICompositeEntity>();
                 this.optionsTopBorderViewModel =
-                    new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, true)
+                    new OptionBorderViewModel(this.questionState, true)
                     {
                         HasOptions = HasOptions
                     };
                 result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(this.Options);
                 this.optionsBottomBorderViewModel =
-                    new OptionBorderViewModel<SingleOptionQuestionAnswered>(this.questionState, false)
+                    new OptionBorderViewModel(this.questionState, false)
                     {
                         HasOptions = HasOptions
                     };

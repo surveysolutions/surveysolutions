@@ -14,8 +14,10 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
@@ -27,8 +29,10 @@ namespace WB.UI.Headquarters.API
 
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
+        private readonly IDataExportFileAccessor exportFileAccessor;
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        private readonly IExternalFileStorage externalFileStorage;
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
@@ -36,29 +40,57 @@ namespace WB.UI.Headquarters.API
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService,
+            IDataExportFileAccessor exportFileAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IDdiMetadataAccessor ddiMetadataAccessor,
+            IExternalFileStorage externalFileStorage,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
+            this.exportFileAccessor = exportFileAccessor;
             this.exportedFilesAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
+            this.externalFileStorage = externalFileStorage;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         [HttpGet]
         [ObserverNotAllowedApi]
         public HttpResponseMessage Paradata(Guid id, long version, DateTime? from = null, DateTime? to = null)
-            => CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                    new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, from?.ToUniversalTime(), to?.ToUniversalTime()));
+        {
+            return CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
+                new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, @from?.ToUniversalTime(),
+                to?.ToUniversalTime()));
+        }
 
         [HttpGet]
         [ObserverNotAllowedApi]
+        [ApiNoCache]
         public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
-            => CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                    new QuestionnaireIdentity(id, version), format, status, from?.ToUniversalTime(), to?.ToUniversalTime()));
+        {
+            var filenameFullPath = this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
+                new QuestionnaireIdentity(id, version), format, status, @from?.ToUniversalTime(),
+                to?.ToUniversalTime());
+
+            if (format == DataExportFormat.Binary && externalFileStorage.IsEnabled())
+            {
+                var filename = this.fileSystemAccessor.GetFileName(filenameFullPath);
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(filename);
+
+                if (this.externalFileStorage.IsExist(externalStoragePath))
+                {
+                    var directLink = this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromMinutes(30));
+
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location = new Uri(directLink);
+                    return response;
+                }
+            }
+
+            return CreateFile(filenameFullPath);
+        }
 
         [HttpGet]
         [ObserverNotAllowedApi]
