@@ -6,7 +6,9 @@ using Android.Support.Design.Widget;
 using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V4;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -41,6 +43,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             Mvx.Trace("Dashboard Search activity started");
             base.OnCreate(bundle);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+            
+            var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
+            recyclerView.HasFixedSize = true;
+            if (recyclerView != null)
+                recyclerView.Adapter = new RecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
         }
 
         protected override void OnStart()
