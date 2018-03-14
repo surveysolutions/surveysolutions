@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             Setup.InstanceToMockedServiceLocator<IAccountRepository>(
                 Mock.Of<IAccountRepository>(x => x.GetByNameOrEmail(userName) == Mock.Of<IMembershipAccount>(a => a.UserName == userName)));
 
-            var address = IPAddress.Any;
+            var address = IPAddress.Parse(IPAddresToChecks);
 
             Setup.InstanceToMockedServiceLocator<IIpAddressProvider>(
                 Mock.Of<IIpAddressProvider>(x => x.GetClientIpAddress() == address));
@@ -73,12 +73,14 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
 
         [NUnit.Framework.Test]
         public void should_return_message_containing_IP() =>
-            filterContext.Response.ReasonPhrase.ShouldContain("IP:0.0.0.0");
+            filterContext.Response.ReasonPhrase.ShouldContain($"IP:{IPAddresToChecks}");
 
 
         ApiBasicAuthAttribute attribute;
         HttpActionContext filterContext;
 
         string userName = "name";
+
+        private string IPAddresToChecks = "1.2.3.4";
     }
 }

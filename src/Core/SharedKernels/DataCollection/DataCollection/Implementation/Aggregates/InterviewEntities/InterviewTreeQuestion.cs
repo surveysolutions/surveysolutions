@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -1415,6 +1416,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetQuestion(InterviewTreeQuestion question)
         {
             this.question = question;
+        }
+
+        public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            var questionnaire = this.question.Tree.Questionnaire;
+            questionInvariants.RequireFixedSingleOptionAnswerAllowed(GetAnswer().SelectedValue, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
 
         public override string ToString() => string.Join(", ", this.GetCascadingParentQuestion()?.GetAnswer());
