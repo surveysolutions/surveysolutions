@@ -1853,7 +1853,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Combobox question options should not cantain reference to parent value..
+        ///   Looks up a localized string similar to Combobox question options should not contain reference to parent value..
         /// </summary>
         public static string WB0280_ComboboxShouldNotHaveParentValue {
             get {
