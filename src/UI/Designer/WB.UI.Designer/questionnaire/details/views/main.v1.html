@@ -628,10 +628,10 @@
             <div class="comments">
                 <perfect-scrollbar class="scroller">
                     <h3>
-                        <span ng-i18next="[i18next]({count: commentThreads.length})SideBarMacroCounter"></span>
+                        <span ng-i18next="[i18next]({count: commentThreads.length})SideBarCommentsCounter"></span>
                     </h3>
                     <div class="empty-list" ng-show="commentThreads.length == 0">
-                        <p ng-i18next>SideBarMacroEmptyLine1</p>
+                        <p ng-i18next>SideBarEmptyCommentsLine</p>
                     </div>
                     <ul ng-model="commentThreads">
                         <li class="comment-thread" ng-repeat="commentThread in commentThreads">
@@ -644,8 +644,8 @@
                             <div class="comments-in-thread">
                                 <ul>
                                     <li ng-repeat="comment in commentThread.comments">
-                                        <span>{{comment.userEmail}}</span>
-                                        <span>{{comment.date}}</span>
+                                        <span class="author">{{comment.userEmail}}</span>
+                                        <span class="date">{{comment.date}}</span>
                                         <p>{{comment.comment}}</p>
                                     </li>
                                 </ul>

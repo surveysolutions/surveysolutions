@@ -1996,6 +1996,33 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {{count}} Comment thread:.
+        /// </summary>
+        public static string SideBarCommentsCounter {
+            get {
+                return ResourceManager.GetString("SideBarCommentsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Comment threads:.
+        /// </summary>
+        public static string SideBarCommentsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarCommentsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will see comments here.
+        /// </summary>
+        public static string SideBarEmptyCommentsLine {
+            get {
+                return ResourceManager.GetString("SideBarEmptyCommentsLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use this tab to define lookup tables..
         /// </summary>
         public static string SideBarLookupEmptyLine1 {
