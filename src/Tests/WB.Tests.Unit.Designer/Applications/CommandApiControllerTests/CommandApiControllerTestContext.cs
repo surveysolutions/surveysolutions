@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Shared.Web.CommandDeserialization;

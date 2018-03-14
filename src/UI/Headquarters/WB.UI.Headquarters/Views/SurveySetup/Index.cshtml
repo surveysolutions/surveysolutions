@@ -27,6 +27,7 @@
         var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
         var $batchUploadUrl = '@Url.Action("BatchUpload", "SurveySetup")';
         var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
+        var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
         var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
         var $webInterviewUrl = '@Url.Action("Start", "WebInterviewSetup")';
 
@@ -34,8 +35,9 @@
         var ajax = new Ajax(notifier);
 
         $(function() {
-            var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax, $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl);
+            var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
+                $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
+                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -130,18 +132,22 @@
                     @if (isAdmin)
                     {
                         <text>
-                    items["clone"] =
-                    {
-                        name: "@HttpUtility.JavaScriptStringEncode(Dashboard.CloneQuestionnaire)",
-                        callback: model.cloneQuestionnaire,
-                        disabled: selectedRow.isDisabled
-                    };
+                        items["clone"] =
+                        {
+                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.CloneQuestionnaire)",
+                            callback: model.cloneQuestionnaire,
+                            disabled: selectedRow.isDisabled
+                        };
                         items["delete"] =
                         {
                             name: "@HttpUtility.JavaScriptStringEncode(Dashboard.DeleteQuestionnaire)",
                             callback: model.deleteQuestionnaire
                             /*,disabled: selectedRow.isDisabled*/
                         };
+                        items["export"] = {
+                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.ExportQuestionnaire)",
+                            callback: model.exportQuestionnaire
+                        }
                         </text>
                     }
                     return items;
