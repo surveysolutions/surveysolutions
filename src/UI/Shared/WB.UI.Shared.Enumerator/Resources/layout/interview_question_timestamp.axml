@@ -6,7 +6,7 @@
               android:layout_height="wrap_content"
               local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
     <LinearLayout style="@style/Interview_Question_Answer"
-      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+      local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
       <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
         <TableLayout android:layout_width="wrap_content"
@@ -23,7 +23,7 @@
           local:MvxBind="HideKeyboardOnClick .; 
                           Click SaveAnswerCommand; 
                           Text Localization('Interview_Questions_Timestamp_SaveAnswer'); 
-                          BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
+                          BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));
                           Tag Format('btnAnswer_{0}', Identity)" />
       </LinearLayout>
 

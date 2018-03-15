@@ -1,5 +1,5 @@
 <template>
-    <button v-if="$me.isAnswered && $me.acceptAnswer" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
+    <button v-if="$me.isAnswered && $me.acceptAnswer" tabindex="-1" type="submit" class="btn btn-link btn-clear" @click="removeAnswer">
         <span></span>
     </button>
 </template>

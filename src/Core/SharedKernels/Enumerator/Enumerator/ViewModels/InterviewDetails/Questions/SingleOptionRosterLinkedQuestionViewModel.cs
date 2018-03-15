@@ -66,8 +66,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
         private HashSet<Guid> parentRosters;
         private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
-        private OptionBorderViewModel<SingleOptionLinkedQuestionAnswered> optionsTopBorderViewModel;
-        private OptionBorderViewModel<SingleOptionLinkedQuestionAnswered> optionsBottomBorderViewModel;
+        private OptionBorderViewModel optionsTopBorderViewModel;
+        private OptionBorderViewModel optionsBottomBorderViewModel;
 
         public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
@@ -88,13 +88,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                this.optionsTopBorderViewModel = new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, true)
+                this.optionsTopBorderViewModel = new OptionBorderViewModel(this.questionState, true)
                 {
                     HasOptions = HasOptions
                 };
                 result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(this.Options);
-                this.optionsBottomBorderViewModel = new OptionBorderViewModel<SingleOptionLinkedQuestionAnswered>(this.questionState, false)
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.questionState, false)
                 {
                     HasOptions = HasOptions
                 };

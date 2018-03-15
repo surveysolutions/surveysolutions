@@ -3,19 +3,36 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
-                    <div class="field" :class="{ answered: $me.isAnswered}">
+                    <div class="field" :class="{ answered: $me.isAnswered }">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" 
                         :placeholder="noAnswerWatermark" 
                         :title="noAnswerWatermark" 
                         :value="$me.answer" v-blurOnEnterKey 
-                        :disabled="!$me.acceptAnswer" @blur="answerIntegerQuestion" 
+                        :disabled="isSpecialValueSelected || !$me.acceptAnswer"
+                        :class="{ 'special-value-selected': isSpecialValueSelected }"
+                        @blur="answerIntegerQuestion" 
                         v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
-                        <wb-remove-answer :on-remove="removeAnswer"/>
-                        </button>
+                        <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
+                    </div>
+                </div>
+                <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                    <div class="field">
+                        <input class="wb-radio" 
+                            type="radio" 
+                            :id="$me.id + '_' + option.value" 
+                            :name="$me.id" 
+                            :value="option.value" 
+                            :disabled="!$me.acceptAnswer"
+                            v-model="specialValue">
+                        <label :for="$me.id + '_' + option.value">
+                            <span class="tick"></span> {{option.title}}
+                        </label>
+                        <wb-remove-answer :on-remove="removeAnswer" />
                     </div>
                 </div>
                 <wb-lock />
             </div>
+            
         </div>
     </wb-question>
 </template>
@@ -29,6 +46,11 @@
         name: 'Integer',
         mixins: [entityDetails],
         computed: { 
+            isSpecialValueSelected(){
+                if (this.$me.answer == null || this.$me.answer == undefined)
+                    return undefined;
+                return this.isSpecialValue(this.$me.answer);
+            },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.NumberEnter')
             },
@@ -40,16 +62,29 @@
                 }
 
                 return ''
+            },
+            specialValue: {
+                get() {
+                    return this.$me.answer
+                },
+                set(value) {
+                    this.saveAnswer(value, true);
+                }
             }
         },
         methods: {
             answerIntegerQuestion(evnt) {
-                this.sendAnswer(() => {
-                    const answerString = numerics.get($(evnt.target))
-                    const answer = answerString != undefined && answerString != ''
-                        ? parseInt(answerString)
-                        : null
+                const answerString = numerics.get($(evnt.target))
+                const answer = answerString != undefined && answerString != ''
+                    ? parseInt(answerString)
+                    : null;
 
+                const isSpecialValue = this.isSpecialValue(answer);
+                this.saveAnswer(answer, isSpecialValue);
+            },
+
+            saveAnswer(answer, isSpecialValue){
+                this.sendAnswer(() => {
                     if(this.handleEmptyAnswer(answer)) {
                         return
                     }
@@ -64,7 +99,7 @@
                         return
                     }
 
-                    if (answer < 0) {
+                    if (!isSpecialValue && answer < 0) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberRosterError", { answer }))
                         return;
                     }
@@ -82,19 +117,25 @@
                         return
                     }
 
-                    const amountOfRostersToRemove = previousAnswer - answer;
-
+                    const amountOfRostersToRemove = previousAnswer -  Math.max(answer, 0);
                     const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
-                    modal.confirm(confirmMessage, result => {
-                        if (result) {
-                            this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })
-                            return
-                        } else {
-                            this.fetch()
-                            return
-                        }
-                    });
+                    if(amountOfRostersToRemove > 0){
+                        modal.confirm(confirmMessage, result => {
+                            if (result) {
+                                this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                                
+                                return
+                            } else {
+                                this.fetch()
+                                return
+                            }
+                        });
+                    }
+                    else
+                    {
+                        this.$store.dispatch('answerIntegerQuestion', { identity: this.id, answer: answer })                        
+                        return
+                    }
                 });
             },
 
@@ -108,15 +149,32 @@
                 }
 
                 const amountOfRostersToRemove = this.$me.answer;
-                const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
+                if(amountOfRostersToRemove > 0){
+                    const confirmMessage = this.$t("WebInterviewUI.NumberRosterRemoveConfirm", { amountOfRostersToRemove })
 
-                modal.confirm(confirmMessage, result => {
-                    if (result) {
-                        this.$store.dispatch('removeAnswer', this.id)
-                    } else {
-                        this.fetch()
-                    }
-                });
+                    modal.confirm(confirmMessage, result => {
+                        if (result) {
+                            this.$store.dispatch('removeAnswer', this.id)
+                        } else {
+                            this.fetch()
+                        }
+                    });
+                }
+                else
+                {
+                    this.$store.dispatch('removeAnswer', this.id)
+                }
+            },
+            isSpecialValue(value){
+                const options = this.$me.options || [];
+                if (options.length == 0)
+                    return false;
+                for(let i=0;i<options.length;i++)
+                {
+                    if (options[i].value === value)
+                        return true;
+                }
+                return false;
             }
         }
     }

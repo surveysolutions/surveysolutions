@@ -29,6 +29,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error<SingleQuestion>("WB0088", CascadingQuestionHasMoreThanAllowedOptions, string.Format(VerificationMessages.WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers, MaxOptionsCountInFilteredComboboxQuestion)),
             Error<SingleQuestion>("WB0089", CascadingQuestionOptionsWithParentValuesShouldBeUnique, VerificationMessages.WB0089_CascadingQuestionOptionWithParentShouldBeUnique),
             Error<INumericQuestion>("WB0128", CountOfDecimalPlacesIsInRange1_15, string.Format(VerificationMessages.WB0128_CountOfDecimalPlacesIsNotInRange, MinCountOfDecimalPlaces, MaxCountOfDecimalPlaces)),
+            Error<INumericQuestion>("WB0131", SpecialValuesHasNonIntegerOptionsValues, string.Format(VerificationMessages.WB0131_SpecialValuesHasNonIntegerOptionsValues, int.MinValue, int.MaxValue)),
+            Error<INumericQuestion>("WB0132", SpecialValuesHasOptionsWithLongTexts, string.Format(VerificationMessages.WB0132_SpecialValuesHasOptionsWithLongTexts, 1, MaxOptionLength)),
+            Error<INumericQuestion>("WB0133", SpecialValuesMustBeUniqueForNumericlQuestion, VerificationMessages.WB0133_SpecialValuesMustBeUniqueForNumericlQuestion),
+            Error<INumericQuestion>("WB0134", SpecialValuesCountMoreThanMaxOptionCount, string.Format(VerificationMessages.WB0134_SpecialValuesCountMoreThanMaxOptionCount, MaxOptionsCountInCategoricalOptionQuestion)),
+            Error<INumericQuestion>("WB0135", SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit, VerificationMessages.WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit),
             Error<ITextListQuestion>("WB0039", TextListQuestionCannotBePrefilled, VerificationMessages.WB0039_TextListQuestionCannotBePrefilled),
             Error<ITextListQuestion>("WB0040", TextListQuestionCannotBeFilledBySupervisor, VerificationMessages.WB0040_TextListQuestionCannotBeFilledBySupervisor),
             Error<ITextListQuestion>("WB0042", TextListQuestionMaxAnswerNotInRange1And200, string.Format(VerificationMessages.WB0042_TextListQuestionMaxAnswerInRange1And200,Constants.MaxLongRosterRowCount, Constants.MinLongRosterRowCount)),
@@ -54,8 +59,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<IQuestion>("WB0072", OptionTitlesMustBeUniqueForCategoricalQuestion, VerificationMessages.WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion),
             ErrorForTranslation<IQuestion>("WB0045", QuestionHasOptionsWithEmptyValue, VerificationMessages.WB0045_QuestionHasOptionsWithEmptyValue),
             ErrorForTranslation<IQuestion>("WB0259", QuestionTitleIsTooLong, string.Format(VerificationMessages.WB0259_QuestionTitleIsTooLong, MaxTitleLength)),
+            ErrorForTranslation<INumericQuestion>("WB0136", QuestionHasSpecialValuesWithEmptyValue, VerificationMessages.WB0136_SpecialValuesHaveOptionsWithEmptyValue),
+            ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
+            Error<SingleQuestion>("WB0280", ComboboxShouldNotHaveParentValue, VerificationMessages.WB0280_ComboboxShouldNotHaveParentValue),
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
             Warning(TooManyQuestions, "WB0205", string.Format(VerificationMessages.WB0205_TooManyQuestions, MaxQuestionsCountInQuestionnaire)),
@@ -77,10 +85,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Warning<GpsCoordinateQuestion>(Any, "WB0264", VerificationMessages.WB0264_GpsQuestion),
             Warning<QRBarcodeQuestion>(Any, "WB0267", VerificationMessages.WB0267_QRBarcodeQuestion),
             Warning(TooFewVariableLabelsAreDefined, "WB0253", VerificationMessages.WB0253_TooFewVariableLabelsAreDefined),
+            
             Warning(MoreThan30PercentQuestionsAreText, "WB0265", string.Format(VerificationMessages.WB0265_MoreThan30PercentQuestionsAreText, TextQuestionsLengthInPercents)),
             WarningForCollection(SameTitle, "WB0266", VerificationMessages.WB0266_SameTitle),
             Warning(NoPrefilledQuestions, "WB0216", VerificationMessages.WB0216_NoPrefilledQuestions),
         };
+
+        private bool ComboboxShouldNotHaveParentValue(SingleQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (question.IsFilteredCombobox.GetValueOrDefault() && question.CascadeFromQuestionId == null)
+            {
+                return question.Answers.Any(x => x.ParentCode != null || x.ParentValue != null);
+            }
+
+            return false;
+        }
 
         private bool MultiOptionQuestionYesNoQuestionCantBeLinked(IMultyOptionsQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
@@ -375,6 +394,38 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return !(question.CountOfDecimalPlaces.Value >= MinCountOfDecimalPlaces && question.CountOfDecimalPlaces.Value <= MaxCountOfDecimalPlaces);
         }
 
+        private static bool SpecialValuesHasNonIntegerOptionsValues(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return OptionsHaveNonIntegerValues(question.Answers);
+        }
+
+        private static bool SpecialValuesHasOptionsWithLongTexts(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return OptionsHasLongText(question.Answers);
+        }
+
+        private static bool SpecialValuesMustBeUniqueForNumericlQuestion(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return OptionsHaveUniqueValues(question.Answers);
+        }
+
+        private static bool SpecialValuesCountMoreThanMaxOptionCount(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return  question.Answers != null && question.Answers.Count > MaxOptionsCountInCategoricalOptionQuestion;
+        }
+
+        private static bool SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!questionnaire.Questionnaire.IsRosterSizeQuestion(question))
+                return false;
+            if ((question.Answers?.Count ?? 0) == 0)
+                return false;
+
+            var rosterLimit = questionnaire.Questionnaire.IsTriggerForLongRoster(question) ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+
+            return  question.Answers.Any(x => x.GetParsedValue() > rosterLimit);
+        }
+
         private static bool RosterSizeQuestionMaxValueCouldBeInRange1And60(IQuestion question,
             MultiLanguageQuestionnaireDocument questionnaire, Func<IQuestion, int?> getRosterSizeQuestionMaxValue)
         {
@@ -477,16 +528,24 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private bool CategoricalQuestionHasOptionsWithLongTexts(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var answers = question.Answers;
-            if (answers == null)
+            return OptionsHasLongText(question.Answers);
+        }
+
+        private static bool OptionsHasLongText(List<Answer> options)
+        {
+            if (options == null)
                 return false;
 
-            return answers.Any(option => !(option.AnswerText.Length >= 1 && option.AnswerText.Length <= MaxOptionLength));
+            return options.Any(option => !(option.AnswerText.Length >= 1 && option.AnswerText.Length <= MaxOptionLength));
         }
 
         private bool CategoricalQuestionHasNonIntegerOptionsValues(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            var answers = question.Answers;
+            return OptionsHaveNonIntegerValues(question.Answers);
+        }
+
+        private static bool OptionsHaveNonIntegerValues(List<Answer> answers)
+        {
             if (answers == null)
                 return false;
 
@@ -501,6 +560,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -580,24 +640,54 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                    (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue);
         }
 
-        private static bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        private static bool SpecialValueTitlesMustBeUnique(INumericQuestion question,
+            MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (question.Answers != null && !question.CascadeFromQuestionId.HasValue)
+            return HasUniqueOptionTitles(question.Answers);
+        }
+
+        private static bool OptionTitlesMustBeUniqueForCategoricalQuestion(IQuestion question,
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
+                return false;
+
+            if (question.CascadeFromQuestionId.HasValue) 
+                return false;
+
+            return HasUniqueOptionTitles(question.Answers);
+        }
+
+        private static bool HasUniqueOptionTitles(List<Answer> options)
+        {
+            if (options != null)
             {
-                return question.Answers.Where(x => x.AnswerText != null).Select(x => x.AnswerText.Trim()).Distinct()
-                           .Count() != question.Answers.Count;
+                var distinctTitlesCount = options
+                    .Where(x => x.AnswerText != null)
+                    .Select(x => x.AnswerText.Trim())
+                    .Distinct()
+                    .Count();
+
+                return distinctTitlesCount != options.Count;
             }
+
             return false;
         }
 
         private static bool OptionValuesMustBeUniqueForCategoricalQuestion(ICategoricalQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
-            if (question.Answers != null)
+            return OptionsHaveUniqueValues(question.Answers);
+        }
+
+        private static bool OptionsHaveUniqueValues(List<Answer> options)
+        {
+            if (options != null)
             {
-                var answersValues = question.Answers.Where(x => !string.IsNullOrWhiteSpace(x.AnswerValue))
+                var answersValues = options.Where(x => !string.IsNullOrWhiteSpace(x.AnswerValue))
                     .Select(x => x.AnswerValue.Trim()).ToList();
                 return answersValues.Distinct().Count() != answersValues.Count();
             }
+
             return false;
         }
 
@@ -673,6 +763,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return !question.MaxAnswerCount.HasValue;
         }
 
+        private static bool QuestionHasSpecialValuesWithEmptyValue(INumericQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            return HasEmptyOptionValues(question.Answers);
+        }
+
         private static bool QuestionHasOptionsWithEmptyValue(IQuestion question, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (!(question is SingleQuestion || question is IMultyOptionsQuestion))
@@ -681,7 +776,14 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             if (question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue)
                 return false;
 
-            return question.Answers.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
+            return HasEmptyOptionValues(question.Answers);
+        }
+
+        private static bool HasEmptyOptionValues(List<Answer> options)
+        {
+            if (options == null)
+                return false;
+            return options.Any(option => string.IsNullOrWhiteSpace(option.AnswerValue));
         }
 
         private static bool QRBarcodeQuestionIsSupervisorQuestion(IQRBarcodeQuestion question, MultiLanguageQuestionnaireDocument questionnaire)

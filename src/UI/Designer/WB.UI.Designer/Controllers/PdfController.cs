@@ -145,7 +145,9 @@ namespace WB.UI.Designer.Controllers
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
-                return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate), JsonRequestBehavior.AllowGet);
+                return pdfGenerationProgress.IsFinished 
+                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet)
+                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate), JsonRequestBehavior.AllowGet);
 
             return this.Json(
                 pdfGenerationProgress.IsFinished
