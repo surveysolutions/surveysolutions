@@ -721,10 +721,10 @@ Downloaded {3}%</value>
     <value>Map sync error</value>
   </data>
   <data name="Dashboard_SearchResult" xml:space="preserve">
-    <value>{0} elements found for entered text</value>
+    <value>{0} elements found</value>
   </data>
   <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
-    <value>Nothing found for entered text</value>
+    <value>Nothing found</value>
   </data>
   <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
     <value>Perform search to display results</value>
