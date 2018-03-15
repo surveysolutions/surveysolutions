@@ -298,13 +298,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>(); // has internal cache, so should be singleton
-            
-            registry.BindAsSingletonWithConstructorArgument<IInterviewSynchronizationFileStorage, InterviewSynchronizationFileStorage>(
-                new[]
-                    {
-                        new ConstructorArgument("rootDirectoryPath", _ => this.currentFolderPath),
-                        new ConstructorArgument("syncDirectoryName", _ => this.syncDirectoryName)
-                    });
 
             registry.BindAsSingleton<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
            
