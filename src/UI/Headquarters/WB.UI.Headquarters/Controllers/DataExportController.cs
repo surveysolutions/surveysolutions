@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -19,14 +24,17 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly ExternalStoragesSettings externalStoragesSettings;
 
         public DataExportController(ICommandService commandService, ILogger logger,
-            IAllUsersAndQuestionnairesFactory
-                allUsersAndQuestionnairesFactory, InterviewDataExportSettings interviewDataExportSettings)
+            IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory, 
+            InterviewDataExportSettings interviewDataExportSettings,
+            ExternalStoragesSettings externalStoragesSettings)
             : base(commandService, logger)
         {
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewDataExportSettings = interviewDataExportSettings;
+            this.externalStoragesSettings = externalStoragesSettings;
         }
 
         [ObserverNotAllowed]
@@ -38,14 +46,19 @@ namespace WB.UI.Headquarters.Controllers
             AllUsersAndQuestionnairesView usersAndQuestionnaires =
                 this.allUsersAndQuestionnairesFactory.Load();
 
-            ExportModel export = new ExportModel();
-            export.Questionnaires = usersAndQuestionnaires.Questionnaires;
-            export.ExportStatuses = new List<InterviewStatus>
+            ExportModel export = new ExportModel
             {
-                InterviewStatus.InterviewerAssigned,
-                InterviewStatus.Completed,
-                InterviewStatus.ApprovedBySupervisor,
-                InterviewStatus.ApprovedByHeadquarters
+                Questionnaires = usersAndQuestionnaires.Questionnaires,
+                ExportStatuses = new List<InterviewStatus>
+                {
+                    InterviewStatus.InterviewerAssigned,
+                    InterviewStatus.Completed,
+                    InterviewStatus.ApprovedBySupervisor,
+                    InterviewStatus.ApprovedByHeadquarters
+                },
+                ExternalStoragesSettings = this.externalStoragesSettings is FakeExternalStoragesSettings
+                    ? null
+                    : this.externalStoragesSettings
             };
 
             return this.View(export);
