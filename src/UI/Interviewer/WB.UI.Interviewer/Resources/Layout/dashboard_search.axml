@@ -16,30 +16,6 @@
     <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
                  local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation)"/>
   </LinearLayout>
-  
-  <!--<android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-    <android.support.v7.widget.Toolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-      local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-      local:layout_scrollFlags="scroll|enterAlways">
-          <android.support.v7.widget.SearchView
-            android:id="@+id/searchView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="0dp"
-            local:MvxBind="Query SearchString" />
-
-        
-    </android.support.v7.widget.Toolbar>
-  </android.support.design.widget.AppBarLayout>-->
 
   <FrameLayout style="@style/Dashboard_Search_Body">
 
