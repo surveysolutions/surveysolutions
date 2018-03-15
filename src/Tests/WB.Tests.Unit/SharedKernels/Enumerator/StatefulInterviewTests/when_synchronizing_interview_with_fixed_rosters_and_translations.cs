@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -16,8 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
     internal class when_synchronizing_interview_with_fixed_rosters: StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             substitutedQuestionId = Guid.Parse("00000000000000000000000000000001");
             rosterTitle = "item1";
@@ -44,11 +42,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             rosterSynchronizationDtoses.Add(Create.Entity.InterviewItemId(rosterId, Create.Entity.RosterVector(0)), rosters.ToArray());
 
             syncDto = Create.Entity.InterviewSynchronizationDto(questionnaireId, rosterGroupInstances: rosterSynchronizationDtoses);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
+        private void BecauseOf() => interview.Synchronize(Create.Command.Synchronize(Guid.NewGuid(), syncDto));
 
-        It should_recalculate_roster_titles = () => interview.GetTitleText(Identity.Create(substitutedQuestionId, Create.Entity.RosterVector(0))).ShouldEqual($"uses {rosterTitle}");
+        [NUnit.Framework.Test] public void should_recalculate_roster_titles () => interview.GetTitleText(Identity.Create(substitutedQuestionId, Create.Entity.RosterVector(0))).Should().Be($"uses {rosterTitle}");
 
         static StatefulInterview interview;
         static InterviewSynchronizationDto syncDto;

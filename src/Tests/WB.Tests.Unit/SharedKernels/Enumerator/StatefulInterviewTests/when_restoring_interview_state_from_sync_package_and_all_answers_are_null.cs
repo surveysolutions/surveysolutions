@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_restoring_interview_state_from_sync_package_and_all_answers_are_null : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var fixedRosterIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"),
                 Create.Entity.RosterVector(1));
             var fixedNestedRosterIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"), rosterVector);
@@ -91,84 +90,86 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
+        private void BecauseOf() => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
-        It should_rise_InterviewSynchronized_event = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewSynchronized_event () =>
              eventContext.ShouldContainEvent<InterviewSynchronized>(x => x.InterviewData == synchronizationDto);
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_integerQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_integerQuestion () 
         {
             interview.GetIntegerQuestion(Identity.Create(integerQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_decimalQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_decimalQuestion () 
         {
             interview.GetDoubleQuestion(Identity.Create(decimalQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_dateTimeQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_dateTimeQuestion () 
         {
             interview.GetDateTimeQuestion(Identity.Create(dateTimeQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_singleOptionQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_singleOptionQuestion () 
         {
             interview.GetSingleOptionQuestion(Identity.Create(singleOptionQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedSingleOptionQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedSingleOptionQuestion () 
         {
             interview.GetLinkedSingleOptionQuestion(Identity.Create(linkedSingleOptionQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multiOptionQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multiOptionQuestion () 
         {
             interview.GetMultiOptionQuestion(Identity.Create(multiOptionQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedMultiOptionQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_linkedMultiOptionQuestion () 
         {
             interview.GetLinkedMultiOptionQuestion(Identity.Create(linkedMultiOptionQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_listQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_listQuestion () 
         {
             interview.GetTextListQuestion(Identity.Create(listQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_textQuestion = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_textQuestion () 
         {
             interview.GetTextQuestion(Identity.Create(textQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_gpsQestionId = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_gpsQestionId () 
         {
             interview.GetGpsQuestion(Identity.Create(gpsQestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
 
-        It should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multimediaQuestionId = () =>
+        [NUnit.Framework.Test] public void should_rise_InterviewAnswersFromSyncPackageRestored_event_with_right_answer_type_for_multimediaQuestionId () 
         {
             interview.GetMultimediaQuestion(Identity.Create(multimediaQuestionId, rosterVector))
-                .IsAnswered().ShouldBeFalse();
-        };
+                .IsAnswered().Should().BeFalse();
+        }
         
         private static EventContext eventContext;
         private static InterviewSynchronizationDto synchronizationDto;

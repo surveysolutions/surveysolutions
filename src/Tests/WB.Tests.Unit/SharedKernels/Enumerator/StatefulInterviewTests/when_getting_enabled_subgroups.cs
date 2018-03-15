@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_enabled_subgroups : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId,
                 chapterId: selectedGroupIdentity.Id,
@@ -27,13 +26,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 });
 
             statefulInterview = Setup.StatefulInterview(questionnaire);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             enabledSubgroupsIds = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
 
-        It should_contains_3_identities = () =>
-            enabledSubgroupsIds.ShouldContainOnly(
+        [NUnit.Framework.Test] public void should_contains_3_identities () =>
+            enabledSubgroupsIds.Should().BeEquivalentTo(
                 Create.Identity(rosterId, rosterInstance2Id),
                 Create.Identity(rosterId, rosterInstance1Id), 
                 Create.Identity(groupId, RosterVector.Empty));
