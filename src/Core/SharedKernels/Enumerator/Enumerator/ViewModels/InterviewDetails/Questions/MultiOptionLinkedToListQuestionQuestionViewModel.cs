@@ -54,8 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> options { get; private set; }
 
-        private OptionBorderViewModel<MultipleOptionsQuestionAnswered> optionsTopBorderViewModel;
-        private OptionBorderViewModel<MultipleOptionsQuestionAnswered> optionsBottomBorderViewModel;
+        private OptionBorderViewModel optionsTopBorderViewModel;
+        private OptionBorderViewModel optionsBottomBorderViewModel;
 
         public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options
         {
@@ -172,13 +172,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get
             {
                 var result = new CompositeCollection<ICompositeEntity>();
-                this.optionsTopBorderViewModel = new OptionBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState, true)
+                this.optionsTopBorderViewModel = new OptionBorderViewModel(this.questionState, true)
                 {
                     HasOptions = HasOptions
                 };
                 result.Add(this.optionsTopBorderViewModel);
                 result.AddCollection(this.Options);
-                this.optionsBottomBorderViewModel = new OptionBorderViewModel<MultipleOptionsQuestionAnswered>(this.questionState, false)
+                this.optionsBottomBorderViewModel = new OptionBorderViewModel(this.questionState, false)
                 {
                     HasOptions = HasOptions
                 };

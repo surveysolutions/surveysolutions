@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;

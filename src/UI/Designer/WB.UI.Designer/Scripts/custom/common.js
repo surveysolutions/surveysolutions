@@ -62,22 +62,26 @@
 		self.itemId = id;
 		self.htmlDownloadUrl = htmlDownloadUrl;
 		self.getLanguagesUrl = getLanguagesUrl;
-		
-		$('#export-html-modal-questionnaire-id').val(self.itemId);
-		$('#export-html-modal-questionnaire-title').text(self.itemName);
-		
-		self.ExportDialogClosed = false;
-		self.selectedTransalationHtml = null;
-		var dropButton = $('#dropdownMenuButtonHtml');
-		dropButton.text(dropButton[0].title);
 
-		$.ajax({
-			url: getLanguagesUrl,
-			cache: false,
-			method: "POST"
-		}).done(function (result) {
-		    if (result.length && result.length > 1) {
-		        var typeaheadCtrl = $(".languages-combobox-html");
+        $.ajax({
+	        url: getLanguagesUrl,
+	        cache: false,
+	        method: "POST",
+	        async: false
+	    }).done(function (result) {
+            if (result.length && result.length > 1){
+
+                $('#mExportHtml').modal("show");
+
+                $('#export-html-modal-questionnaire-id').val(self.itemId);
+                $('#export-html-modal-questionnaire-title').text(self.itemName);
+
+                self.ExportDialogClosed = false;
+                self.selectedTransalationHtml = null;
+                var dropButton = $('#dropdownMenuButtonHtml');
+                dropButton.text(dropButton[0].title);
+
+                var typeaheadCtrl = $(".languages-combobox-html");
 		        typeaheadCtrl.empty();
 
 		        for (var i = 0; i < result.length; i++) {
@@ -101,12 +105,12 @@
 		        $('#htmlGenerateButton').unbind('click');
 		        $('#htmlGenerateButton').click(function(evn) {
 		            window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
-		            $('#htmlCancelButton').click();
+		            $('#mExportHtml').modal("hide");
 		        });
-		    } else {
-		        window.open(self.htmlDownloadUrl + '?translation=' + result[0].Value, '_blank');
-		        $('#htmlCancelButton').click();
-		    }
+            }
+            else {
+                window.open(self.htmlDownloadUrl, '_blank');
+            }
 		});
 	};
 

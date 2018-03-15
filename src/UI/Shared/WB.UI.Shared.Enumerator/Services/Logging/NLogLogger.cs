@@ -23,6 +23,11 @@ namespace WB.UI.Shared.Enumerator.Services.Logging
             this.logger = LogManager.GetLogger(name);
         }
 
+        public void Trace(string message, Exception exception = null)
+        {
+            this.logger.Trace(exception, message);
+        }
+
         public void Debug(string message, Exception exception = null)
         {
             Mvx.Trace(MvxTraceLevel.Diagnostic, message);
