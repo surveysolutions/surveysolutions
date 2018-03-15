@@ -411,7 +411,7 @@
     <Content Include="App_GlobalResources\DataExport.resx">
       <SubType>Designer</SubType>
       <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+      <LastGenOutput>DataExport.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\DataExport.ru.resx">
       <DependentUpon>DataExport.resx</DependentUpon>
@@ -718,6 +718,7 @@
     <Content Include="Content\img\google-maps-markers\m5.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="data-export-storages.html" />
     <Content Include="Dependencies\img\back-to-parrent-1-no-animation-4.png" />
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
@@ -1703,6 +1704,11 @@
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
+    <Compile Include="App_GlobalResources\DataExport.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Maps.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1759,11 +1765,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\DataExport.Designer.cs">
-      <DependentUpon>DataExport.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
