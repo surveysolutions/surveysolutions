@@ -1667,6 +1667,7 @@
     <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
+    <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
