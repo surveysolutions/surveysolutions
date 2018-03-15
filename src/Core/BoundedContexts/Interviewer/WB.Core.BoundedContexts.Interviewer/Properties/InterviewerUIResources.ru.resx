@@ -721,7 +721,7 @@
     <value>Карты успешно обновлены</value>
   </data>
   <data name="Dashboard_SearchResult" xml:space="preserve">
-    <value>Найдено {0} элементов по введенному тексту</value>
+    <value>Найдено {0} элементов</value>
     <comment>Найдено {0} элементов по введенному тексту</comment>
   </data>
   <data name="Dashboard_SearchWatermark" xml:space="preserve">
@@ -729,7 +729,7 @@
     <comment>Введите текст для поиска</comment>
   </data>
   <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
-    <value>Ничего не найдено по введенному тексту</value>
+    <value>Ничего не найдено</value>
     <comment>Ничего не найдено по введенному тексту</comment>
   </data>
   <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
