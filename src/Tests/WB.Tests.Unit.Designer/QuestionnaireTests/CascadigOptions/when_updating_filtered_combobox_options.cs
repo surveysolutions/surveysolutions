@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadigOptions
 
             var categoricalQuestion = questionnaireDocument.Find<ICategoricalQuestion>(questionId);
             Assert.That(categoricalQuestion.Answers, Has.Count.EqualTo(1));
-            Assert.That(categoricalQuestion.Answers[0].AnswerCode, Is.EqualTo(-1));
+            Assert.That(categoricalQuestion.Answers[0], Has.Property(nameof(Answer.AnswerValue)).EqualTo("-1"));
         }
     }
 }
