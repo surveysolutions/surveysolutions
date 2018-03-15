@@ -335,6 +335,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit Search.
+        /// </summary>
+        public static string Dashboard_Search_ExitSearch {
+            get {
+                return ResourceManager.GetString("Dashboard_Search_ExitSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} elements found for entered text.
         /// </summary>
         public static string Dashboard_SearchResult {
