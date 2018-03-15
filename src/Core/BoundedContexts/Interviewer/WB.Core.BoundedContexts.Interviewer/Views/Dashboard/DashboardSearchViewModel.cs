@@ -48,6 +48,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public bool IsNeedFocus { get; set; } = true;
         public string EmptySearchText { get; private set; }
 
+        private string serchResultText;
+        public string SerchResultText 
+        {
+            get => this.serchResultText;
+            set => SetProperty(ref this.serchResultText, value);
+        }
+
         private bool isInProgressLongOperation;
         public bool IsInProgressLongOperation
         {
@@ -118,19 +125,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             try
             {
                 List<IDashboardItem> items = new List<IDashboardItem>();
-                var subTitle = this.viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-                items.Add(subTitle);
 
                 if (string.IsNullOrWhiteSpace(searctText))
                 {
-                    subTitle.Title = InterviewerUIResources.Dashboard_NeedTextForSearch;
+                    SerchResultText = InterviewerUIResources.Dashboard_NeedTextForSearch;
                 }
                 else
                 {
                     var newItems = this.GetUiItems(searctText);
                     items.AddRange(newItems);
-                    var countOfItems = items.Count - 1;
-                    subTitle.Title = countOfItems > 0
+                    var countOfItems = items.Count;
+                    SerchResultText = countOfItems > 0
                         ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
                         : InterviewerUIResources.Dashboard_NotFoundSearchResult;
                 }
@@ -165,8 +170,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             UiItems.Remove(item);
 
-            var countOfItems = UiItems.Count - 1;
-            UiItems.OfType<DashboardSubTitleViewModel>().First().Title = countOfItems > 0
+            var countOfItems = UiItems.Count;
+            SerchResultText = countOfItems > 0
                 ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
                 : InterviewerUIResources.Dashboard_NotFoundSearchResult;
         }
