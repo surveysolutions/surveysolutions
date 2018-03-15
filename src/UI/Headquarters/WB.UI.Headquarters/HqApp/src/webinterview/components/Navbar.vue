@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-web-interview" role="navigation">
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -24,12 +24,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <p class="navbar-text">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
-                    <li v-if="this.$config.inWebTesterMode">
-                        <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
-                            <span class="glyphicon glyphicon-sort"></span>
-                        </button>
-                    </li>
-
+                    <li class="help-link"><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
                     <li class="dropdown language">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                             :title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
@@ -43,7 +38,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
+                    <li v-if="this.$config.inWebTesterMode">
+                        <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
+                            <span class="glyphicon glyphicon-sort"></span>
+                        </button>
+                    </li>                    
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
