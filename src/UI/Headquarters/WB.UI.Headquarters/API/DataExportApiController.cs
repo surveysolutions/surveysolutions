@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -35,6 +36,7 @@ namespace WB.UI.Headquarters.API
         private readonly IExternalFileStorage externalFileStorage;
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly ISerializer serializer;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -43,6 +45,7 @@ namespace WB.UI.Headquarters.API
             IDataExportFileAccessor exportFileAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IDdiMetadataAccessor ddiMetadataAccessor,
+            ISerializer serializer,
             IExternalFileStorage externalFileStorage,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
@@ -54,6 +57,7 @@ namespace WB.UI.Headquarters.API
             this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.externalFileStorage = externalFileStorage;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.serializer = serializer;
         }
 
         [HttpGet]
@@ -160,6 +164,44 @@ namespace WB.UI.Headquarters.API
             };
 
             return result;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public void ExportToExternalStorage(ExportToExternalStorageModel model)
+        {
+            var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
+            if(state == null)
+                throw new HttpException((int)HttpStatusCode.BadRequest, @"Export parameters not found");
+
+            var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(state.QuestionnaireIdentity);
+            if (questionnaireBrowseItem == null)
+                throw new HttpException(404, @"Questionnaire not found");
+
+            this.dataExportProcessesService.AddDataExport(new ExportBinaryToExternalStorage(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
+            {
+                AccessToken = model.Access_token,
+                InterviewStatus = state.InterviewStatus,
+                FromDate = state.FromDate,
+                ToDate = state.ToDate,
+                StorageType = state.Type
+            });
+        }
+
+        public class ExportToExternalStorageModel
+        {
+            public string Access_token { get; set; }
+            public string State { get; set; }
+        }
+
+        public class ExternalStorageStateModel
+        {
+            public ExternalStorageType Type { get; set; }
+            public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+            public InterviewStatus? InterviewStatus { get; set; }
+            public DateTime? FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+
         }
     }
 }

@@ -29,6 +29,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         {
             this.ExportDataIntoDirectory(exportSettings, exportProgress, dataExportProcessDetails.CancellationToken);
 
+            if (!this.CompressExportedData) return;
+
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
@@ -38,7 +40,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName,
                 exportProgress);
         }
-        
+
+        protected virtual bool CompressExportedData => true;
+
         protected abstract void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken);
     }
