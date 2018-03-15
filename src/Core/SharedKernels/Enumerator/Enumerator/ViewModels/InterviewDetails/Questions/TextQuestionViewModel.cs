@@ -148,10 +148,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer(string text)
         {
-            //if app crashed and automatically restored 
-            //the state could be broken
             if (principal?.CurrentUserIdentity == null)
-                return;
+                throw new InvalidOperationException($"Current principal is not set");
 
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
