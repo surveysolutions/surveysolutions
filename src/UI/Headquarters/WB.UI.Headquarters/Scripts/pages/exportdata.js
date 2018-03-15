@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl) {
+﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl, $exportToExternalStorageUrl, storages) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -108,8 +108,57 @@
         });
     }
 
-    self.requestDataUpdate = function(format) {
-        return function() {
+    self.selectStorage = function () {
+        var dialogHtml = $("#storages-dialog").html();
+
+        bootbox.dialog({
+            message: dialogHtml,
+            buttons: {
+                cancel: {
+                    label: "Cancel"
+                },
+                success: {
+                    label: "Select",
+                    callback: function () {
+                        if (storages.selectedStorage().is_local) {
+                            var requestUpdate = self.requestDataUpdate(4 /* binary export*/, false);
+                            requestUpdate();
+                        } else {
+                            var state = {
+                                questionnaireIdentity: {
+                                    questionnaireId: self.selectedTemplateId(),
+                                    version: self.selectedTemplate().version
+                                },
+                                interviewStatus: self.selectedStatus().status,
+                                fromDate: self.fromDateSelected(),
+                                toDate: self.toDateSelected() === undefined ? undefined : moment(self.toDateSelected()).add(1, 'days').utc(),
+                                type: storages.selectedStorage().type
+                            };
+
+                            var request = {
+                                response_type: storages.response_type,
+                                redirect_uri: encodeURIComponent(storages.redirect_uri),
+                                client_id: storages.selectedStorage().client_id,
+                                state: window.btoa(window.location.href + ";" + $exportToExternalStorageUrl + ";" + JSON.stringify(state)),
+                                scope: storages.selectedStorage().scope
+                            };
+
+                            window.location = storages.selectedStorage().authorization_uri + "?" + decodeURIComponent($.param(request));
+                        }
+                    }
+                }
+            }
+        });
+
+        ko.applyBindings(storages, $(".options-group")[0]);
+    }
+
+    self.requestDataUpdate = function (format, shouldShowStorageSelector) {
+        return function () {
+            if (storages && format === 4 /*binary export*/ && shouldShowStorageSelector === true) {
+                self.selectStorage();
+                return;
+            }
             self.sendWebRequest(self.UpdateDataUrl + "?" + self.getRequestQuery(format),
                 [],
                 function(data) {
