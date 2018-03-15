@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
-using Main.Core.Entities.Composite;
+using System;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -14,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 {
     internal class when_completing_interview_with_linked_questions : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkedQuestionIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             Guid linkedSourceQuestionId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -38,11 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             statefulInterview.Apply(Create.Event.LinkedOptionsChanged(new[] { Create.Entity.ChangedLinkedOptions(linkedQuestionIdentity.Id, linkedQuestionIdentity.RosterVector, new[] { Create.Entity.RosterVector(0), Create.Entity.RosterVector(1), Create.Entity.RosterVector(2)})}));
 
             eventContext = new EventContext();
-        };
 
-        Because of = () => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
+            BecauseOf();
+        }
 
-        It should_raize_linked_option_changed_aggregated_event_event = () => eventContext.ShouldContainEvent<LinkedOptionsChanged>();
+        private void BecauseOf() => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
+
+        [NUnit.Framework.Test] public void should_raize_linked_option_changed_aggregated_event_event () => eventContext.ShouldContainEvent<LinkedOptionsChanged>();
 
         static StatefulInterview statefulInterview;
         static Identity linkedQuestionIdentity;
