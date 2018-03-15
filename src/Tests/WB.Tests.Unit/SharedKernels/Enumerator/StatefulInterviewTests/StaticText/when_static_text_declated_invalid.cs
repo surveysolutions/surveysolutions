@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
-using Main.Core.Entities.Composite;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -11,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 {
     internal class when_static_text_declated_invalid: StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -27,15 +25,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
                             })
                 }));
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => statefulInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTextIdentity));
+        private void BecauseOf() => statefulInterview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTextIdentity));
 
-        It should_remember_validity_status = () => statefulInterview.IsEntityValid(staticTextIdentity).ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_remember_validity_status () => statefulInterview.IsEntityValid(staticTextIdentity).Should().BeFalse();
 
-        It should_return_failed_validation_index = () => statefulInterview.GetFailedValidationMessages(staticTextIdentity, "Error").ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_return_failed_validation_index () => statefulInterview.GetFailedValidationMessages(staticTextIdentity, "Error").Should().NotBeEmpty();
 
-        It should_count_it_in_total_invalid_entities = () => statefulInterview.CountInvalidEntitiesInInterview().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_count_it_in_total_invalid_entities () => statefulInterview.CountInvalidEntitiesInInterview().Should().Be(1);
 
         static StatefulInterview statefulInterview;
         static Identity staticTextIdentity;

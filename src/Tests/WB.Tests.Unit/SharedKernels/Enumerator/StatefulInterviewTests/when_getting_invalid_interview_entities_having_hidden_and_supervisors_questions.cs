@@ -1,20 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_invalid_interview_entities_having_hidden_and_supervisors_questions : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(questionnaireId,
                 Create.Entity.Group(groupId: group.Id, children: new List<IComposite>()
                 {
@@ -34,16 +32,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.Apply(Create.Event.StaticTextsDeclaredInvalid(Create.Entity.Identity(staticText1Id)));
             interview.Apply(Create.Event.AnswersDeclaredInvalid(new[] {Create.Entity.Identity(questionId), Create.Entity.Identity(disabledQuestionId), Create.Entity.Identity(prefieldQuestionId) }));
             interview.Apply(Create.Event.QuestionsDisabled(new[] { Create.Entity.Identity(disabledQuestionId) }));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             invalidEntitiesInInterview = interview.GetInvalidEntitiesInInterview();
 
-        It shouldreturn_1_entities_with_error = () =>
-          invalidEntitiesInInterview.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void shouldreturn_1_entities_with_error () =>
+          invalidEntitiesInInterview.Count().Should().Be(2);
 
-        It should_contain_only_invalid_enabled_element = () =>
-            invalidEntitiesInInterview.ShouldContainOnly(
+        [NUnit.Framework.Test] public void should_contain_only_invalid_enabled_element () =>
+            invalidEntitiesInInterview.Should().BeEquivalentTo(
                 Create.Entity.Identity(staticText1Id), Create.Entity.Identity(prefieldQuestionId));
 
         private static StatefulInterview interview;
