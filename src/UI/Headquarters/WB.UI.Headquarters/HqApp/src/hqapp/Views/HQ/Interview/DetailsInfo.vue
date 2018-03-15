@@ -3,12 +3,12 @@
     <div class="panel panel-details">
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
-                <div class="about-questionnaire-details">
+                <div class="about-questionnaire-details clearfix">
                     <ul class="main-info-column list-unstyled pull-left">
                         <li>{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
                         <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
-                    <ul class="list-unstyled pull-left">
+                    <ul class="list-unstyled pull-left table-info">
                         <li v-if="this.$config.model.interviewDuration">
                             <span class="data-label">{{this.$t('Details.Duration')}}:</span>
                             <span class="data">{{this.$config.model.interviewDuration}}</span>
@@ -25,13 +25,13 @@
                             <span class="data supervisor">{{this.$config.model.supervisor}}</span>
                         </li>
                     </ul>
-                    <ul class="list-unstyled pull-left">
+                    <ul class="list-unstyled pull-left table-info">
                         <li><span class="data-label">{{this.$t('Details.Status')}}</span> 
                             <span class="data">{{this.$config.model.statusName}}</span>
+                            <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                         </li>
                         <li><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
-                            <span class="data">{{lastUpdateDate}}</span>
-                            <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
+                            <span class="data">{{lastUpdateDate}}</span>                            
                         </li>
                     </ul>
                 </div>

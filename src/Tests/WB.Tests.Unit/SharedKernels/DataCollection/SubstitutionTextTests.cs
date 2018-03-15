@@ -186,7 +186,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             text.ReplaceSubstitutions();
             var browserReadyText = text.BrowserReadyText;
 
-            Assert.That(browserReadyText, Is.EqualTo($"<time date=\"2010-04-06\">2010-04-06</time> <time datetime=\"2010-04-06T04:30:50\">2010-04-06 04:30:50</time>"));
+            Assert.That(browserReadyText, Is.EqualTo($"<time date=\"2010-04-06\">2010-04-06</time> <time datetime=\"2010-04-06T04:30:50.0000000\">2010-04-06 04:30:50</time>"));
         }
         
         [Test]
