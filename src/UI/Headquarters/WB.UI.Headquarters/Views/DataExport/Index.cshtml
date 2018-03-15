@@ -232,7 +232,7 @@
                 @formatTitle
             </div>
             <div class="cell-data  download-block">
-                <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format), true), visible: showRefreshButton(@exportParameters)">@(format == DataExportFormat.Binary ? DataExport.ExportBtn : DataExport.Generate)</button>
+                <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format), true), visible: showRefreshButton(@exportParameters)">@(format == DataExportFormat.Binary && Model.ExternalStoragesSettings != null ? DataExport.ExportBtn : DataExport.Generate)</button>
                 <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '?' + getRequestQuery('@format') }">@DataExport.Download</a>
                 <div class="not-generated ">@DataExport.DataWasNotGenerated</div>
             </div>
