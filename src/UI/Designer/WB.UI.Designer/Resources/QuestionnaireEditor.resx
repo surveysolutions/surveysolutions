@@ -1075,4 +1075,13 @@
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
     <value>You will see comments here</value>
   </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>View all {{count}} resolved comment</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>View all {{count}} resolved comments</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Hide resolved comments</value>
+  </data>
 </root>

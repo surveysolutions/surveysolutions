@@ -694,14 +694,14 @@
   list-style: none;
 }
 .comments-panel .reference-item {
-  margin-top: 3px;
-  border-radius: 4px 4px 0 0;
+  margin-bottom: 5px;
+  border-radius: 4px;
   padding-left: 18px;
   white-space: nowrap;
   height: 36px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
-  background: #f2f3f5;
+  background: #fff;
   position: relative;
   display: block;
   color: #404040;
@@ -734,7 +734,7 @@
   padding-left: 8px;
   top: 6px;
   color: #3da802;
-  background: #f2f3f5;
+  background: #fff;
   max-width: 240px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -754,8 +754,37 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f2f3f5', endColorstr='#fff2f3f5', GradientType=1);
 }
 .comments-panel .comments-in-thread {
-  background: #fff;
-  border-radius: 0 0 4px 4px;
+  margin-bottom: 15px;
+}
+.comments-panel .comments-in-thread ul {
+  padding: 0;
+}
+.comments-panel .comments-in-thread ul li {
+  padding: 0 10px 0 20px;
+  border-bottom: 2px solid #dbdfe2;
+}
+.comments-panel .comments-in-thread ul li:last-child {
+  border-bottom: none;
+}
+.comments-panel .comments-in-thread .comment {
+  background: #f2f3f5;
+}
+.comments-panel .comments-in-thread .comment .author {
+  margin-right: 10px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  color: #79838a;
+}
+.comments-panel .comments-in-thread .comment .date {
+  font-family: Georgia, serif;
+  color: #98a0a5;
+  font-style: italic;
+}
+.comments-panel .comments-in-thread .comment .comment-text {
+  color: #000;
+}
+.comments-panel .comments-in-thread .comment.resolved {
+  background: transparent;
 }
 #designer-editor.container {
   width: 100%;

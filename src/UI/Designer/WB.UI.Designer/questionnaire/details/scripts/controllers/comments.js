@@ -12,9 +12,25 @@
                     .then(function(result) {
                         $scope.commentThreads = result.data;
                         _.forEach($scope.commentThreads, function(commentThread) {
+                            commentThread.resolvedComments = [];
                             _.forEach(commentThread.comments, function(comment) {
                                 comment.date = moment(comment.date).format("LLL");
+                                comment.isResolved = !_.isNull(comment.resolveDate || null);
                             });
+
+                            if (commentThread.indexOfLastUnresolvedComment != null) {
+                                var comments = commentThread.comments.slice(0, commentThread.indexOfLastUnresolvedComment);
+                                var resolvedComments = commentThread.comments.slice(commentThread.indexOfLastUnresolvedComment);
+
+                                commentThread.comments = comments;
+                                commentThread.resolvedComments = resolvedComments;
+                                commentThread.resolvedAreExpanded = false;
+                                commentThread.toggleResolvedComments = function() {
+                                    this.resolvedAreExpanded = !this.resolvedAreExpanded;
+                                }
+                            }
+
+
                         });
                         console.log(result.data);
                     });
@@ -41,6 +57,11 @@
                 $scope.isFolded = false;
                 $rootScope.$broadcast("closeComments", {});
             };
+
+            $scope.showCommentsAndNavigateTo = function(entity) {
+                $rootScope.$broadcast("openCommentEditorRequested", {});
+                $scope.navigateTo(entity);
+            }
 
             $scope.$on('openComments', function (scope, params) {
                 $scope.unfold();
