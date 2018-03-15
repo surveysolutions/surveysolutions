@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -83,7 +84,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             this.statefulInterviewRepository.Get(id.FormatGuid()); // put questionnaire to cache.
 
-
             if (this.authorizedUser.IsSupervisor)
             {
                 this.pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id, DateTime.Now));
@@ -135,7 +135,29 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             return this.View(interviewHistoryViewFactory.Load(id));
         }
+
+        public ActionResult InterviewAreaFrame(Guid id, string questionId)
+        {
+            InterviewSummary interviewSummary = this.interviewSummaryViewFactory.Load(id);
+            
+            if (interviewSummary == null)
+                return HttpNotFound();
+
+            bool isAccessAllowed =
+                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
+                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
+
+            if (!isAccessAllowed)
+                return HttpNotFound();
+
+            var identity = Identity.Parse(questionId);
+            var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
+            var area = interview.GetAreaQuestion(identity)?.GetAnswer()?.Value;
+
+            return this.View(area);
+        }
     }
+}
 
     public class InterviewReviewModel
     {
