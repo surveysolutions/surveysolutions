@@ -1,8 +1,7 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Documents;
+using System;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -12,11 +11,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
     internal class when_GetAvalibleIdListForParent_is_called_for_file_corresponding_to_roster_triggered_by_numeric_question : PreloadedDataServiceTestContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_return_array_with_0_1_2()
         {
-            questionnaireDocument =
+            var rosterSizeQuestionId = Id.g1;
+            var rosterGroupId = Id.g2;
+            const string rosterSizeQuestionVariableName = "var";
+
+
+            var questionnaireDocument =
                 CreateQuestionnaireDocumentWithOneChapter(
-                    new NumericQuestion() { PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Numeric, StataExportCaption = rosterSizeQuestionVariableName, IsInteger = true},
+                    new NumericQuestion()
+                    {
+                        PublicKey = rosterSizeQuestionId, QuestionType = QuestionType.Numeric,
+                        StataExportCaption = rosterSizeQuestionVariableName, IsInteger = true
+                    },
                     new Group("Roster Group")
                     {
                         IsRoster = true,
@@ -25,24 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                         RosterSizeQuestionId = rosterSizeQuestionId
                     });
 
-            importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
-        };
+            var importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
 
-        Because of =
-            () =>
-                result =
-                    importDataParsingService.GetAvailableIdListForParent(
-                        CreatePreloadedDataByFile(new string[] { ServiceColumns.InterviewId, rosterSizeQuestionVariableName }, new string[][] { new string[] { "1","3" } },
-                            questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new []{"1"}, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]));
+            // Act
+            var result =
+                importDataParsingService.GetAvailableIdListForParent(
+                    CreatePreloadedDataByFile(new string[] { ServiceColumns.InterviewId, rosterSizeQuestionVariableName }, new string[][] { new string[] { "1", "3" } },
+                        questionnaireDocument.Title), new ValueVector<Guid> { rosterSizeQuestionId }, new[] { "1" }, Create.Entity.PreloadedDataByFile(new PreloadedDataByFile[0]));
 
-        It should_return_array_with_0_1_2= () =>
-            result.ShouldEqual(new []{0, 1,2}); 
+            // Assert
+            Assert.That(result, Is.EqualTo(new[] { 0, 1, 2 }));
+        }
 
-        private static ImportDataParsingService importDataParsingService;
-        private static QuestionnaireDocument questionnaireDocument;
-        private static int[] result;
-        private static Guid rosterGroupId = Guid.NewGuid();
-        private static Guid rosterSizeQuestionId = Guid.NewGuid();
-        private static string rosterSizeQuestionVariableName = "var";
     }
 }
