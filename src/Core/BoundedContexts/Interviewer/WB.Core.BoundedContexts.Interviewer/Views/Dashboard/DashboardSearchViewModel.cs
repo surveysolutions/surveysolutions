@@ -238,6 +238,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             messenger.Unsubscribe<StartingLongOperationMessage>(startingLongOperationMessageSubscriptionToken);
             messenger.Unsubscribe<StopingLongOperationMessage>(stopLongOperationMessageSubscriptionToken);
 
+            this.UiItems?.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
+
             interviews = null;
             identifyingQuestions = null;
             assignments = null;

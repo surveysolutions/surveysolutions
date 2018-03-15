@@ -424,7 +424,7 @@
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginLeft</item>
-    <item name="android:textSize">@dimen/textsize_16</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:fontFamily">Roboto</item>
   </style>
 
@@ -437,9 +437,9 @@
     <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
     <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
     <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginLeft</item>
-    <item name="android:textSize">@dimen/textsize_16</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
     <item name="android:fontFamily">Roboto</item>
-    <item name="android:color">@color/dashboard_search_exit_color</item>
+    <item name="android:textColor">@color/dashboard_search_exit_color</item>
   </style>
 
 </resources>
