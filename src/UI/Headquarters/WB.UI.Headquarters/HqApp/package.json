@@ -63,6 +63,7 @@
         "write-file-webpack-plugin": "^4.2.0"
     },
     "dependencies": {
+        "append-query": "^2.0.1",
         "autonumeric": "=1.9.46",
         "axios": "^0.17.1",
         "bootbox": "^4.4.0",

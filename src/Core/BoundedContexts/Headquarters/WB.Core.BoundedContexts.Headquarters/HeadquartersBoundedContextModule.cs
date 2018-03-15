@@ -1,5 +1,6 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System;
+using System.Configuration;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -57,6 +58,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
@@ -290,11 +292,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, HqQuestionnaireStorage>(); // has internal cache, so should be singleton
-
-
-            registry.Bind<IAudioFileStorage, AudioFileStorage>();
-            registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>("rootDirectoryPath", this.currentFolderPath);
-
+            
             registry.BindAsSingletonWithConstructorArgument<IInterviewSynchronizationFileStorage, InterviewSynchronizationFileStorage>(
                 new[]
                     {
@@ -325,8 +323,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
-          
-
             registry.Bind<IEnvironmentContentService, StataEnvironmentContentService>();
 
             registry.Bind<TabularFormatDataExportHandler>();
