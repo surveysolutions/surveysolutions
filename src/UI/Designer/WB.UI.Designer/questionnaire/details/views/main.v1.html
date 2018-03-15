@@ -635,7 +635,7 @@
                     </div>
                     <ul ng-model="commentThreads">
                         <li class="comment-thread" ng-repeat="commentThread in commentThreads">
-                            <a class="reference-item" href="javascript:void(0);" ng-click="navigateTo(commentThread.entity)">
+                            <a class="reference-item" href="javascript:void(0);" ng-click="showCommentsAndNavigateTo(commentThread.entity)">
                                 <span ng-if="commentThread.entity.type == 'Question'" class="icon {{commentThread.entity.questionType}} "></span>
                                 <span ng-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group'" class="icon icon-{{commentThread.entity.type.toLowerCase()}}"></span>
                                 <span class="title">{{commentThread.entity.title | escape}}</span>
@@ -643,12 +643,25 @@
                             </a>
                             <div class="comments-in-thread">
                                 <ul>
-                                    <li ng-repeat="comment in commentThread.comments">
+                                    <li class="comment" ng-class="{resolved: comment.isResolved }" ng-repeat="comment in commentThread.comments">
                                         <span class="author">{{comment.userEmail}}</span>
                                         <span class="date">{{comment.date}}</span>
-                                        <p>{{comment.comment}}</p>
+                                        <p class="comment-text">{{comment.comment}}</p>
                                     </li>
                                 </ul>
+                                <div ng-if="commentThread.resolvedComments.length > 0">
+                                    <a href="javascript:void(0);" ng-click="commentThread.toggleResolvedComments()">
+                                        <span ng-show="commentThread.toggleResolvedComments" ng-i18next="[i18next]({count: commentThread.resolvedComments.length})ViewResolvedCommentsCounter"></span>
+                                        <span ng-hide="commentThread.toggleResolvedComments" ng-i18next>HideResolvedComments</span>
+                                    </a>
+                                    <ul ng-show="commentThread.resolvedAreExpanded">
+                                        <li class="comment" ng-class="{resolved: comment.isResolved }" ng-repeat="comment in commentThread.resolvedComments">
+                                            <span class="author">{{comment.userEmail}}</span>
+                                            <span class="date">{{comment.date}}</span>
+                                            <p class="comment-text">{{comment.comment}}</p>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </li>
                     </ul>

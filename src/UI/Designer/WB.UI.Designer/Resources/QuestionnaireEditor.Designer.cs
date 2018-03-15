@@ -799,6 +799,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide resolved comments.
+        /// </summary>
+        public static string HideResolvedComments {
+            get {
+                return ResourceManager.GetString("HideResolvedComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to History.
         /// </summary>
         public static string History {
@@ -2910,6 +2919,24 @@ namespace WB.UI.Designer.Resources {
         public static string VariableType {
             get {
                 return ResourceManager.GetString("VariableType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all {{count}} resolved comment.
+        /// </summary>
+        public static string ViewResolvedCommentsCounter {
+            get {
+                return ResourceManager.GetString("ViewResolvedCommentsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all {{count}} resolved comments.
+        /// </summary>
+        public static string ViewResolvedCommentsCounter_plural {
+            get {
+                return ResourceManager.GetString("ViewResolvedCommentsCounter_plural", resourceCulture);
             }
         }
         

@@ -1,12 +1,26 @@
 ﻿using System;
+using System.Linq;
+using CsQuery.ExtensionMethods;
 using WB.Core.BoundedContexts.Designer.Verifier;
 
 namespace WB.Core.BoundedContexts.Designer.Comments
 {
     public class CommentThread
     {
+        public CommentThread(CommentView[] comments, QuestionnaireEntityExtendedReference referenceEntity)
+        {
+            this.Comments = comments;
+            this.Entity = referenceEntity;
+            var lastUnresolvedComment = comments.LastOrDefault(x => x.ResolveDate == null);
+            if (lastUnresolvedComment != null)
+            {
+                IndexOfLastUnresolvedComment = comments.IndexOf(lastUnresolvedComment) + 1;
+            }
+        }
+
         public CommentView[] Comments { get; set; }
         public QuestionnaireEntityExtendedReference Entity { get; set; }
+        public int? IndexOfLastUnresolvedComment { get; set; }
     }
 
     public class CommentView

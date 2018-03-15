@@ -381,12 +381,19 @@
             };
 
             $scope.toggleComments = function (item) {
-                var itemIdToComment = item.itemId || $state.params.itemId;
                 $scope.isCommentsBlockVisible = !$scope.isCommentsBlockVisible;
                 if ($scope.isCommentsBlockVisible) {
                     $rootScope.$broadcast("commentsOpened", {});
                 }
             };
+
+            
+            $rootScope.$on('openCommentEditorRequested', function (event, data) {
+                if ($scope.isCommentsBlockVisible === true)
+                    return;
+                $scope.isCommentsBlockVisible = true;
+                $rootScope.$broadcast("commentsOpened", {});
+            });
 
             $scope.deleteVariable = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;

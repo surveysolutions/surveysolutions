@@ -829,8 +829,8 @@
 }
 
 .comments-panel {
-    
-    .comments{
+
+    .comments {
         height: 100%;
     }
 
@@ -841,14 +841,14 @@
     }
 
     .reference-item {
-        margin-top: 3px;
-        border-radius: 4px 4px 0 0;
+        margin-bottom: 5px;
+        border-radius: 4px;
         padding-left: 18px;
         white-space: nowrap;
         height: @verification-item-height;
         .arial-font();
         font-size: 16px;
-        background: @verification-item-bg-color;
+        background: #fff;
         position: relative;
         display: block;
         color: @questionnarie-question-list-item-color;
@@ -885,7 +885,7 @@
             padding-left: 8px;
             top: 6px;
             color: @qname-color;
-            background: @verification-item-bg-color;
+            background: #fff;
             max-width: 240px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -905,8 +905,45 @@
     }
 
     .comments-in-thread {
-        background: #fff;
-        border-radius: 0 0 4px 4px;
+        margin-bottom: 15px;
+
+        ul {
+            padding: 0;
+
+            li {
+                padding: 0 10px 0 20px;
+                border-bottom: 2px solid #dbdfe2;
+            }
+
+            li:last-child {
+                border-bottom: none;
+            }
+        }
+
+        .comment {
+            background: @verification-item-bg-color;
+
+            .author {
+                margin-right: 10px;
+                font-style: italic;
+                font-family: Georgia, serif;
+                color: #79838a;
+            }
+
+            .date {
+                font-family: Georgia, serif;
+                color: #98a0a5;
+                font-style: italic;
+            }
+
+            .comment-text {
+                color: #000;
+            }
+
+            &.resolved {
+                background: transparent;
+            }
+        }
     }
 }
 
