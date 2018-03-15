@@ -31,12 +31,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.PauseRes
                 using (var context = new EventContext())
                 {
                     interview.Resume(new ResumeInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow));
-                    context.ShouldContainEvent<InterviewResumed>();
+                    if (AllowedStatuses.Contains(status))
+                    {
+                        context.ShouldContainEvent<InterviewResumed>();
+                    }
+                    else
+                    {
+                        context.ShouldNotContainEvent<InterviewResumed>();
+                    }
                 }
-            }
-            else
-            {
-                Assert.Throws<InterviewException>(() => interview.Resume(new ResumeInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow)));
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CsQuery.Engine.PseudoClassSelectors;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
@@ -11,11 +10,9 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
@@ -45,8 +42,11 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
             var preloadedFileName = "test";
             var questionVariable = "qVar";
 
-            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new []{ Create.Entity.TextQuestion(variable: questionVariable)});
-            var questionnaireStorage = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
+            var questionnaireDocument =
+                Create.Entity.QuestionnaireDocument(children: new[]
+                    {Create.Entity.TextQuestion(variable: questionVariable)});
+            var questionnaireStorage =
+                Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, questionnaireDocument);
 
             var questionnaireExportStructure = Mock.Of<IQuestionnaireExportStructureStorage>(x =>
                 x.GetQuestionnaireExportStructure(questionnaireIdentity) ==
@@ -57,10 +57,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
                     preloadedFileName, new[] {questionVariable}, new[] {new[] {"text"}}));
 
             var service = CreateInterviewImportDataParsingService(questionnaireStorage: questionnaireStorage,
-                preloadedDataRepository: preloadedDataRepository, questionnaireExportStructureStorage: questionnaireExportStructure);
+                preloadedDataRepository: preloadedDataRepository,
+                questionnaireExportStructureStorage: questionnaireExportStructure);
 
             //act
-            var result = service.GetAssignmentsData(importProcessId, questionnaireIdentity, AssignmentImportType.Assignments);
+            var result = service.GetAssignmentsData(importProcessId, questionnaireIdentity,
+                AssignmentImportType.Assignments);
             //assert
             Assert.That(result, Is.Not.Empty);
         }
@@ -163,6 +165,189 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
                 new Tuple<int, string>(2, "Member 3"),
                 new Tuple<int, string>(3, "Member 5"),
             }));
+        }
+
+        [Test]
+        public void when_ParseInterviews_and_roster_and_source_list_question_has_different_texts()
+        {
+            //arrange
+            var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.TextListQuestion(Id.g2, variable: "list", maxAnswerCount: 4),
+                Create.Entity.ListRoster(Id.g3, variable: "list_roster", rosterSizeQuestionId: Id.g2)
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var exportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireDocument);
+            var service = CreateInterviewImportDataParsingService(dataParser: new QuestionDataParser());
+
+            PreloadedDataByFile preloadedDataByFileMain = new PreloadedDataByFile(questionnaireId.FormatGuid(), null,
+                header: new[] {"interview__id", "list__0", "list__1", "list__2", "list__3"},
+                content: new[] {new[] {"111111", "AA", "AB", null, null}});
+
+            PreloadedDataByFile preloadedDataByFileTopRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(),
+                null,
+                header: new[] {"list_roster__id", "list", "interview__id"},
+                content: new[]
+                {
+                    new[] {"10", "AA", "111111"},
+                    new[] {"20", "ABC", "111111"}
+                });
+
+            List<PreloadedInterviewBaseLevel> preloadedInterviewBaseLevels = new List<PreloadedInterviewBaseLevel>
+            {
+                new PreloadedInterviewQuestionnaireLevel(preloadedDataByFileMain, exportStructure),
+                new PreloadedInterviewLevel(preloadedDataByFileTopRoster, Id.g3, new Guid[] {Id.g2}, exportStructure),
+            };
+
+            //act
+            var ex = Assert.Throws<InterviewImportException>(() => 
+                service.ParseInterviews(preloadedInterviewBaseLevels, questionnaire));
+
+            //assert
+            Assert.That(ex, Is.Not.Null);
+            Assert.That(ex.Code, Is.EqualTo("PL0046"));
+            Assert.That(ex.Message, Is.EqualTo("Inconsistency detected between the items lists in the data file list_roster and question list. Items present in the text list and absent in the file: AB. Rows from data file absent in text list question: ABC. Interview id: 111111"));
+        }
+
+        [Test]
+        public void when_ParseInterviews_and_roster_and_source_list_question_has_different_quantity_of_elements()
+        {
+            //arrange
+            var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.TextListQuestion(Id.g2, variable: "list", maxAnswerCount: 4),
+                Create.Entity.ListRoster(Id.g3, variable: "list_roster", rosterSizeQuestionId: Id.g2)
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var exportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireDocument);
+            var service = CreateInterviewImportDataParsingService(dataParser: new QuestionDataParser());
+
+            PreloadedDataByFile preloadedDataByFileMain = new PreloadedDataByFile(questionnaireId.FormatGuid(), null,
+                header: new[] {"interview__id", "list__0", "list__1", "list__2", "list__3"},
+                content: new[] {new[] {"111111", "AA", "AB", null, null}});
+
+            PreloadedDataByFile preloadedDataByFileTopRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(),
+                null,
+                header: new[] {"list_roster__id", "list", "interview__id"},
+                content: new[]
+                {
+                    new[] {"10", "AA", "111111"},
+                    new[] {"20", "ABC", "111111"},
+                    new[] {"30", "Extra row", "111111"}
+                });
+
+            List<PreloadedInterviewBaseLevel> preloadedInterviewBaseLevels = new List<PreloadedInterviewBaseLevel>
+            {
+                new PreloadedInterviewQuestionnaireLevel(preloadedDataByFileMain, exportStructure),
+                new PreloadedInterviewLevel(preloadedDataByFileTopRoster, Id.g3, new Guid[] {Id.g2}, exportStructure),
+            };
+
+            //act
+            var ex = Assert.Throws<InterviewImportException>(() => 
+                service.ParseInterviews(preloadedInterviewBaseLevels, questionnaire));
+
+            //assert
+            Assert.That(ex, Is.Not.Null);
+            Assert.That(ex.Code, Is.EqualTo("PL0045"));
+            Assert.That(ex.Message, Is.EqualTo("Inconsistency detected between the number of records in the data file list_roster, which has 3 records, and the trigger question list, which has 2 rows. Interview id: 111111"));
+        }
+
+        [Test]
+        public void when_ParseInterviews_and_roster_and_source_list_question_has_elements_with_the_same_title()
+        {
+            //arrange
+            var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.TextListQuestion(Id.g2, variable: "list", maxAnswerCount: 4),
+                Create.Entity.ListRoster(Id.g3, variable: "list_roster", rosterSizeQuestionId: Id.g2)
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var exportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireDocument);
+            var service = CreateInterviewImportDataParsingService(dataParser: new QuestionDataParser());
+
+            PreloadedDataByFile preloadedDataByFileMain = new PreloadedDataByFile(questionnaireId.FormatGuid(), null,
+                header: new[] {"interview__id", "list__0", "list__1", "list__2", "list__3"},
+                content: new[] {new[] {"111111", "AA", "AB", "AA", null}});
+
+            PreloadedDataByFile preloadedDataByFileTopRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(),
+                null,
+                header: new[] {"list_roster__id", "list", "interview__id"},
+                content: new[]
+                {
+                    new[] {"10", "AA", "111111"},
+                    new[] {"20", "AB", "111111"},
+                    new[] {"30", "AA", "111111"}
+                });
+
+            List<PreloadedInterviewBaseLevel> preloadedInterviewBaseLevels = new List<PreloadedInterviewBaseLevel>
+            {
+                new PreloadedInterviewQuestionnaireLevel(preloadedDataByFileMain, exportStructure),
+                new PreloadedInterviewLevel(preloadedDataByFileTopRoster, Id.g3, new Guid[] {Id.g2}, exportStructure),
+            };
+
+            //act
+            var ex = Assert.Throws<InterviewImportException>(() => 
+                service.ParseInterviews(preloadedInterviewBaseLevels, questionnaire));
+
+            //assert
+            Assert.That(ex, Is.Not.Null);
+            Assert.That(ex.Code, Is.EqualTo("PL0043"));
+            Assert.That(ex.Message, Is.EqualTo("Text list question list has non-unique items: AA. Interview id: 111111"));
+        }
+
+                [Test]
+        public void when_ParseInterviews_and_roster_and_source_list_question_has_elements_with_the_same_code()
+        {
+            //arrange
+            var questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            {
+                Create.Entity.TextListQuestion(Id.g2, variable: "list", maxAnswerCount: 4),
+                Create.Entity.ListRoster(Id.g3, variable: "list_roster", rosterSizeQuestionId: Id.g2)
+            });
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
+            var exportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireDocument);
+            var service = CreateInterviewImportDataParsingService(dataParser: new QuestionDataParser());
+
+            PreloadedDataByFile preloadedDataByFileMain = new PreloadedDataByFile(questionnaireId.FormatGuid(), null,
+                header: new[] {"interview__id", "list__0", "list__1", "list__2", "list__3"},
+                content: new[] {new[] {"111111", "AA", "AB", "AC", null}});
+
+            PreloadedDataByFile preloadedDataByFileTopRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(),
+                null,
+                header: new[] {"list_roster__id", "list", "interview__id"},
+                content: new[]
+                {
+                    new[] {"10", "AA", "111111"},
+                    new[] {"20", "AB", "111111"},
+                    new[] {"10", "AC", "111111"}
+                });
+
+            List<PreloadedInterviewBaseLevel> preloadedInterviewBaseLevels = new List<PreloadedInterviewBaseLevel>
+            {
+                new PreloadedInterviewQuestionnaireLevel(preloadedDataByFileMain, exportStructure),
+                new PreloadedInterviewLevel(preloadedDataByFileTopRoster, Id.g3, new Guid[] {Id.g2}, exportStructure),
+            };
+
+            //act
+            var ex = Assert.Throws<InterviewImportException>(() => 
+                service.ParseInterviews(preloadedInterviewBaseLevels, questionnaire));
+
+            //assert
+            Assert.That(ex, Is.Not.Null);
+            Assert.That(ex.Code, Is.EqualTo("PL0044"));
+            Assert.That(ex.Message, Is.EqualTo("Text list question list has non-unique item codes: 10. Interview id: 111111"));
         }
     }
 }

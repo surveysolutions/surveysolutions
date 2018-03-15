@@ -1,11 +1,14 @@
 using System;
 using System.Linq;
+using Amazon.S3;
+using Amazon.S3.Transfer;
 using Microsoft.AspNet.Identity;
 using Moq;
 using SQLite;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -63,6 +66,11 @@ namespace WB.Tests.Abc.TestFactories
         public InMemoryCacheStorage<MultimediaFile, string> MediaStorage()
         {
             return new InMemoryCacheStorage<MultimediaFile, string>();
+        }
+
+        public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
+        {
+            return new S3FileStorage(s3Settings, client, transferUtility, loggerProvider);
         }
     }
 }

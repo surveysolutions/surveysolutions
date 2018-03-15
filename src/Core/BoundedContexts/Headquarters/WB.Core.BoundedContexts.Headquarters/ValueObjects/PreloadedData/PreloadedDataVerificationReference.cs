@@ -1,8 +1,8 @@
 ﻿namespace WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData
 {
-    public class PreloadedDataVerificationReference
+    public class InterviewImportReference
     {
-        public PreloadedDataVerificationReference(long? positionX, long? positionY, PreloadedDataVerificationReferenceType type, string content, string dataFile)
+        public InterviewImportReference(long? positionX, long? positionY, PreloadedDataVerificationReferenceType type, string content, string dataFile)
         {
             this.DataFile = dataFile;
             this.PositionX = positionX;
@@ -11,7 +11,7 @@
             this.Content = content;
         }
 
-        public PreloadedDataVerificationReference(PreloadedDataVerificationReferenceType type, string content, string dataFile)
+        public InterviewImportReference(PreloadedDataVerificationReferenceType type, string content, string dataFile)
         {
             this.DataFile = dataFile;
             this.Type = type;
