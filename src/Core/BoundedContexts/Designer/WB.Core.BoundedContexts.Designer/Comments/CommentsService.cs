@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         public List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
         {
             var commentForEntity = this.comments
-                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).ToList())
+                .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId).OrderBy(x => x.Date).ToList())
                 .Select(CreateCommentView)
                 .ToList();
 
@@ -76,11 +76,9 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             ReadOnlyQuestionnaireDocument questionnaire = questionnaireStorage.GetById(questionnaireId.FormatGuid()).AsReadOnly();
             var commentForEntity = this.comments
                 .Query(_ => _.Where(x => x.QuestionnaireId == questionnaireId).GroupBy(x => x.EntityId).ToList())
-                .Select(x => new CommentThread
-                {
-                    Comments = x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(),
-                    Entity = CreateCommentedEntity(questionnaire, x.Key)
-                })
+                .Select(x => new CommentThread(
+                    comments: x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(), 
+                    referenceEntity: CreateCommentedEntity(questionnaire, x.Key)))
                 .ToList();
 
             return commentForEntity;

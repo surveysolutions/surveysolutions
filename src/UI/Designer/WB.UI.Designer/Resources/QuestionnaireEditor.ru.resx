@@ -1067,7 +1067,6 @@
   </data>
   <data name="EntityComment" xml:space="preserve">
     <value>Новый комментарий</value>
-    <comment> </comment>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
     <value>{{count}} Ветвь обсуждения:</value>
@@ -1077,5 +1076,17 @@
   </data>
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
     <value>Тут вы увидите комментарии</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>Добавьте комментарий</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>Показать {{count}} закрытый комментарий</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>Показать {{count}} закрытых комментария</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Скрыть закрытые комментарии</value>
   </data>
 </root>

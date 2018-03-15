@@ -115,19 +115,21 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                     ChapterId = parent?.PublicKey.FormatGuid()
                 };
             }
-
-            var question = questionnaireDocument.Find<IQuestion>(reference.Id);
-
-            return new QuestionnaireEntityExtendedReference
+            else
             {
-                ItemId = reference.Id.FormatGuid(),
-                Type = reference.Type,
-                Variable = question.StataExportCaption,
-                QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
-                Title = question.QuestionText,
-                ChapterId = parent?.PublicKey.FormatGuid(),
-                IndexOfEntityInProperty = reference.IndexOfEntityInProperty
-            };
+                var question = questionnaireDocument.Find<IQuestion>(reference.Id);
+
+                return new QuestionnaireEntityExtendedReference
+                {
+                    ItemId = reference.Id.FormatGuid(),
+                    Type = reference.Type,
+                    Variable = question.StataExportCaption,
+                    QuestionType = "icon-" + question.QuestionType.ToString().ToLower(),
+                    Title = question.QuestionText,
+                    ChapterId = parent?.PublicKey.FormatGuid(),
+                    IndexOfEntityInProperty = reference.IndexOfEntityInProperty
+                };
+            }
         }
     }
 }
