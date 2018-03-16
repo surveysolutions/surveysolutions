@@ -766,6 +766,14 @@
 .comments-panel .comments-in-thread ul li:last-child {
   border-bottom: none;
 }
+.comments-panel .comments-in-thread .show-more {
+  color: #2a81cb;
+  padding-left: 20px;
+  font-weight: bold;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-transform: uppercase;
+  font-size: 12px;
+}
 .comments-panel .comments-in-thread .comment {
   background: #f2f3f5;
 }
@@ -1145,6 +1153,20 @@
   padding: 10px 20px;
   height: 100%;
   overflow: auto;
+}
+.comments-editor .author {
+  margin-right: 10px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  color: #79838a;
+}
+.comments-editor .date {
+  font-family: Georgia, serif;
+  color: #98a0a5;
+  font-style: italic;
+}
+.comments-editor .comment-text {
+  color: #000;
 }
 .highlighted-add {
   border-radius: 4px 4px 0 0;

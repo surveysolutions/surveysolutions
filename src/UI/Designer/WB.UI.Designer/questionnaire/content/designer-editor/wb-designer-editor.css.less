@@ -920,6 +920,15 @@
             }
         }
 
+        .show-more {
+            color: #2a81cb;
+            padding-left: 20px;
+            font-weight: bold;
+            font-family: "Trebuchet MS", Helvetica, sans-serif;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
         .comment {
             background: @verification-item-bg-color;
 
@@ -1239,22 +1248,39 @@
         height: 50%;
     }
 
-    .comments-editor {
-        height: 50%;
-        padding: 0;
-        border-top: 2px solid @questionnarie-question-specific-block-color;
+.comments-editor {
+    height: 50%;
+    padding: 0;
+    border-top: 2px solid @questionnarie-question-specific-block-color;
 
-        form {
-            width: 100%;
+    form {
+        width: 100%;
+        height: 100%;
+
+        .form-holder {
+            padding: 10px 20px;
             height: 100%;
-
-            .form-holder {
-                padding: 10px 20px;
-                height: 100%;
-                overflow: auto;
-            }
+            overflow: auto;
         }
     }
+
+    .author {
+        margin-right: 10px;
+        font-style: italic;
+        font-family: Georgia, serif;
+        color: #79838a;
+    }
+
+    .date {
+        font-family: Georgia, serif;
+        color: #98a0a5;
+        font-style: italic;
+    }
+
+    .comment-text {
+        color: #000;
+    }
+}
 
     .highlighted-add {
         border-radius: 4px 4px 0 0;
@@ -1554,7 +1580,6 @@
             }
         }
     }
-
 
     .questionnaire-tree-holder {
         .roster-items {
@@ -1916,4 +1941,3 @@
     .pointer {
         cursor: pointer;
     }
-

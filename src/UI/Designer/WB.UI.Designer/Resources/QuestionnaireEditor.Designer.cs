@@ -313,6 +313,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add comment.
+        /// </summary>
+        public static string EditorAddComment {
+            get {
+                return ResourceManager.GetString("EditorAddComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide comments.
+        /// </summary>
+        public static string EditorHideComment {
+            get {
+                return ResourceManager.GetString("EditorHideComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This section is empty..
         /// </summary>
         public static string EmptySectionLine1 {

@@ -29,10 +29,7 @@
                                     this.resolvedAreExpanded = !this.resolvedAreExpanded;
                                 }
                             }
-
-
                         });
-                        console.log(result.data);
                     });
             };
 

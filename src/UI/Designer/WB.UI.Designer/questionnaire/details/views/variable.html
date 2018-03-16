@@ -47,11 +47,15 @@
     <div class="form-buttons-holder">
         <div class="pull-left">
             <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': variableForm.$dirty }" ng-click="saveVariable()" unsaved-warning-clear ng-disabled="!variableForm.$valid" ng-i18next>Save</button>
-            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()" unsaved-warning-clear unsaved-warning-clear ng-i18next>Cancel</button>
+            <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancel()" unsaved-warning-clear ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="add-comment-button" class="btn btn-lg btn-link" ng-click="toggleComments(activeQuestion)" unsaved-warning-clear>
+                <span ng-i18next ng-hide="isCommentsBlockVisible">EditorAddComment</span>
+                <span ng-i18next ng-show="isCommentsBlockVisible">EditorHideComment</span>
+            </button>
             <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteVariable(activeVariable)" unsaved-warning-clear ng-i18next>Delete</button>
-            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" ng-if="!activeGroup.isChapter" />
+            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" ng-if="!activeGroup.isChapter"/>
         </div>
     </div>
 </form>
