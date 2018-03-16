@@ -55,7 +55,8 @@ namespace WB.Enumerator.Native.WebInterview
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving,
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
-                IsCurrentUserObserving = this.IsCurrentUserObserving
+                IsCurrentUserObserving = this.IsCurrentUserObserving,
+                DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId))
             };
         }
 
