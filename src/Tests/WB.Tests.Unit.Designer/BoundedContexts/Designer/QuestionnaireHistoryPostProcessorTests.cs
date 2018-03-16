@@ -545,8 +545,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
             var usersStorage = new TestPlainStorage<User>();
-            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName, Email = responsibleUserName + "email" }, responsibleId.FormatGuid());
+            usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName, Email = sharedWithUserName + "email"}, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
@@ -578,7 +578,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0));
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
-            Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName));
+            Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
             Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
         }
 
@@ -597,8 +597,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
             var usersStorage = new TestPlainStorage<User>();
-            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
-            usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName }, sharedWithId.FormatGuid());
+            usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName, Email = sharedWithUserName + "email"}, responsibleId.FormatGuid());
+            usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName, Email = sharedWithUserName + "email" }, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
@@ -629,7 +629,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.Sequence, Is.EqualTo(0));
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
-            Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName));
+            Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
             Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
         }
 
