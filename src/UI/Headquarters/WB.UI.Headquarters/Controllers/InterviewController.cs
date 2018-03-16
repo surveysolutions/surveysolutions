@@ -157,7 +157,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             return this.View(area);
         }
     }
-}
 
     public class InterviewReviewModel
     {
