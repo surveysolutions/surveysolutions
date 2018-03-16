@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
         public override void Up()
         {
             Alter.Table("brokeninterviewpackages")
-                .AddColumn("reprocessattemptscount").AsInt32().NotNullable().SetExistingRowsTo(0);
+                .AddColumn("reprocessattemptscount").AsInt32().NotNullable().SetExistingRowsTo(10);
             Alter.Table("interviewpackages")
                 .AddColumn("processattemptscount").AsInt32().NotNullable().SetExistingRowsTo(0);
         }
