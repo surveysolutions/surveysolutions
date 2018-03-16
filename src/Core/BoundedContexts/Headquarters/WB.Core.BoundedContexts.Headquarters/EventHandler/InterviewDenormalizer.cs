@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -72,16 +71,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IInterviewFactory repository;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaries;
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly IEntitySerializer<object> entitySerializer;
 
         public InterviewDenormalizer(IInterviewFactory interviewFactory,
-            IQueryableReadSideRepositoryReader<InterviewSummary> summaries, IQuestionnaireStorage questionnaireStorage,
-            IEntitySerializer<object> entitySerializer)
+            IQueryableReadSideRepositoryReader<InterviewSummary> summaries, IQuestionnaireStorage questionnaireStorage)
         {
             this.repository = interviewFactory;
             this.summaries = summaries;
             this.questionnaireStorage = questionnaireStorage;
-            this.entitySerializer = entitySerializer;
         }
 
         private readonly Dictionary<Guid, QuestionnaireIdentity> interviewToQuestionnaire =
@@ -173,7 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsList = this.entitySerializer.Serialize(evnt.Payload.Answers.Select(_ => new InterviewTextListAnswer(_.Item1, _.Item2)).ToArray())
+                    AsList = evnt.Payload.Answers.Select(_ => new InterviewTextListAnswer(_.Item1, _.Item2)).ToArray()
                 });
 
         public void Update(InterviewState state, IPublishedEvent<SingleOptionQuestionAnswered> evnt) =>
@@ -199,7 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsIntMatrix = this.entitySerializer.Serialize(evnt.Payload.SelectedRosterVectors.Select(_ => _.Select(Convert.ToInt32).ToArray()).ToArray())
+                    AsIntMatrix = evnt.Payload.SelectedRosterVectors.Select(_ => _.Select(Convert.ToInt32).ToArray()).ToArray()
                 });
 
         public void Update(InterviewState state, IPublishedEvent<DateTimeQuestionAnswered> evnt) =>
@@ -217,8 +213,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsGps = this.entitySerializer.Serialize(new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy,
-                        evnt.Payload.Altitude, evnt.Payload.Timestamp))
+                    AsGps = new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude, evnt.Payload.Accuracy,
+                        evnt.Payload.Altitude, evnt.Payload.Timestamp)
                 });
 
         public void Update(InterviewState state, IPublishedEvent<QRBarcodeQuestionAnswered> evnt) =>
@@ -245,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsYesNo = this.entitySerializer.Serialize(evnt.Payload.AnsweredOptions)
+                    AsYesNo = evnt.Payload.AnsweredOptions
                 });
 
         public void Update(InterviewState state, IPublishedEvent<AreaQuestionAnswered> evnt) =>
@@ -254,9 +250,9 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsArea = this.entitySerializer.Serialize(new Area(
+                    AsArea = new Area(
                         evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.AreaSize,
-                        evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor))
+                        evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor)
                 });
 
         public void Update(InterviewState state, IPublishedEvent<AudioQuestionAnswered> evnt) =>
@@ -265,7 +261,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 {
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
-                    AsAudio = this.entitySerializer.Serialize(AudioAnswer.FromString(evnt.Payload.FileName, evnt.Payload.Length))
+                    AsAudio = AudioAnswer.FromString(evnt.Payload.FileName, evnt.Payload.Length)
                 });
 
         public void Update(InterviewState state, IPublishedEvent<AnswersRemoved> evnt)

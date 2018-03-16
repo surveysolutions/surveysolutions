@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -13,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_commented_by_supervisor_questions_from_restored_from_sync_package_interview : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new[]
             {
                 Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(1)}, children: new[]
@@ -51,19 +49,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 disabledQuestions: new HashSet<InterviewItemId> { Create.Entity.InterviewItemId(disabledQuestionId, rosterVector) });
             interview.Synchronize(Create.Command.Synchronize(userId, interviewSynchronizationDto));
             interview.Apply(Create.Event.QuestionsDisabled(new []{ Create.Identity(disabledQuestionId, rosterVector) }));
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             commentedQuestionsIdentities = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().ToArray();
 
-        It should_return_2_commented_by_supervisor_questions = () =>
-            commentedQuestionsIdentities.Length.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_commented_by_supervisor_questions () =>
+            commentedQuestionsIdentities.Length.Should().Be(2);
 
-        It should_return_only_interviewers_questions = () =>
-            commentedQuestionsIdentities.Select(x => x.Id).ShouldContainOnly(repliedByInterQuestionId, interQuestionId);
+        [NUnit.Framework.Test] public void should_return_only_interviewers_questions () =>
+            commentedQuestionsIdentities.Select(x => x.Id).Should().BeEquivalentTo(repliedByInterQuestionId, interQuestionId);
 
-        It should_return_question_without_interviewer_interviewer_reply_first = () =>
-            commentedQuestionsIdentities.ElementAt(0).Id.ShouldEqual(interQuestionId);
+        [NUnit.Framework.Test] public void should_return_question_without_interviewer_interviewer_reply_first () =>
+            commentedQuestionsIdentities.ElementAt(0).Id.Should().Be(interQuestionId);
 
         private static StatefulInterview interview;
         private static Identity[] commentedQuestionsIdentities;

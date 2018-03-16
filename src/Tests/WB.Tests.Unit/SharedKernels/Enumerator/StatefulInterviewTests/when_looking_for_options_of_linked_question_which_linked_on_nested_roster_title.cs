@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_looking_for_options_of_linked_question_which_linked_on_nested_roster_title : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireRepository =
                 Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                     Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
@@ -41,19 +40,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                             }),
                         Create.Entity.MultyOptionsQuestion(linkedToQuestionIdentity.Id, linkedToRosterId: sourceOfLinkedToRosterId)
                     })));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
+        private void BecauseOf() => interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-        It should_order_options_by_roster_sort_index_at_first = () =>
+        [NUnit.Framework.Test] public void should_order_options_by_roster_sort_index_at_first () 
         {
-            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.First()).ToArray().ShouldEqual(new int[] { 1, 1, 2, 2 });
-        };
+            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.First()).ToArray().Should().BeEquivalentTo(new int[] { 1, 1, 2, 2 });
+        }
 
-        It should_order_options_by_nested_roster_sort_index_in_scope_of_parent_roster = () =>
+        [NUnit.Framework.Test] public void should_order_options_by_nested_roster_sort_index_in_scope_of_parent_roster () 
         {
-            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.Last()).ToArray().ShouldEqual(new int[] { 1, 2, 1, 2 });
-        };
+            interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity).Options.Select(a => a.Last()).ToArray().Should().BeEquivalentTo(new int[] { 1, 2, 1, 2 });
+        }
 
         private static IQuestionnaireStorage questionnaireRepository;
         private static StatefulInterview interview;

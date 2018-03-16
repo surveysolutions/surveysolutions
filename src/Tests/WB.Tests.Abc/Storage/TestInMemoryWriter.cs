@@ -76,6 +76,11 @@ namespace WB.Tests.Abc.Storage
             }
         }
 
+        public void Flush()
+        {
+            
+        }
+
         public Type ViewType
         {
             get { return typeof(T); }
