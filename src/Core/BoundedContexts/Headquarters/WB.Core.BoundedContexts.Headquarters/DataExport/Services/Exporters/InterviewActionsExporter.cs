@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using Dapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -18,6 +19,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
@@ -31,10 +33,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
+        private readonly ISessionProvider sessionProvider;
         private readonly ILogger logger;
 
         protected InterviewActionsExporter()
         {
+
         }
 
         public InterviewActionsExporter(InterviewDataExportSettings interviewDataExportSettings,
@@ -42,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             ICsvWriter csvWriter, 
             ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses,
-            ILogger logger)
+            ILogger logger, ISessionProvider sessionProvider)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -50,6 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.transactionManager = transactionManager;
             this.interviewStatuses = interviewStatuses;
             this.logger = logger;
+            this.sessionProvider = sessionProvider;
         }
 
         public void Export(QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
@@ -57,29 +62,32 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.ExportActionsInTabularFormat(interviewIdsToExport, basePath, progress);
         }
 
-        private void ExportActionsInTabularFormat(List<Guid> interviewIdsToExport,
-            string basePath,
-            IProgress<int> progress)
+        private void ExportActionsInTabularFormat(List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
             var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
+            var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
             this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.DataFileSeparator.ToString());
 
             long totalProcessedCount = 0;
             var stopwatch = Stopwatch.StartNew();
-            foreach (var interviewsBatch in interviewIdsToExport.Batch(this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery))
+            var etaHelper = new EtaHelper(interviewIdsToExport.Count, batchSize, trackingStopwatch: stopwatch);
+
+            foreach (var interviewsBatch in interviewIdsToExport.Batch(batchSize))
             {
-                var interviewIdsStrings = interviewsBatch.Select(x => x.FormatGuid()).ToArray();
-                Expression<Func<InterviewSummary, bool>> whereClauseForAction = 
-                    x => interviewIdsStrings.Contains(x.SummaryId);
-                string[][] actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() => this.QueryActionsChunkFromReadSide(whereClauseForAction));
+                var interviewIdsStrings = interviewsBatch.ToArray();
+                Expression<Func<InterviewSummary, bool>> whereClauseForAction = x => interviewIdsStrings.Contains(x.InterviewId);
+
+                var actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
+                    () => this.QueryActionsChunkFromReadSide(whereClauseForAction));
 
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
                 totalProcessedCount += interviewIdsStrings.Length;
                 progress.Report(totalProcessedCount.PercentOf(interviewIdsToExport.Count));
+                etaHelper.AddProgress(interviewIdsStrings.Length);
 
-                this.logger.Debug($"Exported batch of interview actions. Processed: {totalProcessedCount:N0} out of {interviewIdsToExport.Count:N0}");
+                this.logger.Debug($"Exported batch of interview actions. Processed: {totalProcessedCount:N0} out of {interviewIdsToExport.Count:N0}. {etaHelper}");
             }
 
             stopwatch.Stop();
@@ -87,8 +95,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             progress.Report(100);
         }
 
-        private string[][] QueryActionsChunkFromReadSide(Expression<Func<InterviewSummary, bool>> queryActions)
+        private List<string[]> QueryActionsChunkFromReadSide(Expression<Func<InterviewSummary, bool>> queryActions)
         {
+            sessionProvider.GetSession()?.Connection?.Execute("set enable_seqscan=false");
+
             var interviews =
               this.interviewStatuses.Query(_ => _
                     .Where(queryActions)
@@ -105,7 +115,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                         i.StatusHistory.InterviewerName,
                         i.StatusHistory.Position
                     })
-                    .OrderBy(x => x.InterviewId).ThenBy(x => x.Position).ToList());
+                    .OrderBy(x => x.InterviewId)
+                        .ThenBy(x => x.Position).ToList());
 
             var result = new List<string[]>();
 
@@ -124,7 +135,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 };
                 result.Add(resultRow.ToArray());
             }
-            return result.ToArray();
+            return result;
         }
 
         private string GetResponsibleName(InterviewExportedAction status, string interviewerName, string supervisorName, string statusChangeOriginatorName)
