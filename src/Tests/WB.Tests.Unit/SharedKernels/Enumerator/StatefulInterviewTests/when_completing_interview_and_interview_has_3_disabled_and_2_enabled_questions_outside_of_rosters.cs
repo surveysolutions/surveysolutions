@@ -2,6 +2,7 @@ using System;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -12,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_completing_interview_and_interview_has_3_disabled_and_2_enabled_questions_outside_of_rosters
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(questionId: disabledQuestion1Id, variable: "q1"),
@@ -35,15 +35,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             }));
 
             eventContext = new EventContext();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
 
-        It should_raise_QuestionsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>();
 
-        It should_raise_QuestionsDisabled_event_with_ids_of_disabled_questions_and_empty_roster_vectors = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_with_ids_of_disabled_questions_and_empty_roster_vectors () =>
             eventContext.GetEvent<QuestionsDisabled>().Questions.ShouldContainOnly(new[]
             {
                 Create.Entity.Identity(disabledQuestion1Id, RosterVector.Empty),
@@ -51,11 +53,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 Create.Entity.Identity(disabledQuestion3Id, RosterVector.Empty),
             });
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static StatefulInterview interview;
         private static EventContext eventContext;

@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -11,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_completing_interview_and_interview_has_1_disabled_and_1_enabled_questions_in_fixed_roster_with_3_instances
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid rosterId = Guid.NewGuid();
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -41,28 +41,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             }));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
 
-        It should_raise_QuestionsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>();
 
-        It should_raise_QuestionsDisabled_event_with_id_of_disabled_question_and_roster_vectors_of_fixed_roster = () =>
-            eventContext.GetEvent<QuestionsDisabled>().Questions.ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_with_id_of_disabled_question_and_roster_vectors_of_fixed_roster () =>
+            eventContext.GetEvent<QuestionsDisabled>().Questions.Should().BeEquivalentTo(new[]
             {
                 Create.Entity.Identity(disabledQuestionId, Create.Entity.RosterVector(1)),
                 Create.Entity.Identity(disabledQuestionId, Create.Entity.RosterVector(2)),
                 Create.Entity.Identity(disabledQuestionId, Create.Entity.RosterVector(3)),
             });
         
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         private static StatefulInterview interview;
         private static EventContext eventContext;
