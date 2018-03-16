@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Api;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.API.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
@@ -61,19 +62,26 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             IAuthorizedUser authorizedUser = null,
             IUserViewFactory userViewFactory = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewReferences = null,
-            IStatefulInterviewRepository statefulInterviewRepository = null)
+
+            IStatefulInterviewRepository statefulInterviewRepository = null,
+            IStatefullInterviewSearcher statefullInterviewSearcher = null,
+            IQuestionnaireStorage questionnaireStorage = null)
         {
             var controller = new InterviewsController(
-                logger ?? Mock.Of<ILogger>(),
-                allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(), Mock.Of<IInterviewHistoryFactory>(),
-                commandService ?? Mock.Of<ICommandService>(),
-                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                interviewReferences ?? new TestInMemoryWriter<InterviewSummary>(), 
-                statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+                logger: logger ?? Mock.Of<ILogger>(),
+                allInterviewsViewFactory: allInterviewsViewViewFactory ?? Mock.Of<IAllInterviewsFactory>(), 
+                interviewHistoryViewFactory: Mock.Of<IInterviewHistoryFactory>(),
+                userViewFactory: userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                interviewReferences: interviewReferences ?? new TestInMemoryWriter<InterviewSummary>(),
+                statefulInterviewRepository: statefulInterviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                commandService: commandService ?? Mock.Of<ICommandService>(),
+                authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>());
 
-            controller.Request = new HttpRequestMessage(HttpMethod.Post, "https://localhost");
-            controller.Request.SetConfiguration(new HttpConfiguration());
+
+            controller.Request = new HttpRequestMessage(method: HttpMethod.Post, requestUri: "https://localhost");
+            controller.Request.SetConfiguration(configuration: new HttpConfiguration());
 
             return controller;
         }
