@@ -1,24 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_restoring_interview_state_from_sync_package_for_questionnaire_with_numeric_rosters : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
 
             var fixedRosterIdentity = Identity.Create(Guid.Parse("11111111111111111111111111111111"),
                 Create.Entity.RosterVector(1));
@@ -62,27 +58,29 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId, userId: userId, answers: answersDtos);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
+        private void BecauseOf() => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
-        It should_set_roster_title_to_roster1 = () =>
-            interview.GetRosterTitle(Identity.Create(roster1Id, rosterVector)).ShouldEqual("10.5");
+        [NUnit.Framework.Test] public void should_set_roster_title_to_roster1 () =>
+            interview.GetRosterTitle(Identity.Create(roster1Id, rosterVector)).Should().Be("10.5");
 
-        It should_set_roster_title_to_roster2 = () =>
-            interview.GetRosterTitle(Identity.Create(roster2Id, rosterVector)).ShouldEqual("hello, world");
+        [NUnit.Framework.Test] public void should_set_roster_title_to_roster2 () =>
+            interview.GetRosterTitle(Identity.Create(roster2Id, rosterVector)).Should().Be("hello, world");
 
-        It should_set_roster_title_to_roster3 = () =>
-            interview.GetRosterTitle(Identity.Create(roster3Id, rosterVector)).ShouldEqual("Option 100");
+        [NUnit.Framework.Test] public void should_set_roster_title_to_roster3 () =>
+            interview.GetRosterTitle(Identity.Create(roster3Id, rosterVector)).Should().Be("Option 100");
 
-        It should_set_roster_title_to_roster4 = () =>
-            interview.GetRosterTitle(Identity.Create(roster4Id, rosterVector)).ShouldEqual("2005-11-30");
+        [NUnit.Framework.Test] public void should_set_roster_title_to_roster4 () =>
+            interview.GetRosterTitle(Identity.Create(roster4Id, rosterVector)).Should().Be("2005-11-30");
 
         private static EventContext eventContext;
         private static InterviewSynchronizationDto synchronizationDto;

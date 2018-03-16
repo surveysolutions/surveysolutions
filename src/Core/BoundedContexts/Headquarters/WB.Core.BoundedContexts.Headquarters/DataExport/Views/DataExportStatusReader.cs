@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.DataExport.Accessors.IFilebasedExportedDataAccessor;
 
@@ -21,6 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IDataExportFileAccessor exportFileAccessor;
+        private readonly IExternalFileStorage externalFileStorage;
 
         private readonly Tuple<DataExportType, DataExportFormat>[] supportedDataExports = new[]
         {
@@ -37,12 +40,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             IDataExportProcessesService dataExportProcessesService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
             IFileSystemAccessor fileSystemAccessor,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IDataExportFileAccessor exportFileAccessor,
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, IExternalFileStorage externalFileStorage)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.exportFileAccessor = exportFileAccessor;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.externalFileStorage = externalFileStorage;
         }
 
         public DataExportStatusView GetDataExportStatusForQuestionnaire(QuestionnaireIdentity questionnaireIdentity,
@@ -53,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
             if (questionnaire == null)
                 return null;
-
+            
             var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses().Select(CreateRunningDataExportProcessView).ToArray();
             var allProcesses = this.dataExportProcessesService.GetAllProcesses().Select(CreateRunningDataExportProcessView).ToArray();
 
@@ -129,10 +135,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
                 dataExportView.DataExportProcessId = process?.DataExportProcessId;
                 dataExportView.ProgressInPercents = process?.Progress ?? 0;
             }
-
+            
             string filePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus, fromDate, toDate);
 
-            if (this.fileSystemAccessor.IsFileExists(filePath))
+            if (dataFormat == DataExportFormat.Binary && this.externalFileStorage.IsEnabled())
+            { 
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(this.fileSystemAccessor.GetFileName(filePath));
+                var metadata = this.externalFileStorage.GetObjectMetadata(externalStoragePath);
+
+                if (metadata != null)
+                {
+                    dataExportView.LastUpdateDate = metadata.LastModified;
+                    dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(metadata.Size);
+                    dataExportView.HasDataToExport = true;
+                }
+            }
+            else if (this.fileSystemAccessor.IsFileExists(filePath))
             {
                 dataExportView.LastUpdateDate = this.fileSystemAccessor.GetModificationTime(filePath);
                 dataExportView.FileSize = FileSizeUtils.SizeInMegabytes(this.fileSystemAccessor.GetFileSize(filePath));

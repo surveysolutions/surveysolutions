@@ -11,6 +11,7 @@
                             @blur="updateRow($event, row)"/>
                         <button type="submit" class="btn btn-link btn-clear" 
                             v-if="$me.acceptAnswer"
+                            tabindex="-1"
                             @click="confirmAndRemoveRow(index)"><span></span></button>
                     </div>
                 </div>

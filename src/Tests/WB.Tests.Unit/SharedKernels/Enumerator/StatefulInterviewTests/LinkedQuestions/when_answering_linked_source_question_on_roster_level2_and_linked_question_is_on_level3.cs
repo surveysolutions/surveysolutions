@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 {
     internal class when_answering_linked_source_question_on_roster_level2_and_linked_question_is_on_level3 : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "q1"),
@@ -39,15 +38,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(0), DateTime.UtcNow, new[] { 1, 2 });
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, Create.Entity.RosterVector(1), DateTime.UtcNow, new[] { 1, 2 });
             interview.AnswerNumericIntegerQuestion(interviewerId, roster3TriggerId, Create.Entity.RosterVector(0, 1), DateTime.UtcNow, 2);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() 
         {
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 1), DateTime.UtcNow, "answer 0.1");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 2), DateTime.UtcNow, "answer 0.2");
-        };
+        }
 
-        It should_put__2__options_in_linked_single_question_from_roster__0_1_0__ = () =>
+        [NUnit.Framework.Test] public void should_put__2__options_in_linked_single_question_from_roster__0_1_0__ () 
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 0));
 
@@ -55,16 +55,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).ShouldEqual("answer 0.1");
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).ShouldEqual("answer 0.2");
-        };
+        }
 
-        It should_put__2__options_in_linked_single_question_from_roster__0_1_1__ = () =>
+        [NUnit.Framework.Test] public void should_put__2__options_in_linked_single_question_from_roster__0_1_1__ () 
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 1));
 
             interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(2);
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).ShouldEqual("answer 0.1");
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).ShouldEqual("answer 0.2");
-        };
+        }
 
         static StatefulInterview interview;
 
