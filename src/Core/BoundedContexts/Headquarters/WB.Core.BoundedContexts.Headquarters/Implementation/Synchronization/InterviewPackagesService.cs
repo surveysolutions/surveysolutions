@@ -142,7 +142,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     && 
                     (
                         p.ReprocessAttemptsCount > 2 
-                        || _.Count(d => d.InterviewId == interviewId && (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)) > 1
+                        || _.Count(d => d.InterviewId == interviewId && (d.ExceptionType == UnknownExceptionType || d.ExceptionType == undefined)) > 1
                     )
                 )
             );
@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             return this.brokenInterviewPackageStorage.Query(_ =>
             {
                 var filteredByError = _.Where(p => (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
-                    && _.Count(d => d.InterviewId == p.InterviewId && (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)) == 1);
+                    && _.Count(d => d.InterviewId == p.InterviewId && (d.ExceptionType == UnknownExceptionType || d.ExceptionType == undefined)) == 1);
 
                 var filteredByTries = filteredByError.Where(p => 
                     p.ProcessingDate < utcNow5Minutes && p.ReprocessAttemptsCount < 1
