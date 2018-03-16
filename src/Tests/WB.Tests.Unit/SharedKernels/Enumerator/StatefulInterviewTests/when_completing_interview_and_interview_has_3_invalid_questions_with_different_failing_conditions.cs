@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -13,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_completing_interview_and_interview_has_3_invalid_questions_with_different_failing_conditions
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.TextQuestion(questionId: invalidQuestion1Identity.Id, variable: "q1"),
@@ -49,51 +49,53 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             }));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
 
-        It should_raise_AnswersDeclaredInvalid_event = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event () =>
             eventContext.ShouldContainEvent<AnswersDeclaredInvalid>();
 
-        It should_raise_AnswersDeclaredInvalid_event_with_identities_of_invalid_questions = () =>
-            eventContext.GetEvent<AnswersDeclaredInvalid>().Questions.ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_with_identities_of_invalid_questions () =>
+            eventContext.GetEvent<AnswersDeclaredInvalid>().Questions.Should().BeEquivalentTo(new[]
             {
                 invalidQuestion1Identity,
                 invalidQuestion2Identity,
                 invalidQuestion3Identity,
             });
 
-        It should_raise_AnswersDeclaredInvalid_event_with_first_condition_failing_for_first_question = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_with_first_condition_failing_for_first_question () =>
             eventContext.GetEvent<AnswersDeclaredInvalid>()
-                .FailedValidationConditions[invalidQuestion1Identity].ShouldContainOnly(new[]
+                .FailedValidationConditions[invalidQuestion1Identity].Should().BeEquivalentTo(new[]
                 {
                     Create.Entity.FailedValidationCondition(failedConditionIndex: 1),
                 });
 
-        It should_raise_AnswersDeclaredInvalid_event_with_second_condition_failing_for_second_question = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_with_second_condition_failing_for_second_question () =>
             eventContext.GetEvent<AnswersDeclaredInvalid>()
-                .FailedValidationConditions[invalidQuestion2Identity].ShouldContainOnly(new[]
+                .FailedValidationConditions[invalidQuestion2Identity].Should().BeEquivalentTo(new[]
                 {
                     Create.Entity.FailedValidationCondition(failedConditionIndex: 2),
                 });
 
-        It should_raise_AnswersDeclaredInvalid_event_with_third_condition_failing_for_third_question = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_with_third_condition_failing_for_third_question () =>
             eventContext.GetEvent<AnswersDeclaredInvalid>()
-                .FailedValidationConditions[invalidQuestion3Identity].ShouldContainOnly(new[]
+                .FailedValidationConditions[invalidQuestion3Identity].Should().BeEquivalentTo(new[]
                 {
                     Create.Entity.FailedValidationCondition(failedConditionIndex: 3),
                 });
 
-        It should_not_raise_AnswersDeclaredValid_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_AnswersDeclaredValid_event () =>
             eventContext.ShouldNotContainEvent<AnswersDeclaredValid>();
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static StatefulInterview interview;
         private static EventContext eventContext;

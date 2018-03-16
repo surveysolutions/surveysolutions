@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_group_in_roster : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(new[]
             {
                 Create.Entity.FixedRoster(fixedTitles: new[] {Create.Entity.FixedTitle(rosterInstanceId)}, children: new[]
@@ -19,13 +18,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             });
 
             interview = Setup.StatefulInterview(questionnaire);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             result = interview.HasGroup(group);
 
-        It should_return_true = () =>
-            result.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_return_true () =>
+            result.Should().BeTrue();
 
         private static bool result;
         private static StatefulInterview interview;

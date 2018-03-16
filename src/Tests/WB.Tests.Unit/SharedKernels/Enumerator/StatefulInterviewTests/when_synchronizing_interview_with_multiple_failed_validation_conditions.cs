@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,14 +11,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_synchronizing_interview_with_multiple_failed_validation_conditions : StatefulInterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid integerQuestionId = Guid.Parse("00000000000000000000000000000001");
             RosterVector rosterVector = Create.Entity.RosterVector(1m, 0m);
@@ -79,12 +76,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
             synchronizationDto = Create.Entity.InterviewSynchronizationDto(questionnaireId: questionnaireId,
                 userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
-        };
 
-        Because of = () => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
+            BecauseOf();
+        }
 
-        It should_return_empty_failed_condition_messages =
-            () => interview.GetFailedValidationMessages(questionIdentity, "Error").ShouldContainOnly(
+        private void BecauseOf() => interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
+
+        [NUnit.Framework.Test] public void should_return_empty_failed_condition_messages () => interview.GetFailedValidationMessages(questionIdentity, "Error").Should().BeEquivalentTo(
                 $"{firstValidationMessage} [1]", 
                 $"{thirdValidationMessage} [3]");
 
