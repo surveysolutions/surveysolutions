@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoFixture;
 using NUnit.Framework;
-using Ploeh.AutoFixture;
-using Ploeh.AutoFixture.AutoMoq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -81,6 +80,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(2));
         }
 
-        IFixture NewFixture() => new Fixture().Customize(new AutoMoqCustomization());
+        IFixture NewFixture() => Create.Other.AutoFixture();
     }
 }

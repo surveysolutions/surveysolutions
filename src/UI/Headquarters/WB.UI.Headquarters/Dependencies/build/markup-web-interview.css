@@ -597,7 +597,8 @@ span.image-zoom-box, span.image-option {
   .question-editor .block-with-data .btn-link {
     padding-left: 0; }
   .question-editor.answered .question-unit .options-group {
-    background-color: transparent; }
+    background-color: transparent;
+    font-size: 0; }
   .question-editor.has-error .question-unit .options-group {
     background-color: #f6d6d0; }
     .question-editor.has-error .question-unit .options-group .form-group {
