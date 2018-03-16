@@ -1,8 +1,6 @@
 using System;
-using System.Linq.Expressions;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -11,8 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_determining_has_interview_a_group_and_group_is_in_roster_which_has_instance_with_id_not_equal_to_group_roster_vector : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             IQuestionnaireStorage questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, _
                 => _.HasGroup(@group.Id) == true
                 && _.GetRostersFromTopToSpecifiedGroup(@group.Id) == new Guid[] { rosterId });
@@ -20,13 +17,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.Apply(Create.Event.RosterInstancesAdded(rosterId, new[] { rosterInstanceId }));
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             result = interview.HasGroup(group);
 
-        It should_return_false = () =>
-            result.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_return_false () =>
+            result.Should().BeFalse();
 
         private static bool result;
         private static StatefulInterview interview;

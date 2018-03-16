@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_question_comments_from_restored_from_sync_package_interview : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             IQuestionnaireStorage questionnaireRepository =
                 Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(),
                     Create.Entity.PlainQuestionnaire(
@@ -35,14 +34,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var answersDtos = new[]
             {
-                Create.Entity.AnsweredQuestionSynchronizationDto(questionId, rosterVector, 1, 
+                Create.Entity.AnsweredQuestionSynchronizationDto(questionId, rosterVector, 1,
                     Create.Entity.CommentSynchronizationDto(userId: supervisorId, text: "First line"),
                     Create.Entity.CommentSynchronizationDto(userId: supervisorId, text: "Second line"),
                     Create.Entity.CommentSynchronizationDto(userId: interviewerId, text: "Hello world!"),
-                    Create.Entity.CommentSynchronizationDto(userId: hqId, userRole: UserRoles.Headquarter, text: "hi there!"),
+                    Create.Entity.CommentSynchronizationDto(userId: hqId, userRole: UserRoles.Headquarter,
+                        text: "hi there!"),
                     Create.Entity.CommentSynchronizationDto(userId: interviewerId, text: "First line"),
                     Create.Entity.CommentSynchronizationDto(userId: interviewerId, text: "Second line")
-                    )
+                )
             };
 
             var interviewSynchronizationDto = Create.Entity.InterviewSynchronizationDto(
@@ -51,49 +51,51 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 supervisorId: supervisorId,
                 answers: answersDtos);
             interview.Synchronize(Create.Command.Synchronize(interviewerId, interviewSynchronizationDto));
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             comments = interview.GetQuestionComments(Create.Entity.Identity(questionId, rosterVector));
 
-        It should_return_4_commens = () =>
-            comments.Count().ShouldEqual(6);
+        [NUnit.Framework.Test] public void should_return_4_commens () =>
+            comments.Count().Should().Be(6);
 
-        It should_first_2_comments_from_supervisor = () =>
+        [NUnit.Framework.Test] public void should_first_2_comments_from_supervisor () 
         {
             var comment = comments.ElementAt(0);
-            comment.UserId.ShouldEqual(supervisorId);
-            comment.Comment.ShouldEqual($"First line");
+            comment.UserId.Should().Be(supervisorId);
+            comment.Comment.Should().Be($"First line");
 
             comment = comments.ElementAt(1);
-            comment.UserId.ShouldEqual(supervisorId);
-            comment.Comment.ShouldEqual($"Second line");
-        };
+            comment.UserId.Should().Be(supervisorId);
+            comment.Comment.Should().Be($"Second line");
+        }
 
-        It should_return_third_comment_from_interviewer = () =>
+        [NUnit.Framework.Test] public void should_return_third_comment_from_interviewer () 
         {
             var comment = comments.ElementAt(2);
-            comment.UserId.ShouldEqual(interviewerId);
-            comment.Comment.ShouldEqual("Hello world!");
-        };
+            comment.UserId.Should().Be(interviewerId);
+            comment.Comment.Should().Be("Hello world!");
+        }
 
-        It should_return_HQ_comment_on_4_position = () =>
+        [NUnit.Framework.Test] public void should_return_HQ_comment_on_4_position () 
         {
             var comment = comments.ElementAt(3);
-            comment.UserId.ShouldEqual(hqId);
-            comment.Comment.ShouldEqual("hi there!");
-        };
+            comment.UserId.Should().Be(hqId);
+            comment.Comment.Should().Be("hi there!");
+        }
 
-        It should_merge_last_2_comments_from_inerviewer = () =>
+        [NUnit.Framework.Test] public void should_merge_last_2_comments_from_inerviewer () 
         {
             var comment = comments.ElementAt(4);
-            comment.UserId.ShouldEqual(interviewerId);
-            comment.Comment.ShouldEqual($"First line");
+            comment.UserId.Should().Be(interviewerId);
+            comment.Comment.Should().Be($"First line");
 
             comment = comments.ElementAt(5);
-            comment.UserId.ShouldEqual(interviewerId);
-            comment.Comment.ShouldEqual($"Second line");
-        };
+            comment.UserId.Should().Be(interviewerId);
+            comment.Comment.Should().Be($"Second line");
+        }
 
         private static StatefulInterview interview;
         private static IEnumerable<AnswerComment> comments;
