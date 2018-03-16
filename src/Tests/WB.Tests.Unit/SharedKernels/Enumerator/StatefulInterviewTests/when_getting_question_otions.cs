@@ -1,20 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
-using Moq;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_question_otions : StatefulInterviewTestsContext
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
             options = new List<CategoricalOption>()
             {
@@ -26,19 +23,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 _ => _.GetOptionsForQuestion(questionId, null, string.Empty) == options);
 
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() 
         {
             categoricalOptions =
                 statefulInterview.GetFirstTopFilteredOptionsForQuestion(questionIdentity, null, string.Empty, 200).ToList();
-        };
+        }
 
-        It should_contains_2_elements = () =>
-            categoricalOptions.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_contains_2_elements () =>
+            categoricalOptions.Should().HaveCount(2);
 
-        It should_question_options = () =>
-            categoricalOptions.ShouldEqual(options.ToList());
+        [NUnit.Framework.Test] public void should_question_options () =>
+            categoricalOptions.Should().BeEquivalentTo(options.ToList());
 
         static StatefulInterview statefulInterview;
 

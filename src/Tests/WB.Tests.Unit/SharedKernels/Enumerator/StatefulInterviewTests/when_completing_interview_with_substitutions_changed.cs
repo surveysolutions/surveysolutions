@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -12,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_completing_interview_with_substitutions_changed : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid substitutionId = Guid.Parse("77777777777777777777777777777777");
             Guid userId = Guid.Parse("88888888888888888888888888888888");
             string substitutionVar = "subst";
@@ -30,17 +30,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview.AnswerTextQuestion(userId, substitutionId, RosterVector.Empty, DateTime.UtcNow, "substitution text");
 
             eventContext = new EventContext();
-        };
 
-        Because of = () => interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
+            BecauseOf();
+        }
 
-        It should_raise_substitutions_changed_event_with_all_changed_entities = () =>
+        private void BecauseOf() => interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
+
+        [NUnit.Framework.Test] public void should_raise_substitutions_changed_event_with_all_changed_entities () 
         {
             var @event = eventContext.GetEvent<SubstitutionTitlesChanged>();
-            @event.Groups.ShouldContainOnly(Create.Entity.Identity(groupId, RosterVector.Empty));
-            @event.StaticTexts.ShouldContainOnly(Create.Entity.Identity(staticTextId, RosterVector.Empty));
-            @event.Questions.ShouldContainOnly(Create.Entity.Identity(questionId, RosterVector.Empty));
-        };
+            @event.Groups.Should().BeEquivalentTo(Create.Entity.Identity(groupId, RosterVector.Empty));
+            @event.StaticTexts.Should().BeEquivalentTo(Create.Entity.Identity(staticTextId, RosterVector.Empty));
+            @event.Questions.Should().BeEquivalentTo(Create.Entity.Identity(questionId, RosterVector.Empty));
+        }
 
         static StatefulInterview interview;
         static EventContext eventContext;

@@ -60,8 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             cancellationToken.ThrowIfCancellationRequested();
 
             var allMultimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId,
-                    multimediaQuestionIds));
+                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId));
 
             cancellationToken.ThrowIfCancellationRequested();
 
