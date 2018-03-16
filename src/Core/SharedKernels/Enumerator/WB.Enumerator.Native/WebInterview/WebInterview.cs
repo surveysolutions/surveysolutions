@@ -17,6 +17,7 @@ namespace WB.Enumerator.Native.WebInterview
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IWebInterviewNotificationService webInterviewNotificationService;
         private readonly IWebInterviewInterviewEntityFactory interviewEntityFactory;
+        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
 
@@ -42,6 +43,7 @@ namespace WB.Enumerator.Native.WebInterview
             IWebInterviewNotificationService webInterviewNotificationService,
             IWebInterviewInterviewEntityFactory interviewEntityFactory,
             IImageFileStorage imageFileStorage,
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
             IAudioFileStorage audioFileStorage)
         {
             this.statefulInterviewRepository = statefulInterviewRepository;
@@ -49,6 +51,7 @@ namespace WB.Enumerator.Native.WebInterview
             this.questionnaireRepository = questionnaireRepository;
             this.webInterviewNotificationService = webInterviewNotificationService;
             this.interviewEntityFactory = interviewEntityFactory;
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.audioFileStorage = audioFileStorage;
             this.imageFileStorage = imageFileStorage;
         }
