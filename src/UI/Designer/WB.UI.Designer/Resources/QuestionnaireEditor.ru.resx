@@ -1089,4 +1089,10 @@
   <data name="HideResolvedComments" xml:space="preserve">
     <value>Скрыть закрытые комментарии</value>
   </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Добавить комментарий</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Скрыть комментарии</value>
+  </data>
 </root>
