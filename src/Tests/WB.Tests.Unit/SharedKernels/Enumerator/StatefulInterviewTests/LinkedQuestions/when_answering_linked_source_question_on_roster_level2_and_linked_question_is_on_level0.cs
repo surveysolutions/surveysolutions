@@ -1,17 +1,15 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQuestions
 {
     internal class when_answering_linked_source_question_on_roster_level2_and_linked_question_is_on_level0 : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "q1"),
@@ -38,32 +36,34 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 1), DateTime.UtcNow, "answer 0.1");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 2), DateTime.UtcNow, "answer 0.2");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1, 1), DateTime.UtcNow, "answer 1.1");
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1, 2), DateTime.UtcNow, "answer 1.2");
 
-        It should_linked_single_question_has_4_options = () =>
+        [NUnit.Framework.Test] public void should_linked_single_question_has_4_options () 
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, RosterVector.Empty);
 
-            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(4);
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).ShouldEqual("numeric 1: Multi 1: answer 0.1");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).ShouldEqual("numeric 1: Multi 2: answer 0.2");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1)).ShouldEqual("numeric 2: Multi 1: answer 1.1");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 2)).ShouldEqual("numeric 2: Multi 2: answer 1.2");
-        };
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.Should().Be(4);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).Should().Be("numeric 1: Multi 1: answer 0.1");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).Should().Be("numeric 1: Multi 2: answer 0.2");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1)).Should().Be("numeric 2: Multi 1: answer 1.1");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 2)).Should().Be("numeric 2: Multi 2: answer 1.2");
+        }
 
-        It should_linked_multi_question_has_4_options = () =>
+        [NUnit.Framework.Test] public void should_linked_multi_question_has_4_options () 
         {
             var identity = Create.Entity.Identity(linkedMultiQuestionId, RosterVector.Empty);
 
-            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.ShouldEqual(4);
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).ShouldEqual("numeric 1: Multi 1: answer 0.1");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).ShouldEqual("numeric 1: Multi 2: answer 0.2");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1)).ShouldEqual("numeric 2: Multi 1: answer 1.1");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 2)).ShouldEqual("numeric 2: Multi 2: answer 1.2");
-        };
+            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.Should().Be(4);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).Should().Be("numeric 1: Multi 1: answer 0.1");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).Should().Be("numeric 1: Multi 2: answer 0.2");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 1)).Should().Be("numeric 2: Multi 1: answer 1.1");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(1, 2)).Should().Be("numeric 2: Multi 2: answer 1.2");
+        }
 
         static StatefulInterview interview;
 

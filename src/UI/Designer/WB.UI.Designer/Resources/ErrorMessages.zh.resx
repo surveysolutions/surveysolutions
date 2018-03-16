@@ -225,8 +225,8 @@
   <data name="UserName_required" xml:space="preserve">
     <value>用户名必填</value>
   </data>
-  <data name="UserNeedToContactSupport" xml:space="preserve">
-    <value>您没有权限进行这个操作。请联系支持</value>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>您没有权限进行这个操作。请联系支持。IP:{0}</value>
   </data>
   <data name="UserNotApproved" xml:space="preserve">
     <value>您的账户未被批准通过，请首先确认账户。我们已向{0}发送了确认关联。</value>

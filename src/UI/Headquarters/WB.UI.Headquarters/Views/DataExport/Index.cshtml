@@ -1,6 +1,8 @@
 ﻿@using Microsoft.Security.Application
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
+@using WB.Core.BoundedContexts.Headquarters.Views.DataExport
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@using WB.UI.Headquarters.Models
 @model WB.UI.Headquarters.Models.ExportModel
 
 @{
@@ -14,24 +16,37 @@
     @Scripts.Render("~/js/list")
     @Scripts.Render("~/js/exportdata")
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        var $AllDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
-        var $HistoryUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
-        var $UpdateTabularDataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
+        var $AllDataUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "AllData"})';
+        var $HistoryUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "Paradata"})';
+        var $UpdateTabularDataUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "RequestUpdate"})';
 
-        var $DDIUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
-        var $ExportedDataReferencesForQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "GetExportStatus"})';
-        var $DeleteDataExportProcessUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
+        var $DDIUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DDIMetadata"})';
+        var $ExportedDataReferencesForQuestionnaireUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "GetExportStatus"})';
+        var $DeleteDataExportProcessUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "DeleteDataExportProcess"})';
+
+        var $ExportToExternalStorageUrl =
+            '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportToExternalStorage"}, Request.Url.Scheme)';
         $(function() {
             var templates = [
                 @foreach (var item in Model.Questionnaires)
                 {
-                    <text>{ id: '@item.TemplateId', version: '@item.TemplateVersion', title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)' },</text>
+                    <text>{
+                    id: '@item.TemplateId',
+                    version: '@item.TemplateVersion',
+                    title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)'
+                },</text>
                 }
             ];
             var exportFromats = [];
-            @foreach (DataExportFormat formatValue in Enum.GetValues(typeof (DataExportFormat)))
+            @foreach (DataExportFormat formatValue in Enum.GetValues(typeof(DataExportFormat)))
             {
                 <text>exportFromats[@((int) formatValue)] = '@formatValue.ToString()'</text>
             }
@@ -44,17 +59,56 @@
                 }
             ];
 
+            var externalStorages = null;
+            @if (Model.ExternalStoragesSettings != null)
+            {
+                var storages = Model.ExternalStoragesSettings;
+                <text>
+                    var StoragesViewModel = function() {
+                        this.redirect_uri = "@storages.OAuth2.RedirectUri",
+                            this.response_type = "@storages.OAuth2.ResponseType",
+                            this.storages = [
+                                {
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.ZipFile)",
+                                    is_local: true
+                                }, {
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.OneDrive)",
+                                    client_id: "@storages.OAuth2.OneDrive.ClientId",
+                                    type: "@ExternalStorageType.OneDrive",
+                                    scope: "@storages.OAuth2.OneDrive.Scope",
+                                    authorization_uri: "@storages.OAuth2.OneDrive.AuthorizationUri"
+                                }, {
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.Dropbox)",
+                                    client_id: "@storages.OAuth2.Dropbox.ClientId",
+                                    type: "@ExternalStorageType.Dropbox",
+                                    scope: "@storages.OAuth2.Dropbox.Scope",
+                                    authorization_uri: "@storages.OAuth2.Dropbox.AuthorizationUri"
+                                }, {
+                                    name: "@HttpUtility.JavaScriptStringEncode(DataExport.GoogleDrive)",
+                                    client_id: "@storages.OAuth2.GoogleDrive.ClientId",
+                                    type: "@ExternalStorageType.GoogleDrive",
+                                    scope: "@storages.OAuth2.GoogleDrive.Scope",
+                                    authorization_uri: "@storages.OAuth2.GoogleDrive.AuthorizationUri"
+                                }
+                            ];
+                        this.selectedStorage = ko.observable(this.storages[0]);
+                    };
+                    externalStorages = new StoragesViewModel();
+                </text>
+            }
             var model = new Supervisor.VM.ExportData(templates,
                 statuses,
                 $ExportedDataReferencesForQuestionnaireUrl,
                 exportFromats,
                 $DeleteDataExportProcessUrl,
-                $UpdateTabularDataUrl);
+                $UpdateTabularDataUrl,
+                $ExportToExternalStorageUrl,
+                externalStorages);
             ko.applyBindings(model);
         });
 
         $('#umbrella').hide();
-    </script>
+</script>
 }
 
 <main class="export hold-transition">
@@ -178,7 +232,7 @@
                 @formatTitle
             </div>
             <div class="cell-data  download-block">
-                <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format)), visible: showRefreshButton(@exportParameters)">@DataExport.Generate</button>
+                <button type="button" class="btn btn-success btn-lg generate" data-bind="click: requestDataUpdate(@((int) format), true), visible: showRefreshButton(@exportParameters)">@(format == DataExportFormat.Binary && Model.ExternalStoragesSettings != null ? DataExport.ExportBtn : DataExport.Generate)</button>
                 <a type="button" class="btn btn-primary btn-lg download" data-bind="visible: showDownloadButton(@exportParameters), attr: { href: @dataUrl + '?' + getRequestQuery('@format') }">@DataExport.Download</a>
                 <div class="not-generated ">@DataExport.DataWasNotGenerated</div>
             </div>
@@ -231,4 +285,18 @@
     <h3>
         @DataExport.ConfirmStop @DataExport.export?
     </h3>
+</script>
+
+<script type="text/html" id="storages-dialog">
+    <p>@DataExport.SaveBinaryDataTo</p>
+    <div class="options-group">
+        <div class="radio" data-bind="foreach: storages">
+            <div class="field">
+                <input type="radio" class="wb-radio" name="providersGroup" data-bind="checkedValue: $data, checked: $root.selectedStorage, attr: { 'id': $data.name }"> <label data-bind="attr: { 'for': $data.name }">
+                    <span class="tick"></span> <!-- ko text: name --><!-- /ko -->
+                </label>
+            </div>
+        </div>
+        <span class="lock"></span>
+    </div>
 </script>

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WB.UI.Designer.Pdf
@@ -98,9 +99,9 @@ namespace WB.UI.Designer.Pdf
                             process.Kill();
                         }
 
-                        Task.WaitAll(outputReader, errorReader);
+                        bool sucsessfullyAwaited = Task.WaitAll(new Task[]{ outputReader, errorReader}, environment.Timeout);
 
-                        if (!waitResult)
+                        if (!waitResult || !sucsessfullyAwaited)
                         {
                             throw new PdfConvertTimeoutException();
                         }
