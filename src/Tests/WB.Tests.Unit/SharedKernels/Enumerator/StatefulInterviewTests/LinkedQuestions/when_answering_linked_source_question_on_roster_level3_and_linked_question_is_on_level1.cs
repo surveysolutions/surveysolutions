@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 {
     internal class when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level1 : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: rosterSizeQuestionId, variable: "q1"),
@@ -40,12 +39,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 1, 100), DateTime.UtcNow, "answer 0.1.100");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 2, 100), DateTime.UtcNow, "answer 0.2.100");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(0, 2, 200), DateTime.UtcNow, "answer 0.2.200");
 
-        It should_linked_single_question_from_roster1_has_3_options = () =>
+        [NUnit.Framework.Test] public void should_linked_single_question_from_roster1_has_3_options () 
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0));
 
@@ -53,15 +53,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).ShouldEqual("Multi 1: Title 1: answer 0.1.100");
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).ShouldEqual("Multi 2: Title 1: answer 0.2.100");
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).ShouldEqual("Multi 2: Title 2: answer 0.2.200");
-        };
+        }
 
-        It should_linked_single_question_from_roster2_has_no_options = () =>
+        [NUnit.Framework.Test] public void should_linked_single_question_from_roster2_has_no_options () 
         {
             interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1)))
                 .Options.ShouldBeEmpty();
-        };
+        }
 
-        It should_linked_multi_question_from_roster1_has_3_options = () =>
+        [NUnit.Framework.Test] public void should_linked_multi_question_from_roster1_has_3_options () 
         {
             var identity = Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(0));
 
@@ -69,12 +69,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).ShouldEqual("Multi 1: Title 1: answer 0.1.100");
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).ShouldEqual("Multi 2: Title 1: answer 0.2.100");
             interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).ShouldEqual("Multi 2: Title 2: answer 0.2.200");
-        };
+        }
 
-        It should_linked_multi_question_from_roster2_has_no_options = () => {
+        [NUnit.Framework.Test] public void should_linked_multi_question_from_roster2_has_no_options () {
             interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(1)))
                 .Options.ShouldBeEmpty();
-        };
+        }
 
         static StatefulInterview interview;
 

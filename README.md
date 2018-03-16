@@ -1,5 +1,17 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
 # 5.27
+- All HQs which should have ability to export binary to external storages should get following code to web.config file to configuration section:
+<configSections>
+        <section name="externalStorages" type="WB.UI.Shared.Web.Configuration.ExternalStoragesConfigSection, WB.UI.Shared.Web, Version=5.22.20.0, Culture=neutral" />
+    </configSections>
+    <externalStorages>
+        <oauth2 redirectUri="https://demo.mysurvey.solutions/data-export-storages.html" responseType="token">
+            <dropbox authorizationUri="https://www.dropbox.com/1/oauth2/authorize" clientId="***REMOVED***"></dropbox>
+            <onedrive authorizationUri="https://login.live.com/oauth20_authorize.srf" clientId="***REMOVED***" scope="onedrive.readwrite"></onedrive>
+            <googledrive authorizationUri="https://accounts.google.com/o/oauth2/v2/auth" clientId="***REMOVED***" scope="https://www.googleapis.com/auth/drive.file"></googledrive>
+        </oauth2>
+    </externalStorages>
+	
 - After deployment of relase there is a script that should be executed from Gateway or Build server to sync images/export data from disk to s3 storage - [deploy-tools/utils/sync-all-files-to-s3.ps1](https://bitbucket.org/wbcapi/deploy-tools/src/master/utils/sync-all-files-to-s3.ps1?at=master&fileviewer=file-view-default)
 # 5.26
 - .net framework 4.7.1 is required

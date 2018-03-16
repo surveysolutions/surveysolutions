@@ -3,6 +3,7 @@ using System.Linq;
 using System.Runtime.Caching;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -10,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -51,7 +53,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         private readonly IUserViewFactory users;
 
         public InterviewSummaryDenormalizer(
-            IUserViewFactory users, 
+            IUserViewFactory users,
             IQuestionnaireStorage questionnaireStorage)
         {
             this.users = users;
@@ -67,13 +69,13 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         private InterviewSummary AnswerQuestion(InterviewSummary interviewSummary, Guid questionId, object answer, DateTime updateDate)
         {
-           return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
-            {
-                if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
-                {
-                    interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
-                }
-            });
+            return this.UpdateInterviewSummary(interviewSummary, updateDate, interview =>
+             {
+                 if (interview.AnswersToFeaturedQuestions.Any(x => x.Questionid == questionId))
+                 {
+                     interview.AnswerFeaturedQuestion(questionId, AnswerUtils.AnswerToString(answer));
+                 }
+             });
         }
 
         private InterviewSummary AnswerFeaturedQuestionWithOptions(InterviewSummary interviewSummary, Guid questionId, DateTime updateDate,
@@ -105,7 +107,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             Guid eventSourceId,
             DateTime eventTimeStamp,
             bool wasCreatedOnClient,
-            int? assignmentId, 
+            int? assignmentId,
             DateTime? creationTime)
         {
             var responsible = this.users.GetUser(new UserViewInputModel(userId));
@@ -239,7 +241,15 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<DateTimeQuestionAnswered> @event)
         {
-            return this.AnswerQuestion(state, @event.Payload.QuestionId, @event.Payload.Answer.ToString(ExportFormatSettings.ExportDateTimeFormat), @event.EventTimeStamp);
+            var questionnaire = GetQuestionnaire(state.QuestionnaireId, state.QuestionnaireVersion);
+            DateTimeQuestion question = questionnaire.Find<DateTimeQuestion>(@event.Payload.QuestionId);
+            string answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateFormat);
+            if (question?.IsTimestamp == true)
+            {
+                answerString = @event.Payload.Answer.ToString(DateTimeFormat.DateWithTimeFormat);
+            }
+
+            return this.AnswerQuestion(state, @event.Payload.QuestionId, answerString, @event.EventTimeStamp);
         }
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<GeoLocationQuestionAnswered> @event)
@@ -424,7 +434,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
-            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
+            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length,
                 @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
         }

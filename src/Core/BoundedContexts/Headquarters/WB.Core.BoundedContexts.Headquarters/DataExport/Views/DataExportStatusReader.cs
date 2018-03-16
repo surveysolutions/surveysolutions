@@ -138,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             
             string filePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(questionnaireIdentity, dataFormat, interviewStatus, fromDate, toDate);
 
-            if (this.externalFileStorage.IsEnabled())
+            if (dataFormat == DataExportFormat.Binary && this.externalFileStorage.IsEnabled())
             { 
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(this.fileSystemAccessor.GetFileName(filePath));
                 var metadata = this.externalFileStorage.GetObjectMetadata(externalStoragePath);

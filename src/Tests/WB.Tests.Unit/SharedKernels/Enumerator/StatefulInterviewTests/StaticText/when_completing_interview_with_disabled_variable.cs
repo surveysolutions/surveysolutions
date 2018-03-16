@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 {
     internal class when_completing_interview_with_disabled_variable : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             variableIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -32,13 +30,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             statefulInterview.Apply(Create.Event.VariablesDisabled(variableIdentity));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
+        private void BecauseOf() => statefulInterview.Complete(Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"), "", DateTime.Now);
 
-        It should_raize_variable_disabled_event = () => eventContext.ShouldContainEvent<VariablesDisabled>(v=>v.Variables[0]==variableIdentity);
-        It should_not_raize_variable_enabled_event = () => eventContext.ShouldNotContainEvent<VariablesEnabled>();
-        It should_raize_variable_changed_event = () => eventContext.ShouldContainEvent<VariablesChanged>(v => v.ChangedVariables[0].Identity == variableIdentity);
+        [NUnit.Framework.Test] public void should_raize_variable_disabled_event () => eventContext.ShouldContainEvent<VariablesDisabled>(v=>v.Variables[0]==variableIdentity);
+        [NUnit.Framework.Test] public void should_not_raize_variable_enabled_event () => eventContext.ShouldNotContainEvent<VariablesEnabled>();
+        [NUnit.Framework.Test] public void should_raize_variable_changed_event () => eventContext.ShouldContainEvent<VariablesChanged>(v => v.ChangedVariables[0].Identity == variableIdentity);
 
         static StatefulInterview statefulInterview;
         static Identity variableIdentity;
