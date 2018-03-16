@@ -1,26 +1,24 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Enumerator.Services.MaskText;
-using It = Machine.Specifications.It;
-
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
 {
     internal class when_removing_last_character : MaskTextTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             maskedText = CreateMaskedText("(###) (### ### ##)");
             maskedText.AddString("(111) (111 111 12)", 0, ref selection);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             maskedText.RemoveRange(16, 1, 0, ref selection);
 
-        It should_be_remove_last_char = () =>
-            maskedText.MakeMaskedText().ShouldEqual("(111) (111 111 1_)");
+        [NUnit.Framework.Test] public void should_be_remove_last_char () =>
+            maskedText.MakeMaskedText().Should().Be("(111) (111 111 1_)");
 
-        It should_set_selection_to_16 = () =>
-            selection.ShouldEqual(16);
+        [NUnit.Framework.Test] public void should_set_selection_to_16 () =>
+            selection.Should().Be(16);
 
 
         static int selection;
