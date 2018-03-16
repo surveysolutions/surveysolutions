@@ -353,15 +353,6 @@
     <item name="android:layout_height">wrap_content</item>
   </style>
 
-
-  <style name="Dashboard_SearchView_SearchButton">
-    <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
-    <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
-    <item name="android:layout_gravity">right</item>
-    <item name="android:scaleType">fitCenter</item>
-    <item name="android:background">@drawable/dashboard_search_icon</item>
-  </style>
-
   <style name="Dashboard_SearchView_FilterInput">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -385,21 +376,13 @@
     <item name="android:background">@drawable/delete_button</item>
   </style>
 
-  <style name="Dashboard_SearchView_SearchButton">
-    <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
-    <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
-    <item name="android:layout_gravity">right</item>
-    <item name="android:scaleType">fitCenter</item>
-    <item name="android:background">@drawable/dashboard_search_icon</item>
-  </style>
-  
   <style name="Dashboard_SearchView_SearchIcon">
     <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:scaleType">fitCenter</item>
     <item name="android:layout_gravity">center_vertical</item>
-    <item name="android:background">@android:drawable/ic_menu_search</item>
+    <item name="android:background">@drawable/spyglass_black</item>
   </style>
 
   <style name="Dashboard_SearchView_Container">
