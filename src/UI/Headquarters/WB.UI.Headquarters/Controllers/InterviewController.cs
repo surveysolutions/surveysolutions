@@ -143,11 +143,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (interviewSummary == null)
                 return HttpNotFound();
 
-            bool isAccessAllowed =
-                this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator ||
-                (this.authorizedUser.IsSupervisor && this.authorizedUser.Id == interviewSummary.TeamLeadId);
-
-            if (!isAccessAllowed)
+            bool isAccessAllowed = CurrentUserCanAccessInterview(interviewSummary);
+            if(!isAccessAllowed)
                 return HttpNotFound();
 
             var identity = Identity.Parse(questionId);
