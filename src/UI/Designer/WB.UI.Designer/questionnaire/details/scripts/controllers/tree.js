@@ -33,7 +33,7 @@
 
             $scope.highlightedId = null;
             $scope.isSearchInFocus = false;
-            $scope.isCommentsBlockVisible = false;
+            
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
@@ -379,22 +379,7 @@
                     }
                 });
             };
-
-            $scope.toggleComments = function (item) {
-                $scope.isCommentsBlockVisible = !$scope.isCommentsBlockVisible;
-                if ($scope.isCommentsBlockVisible) {
-                    $rootScope.$broadcast("commentsOpened", {});
-                }
-            };
-
             
-            $rootScope.$on('openCommentEditorRequested', function (event, data) {
-                if ($scope.isCommentsBlockVisible === true)
-                    return;
-                $scope.isCommentsBlockVisible = true;
-                $rootScope.$broadcast("commentsOpened", {});
-            });
-
             $scope.deleteVariable = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 

@@ -915,8 +915,9 @@
                 border-bottom: 2px solid #dbdfe2;
             }
 
-            li:last-child {
+            li:last-of-type {
                 border-bottom: none;
+                margin-bottom: 5px;
             }
         }
 
@@ -947,6 +948,8 @@
 
             .comment-text {
                 color: #000;
+                margin: 0;
+                white-space: pre-line;
             }
 
             &.resolved {
@@ -1251,7 +1254,7 @@
 .comments-editor {
     height: 50%;
     padding: 0;
-    border-top: 2px solid @questionnarie-question-specific-block-color;
+    border-top: 2px solid #dbdfe2;
 
     form {
         width: 100%;
@@ -1264,21 +1267,38 @@
         }
     }
 
-    .author {
-        margin-right: 10px;
-        font-style: italic;
-        font-family: Georgia, serif;
-        color: #79838a;
+    .comment {
+        background: @questionnarie-question-specific-block-color;
+        padding: 5px 17px;
+        border-bottom: 2px solid #dbdfe2;
+
+        &.isResolved {
+            background: transparent;
+        }
+
+
+        .author {
+            margin-right: 10px;
+            font-style: italic;
+            font-family: Georgia, serif;
+            color: #79838a;
+        }
+
+        .date {
+            font-family: Georgia, serif;
+            color: #98a0a5;
+            font-style: italic;
+        }
+
+        .comment-text {
+            color: #000;
+            margin: 0;
+            white-space: pre-line;
+        }
     }
 
-    .date {
-        font-family: Georgia, serif;
-        color: #98a0a5;
-        font-style: italic;
-    }
-
-    .comment-text {
-        color: #000;
+    #edit-entity-comment-row {
+        margin-top: 10px;
     }
 }
 

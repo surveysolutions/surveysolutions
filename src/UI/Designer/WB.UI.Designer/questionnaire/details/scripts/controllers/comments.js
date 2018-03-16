@@ -75,6 +75,10 @@
                 $scope.loadCommentThreads();
             });
 
+            $rootScope.$on('commentResolved', function (comment) {
+                $scope.loadCommentThreads();
+            });
+
             $rootScope.$on('questionnaireLoaded', function () {
                 $scope.loadCommentThreads();
             });
