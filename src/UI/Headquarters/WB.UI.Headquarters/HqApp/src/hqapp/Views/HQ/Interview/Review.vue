@@ -40,10 +40,8 @@ export default {
       return {
         "show-content": smallOrMedioumScreenWidth && !sidebar.sidebarHidden,
         "show-filters": smallOrMedioumScreenWidth && !sidebar.facetHidden,
-        "fullscreen-hidden-content":
-          !smallOrMedioumScreenWidth && sidebar.sidebarHidden,
-        "fullscreen-hidden-filters":
-          !smallOrMedioumScreenWidth && sidebar.facetHidden,
+        "fullscreen-hidden-content": !smallOrMedioumScreenWidth && sidebar.sidebarHidden,
+        "fullscreen-hidden-filters": !smallOrMedioumScreenWidth && sidebar.facetHidden,
         "filters-results-are-shown": !sidebar.searchResultsHidden
       };
     }

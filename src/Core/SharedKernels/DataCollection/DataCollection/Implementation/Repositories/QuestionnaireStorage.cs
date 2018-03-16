@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             return plainQuestionnaire;
         }
 
-        public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
+        public virtual void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
             string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
             this.repository.Store(questionnaireDocument, repositoryId);
