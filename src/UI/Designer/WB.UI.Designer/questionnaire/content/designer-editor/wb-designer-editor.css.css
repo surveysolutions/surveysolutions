@@ -763,8 +763,9 @@
   padding: 0 10px 0 20px;
   border-bottom: 2px solid #dbdfe2;
 }
-.comments-panel .comments-in-thread ul li:last-child {
+.comments-panel .comments-in-thread ul li:last-of-type {
   border-bottom: none;
+  margin-bottom: 5px;
 }
 .comments-panel .comments-in-thread .show-more {
   color: #2a81cb;
@@ -790,6 +791,8 @@
 }
 .comments-panel .comments-in-thread .comment .comment-text {
   color: #000;
+  margin: 0;
+  white-space: pre-line;
 }
 .comments-panel .comments-in-thread .comment.resolved {
   background: transparent;
@@ -1143,7 +1146,7 @@
 .comments-editor {
   height: 50%;
   padding: 0;
-  border-top: 2px solid #f1f2f3;
+  border-top: 2px solid #dbdfe2;
 }
 .comments-editor form {
   width: 100%;
@@ -1154,19 +1157,32 @@
   height: 100%;
   overflow: auto;
 }
-.comments-editor .author {
+.comments-editor .comment {
+  background: #f1f2f3;
+  padding: 5px 17px;
+  border-bottom: 2px solid #dbdfe2;
+}
+.comments-editor .comment.isResolved {
+  background: transparent;
+}
+.comments-editor .comment .author {
   margin-right: 10px;
   font-style: italic;
   font-family: Georgia, serif;
   color: #79838a;
 }
-.comments-editor .date {
+.comments-editor .comment .date {
   font-family: Georgia, serif;
   color: #98a0a5;
   font-style: italic;
 }
-.comments-editor .comment-text {
+.comments-editor .comment .comment-text {
   color: #000;
+  margin: 0;
+  white-space: pre-line;
+}
+.comments-editor #edit-entity-comment-row {
+  margin-top: 10px;
 }
 .highlighted-add {
   border-radius: 4px 4px 0 0;
