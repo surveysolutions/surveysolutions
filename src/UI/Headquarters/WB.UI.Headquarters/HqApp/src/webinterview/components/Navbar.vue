@@ -22,7 +22,12 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                <p class="navbar-text">{{questionnaireTitle}}</p>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><router-link class="interview-ID" active-class="" :to="toFirstSection" v-if="$store.state.webinterview.firstSectionId">
+                    {{interviewKey}}
+                </router-link></li>
+                </ul>
+                <p class="navbar-text pull-left">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="help-link"><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
                     <li class="dropdown language">
