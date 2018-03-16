@@ -1,5 +1,6 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Snapshots;
+using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -12,13 +13,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             Key = key;
             HasErrors = hasErrors;
             Status = status;
+            Entities = new List<InterviewEntity>();
         }
 
         public Guid Id { get; }
 
         public string Key { get; }
-
         public bool HasErrors { get; }
         public InterviewStatus Status { get; set; }
+        public List<InterviewEntity> Entities { get; set; }
     }
 }

@@ -26,14 +26,25 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, 
-            IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, 
-            IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, 
-            IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory, 
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
+            ICommandService commandService,
+            IQuestionnaireStorage questionnaireRepository,
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
             IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage) : 
-            base(statefulInterviewRepository, commandService, questionnaireRepository, 
-                webInterviewNotificationService, interviewEntityFactory, imageFileStorage, audioFileStorage)
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            IAudioFileStorage audioFileStorage,
+            IAuthorizedUser authorizedUser,
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewFactory interviewFactory,
+            IStatefullInterviewSearcher statefullInterviewSearcher) : base(statefulInterviewRepository,
+            commandService,
+            questionnaireRepository,
+            webInterviewNotificationService,
+            interviewEntityFactory,
+            imageFileStorage,
+            interviewBrokenPackagesService,
+            audioFileStorage)
         {
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
