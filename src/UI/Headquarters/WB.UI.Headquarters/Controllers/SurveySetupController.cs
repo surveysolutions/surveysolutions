@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -186,7 +187,7 @@ namespace WB.UI.Headquarters.Controllers
                 ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                 try
                 {
-                    this.interviewImportService.VerifyAssignments(questionnaireIdentity, interviewImportProcessId, model.File.FileName);
+                    this.interviewImportService.VerifyAssignments(questionnaireIdentity, interviewImportProcessId, Path.GetFileName(model.File.FileName));
                 }
                 finally
                 {
