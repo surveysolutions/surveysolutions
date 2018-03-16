@@ -285,7 +285,7 @@ namespace WB.UI.Headquarters.Controllers
                     preloadedSample?.FileName));
             }
 
-            this.TempData[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
+            this.Session[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
@@ -343,7 +343,7 @@ namespace WB.UI.Headquarters.Controllers
                     verificationState.FileName));
             }
 
-            this.TempData[$"InterviewImportConfirmation-{interviewImportProcessId}"] = new PreloadedDataConfirmationModel
+            this.Session[$"InterviewImportConfirmation-{interviewImportProcessId}"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = questionnaireId,
                 Version = version,
@@ -388,9 +388,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var key = $"InterviewImportConfirmation-{id}";
             PreloadedDataConfirmationModel model = null;
-            if (this.TempData.ContainsKey(key))
+            if (this.Session[key] != null)
             {
-                model = this.TempData[key] as PreloadedDataConfirmationModel;
+                model = this.Session[key] as PreloadedDataConfirmationModel;
             }
             if (model == null)
             {
