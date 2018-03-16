@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             IQuestionnaireStorage questionnaireStorage = null)
             => new InterviewDenormalizer(interviewFactory ?? Mock.Of<IInterviewFactory>(),
                 summaries ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(), new EntitySerializer<object>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
 
         [Test]
         public void when_remove_rosters_should_be_questionnaire_identity_getting_from_inner_cache()
