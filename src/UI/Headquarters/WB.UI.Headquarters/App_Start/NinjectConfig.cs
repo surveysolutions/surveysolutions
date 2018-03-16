@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
@@ -159,6 +160,39 @@ namespace WB.UI.Headquarters
             var sampleImportSettings = new SampleImportSettings(
                 settingsProvider.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
 
+            ExternalStoragesSettings externalStoragesSettings = new FakeExternalStoragesSettings();
+
+            var externalStoragesSection = settingsProvider.TryGetSection<ExternalStoragesConfigSection>("externalStorages");
+            if (externalStoragesSection != null)
+            {
+                externalStoragesSettings = new ExternalStoragesSettings
+                {
+                    OAuth2 = new ExternalStoragesSettings.OAuth2Settings
+                    {
+                        RedirectUri = externalStoragesSection.OAuth2.RedirectUri,
+                        ResponseType = externalStoragesSection.OAuth2.ResponseType,
+                        OneDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.OneDrive.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.OneDrive.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.OneDrive.Scope
+                        },
+                        Dropbox = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.Dropbox.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.Dropbox.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.Dropbox.Scope
+                        },
+                        GoogleDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.GoogleDrive.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.GoogleDrive.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.GoogleDrive.Scope
+                        },
+                    }
+                };
+            }
+
             //for assembly relocation during migration
             var legacyAssemblySettings = new LegacyAssemblySettings()
             {
@@ -183,7 +217,8 @@ namespace WB.UI.Headquarters
                     sampleImportSettings,
                     synchronizationSettings,
                     trackingSettings,
-                    interviewCountLimit),
+                    interviewCountLimit,
+                    externalStoragesSettings: externalStoragesSettings),
                 new FileStorageModule(basePath),
                 new QuartzModule(),
                 new WebInterviewModule(),
