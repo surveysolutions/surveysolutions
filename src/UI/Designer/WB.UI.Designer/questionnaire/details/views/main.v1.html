@@ -650,9 +650,9 @@
                                     </li>
                                 </ul>
                                 <div ng-if="commentThread.resolvedComments.length > 0">
-                                    <a href="javascript:void(0);" ng-click="commentThread.toggleResolvedComments()">
-                                        <span ng-show="commentThread.toggleResolvedComments" ng-i18next="[i18next]({count: commentThread.resolvedComments.length})ViewResolvedCommentsCounter"></span>
-                                        <span ng-hide="commentThread.toggleResolvedComments" ng-i18next>HideResolvedComments</span>
+                                    <a href="javascript:void(0);" class="show-more" ng-click="commentThread.toggleResolvedComments()">
+                                        <span ng-hide="commentThread.resolvedAreExpanded" ng-i18next="[i18next]({count: commentThread.resolvedComments.length})ViewResolvedCommentsCounter"></span>
+                                        <span ng-show="commentThread.resolvedAreExpanded" ng-i18next>HideResolvedComments</span>
                                     </a>
                                     <ul ng-show="commentThread.resolvedAreExpanded">
                                         <li class="comment" ng-class="{resolved: comment.isResolved }" ng-repeat="comment in commentThread.resolvedComments">

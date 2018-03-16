@@ -2,8 +2,9 @@
     <div class="form-holder">
         <div ng-repeat="comment in comments">
             <button ng-hide="comment.isResolved" type="button" class="btn btn-sm btn-link pull-right" ng-click="resolveComment(comment)">Resolve</button>
-            <span>{{comment.userEmail}}</span><span class="text-success">{{comment.date}}</span>
-            <p>{{comment.comment}}</p>
+            <span class="author">{{comment.userEmail}}</span>
+            <span class="date">{{comment.date}}</span>
+            <p class="comment-text">{{comment.comment}}</p>
         </div>
 
         <div class="row" id="edit-entity-comment-row">

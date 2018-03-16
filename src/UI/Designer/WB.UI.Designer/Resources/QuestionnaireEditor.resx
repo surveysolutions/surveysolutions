@@ -1084,4 +1084,10 @@
   <data name="HideResolvedComments" xml:space="preserve">
     <value>Hide resolved comments</value>
   </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Add comment</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Hide comments</value>
+  </data>
 </root>
