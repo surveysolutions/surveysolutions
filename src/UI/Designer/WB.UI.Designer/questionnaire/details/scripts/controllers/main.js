@@ -99,6 +99,23 @@ angular.module('designerApp')
                     $scope.showFindReplaceDialog();
                 }
             });
+
+            $scope.isCommentsBlockVisible = false;
+            $scope.toggleComments = function (item) {
+                $scope.isCommentsBlockVisible = !$scope.isCommentsBlockVisible;
+                if ($scope.isCommentsBlockVisible) {
+                    $rootScope.$broadcast("commentsOpened", {});
+                }
+            };
+
+            $rootScope.$on('openCommentEditorRequested', function (event, data) {
+                if ($scope.isCommentsBlockVisible === true)
+                    return;
+                $scope.isCommentsBlockVisible = true;
+                $rootScope.$broadcast("commentsOpened", {});
+            });
+
+
             var searchBoxOpened = false;
             $scope.showFindReplaceDialog = function() {
                 if (!searchBoxOpened) {

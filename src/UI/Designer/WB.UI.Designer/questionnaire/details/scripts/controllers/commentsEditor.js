@@ -33,6 +33,7 @@
                     .then(function() {
                         comment.resolveDate = new Date();
                         comment.isResolved = true;
+                        $rootScope.$broadcast("commentResolved", comment);
                     });
             }
 
