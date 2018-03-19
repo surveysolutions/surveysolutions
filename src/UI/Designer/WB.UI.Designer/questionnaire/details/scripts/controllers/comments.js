@@ -23,7 +23,6 @@
                                 comment.isResolved = !_.isNull(comment.resolveDate || null);
                             });
 
-                            console.log(commentThread.indexOfLastUnresolvedComment);
                             if (commentThread.indexOfLastUnresolvedComment != null) {
                                 var comments = commentThread.comments.slice(0, commentThread.indexOfLastUnresolvedComment);
                                 var resolvedComments = commentThread.comments.slice(commentThread.indexOfLastUnresolvedComment);
