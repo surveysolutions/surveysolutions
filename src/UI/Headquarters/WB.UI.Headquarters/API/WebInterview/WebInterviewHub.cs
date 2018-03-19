@@ -21,6 +21,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
     {
+        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewFactory interviewFactory;
@@ -43,9 +44,9 @@ namespace WB.UI.Headquarters.API.WebInterview
             webInterviewNotificationService,
             interviewEntityFactory,
             imageFileStorage,
-            interviewBrokenPackagesService,
             audioFileStorage)
         {
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewFactory = interviewFactory;
@@ -149,7 +150,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                     this.commandService.Execute(command);
                 }
             }
+        }
 
+        public override InterviewInfo GetInterviewDetails()
+        {
+            var interviewDetails = base.GetInterviewDetails();
+            interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
+            return interviewDetails;
         }
     }
 }

@@ -178,6 +178,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export questionnaire.
+        /// </summary>
+        internal static string ExportQuestionnaire {
+            get {
+                return ResourceManager.GetString("ExportQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to History.
         /// </summary>
         internal static string History {

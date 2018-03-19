@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Type;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Designer.Translations

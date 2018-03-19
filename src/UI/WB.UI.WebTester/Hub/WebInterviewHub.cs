@@ -19,7 +19,6 @@ namespace WB.UI.WebTester.Hub
             IWebInterviewNotificationService webInterviewNotificationService,
             IWebInterviewInterviewEntityFactory interviewEntityFactory,
             IImageFileStorage imageFileStorage,
-            IInterviewBrokenPackagesService interviewBrokenPackagesService,
             IAudioFileStorage audioFileStorage,
             IEvictionNotifier evictionNotify) : base(statefulInterviewRepository,
             commandService,
@@ -27,7 +26,6 @@ namespace WB.UI.WebTester.Hub
             webInterviewNotificationService,
             interviewEntityFactory,
             imageFileStorage,
-            interviewBrokenPackagesService,
             audioFileStorage)
         {
             this.evictionNotify = evictionNotify;
