@@ -16,6 +16,7 @@
     <PackageReference Include="AngleSharp" Version="0.9.9" />
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="DotNetZip" Version="1.10.1" />
+    <PackageReference Include="EPPlus" Version="4.1.1" />
     <PackageReference Include="FluentMigrator" Version="1.6.2" />
     <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
     <PackageReference Include="FluentMigrator.Tools" Version="1.6.2" />
@@ -49,6 +50,9 @@
   <ItemGroup>
     <Reference Include="Dapper">
       <HintPath>..\..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\bin\Debug\net471\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

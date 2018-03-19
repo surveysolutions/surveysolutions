@@ -20,10 +20,12 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
@@ -93,6 +95,8 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IWebInterviewAllowService, WebInterviewAllowService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
+            registry.Bind<ITranslationsExportService, TranslationsExportService>();
+            registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
         }
     }
 }
