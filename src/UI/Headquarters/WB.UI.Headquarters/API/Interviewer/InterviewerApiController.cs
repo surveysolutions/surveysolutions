@@ -74,27 +74,36 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
-        public virtual HttpResponseMessage Get()
+        [WriteToSyncLog(SynchronizationLogType.GetApk)]
+        public virtual async Task<HttpResponseMessage> Get()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+                return await this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
 
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
+            return await this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
         }
-
+        
         [HttpGet]
-        public virtual HttpResponseMessage GetExtended()
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
+        public virtual async Task<HttpResponseMessage> GetExtended()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
+                return await this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
 
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+            return await this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
         }
 
-        private HttpResponseMessage HttpResponseMessage(string appName)
+        private async Task<HttpResponseMessage> HttpResponseMessage(string appName)
         {
+            var authHeader = Request.Headers.Authorization?.ToString();
+
+            if (authHeader != null)
+            {
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+            }
+
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
@@ -113,8 +122,16 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
-        public virtual HttpResponseMessage Patch(int deviceVersion)
+        [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
+        public virtual async Task<HttpResponseMessage> Patch(int deviceVersion)
         {
+            var authHeader = Request.Headers.Authorization?.ToString();
+
+            if (authHeader != null)
+            {
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+            }
+
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if(clientVersion == ClientVersionFromUserAgent.WithMaps)
                 return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
@@ -123,8 +140,16 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
-        public virtual HttpResponseMessage PatchExtended(int deviceVersion)
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
+        public virtual async Task<HttpResponseMessage> PatchExtended(int deviceVersion)
         {
+            var authHeader = Request.Headers.Authorization?.ToString();
+
+            if (authHeader != null)
+            {
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+            }
+
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
                 return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
