@@ -13,7 +13,7 @@
                     <span class="icon-bar bottom-menu"></span>
                 </button>
                 <div class="navbar-brand">
-                    <router-link class="logo" :to="toFirstSection" v-if="$store.state.webinterview.firstSectionId && hqLink == null"></router-link>
+                    <router-link class="logo" :to="toCoverPage" v-if="hqLink == null"></router-link>
                     <a :href="hqLink" v-if="hqLink != null" class="logo"></a>
                 </div>  
                 <button v-if="this.$config.inWebTesterMode" type="button" class="btn btn-default btn-link btn-icon" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
@@ -107,6 +107,9 @@
             },
             toFirstSection(){
                 return { name: 'section', params: { sectionId: this.$store.state.webinterview.firstSectionId } }
+            },
+            toCoverPage() {
+                return { name: 'prefilled' }
             },
             interviewKey() {
                 return this.$store.state.webinterview.interviewKey || this.$t("WebInterviewUI.WebInterview");
