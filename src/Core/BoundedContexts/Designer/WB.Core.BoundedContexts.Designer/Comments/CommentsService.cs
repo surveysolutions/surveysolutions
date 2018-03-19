@@ -48,20 +48,20 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             };
         }
 
-        public void PostComment(AddCommentModel comment)
+        public void PostComment(Guid commentId, Guid questionnaireId, Guid entityId, string commentComment, string userName, string userEmail)
         {
             var commentInstanse = new CommentInstance
             {
-                Id = comment.Id,
-                QuestionnaireId = comment.QuestionnaireId,
-                EntityId = comment.EntityId,
-                Comment = comment.Comment,
+                Id = commentId,
+                QuestionnaireId = questionnaireId,
+                EntityId = entityId,
+                Comment = commentComment,
                 Date = DateTime.UtcNow,
                 ResolveDate = null,
-                UserName = comment.UserName,
-                UserEmail = comment.UserEmail
+                UserName = userName,
+                UserEmail = userEmail
             };
-            this.comments.Store(commentInstanse, comment.Id);
+            this.comments.Store(commentInstanse, commentId);
         }
 
         public void ResolveComment(Guid commentdId)
