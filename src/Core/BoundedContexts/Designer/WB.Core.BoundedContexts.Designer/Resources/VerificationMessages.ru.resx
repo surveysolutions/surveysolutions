@@ -714,7 +714,4 @@
   <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
     <value>@rowname переменная не поддерживается больше.</value>
   </data>
-  <data name="WB0280_ComboboxShouldNotHaveParentValue" xml:space="preserve">
-    <value>Вопрос список не может содержать ссылки на родительский вопрос в опциях.</value>
-  </data>
 </root>
