@@ -1,5 +1,6 @@
 //navigation
-$width-right-menu: 560px;
+$max-width-right-menu: 560px;
+$min-width-right-menu: 220px;
 $width-left-menu: 120px;
 $width-right-menu-small: 380px;
 
@@ -226,7 +227,8 @@ $width-right-menu-small: 380px;
 		}
 	}
 	.nav.navbar-right{
-		max-width: $width-right-menu;
+		max-width: $max-width-right-menu;
+		min-width: $min-width-right-menu;
 		& > li{
 			float: right;
 			&.help-link{
