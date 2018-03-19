@@ -20,7 +20,7 @@
                         $scope.comments = data || [];
 
                         _.forEach($scope.comments, function(comment) {
-                            comment.date = moment(comment.date).format("LLL");
+                            comment.date = moment.utc(comment.date).local().format("LLL");
                             comment.isResolved = !_.isNull(comment.resolveDate || null);
                         });
                         
