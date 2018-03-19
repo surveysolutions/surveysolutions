@@ -1065,4 +1065,7 @@
     <value>Выберите элемент из списка</value>
     <comment>Выберите элемент из списка</comment>
   </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Использовать подпись</value>
+  </data>
 </root>

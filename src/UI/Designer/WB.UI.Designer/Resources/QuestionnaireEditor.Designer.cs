@@ -943,6 +943,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use signature pad.
+        /// </summary>
+        public static string IsSignature {
+            get {
+                return ResourceManager.GetString("IsSignature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log out.
         /// </summary>
         public static string LogOut {

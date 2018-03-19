@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 
@@ -20,9 +21,8 @@ namespace WB.UI.WebTester.Services.Implementation
         }
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
-        {
-            throw new NotImplementedException();
-        }
+            => this.mediaStorage.GetArea(interviewId).Select(x =>
+                new InterviewBinaryDataDescriptor(interviewId, x.Filename, x.MimeType, () => x.Data)).ToList();
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {

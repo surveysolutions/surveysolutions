@@ -51,9 +51,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 isPreFilled: false, scope: QuestionScope.Interviewer,   
                 validationConditions: new List<ValidationCondition>(),validationExpression:null, validationMessage:null));
 
-            questionnaire.UpdateMultimediaQuestion(questionId: questionMultimediaId, title: "title", variableName: "variableName4", 
+            questionnaire.UpdateMultimediaQuestion(
+                Create.Command.UpdateMultimediaQuestion(
+                questionId: questionMultimediaId, title: "title", variableName: "variableName4", 
                 variableLabel: "variableLabel4", enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, 
-                scope: QuestionScope.Interviewer, properties: Create.QuestionProperties());
+                scope: QuestionScope.Interviewer, properties: Create.QuestionProperties(), isSignature: false));
 
             questionnaire.UpdateMultiOptionQuestion(questionId: questionMultyOptionId, title: "title", variableName: "variableName5", 
                 variableLabel: "variableLabel5", scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, 

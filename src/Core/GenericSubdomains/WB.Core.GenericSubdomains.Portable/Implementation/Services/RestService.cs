@@ -385,8 +385,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private RestContentCompressionType GetContentCompressionType(HttpContentHeaders headers)
         {
-            IEnumerable<string> acceptedEncodings;
-            headers.TryGetValues("Content-Encoding", out acceptedEncodings);
+            headers.TryGetValues("Content-Encoding", out var acceptedEncodings);
 
             if (acceptedEncodings == null) return RestContentCompressionType.None;
 

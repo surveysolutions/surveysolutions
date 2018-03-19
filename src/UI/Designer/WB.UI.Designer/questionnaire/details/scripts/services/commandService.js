@@ -271,6 +271,9 @@
                     case "TextList":
                         command.maxAnswerCount = question.maxAnswerCount;
                         break;
+                    case "Multimedia":
+                        command.IsSignature = question.isSignature;
+                        break;
                 }
                 var questionType = question.type === "MultyOption" ? "MultiOption" : question.type; // we have different name in enum and in command. Correct one is 'Multi' but we cant change it in enum
                 var commandName = "Update" + questionType + "Question";
