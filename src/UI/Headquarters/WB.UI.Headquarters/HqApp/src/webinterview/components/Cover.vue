@@ -42,6 +42,8 @@
                     <p>
                         <b v-if="question.type == 'Gps'">
                             <a :href="getGpsUrl(question)" target="_blank">{{question.answer}}</a>
+                            <br/>
+                            <img v-bind:src="googleMapPosition(question.answer)" draggable="false" />
                         </b>
                         <b v-else-if="question.type == 'DateTime'" v-dateTimeFormatting v-html="question.answer">
                         </b>
@@ -118,6 +120,11 @@ export default {
         }
     },
     methods: {
+        googleMapPosition(answer) {
+            return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${answer}`
+                + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${answer}`
+                + `&key=${this.$config.googleApiKey}`
+        },
         fetch() {
             this.$store.dispatch("fetchCoverInfo")
         },
