@@ -364,7 +364,12 @@ if (!window.AudioRecorder) {
             if (!navigator.requestAnimationFrame)
                 navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
 
-            navigator.getUserMedia(settings, successCallback, config.errorCallback);
+            if(!navigator.getUserMedia) {
+                config.errorCallback();
+            }
+            else {
+                navigator.getUserMedia(settings, successCallback, config.errorCallback);
+            }
         }
 
         return self;
