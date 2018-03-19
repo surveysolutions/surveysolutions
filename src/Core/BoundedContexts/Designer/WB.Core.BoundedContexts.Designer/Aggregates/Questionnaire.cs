@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -1440,52 +1441,54 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, 
-            string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
+        public void UpdateMultimediaQuestion(
+            UpdateMultimediaQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
             PrepareGeneralProperties(ref title, ref variableName);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
 
-            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-            IQuestion newQuestion = CreateQuestion(
-                    questionId,
-                    QuestionType.Multimedia,
-                    scope,
-                    title,
-                    variableName,
-                    variableLabel,
-                    enablementCondition,
-                    hideIfDisabled,
-                    Order.AZ,
-                    false,
-                    instructions,
-                    properties,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new List<ValidationCondition>(),
-                    null,
-                    false);
-
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            MultimediaQuestion newQuestion = (MultimediaQuestion) CreateQuestion(
+                command.QuestionId,
+                QuestionType.Multimedia,
+                command.Scope,
+                title,
+                variableName,
+                command.VariableLabel,
+                command.EnablementCondition,
+                command.HideIfDisabled,
+                Order.AZ,
+                false,
+                command.Instructions,
+                command.Properties,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                new List<ValidationCondition>(),
+                null,
+                false);
+            newQuestion.IsSignature = command.IsSignature;
             if (question != null)
             {
                 this.innerDocument.ReplaceEntity(question, newQuestion);

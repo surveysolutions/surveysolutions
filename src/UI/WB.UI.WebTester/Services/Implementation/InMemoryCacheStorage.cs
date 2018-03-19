@@ -8,7 +8,14 @@ namespace WB.UI.WebTester.Services.Implementation
     {
         private readonly ConcurrentDictionary<Guid, Dictionary<TK, T>> memoryCache =
             new ConcurrentDictionary<Guid, Dictionary<TK, T>>();
-        
+
+        public IEnumerable<T> GetArea(Guid area)
+        {
+            if (!memoryCache.TryGetValue(area, out var cache)) return null;
+
+            return cache.Values;
+        }
+
         public void Remove(TK id, Guid area = default(Guid))
         {
             if (!memoryCache.TryGetValue(area, out var cache)) return;
