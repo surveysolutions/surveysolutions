@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             var exceptionMessage = "message";
             var tabletDiagnosticServiceMock= Substitute.For<ITabletDiagnosticService>();
 
-            tabletDiagnosticServiceMock.UpdateTheApp(CancellationToken.None).ThrowsForAnyArgs(new Exception(exceptionMessage));
+            tabletDiagnosticServiceMock.UpdateTheApp(CancellationToken.None, true).ThrowsForAnyArgs(new Exception(exceptionMessage));
 
             var checkNewVersionViewModel = CreateCheckNewVersionViewModel(tabletDiagnosticService: tabletDiagnosticServiceMock);
 
