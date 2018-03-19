@@ -113,6 +113,11 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             }
         }
 
+        public void Flush()
+        {
+            if(!this.isCacheEnabled) this.storage.Flush();
+        }
+
         private TEntity GetByIdUsingCache(string id)
         {
             if (this.cache.ContainsKey(id))
