@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -78,12 +79,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         [TestCase(QuestionType.Numeric, 1)]
         [TestCase(QuestionType.Numeric, 1.3)]
         [TestCase(QuestionType.Text, "answer text")]
-        [TestCase(QuestionType.DateTime, "2012-02-01T22:00:00")]
         [TestCase(QuestionType.QRBarcode, "some answer")]
         public void Update_When_event_with_answer_on_featured_question_published_Then_answer_value_be_equal_passed_answer(QuestionType type,
             object answer)
         {
-            var questionId = Guid.Parse("10000000000000000000000000000000");
+            var questionId = Id.g1;
 
             var savedInterviewSummary =
                 CreateInterviewSummaryQuestions(
@@ -98,6 +98,44 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 this.CreateQuestionAnsweredEventByQuestionType(questionId, type, answer));
 
             Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == questionId).Answer, Is.EqualTo(answer.ToString()));
+        }
+
+        [Test]
+        public void when_date_time_featured_questions_answered()
+        {
+            var dateQuestionId = Id.g1;
+            var dateTimeQuestionId = Id.g2;
+
+            var savedInterviewSummary =
+                CreateInterviewSummaryQuestions(
+                    new QuestionAnswer()
+                    {
+                        Questionid = dateQuestionId
+                    },
+                    new QuestionAnswer()
+                    {
+                        Questionid = dateTimeQuestionId
+                    });
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.DateTimeQuestion(questionId: dateQuestionId, isTimestamp: false),
+                Create.Entity.DateTimeQuestion(questionId: dateTimeQuestionId, isTimestamp: true)
+            );
+
+            var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(questionnaire);
+
+            var dateAnswer = new DateTime(2010, 5, 17);
+            var timestampAnswer = new DateTime(2011, 1, 17, 20, 10, 38);
+
+            // act
+            var updatedInterviewSummary =  interviewSummaryEventHandler.Update(savedInterviewSummary,
+                this.CreatePublishableEvent(Create.Event.DateTimeQuestionAnswered(dateQuestionId, dateAnswer)));
+            updatedInterviewSummary =  interviewSummaryEventHandler.Update(savedInterviewSummary,
+                this.CreatePublishableEvent(Create.Event.DateTimeQuestionAnswered(dateTimeQuestionId, timestampAnswer)));
+
+            // assert
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == dateQuestionId).Answer, Is.EqualTo(dateAnswer.ToString(DateTimeFormat.DateFormat)));
+            Assert.That(updatedInterviewSummary.AnswersToFeaturedQuestions.First(x => x.Questionid == dateTimeQuestionId).Answer, Is.EqualTo(timestampAnswer.ToString(DateTimeFormat.DateWithTimeFormat)));
         }
 
         [Test]
@@ -137,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             {
                 case QuestionType.DateTime:
                     return new DateTimeQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now,
-                        DateTime.ParseExact(answer.ToString(), ExportFormatSettings.ExportDateTimeFormat, CultureInfo.InvariantCulture));
+                        DateTime.Parse(answer.ToString()));
                 case QuestionType.Numeric:
                     if (answer is int)
                         return new NumericIntegerQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (int)answer);

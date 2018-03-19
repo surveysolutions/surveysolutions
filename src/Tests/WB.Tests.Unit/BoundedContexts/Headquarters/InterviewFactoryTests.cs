@@ -1,41 +1,35 @@
 using System;
-using Moq;
+using AutoFixture;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters
 {
     [TestOf(typeof(InterviewFactory))]
-    internal class InterviewFactoryTests
+    internal class InterviewFactoryFlagsTests
     {
-        private static InterviewFactory CreateInterviewFactory(
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryRepository = null,
-            IQuestionnaireStorage questionnaireStorage = null,
-            ISessionProvider sessionProvider = null,
-            IEntitySerializer<object> jsonSerializer = null)
-            => new InterviewFactory(
-                summaryRepository: interviewSummaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                sessionProvider: sessionProvider ?? Mock.Of<ISessionProvider>());
-        [Test]
-        public void when_remove_flag_question_received_by_interviewer()
+        private Fixture fixture;
+        private Guid interviewId;
+        private Identity questionIdentity;
+
+        [SetUp]
+        public void Setup()
         {
-            //arrange
-            //arrange
-            var interviewId = Guid.Parse("11111111111111111111111111111111");
-            var questionIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"),
-                Create.RosterVector(1));
+            this.fixture = Create.Other.AutoFixture();
 
             var interviewSummaryRepository = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
+            fixture.Register<IQueryableReadSideRepositoryReader<InterviewSummary>>(() => interviewSummaryRepository);
+
+            //arrange
+            this.interviewId = Id.g1;
+            this.questionIdentity = Identity.Create(Id.g2, Create.RosterVector(1));
+
             interviewSummaryRepository.Store(new InterviewSummary
             {
                 SummaryId = interviewId.FormatGuid(),
@@ -43,11 +37,16 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 Status = InterviewStatus.RejectedBySupervisor,
                 ReceivedByInterviewer = true
             }, interviewId.FormatGuid());
+        }
 
-            var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository);
+        [Test]
+        public void when_remove_flag_question_received_by_interviewer()
+        {
+            var factory = fixture.Create<InterviewFactory>();
 
             //act
             var exception = Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity, false));
+            
             //assert
             Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
@@ -56,26 +55,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         [Test]
         public void when_set_flag_question_received_by_interviewer()
         {
-            //arrange
-            var interviewId = Guid.Parse("11111111111111111111111111111111");
-            var questionIdentity = Identity.Create(Guid.Parse("22222222222222222222222222222222"),
-                Create.RosterVector(1));
-
-            var interviewSummaryRepository = Create.Storage.InMemoryReadeSideStorage<InterviewSummary>();
-            interviewSummaryRepository.Store(new InterviewSummary
-            {
-                SummaryId = interviewId.FormatGuid(),
-                InterviewId = interviewId,
-                Status = InterviewStatus.RejectedBySupervisor,
-                ReceivedByInterviewer = true
-            }, interviewId.FormatGuid());
-
-            var factory = CreateInterviewFactory(interviewSummaryRepository: interviewSummaryRepository);
+            var factory = fixture.Create<InterviewFactory>();
 
             //act
             var exception = Assert.Catch<InterviewException>(() => factory.SetFlagToQuestion(interviewId, questionIdentity, true));
+
             //assert
-            Assert.That(exception, Is.Not.Null); 
+            Assert.That(exception, Is.Not.Null);
             Assert.That(exception.Message, Is.EqualTo($"Can't modify Interview {interviewId} on server, because it received by interviewer."));
         }
     }

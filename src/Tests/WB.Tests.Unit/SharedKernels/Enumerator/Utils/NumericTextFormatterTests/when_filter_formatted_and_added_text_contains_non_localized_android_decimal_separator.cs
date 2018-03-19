@@ -1,11 +1,14 @@
-﻿using Machine.Specifications;
+﻿using FluentAssertions;
+using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
 {
     public class when_filter_formatted_and_added_text_contains_non_localized_android_decimal_separator : NumericTextFormatterTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_return_empty_string()
         {
             var numericTextFormatterSettings = new NumericTextFormatterSettings
             {
@@ -18,16 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
                 UseGroupSeparator = true
             };
 
-            formatter = CreateNumericTextFormatter(numericTextFormatterSettings);
-        };
+            var formatter = CreateNumericTextFormatter(numericTextFormatterSettings);
 
-        Because of = () => filteredResult = formatter.FilterFormatted(addedText: ".", sourceText: "1111", insertToIndex: 4);
+            var filteredResult = formatter.FilterFormatted(addedText: ".", sourceText: "1111", insertToIndex: 4);
 
-        It should_return_empty_string = () =>
-            filteredResult.ShouldEqual(",");
-        
-        static NumericTextFormatter formatter;
-
-        private static string filteredResult;
+            filteredResult.Should().Be(",");
+        }
     }
 }

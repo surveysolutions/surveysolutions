@@ -2075,7 +2075,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfOptionsCanNotBeParsed(Option[] options)
         {
-            if (options.Any(x => !int.TryParse(x.Value, NumberStyles.None, CultureInfo.InvariantCulture, out int _)))
+            var numberStyles = NumberStyles.None | NumberStyles.AllowLeadingSign | NumberStyles.AllowTrailingWhite | NumberStyles.AllowLeadingWhite;
+            if (options.Any(x => !int.TryParse(x.Value,
+                numberStyles,
+                CultureInfo.InvariantCulture, out int _)))
             {
                 throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters,
                     ExceptionMessages.OptionValuesShouldBeNumbers);
