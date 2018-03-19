@@ -102,8 +102,8 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                             throw new InvalidExcelFileException(ExceptionMessages.TranlationExcelFileHasErrors) { FoundErrors = translationErrors };
 
                         var questionnaire = this.questionnaireStorage.GetById(questionnaireId.FormatGuid());
-                        HashSet<Guid> idsOfAllQuestionnaireEntities =
-                            new HashSet<Guid>(questionnaire.Children.TreeToEnumerable(x => x.Children).Select(x => x.PublicKey));
+                        Dictionary<Guid, bool> idsOfAllQuestionnaireEntities =
+                            questionnaire.Children.TreeToEnumerable(x => x.Children).ToDictionary(composite => composite.PublicKey, x=>x is Group);
 
                         var translationInstances = new List<TranslationInstance>();
                         foreach (var worksheet in sheetsWithTranslation)
@@ -117,11 +117,11 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                                 if (string.IsNullOrWhiteSpace(importedTranslation.Translation)) continue;
 
                                 var questionnaireEntityId = Guid.Parse(importedTranslation.EntityId);
-                                if (!idsOfAllQuestionnaireEntities.Contains(questionnaireEntityId)) continue;
+                                if (!idsOfAllQuestionnaireEntities.Keys.Contains(questionnaireEntityId)) continue;
 
                                 var translationType = (TranslationType) Enum.Parse(typeof(TranslationType), importedTranslation.Type);
 
-                                var cleanedValue = this.GetCleanedValue(translationType, importedTranslation.Translation);
+                                var cleanedValue = this.GetCleanedValue(translationType, idsOfAllQuestionnaireEntities[questionnaireEntityId], importedTranslation.Translation);
 
                                 var translationInstance = new TranslationInstance
                                 {
@@ -155,13 +155,15 @@ namespace WB.Core.BoundedContexts.Designer.Translations
             }
         }
 
-        private string GetCleanedValue(TranslationType translationType, string value)
+        private string GetCleanedValue(TranslationType translationType, bool isGroup, string value)
         {
             switch (translationType)
             {
                 case TranslationType.Title:
                 case TranslationType.Instruction:
-                    return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value));
+                    return isGroup ? 
+                        System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value, true)):
+                        System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value));                
                 default:
                     return System.Web.HttpUtility.HtmlDecode(CommandUtils.SanitizeHtml(value, true));
             }
