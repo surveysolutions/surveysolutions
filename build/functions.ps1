@@ -317,12 +317,24 @@ function CopyCapi($Project, $source, $cleanUp) {
 }
 
 function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
-    if($branch.ToLower() -eq 'release') {
-        $branch = ""
-    } else {
-        $branch = " $branch"
-    }
-    $ver = $Version + "." + $BuildNumber
+	if($branch.ToLower() -eq 'release') {
+		$branch = ""
+	} else {
+		$branch = " $branch"
+	}
+
+	if ($Version -match "^[0-9]+\.[0-9]+$") {
+		$ver = $Version + ".0." + $BuildNumber
+	}
+	else {
+		if ($Version -match "^[0-9]+\.[0-9]+\.[0-9]+$") {
+			$ver = $Version + "." + $BuildNumber
+		}
+		else {
+			Throw "Version string $Version must be of form YYY.MM or YYYY.MM.#"
+		}
+	}
+
     $NewVersion = 'AssemblyVersion("' + $ver + '")';
     $NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
     $NewInformationalVerson = "AssemblyInformationalVersion(""$Version (build $BuildNumber)$branch"")"

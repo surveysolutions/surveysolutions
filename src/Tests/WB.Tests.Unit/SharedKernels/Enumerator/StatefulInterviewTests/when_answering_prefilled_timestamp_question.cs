@@ -1,22 +1,21 @@
-﻿using System;
+using System;
 using System.Globalization;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_answering_prefilled_timestamp_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -29,21 +28,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             interview.AnswerDateTimeQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, dateAnswer);
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearmDown() 
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_DateTimeQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_DateTimeQuestionAnswered_event () =>
             interview
                 .GetAnswerAsString(Create.Entity.Identity(questionId, RosterVector.Empty), new CultureInfo("ru-RU"))
-                .ShouldEqual(dateAnswer.ToString(DateTimeFormat.DateWithTimeFormat));
+                .Should().Be(dateAnswer.ToString(DateTimeFormat.DateWithTimeFormat));
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

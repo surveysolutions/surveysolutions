@@ -473,9 +473,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
                     return questionView;
+                case QuestionType.Multimedia:
+                    var multimediaQuestion = (MultimediaQuestion) question;
+                    questionView.IsSignature = multimediaQuestion.IsSignature;
+                    return questionView;
                 case QuestionType.Audio:
                 case QuestionType.QRBarcode:
-                case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:
                 case QuestionType.Area:
                     return questionView;

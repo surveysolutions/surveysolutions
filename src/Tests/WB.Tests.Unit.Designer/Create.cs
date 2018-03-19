@@ -54,6 +54,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -379,7 +380,7 @@ namespace WB.Tests.Unit.Designer
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string title = "test", QuestionScope scope = QuestionScope.Interviewer
-            , bool hideIfDisabled = false)
+            , bool hideIfDisabled = false, bool isSignature = false)
         {
             return new MultimediaQuestion("Question T")
             {
@@ -391,7 +392,8 @@ namespace WB.Tests.Unit.Designer
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                QuestionText = title
+                QuestionText = title,
+                IsSignature = isSignature
             };
         }
 
@@ -1175,6 +1177,23 @@ namespace WB.Tests.Unit.Designer
             {
                 return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
             }
+
+            public static UpdateMultimediaQuestion UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string instructions, string enablementCondition, string variableLabel, bool hideIfDisabled, Guid responsibleId, QuestionScope scope, QuestionProperties properties, bool isSignature)
+            {
+                return new UpdateMultimediaQuestion(Guid.NewGuid(), questionId, responsibleId, new CommonQuestionParameters
+                {
+                    EnablementCondition = enablementCondition,
+                    HideIfDisabled = hideIfDisabled,
+                    Title = title,
+                    Instructions = instructions,
+                    VariableName = variableName,
+                    VariableLabel = variableLabel,
+                    HideInstructions = properties.HideInstructions
+                }, scope)
+                {
+                    IsSignature = isSignature
+                };
+            }
         }
 
         public static ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered")
@@ -1264,7 +1283,9 @@ namespace WB.Tests.Unit.Designer
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
+                new TranslationsExportService()
+            );
 
 
         public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)

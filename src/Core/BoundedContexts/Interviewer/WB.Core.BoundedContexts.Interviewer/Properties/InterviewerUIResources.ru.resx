@@ -720,4 +720,38 @@
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>
   </data>
+    <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Загрузка обновлений</value>
+    <comment>Загрузка обновлений</comment>
+  </data>
+    <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Проверка обновлений</value>
+    <comment>Проверка обновлений</comment>
+  </data>
+    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Загружено {0} из {1} при {2} ({3}%)</value>
+    <comment>Загружено {0} из {1} ({2}%)</comment>
+  </data>  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>Найдено {0} элементов</value>
+    <comment>Найдено {0} элементов по введенному тексту</comment>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Введите текст для поиска</value>
+    <comment>Введите текст для поиска</comment>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Ничего не найдено</value>
+    <comment>Ничего не найдено по введенному тексту</comment>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Выполните поиск для отображения результатов</value>
+    <comment>Выполните поиск для отображения результатов</comment>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Поиск</value>
+    <comment>Поиск</comment>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Выйти из поиска</value>
+  </data>
 </root>

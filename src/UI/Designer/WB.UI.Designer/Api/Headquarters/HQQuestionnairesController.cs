@@ -129,7 +129,6 @@ namespace WB.UI.Designer.Api.Headquarters
             var resultAssembly = this.GetQuestionnaireAssemblyOrThrow(questionnaireView, versionToCompileAssembly);
 
             var questionnaire = questionnaireView.Source.Clone();
-            questionnaire.LookupTables = null;
             questionnaire.IsUsingExpressionStorage = versionToCompileAssembly > 19;
             var readOnlyQuestionnaireDocument = questionnaireView.Source.AsReadOnly();
             questionnaire.ExpressionsPlayOrder = this.expressionsPlayOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);

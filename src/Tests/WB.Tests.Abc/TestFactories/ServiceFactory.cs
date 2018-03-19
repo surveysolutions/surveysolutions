@@ -444,7 +444,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
-                Mock.Of<IAudioFileStorage>());
+                Mock.Of<IAudioFileStorage>(),
+                Mock.Of<ITabletDiagnosticService>(),
+                Mock.Of<IInterviewerSettings>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -558,7 +560,8 @@ namespace WB.Tests.Abc.TestFactories
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 Create.Service.TransactionManagerProvider(),
                 interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(),
+                Mock.Of<ISessionProvider>());
         }
 
         public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()

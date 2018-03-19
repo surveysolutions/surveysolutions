@@ -1063,6 +1063,9 @@
   <data name="EntityComment" xml:space="preserve">
     <value>New comment</value>
   </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Use signature pad</value>
+  </data>
   <data name="HelpNewComment" xml:space="preserve">
     <value>add comment</value>
   </data>

@@ -448,6 +448,9 @@ for further instructions</value>
   <data name="MenuItem_Title_SignOut" xml:space="preserve">
     <value>Sign out</value>
   </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
     <value>All current data will be erased. Are you sure you want to proceed to restore. If Yes, please make sure restore data is presented at {0}</value>
   </data>
@@ -622,6 +625,15 @@ for further instructions</value>
   <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
     <value>Removing {0} questionnaire out of {1}</value>
   </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Downloading application updates</value>
+  </data>
+    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Received {0} of {1} at {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Checking application updates</value>
+  </data>
   <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
     <value>You have incompatible version of Interviewer application. Please, uninstall it and install again from your Survey Solutions Headquarters website</value>
   </data>
@@ -691,30 +703,45 @@ your next synchronization</value>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Discard</value>
   </data>
-  <data name="Dashboard_Interview_QuestionsAnsweredFormat">
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
     <value>{0} question(s) answered</value>
   </data>
-  <data name="Dashboard_Interview_AssignmentLabelFormat">
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
     <value>Assignment #{0}</value>
     <comment>{0} - is an assignment id</comment>
   </data>
-  <data name="Dashboard_No_InterviewKey">
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
     <value>No interview key</value>
   </data>
-  <data name="Dashboard_CensusAssignment">
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Census</value>
   </data>
-    <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
     <value>Checking maps on server</value>
   </data>
-    <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
     <value>Handling map {0}, {1} out of {2}.
 Downloaded {3}%</value>
   </data>
-    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
     <value>Map synchronization succesfuly finished</value>
   </data>
-    <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
     <value>Map sync error</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} elements found</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Nothing found</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Perform search to display results</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Enter text for search</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Exit Search</value>
   </data>
 </root>

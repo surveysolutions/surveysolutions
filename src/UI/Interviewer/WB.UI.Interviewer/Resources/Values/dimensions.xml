@@ -31,7 +31,12 @@
   <dimen name="Dashboard_TabMenu_tab_marginLeft">32dp</dimen>
   <dimen name="Dashboard_TabMenu_tab_padding">12dp</dimen>
   <dimen name="Dashboard_Items_space">2dp</dimen>
-  
+
+  <dimen name="Dashboard_SearchView_SearchView_padding">2dp</dimen>
+  <dimen name="Dashboard_SearchView_SearchView_height">60dp</dimen>
+  <dimen name="Dashboard_SearchView_DeleteButton_size">36dp</dimen>
+  <dimen name="Dashboard_SearchView_SearchButton_size">36dp</dimen>
+
   <dimen name="dashboard_card_base_margin">14dp</dimen>
   <dimen name="dashboard_card_duo_margin">28dp</dimen>
   
