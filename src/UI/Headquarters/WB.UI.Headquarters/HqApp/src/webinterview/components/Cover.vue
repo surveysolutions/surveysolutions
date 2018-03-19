@@ -1,10 +1,15 @@
 <template>
-    <div class="unit-section complete-section">
+    <div class="unit-section" :class="coverStatusClass">
         <div class="unit-title">
             <wb-humburger :showFoldbackButtonAsHamburger="showHumburger"></wb-humburger>
             <h3>{{ $t("WebInterviewUI.Cover")}}</h3>
         </div>
-        <div class="wrapper-info">
+
+        <div class="wrapper-info error">
+            <div class="container-info" v-if="hasBrokenPackage">
+                <h4 class="error-text">{{ $t("WebInterviewUI.CoverBrokenPackegeTitle")}}</h4>
+                <p class="error-text"><i v-html="$t('WebInterviewUI.CoverBrokenPackegeText')"></i></p>
+            </div>
             <div class="container-info">
                 <h2>{{title}}</h2>
             </div>
@@ -37,6 +42,8 @@
                     <p>
                         <b v-if="question.type == 'Gps'">
                             <a :href="getGpsUrl(question)" target="_blank">{{question.answer}}</a>
+                            <br/>
+                            <img v-bind:src="googleMapPosition(question.answer)" draggable="false" />
                         </b>
                         <b v-else-if="question.type == 'DateTime'" v-dateTimeFormatting v-html="question.answer">
                         </b>
@@ -97,9 +104,27 @@ export default {
         },
         hasSupervisorComment() {
             return !isEmpty(this.$store.state.webinterview.coverInfo.supervisorRejectComment)
+        },
+        hasBrokenPackage() {
+            return this.$store.state.webinterview.doesBrokenPackageExist == undefined 
+                ? false
+                : this.$store.state.webinterview.doesBrokenPackageExist;
+        },
+        coverStatusClass() {
+            return [
+                {
+                    'complete-section'  : !this.hasBrokenPackage,
+                    'section-with-error': this.hasBrokenPackage
+                }
+            ]
         }
     },
     methods: {
+        googleMapPosition(answer) {
+            return `${this.$config.googleMapsApiBaseUrl}/maps/api/staticmap?center=${answer}`
+                + `&zoom=14&scale=0&size=385x200&markers=color:blue|label:O|${answer}`
+                + `&key=${this.$config.googleApiKey}`
+        },
         fetch() {
             this.$store.dispatch("fetchCoverInfo")
         },

@@ -53,13 +53,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
         protected override void ExportDataIntoArchive(IZipArchive archive, ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(settings.QuestionnaireId);
-            var multimediaQuestionIds = questionnaire.Find<IMultimediaQuestion>().Select(x => x.PublicKey).ToArray();
-
             cancellationToken.ThrowIfCancellationRequested();
 
             var allMultimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId, multimediaQuestionIds));
+                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId));
 
             cancellationToken.ThrowIfCancellationRequested();
 

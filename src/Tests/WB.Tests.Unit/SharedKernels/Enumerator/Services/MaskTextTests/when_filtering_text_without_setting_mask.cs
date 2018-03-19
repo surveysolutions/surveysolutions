@@ -1,22 +1,20 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Enumerator.Services.MaskText;
-using It = Machine.Specifications.It;
-
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
 {
     internal class when_filtering_text_without_setting_mask : MaskTextTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             maskedText = CreateMaskedText();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             filterResult = maskedText.FilterOnlyMaskedChars("s-ss", 0);
 
-        It should_accept_all = () =>
-            filterResult.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_accept_all () =>
+            filterResult.Should().BeNull();
 
         static string filterResult;
         static MaskedText maskedText;
