@@ -50,6 +50,20 @@ namespace WB.Core.SharedKernels.DataCollection
             return Create(id, rosterVector);
         }
 
+        public static bool TryParse(string value, out Identity identity)
+        {
+            try
+            {
+                identity = Parse(value);
+                return true;
+            }
+            catch
+            {
+                identity = null;
+                return false;
+            }
+        }
+
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
