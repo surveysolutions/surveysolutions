@@ -10,7 +10,13 @@
         <div class="row" id="edit-entity-comment-row">
             <div class="form-group col-xs-12">
                 <label class="wb-label" for="edit-entity-comment"> {{'EntityComment' | i18next}} <help key="newComment" /></label>
-                <textarea id="edit-entity-comment" ng-model="activeComment.comment" class="form-control" required msd-elastic></textarea>
+                <textarea name="comment" id="edit-entity-comment" ng-model="activeComment.comment" class="form-control" required msd-elastic></textarea>
+                <div>
+                    <span>{{activeComment.comment.length}} / {{maxCommentLength}}</span>
+                </div>
+                <div class="text-danger" ng-show="$scope.activeComment.serverValidation !== null">
+                    <span>{{activeComment.serverValidation}}</span>
+                </div>
             </div>
         </div>
         <div class="form-group">

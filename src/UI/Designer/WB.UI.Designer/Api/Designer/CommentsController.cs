@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Comments;
@@ -45,13 +46,18 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpPost]
         [CamelCase]
-        [Route("entity/{itemId:Guid}/addComment")]
+        [Route("entity/addComment")]
         public HttpResponseMessage PostComment(Guid id, AddCommentModel comment)
         {
+            if (!ModelState.IsValid)
+            {
+                return this.Request.CreateResponse(new JsonResponseResult
+                {
+                    Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
+                });
+            }
             IMembershipWebUser user = this.userHelper.WebUser;
-            comment.UserName = user.UserName;
-            comment.UserEmail = user.MembershipUser.Email;
-            commentsService.PostComment(comment);
+            commentsService.PostComment(comment.Id, comment.QuestionnaireId, comment.EntityId, comment.Comment, user.UserName, user.MembershipUser.Email);
             return this.Request.CreateResponse(new JsonResponseResult());
         }
 

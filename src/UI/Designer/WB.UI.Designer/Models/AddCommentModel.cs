@@ -1,14 +1,21 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace WB.Core.BoundedContexts.Designer.Comments
+namespace WB.UI.Designer.Models
 {
     public class AddCommentModel
     {
+        [Required]
         public Guid Id { get; set; }
+
+        [Required]
         public Guid EntityId { get; set; }
+
+        [Required]
         public Guid QuestionnaireId { get; set; }
+
+        [Required]
+        [StringLength(1000)]
         public string Comment { get; set; }
-        public string UserName { get; set; }
-        public string UserEmail { get; set; }
     }
 }

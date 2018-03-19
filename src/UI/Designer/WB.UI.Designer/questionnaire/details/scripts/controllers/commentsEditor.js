@@ -3,6 +3,8 @@
         function ($rootScope, $scope, $state, commentsService, $i18next, commandService, utilityService, moment) {
             'use strict';
 
+            $scope.maxCommentLength = 1000;
+
             var createNewComment = function() {
                 return {
                     id: utilityService.guid(),
@@ -38,16 +40,28 @@
             }
 
             $scope.postComment = function() {
+                $scope.activeComment.serverValidation = null;
+
                 commentsService.postComment($state.params.questionnaireId, $state.params.itemId, $scope.activeComment)
-                    .then(function() {
-                        var comment = angular.copy($scope.activeComment);
-                        comment.userName = $scope.currentUserName;
-                        comment.userEmail = $scope.currentUserEmail;
-                        $scope.comments.push(comment);
-                        $rootScope.$broadcast("newCommentPosted", comment);
-                        $scope.activeComment = createNewComment();
+                    .then(function(response) {
+                        if (!_.isNull(response.data.error || null)) {
+                            $scope.activeComment.serverValidation = (response.data.error || null);
+                            $scope.addCommentForm.$setPristine();
+                        } else {
+                            var comment = angular.copy($scope.activeComment);
+                            comment.date = moment(new Date()).format("LLL");
+                            comment.userName = $scope.currentUserName;
+                            comment.userEmail = $scope.currentUserEmail;
+                            $scope.comments.push(comment);
+                            $rootScope.$broadcast("newCommentPosted", comment);
+                            $scope.activeComment = createNewComment();
+                        }
                     });
             }
+
+            $scope.$watch('addCommentForm', function (value) {
+                $scope.addCommentForm.comment.$setValidity("serverValidation", true);
+            }, false);
 
             $rootScope.$on('commentsOpened', function (event, data) {
                 utilityService.setFocusIn("edit-entity-comment");
