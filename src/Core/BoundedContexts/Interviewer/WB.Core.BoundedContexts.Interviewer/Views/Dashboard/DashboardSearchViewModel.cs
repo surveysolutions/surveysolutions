@@ -187,9 +187,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
-                bool isMatched = assignmentItem.Title.Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
-                                 || assignmentItem.Id.ToString().Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
-                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => pi.AnswerAsString?.Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false) ?? false);
+                bool isMatched = Contatins(assignmentItem.Title, searctText)
+                                 || Contatins(assignmentItem.Id.ToString(), searctText)
+                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contatins(pi.AnswerAsString, searctText)) ?? false);
 
                 if (isMatched)
                 {
@@ -213,11 +213,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 bool isMatched = interviewView.ResponsibleId == principal.CurrentUserIdentity.UserId
                                  &&
                                  (
-                                     interviewView.InterviewKey.Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
-                                     || interviewView.QuestionnaireTitle.Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
-                                     || (interviewView.Assignment?.ToString().Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false)
-                                     || (interviewView.LastInterviewerOrSupervisorComment?.Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false)
-                                     || details.Any(pi => pi.Answer?.Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false)
+                                     Contatins(interviewView.InterviewKey, searctText)
+                                     || Contatins(interviewView.QuestionnaireTitle, searctText)
+                                     || Contatins(interviewView.Assignment?.ToString(), searctText)
+                                     || Contatins(interviewView.LastInterviewerOrSupervisorComment, searctText)
+                                     || details.Any(pi => Contatins(pi.Answer, searctText))
                                  );
 
                 if (isMatched)
@@ -227,6 +227,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     yield return interviewDashboardItem;
                 }
             }
+        }
+
+        private bool Contatins(string originalString, string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(originalString))
+                return false;
+
+            var indexOf = originalString.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
+            return indexOf >= 0;
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
