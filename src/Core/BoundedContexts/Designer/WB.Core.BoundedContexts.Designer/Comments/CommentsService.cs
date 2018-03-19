@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                     referenceEntity: CreateCommentedEntity(questionnaire, x.Key)))
                 .ToList();
 
-            return commentForEntity;
+            return commentForEntity.OrderByDescending(x => x.IndexOfLastUnresolvedComment).ToList();
         }
 
         private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire, Guid itemId)

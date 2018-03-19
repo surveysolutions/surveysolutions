@@ -13,21 +13,27 @@
                         $scope.commentThreads = result.data;
                         _.forEach($scope.commentThreads, function(commentThread) {
                             commentThread.resolvedComments = [];
+                            commentThread.resolvedAreExpanded = false;
+                            commentThread.toggleResolvedComments = function() {
+                                this.resolvedAreExpanded = !this.resolvedAreExpanded;
+                            }
+
                             _.forEach(commentThread.comments, function(comment) {
-                                comment.date = moment(comment.date).format("LLL");
+                                comment.date = moment.utc(comment.date).local().format("LLL");
                                 comment.isResolved = !_.isNull(comment.resolveDate || null);
                             });
 
+                            console.log(commentThread.indexOfLastUnresolvedComment);
                             if (commentThread.indexOfLastUnresolvedComment != null) {
                                 var comments = commentThread.comments.slice(0, commentThread.indexOfLastUnresolvedComment);
                                 var resolvedComments = commentThread.comments.slice(commentThread.indexOfLastUnresolvedComment);
 
                                 commentThread.comments = comments;
                                 commentThread.resolvedComments = resolvedComments;
-                                commentThread.resolvedAreExpanded = false;
-                                commentThread.toggleResolvedComments = function() {
-                                    this.resolvedAreExpanded = !this.resolvedAreExpanded;
-                                }
+                                
+                            } else {
+                                commentThread.resolvedComments = commentThread.comments;
+                                commentThread.comments = [];
                             }
                         });
                     });
