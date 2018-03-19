@@ -14,6 +14,8 @@ using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
@@ -55,6 +57,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 Create.Entity.NumericIntegerQuestion(variable: "q1")
             );
 
+            var plQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+
             var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport> { new InterviewToExport(interviewId, interviewKey, true, InterviewStatus.Completed) };
 
@@ -72,7 +76,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 transactionManagerProvider.Object,
                 errorsExporter.Object,
                 Mock.Of<IInterviewFactory>(),
-                exportViewFactory.Object);
+                exportViewFactory.Object,
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(plQuestionnaire.QuestionnaireId, plQuestionnaire));
 
             //act
             exporter.Export(questionnaireExportStructure, interviewIdsToExport, "", new Progress<int>(), CancellationToken.None);

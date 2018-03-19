@@ -173,11 +173,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         #region Shared persons
         public void Process(Questionnaire aggregate, AddSharedPersonToQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Add,
-                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), null);
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserEmail(command.PersonId), null);
 
         public void Process(Questionnaire aggregate, RemoveSharedPersonFromQuestionnaire command)
             => this.AddQuestionnaireChangeItem(command.QuestionnaireId, command.ResponsibleId, QuestionnaireActionType.Delete,
-                QuestionnaireItemType.Person, command.PersonId, this.GetUserName(command.PersonId), null);
+                QuestionnaireItemType.Person, command.PersonId, this.GetUserEmail(command.PersonId), null);
 
         #endregion
 
@@ -732,6 +732,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
                 if (creator != null)
                     return creator.UserName;
+            }
+            return null;
+        }
+
+        private string GetUserEmail(Guid? userId)
+        {
+            if (userId.HasValue)
+            {
+                var creator = this.accountStorage.GetById(userId.Value.FormatGuid());
+                if (creator != null)
+                    return creator.Email;
             }
             return null;
         }

@@ -72,6 +72,11 @@ namespace WB.Tests.Unit.Designer
             }
         }
 
+        public void Flush()
+        {
+            
+        }
+
         public Type ViewType
         {
             get { return typeof(T); }

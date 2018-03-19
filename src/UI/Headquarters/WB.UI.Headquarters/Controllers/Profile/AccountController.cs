@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
-        public async Task<ActionResult> UpdateOwnPassword(ManageAccountModel model)
+        public async Task<ActionResult> UpdateOwnPassword([Bind(Prefix = "UpdateOwnPassword")]ManageAccountModel model)
         {
             var currentUser = this.userManager.FindById(this.authorizedUser.Id);
             var resultModel = GetCurrentUserModel();
@@ -206,7 +206,14 @@ namespace WB.UI.Headquarters.Controllers
 
             this.ViewBag.ActivePage = MenuItem.ManageAccount;
 
-            await this.ValidateOldPassword(model, currentUser);
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                bool isPasswordValid = await this.IsOldPasswordValid(model, currentUser);
+                if (!isPasswordValid)
+                {
+                    this.ModelState.AddModelError("UpdateOwnPassword." + nameof(ManageAccountModel.Password), FieldsAndValidations.OldPasswordErrorMessage);
+                }
+            }
 
             if (this.ModelState.IsValid)
             {
@@ -215,24 +222,12 @@ namespace WB.UI.Headquarters.Controllers
                 if (updateResult.Succeeded)
                     this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfully);
                 else
-                    this.ModelState.AddModelError(nameof(ManageAccountModel.Password), string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError("UpdateOwnPassword." + nameof(ManageAccountModel.Password), string.Join(@", ", updateResult.Errors));
             }
 
             model.EditAction = nameof(Manage);
             model.UpdatePasswordAction = nameof(this.UpdateOwnPassword);
             return View("Manage", resultModel);
-        }
-
-        private async Task ValidateOldPassword(ManageAccountModel model, HqUser currentUser)
-        {
-            if (!string.IsNullOrEmpty(model.Password))
-            {
-                bool isPasswordValid = await this.IsOldPasswordValid(model, currentUser);
-                if (!isPasswordValid)
-                {
-                    this.ModelState.AddModelError<ManageAccountModel>(x => x.OldPassword, FieldsAndValidations.OldPasswordErrorMessage);
-                }
-            }
         }
 
         private async Task<bool> IsOldPasswordValid(ManageAccountModel model, HqUser currentUser)
