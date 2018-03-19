@@ -181,9 +181,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
-                bool isMatched = assignmentItem.Title.Contains(searctText)
-                                 || assignmentItem.Id.ToString().Contains(searctText)
-                                 || (assignmentItem.Answers?.Any(pi => pi.AnswerAsString?.Contains(searctText) ?? false) ?? false);
+                bool isMatched = assignmentItem.Title.Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
+                                 || assignmentItem.Id.ToString().Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
+                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => pi.AnswerAsString?.Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false) ?? false);
 
                 if (isMatched)
                 {
@@ -207,10 +207,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 bool isMatched = interviewView.ResponsibleId == principal.CurrentUserIdentity.UserId
                                  &&
                                  (
-                                     interviewView.InterviewKey.Contains(searctText)
-                                     || (interviewView.Assignment?.ToString().Contains(searctText) ?? false)
-                                     || (interviewView.LastInterviewerOrSupervisorComment?.Contains(searctText) ?? false)
-                                     || details.Any(pi => pi.Answer?.Contains(searctText) ?? false)
+                                     interviewView.InterviewKey.Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
+                                     || interviewView.QuestionnaireTitle.Equals(searctText, StringComparison.InvariantCultureIgnoreCase)
+                                     || (interviewView.Assignment?.ToString().Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false)
+                                     || (interviewView.LastInterviewerOrSupervisorComment?.Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false)
+                                     || details.Any(pi => pi.Answer?.Equals(searctText, StringComparison.InvariantCultureIgnoreCase) ?? false)
                                  );
 
                 if (isMatched)
