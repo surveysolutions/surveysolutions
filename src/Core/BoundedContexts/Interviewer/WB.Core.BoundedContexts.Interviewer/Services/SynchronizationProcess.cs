@@ -129,26 +129,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
             {
                 Stopwatch sw = null;
-                await this.diagnosticService.UpdateTheApp(cancellationToken, downloadProgress =>
+                try
                 {
-                    if(sw == null) sw = Stopwatch.StartNew();
-                    if (downloadProgress.ProgressPercentage % 1 != 0) return;
-
-                    var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
-                    var totalKilobytes = (downloadProgress.TotalBytesToReceive ?? 0).Bytes();
-
-                    progress.Report(new SyncProgressInfo
+                    await this.diagnosticService.UpdateTheApp(cancellationToken, false, downloadProgress =>
                     {
-                        Title = InterviewerUIResources.Synchronization_DownloadApplication,
-                        Description = string.Format(
-                            InterviewerUIResources.Synchronization_DownloadApplication_Description,
-                            receivedKilobytes.Humanize("00.00 MB"),
-                            totalKilobytes.Humanize("00.00 MB"),
-                            receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
-                            (int)downloadProgress.ProgressPercentage),
-                        Status = SynchronizationStatus.Download
+                        if (sw == null) sw = Stopwatch.StartNew();
+                        if (downloadProgress.ProgressPercentage % 1 != 0) return;
+
+                        var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
+                        var totalKilobytes = (downloadProgress.TotalBytesToReceive ?? 0).Bytes();
+
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.Synchronization_DownloadApplication,
+                            Description = string.Format(
+                                InterviewerUIResources.Synchronization_DownloadApplication_Description,
+                                receivedKilobytes.Humanize("00.00 MB"),
+                                totalKilobytes.Humanize("00.00 MB"),
+                                receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
+                                (int) downloadProgress.ProgressPercentage),
+                            Status = SynchronizationStatus.Download
+                        });
                     });
-                });
+                }
+                catch (Exception exc)
+                {
+                    this.logger.Error("Error on auto updating", exc);
+                }
             }
         }
 

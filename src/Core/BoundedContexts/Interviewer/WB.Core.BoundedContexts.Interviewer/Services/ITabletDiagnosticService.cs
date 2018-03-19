@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public interface ITabletDiagnosticService
     {
         void LaunchShareAction(string title, string info);
-        Task UpdateTheApp(CancellationToken cancellationToken, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
+        Task UpdateTheApp(CancellationToken cancellationToken, bool continueIfNoPatch, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null);
         void RestartTheApp();
     }
 }
