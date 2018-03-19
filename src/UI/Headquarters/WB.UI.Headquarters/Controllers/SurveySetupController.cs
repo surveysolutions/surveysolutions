@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -186,7 +187,7 @@ namespace WB.UI.Headquarters.Controllers
                 ThreadMarkerManager.MarkCurrentThreadAsIsolated();
                 try
                 {
-                    this.interviewImportService.VerifyAssignments(questionnaireIdentity, interviewImportProcessId, model.File.FileName);
+                    this.interviewImportService.VerifyAssignments(questionnaireIdentity, interviewImportProcessId, Path.GetFileName(model.File.FileName));
                 }
                 finally
                 {
@@ -285,7 +286,7 @@ namespace WB.UI.Headquarters.Controllers
                     preloadedSample?.FileName));
             }
 
-            this.TempData[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
+            this.Session[$"InterviewImportConfirmation-{preloadedMetadata.Id}"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
@@ -343,7 +344,7 @@ namespace WB.UI.Headquarters.Controllers
                     verificationState.FileName));
             }
 
-            this.TempData[$"InterviewImportConfirmation-{interviewImportProcessId}"] = new PreloadedDataConfirmationModel
+            this.Session[$"InterviewImportConfirmation-{interviewImportProcessId}"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = questionnaireId,
                 Version = version,
@@ -388,9 +389,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var key = $"InterviewImportConfirmation-{id}";
             PreloadedDataConfirmationModel model = null;
-            if (this.TempData.ContainsKey(key))
+            if (this.Session[key] != null)
             {
-                model = this.TempData[key] as PreloadedDataConfirmationModel;
+                model = this.Session[key] as PreloadedDataConfirmationModel;
             }
             if (model == null)
             {

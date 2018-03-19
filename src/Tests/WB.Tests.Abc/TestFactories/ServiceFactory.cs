@@ -560,7 +560,8 @@ namespace WB.Tests.Abc.TestFactories
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 Create.Service.TransactionManagerProvider(),
                 interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(),
+                Mock.Of<ISessionProvider>());
         }
 
         public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()

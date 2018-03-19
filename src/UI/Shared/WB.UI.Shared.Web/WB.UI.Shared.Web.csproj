@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compression\CompressionHandler.cs" />
+    <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
@@ -230,8 +231,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Captcha.ka.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
-    </EmbeddedResource>    
-	<EmbeddedResource Include="Resources\Captcha.ru.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.ru.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Captcha.resx">
@@ -258,8 +259,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
-    </EmbeddedResource>    
-	<EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

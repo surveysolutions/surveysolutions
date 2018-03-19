@@ -20,11 +20,12 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
-    internal class InterviewPackagesService : IInterviewPackagesService
+    internal class InterviewPackagesService : IInterviewPackagesService, IInterviewBrokenPackagesService
     {
         public const string UnknownExceptionType = "Unexpected";
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
@@ -104,7 +105,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     IsCensusInterview = brokenInterviewPackage.IsCensusInterview,
                     QuestionnaireId = brokenInterviewPackage.QuestionnaireId,
                     QuestionnaireVersion = brokenInterviewPackage.QuestionnaireVersion,
-                    Events = brokenInterviewPackage.Events
+                    Events = brokenInterviewPackage.Events,
+                    ProcessAttemptsCount = brokenInterviewPackage.ReprocessAttemptsCount + 1
                 };
 
                 if (this.syncSettings.UseBackgroundJobForProcessingPackages)
@@ -129,6 +131,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 .Query(packages => packages.Select(package => package.InterviewId).Take(count).ToList())
                 .Select(id => id.FormatGuid())
                 .ToReadOnlyCollection();
+        }
+
+        public bool IsNeedShowBrokenPackageNotificationForInterview(Guid interviewId)
+        {
+            var undefined = InterviewDomainExceptionType.Undefined.ToString();
+            return this.brokenInterviewPackageStorage.Query(_ =>
+                _.Any(p => (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
+                    && p.InterviewId == interviewId
+                    && 
+                    (
+                        p.ReprocessAttemptsCount > 2 
+                        || _.Count(d => d.InterviewId == interviewId && (d.ExceptionType == UnknownExceptionType || d.ExceptionType == undefined)) > 1
+                    )
+                )
+            );
+        }
+
+        public IReadOnlyCollection<int> GetTopBrokenPackageIdsAllowedToReprocess(int count)
+        {
+            var utcNow = DateTime.UtcNow;
+            var utcNow5Minutes = utcNow.AddMinutes(-5);
+            var utcNow10Minutes = utcNow.AddMinutes(-10);
+            var utcNow60Minutes = utcNow.AddMinutes(-60);
+            var utcNow8Hours = utcNow.AddHours(-8);
+            var utcNow24Hours = utcNow.AddHours(-24);
+            var undefined = InterviewDomainExceptionType.Undefined.ToString();
+
+            return this.brokenInterviewPackageStorage.Query(_ =>
+            {
+                var filteredByError = _.Where(p => (p.ExceptionType == UnknownExceptionType || p.ExceptionType == undefined)
+                    && _.Count(d => d.InterviewId == p.InterviewId && (d.ExceptionType == UnknownExceptionType || d.ExceptionType == undefined)) == 1);
+
+                var filteredByTries = filteredByError.Where(p => 
+                    p.ProcessingDate < utcNow5Minutes && p.ReprocessAttemptsCount < 1
+                    || p.ProcessingDate < utcNow10Minutes && p.ReprocessAttemptsCount < 2
+                    || p.ProcessingDate < utcNow60Minutes && p.ReprocessAttemptsCount < 3
+                    || p.ProcessingDate < utcNow8Hours && p.ReprocessAttemptsCount < 4
+                    || p.ProcessingDate < utcNow24Hours && p.ReprocessAttemptsCount < 5
+                ).OrderByDescending(p => p.ProcessingDate);
+                return filteredByTries.Select(p => p.Id).Take(count);
+            }).ToList();
         }
 
         public virtual IReadOnlyCollection<string> GetTopPackageIds(int count)
@@ -167,16 +210,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             string existingInterviewKey = null;
             try
             {
-                existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
-                var serializedEvents = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(interview.Events)
-                    .Select(e => e.Payload)
-                    .ToArray();
-
-                this.logger.Debug(
-                    $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Restart();
-
                 bool startedOwnTransaction = false;
                 if (!this.transactionManager.TransactionStarted)
                 {
@@ -184,8 +217,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     transactionManager.BeginCommandTransaction();
                 }
 
-                bool shouldChangeInterviewKey =
-                    CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+                existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
+                var serializedEvents = this.serializer
+                    .Deserialize<AggregateRootEvent[]>(interview.Events)
+                    .Select(e => e.Payload)
+                    .ToArray();
+
+                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+
+                bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
                 bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId,
                     serializedEvents, out Guid? newSupervisorId);
 
@@ -234,15 +275,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     ProcessingDate = DateTime.UtcNow,
                     ExceptionType = exceptionType,
                     ExceptionMessage = exception.Message,
-                    ExceptionStackTrace =
-                        string.Join(Environment.NewLine,
-                            exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+                    ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
+                    ReprocessAttemptsCount = interview.ProcessAttemptsCount,
                 }, null);
 
                 CommonMetrics.BrokenPackagesCount.Labels(exceptionType).Inc();
 
-                this.logger.Debug(
-                    $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
 
@@ -267,8 +306,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             if (interviewKeyEvent != null)
             {
                 var stringKey = interviewKeyEvent.Key.ToString();
-                var existingInterview =
-                    this.interviews.Query(
+                var existingInterview = this.interviews.Query(
                         _ => _.FirstOrDefault(x => x.Key == stringKey && x.InterviewId != interviewId));
 
                 if (existingInterview != null)

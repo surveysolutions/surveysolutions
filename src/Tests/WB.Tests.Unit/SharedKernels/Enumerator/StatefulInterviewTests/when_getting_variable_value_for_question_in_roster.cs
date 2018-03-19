@@ -1,15 +1,13 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_variable_value_for_question_in_roster : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             expectedVariableValue = 555;
 
             variableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -25,11 +23,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview = Setup.StatefulInterview(questionnaireDocument);
             interview.Apply(Create.Event.VariablesChanged(Create.Entity.ChangedVariable(Create.Identity(variableId, variableRosterVector), expectedVariableValue)));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => actualVariableValue = interview.GetVariableValueByOrDeeperRosterLevel(variableId, Create.RosterVector(0, 1));
+        private void BecauseOf() => actualVariableValue = interview.GetVariableValueByOrDeeperRosterLevel(variableId, Create.RosterVector(0, 1));
 
-        It should_reduce_roster_vector_to_find_target_variable_value = () => actualVariableValue.ShouldEqual(expectedVariableValue);
+        [NUnit.Framework.Test] public void should_reduce_roster_vector_to_find_target_variable_value () => actualVariableValue.Should().Be(expectedVariableValue);
 
         private static StatefulInterview interview;
         private static Guid variableId;

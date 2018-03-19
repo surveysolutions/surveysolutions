@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 {
     internal class when_static_text_disabled_after_enabling : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
@@ -20,11 +19,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
             statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));
-        };
 
-        Because of = () => statefulInterview.Apply(Create.Event.StaticTextsDisabled(staticTextIdentity));
+            BecauseOf();
+        }
 
-        It should_disable_it = () => statefulInterview.IsEnabled(staticTextIdentity).ShouldBeFalse();
+        private void BecauseOf() => statefulInterview.Apply(Create.Event.StaticTextsDisabled(staticTextIdentity));
+
+        [NUnit.Framework.Test] public void should_disable_it () => statefulInterview.IsEnabled(staticTextIdentity).Should().BeFalse();
 
         static StatefulInterview statefulInterview;
         static Identity staticTextIdentity;
