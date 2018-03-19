@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly string mapsLocation;
         private readonly ILogger logger;
 
-        string[] filesToSearch = { "*.tpk", "*.mmpk" };
+        string[] filesToSearch = { "*.tpk", "*.mmpk", "*.tif" };
 
         string tempSuffix = ".part";
 

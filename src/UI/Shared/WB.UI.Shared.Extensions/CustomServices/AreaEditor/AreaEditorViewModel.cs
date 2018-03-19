@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
@@ -112,33 +113,51 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             var mapFileExtention = this.fileSystemAccessor.GetFileExtension(pathToMapFile);
 
-            switch (mapFileExtention)
+            try
             {
-                case ".mmpk":
+                switch (mapFileExtention)
                 {
-                    MobileMapPackage package = await MobileMapPackage.OpenAsync(pathToMapFile);
-                    if (package.Maps.Count > 0)
-                        return package.Maps.First();
-                    break;
-                }
-                case ".tpk":
-                {
-                    TileCache titleCache = new TileCache(pathToMapFile);
-                    var layer = new ArcGISTiledLayer(titleCache)
+                    case ".mmpk":
                     {
-                        //zoom to any level
-                        //if area is out of the map
-                        // should be available to navigate
-                        MinScale = 100000000,
-                        MaxScale = 1
-                    };
-                    return new Map
+                        MobileMapPackage package = await MobileMapPackage.OpenAsync(pathToMapFile);
+                        if (package.Maps.Count > 0)
+                            return package.Maps.First();
+                        break;
+                    }
+                    case ".tpk":
                     {
-                        Basemap = new Basemap(layer),
-                        MinScale = 100000000,
-                        MaxScale = 1
-                    };
+                        TileCache titleCache = new TileCache(pathToMapFile);
+                        var layer = new ArcGISTiledLayer(titleCache)
+                        {
+                            //zoom to any level
+                            //if area is out of the map
+                            // should be available to navigate
+                            MinScale = 100000000,
+                            MaxScale = 1
+                        };
+                        return new Map
+                        {
+                            Basemap = new Basemap(layer),
+                            MinScale = 100000000,
+                            MaxScale = 1
+                        };
+                    }
+                    case ".tif":
+                    {
+                        Raster raster = new Raster(pathToMapFile);
+                        RasterLayer newRasterLayer = new RasterLayer(raster);
+                        await newRasterLayer.LoadAsync();
+
+                        //add error display
+                        if (newRasterLayer.SpatialReference.IsProjected)
+                            return new Map(new Basemap(newRasterLayer));
+                        break;
+                    }
                 }
+            }
+            catch (Exception exc)
+            {
+                logger.Error("Unable to open map", exc);
             }
 
             return null;
@@ -183,8 +202,19 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             if (this.StartEditAreaCommand.CanExecute())
                                 this.StartEditAreaCommand.Execute();
                         };
+
+                    this.mapView.LayerViewStateChanged += MyMapView_LayerViewStateChanged;
                 }
             }
+        }
+
+        private void MyMapView_LayerViewStateChanged(object sender, LayerViewStateChangedEventArgs e)
+        {
+                if (e.Layer is RasterLayer)
+                {
+                    if (e.LayerViewState.Error != null)
+                        Console.WriteLine(e.LayerViewState.Error.Message);
+                }
         }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
@@ -282,6 +312,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.IsEditing = true;
             try
             {
+                this.MapView.GeoViewTapped += delegate(object sender, GeoViewInputEventArgs args)
+                {
+
+                    var point = args.Location;
+                    var sr = point.SpatialReference;
+                    
+                };
+
                 this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;

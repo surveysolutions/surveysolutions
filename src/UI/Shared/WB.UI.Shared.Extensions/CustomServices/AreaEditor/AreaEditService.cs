@@ -48,7 +48,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             await this.permissions.AssureHasPermission(Permission.Location);
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            ArcGISRuntimeEnvironment.SetLicense("runtimebasic,1000,rud000017554,none,4N400PJPXJGH2T8AG192");
+            ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,***REMOVED***");
 
             return await this.EditArea(area);
         }
