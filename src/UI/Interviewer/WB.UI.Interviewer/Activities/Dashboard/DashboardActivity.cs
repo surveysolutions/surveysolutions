@@ -169,6 +169,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_search, InterviewerUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
@@ -195,6 +196,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
+                    break;
+                case Resource.Id.menu_search:
+                    this.ViewModel.ShowSearchCommand.Execute();
                     break;
             }
 

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_enabled_subgroups_and_same_roster_instance_was_added_twice : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var userId = Guid.Parse("11111111111111111111111111111111");
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId,
@@ -24,17 +23,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             
             statefulInterview = Setup.StatefulInterview(questionnaire);
             statefulInterview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, 1);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf()
         {
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(rosterInstance1Id)));
             statefulInterview.Apply(Create.Event.RosterInstancesAdded(rosterId, Create.Entity.RosterVector(rosterInstance1Id)));
             enabledSubgroupsIdentities = statefulInterview.GetEnabledSubgroups(selectedGroupIdentity).ToArray();
-        };
+        }
 
-        It should_contain_1_identity = () =>
-            enabledSubgroupsIdentities.Length.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_contain_1_identity () =>
+            enabledSubgroupsIdentities.Length.Should().Be(1);
 
         static StatefulInterview statefulInterview;
         static Identity[] enabledSubgroupsIdentities;

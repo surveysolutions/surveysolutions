@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -123,8 +124,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             if (questionnaire == null) return new List<AssignmentIdentifyingQuestionRow>();
 
             List<AssignmentIdentifyingQuestionRow> identifyingColumnText =
-                assignment.IdentifyingData.Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(), x.AnswerAsString))
-                .ToList();
+                assignment.IdentifyingData
+                          .Where(x => questionnaire.GetQuestionType(x.Identity.Id) != QuestionType.GpsCoordinates)
+                          .Select(x => new AssignmentIdentifyingQuestionRow(questionnaire.GetQuestionTitle(x.Identity.Id).RemoveHtmlTags(), x.AnswerAsString))
+                          .ToList();
             return identifyingColumnText;
         }
 

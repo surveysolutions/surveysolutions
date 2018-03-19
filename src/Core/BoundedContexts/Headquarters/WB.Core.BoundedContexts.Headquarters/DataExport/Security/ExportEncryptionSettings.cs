@@ -22,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
         public static readonly string VersionCheckingInfoKey = "versoinKey";
         public static readonly string GlobalNoticeKey = "settings";
         public static readonly string QuestionnaireVersionKey = "QuestionnaireVersion";
+        public static readonly string InterviewerSettings = "InterviewerSettings";
     }
 }

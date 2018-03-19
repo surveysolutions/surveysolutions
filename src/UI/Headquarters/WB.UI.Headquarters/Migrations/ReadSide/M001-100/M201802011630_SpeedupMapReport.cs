@@ -9,7 +9,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Execute.Sql("CREATE INDEX CONCURRENTLY IF NOT Exists interviews_asgps_not_null_indx ON readside.interviews(asgps) WHERE asgps IS NOT NULL;");
+           // Execute.Sql("CREATE INDEX CONCURRENTLY IF NOT Exists interviews_asgps_not_null_indx ON readside.interviews(asgps) WHERE asgps IS NOT NULL;");
         }
 
         public override void Down()

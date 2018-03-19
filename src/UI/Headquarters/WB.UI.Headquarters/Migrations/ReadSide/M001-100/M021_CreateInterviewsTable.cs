@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Infrastructure.Native.Storage;
@@ -147,7 +148,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             });
         }
 
-        public static IEnumerable<InterviewEntity> ToEntities(Guid interviewId, InterviewLevel lvl)
+        private static IEnumerable<InterviewEntity> ToEntities(Guid interviewId, InterviewLevel lvl)
         {
             foreach (var question in lvl.QuestionsSearchCache)
             {
@@ -247,6 +248,81 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         public override void Down()
         {
             Delete.Table("interviews");
+        }
+
+        private class InterviewLevel
+        {
+            public InterviewLevel()
+            {
+                this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?>();
+                this.DisabledGroups = new HashSet<Guid>();
+                this.RosterRowTitles = new Dictionary<Guid, string>();
+                this.QuestionsSearchCache = new Dictionary<Guid, InterviewQuestion>();
+                this.Variables = new Dictionary<Guid, object>();
+                this.StaticTexts = new Dictionary<Guid, InterviewStaticText>();
+                this.DisabledVariables = new HashSet<Guid>();
+            }
+            public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
+                : this()
+            {
+                this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?> { { scopeVector, sortIndex } };
+                this.RosterVector = vector;
+            }
+
+            public decimal[] RosterVector { get; set; }
+            public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; set; }
+            public HashSet<Guid> DisabledGroups { get; set; }
+            public Dictionary<Guid, string> RosterRowTitles { get; set; }
+            public Dictionary<Guid, InterviewQuestion> QuestionsSearchCache { get; set; }
+            public Dictionary<Guid, object> Variables { get; set; }
+            public HashSet<Guid> DisabledVariables { get; set; }
+            public Dictionary<Guid, InterviewStaticText> StaticTexts { get; set; }
+        }
+
+        private class InterviewEntity 
+        {
+            public virtual Guid InterviewId { get; set; }
+            public virtual Identity Identity { get; set; }
+            public virtual EntityType EntityType { get; set; }
+
+            public virtual bool HasFlag { get; set; }
+            public virtual bool IsEnabled { get; set; }
+            public virtual int[] InvalidValidations { get; set; }
+            public virtual bool IsReadonly { get; set; }
+            public virtual int? AsInt { get; set; }
+            public virtual double? AsDouble { get; set; }
+            public virtual long? AsLong { get; set; }
+            public virtual string AsString { get; set; }
+            public virtual DateTime? AsDateTime { get; set; }
+            public virtual bool? AsBool { get; set; }
+            public virtual int[] AsIntArray { get; set; }
+            public virtual InterviewTextListAnswer[] AsList { get; set; }
+            public virtual AnsweredYesNoOption[] AsYesNo { get; set; }
+            public virtual int[][] AsIntMatrix { get; set; }
+            public virtual GeoPosition AsGps { get; set; }
+            public virtual AudioAnswer AsAudio { get; set; }
+            public virtual Area AsArea { get; set; }
+        }
+
+        private class InterviewData : InterviewBrief
+        {
+            public InterviewData()
+            {
+                this.Levels = new Dictionary<string, InterviewLevel>();
+            }
+
+            public UserRoles ResponsibleRole { get; set; }
+            public DateTime UpdateDate { get; set; }
+            public Dictionary<string, InterviewLevel> Levels { get; set; }
+            public bool WasCompleted { get; set; }
+            public Guid? SupervisorId { get; set; }
+            public bool CreatedOnClient { get; set; }
+            public bool ReceivedByInterviewer { get; set; }
+            public string CurrentLanguage { get; set; }
+            public bool IsMissingAssignToInterviewer { get; set; }
+
+            public string InterviewKey { get; set; }
+            public int? AssignmentId { get; set; }
         }
     }
 }
