@@ -1060,4 +1060,7 @@
   <data name="QuestionAddSpecialValues" xml:space="preserve">
     <value>Add special value</value>
   </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Use signature pad</value>
+  </data>
 </root>

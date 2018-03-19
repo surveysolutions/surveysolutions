@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Models;

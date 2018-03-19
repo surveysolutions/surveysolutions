@@ -103,6 +103,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 }
             }
 
+            if (forItemObject is MultimediaQuestionViewModel multimediaQuestionViewModel && multimediaQuestionViewModel.IsSignature)
+            {
+                return Resource.Layout.interview_question_signature;
+            }
+
             return EntityTemplates.ContainsKey(typeOfViewModel)
                 ? EntityTemplates[typeOfViewModel]
                 : EntityTemplates.ContainsKey(typeOfViewModel.BaseType) ? EntityTemplates[typeOfViewModel.BaseType] : UnknownViewType;

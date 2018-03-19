@@ -200,4 +200,8 @@
     <value>Карты</value>
     <comment>Карты</comment>
   </data>
+    <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Экспортировать опросник</value>
+    <comment>Экспортировать опросник</comment>
+  </data>
 </root>

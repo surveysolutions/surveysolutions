@@ -10,11 +10,11 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
     {
         private readonly ZipOutputStream zipStream;
 
-        public IonicZipArchive(Stream outputStream, string password, CompressionLevel compressionLevel = CompressionLevel.BestSpeed)
+        public IonicZipArchive(Stream outputStream, string password, CompressionLevel compressionLevel = CompressionLevel.BestSpeed, bool leaveOpen = false)
         {
-            this.zipStream = new ZipOutputStream(outputStream);
+            this.zipStream = new ZipOutputStream(outputStream, leaveOpen);
             zipStream.CompressionLevel = compressionLevel;
-
+            
             if (!string.IsNullOrWhiteSpace(password))
             {
                 zipStream.Password = password;

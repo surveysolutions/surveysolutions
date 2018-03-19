@@ -90,6 +90,8 @@
 
                 $scope.activeQuestion.wereOptionsTruncated = question.wereOptionsTruncated || false;
                 $scope.activeQuestion.isInteger = (question.type === 'Numeric') ? question.isInteger : true;
+                $scope.activeQuestion.isSignature = (question.type === 'Multimedia') ? question.isSignature : false;
+
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
                 $scope.activeQuestion.questionScope = _.find(question.allQuestionScopeOptions, {value: question.isPreFilled ? 'Identifying' : question.questionScope});
