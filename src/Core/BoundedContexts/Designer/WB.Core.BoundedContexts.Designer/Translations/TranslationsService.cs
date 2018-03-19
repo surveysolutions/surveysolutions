@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Commands;
 using WB.Core.BoundedContexts.Designer.Resources;
