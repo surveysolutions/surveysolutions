@@ -10,6 +10,7 @@
     <EditText style="@style/Dashboard_SearchView_FilterInput"
               local:MvxBind="SetFocus Not(Or(IsInProgressLongOperation, IsInProgressLongOperation)); 
                                      Watermark EmptySearchText; 
+                                     Text SearchText;
                                      TextChanged SearchCommand;
                                      Enabled Not(IsInProgressLongOperation); 
                                      Clickable Not(IsInProgressLongOperation);" />
@@ -45,7 +46,7 @@
                   local:MvxBind="ItemsSource UiItems;" />
 
               <TextView style="@style/Dashboard_Search_ExitSearch" 
-                local:MvxBind="Text Localization('Dashboard_Search_ExitSearch'); Click ClearSearchCommand;" />
+                local:MvxBind="Text Localization('Dashboard_Search_ExitSearch'); Click ExitSearchCommand;" />
 
             </LinearLayout>
             <LinearLayout style="@style/Interview_GroupWithDivider"
