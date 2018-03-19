@@ -230,4 +230,16 @@
     <value>Нет карт для скачивания</value>
     <comment>Нет карт для скачивания</comment>
   </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>Запрошена новая версия приложения</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>Запрошена новая версия расширенного приложения</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Запрошен патч для расширенного приложения версии {0}</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Запрошен патч для приложения версии {0}</value>
+  </data>
 </root>

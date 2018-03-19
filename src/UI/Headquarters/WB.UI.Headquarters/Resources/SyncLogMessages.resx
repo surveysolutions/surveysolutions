@@ -219,4 +219,16 @@
   <data name="InterviewerFailedToLogin" xml:space="preserve">
     <value>Interviewer failed to login</value>
   </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>New application file requested</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>New extended application file requested</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Patch file requested for extended version {0}</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Patch file requested for version {0}</value>
+  </data>
 </root>
