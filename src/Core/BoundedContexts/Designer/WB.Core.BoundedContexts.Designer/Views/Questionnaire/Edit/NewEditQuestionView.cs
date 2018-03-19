@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public int? MaxAnswerCount { get; set; }
         public bool YesNoView { get; set; }
         public bool? IsFilteredCombobox { get; set; }
-
+        public bool? IsSignature { get; set; }
         public bool IsTimestamp { get; set; }
 
         public string CascadeFromQuestionId { get; set; }

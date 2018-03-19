@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -161,7 +162,10 @@ namespace WB.UI.Headquarters.Controllers
             }
             catch (RestException ex) when (ex.StatusCode == HttpStatusCode.Forbidden)
             {
-                this.ModelState.AddModelError("AccessForbidden", $"{Resources.LoginToDesigner.AccessForbidden} {ex.Message}");
+                var position = ex.Message.IndexOf("IP:", StringComparison.InvariantCultureIgnoreCase);
+                string ipString = position > -1 ? ex.Message.Substring(position) : "";
+
+                this.ModelState.AddModelError("AccessForbidden", $"{Resources.LoginToDesigner.AccessForbidden} {ipString}");
             }
             catch (RestException ex)
             {

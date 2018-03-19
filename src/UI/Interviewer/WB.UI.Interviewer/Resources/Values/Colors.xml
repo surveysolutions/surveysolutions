@@ -30,6 +30,9 @@
   <color name="dashboard_border">#ECECEC</color>
   <color name="dashboard_border_shadow">#C2C2C2</color>
 
+  <color name="dashboard_search_background_color">#F2F2F2</color>
+  <color name="dashboard_search_exit_color">#2A81CB</color>
+  
   <!-- File picker -->
   <color name="bright_blue">#33B5E5</color>
   <color name="selection_background_color">#FEBB20</color>

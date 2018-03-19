@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -25,36 +26,39 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultimediaQuesti
         }
 
         private void BecauseOf() =>
-                questionnaire.UpdateMultimediaQuestion(questionId: questionId, title: "title",
+            questionnaire.UpdateMultimediaQuestion(
+                Create.Command.UpdateMultimediaQuestion(
+                    questionId: questionId, title: "title",
                     variableName: "multimedia_question",
-                    variableLabel: variableName, enablementCondition: condition, hideIfDisabled: hideIfDisabled, instructions: instructions,
-                    responsibleId: responsibleId, scope: QuestionScope.Interviewer, properties: Create.QuestionProperties());
-
-
+                    variableLabel: variableName, enablementCondition: condition, hideIfDisabled: hideIfDisabled,
+                    instructions: instructions,
+                    responsibleId: responsibleId, scope: QuestionScope.Interviewer,
+                    properties: Create.QuestionProperties(),
+                    isSignature: false));
 
         [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .PublicKey.ShouldEqual(questionId);
+                .PublicKey.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_contains_question_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .VariableLabel.ShouldEqual(variableName);
+                .VariableLabel.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_contains_question_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .QuestionText.ShouldEqual(title);
+                .QuestionText.Should().Be(title);
 
         [NUnit.Framework.Test] public void should_contains_question_with_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .ConditionExpression.ShouldEqual(condition);
+                .ConditionExpression.Should().Be(condition);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+                .HideIfDisabled.Should().Be(hideIfDisabled);
 
         [NUnit.Framework.Test] public void should_contains_question_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .Instructions.ShouldEqual(instructions);
+                .Instructions.Should().Be(instructions);
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

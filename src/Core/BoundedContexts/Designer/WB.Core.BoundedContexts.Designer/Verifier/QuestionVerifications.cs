@@ -63,7 +63,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorForTranslation<INumericQuestion>("WB0137", SpecialValueTitlesMustBeUnique, VerificationMessages.WB0137_SpecialValuesTitlesMustBeUnique),
             Error<SingleQuestion, SingleQuestion>("WB0087", CascadingHasCircularReference, VerificationMessages.WB0087_CascadingQuestionHasCicularReference),
             ErrorForTranslation<IComposite, ValidationCondition>("WB0105", GetValidationConditionsOrEmpty, ValidationMessageIsTooLong, index => string.Format(VerificationMessages.WB0105_ValidationMessageIsTooLong, index, MaxValidationMessageLength)),
-            Error<SingleQuestion>("WB0280", ComboboxShouldNotHaveParentValue, VerificationMessages.WB0280_ComboboxShouldNotHaveParentValue),
             Error_ManyGpsPrefilledQuestions_WB0006,
             ErrorsByLinkedQuestions,
             Warning(TooManyQuestions, "WB0205", string.Format(VerificationMessages.WB0205_TooManyQuestions, MaxQuestionsCountInQuestionnaire)),

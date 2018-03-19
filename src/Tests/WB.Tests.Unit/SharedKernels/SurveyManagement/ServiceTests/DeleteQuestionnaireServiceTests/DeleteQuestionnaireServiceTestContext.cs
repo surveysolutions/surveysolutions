@@ -24,11 +24,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
            IQuestionnaireStorage questionnaireStorage = null,
            IInterviewImportService interviewImportService = null)
         {
-            Func<IInterviewsToDeleteFactory> factory = () => (interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>());
+            IInterviewsToDeleteFactory Factory() => interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>();
+
             Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return
                 new DeleteQuestionnaireService(
-                    factory,
+                    Factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     Mock.Of<ITranslationManagementService>(),
                     interviewImportService ?? Mock.Of<IInterviewImportService>(_ => _.Status == new AssignmentImportStatus()),

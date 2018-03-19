@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
@@ -12,7 +13,7 @@ using WB.UI.Headquarters.Models.CompanyLogo;
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {
     [TestFixture]
-    [TestOf(typeof(CompanyLogoApiV2Controller))]
+    [TestOf(typeof(SettingsV2Controller))]
     public class CompanyLogoApiV2ControllerTests
     {
         [Test]
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var controller = this.GetController();
 
             // act
-            var response = controller.Get();
+            var response = controller.CompanyLogo();
             
             // assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NoContent));
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var controller = this.GetController(logoStorage);
 
             // act
-            var response = controller.Get();
+            var response = controller.CompanyLogo();
 
             // assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -60,17 +61,18 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             var controller = this.GetController(logoStorage, requestEtag: $"\"{logo.GetEtagValue()}\"");
 
             // act
-            var response = controller.Get();
+            var response = controller.CompanyLogo();
 
             // assert
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.NotModified));
             Assert.That(response.Content, Is.Null);
         }
 
-        CompanyLogoApiV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
-            string requestEtag = null)
+        SettingsV2Controller GetController(IPlainKeyValueStorage<CompanyLogo> logoStorage = null,
+            string requestEtag = null, IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage = null)
         {
-            var companyLogoApiV2Controller = new CompanyLogoApiV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>());
+            var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
+                interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>());
             var httpRequestMessage = new HttpRequestMessage();
             if (requestEtag != null)
             {

@@ -21,20 +21,32 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
     {
+        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, 
-            IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, 
-            IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, 
-            IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory, 
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
+            ICommandService commandService,
+            IQuestionnaireStorage questionnaireRepository,
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
             IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage) : 
-            base(statefulInterviewRepository, commandService, questionnaireRepository, 
-                webInterviewNotificationService, interviewEntityFactory, imageFileStorage, audioFileStorage)
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            IAudioFileStorage audioFileStorage,
+            IAuthorizedUser authorizedUser,
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewFactory interviewFactory,
+            IStatefullInterviewSearcher statefullInterviewSearcher) : base(statefulInterviewRepository,
+            commandService,
+            questionnaireRepository,
+            webInterviewNotificationService,
+            interviewEntityFactory,
+            imageFileStorage,
+            audioFileStorage)
         {
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewFactory = interviewFactory;
@@ -138,7 +150,13 @@ namespace WB.UI.Headquarters.API.WebInterview
                     this.commandService.Execute(command);
                 }
             }
+        }
 
+        public override InterviewInfo GetInterviewDetails()
+        {
+            var interviewDetails = base.GetInterviewDetails();
+            interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
+            return interviewDetails;
         }
     }
 }

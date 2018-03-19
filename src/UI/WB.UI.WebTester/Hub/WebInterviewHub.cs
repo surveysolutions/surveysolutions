@@ -13,17 +13,20 @@ namespace WB.UI.WebTester.Hub
     {
         private readonly IEvictionNotifier evictionNotify;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, 
-            ICommandService commandService, 
-            IQuestionnaireStorage questionnaireRepository, 
-            IWebInterviewNotificationService webInterviewNotificationService, 
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
+            ICommandService commandService,
+            IQuestionnaireStorage questionnaireRepository,
+            IWebInterviewNotificationService webInterviewNotificationService,
             IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IEvictionNotifier evictionNotify, 
             IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage) : 
-            base(statefulInterviewRepository, commandService, questionnaireRepository, 
-                webInterviewNotificationService, interviewEntityFactory, imageFileStorage, 
-                audioFileStorage)
+            IAudioFileStorage audioFileStorage,
+            IEvictionNotifier evictionNotify) : base(statefulInterviewRepository,
+            commandService,
+            questionnaireRepository,
+            webInterviewNotificationService,
+            interviewEntityFactory,
+            imageFileStorage,
+            audioFileStorage)
         {
             this.evictionNotify = evictionNotify;
         }

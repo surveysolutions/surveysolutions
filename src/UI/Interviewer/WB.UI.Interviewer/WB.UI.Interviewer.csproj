@@ -313,6 +313,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\Dashboard\DashboardSearchActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
@@ -458,6 +459,9 @@
     <AndroidResource Include="Resources\layout\map_list_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\dashboard_search.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\ErrorScreen.axml">
@@ -485,7 +489,9 @@
     <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\values\colors.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\values\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -662,6 +668,9 @@
     <AndroidResource Include="Resources\menu\maps.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\spyglass_black.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

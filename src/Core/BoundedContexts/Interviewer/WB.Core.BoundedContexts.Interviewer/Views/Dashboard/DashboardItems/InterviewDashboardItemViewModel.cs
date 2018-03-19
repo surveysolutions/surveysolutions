@@ -233,7 +233,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
             this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
-            this.OnItemRemoved(this, EventArgs.Empty);
+            this.OnItemRemoved.Invoke(this, EventArgs.Empty);
         }
 
         public async Task LoadInterviewAsync()

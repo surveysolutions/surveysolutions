@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_completing_interview_and_interview_has_2_disabled_and_2_enabled_instances_of_fixed_roster
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
             {
                 Create.Entity.Roster(
@@ -34,32 +33,27 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             }));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             interview.Complete(Guid.NewGuid(), string.Empty, DateTime.UtcNow);
 
-        It should_raise_GroupsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_raise_GroupsDisabled_event () =>
             eventContext.ShouldContainEvent<GroupsDisabled>();
 
-        It should_raise_GroupsDisabled_event_with_disabled_roster_vectors_of_fixed_roster = () =>
-            eventContext.GetEvent<GroupsDisabled>().Groups.ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_raise_GroupsDisabled_event_with_disabled_roster_vectors_of_fixed_roster () =>
+            eventContext.GetEvent<GroupsDisabled>().Groups.Should().BeEquivalentTo(new[]
             {
                 Create.Entity.Identity(rosterId, Create.Entity.RosterVector(-3)),
                 Create.Entity.Identity(rosterId, Create.Entity.RosterVector(-4)),
             });
 
-        It should_not_raise_QuestionsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsDisabled_event () =>
             eventContext.ShouldNotContainEvent<QuestionsDisabled>();
 
-        It should_not_raise_QuestionsEnabled_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsEnabled_event () =>
             eventContext.ShouldNotContainEvent<QuestionsEnabled>();
-
-        Cleanup stuff = () =>
-        {
-            eventContext.Dispose();
-            eventContext = null;
-        };
 
         private static StatefulInterview interview;
         private static EventContext eventContext;
