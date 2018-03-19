@@ -44,9 +44,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.messenger = messenger;
         }
 
-        public string SearchText { get; set; }
         public bool IsNeedFocus { get; set; } = true;
         public string EmptySearchText { get; private set; }
+
+        private string searchText;
+        public string SearchText
+        {
+            get => this.searchText;
+            set => SetProperty(ref this.searchText, value);
+        }
 
         private string serchResultText;
         public string SerchResultText 
@@ -69,12 +75,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             set => SetProperty(ref this.isInProgressItemsLoading, value);
         }
 
-        public IMvxCommand ClearSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateToDashboard());
+        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty);
+        public IMvxCommand ExitSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateToDashboard());
         public IMvxCommand SearchCommand => new MvxCommand<string>(Search);
 
         private void Search(string searctText)
         {
-            SearchText = searctText;
             UpdateUiItems(searctText);
         }
 
