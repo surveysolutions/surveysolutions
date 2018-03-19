@@ -6680,19 +6680,47 @@ a.disabled {
   color: white;
   text-decoration: none; }
 
-.navbar-text, .interview-ID {
-  font: 18px/20px "RobotoBold";
+.navbar .navbar-text, .navbar .interview-ID {
+  font: 18px/20px "RobotoBold" !important;
   padding: 24px 9px; }
 
 .interview-ID {
   color: #fff;
   display: inline-block; }
 
+.navbar-header > .interview-ID {
+  display: none; }
+
+.navbar-web-interview .navbar-header > .interview-ID {
+  display: none; }
+
+.navbar-web-interview .nav.navbar-left {
+  max-width: 120px;
+  overflow: hidden; }
+  .navbar-web-interview .nav.navbar-left li {
+    max-width: 100%; }
+    .navbar-web-interview .nav.navbar-left li .interview-ID {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+
+.navbar-web-interview .nav.navbar-right {
+  max-width: 560px;
+  min-width: 220px; }
+  .navbar-web-interview .nav.navbar-right > li {
+    float: right; }
+    .navbar-web-interview .nav.navbar-right > li.help-link {
+      max-width: 120px; }
+    .navbar-web-interview .nav.navbar-right > li > a {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+
 .navbar-text {
   white-space: nowrap;
   margin-bottom: 0;
   margin-top: 0;
-  width: 50%;
+  max-width: calc(100% - 730px);
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
@@ -6704,7 +6732,27 @@ a.disabled {
 
 .language {
   background: url("../img/language.png") 0 15px no-repeat;
-  padding-left: 40px; }
+  padding-left: 40px;
+  max-width: 60%; }
+  .language > a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .language .dropdown-menu {
+    max-width: 350px; }
+    .language .dropdown-menu a {
+      white-space: normal; }
+
+.navbar-web-interview .in .nav.navbar-right {
+  max-width: 100%; }
+
+@media screen and (max-width: 1350px) {
+  .navbar-web-interview .navbar-text {
+    max-width: calc(100% - 550px); }
+  .navbar-web-interview .nav.navbar-right {
+    max-width: 380px; }
+  .navbar-web-interview .language {
+    max-width: 55%; } }
 
 @media (max-width: 1210px) {
   .navbar .container, .navbar .container-fluid {
@@ -6850,6 +6898,14 @@ a.disabled {
     background-color: transparent; } }
 
 @media (max-width: 879px) {
+  .navbar-web-interview .nav.navbar-right > li,
+  .navbar-web-interview .nav.navbar-right > li.help-link,
+  .navbar-web-interview .nav.navbar-left {
+    width: 100%;
+    max-width: 100%;
+    text-align: left; }
+  .language .dropdown-menu {
+    max-width: 80%; }
   .navbar {
     min-height: 60px; }
     .navbar .container, .navbar .container-fluid {
@@ -6862,6 +6918,9 @@ a.disabled {
     .navbar .navbar-header {
       margin: 0;
       padding-top: 5px; }
+      .navbar .navbar-header > .interview-ID {
+        padding: 15px 9px;
+        display: inline-block; }
       .navbar .navbar-header .btn-icon,
       .navbar .navbar-header .badge.badge_nav {
         display: block;

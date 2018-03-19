@@ -1851,14 +1851,5 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0276_RownameIsNotSupported", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Combobox question options should not contain reference to parent value..
-        /// </summary>
-        public static string WB0280_ComboboxShouldNotHaveParentValue {
-            get {
-                return ResourceManager.GetString("WB0280_ComboboxShouldNotHaveParentValue", resourceCulture);
-            }
-        }
     }
 }
