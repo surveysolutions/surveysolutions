@@ -43,7 +43,7 @@
         };
 
         commentsService.postComment = function(questionnaireId, itemId, comment) {
-            var url = utilityService.format('{0}/entity/{1}/addComment', utilityService.format(urlBase, questionnaireId), itemId);
+            var url = utilityService.format('{0}/entity/addComment', utilityService.format(urlBase, questionnaireId));
             return post(url, comment);
         };
 
