@@ -177,6 +177,9 @@
   <data name="DeleteQuestionnaire" xml:space="preserve">
     <value>Delete questionnaire</value>
   </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Export questionnaire</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
