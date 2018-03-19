@@ -39,7 +39,7 @@ namespace WB.Enumerator.Native.WebInterview
             };
         }
 
-        public InterviewInfo GetInterviewDetails()
+        public virtual InterviewInfo GetInterviewDetails()
         {
             var statefulInterview = this.GetCallerInterview();
             if (statefulInterview == null) return null;
@@ -56,7 +56,7 @@ namespace WB.Enumerator.Native.WebInterview
                 InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving,
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
                 IsCurrentUserObserving = this.IsCurrentUserObserving,
-                DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId))
+                DoesBrokenPackageExist = false
             };
         }
 
