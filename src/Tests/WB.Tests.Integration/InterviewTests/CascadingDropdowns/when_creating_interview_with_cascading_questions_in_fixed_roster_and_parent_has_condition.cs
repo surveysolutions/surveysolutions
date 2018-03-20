@@ -12,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    internal class when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : in_standalone_app_domain
+    internal class when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
@@ -93,6 +93,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             results.WasAnyGrandChildQuestionDisabled.Should().BeTrue();
 
         private static InvokeResults results;
+        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         [Serializable]
         internal class InvokeResults

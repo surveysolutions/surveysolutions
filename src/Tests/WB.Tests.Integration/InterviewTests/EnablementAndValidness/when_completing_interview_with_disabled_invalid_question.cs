@@ -11,8 +11,9 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_completing_interview_with_disabled_invalid_question_and_static_text : in_standalone_app_domain
+    internal class when_completing_interview_with_disabled_invalid_question_and_static_text : InterviewTestsContext
     {
+
         [OneTimeSetUp]
         public void Setup()
         {
@@ -71,6 +72,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             public bool RaisedInterviewDeclaredInvalid { get; set; }
             public bool RaisedInterviewDeclaredValid { get; set; }
         }
+
+        [OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
 
         private InvokeResults results;
     }

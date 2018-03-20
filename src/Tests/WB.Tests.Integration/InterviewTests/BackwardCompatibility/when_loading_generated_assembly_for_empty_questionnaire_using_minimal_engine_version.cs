@@ -8,8 +8,10 @@ using NUnit.Framework;
 
 namespace WB.Tests.Integration.InterviewTests.BackwardCompatibility
 {
-    internal class when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version : in_standalone_app_domain
+    internal class when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version : InterviewTestsContext
     {
+        protected AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
         [Test]
         public void should_declare_GetRosterKey_method_in_QuestionnaireTopLevel()
         {
@@ -42,7 +44,7 @@ namespace WB.Tests.Integration.InterviewTests.BackwardCompatibility
             public bool QuestionnaireTopLevelContainsGetRosterKeyMethod { get; set; }
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void TearDown()
         {
             appDomainContext.Dispose();
