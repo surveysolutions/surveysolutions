@@ -106,7 +106,7 @@ namespace Ncqrs.Tests.Domain
         {
             var theAggregate = new MyAggregateRoot();
             Action act = ()=>theAggregate.MethodThatCausesAnEventThatHasAHandler();
-            act.ShouldNotThrow();
+            act.Should().NotThrow();
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace Ncqrs.Tests.Domain
             var theAggregate = new MyAggregateRoot();
             Action act = theAggregate.MethodThatCausesAnEventThatDoesNotConaintAHandler;
 
-            act.ShouldThrow<EventNotHandledException>();
+            act.Should().Throw<EventNotHandledException>();
         }
 
         [Test]
@@ -188,7 +188,7 @@ namespace Ncqrs.Tests.Domain
 
             Action act = () => theAggregate.InitializeFromHistory(Guid.NewGuid(), null);
 
-            act.ShouldThrow<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -210,7 +210,7 @@ namespace Ncqrs.Tests.Domain
                 new CommittedEvent(Guid.NewGuid(), null, Guid.NewGuid(), theAggregate.EventSourceId, wrongSequence, DateTime.UtcNow, 0, new HandledEvent()));
 
             Action act = ()=> theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream);
-            act.ShouldThrow<InvalidOperationException>().And.Message.Should().Contain("sequence");
+            act.Should().Throw<InvalidOperationException>().And.Message.Should().Contain("sequence");
         }
 
         [Test]
@@ -240,7 +240,7 @@ namespace Ncqrs.Tests.Domain
 
             Action act = () => theAggregate.InitializeFromHistory(theAggregate.EventSourceId, stream);
 
-            act.ShouldThrow<InvalidOperationException>();
+            act.Should().Throw<InvalidOperationException>();
         }
         
         [Test]
