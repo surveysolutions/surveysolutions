@@ -81,7 +81,7 @@ namespace Ncqrs.Tests.Eventing
 
             Action act = () => new CommittedEventStream(sourceId, eventsWithAnNullElement);
 
-            act.ShouldThrow<ArgumentNullException>();
+            act.Should().Throw<ArgumentNullException>();
         }
 
         [Test]
@@ -98,7 +98,7 @@ namespace Ncqrs.Tests.Eventing
 
             Action act = () => new CommittedEventStream(sourceId, committedEvents);
 
-            act.ShouldThrow<ArgumentException>();
+            act.Should().Throw<ArgumentException>();
         }
 
         [Test]
@@ -115,7 +115,7 @@ namespace Ncqrs.Tests.Eventing
 
             Action act = () => new CommittedEventStream(sourceId, committedEvents);
 
-            act.ShouldThrow<ArgumentException>();
+            act.Should().Throw<ArgumentException>();
         }
     }
 }
