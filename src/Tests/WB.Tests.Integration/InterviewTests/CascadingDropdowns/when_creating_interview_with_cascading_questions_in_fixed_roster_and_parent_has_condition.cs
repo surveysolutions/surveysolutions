@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
@@ -12,8 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
     internal class when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition : in_standalone_app_domain
     {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -74,17 +80,17 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        It should_not_enable_any_question = () =>
-            results.WasAnyQuestionEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_any_question () =>
+            results.WasAnyQuestionEnabled.Should().BeFalse();
 
-        It should_disable_all_parent_questions = () =>
-            results.WasAnyParentQuestionDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_all_parent_questions () =>
+            results.WasAnyParentQuestionDisabled.Should().BeTrue();
 
-        It should_disable_all_child_questions = () =>
-            results.WasAnyChildQuestionDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_all_child_questions () =>
+            results.WasAnyChildQuestionDisabled.Should().BeTrue();
 
-        It should_disable_all_grand_child_questions = () =>
-            results.WasAnyGrandChildQuestionDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_all_grand_child_questions () =>
+            results.WasAnyGrandChildQuestionDisabled.Should().BeTrue();
 
         private static InvokeResults results;
 
@@ -95,6 +101,13 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             public bool WasAnyParentQuestionDisabled { get; set; }
             public bool WasAnyChildQuestionDisabled { get; set; }
             public bool WasAnyGrandChildQuestionDisabled { get; set; }
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
         }
     }
 }

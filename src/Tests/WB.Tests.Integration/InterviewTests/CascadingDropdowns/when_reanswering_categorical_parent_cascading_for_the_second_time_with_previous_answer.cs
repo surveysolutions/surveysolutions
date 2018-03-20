@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -14,12 +16,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
     [Subject(typeof(Interview))]
     internal class when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
 
@@ -81,23 +83,24 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
 
-        It should_not_enable_child_question_because_it_was_already_enabled = () =>
-            results.WasChildCascadingEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_child_question_because_it_was_already_enabled () =>
+            results.WasChildCascadingEnabled.Should().BeFalse();
 
-        It should_not_disable_child_question_because_it_was_already_enabled = () =>
-            results.WasChildCascadingDisabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_disable_child_question_because_it_was_already_enabled () =>
+            results.WasChildCascadingDisabled.Should().BeFalse();
 
-        It should_not_disable_grandchild_question_because_it_was_already_enabled = () =>
-            results.WasGrandChildAnswerDiasbled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_disable_grandchild_question_because_it_was_already_enabled () =>
+            results.WasGrandChildAnswerDiasbled.Should().BeFalse();
 
-        It should_not_enable_grandchild_question_because_it_was_already_enabled = () =>
-            results.WasGrandChildAnswerEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_grandchild_question_because_it_was_already_enabled () =>
+            results.WasGrandChildAnswerEnabled.Should().BeFalse();
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
