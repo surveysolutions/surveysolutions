@@ -75,35 +75,28 @@ namespace WB.UI.Headquarters.API.Interviewer
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
-        public virtual async Task<HttpResponseMessage> Get()
+        public virtual HttpResponseMessage Get()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return await this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+                return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
 
-            return await this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
         }
         
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
-        public virtual async Task<HttpResponseMessage> GetExtended()
+        public virtual HttpResponseMessage GetExtended()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return await this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
+                return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
 
-            return await this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
         }
 
-        private async Task<HttpResponseMessage> HttpResponseMessage(string appName)
+        private HttpResponseMessage HttpResponseMessage(string appName)
         {
-            var authHeader = Request.Headers.Authorization?.ToString();
-
-            if (authHeader != null)
-            {
-                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
-            }
-
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
