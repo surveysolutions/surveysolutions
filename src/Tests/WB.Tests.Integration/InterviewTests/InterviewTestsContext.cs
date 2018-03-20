@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,9 +12,7 @@ using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -29,11 +26,9 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
-using It = Moq.It;
 
 namespace WB.Tests.Integration.InterviewTests
 {
-    [Subject(typeof(Interview))]
     public class InterviewTestsContext
     {
         internal static AnsweredYesNoOption Yes(decimal value)

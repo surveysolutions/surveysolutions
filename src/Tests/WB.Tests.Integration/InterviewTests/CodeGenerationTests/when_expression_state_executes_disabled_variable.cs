@@ -3,7 +3,6 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection.V9;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;

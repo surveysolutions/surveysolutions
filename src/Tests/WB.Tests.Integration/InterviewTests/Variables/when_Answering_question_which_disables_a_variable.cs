@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;

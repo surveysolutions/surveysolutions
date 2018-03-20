@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.TesterResourcesTests
@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
 
         [Test]
         public void should_return_only_dimensions_xmls_from_values_folders() =>
-            resources.ShouldEachConformTo(resource => resource.ToLower().StartsWith("values") && resource.ToLower().Contains("dimensions"));
+            resources.Should().OnlyContain(resource => resource.ToLower().StartsWith("values") && resource.ToLower().Contains("dimensions"));
 
         private static string[] resources;
     }

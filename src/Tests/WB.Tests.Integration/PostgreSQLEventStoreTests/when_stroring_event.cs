@@ -9,7 +9,6 @@ using Npgsql;
 using NUnit.Framework;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {

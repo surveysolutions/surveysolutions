@@ -8,7 +8,6 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using System.Collections.Generic;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness

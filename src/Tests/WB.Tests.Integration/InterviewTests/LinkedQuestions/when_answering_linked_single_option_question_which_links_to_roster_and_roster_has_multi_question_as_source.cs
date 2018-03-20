@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -7,7 +6,6 @@ using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {

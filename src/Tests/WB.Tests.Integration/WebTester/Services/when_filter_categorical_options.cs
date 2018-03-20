@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Documents;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;

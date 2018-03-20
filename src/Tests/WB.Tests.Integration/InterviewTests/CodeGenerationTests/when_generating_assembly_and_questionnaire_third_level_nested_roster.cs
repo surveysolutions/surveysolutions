@@ -4,7 +4,6 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests

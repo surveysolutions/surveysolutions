@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests

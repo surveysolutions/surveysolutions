@@ -1,23 +1,18 @@
-﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLTests
 {
-    [Subject(typeof(PostgresReadSideKeyValueStorage<TestRemoveKeyValueStartsFromClass>))]
+    [TestOf(typeof(PostgresReadSideKeyValueStorage<TestRemoveKeyValueStartsFromClass>))]
     public class when_removing_from_keyvalue_storage_if_id_starts_from : with_postgres_db
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
@@ -30,17 +25,23 @@ namespace WB.Tests.Integration.PostgreSQLTests
             storage.Store(new TestRemoveKeyValueStartsFromClass { Value = "test1" }, $"{nastya}1");
             storage.Store(new TestRemoveKeyValueStartsFromClass { Value = "test2" }, $"{nastya}2");
             storage.Store(new TestRemoveKeyValueStartsFromClass { Value = "test3" }, "vitaliy");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => { storage.RemoveIfStartsWith(nastya); };
+        public void BecauseOf() { storage.RemoveIfStartsWith(nastya); }
 
-        It should_nastya1_value_be_null = () => storage.GetById($"{nastya}1").ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_nastya1_value_be_null () => storage.GetById($"{nastya}1").Should().NotBeNull();
 
-        It should_nastya2_value_be_null = () => storage.GetById($"{nastya}2").ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_nastya2_value_be_null () => storage.GetById($"{nastya}2").Should().NotBeNull();
 
-        It should_vitaliy_value_be_not_null = () => storage.GetById("vitaliy").ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_vitaliy_value_be_not_null () => storage.GetById("vitaliy").Should().NotBeNull();
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            pgSqlConnection.Close();
+        }
 
         static PostgresReadSideKeyValueStorage<TestRemoveKeyValueStartsFromClass> storage;
         static string nastya = "nastya";
