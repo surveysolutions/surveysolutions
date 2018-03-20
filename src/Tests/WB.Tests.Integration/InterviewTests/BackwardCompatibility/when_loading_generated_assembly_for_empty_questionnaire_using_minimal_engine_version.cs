@@ -1,29 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Documents;
+using NUnit.Framework;
 
 namespace WB.Tests.Integration.InterviewTests.BackwardCompatibility
 {
     internal class when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version : in_standalone_app_domain
     {
-        Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+        [Test]
+        public void should_declare_GetRosterKey_method_in_QuestionnaireTopLevel()
         {
-            Setup.MockedServiceLocator();
-            QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter();
-            Assembly assembly = CompileAssemblyUsingQuestionnaireEngine(questionnaireDocument);
+            appDomainContext = AppDomainContext.Create();
 
-            var questionnaireTopLevelTypeInfo = assembly.GetTypes().Single(type => type.Name == "QuestionnaireTopLevel").GetTypeInfo();
+            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+            {
+                Setup.MockedServiceLocator();
+                QuestionnaireDocument questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter();
+                Assembly assembly = CompileAssemblyUsingQuestionnaireEngine(questionnaireDocument);
 
-            return new InvokeResults { QuestionnaireTopLevelContainsGetRosterKeyMethod = questionnaireTopLevelTypeInfo.DeclaredMethods.Any(method => method.Name.EndsWith("GetRosterKey")) };
-        });
+                var questionnaireTopLevelTypeInfo =
+                    assembly.GetTypes().Single(type => type.Name == "QuestionnaireTopLevel").GetTypeInfo();
 
-        It should_declare_GetRosterKey_method_in_QuestionnaireTopLevel = () =>
-            results.QuestionnaireTopLevelContainsGetRosterKeyMethod.ShouldBeTrue();
+                return new InvokeResults
+                {
+                    QuestionnaireTopLevelContainsGetRosterKeyMethod =
+                        questionnaireTopLevelTypeInfo.DeclaredMethods.Any(method => method.Name.EndsWith("GetRosterKey"))
+                };
+            });
+
+            results.QuestionnaireTopLevelContainsGetRosterKeyMethod.Should().BeTrue();
+        }
 
         private static InvokeResults results;
 
@@ -31,6 +40,13 @@ namespace WB.Tests.Integration.InterviewTests.BackwardCompatibility
         internal class InvokeResults
         {
             public bool QuestionnaireTopLevelContainsGetRosterKeyMethod { get; set; }
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
         }
     }
 }
