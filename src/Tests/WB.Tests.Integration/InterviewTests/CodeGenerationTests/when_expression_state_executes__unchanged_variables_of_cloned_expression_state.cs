@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,12 +12,12 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_expression_state_executes__unchanged_variables_of_cloned_expression_state : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -50,14 +50,14 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
             });
 
 
-        It should_result_not_return_the_variable_changed_result = () =>
-             results.CountOfChangedVariables.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_result_not_return_the_variable_changed_result () =>
+             results.CountOfChangedVariables.Should().Be(0);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;
