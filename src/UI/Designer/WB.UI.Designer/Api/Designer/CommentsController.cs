@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using Castle.Components.DictionaryAdapter;
 using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Filters;
 using WB.UI.Designer.Models;
 using WB.UI.Shared.Web.Filters;
@@ -19,13 +21,16 @@ namespace WB.UI.Designer.Api.Designer
     {
         private readonly ICommentsService commentsService;
         private readonly IMembershipUserService userHelper;
+        private readonly IQuestionnaireViewFactory questionnaireViewFactory;
 
         public CommentsController(
             ICommentsService commentsService, 
-            IMembershipUserService userHelper)
+            IMembershipUserService userHelper,
+            IQuestionnaireViewFactory questionnaireViewFactory)
         {
             this.commentsService = commentsService;
             this.userHelper = userHelper;
+            this.questionnaireViewFactory = questionnaireViewFactory;
         }
 
         [HttpGet]
@@ -33,7 +38,9 @@ namespace WB.UI.Designer.Api.Designer
         [Route("commentThreads")]
         public List<CommentThread> commentThreads(Guid id)
         {
-            return this.commentsService.LoadCommentThreads(id);
+            bool hasAccess = this.userHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.userHelper.WebUser.UserId);
+
+            return hasAccess ? this.commentsService.LoadCommentThreads(id) : new List<CommentThread>();
         }
 
         [HttpGet]
@@ -41,7 +48,8 @@ namespace WB.UI.Designer.Api.Designer
         [Route("entity/{itemId:Guid}/comments")]
         public List<CommentView> Get(Guid id, Guid itemId)
         {
-            return this.commentsService.LoadCommentsForEntity(id, itemId);
+            bool hasAccess = this.userHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.userHelper.WebUser.UserId);
+            return hasAccess ? this.commentsService.LoadCommentsForEntity(id, itemId) : new EditableList<CommentView>();
         }
 
         [HttpPost]
@@ -56,6 +64,15 @@ namespace WB.UI.Designer.Api.Designer
                     Error = string.Join(", ", ModelState.SelectMany(x => x.Value.Errors).Select(x => x.ErrorMessage))
                 });
             }
+            bool hasAccess = this.userHelper.WebUser.IsAdmin || this.questionnaireViewFactory.HasUserAccessToRevertQuestionnaire(id, this.userHelper.WebUser.UserId);
+            if (!hasAccess)
+            {
+                return this.Request.CreateResponse(new JsonResponseResult
+                {
+                    Error = "Access denied"
+                });
+            }
+
             IMembershipWebUser user = this.userHelper.WebUser;
             commentsService.PostComment(comment.Id, comment.QuestionnaireId, comment.EntityId, comment.Comment, user.UserName, user.MembershipUser.Email);
             return this.Request.CreateResponse(new JsonResponseResult());
