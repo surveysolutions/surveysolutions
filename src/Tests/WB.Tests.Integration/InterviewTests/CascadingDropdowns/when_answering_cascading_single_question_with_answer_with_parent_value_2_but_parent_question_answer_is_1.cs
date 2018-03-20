@@ -73,7 +73,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             results.ExceptionType.Should().Be(typeof(AnswerNotAcceptedException));
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__answer____parent_value____incorrect__ () =>
-            new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(
+            new[] { "answer", "parent value", "do not correspond" }.Should().OnlyContain(
                 keyword => results.ErrorMessage.Contains(keyword));
 
         [OneTimeTearDown]
