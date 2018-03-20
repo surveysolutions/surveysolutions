@@ -1098,4 +1098,7 @@
   <data name="EditorHideComment" xml:space="preserve">
     <value>Скрыть комментарии</value>
   </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
 </root>
