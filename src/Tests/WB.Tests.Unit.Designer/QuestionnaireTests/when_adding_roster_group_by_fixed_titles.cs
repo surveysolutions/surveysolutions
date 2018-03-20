@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -36,31 +36,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         [NUnit.Framework.Test] public void should_contains_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .PublicKey.ShouldEqual(groupId);
+                .PublicKey.Should().Be(groupId);
 
         [NUnit.Framework.Test] public void should_contains_group_with_RosterSizeSourceType_equal_to_specified_rosterSizeSourceType () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .RosterSizeSource.ShouldEqual(rosterSizeSourceType);
+                .RosterSizeSource.Should().Be(rosterSizeSourceType);
 
         [NUnit.Framework.Test] public void should_contains_group_with_RosterSizeQuestionId_equal_to_null () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterSizeQuestionId.ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterSizeQuestionId.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_not_nullable_RosterFixedTitles () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_not_empty_RosterFixedTitles () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.Length.ShouldNotEqual(0);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).FixedRosterTitles.Length.Should().NotBe(0);
 
         [NUnit.Framework.Test] public void should_contains_group_with_RosterFixedTitles_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .FixedRosterTitles.Select(x => x.Title).ShouldContainOnly(new[] { rosterFixedTitle1, rosterFixedTitle2 });
+                .FixedRosterTitles.Select(x => x.Title).Should().BeEquivalentTo(new[] { rosterFixedTitle1, rosterFixedTitle2 });
 
         [NUnit.Framework.Test] public void should_contains_group_with_RosterTitleQuestionId_equal_to_null () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterTitleQuestionId.ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).RosterTitleQuestionId.Should().BeNull();
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;

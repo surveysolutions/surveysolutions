@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -28,10 +28,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireHelper
             result = questionnaireHelper.GetQuestionnaires(user.UserId, user.IsAdmin, QuestionnairesType.My, null);
 
         [NUnit.Framework.Test] public void should_be_not_allowed_to_open_deleted_questionnaire_for_zero_element () =>
-            result[0].CanOpen.ShouldEqual(false);
+            result[0].CanOpen.Should().Be(false);
 
         [NUnit.Framework.Test] public void should_be_allowed_to_open_not_deleted_questionnaire_for_first_element () =>
-            result[1].CanOpen.ShouldEqual(true);
+            result[1].CanOpen.Should().Be(true);
 
         private static UI.Designer.Code.QuestionnaireHelper questionnaireHelper;
         private static IPagedList<QuestionnaireListViewModel> result;

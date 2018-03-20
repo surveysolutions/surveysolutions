@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Subject(typeof(QuestionnaireVerifier), "WB0062")]
     internal class when_validating_questionnaire_with_empty_variable_names : QuestionnaireVerifierTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
@@ -44,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = Enumerable.ToList<QuestionnaireVerificationMessage>(verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)));
 
         [NUnit.Framework.Test] public void should_skip_empty_names_when_validating_uniqueness () => 
-            verificationMessages.Where(x => x.Code == "WB0062").ShouldBeEmpty();
+            verificationMessages.Where(x => x.Code == "WB0062").Should().BeEmpty();
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;

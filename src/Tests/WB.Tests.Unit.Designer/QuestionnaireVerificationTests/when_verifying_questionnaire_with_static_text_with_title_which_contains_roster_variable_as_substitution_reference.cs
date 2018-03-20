@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -27,22 +26,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_error_with_code_WB0019 () =>
-            verificationMessages.GetError("WB0019").ShouldNotBeNull();
+            verificationMessages.GetError("WB0019").Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_error_WB0019_with_1_reference () =>
-            verificationMessages.GetError("WB0019").References.Count.ShouldEqual(2);
+            verificationMessages.GetError("WB0019").References.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_error_WB0019_with_first_reference_with_type_StaticText () =>
-            verificationMessages.GetError("WB0019").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
+            verificationMessages.GetError("WB0019").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.StaticText);
 
         [NUnit.Framework.Test] public void should_return_error_WB0019_with_first_reference_with_id_of_static_text () =>
-            verificationMessages.GetError("WB0019").References.First().Id.ShouldEqual(staticTextId);
+            verificationMessages.GetError("WB0019").References.First().Id.Should().Be(staticTextId);
 
         [NUnit.Framework.Test] public void should_return_error_WB0019_with_second_reference_with_type_roster () =>
-            verificationMessages.GetError("WB0019").References.Second().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetError("WB0019").References.Second().Type.Should().Be(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_error_WB0019_with_second_reference_with_id_of_roster () =>
-            verificationMessages.GetError("WB0019").References.Second().Id.ShouldEqual(rosterId);
+            verificationMessages.GetError("WB0019").References.Second().Id.Should().Be(rosterId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

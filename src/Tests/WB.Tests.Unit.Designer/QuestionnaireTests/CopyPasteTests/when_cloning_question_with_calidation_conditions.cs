@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTests
 {
-    [Subject(typeof(AbstractQuestion))]
     internal class when_cloning_question_with_validation_conditions
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
@@ -20,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
 
         private void BecauseOf() => clone.ValidationConditions[0].Message = "changed";
 
-        [NUnit.Framework.Test] public void should_not_change_original_validation_when_changing_title_in_clone () => original.ValidationConditions[0].Message.ShouldEqual("original");
+        [NUnit.Framework.Test] public void should_not_change_original_validation_when_changing_title_in_clone () => original.ValidationConditions[0].Message.Should().Be("original");
 
         static TextQuestion original;
         static TextQuestion clone;

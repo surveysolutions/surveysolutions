@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -43,15 +43,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             questionnaire.PasteAfter(command);
 
         [NUnit.Framework.Test] public void should_clone_MaxAnswerCount_value () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_PublicKey_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId)
-                .PublicKey.ShouldEqual(targetId);
+                .PublicKey.Should().Be(targetId);
 
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_stataExportCaption_specified () =>
             questionnaire.QuestionnaireDocument.Find<IStaticText>(targetId)
-                .Text.ShouldEqual(text);
+                .Text.Should().Be(text);
 
         static Questionnaire questionnaire;
         static Guid questionToPastAfterId;

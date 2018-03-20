@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 
@@ -22,13 +22,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private void BecauseOf() => questionnaire.AddOrUpdateAttachment(updateAttachment);
 
         [NUnit.Framework.Test] public void should_contains_attachment_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).AttachmentId.ShouldEqual(attachmentId);
+            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).AttachmentId.Should().Be(attachmentId);
 
         [NUnit.Framework.Test] public void should_contains_attachment_with_AttachmentName_specified () =>
-            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).Name.ShouldEqual(name);
+            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).Name.Should().Be(name);
 
         [NUnit.Framework.Test] public void should_contains_attachment_with_ContentId_specified () =>
-            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).ContentId.ShouldEqual(attachmentContentId);
+            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).ContentId.Should().Be(attachmentContentId);
 
         private static AddOrUpdateAttachment updateAttachment;
         private static Questionnaire questionnaire;

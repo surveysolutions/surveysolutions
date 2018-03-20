@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             verificationMessages.ShouldContainError("WB0097");
 
         [Test] public void should_return_WB0097_message_with_appropriate_message () =>
-            verificationMessages.ShouldContain(x => x.Message == VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters);
+            verificationMessages.Should().Contain(x => x.Message == VerificationMessages.WB0097_QuestionnaireTitleHasInvalidCharacters);
 
         static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
     }

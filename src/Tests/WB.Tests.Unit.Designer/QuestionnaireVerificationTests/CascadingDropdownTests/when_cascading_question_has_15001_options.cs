@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -57,13 +57,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0088_error () => verificationErrors.ShouldContainError("WB0088");
 
         [NUnit.Framework.Test] public void should_return_error_with_level_general () =>
-            verificationErrors.GetError("WB0088").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationErrors.GetError("WB0088").MessageLevel.Should().Be(VerificationMessageLevel.General);
 
         [NUnit.Framework.Test] public void should_return_error_with_reference_to_question () =>
-            verificationErrors.GetError("WB0088").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationErrors.GetError("WB0088").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_error_with_referece_to_question_with_error () => 
-            verificationErrors.GetError("WB0088").References.First().Id.ShouldEqual(childCascadedComboboxId);
+            verificationErrors.GetError("WB0088").References.First().Id.Should().Be(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;
         static Guid parentSingleOptionQuestionId;

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -37,15 +37,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         [NUnit.Framework.Test] public void should_contains_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId)
-                .PublicKey.ShouldEqual(groupFromSourceRosterId);
+                .PublicKey.Should().Be(groupFromSourceRosterId);
 
         [NUnit.Framework.Test] public void should_contains_group_with_ParentGroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupFromSourceRosterId)
-                .GetParent().PublicKey.ShouldEqual(groupFromTargetRosterId);
+                .GetParent().PublicKey.Should().Be(groupFromTargetRosterId);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

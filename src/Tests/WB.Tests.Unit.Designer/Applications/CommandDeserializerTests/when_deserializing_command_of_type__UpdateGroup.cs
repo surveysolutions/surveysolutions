@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -33,19 +33,19 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
-            result.ShouldBeOfExactType<UpdateGroup>();
+            result.Should().BeOfType<UpdateGroup>();
 
         [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
+            ((UpdateGroup)result).Title.Should().Be(sanitizedTitle);
 
         [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateGroup)result).QuestionnaireId.Should().Be(Guid.Parse(questionnaireId));
 
         [NUnit.Framework.Test] public void should_return_same_group_id_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((UpdateGroup)result).GroupId.Should().Be(Guid.Parse(groupId));
 
         [NUnit.Framework.Test] public void should_return_same_condition_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).Condition.ShouldEqual(condition);
+            ((UpdateGroup)result).Condition.Should().Be(condition);
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

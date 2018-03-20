@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -98,10 +97,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument), Times.Once);
 
         [NUnit.Framework.Test] public void should_return_messages_created_by_mapper_as_action_result () =>
-            result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);
+            result.Errors.Should().BeEquivalentTo(mappedAndEnrichedVerificationErrors);
 
         [NUnit.Framework.Test] public void should_return_warnings_created_by_mapper_as_action_result () =>
-            result.Warnings.ShouldEqual(mappedAndEnrichedVerificationWarnings);
+            result.Warnings.Should().BeEquivalentTo(mappedAndEnrichedVerificationWarnings);
 
         private static QuestionnaireDocument questionnaireDocument; 
         private static QuestionnaireView questionnaireView; 

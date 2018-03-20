@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -27,10 +25,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0254_warning () => errors.ShouldContainWarning("WB0254", "Use function IsValidEmail() to validate email address.");
 
         [NUnit.Framework.Test] public void should_return_error_with_references_on_text_question () =>
-          errors.First(warning => warning.Code == "WB0254").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+          errors.First(warning => warning.Code == "WB0254").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_error_with_references_on_text_question_id () =>
-          errors.First(warning => warning.Code == "WB0254").References.First().Id.ShouldEqual(textQuestionId);
+          errors.First(warning => warning.Code == "WB0254").References.First().Id.Should().Be(textQuestionId);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

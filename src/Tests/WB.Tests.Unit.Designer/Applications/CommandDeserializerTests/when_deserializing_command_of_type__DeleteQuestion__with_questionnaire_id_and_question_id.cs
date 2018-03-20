@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -27,13 +27,13 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         [NUnit.Framework.Test] public void should_return_NewDeleteQuestionCommand () =>
-            result.ShouldBeOfExactType<DeleteQuestion>();
+            result.Should().BeOfType<DeleteQuestion>();
 
         [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewDeleteQuestionCommand () =>
-            ((DeleteQuestion)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((DeleteQuestion)result).QuestionnaireId.Should().Be(Guid.Parse(questionnaireId));
 
         [NUnit.Framework.Test] public void should_return_same_question_id_in_NewDeleteQuestionCommand () =>
-            ((DeleteQuestion)result).QuestionId.ShouldEqual(Guid.Parse(questionId));
+            ((DeleteQuestion)result).QuestionId.Should().Be(Guid.Parse(questionId));
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

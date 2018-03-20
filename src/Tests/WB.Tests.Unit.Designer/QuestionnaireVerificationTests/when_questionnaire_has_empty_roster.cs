@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -28,7 +27,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             messages.ShouldContainWarning("WB0204");
 
         [NUnit.Framework.Test] public void should_put_reference_to_empty_roster_to_message_WB0204 () =>
-            messages.GetWarning("WB0204").References.Single().Id.ShouldEqual(rosterId);
+            messages.GetWarning("WB0204").References.Single().Id.Should().Be(rosterId);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

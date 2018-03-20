@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -31,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_messages_be_empty () => verificationMessages.ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_messages_be_empty () => verificationMessages.Should().BeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

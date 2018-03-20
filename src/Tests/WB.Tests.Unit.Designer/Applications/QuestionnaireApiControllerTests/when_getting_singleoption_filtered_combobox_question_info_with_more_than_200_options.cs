@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api;
@@ -24,13 +24,13 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = controller.EditQuestion(questionnaireId, questionId);
 
         [NUnit.Framework.Test] public void should_return_edit_question_details () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_edit_question_details_with_200_options () =>
-            result.Options.Length.ShouldEqual(200);
+            result.Options.Length.Should().Be(200);
 
         [NUnit.Framework.Test] public void should_return_edit_question_details_with_WasOptionsTruncated_set_in_true () =>
-            result.WereOptionsTruncated.ShouldBeTrue();
+            result.WereOptionsTruncated.Should().BeTrue();
 
         private static QuestionnaireController controller;
         private static string questionnaireId = "22222222222222222222222222222222";

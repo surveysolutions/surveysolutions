@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Tests.Abc;
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
             verificationMessages.ShouldNotContainError("WB0056");
-            verificationMessages.GetError("WB0056").ShouldBeNull();
+            verificationMessages.GetError("WB0056").Should().BeNull();
         }
 
         [Test]

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -29,16 +28,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_1_message_with_code_WB0107 () =>
-            verificationMessages.Count(x => x.Code == "WB0107").ShouldEqual(1);
+            verificationMessages.Count(x => x.Code == "WB0107").Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_messages_each_having_single_reference () =>
-            verificationMessages.Single(x => x.Code == "WB0107").References.Count().ShouldEqual(1);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_messages_each_referencing_static_text () =>
-            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.StaticText);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Type.Should().Be(QuestionnaireVerificationReferenceType.StaticText);
 
         [NUnit.Framework.Test] public void should_return_message_referencing_first_incorrect_question () =>
-            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Id.ShouldEqual(staticTextId);
+            verificationMessages.Single(x => x.Code == "WB0107").References.Single().Id.Should().Be(staticTextId);
 
         private static List<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;
