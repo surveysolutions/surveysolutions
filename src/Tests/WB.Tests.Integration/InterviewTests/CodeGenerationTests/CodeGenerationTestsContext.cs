@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Documents;
@@ -13,7 +12,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 

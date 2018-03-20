@@ -7,7 +7,6 @@ using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

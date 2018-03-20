@@ -6,7 +6,6 @@ using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 

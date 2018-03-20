@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {

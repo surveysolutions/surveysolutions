@@ -1,10 +1,8 @@
 using System;
-using System.Threading;
 using FluentAssertions;
-using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -18,7 +16,7 @@ namespace WB.Tests.Integration.CommandServiceTests
         }
 
         private void BecauseOf() =>
-            exception = Catch.Only<CommandServiceException>(() =>
+            exception = Assert.Throws<CommandServiceException>(() =>
                 commandService.Execute(new NotRegisteredCommand(), null));
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__not____registered__ () =>

@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
@@ -36,8 +36,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_execute_commands_in_the_same_order_they_were_executed () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .Handles<WorkAboutHalfSecond>(_ => aggregateId, aggregate => aggregate.WorkAboutHalfSecond);
@@ -46,9 +45,13 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = IntegrationCreate.SequentialCommandService(repository: repository);
-        };
+         
+            BecauseOf();
 
-        Because of = () =>
+            executionSequence.Should().BeEquivalentTo( 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 );
+        }
+
+        public void BecauseOf() 
         {
             var t0 = commandService.ExecuteAsync(new WorkAboutHalfSecond(0), null, CancellationToken.None);
             Task.Delay(5).Wait();
@@ -72,10 +75,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             Task.Delay(5).Wait();
 
             Task.WaitAll(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9);
-        };
-
-        It should_execute_commands_in_the_same_order_they_were_executed = () =>
-            executionSequence.ShouldEqual(new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+        }
 
         private static SequentialCommandService commandService;
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock

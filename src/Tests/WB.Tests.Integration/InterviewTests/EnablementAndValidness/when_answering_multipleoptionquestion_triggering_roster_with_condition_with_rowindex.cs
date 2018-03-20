@@ -5,7 +5,6 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness

@@ -1,11 +1,9 @@
 ﻿using System;
-using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Integration.UtilsTest
 {
-    [Subject(typeof(Util))]
     [TestOf(typeof(Util))]
     public class UtilTests
     {

@@ -1,27 +1,24 @@
-﻿using System.Reflection;
-using Machine.Specifications;
+using System.Reflection;
+using FluentAssertions;
 using Moq;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using NHibernate.Persister.Entity;
 using NHibernate.Tool.hbm2ddl;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.SharedKernels.SurveySolutions;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLTests
 {
-    [Subject(typeof(PostgresReadSideKeyValueStorage<TestRemoveStartsFrom>))]
+    [TestOf(typeof(PostgresReadSideKeyValueStorage<TestRemoveStartsFrom>))]
     public class when_removing_from_repository_storage_if_id_starts_from : with_postgres_db
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var connectionString = connectionStringBuilder.ConnectionString;
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
@@ -49,21 +46,24 @@ namespace WB.Tests.Integration.PostgreSQLTests
             storage.Store(new TestRemoveStartsFrom { Value = "test1", EntityId = $"{nastya}1" }, $"{nastya}1");
             storage.Store(new TestRemoveStartsFrom { Value = "test2", EntityId = $"{nastya}2" }, $"{nastya}2");
             storage.Store(new TestRemoveStartsFrom { Value = "test3", EntityId = $"vitaliy" }, "vitaliy");
-        };
 
-        Because of = () => { storage.RemoveIfStartsWith(nastya); };
+            BecauseOf();
+        }
 
-        It should_nastya1_value_be_null = () => storage.GetById($"{nastya}1").ShouldNotBeNull();
+        public void BecauseOf() { storage.RemoveIfStartsWith(nastya); }
 
-        It should_nastya2_value_be_null = () => storage.GetById($"{nastya}2").ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_nastya1_value_be_null () => storage.GetById($"{nastya}1").Should().NotBeNull();
 
-        It should_vitaliy_value_be_not_null = () => storage.GetById("vitaliy").ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_nastya2_value_be_null () => storage.GetById($"{nastya}2").Should().NotBeNull();
 
-        Cleanup things = () =>
+        [NUnit.Framework.Test] public void should_vitaliy_value_be_not_null () => storage.GetById("vitaliy").Should().NotBeNull();
+
+        [OneTimeTearDown]
+        public void TearDown()
         {
             session.Close();
             pgSqlConnection.Close();
-        };
+        }
 
         static PostgreReadSideStorage<TestRemoveStartsFrom> storage;
         static string nastya = "nastya";
@@ -76,7 +76,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             mapper.AddMapping(typeof(TestRemoveStartsFromClassMap));
             mapper.BeforeMapProperty += (inspector, member, customizer) =>
             {
-                var propertyInfo = (PropertyInfo)member.LocalMember;
+                var propertyInfo = (PropertyInfo) member.LocalMember;
                 if (propertyInfo.PropertyType == typeof(string))
                 {
                     customizer.Type(NHibernateUtil.StringClob);

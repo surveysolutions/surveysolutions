@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -57,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 using (var eventContext = new EventContext())
                 {
-                    var exception = Catch.Exception(() =>
+                    var exception = Assert.Throws<AnswerNotAcceptedException>(() =>
                         interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 22)
                         );
 

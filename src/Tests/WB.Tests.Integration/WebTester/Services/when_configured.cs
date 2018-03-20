@@ -5,7 +5,6 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Enumerator.Native.Questionnaire;
 using WB.Tests.Abc;
 using WB.UI.WebTester.Services.Implementation;
 
