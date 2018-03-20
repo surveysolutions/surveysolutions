@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -12,12 +12,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_question_that_change_options_list_of_linked__that_is_in_same_roster_as_source_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -60,20 +60,20 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_return_1_option_for_linked_question_in_1_roster = () =>
-            results.OptionsCountForQuestion4InRoster1.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_return_1_option_for_linked_question_in_1_roster () =>
+            results.OptionsCountForQuestion4InRoster1.Should().Be(1);
 
-        It should_return_2_options_for_linked_question_in_2_roster = () =>
-            results.OptionsCountForQuestion4InRoster2.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_options_for_linked_question_in_2_roster () =>
+            results.OptionsCountForQuestion4InRoster2.Should().Be(2);
 
-        It should_not_return_options_for_linked_question_in_3_roster = () =>
-            results.OptionsCountForQuestion4InRoster3.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_return_options_for_linked_question_in_3_roster () =>
+            results.OptionsCountForQuestion4InRoster3.Should().Be(0);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

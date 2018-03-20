@@ -1,6 +1,6 @@
 using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -9,12 +9,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_creating_interview_and_question_has_conditions_referencin_random : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -42,17 +42,17 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_not_raise_QuestionsEnabled_events = () =>
-            result.QuestionsEnabledEventCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsEnabled_events () =>
+            result.QuestionsEnabledEventCount.Should().Be(0);
         
-        It should_raise_QuestionsDisabled_event = () =>
-            result.QuestionsDisabledEventCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event () =>
+            result.QuestionsDisabledEventCount.Should().Be(1);
         
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Spec;
@@ -15,10 +15,11 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_restore_interview_with_nested_rosters : in_standalone_app_domain
+    internal class when_restore_interview_with_nested_rosters : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+
+
             var questionnaireId = Guid.NewGuid();
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -62,22 +63,24 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     wasCompleted: true);
 
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             interview.Synchronize(Create.Command.Synchronize(userId, interviewSynchronizationDto));
 
-        It should_raise_InterviewSynchronized_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewSynchronized_event () =>
             eventContext.ShouldContainEvent<InterviewSynchronized>(@event => @event.InterviewData==interviewSynchronizationDto);
 
-        It should_restore_2_rosters_from_the_sync_package = () => 
-            interview.GetAllNodes().Count(x => x is InterviewTreeRoster).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_restore_2_rosters_from_the_sync_package () => 
+            interview.GetAllNodes().Count(x => x is InterviewTreeRoster).Should().Be(2);
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

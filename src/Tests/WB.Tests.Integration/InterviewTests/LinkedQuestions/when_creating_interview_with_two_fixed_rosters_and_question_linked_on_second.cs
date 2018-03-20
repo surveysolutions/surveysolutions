@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -13,12 +14,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
     [Ignore("Fix in KP-7358")]
     internal class when_creating_interview_with_two_fixed_rosters_and_question_linked_on_second : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -51,14 +51,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_event_has_2_options_for_linked_question = () =>
-            results.LinkedOptionsCount.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_event_has_2_options_for_linked_question () =>
+            results.LinkedOptionsCount.Should().Be(2);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
 

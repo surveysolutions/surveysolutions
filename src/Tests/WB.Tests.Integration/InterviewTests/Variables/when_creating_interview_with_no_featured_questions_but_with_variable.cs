@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,10 +12,9 @@ using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
-    internal class when_creating_interview_with_no_featured_questions_but_with_variable : in_standalone_app_domain
+    internal class when_creating_interview_with_no_featured_questions_but_with_variable : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventContext = new EventContext();
 
             questionnaireId = Guid.Parse("10000000000000000000000000000000");
@@ -32,31 +31,32 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(questionnaire);
 
             command = Create.Command.CreateInterview(Guid.Empty, userId, questionnaireIdentity, DateTime.Now, responsibleSupervisorId, null, null, null);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             eventContext = new EventContext();
             interview.CreateInterview(command);
-        };
+        }
 
-        It should_raise_InterviewCreated_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewCreated_event () =>
             eventContext.ShouldContainEvent<InterviewCreated>();
 
-        It should_provide_questionnaire_id_in_InterviewCreated_event = () =>
-            eventContext.GetSingleEvent<InterviewCreated>().QuestionnaireId.ShouldEqual(questionnaireId);
+        [NUnit.Framework.Test] public void should_provide_questionnaire_id_in_InterviewCreated_event () =>
+            eventContext.GetSingleEvent<InterviewCreated>().QuestionnaireId.Should().Be(questionnaireId);
 
-        It should_provide_questionnaire_verstion_in_InterviewCreated_event = () =>
-            eventContext.GetSingleEvent<InterviewCreated>().QuestionnaireVersion.ShouldEqual(questionnaireVersion);
+        [NUnit.Framework.Test] public void should_provide_questionnaire_verstion_in_InterviewCreated_event () =>
+            eventContext.GetSingleEvent<InterviewCreated>().QuestionnaireVersion.Should().Be(questionnaireVersion);
 
-        It should_set_variable_value = () =>
-            eventContext.GetSingleEvent<VariablesChanged>().ChangedVariables[0].NewValue.ShouldEqual(true);
+        [NUnit.Framework.Test] public void should_set_variable_value () =>
+            eventContext.GetSingleEvent<VariablesChanged>().ChangedVariables[0].NewValue.Should().Be(true);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static EventContext eventContext;
         private static Guid questionnaireId;

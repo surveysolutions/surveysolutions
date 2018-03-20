@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -13,12 +13,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     internal class when_answering_single_question_that_is_in_roster_and_triggers_nested_group : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -69,17 +69,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_raise_GroupsEnabled_event_for_nested_roster_groupd = () =>
-            results.WasNestedGroupEnabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_GroupsEnabled_event_for_nested_roster_groupd () =>
+            results.WasNestedGroupEnabled.Should().BeTrue();
 
-        It should_not_raise_GroupsDisabled_event_for_nested_roster_groupd = () =>
-            results.WasNestedGroupDisabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_raise_GroupsDisabled_event_for_nested_roster_groupd () =>
+            results.WasNestedGroupDisabled.Should().BeFalse();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

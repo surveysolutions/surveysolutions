@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -11,12 +11,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_creating_interview_with_fixed_rosters_and_question_linked_on_them : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -42,14 +42,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 };
             });
 
-        It should_return_2_options_for_linked_question = () =>
-            results.OptionsCountForLinkedToRosterQuestion.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_options_for_linked_question () =>
+            results.OptionsCountForLinkedToRosterQuestion.Should().Be(2);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
 

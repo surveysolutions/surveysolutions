@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -13,8 +13,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_linked_single_option_question_which_links_to_roster_and_roster_has_multi_question_as_source : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
@@ -45,28 +44,29 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             interview.AnswerMultipleOptionsQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, new [] { 2, 3, 1 });
             
             eventContext = new EventContext();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        public void BecauseOf() =>
             interview.AnswerSingleOptionLinkedQuestion(userId, linkedToRosterId, RosterVector.Empty, DateTime.Now, new decimal[] { 1 });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_SingleOptionLinkedQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_SingleOptionLinkedQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<SingleOptionLinkedQuestionAnswered>();
 
-        It should_contains_options_for_single_linked_question_in_original_order = () =>
+        [NUnit.Framework.Test] public void should_contains_options_for_single_linked_question_in_original_order () 
         {
             var linkedToRosterQuestion = interview.GetLinkedSingleOptionQuestion(Abc.Create.Identity(linkedToRosterId));
-            linkedToRosterQuestion.Options.ShouldEqual(new List<RosterVector>
-            {
-                Abc.Create.RosterVector(1), Abc.Create.RosterVector(2), Abc.Create.RosterVector(3),
-            });
-        };
+            linkedToRosterQuestion.Options.Should().BeEquivalentTo(
+                Abc.Create.RosterVector(1), Abc.Create.RosterVector(2), Abc.Create.RosterVector(3)
+            );
+        }
 
 
         static EventContext eventContext;

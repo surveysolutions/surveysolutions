@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -11,9 +12,22 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_adding_roster_instance_that_affects_variable : in_standalone_app_domain
+    internal class when_adding_roster_instance_that_affects_variable : InterviewTestsContext
     {
-        Because of = () => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
             Setup.MockedServiceLocator();
 
@@ -56,7 +70,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             }
         });
 
-        It should_raise_variables_changd_event_if_related_question_has_answer_removed = () => result.VariableChangedEventRaised.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_variables_changd_event_if_related_question_has_answer_removed () => result.VariableChangedEventRaised.Should().BeTrue();
 
         private static InvokeResults result;
 

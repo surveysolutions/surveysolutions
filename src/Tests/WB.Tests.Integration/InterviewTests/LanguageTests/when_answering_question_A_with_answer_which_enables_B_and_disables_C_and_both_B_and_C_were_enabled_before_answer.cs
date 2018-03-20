@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -13,12 +13,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_enabled_before_answer : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -62,20 +62,20 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_raise_QuestionsDisabled_event = () =>
-            result.QuestionsDisabledEventCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event () =>
+            result.QuestionsDisabledEventCount.Should().Be(1);
 
-        It should_not_raise_QuestionsEnabled_event = () =>
-            result.QuestionsEnabledEventCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsEnabled_event () =>
+            result.QuestionsEnabledEventCount.Should().Be(0);
 
-        It should_raise_QuestionsDisabled_event_with_question_C_only = () =>
-            result.QuestionsDisabledQuestionIds.ShouldContainOnly(Guid.Parse("cccccccccccccccccccccccccccccccc"));
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_with_question_C_only () =>
+            result.QuestionsDisabledQuestionIds.Should().BeEquivalentTo(Guid.Parse("cccccccccccccccccccccccccccccccc"));
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;
