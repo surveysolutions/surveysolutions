@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             this.questionnaireStorage = questionnaireStorage;
         }
 
-
         public List<CommentView> LoadCommentsForEntity(Guid questionnaireId, Guid entityId)
         {
             var commentForEntity = this.comments
@@ -64,6 +63,15 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             this.comments.Store(commentInstanse, commentId);
         }
 
+        public void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId)
+        {
+            var commentsForEntity = this.comments.Query(_ => _
+                .Where(x => x.QuestionnaireId == questionnaireId && x.EntityId == entityId)
+                .ToList());
+
+            this.comments.Remove(commentsForEntity);
+        }
+
         public void ResolveComment(Guid commentdId)
         {
             var comment = this.comments.GetById(commentdId);
@@ -79,6 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Comments
                 .Select(x => new CommentThread(
                     comments: x.Select(CreateCommentView).OrderByDescending(c => c.Date).ToArray(), 
                     referenceEntity: CreateCommentedEntity(questionnaire, x.Key)))
+                .Where(y => y.Entity != null)
                 .ToList();
 
             return commentForEntity.OrderByDescending(x => x.IndexOfLastUnresolvedComment).ToList();
@@ -87,6 +96,8 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         private QuestionnaireEntityExtendedReference CreateCommentedEntity(ReadOnlyQuestionnaireDocument questionnaire, Guid itemId)
         {
             var entity = questionnaire.Find<IComposite>(itemId);
+            if (entity == null)
+                return null;
             var reference = QuestionnaireEntityReference.CreateFrom(entity)?.ExtendedReference(questionnaire);
             return reference;
         }
