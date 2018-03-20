@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -22,15 +22,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.MoveGroup(groupId, roster2Id, 0, responsibleId);
 
         [NUnit.Framework.Test] public void should_contains_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-           .PublicKey.ShouldEqual(groupId);
+           .PublicKey.Should().Be(groupId);
 
         [NUnit.Framework.Test] public void should_contains_group_with_roster2Id_specified () =>
            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-            .GetParent().PublicKey.ShouldEqual(roster2Id);
+            .GetParent().PublicKey.Should().Be(roster2Id);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

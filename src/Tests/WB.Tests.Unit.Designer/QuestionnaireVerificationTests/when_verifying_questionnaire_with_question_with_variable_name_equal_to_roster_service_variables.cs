@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -52,16 +51,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_5_error () =>
-            verificationMessages.Count().ShouldEqual(5);
+            verificationMessages.Count().Should().Be(5);
 
         [NUnit.Framework.Test] public void should_return_all_errors_with_code__WB0058 () =>
-            verificationMessages.ShouldEachConformTo(e=>e.Code=="WB0058");
+            verificationMessages.Should().OnlyContain(e=>e.Code=="WB0058");
 
         [NUnit.Framework.Test] public void should_return_all_errors_with_1_references () =>
-            verificationMessages.ShouldEachConformTo(e=>e.References.Count==1);
+            verificationMessages.Should().OnlyContain(e=>e.References.Count==1);
 
         [NUnit.Framework.Test] public void should_return_all_errors_reference_with_type_Question () =>
-            verificationMessages.ShouldEachConformTo(e=>e.References.First().Type==QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Should().OnlyContain(e=>e.References.First().Type==QuestionnaireVerificationReferenceType.Question);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

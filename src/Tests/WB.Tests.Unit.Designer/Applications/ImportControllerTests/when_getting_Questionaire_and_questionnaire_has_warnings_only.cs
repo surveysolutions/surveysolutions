@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             questionnaireCommunicationPackage = importController.Questionnaire(request);
 
         [NUnit.Framework.Test] public void should_return_not_null_responce () =>
-            questionnaireCommunicationPackage.ShouldNotBeNull();
+            questionnaireCommunicationPackage.Should().NotBeNull();
 
         private static ImportV2Controller importController;
         private static DownloadQuestionnaireRequest request;

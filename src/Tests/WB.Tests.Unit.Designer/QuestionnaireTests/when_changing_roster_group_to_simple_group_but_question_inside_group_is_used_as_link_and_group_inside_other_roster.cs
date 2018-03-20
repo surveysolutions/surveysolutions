@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -34,10 +34,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.UpdateGroup(groupToUpdateId, responsibleId, "title", null, null, "", "", false, false, RosterSizeSourceType.Question, null, null);
 
         [NUnit.Framework.Test] public void should_contains_group_with_groupToUpdateId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_IsRoster_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).IsRoster.ShouldBeFalse();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToUpdateId).IsRoster.Should().BeFalse();
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

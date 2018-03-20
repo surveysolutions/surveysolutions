@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -8,24 +9,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 {
     internal class when_deleting_translation_without_premission_to_edit : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception() {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddOrUpdateTranslation(Create.Command.AddOrUpdateTranslation(questionnaireId, translationId, "", ownerId));
 
             deleteTranslation = Create.Command.DeleteTranslation(questionnaireId, translationId, sharedPersonId);
-            BecauseOf();
+
+            var exception = Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteTranslation(deleteTranslation));
+            exception.ErrorType.Should().Be(DomainExceptionType.DoesNotHavePermissionsForEdit);
         }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() => questionnaire.DeleteTranslation(deleteTranslation));
-
-        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
-            exception.ShouldBeOfExactType(typeof(QuestionnaireException));
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_type_DoesNotHavePermissionsForEdit () =>
-            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
-
-        private static Exception exception;
         private static DeleteTranslation deleteTranslation;
         private static Questionnaire questionnaire;
         private static readonly Guid ownerId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 verificationMessages.ShouldContainError("WB0056");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
-                verificationMessages.GetError("WB0056").ShouldNotBeNull();
+                verificationMessages.GetError("WB0056").Should().NotBeNull();
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

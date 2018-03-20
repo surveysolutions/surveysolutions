@@ -1,7 +1,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading;
-using Machine.Specifications;
+using FluentAssertions;
 
 namespace WB.Tests.Unit.Designer.Applications.MessageHandlerTests
 {
@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.Applications.MessageHandlerTests
             message = client.SendAsync(requestMessage, new CancellationToken(false)).Result;
 
         [NUnit.Framework.Test] public void should_return_OK_status_code () =>
-            message.StatusCode.ShouldEqual(HttpStatusCode.OK);
+            message.StatusCode.Should().Be(HttpStatusCode.OK);
 
         private static HttpResponseMessage message;
         private static HttpMessageInvoker client;

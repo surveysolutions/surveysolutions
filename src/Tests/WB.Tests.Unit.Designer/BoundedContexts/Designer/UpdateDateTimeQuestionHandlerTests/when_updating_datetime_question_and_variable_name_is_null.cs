@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -13,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
 {
     internal class when_updating_datetime_question_and_variable_name_is_null : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_not_throw_exception () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -23,12 +22,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                          variableName: "old_variable_name",
                          instructions: "old instructions",
                          enablementCondition: "old condition");
-            BecauseOf();
+
+            questionnaire.UpdateDateTimeQuestion(command);
         }
-
-        private void BecauseOf() => exception = Catch.Exception(() => questionnaire.UpdateDateTimeQuestion(command));
-
-        [NUnit.Framework.Test] public void should_not_throw_exception () => exception.ShouldBeNull();
 
         private static Questionnaire questionnaire;
         private static Exception exception;

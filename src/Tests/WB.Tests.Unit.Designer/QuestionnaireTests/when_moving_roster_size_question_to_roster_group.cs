@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -41,15 +41,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.MoveQuestion(rosterSizeQuestionId, chapterId, targetIndex: 0, responsibleId: responsibleId);
 
         [NUnit.Framework.Test] public void should_contains_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_question_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId)
-           .PublicKey.ShouldEqual(rosterSizeQuestionId);
+           .PublicKey.Should().Be(rosterSizeQuestionId);
 
         [NUnit.Framework.Test] public void should_contains_question_with_chapterId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterSizeQuestionId)
-            .GetParent().PublicKey.ShouldEqual(chapterId);
+            .GetParent().PublicKey.Should().Be(chapterId);
 
 
         private static Questionnaire questionnaire;

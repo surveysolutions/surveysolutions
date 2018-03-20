@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -37,31 +36,31 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
         [NUnit.Framework.Test] public void should_contains_Question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .PublicKey.ShouldEqual(questionId);
+                .PublicKey.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_contains_NewQuestion_with_ParentGroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(chapterId)
-                .Children.ShouldContain(q => q.PublicKey == questionId);
+                .Children.Should().Contain(q => q.PublicKey == questionId);
 
         [NUnit.Framework.Test] public void should_contains_NewQuestion_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .QuestionText.ShouldEqual(title);
+                .QuestionText.Should().Be(title);
 
         [NUnit.Framework.Test] public void should_contains_NewQuestion_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .StataExportCaption.ShouldEqual(variableName);
+                .StataExportCaption.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_contains_NewQuestion_with_enablementCondition_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .ConditionExpression.ShouldEqual(enablementCondition);
+                .ConditionExpression.Should().Be(enablementCondition);
 
         [NUnit.Framework.Test] public void should_contains_NewQuestion_with_ifeatured_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .Featured.ShouldEqual(isPreFilled);
+                .Featured.Should().Be(isPreFilled);
 
         [NUnit.Framework.Test] public void should_contains_NewQuestion_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .Instructions.ShouldEqual(instructions);
+                .Instructions.Should().Be(instructions);
 
 
         private static Questionnaire questionnaire;

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
+using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 
@@ -20,16 +21,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
         private void BecauseOf() => questionnaire.UpdateMacro(updateMacro);
 
         [NUnit.Framework.Test] public void should_contains_Macro_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Macros.ShouldContain(t => t.Key == macroId);
+            questionnaire.QuestionnaireDocument.Macros.ToEnumerable().Should().Contain(t => t.Key == macroId);
 
         [NUnit.Framework.Test] public void should_contains_Macro_with_Name_specified () =>
-            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Name.ShouldEqual(name);
+            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Name.Should().Be(name);
 
         [NUnit.Framework.Test] public void should_contains_Macro_with_Content_specified () =>
-            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Content.ShouldEqual(content);
+            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Content.Should().Be(content);
 
         [NUnit.Framework.Test] public void should_contains_Macro_with_Description_specified () =>
-            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Description.ShouldEqual(description);
+            questionnaire.QuestionnaireDocument.Macros.Single(t => t.Key == macroId).Value.Description.Should().Be(description);
 
         private static UpdateMacro updateMacro;
         private static Questionnaire questionnaire;

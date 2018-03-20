@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -45,13 +45,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainCritical("WB0005");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.GetCritical("WB0005").References.Count().ShouldEqual(1);
+            verificationMessages.GetCritical("WB0005").References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_variable_type () =>
-            verificationMessages.GetCritical("WB0005").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Variable);
+            verificationMessages.GetCritical("WB0005").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Variable);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
-            verificationMessages.GetCritical("WB0005").References.First().Id.ShouldEqual(varId);
+            verificationMessages.GetCritical("WB0005").References.First().Id.Should().Be(varId);
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

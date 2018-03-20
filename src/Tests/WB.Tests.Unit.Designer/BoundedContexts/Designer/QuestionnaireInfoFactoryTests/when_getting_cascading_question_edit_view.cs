@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 
@@ -42,19 +40,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetQuestionEditView(questionnaireId, questionId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_grouped_list_of_single_questions_with_3_items () =>
-            result.SourceOfSingleQuestions.Count.ShouldEqual(3);
+            result.SourceOfSingleQuestions.Count.Should().Be(3);
 
         [NUnit.Framework.Test] public void should_return_list_withfirst_placeholder_item () =>
-            result.SourceOfSingleQuestions.ElementAt(0).IsSectionPlaceHolder.ShouldBeTrue();
+            result.SourceOfSingleQuestions.ElementAt(0).IsSectionPlaceHolder.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_return_single_question_with_id__g1 () =>
-            result.SourceOfSingleQuestions.ElementAt(1).Id.ShouldEqual(q1Id.FormatGuid());
+            result.SourceOfSingleQuestions.ElementAt(1).Id.Should().Be(q1Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_single_question_with_id__g2 () =>
-            result.SourceOfSingleQuestions.ElementAt(2).Id.ShouldEqual(q2Id.FormatGuid());
+            result.SourceOfSingleQuestions.ElementAt(2).Id.Should().Be(q2Id.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditQuestionView result;

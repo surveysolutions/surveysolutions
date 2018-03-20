@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -64,12 +63,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0087_error () => verificationErrors.ShouldContainError("WB0087");
 
         [NUnit.Framework.Test] public void should_return_references_to_cycled_entities () => 
-            verificationErrors.SelectMany(x => x.References).ShouldEachConformTo(x =>
+            verificationErrors.SelectMany(x => x.References).Should().Contain(x =>
                 new[]{parentSingleOptionQuestionId, childCascadedComboboxId, grandChildCascadingQuestion}.Contains(x.Id));
 
         [NUnit.Framework.Test] public void should_return_errors_with_references_to_questions () => 
             verificationErrors.SelectMany(x => x.References)
-                              .ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
+                              .Should().Contain(x => x.Type == QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;

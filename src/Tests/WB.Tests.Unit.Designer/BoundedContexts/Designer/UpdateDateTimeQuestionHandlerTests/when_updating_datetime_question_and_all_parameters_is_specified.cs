@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -34,16 +34,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         {
             var question = questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId);
 
-            question.PublicKey.ShouldEqual(questionId);
-            question.StataExportCaption.ShouldEqual(variableName);
-            question.QuestionText.ShouldEqual(title);
-            question.ConditionExpression.ShouldEqual(enablementCondition);
-            question.Instructions.ShouldEqual(instructions);
-            question.Featured.ShouldEqual(isPreFilled);
-            question.QuestionScope.ShouldEqual(scope);
-            question.ValidationConditions.First().Expression.ShouldEqual(validationExpression);
-            question.ValidationConditions.First().Message.ShouldEqual(validationMessage);
-            question.IsTimestamp.ShouldEqual(isTimestamp);
+            question.PublicKey.Should().Be(questionId);
+            question.StataExportCaption.Should().Be(variableName);
+            question.QuestionText.Should().Be(title);
+            question.ConditionExpression.Should().Be(enablementCondition);
+            question.Instructions.Should().Be(instructions);
+            question.Featured.Should().Be(isPreFilled);
+            question.QuestionScope.Should().Be(scope);
+            question.ValidationConditions.First().Expression.Should().Be(validationExpression);
+            question.ValidationConditions.First().Message.Should().Be(validationMessage);
+            question.IsTimestamp.Should().Be(isTimestamp);
         }
 
         private static Questionnaire questionnaire;

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -32,10 +32,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_create_roster_model_with_1_LinkedQuestionFilterExpressions () =>
-            model.AllRosters[0].LinkedQuestionFilterExpressions.Count.ShouldEqual(1);
+            model.AllRosters[0].LinkedQuestionFilterExpressions.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_LinkedQuestionFilterExpressions_where_LinkedQuestionId_equals_to_gB () =>
-            model.AllRosters[0].LinkedQuestionFilterExpressions[0].LinkedQuestionId.ShouldEqual(Id.gB);
+            model.AllRosters[0].LinkedQuestionFilterExpressions[0].LinkedQuestionId.Should().Be(Id.gB);
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;
         private static QuestionnaireExpressionStateModel model;

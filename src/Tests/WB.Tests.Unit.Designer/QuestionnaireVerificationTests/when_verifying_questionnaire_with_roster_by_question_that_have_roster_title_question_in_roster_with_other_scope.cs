@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -67,19 +66,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0035__ () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0035");
+            verificationMessages.Single().Code.Should().Be("WB0035");
 
         [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single().References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
-            verificationMessages.Single().References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.Single().References.Single().Type.Should().Be(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_roster2Id () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(roster2Id);
+            verificationMessages.Single().References.First().Id.Should().Be(roster2Id);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

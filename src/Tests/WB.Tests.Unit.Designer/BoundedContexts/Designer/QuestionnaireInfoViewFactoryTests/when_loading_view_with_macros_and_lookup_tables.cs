@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 
@@ -33,44 +32,44 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             view = factory.Load(questionnaireId, userId);
 
         [NUnit.Framework.Test] public void should_find_questionnaire () =>
-            view.ShouldNotBeNull();
+            view.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_all_macroses_from_questionnaire () =>
-            view.Macros.Select(x => x.ItemId).ShouldContainOnly(macro1Id.FormatGuid(), macro2Id.FormatGuid(), macro3Id.FormatGuid(), macro4Id.FormatGuid());
+            view.Macros.Select(x => x.ItemId).Should().BeEquivalentTo(macro1Id.FormatGuid(), macro2Id.FormatGuid(), macro3Id.FormatGuid(), macro4Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_contains_all_lookups_from_questionnaire () =>
-            view.LookupTables.Select(x => x.ItemId).ShouldContainOnly(lookupTable1Id.FormatGuid(), lookupTable2Id.FormatGuid());
+            view.LookupTables.Select(x => x.ItemId).Should().BeEquivalentTo(lookupTable1Id.FormatGuid(), lookupTable2Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_first_element_match_macro_with_id_macro4Id () 
         {
-            view.Macros.ElementAt(0).ItemId.ShouldEqual(macro4Id.FormatGuid());
-            view.Macros.ElementAt(0).Name.ShouldEqual(macros[macro4Id].Name);
-            view.Macros.ElementAt(0).Content.ShouldEqual(macros[macro4Id].Content);
-            view.Macros.ElementAt(0).Description.ShouldEqual(macros[macro4Id].Description);
+            view.Macros.ElementAt(0).ItemId.Should().Be(macro4Id.FormatGuid());
+            view.Macros.ElementAt(0).Name.Should().Be(macros[macro4Id].Name);
+            view.Macros.ElementAt(0).Content.Should().Be(macros[macro4Id].Content);
+            view.Macros.ElementAt(0).Description.Should().Be(macros[macro4Id].Description);
         }
 
         [NUnit.Framework.Test] public void should_second_element_match_macro_with_id_macro1Id () 
         {
-            view.Macros.ElementAt(1).ItemId.ShouldEqual(macro1Id.FormatGuid());
-            view.Macros.ElementAt(1).Name.ShouldEqual(macros[macro1Id].Name);
-            view.Macros.ElementAt(1).Content.ShouldEqual(macros[macro1Id].Content);
-            view.Macros.ElementAt(1).Description.ShouldEqual(macros[macro1Id].Description);
+            view.Macros.ElementAt(1).ItemId.Should().Be(macro1Id.FormatGuid());
+            view.Macros.ElementAt(1).Name.Should().Be(macros[macro1Id].Name);
+            view.Macros.ElementAt(1).Content.Should().Be(macros[macro1Id].Content);
+            view.Macros.ElementAt(1).Description.Should().Be(macros[macro1Id].Description);
         }
 
         [NUnit.Framework.Test] public void should_third_element_match_macro_with_id_macro2Id () 
         {
-            view.Macros.ElementAt(2).ItemId.ShouldEqual(macro2Id.FormatGuid());
-            view.Macros.ElementAt(2).Name.ShouldEqual(macros[macro2Id].Name);
-            view.Macros.ElementAt(2).Content.ShouldEqual(macros[macro2Id].Content);
-            view.Macros.ElementAt(2).Description.ShouldEqual(macros[macro2Id].Description);
+            view.Macros.ElementAt(2).ItemId.Should().Be(macro2Id.FormatGuid());
+            view.Macros.ElementAt(2).Name.Should().Be(macros[macro2Id].Name);
+            view.Macros.ElementAt(2).Content.Should().Be(macros[macro2Id].Content);
+            view.Macros.ElementAt(2).Description.Should().Be(macros[macro2Id].Description);
         }
 
         [NUnit.Framework.Test] public void should_fourth_element_match_macro_with_id_macro3Id () 
         {
-            view.Macros.ElementAt(3).ItemId.ShouldEqual(macro3Id.FormatGuid());
-            view.Macros.ElementAt(3).Name.ShouldEqual(macros[macro3Id].Name);
-            view.Macros.ElementAt(3).Content.ShouldEqual(macros[macro3Id].Content);
-            view.Macros.ElementAt(3).Description.ShouldEqual(macros[macro3Id].Description);
+            view.Macros.ElementAt(3).ItemId.Should().Be(macro3Id.FormatGuid());
+            view.Macros.ElementAt(3).Name.Should().Be(macros[macro3Id].Name);
+            view.Macros.ElementAt(3).Content.Should().Be(macros[macro3Id].Content);
+            view.Macros.ElementAt(3).Description.Should().Be(macros[macro3Id].Description);
         }
 
         private static QuestionnaireInfoView view;

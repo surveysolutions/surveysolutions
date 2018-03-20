@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -40,43 +40,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                          }));
         
         [NUnit.Framework.Test] public void should_contains_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .PublicKey.ShouldEqual(questionId);
+                .PublicKey.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_contains_question_with_variable_name_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .StataExportCaption.ShouldEqual(variableName);
+                .StataExportCaption.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_contains_question_with_title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .QuestionText.ShouldEqual(title);
+                .QuestionText.Should().Be(title);
 
         [NUnit.Framework.Test] public void should_contains_question_with_condition_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .ConditionExpression.ShouldEqual(enablementCondition);
+                .ConditionExpression.Should().Be(enablementCondition);
 
        [NUnit.Framework.Test] public void should_contains_question_with_instructions_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .Instructions.ShouldEqual(instructions);
+                .Instructions.Should().Be(instructions);
 
         [NUnit.Framework.Test] public void should_contains_question_with_featured_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .Featured.ShouldEqual(isPreFilled);
+                .Featured.Should().Be(isPreFilled);
 
         [NUnit.Framework.Test] public void should_contains_question_with_scope_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .QuestionScope.ShouldEqual(scope);
+                .QuestionScope.Should().Be(scope);
 
         [NUnit.Framework.Test] public void should_contains_question_with_validationExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.Should().Be(validationExpression);
 
         [NUnit.Framework.Test] public void should_contains_question_with_validationMessage_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-               .ValidationConditions.First().Message.ShouldEqual(validationMessage);
+               .ValidationConditions.First().Message.Should().Be(validationMessage);
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

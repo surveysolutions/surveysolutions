@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
@@ -19,11 +19,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 
         [NUnit.Framework.Test] public void should_return_attachment_content_with_specified_properties () 
         {
-            attachmentContent.ContentId.ShouldEqual(attachmentContentId);
-            attachmentContent.ContentType.ShouldEqual(contentType);
-            attachmentContent.Size.ShouldEqual(fileContent.Length);
-            attachmentContent.Details.Height.ShouldEqual(contentDetails.Height);
-            attachmentContent.Details.Width.ShouldEqual(contentDetails.Width);
+            attachmentContent.ContentId.Should().Be(attachmentContentId);
+            attachmentContent.ContentType.Should().Be(contentType);
+            attachmentContent.Size.Should().Be(fileContent.Length);
+            attachmentContent.Details.Height.Should().Be(contentDetails.Height);
+            attachmentContent.Details.Width.Should().Be(contentDetails.Width);
         }
 
         private static AttachmentContent attachmentContent;

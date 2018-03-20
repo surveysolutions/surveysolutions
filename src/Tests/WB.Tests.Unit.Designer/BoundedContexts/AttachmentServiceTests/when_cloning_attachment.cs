@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
         [NUnit.Framework.Test] public void should_save_cloned_attachment_meta_with_specified_properties () 
         {
             var attachmentMeta = attachmentMetaStorage.GetById(newAttachmentId);
-            attachmentMeta.FileName.ShouldEqual(fileName);
-            attachmentMeta.QuestionnaireId.ShouldEqual(newQuestionnaireId);
-            attachmentMeta.ContentId.ShouldEqual(attachmentContentId);
+            attachmentMeta.FileName.Should().Be(fileName);
+            attachmentMeta.QuestionnaireId.Should().Be(newQuestionnaireId);
+            attachmentMeta.ContentId.Should().Be(attachmentContentId);
         }
 
         private static AttachmentService attachmentService;

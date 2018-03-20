@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
 
         [NUnit.Framework.Test] public void should_update_question_text () =>
             questionnaire.QuestionnaireDocument.GetQuestion<TextQuestion>(questionId)
-                .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
+                .QuestionText.Should().Be(titleWithSubstitutionToSelf);
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

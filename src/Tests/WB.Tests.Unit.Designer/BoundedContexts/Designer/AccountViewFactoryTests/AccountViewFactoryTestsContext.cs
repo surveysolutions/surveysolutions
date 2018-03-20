@@ -2,7 +2,6 @@
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTests
 {

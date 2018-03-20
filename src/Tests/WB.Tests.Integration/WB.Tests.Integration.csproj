@@ -32,7 +32,7 @@
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="EntityFramework6.Npgsql" Version="3.1.1" />
-    <PackageReference Include="FluentAssertions" Version="4.19.4" />
+    <PackageReference Include="FluentAssertions" Version="5.2.0" />
     <PackageReference Include="FluentMigrator" Version="1.6.2" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
     <PackageReference Include="Iesi.Collections" Version="4.0.2" />

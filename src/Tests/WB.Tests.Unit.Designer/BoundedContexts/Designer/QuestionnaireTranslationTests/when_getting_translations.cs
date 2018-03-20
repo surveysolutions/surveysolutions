@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslationTests
 {
-    [Subject(typeof(QuestionnaireTranslation))]
     internal class when_getting_translations : QuestionnaireTranslationTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
@@ -37,21 +36,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslati
 
         private void BecauseOf() => translation = CreateQuestionnaireTranslation(storedTranslations);
 
-        [NUnit.Framework.Test] public void should_return_translated_title () => translation.GetTitle(questionId).ShouldEqual("title");
+        [NUnit.Framework.Test] public void should_return_translated_title () => translation.GetTitle(questionId).Should().Be("title");
 
-        [NUnit.Framework.Test] public void should_return_translated_instruction () => translation.GetInstruction(questionId).ShouldEqual("instruction");
+        [NUnit.Framework.Test] public void should_return_translated_instruction () => translation.GetInstruction(questionId).Should().Be("instruction");
 
-        [NUnit.Framework.Test] public void should_return_translated_option () => translation.GetAnswerOption(questionId, "1").ShouldEqual("option1");
+        [NUnit.Framework.Test] public void should_return_translated_option () => translation.GetAnswerOption(questionId, "1").Should().Be("option1");
 
-        [NUnit.Framework.Test] public void should_return_translated_validation () => translation.GetValidationMessage(questionId, 1).ShouldEqual("validation message");
+        [NUnit.Framework.Test] public void should_return_translated_validation () => translation.GetValidationMessage(questionId, 1).Should().Be("validation message");
 
-        [NUnit.Framework.Test] public void should_return_null_for_missing_title () => translation.GetTitle(Guid.NewGuid()).ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_null_for_missing_title () => translation.GetTitle(Guid.NewGuid()).Should().BeNull();
 
-        [NUnit.Framework.Test] public void should_return_null_for_missing_instruction () => translation.GetInstruction(Guid.NewGuid()).ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_null_for_missing_instruction () => translation.GetInstruction(Guid.NewGuid()).Should().BeNull();
 
-        [NUnit.Framework.Test] public void should_return_null_for_missing_translated_option () => translation.GetAnswerOption(Guid.NewGuid(), "1").ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_null_for_missing_translated_option () => translation.GetAnswerOption(Guid.NewGuid(), "1").Should().BeNull();
 
-        [NUnit.Framework.Test] public void should_return_null_for_missing_translated_validation () => translation.GetValidationMessage(Guid.NewGuid(), 1).ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_null_for_missing_translated_validation () => translation.GetValidationMessage(Guid.NewGuid(), 1).Should().BeNull();
 
         static ITranslation translation;
         static List<TranslationDto> storedTranslations;

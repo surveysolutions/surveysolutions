@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -40,10 +40,10 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             commandInflater.PrepareDeserializedCommandForExecution(command);
 
         [NUnit.Framework.Test] public void should_not_be_null () =>
-           command.SourceDocument.ShouldNotBeNull();
+           command.SourceDocument.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_questionnarie_id_as_provided () =>
-            command.SourceDocument.PublicKey.ShouldEqual(questionnaireId);
+            command.SourceDocument.PublicKey.Should().Be(questionnaireId);
 
         private static CommandInflater commandInflater;
         private static PasteInto command;

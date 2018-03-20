@@ -1,5 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -12,7 +11,6 @@ using WB.UI.Designer.Api.Headquarters;
 
 namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
 {
-    [Subject(typeof(HQQuestionnairesController))]
     internal class QuestionnairesControllerTestContext
     {
         protected static HQQuestionnairesController CreateQuestionnairesController(

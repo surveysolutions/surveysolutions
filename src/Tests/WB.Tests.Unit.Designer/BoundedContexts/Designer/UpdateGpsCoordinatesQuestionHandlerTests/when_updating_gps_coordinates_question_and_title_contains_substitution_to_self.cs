@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
-using WB.Core.BoundedContexts.Designer.Exceptions;
-
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
@@ -50,7 +48,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 
         [NUnit.Framework.Test] public void should_update_question_text () =>
             questionnaire.QuestionnaireDocument.GetQuestion<GpsCoordinateQuestion>(questionId)
-                .QuestionText.ShouldEqual(titleWithSubstitutionToSelf);
+                .QuestionText.Should().Be(titleWithSubstitutionToSelf);
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

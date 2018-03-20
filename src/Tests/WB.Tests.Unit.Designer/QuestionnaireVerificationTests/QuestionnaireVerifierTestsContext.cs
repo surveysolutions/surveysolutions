@@ -1,29 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
 {
-    [Subject(typeof(QuestionnaireVerifier))]
     [TestOf(typeof(QuestionnaireVerifier))]
     internal class QuestionnaireVerifierTestsContext
     {

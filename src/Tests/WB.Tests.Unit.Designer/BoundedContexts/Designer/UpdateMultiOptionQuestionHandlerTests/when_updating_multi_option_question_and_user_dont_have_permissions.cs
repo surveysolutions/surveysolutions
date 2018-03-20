@@ -1,10 +1,9 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuestionHandlerTests
@@ -22,10 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         instructions: "old instructions",
                         enablementCondition: "old condition");
             BecauseOf();
+
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "don't", "have", "permissions" });
         }
 
         private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
                     title: title,
@@ -42,14 +43,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     maxAllowedAnswers: maxAllowedAnswers,
                     yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
                 linkedFilterExpression: null, properties: Create.QuestionProperties()));
-
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__dont__have__permissions__ () =>
-            new[] { "don't", "have", "permissions" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
 
         private static Questionnaire questionnaire;
         private static Exception exception;

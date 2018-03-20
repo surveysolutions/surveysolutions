@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             denormalizer.ImportQuestionnaire(userId, questionnaireDocument);
 
         [NUnit.Framework.Test] public void should_list_of_macroses_contains_macros_from_replaced_questionnaire_only () =>
-           documentStorage.GetById(questionnaireDocument.PublicKey).Macros.Keys.ShouldContainOnly(macrosWithBefore);
+           documentStorage.GetById(questionnaireDocument.PublicKey).Macros.Keys.Should().ContainSingle(x => x == macrosWithBefore);
 
         private static Questionnaire denormalizer;
         private static QuestionnaireDocument questionnaireDocument;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
             version = designerEngineVersionService.GetQuestionnaireContentVersion(questionnaire);
 
         [NUnit.Framework.Test] public void should_return_16_version () =>
-            version.ShouldEqual(16);
+            version.Should().Be(16);
 
         private static int version;
         private static IDesignerEngineVersionService designerEngineVersionService;

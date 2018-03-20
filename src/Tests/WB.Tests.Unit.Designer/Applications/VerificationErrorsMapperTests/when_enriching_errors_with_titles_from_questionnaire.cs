@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -34,72 +34,72 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             result = mapper.EnrichVerificationErrors(verificationMessages, document);
 
         [NUnit.Framework.Test] public void should_return_2_errors () => 
-            result.Length.ShouldEqual(3);
+            result.Length.Should().Be(3);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_same_Code_as_input_error_has () =>
-            result.ElementAt(0).Code.ShouldEqual(verificationMessages.ElementAt(0).Code);
+            result.ElementAt(0).Code.Should().Be(verificationMessages.ElementAt(0).Code);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_same_Message_as_input_error_has () =>
-            result.ElementAt(0).Message.ShouldEqual(verificationMessages.ElementAt(0).Message);
+            result.ElementAt(0).Message.Should().Be(verificationMessages.ElementAt(0).Message);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_same_References_count_as_input_error_has () =>
-            result.ElementAt(0).Errors.SelectMany(e => e.References).Count().ShouldEqual(2);
+            result.ElementAt(0).Errors.SelectMany(e => e.References).Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_first_error_that_references_question_with_questionId () =>
-            result.ElementAt(0).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId);
+            result.ElementAt(0).Errors.First().References.ElementAt(0).ItemId.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_return_first_error_that_references_group_with_groupId () =>
-            result.ElementAt(0).Errors.Second().References.ElementAt(0).ItemId.ShouldEqual(groupId);
+            result.ElementAt(0).Errors.Second().References.ElementAt(0).ItemId.Should().Be(groupId);
 
         [NUnit.Framework.Test] public void should_return_first_error_that_references_question_with_questionTitle () =>
-            result.ElementAt(0).Errors.First().References.ElementAt(0).Title.ShouldEqual(questionTitle);
+            result.ElementAt(0).Errors.First().References.ElementAt(0).Title.Should().Be(questionTitle);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_IsGroupOfErrors_field_set_in_true () =>
-            result.ElementAt(0).IsGroupedMessage.ShouldBeTrue();
+            result.ElementAt(0).IsGroupedMessage.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_return_last_error_with_same_Code_as_input_error_has () =>
-            result.ElementAt(1).Code.ShouldEqual(verificationMessages.ElementAt(1).Code);
+            result.ElementAt(1).Code.Should().Be(verificationMessages.ElementAt(1).Code);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_same_Message_as_input_error_has () =>
-            result.ElementAt(1).Message.ShouldEqual(verificationMessages.ElementAt(1).Message);
+            result.ElementAt(1).Message.Should().Be(verificationMessages.ElementAt(1).Message);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_same_References_count_as_input_error_has () =>
-            result.ElementAt(1).Errors.First().References.Count.ShouldEqual(verificationMessages.ElementAt(1).References.Count());
+            result.ElementAt(1).Errors.First().References.Count.Should().Be(verificationMessages.ElementAt(1).References.Count());
 
         [NUnit.Framework.Test] public void should_return_last_error_that_references_question_with_questionId () =>
-            result.ElementAt(1).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(groupId);
+            result.ElementAt(1).Errors.First().References.ElementAt(0).ItemId.Should().Be(groupId);
 
         [NUnit.Framework.Test] public void should_return_last_error_that_references_question_with_groupTitle () =>
-            result.ElementAt(1).Errors.First().References.ElementAt(0).Title.ShouldEqual(groupTitle);
+            result.ElementAt(1).Errors.First().References.ElementAt(0).Title.Should().Be(groupTitle);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_IsGroupOfErrors_field_set_in_true () =>
-            result.ElementAt(1).IsGroupedMessage.ShouldBeTrue();
+            result.ElementAt(1).IsGroupedMessage.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_return_third_error_with_same_Code_as_input_error_has () =>
-            result.ElementAt(2).Code.ShouldEqual(verificationMessages.ElementAt(2).Code);
+            result.ElementAt(2).Code.Should().Be(verificationMessages.ElementAt(2).Code);
 
         [NUnit.Framework.Test] public void should_return_third_error_with_same_Message_as_input_error_has () =>
-            result.ElementAt(2).Message.ShouldEqual(verificationMessages.ElementAt(2).Message);
+            result.ElementAt(2).Message.Should().Be(verificationMessages.ElementAt(2).Message);
 
         [NUnit.Framework.Test] public void should_return_third_error_with_same_References_count_as_input_error_has () =>
-            result.ElementAt(2).Errors.First().References.Count.ShouldEqual(3);
+            result.ElementAt(2).Errors.First().References.Count.Should().Be(3);
 
         [NUnit.Framework.Test] public void should_return_third_error_that_references_question_group_and_roster () 
         {
             var references = result.ElementAt(2).Errors.First().References;
-            references.ElementAt(0).ItemId.ShouldEqual(questionId);
-            references.ElementAt(0).Title.ShouldEqual(questionTitle);
+            references.ElementAt(0).ItemId.Should().Be(questionId);
+            references.ElementAt(0).Title.Should().Be(questionTitle);
 
-            references.ElementAt(1).ItemId.ShouldEqual(groupId);
-            references.ElementAt(1).Title.ShouldEqual(groupTitle);
+            references.ElementAt(1).ItemId.Should().Be(groupId);
+            references.ElementAt(1).Title.Should().Be(groupTitle);
 
-            references.ElementAt(2).ItemId.ShouldEqual(rosterId);
-            references.ElementAt(2).Title.ShouldEqual(rosterTitle);
+            references.ElementAt(2).ItemId.Should().Be(rosterId);
+            references.ElementAt(2).Title.Should().Be(rosterTitle);
 
         }
 
         [NUnit.Framework.Test] public void should_return_third_error_with_IsGroupOfErrors_field_set_in_true () =>
-            result.ElementAt(2).IsGroupedMessage.ShouldBeFalse();
+            result.ElementAt(2).IsGroupedMessage.Should().BeFalse();
 
 
         private static IVerificationErrorsMapper mapper;

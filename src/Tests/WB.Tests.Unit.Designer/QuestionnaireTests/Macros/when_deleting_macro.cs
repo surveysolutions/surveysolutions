@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
         private void BecauseOf() => questionnaire.DeleteMacro(deleteMacro);
 
         [NUnit.Framework.Test] public void should_doesnt_contain_Macro_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Macros.ShouldNotContain(t => t.Key == macroId);
+            questionnaire.QuestionnaireDocument.Macros.ToEnumerable().Should().NotContain(t => t.Key == macroId);
 
 
         private static DeleteMacro deleteMacro;

@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using System.Collections.Generic;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
 {
     internal class when_updating_text_question_and_title_contains_substitution_to_variable : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_not_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -30,23 +31,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                 variableType: VariableType.String,
                 variableName: variableName,
                 variableExpression: "text + text");
-            BecauseOf();
+
+
+            questionnaire.UpdateTextQuestion(
+                new UpdateTextQuestion(
+                    questionnaire.Id,
+                    questionId,
+                    responsibleId,
+                    new CommonQuestionParameters() {Title = titleWithSubstitutionToVariable, VariableName = "q1"},
+                    null, scope, false,
+                    new List<ValidationCondition>()));
+
         }
-
-        private void BecauseOf() =>
-             exception = Catch.Exception(() =>
-                 questionnaire.UpdateTextQuestion(
-                     new UpdateTextQuestion(
-                         questionnaire.Id,
-                         questionId,
-                         responsibleId,
-                         new CommonQuestionParameters() { Title = titleWithSubstitutionToVariable, VariableName = "q1" },
-                         null, scope, false,
-                         new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
-
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeNull();
-
 
         private static Questionnaire questionnaire;
         private static Exception exception;

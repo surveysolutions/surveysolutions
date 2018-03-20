@@ -1,10 +1,9 @@
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactoryTests
@@ -26,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             view = factory.Load(questionnaireId, chapterId);
 
         [NUnit.Framework.Test] public void should_chapter_be_null () =>
-            view.ShouldBeNull();
+            view.Should().BeNull();
 
         private static NewChapterView view;
         private static ChapterInfoViewFactory factory;

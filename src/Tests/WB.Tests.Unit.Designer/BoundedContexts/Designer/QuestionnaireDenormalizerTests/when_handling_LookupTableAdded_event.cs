@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
@@ -19,13 +19,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private void BecauseOf() => denormalizer.AddLookupTable(new AddLookupTable(questionnaire.PublicKey, null, "", entityId, creatorId));
 
         [NUnit.Framework.Test] public void should_add_one_lookup_table () =>
-            questionnaire.LookupTables.Count.ShouldEqual(1);
+            questionnaire.LookupTables.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_add_lookup_table_with_key_equals_entity_id () =>
-           questionnaire.LookupTables.ContainsKey(entityId).ShouldBeTrue();
+           questionnaire.LookupTables.ContainsKey(entityId).Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_add_empty_lookup_table () =>
-           questionnaire.LookupTables[entityId].TableName.ShouldBeNull();
+           questionnaire.LookupTables[entityId].TableName.Should().BeNull();
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 
         [Test]
         public void should_doesnt_contain_Translation_with_EntityId_specified() =>
-            questionnaire.QuestionnaireDocument.Translations.ShouldNotContain(t => t.Id == translationId);
+            questionnaire.QuestionnaireDocument.Translations.Should().NotContain(t => t.Id == translationId);
 
 
         private static DeleteTranslation deleteTranslation;
