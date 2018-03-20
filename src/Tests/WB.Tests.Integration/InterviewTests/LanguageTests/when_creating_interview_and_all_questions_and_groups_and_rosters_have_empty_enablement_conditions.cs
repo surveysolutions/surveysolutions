@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -11,12 +9,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -46,17 +44,17 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_not_raise_QuestionsEnabled_events = () =>
-            result.QuestionsEnabledEventCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsEnabled_events () =>
+            result.QuestionsEnabledEventCount.Should().Be(0);
 
-        It should_not_raise_GroupsEnabled_events = () =>
-            result.GroupsEnabledEventCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_raise_GroupsEnabled_events () =>
+            result.GroupsEnabledEventCount.Should().Be(0);
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;

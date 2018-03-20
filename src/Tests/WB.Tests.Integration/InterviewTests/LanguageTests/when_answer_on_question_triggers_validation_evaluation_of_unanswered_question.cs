@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -11,12 +11,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_answer_on_question_triggers_validation_evaluation_of_unanswered_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var questionnaireId = Guid.Parse("10000000000000000000000000000000");
@@ -52,14 +52,14 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 return result;
             });
 
-        It should_not_enable_groupId = () =>
-            results.AnswerIsValid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_not_enable_groupId () =>
+            results.AnswerIsValid.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

@@ -1,6 +1,6 @@
 using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -12,12 +12,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
     [TestFixture]
     internal class when_answering_question_that_enables_section_with_nested_rosters_inside_it : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -58,16 +58,16 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_mark_nested_roster_as_enabled = () => results.NestedRosterIsEnabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_mark_nested_roster_as_enabled () => results.NestedRosterIsEnabled.Should().BeTrue();
 
-        It should_mark_top_level_roster_as_enabled = () => results.TopRosterIsEnabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_mark_top_level_roster_as_enabled () => results.TopRosterIsEnabled.Should().BeTrue();
 
 
-        private Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

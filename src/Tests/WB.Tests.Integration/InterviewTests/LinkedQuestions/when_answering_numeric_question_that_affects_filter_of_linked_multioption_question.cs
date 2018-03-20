@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -13,12 +13,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_numeric_question_that_affects_filter_of_linked_multioption_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        private Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -56,14 +56,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_raise_AnswersRemoved_for_linked = () =>
-            results.HasLinkedQuestionToRemoveAnswer.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswersRemoved_for_linked () =>
+            results.HasLinkedQuestionToRemoveAnswer.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         static InvokeResults results;
         static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

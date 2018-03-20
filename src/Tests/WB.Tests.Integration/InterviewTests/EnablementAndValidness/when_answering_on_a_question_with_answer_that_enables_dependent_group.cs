@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -10,9 +11,22 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_on_a_question_with_answer_that_enables_dependent_group : in_standalone_app_domain
+    internal class when_answering_on_a_question_with_answer_that_enables_dependent_group : InterviewTestsContext
     {
-        Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
             Setup.MockedServiceLocator();
 
@@ -37,8 +51,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             }
         });
 
-        It should_enable_dependent_group = () =>
-            results.WasGroupsEnabledEventPublishedForDependentGroup.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_enable_dependent_group () =>
+            results.WasGroupsEnabledEventPublishedForDependentGroup.Should().BeTrue();
 
         private static InvokeResults results;
 

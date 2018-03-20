@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_answering_question_that_disables_group_and_roster_inside_it : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -58,17 +58,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_declare_question_q2_as_disabled = () =>
-            results.QuestionsQ2Disabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_declare_question_q2_as_disabled () =>
+            results.QuestionsQ2Disabled.Should().BeTrue();
 
-        It should_declare_roster_as_disabled = () =>
-            results.RosterDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_declare_roster_as_disabled () =>
+            results.RosterDisabled.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

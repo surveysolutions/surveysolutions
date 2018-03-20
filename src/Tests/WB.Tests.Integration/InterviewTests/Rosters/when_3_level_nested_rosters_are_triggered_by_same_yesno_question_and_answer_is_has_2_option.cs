@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_2_option : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        private Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -91,23 +91,23 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_add_11_rosters = () =>
-            results.CountOfAddedInstances.ShouldEqual(11);
+        [NUnit.Framework.Test] public void should_add_11_rosters () =>
+            results.CountOfAddedInstances.Should().Be(11);
 
-        It should_remove_11_rosters = () =>
-            results.CountOfRemovedInstances.ShouldEqual(11);
+        [NUnit.Framework.Test] public void should_remove_11_rosters () =>
+            results.CountOfRemovedInstances.Should().Be(11);
 
-        It should_add_roster_that_roster_vector_has_no_deleted_instance_id_30 = () =>
-            results.AddedRostersHasNo_30_RosterVector.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_add_roster_that_roster_vector_has_no_deleted_instance_id_30 () =>
+            results.AddedRostersHasNo_30_RosterVector.Should().BeTrue();
 
-        It should_remove_roster_that_roster_vector_has_30 = () =>
-            results.DeletedRostersHas_30_RosterVector.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_roster_that_roster_vector_has_30 () =>
+            results.DeletedRostersHas_30_RosterVector.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

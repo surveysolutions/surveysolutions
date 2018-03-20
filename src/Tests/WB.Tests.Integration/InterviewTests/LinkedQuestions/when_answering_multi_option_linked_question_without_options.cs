@@ -1,7 +1,9 @@
-﻿using System;
+using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -10,8 +12,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_multi_option_linked_question_without_options : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [Test] public void should_raise_InterviewException () {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             var triggerQuestionId = Guid.NewGuid();
@@ -30,19 +31,13 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             });
 
             interview = SetupInterview(questionnaireDocument: questionnaireDocument);
-        };
 
-        Because of = () =>
-             exception = Catch.Exception(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: answer));
+            var exception = Assert.Throws<InterviewException>(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
+                answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: answer));
 
-        It should_raise_InterviewException = () =>
-           exception.ShouldBeOfExactType<InterviewException>();
-
-        It should_throw_exception_with_message_containting__type_QRBarcode_expected__ = () =>
-             new[] { "answer", "linked", "options" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
-
+            new[] { "answer", "linked", "options" }.Should().OnlyContain(
+                keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
+        }
 
         private static Exception exception;
         private static Interview interview;

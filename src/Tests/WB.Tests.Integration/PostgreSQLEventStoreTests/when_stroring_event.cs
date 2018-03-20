@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using It = Machine.Specifications.It;
@@ -14,8 +15,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
     public class when_stroring_event : with_postgres_db
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             int sequenceCounter = 1;
@@ -62,31 +62,37 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 }, 
                 eventTypeResolver,
                 sessionProvider.Object);
-        };
 
-        Because of = () => eventStore.Store(events);
+            BecauseOf();
+        }
 
-        It should_read_stored_events = () =>
+        public void BecauseOf() => eventStore.Store(events);
+
+        [NUnit.Framework.Test] public void should_read_stored_events () 
         {
             var eventStream = eventStore.Read(eventSourceId, 0);
-            eventStream.Count().ShouldEqual(3);
+            eventStream.Count().Should().Be(3);
 
             var firstEvent = eventStream.First();
-            firstEvent.Payload.ShouldBeOfExactType<AccountRegistered>();
+            firstEvent.Payload.Should().BeOfType<AccountRegistered>();
             var accountRegistered = (AccountRegistered)firstEvent.Payload;
 
-            accountRegistered.Email.ShouldEqual("test@test.com");
-        };
+            accountRegistered.Email.Should().Be("test@test.com");
+        }
 
-        It should_persist_items_with_global_sequence_set = () =>
+        [NUnit.Framework.Test] public void should_persist_items_with_global_sequence_set () 
         {
             var eventStream = eventStore.Read(eventSourceId, 0);
-            eventStream.Select(x => x.GlobalSequence).ShouldNotContain(0);
-        };
+            eventStream.Select(x => x.GlobalSequence).Should().NotContain(0);
+        }
         
-        It should_count_stored_events = () => eventStore.CountOfAllEvents(); // it should not fail
+        [NUnit.Framework.Test] public void should_count_stored_events () => eventStore.CountOfAllEvents(); // it should not fail
 
-        Cleanup c = () => npgsqlConnection?.Dispose();
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            npgsqlConnection.Close();
+        }
 
         static PostgresEventStore eventStore;
         static UncommittedEventStream events;
