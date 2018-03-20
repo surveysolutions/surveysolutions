@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
@@ -12,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
     internal class when_reanswering_numeric_question_that_can_turn_off_cascading_chain : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
 
@@ -76,33 +78,34 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        It should_not_enable_any_question = () =>
-            results.WasAnyAnswerEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_any_question () =>
+            results.WasAnyAnswerEnabled.Should().BeFalse();
 
-        It should_disable_parent_question = () =>
-            results.WasParentDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_parent_question () =>
+            results.WasParentDisabled.Should().BeTrue();
 
-        It should_not_enable_parent_question = () =>
-            results.WasParentEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_parent_question () =>
+            results.WasParentEnabled.Should().BeFalse();
 
-        It should_disable_child_question = () =>
-            results.WasChildDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_child_question () =>
+            results.WasChildDisabled.Should().BeTrue();
 
-        It should_not_enable_child_question = () =>
-            results.WasChildEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_child_question () =>
+            results.WasChildEnabled.Should().BeFalse();
 
-        It should_not_enable_garnd_child_question = () =>
-            results.WasGrandChildEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_garnd_child_question () =>
+            results.WasGrandChildEnabled.Should().BeFalse();
 
-        It should_disable_grandchild_question = () =>
-            results.WasGrandChildDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_grandchild_question () =>
+            results.WasGrandChildDisabled.Should().BeTrue();
 
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
