@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_expression_state_executes_linked_question_filters : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -49,14 +49,14 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 };
             });
         
-        It should_result_contain_1_available_option = () =>
-             results.CountOfOptions.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_result_contain_1_available_option () =>
+             results.CountOfOptions.Should().Be(1);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;
