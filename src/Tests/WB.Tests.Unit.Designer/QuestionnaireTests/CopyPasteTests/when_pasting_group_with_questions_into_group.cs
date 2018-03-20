@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -52,43 +52,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             questionnaire.PasteInto(command);
 
         [NUnit.Framework.Test] public void should_clone_group () => 
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_GroupCloned_event_with_correct_hideIfDisabled_flag_for_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_numeric_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<INumericQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<INumericQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_textList_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<ITextListQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<ITextListQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multimedia_question () 
         {
             var multimediaCloneEvent = questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IMultimediaQuestion>().Single();
-            multimediaCloneEvent.HideIfDisabled.ShouldEqual(true);
+            multimediaCloneEvent.HideIfDisabled.Should().Be(true);
         }
 
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_qrBarcode_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IQRBarcodeQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IQRBarcodeQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_text_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<TextQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<TextQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_dateTime_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<DateTimeQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<DateTimeQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_gps_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<GpsCoordinateQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<GpsCoordinateQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_singleOption_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<SingleQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<SingleQuestion>().Single().HideIfDisabled.Should().Be(true);
         
         [NUnit.Framework.Test] public void should_raise_QuestionCloned_event_with_correct_hideIfDisabled_flag_for_multipleOptions_question () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IMultyOptionsQuestion>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IMultyOptionsQuestion>().Single().HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_raise_StaticTextCloned_event_with_correct_hideIfDisabled_flag_for_static_Text () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IStaticText>().Single().HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Children.OfType<IStaticText>().Single().HideIfDisabled.Should().Be(true);
 
         static Questionnaire questionnaire;
         static Guid groupToPasteInId;

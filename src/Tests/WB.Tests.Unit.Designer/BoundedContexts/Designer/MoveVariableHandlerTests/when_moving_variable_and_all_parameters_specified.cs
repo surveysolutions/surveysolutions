@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -22,10 +22,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveVariableHandlerTes
 
 
         [NUnit.Framework.Test] public void should_moved_IVariable_to_new_group_with_PublicKey_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).GetParent().PublicKey.ShouldEqual(targetEntityId);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).GetParent().PublicKey.Should().Be(targetEntityId);
 
         [NUnit.Framework.Test] public void should_moved_IVariable_to_new_group_with_TargetIndex_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).GetParent().Children[targetIndex].PublicKey.ShouldEqual(entityId);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).GetParent().Children[targetIndex].PublicKey.Should().Be(entityId);
 
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

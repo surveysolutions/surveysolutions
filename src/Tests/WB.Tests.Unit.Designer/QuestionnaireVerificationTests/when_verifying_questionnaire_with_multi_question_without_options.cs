@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -32,7 +31,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_not_return_error_with_code__WB0072__and__WB0073 () =>
-            verificationMessages.Select(x => x.Code).ShouldNotContain("WB0072", "WB0073");
+            verificationMessages.Select(x => x.Code).Should().NotContain("WB0072", "WB0073");
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

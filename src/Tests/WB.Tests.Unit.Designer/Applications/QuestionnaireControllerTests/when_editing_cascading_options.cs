@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.UI.Designer.Controllers;
@@ -28,17 +28,17 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private void BecauseOf() => view = controller.EditCascadingOptions(postedFile);
 
         [NUnit.Framework.Test] public void should_return_list_with_1_option () =>
-            ((IEnumerable<Option>)view.Model).Count().ShouldEqual(1);
+            ((IEnumerable<Option>)view.Model).Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_first_option_with_value_equals_1 () =>
-            ((IEnumerable<Option>)view.Model).First().Value.ShouldEqual("1");
+            ((IEnumerable<Option>)view.Model).First().Value.Should().Be("1");
 
         [NUnit.Framework.Test] public void should_return_first_option_with_title_equals_Street_1 () =>
-            ((IEnumerable<Option>)view.Model).First().Title.ShouldEqual("Street 1");
+            ((IEnumerable<Option>)view.Model).First().Title.Should().Be("Street 1");
 
         [NUnit.Framework.Test]
         public void should_return_first_option_with_parent_value_equals_2() =>
-            ((IEnumerable<Option>)view.Model).First().ParentValue.ShouldEqual("2");
+            ((IEnumerable<Option>)view.Model).First().ParentValue.Should().Be("2");
 
         [OneTimeTearDown]
         public void cleanup()

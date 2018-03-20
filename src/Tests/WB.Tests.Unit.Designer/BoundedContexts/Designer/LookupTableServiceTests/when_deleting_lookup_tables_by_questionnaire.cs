@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;

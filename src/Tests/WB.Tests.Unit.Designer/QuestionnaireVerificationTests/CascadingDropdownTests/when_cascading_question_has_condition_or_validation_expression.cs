@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -64,22 +63,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
 
         [NUnit.Framework.Test] public void should_result_contains_WB0091_error () =>
-            getWB0091Error().ShouldNotBeNull();
+            getWB0091Error().Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_WB0091_error_contains_single_reference () =>
-            getWB0091Error().References.Count().ShouldEqual(1);
+            getWB0091Error().References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_WB0091_error_contains_reference_to_specified_child_cascading_question_id () =>
-            getWB0091Error().References.Single().Id.ShouldEqual(childCascadedComboboxId);
+            getWB0091Error().References.Single().Id.Should().Be(childCascadedComboboxId);
 
         [NUnit.Framework.Test] public void should_result_contains_WB0092_error () =>
-            getWB0092Error().ShouldNotBeNull();
+            getWB0092Error().Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_WB0092_error_contains_single_reference () =>
-            getWB0092Error().References.Count().ShouldEqual(1);
+            getWB0092Error().References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_WB0092_error_contains_reference_to_specified_child_cascading_question_id () =>
-            getWB0092Error().References.Single().Id.ShouldEqual(secondChildId);
+            getWB0092Error().References.Single().Id.Should().Be(secondChildId);
 
         private static QuestionnaireVerificationMessage getWB0091Error()
         {

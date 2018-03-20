@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
-using WB.Core.BoundedContexts.Designer.Exceptions;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
@@ -21,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
             questionnaire.UpdateLookupTable(updateLookupTable);
 
         [NUnit.Framework.Test] public void should_create_new_lookup_table () =>
-            questionnaire.QuestionnaireDocument.LookupTables.SingleOrDefault(x => x.Key == lookupTableId).Value.TableName.ShouldEqual(lookupTableName);
+            questionnaire.QuestionnaireDocument.LookupTables.SingleOrDefault(x => x.Key == lookupTableId).Value.TableName.Should().Be(lookupTableName);
 
         private static UpdateLookupTable updateLookupTable;
         private static Questionnaire questionnaire;

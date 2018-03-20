@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
         [NUnit.Framework.Test] public void should_generate_model_for_single_linked_to_list_question_with_type__nullable_decimal () 
         {
             var singleLinkedToList = GetQuestion(singleLinkedToListId);
-            singleLinkedToList.TypeName.ShouldEqual("decimal?");
+            singleLinkedToList.TypeName.Should().Be("decimal?");
         }
 
         [NUnit.Framework.Test] public void should_generate_model_for_multi_linked_to_list_question_with_type__decimal () 
         {
             var multiLiskedToList = GetQuestion(multiLiskedToListId);
-            multiLiskedToList.TypeName.ShouldEqual("decimal[]");
+            multiLiskedToList.TypeName.Should().Be("decimal[]");
         }
 
         private static QuestionTemplateModel GetQuestion(Guid id)

@@ -1,6 +1,4 @@
 ﻿using System;
-using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -75,12 +73,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, personWhitoutPermissions);
 
             // Act
-            var exception = Catch.Exception(() => questionnaire.RevertVersion(command));
+            var exception = Assert.Throws<QuestionnaireException>(() => questionnaire.RevertVersion(command));
 
             // Assert
-            Assert.That(exception, Is.Not.Null);
-            Assert.That(exception.GetType().IsAssignableFrom(typeof(QuestionnaireException)), Is.True);
-            Assert.That(((QuestionnaireException)exception).ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+            Assert.That(exception.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
         }
     }
 }

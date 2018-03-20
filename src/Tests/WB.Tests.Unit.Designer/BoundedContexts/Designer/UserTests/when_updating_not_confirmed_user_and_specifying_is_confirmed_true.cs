@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
                 isConfirmed: true, canImportOnHq: true);
 
         [NUnit.Framework.Test] public void should_set_IsConfirmed_to_true () =>
-                user.IsConfirmed.ShouldEqual(true);
+                user.IsConfirmed.Should().Be(true);
 
         private static User user;
     }

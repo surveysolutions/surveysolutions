@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -37,28 +37,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
 
 
         [NUnit.Framework.Test] public void should_contains_statictext () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).PublicKey.ShouldEqual(entityId);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).PublicKey.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_Text_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.ShouldEqual(text);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.Should().Be(text);
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_enablement_condition_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ConditionExpression.ShouldEqual(enablementCondition);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ConditionExpression.Should().Be(enablementCondition);
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_hide_if_disabled_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).HideIfDisabled.ShouldBeTrue();
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).HideIfDisabled.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_count_equals_1 () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.ShouldEqual(1);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_expression_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Expression.ShouldEqual(validationCondition);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Expression.Should().Be(validationCondition);
 
         [NUnit.Framework.Test] public void should_contains_statictext_with_validation_condition_message_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Message.ShouldEqual(validationMessage);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ValidationConditions.Single().Message.Should().Be(validationMessage);
 
         private static UpdateStaticText command;
         private static Questionnaire questionnaire;

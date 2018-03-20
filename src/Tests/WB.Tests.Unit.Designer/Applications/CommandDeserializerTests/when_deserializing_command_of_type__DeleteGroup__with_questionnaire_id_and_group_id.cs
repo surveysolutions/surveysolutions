@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.CommandDeserialization;
@@ -27,13 +27,13 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         [NUnit.Framework.Test] public void should_return_NewDeleteGroupCommand () =>
-            result.ShouldBeOfExactType<DeleteGroup>();
+            result.Should().BeOfType<DeleteGroup>();
 
         [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewDeleteGroupCommand () =>
-            ((DeleteGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((DeleteGroup)result).QuestionnaireId.Should().Be(Guid.Parse(questionnaireId));
 
         [NUnit.Framework.Test] public void should_return_same_group_id_in_NewDeleteGroupCommand () =>
-            ((DeleteGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((DeleteGroup)result).GroupId.Should().Be(Guid.Parse(groupId));
 
         private static ICommand result;
         private static DesignerCommandDeserializer deserializer;

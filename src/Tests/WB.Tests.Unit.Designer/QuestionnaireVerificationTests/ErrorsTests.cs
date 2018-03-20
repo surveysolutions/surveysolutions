@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -319,7 +319,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             var result = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-            result.Single().Code.ShouldEqual("WB0031");
+            result.Single().Code.Should().Be("WB0031");
         }
 
         [Test]

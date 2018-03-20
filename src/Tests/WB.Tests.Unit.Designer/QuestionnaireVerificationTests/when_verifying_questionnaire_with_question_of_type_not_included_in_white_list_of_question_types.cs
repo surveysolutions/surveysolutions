@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -41,25 +40,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.Single().MessageLevel.Should().Be(VerificationMessageLevel.General);
 
         [NUnit.Framework.Test] public void should_return_messages_each_with_code__WB0002__ () =>
-            verificationMessages.ShouldEachConformTo(error
+            verificationMessages.Should().OnlyContain(error
                 => error.Code == "WB0066");
 
         [NUnit.Framework.Test] public void should_return_messages_each_having_single_reference () =>
-            verificationMessages.ShouldEachConformTo(error
+            verificationMessages.Should().OnlyContain(error
                 => error.References.Count() == 1);
 
         [NUnit.Framework.Test] public void should_return_messages_each_referencing_question () =>
-            verificationMessages.ShouldEachConformTo(error
+            verificationMessages.Should().OnlyContain(error
                 => error.References.Single().Type == QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_referencing_first_incorrect_question () =>
-            verificationMessages.ShouldContain(error
+            verificationMessages.Should().Contain(error
                 => error.References.Single().Id == questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

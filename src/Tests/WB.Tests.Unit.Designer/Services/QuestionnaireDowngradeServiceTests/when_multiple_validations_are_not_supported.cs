@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.Services.QuestionnaireDowngradeServiceTests
 
         private void BecauseOf() => service.Downgrade(questionnaire, 11);
 
-        [NUnit.Framework.Test] public void should_put_validation_message_to_validation_message_field () => questionnaire.GetQuestion<TextQuestion>(questionId).ValidationMessage.ShouldEqual("message");
+        [NUnit.Framework.Test] public void should_put_validation_message_to_validation_message_field () => questionnaire.GetQuestion<TextQuestion>(questionId).ValidationMessage.Should().Be("message");
 
         static QuestionnaireDowngradeService service;
         static QuestionnaireDocument questionnaire;

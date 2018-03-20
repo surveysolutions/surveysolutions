@@ -1,12 +1,10 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -28,25 +26,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetRosterEditView(questionnaireId, rosterId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_roster_with_ItemId_equals_groupId () =>
-            result.ItemId.ShouldEqual(rosterId.FormatGuid());
+            result.ItemId.Should().Be(rosterId.FormatGuid());
         
         [NUnit.Framework.Test] public void should_return_roster_with_RosterFixedTitles_count_equals_to_0 () =>
-            result.FixedRosterTitles.Length.ShouldEqual(0);
+            result.FixedRosterTitles.Length.Should().Be(0);
 
         [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeMultiQuestionId_equals_g3_RosterSizeQuestionId () =>
-            result.RosterSizeMultiQuestionId.ShouldEqual(q2Id.FormatGuid());
+            result.RosterSizeMultiQuestionId.Should().Be(q2Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeListQuestionId_equals_g3_RosterSizeQuestionId () =>
-            result.RosterSizeListQuestionId.ShouldBeNull();
+            result.RosterSizeListQuestionId.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeNumericQuestionId_equals_g3_RosterSizeQuestionId () =>
-            result.RosterSizeNumericQuestionId.ShouldBeNull();
+            result.RosterSizeNumericQuestionId.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType () =>
-            result.Type.ShouldEqual(RosterType.Multi);
+            result.Type.Should().Be(RosterType.Multi);
         
 
         private static QuestionnaireInfoFactory factory;

@@ -1,6 +1,6 @@
 using System;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -9,30 +9,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_variable_name_is_null : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public void should_not_throw_exception()
+        {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
-            BecauseOf();
+            questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
+
+
+            questionnaire.AddTextQuestion(
+                questionId: questionId,
+                parentId: chapterId,
+                title: title,
+                variableName: null,
+                variableLabel: null,
+                isPreFilled: isPreFilled,
+                scope: QuestionScope.Interviewer,
+                enablementCondition: enablementCondition,
+                validationExpression: validationExpression,
+                validationMessage: validationMessage,
+                instructions: instructions,
+                mask: null,
+                responsibleId: responsibleId);
         }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
-                questionnaire.AddTextQuestion(
-                    questionId: questionId,
-                    parentId: chapterId,
-                    title: title,
-                    variableName: null,
-                    variableLabel: null,
-                    isPreFilled: isPreFilled,
-                    scope: QuestionScope.Interviewer,
-                    enablementCondition: enablementCondition,
-                    validationExpression: validationExpression,
-                    validationMessage: validationMessage,
-                    instructions: instructions,
-                    mask: null,
-                    responsibleId: responsibleId));
-
-        [NUnit.Framework.Test] public void should_not_throw_exception () => exception.ShouldBeNull();
 
         private static Questionnaire questionnaire;
         private static Exception exception;

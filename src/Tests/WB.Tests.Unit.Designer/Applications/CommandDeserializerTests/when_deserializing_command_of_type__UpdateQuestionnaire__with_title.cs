@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -28,13 +28,13 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             result = deserializer.Deserialize(commandType, command);
 
         [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
-            result.ShouldBeOfExactType<UpdateQuestionnaire>();
+            result.Should().BeOfType<UpdateQuestionnaire>();
 
         [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
-            ((UpdateQuestionnaire)result).Title.ShouldEqual(sanitizedTitle);
+            ((UpdateQuestionnaire)result).Title.Should().Be(sanitizedTitle);
 
         [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
-            ((UpdateQuestionnaire)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateQuestionnaire)result).QuestionnaireId.Should().Be(Guid.Parse(questionnaireId));
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

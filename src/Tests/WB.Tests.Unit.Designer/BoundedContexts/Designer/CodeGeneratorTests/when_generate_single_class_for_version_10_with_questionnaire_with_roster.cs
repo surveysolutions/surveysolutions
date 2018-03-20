@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -36,10 +36,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
         [NUnit.Framework.Test] public void should_generate_class_with_V10_namespaces_included () =>
-            generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V10");
+            generatedClassContent.Should().Contain("WB.Core.SharedKernels.DataCollection.V10");
 
         [NUnit.Framework.Test] public void should_generate_class_with_AbstractConditionalLevelInstanceV10 () =>
-            generatedClassContent.ShouldContain("AbstractConditionalLevelInstanceV10");
+            generatedClassContent.Should().Contain("AbstractConditionalLevelInstanceV10");
 
         private static int version = 16;
         private static CodeGenerator generator;

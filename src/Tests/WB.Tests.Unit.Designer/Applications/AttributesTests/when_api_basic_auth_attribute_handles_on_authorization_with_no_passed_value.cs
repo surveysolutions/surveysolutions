@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.UI.Designer.Api.Attributes;
 
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             attribute.OnAuthorization(filterContext);
 
         [NUnit.Framework.Test] public void should_return_unauthorized_status_code () =>
-            filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
+            filterContext.Response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 
         private static ApiBasicAuthAttribute attribute;
         private static HttpActionContext filterContext;

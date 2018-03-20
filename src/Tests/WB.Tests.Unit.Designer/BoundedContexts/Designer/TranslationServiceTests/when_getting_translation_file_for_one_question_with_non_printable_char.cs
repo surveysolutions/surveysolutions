@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 
@@ -51,8 +50,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         [NUnit.Framework.Test] public void should_remove_non_printable_chars_in_translation_file () 
         {
-            cells[3, 4].GetValue<string>().ShouldEqual("В скобках символ без графического отобажения ()");
-            cells[3, 5].GetValue<string>().ShouldEqual("Here is non-printable char ()");
+            cells[3, 4].GetValue<string>().Should().Be("В скобках символ без графического отобажения ()");
+            cells[3, 5].GetValue<string>().Should().Be("Here is non-printable char ()");
         }
 
         static TranslationsService service;

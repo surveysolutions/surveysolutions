@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -35,13 +35,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0074");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.GetError("WB0074").References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0074").References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
-            verificationMessages.GetError("WB0074").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0074").References.Single().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_linkedQuestionId () =>
-            verificationMessages.GetError("WB0074").References.Single().Id.ShouldEqual(linkedQuestionId);
+            verificationMessages.GetError("WB0074").References.Single().Id.Should().Be(linkedQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

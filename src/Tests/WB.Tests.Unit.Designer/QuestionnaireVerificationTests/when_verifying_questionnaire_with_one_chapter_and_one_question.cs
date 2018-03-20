@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_no_errors () =>
-            verificationMessages.ShouldBeEmpty();
+            verificationMessages.Should().BeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static IQuestionnaireVerifier verifier;

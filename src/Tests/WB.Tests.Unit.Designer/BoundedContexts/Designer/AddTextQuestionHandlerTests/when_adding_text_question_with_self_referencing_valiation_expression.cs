@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -36,11 +36,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
         [NUnit.Framework.Test] public void should_contains_TextQuestion_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .PublicKey.ShouldEqual(questionId);
+                .PublicKey.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_contains_TextQuestion_with_validationExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId)
-                .ValidationConditions.First().Expression.ShouldEqual(validationExpression);
+                .ValidationConditions.First().Expression.Should().Be(validationExpression);
 
         private static Questionnaire questionnaire;
 

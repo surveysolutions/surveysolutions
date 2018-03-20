@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -22,23 +22,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     rosterSizeQuestionId: rosterSizeQuestionId, description: description, condition: null, hideIfDisabled: false, parentGroupId: parentRosterId, isRoster: true, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null);
 
         [NUnit.Framework.Test] public void should_contains_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_group_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .PublicKey.ShouldEqual(groupId);
+                .PublicKey.Should().Be(groupId);
 
         [NUnit.Framework.Test] public void should_contains_group_with_ParentGroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .GetParent().PublicKey.ShouldEqual(parentRosterId);
+                .GetParent().PublicKey.Should().Be(parentRosterId);
 
         [NUnit.Framework.Test] public void should_contains_group_with_Title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .Title.ShouldEqual(title);
+                .Title.Should().Be(title);
 
         [NUnit.Framework.Test] public void should_contains_group_with_Description_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .Description.ShouldEqual(description);
+                .Description.Should().Be(description);
 
 
         private static Questionnaire questionnaire;

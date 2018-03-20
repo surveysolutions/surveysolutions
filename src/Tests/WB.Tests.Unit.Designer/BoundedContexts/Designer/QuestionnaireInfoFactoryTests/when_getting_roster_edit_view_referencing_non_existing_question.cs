@@ -1,14 +1,12 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -33,13 +31,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetRosterEditView(questionnaireId, rosterId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_roster_with_ItemId_equals_groupId () =>
-            result.ItemId.ShouldEqual(rosterId.FormatGuid());
+            result.ItemId.Should().Be(rosterId.FormatGuid());
         
         [NUnit.Framework.Test] public void should_return_roster_with_RosterSizeSourceType_equals_g3_RosterSizeSourceType () =>
-            result.Type.ShouldEqual(RosterType.Numeric);
+            result.Type.Should().Be(RosterType.Numeric);
         
 
         private static QuestionnaireInfoFactory factory;

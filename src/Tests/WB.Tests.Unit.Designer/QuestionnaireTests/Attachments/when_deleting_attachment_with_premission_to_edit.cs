@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private void BecauseOf() => questionnaire.DeleteAttachment(deleteAttachment);
 
         [NUnit.Framework.Test] public void should_doesnt_contains_attachment_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Attachments.FirstOrDefault(a => a.AttachmentId == attachmentId).ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Attachments.FirstOrDefault(a => a.AttachmentId == attachmentId).Should().BeNull();
 
         private static DeleteAttachment deleteAttachment;
         private static Questionnaire questionnaire;

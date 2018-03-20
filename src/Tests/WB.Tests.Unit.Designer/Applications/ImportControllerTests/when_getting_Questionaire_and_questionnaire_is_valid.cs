@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
@@ -56,19 +56,19 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
             questionnaireCommunicationPackage = importController.Questionnaire(request);
 
         [NUnit.Framework.Test] public void should_return_not_null_responce () =>
-            questionnaireCommunicationPackage.ShouldNotBeNull();
+            questionnaireCommunicationPackage.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_generated_assembly () =>
-            questionnaireCommunicationPackage.QuestionnaireAssembly.ShouldEqual(generatedAssembly);
+            questionnaireCommunicationPackage.QuestionnaireAssembly.Should().Be(generatedAssembly);
 
         [NUnit.Framework.Test] public void should_return_compressed_serialized_questionnaire () =>
-            questionnaireCommunicationPackage.Questionnaire.ShouldEqual(compressedSerializedQuestionnaire);
+            questionnaireCommunicationPackage.Questionnaire.Should().Be(compressedSerializedQuestionnaire);
 
         /*[NUnit.Framework.Test] public void should_serialize_questionnaire_with_empty_Macros_SharedPersons_and_LookupTables () =>
         {
-            questionniareToSerialize.Macros.ShouldBeNull();
-            questionniareToSerialize.SharedPersons.ShouldBeNull();
-            questionniareToSerialize.LookupTables.ShouldBeNull();
+            questionniareToSerialize.Macros.Should().BeNull();
+            questionniareToSerialize.SharedPersons.Should().BeNull();
+            questionniareToSerialize.LookupTables.Should().BeNull();
         }*/
 
         //private static QuestionnaireDocument questionniareToSerialize;

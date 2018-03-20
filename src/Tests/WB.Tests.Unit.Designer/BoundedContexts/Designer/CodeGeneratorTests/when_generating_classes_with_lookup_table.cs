@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -59,22 +59,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent = generator.Generate(questionnaire, version);
 
         [NUnit.Framework.Test] public void should_generate_class_for_lookup_tables_with_correct_key () =>
-            generatedClassContent.Keys.ShouldContain(lookupTableClassName);
+            generatedClassContent.Keys.Should().Contain(lookupTableClassName);
 
         [NUnit.Framework.Test] public void should_generate_class_for_lookup_tables () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public static class LookupTables");
+            generatedClassContent[lookupTableClassName].Should().Contain("public static class LookupTables");
 
         [NUnit.Framework.Test] public void should_generate_class_for_Price () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public class @Lookup__Price");
+            generatedClassContent[lookupTableClassName].Should().Contain("public class @Lookup__Price");
 
         [NUnit.Framework.Test] public void should_generate_class_constructor_for_Price () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public @Lookup__Price(decimal rowcode, double? min,double? max)");
+            generatedClassContent[lookupTableClassName].Should().Contain("public @Lookup__Price(decimal rowcode, double? min,double? max)");
 
         [NUnit.Framework.Test] public void should_generate_lookup_table_price () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("public static Dictionary<decimal, @Lookup__Price> price");
+            generatedClassContent[lookupTableClassName].Should().Contain("public static Dictionary<decimal, @Lookup__Price> price");
 
         [NUnit.Framework.Test] public void should_generate_lookup_table_field_price () =>
-            generatedClassContent[lookupTableClassName].ShouldContain("private static readonly Dictionary<decimal, @Lookup__Price> @__price = @Lookup__Price_Generator.GetTable();");
+            generatedClassContent[lookupTableClassName].Should().Contain("private static readonly Dictionary<decimal, @Lookup__Price> @__price = @Lookup__Price_Generator.GetTable();");
 
 
         private static int version = 16;

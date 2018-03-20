@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -68,61 +68,61 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireTranslato
             translatedDocument = translator.Translate(originalDocument, translation);
 
         [NUnit.Framework.Test] public void should_return_translated_document () =>
-            translatedDocument.ShouldNotBeNull();
+            translatedDocument.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_translate_chapter_title_which_has_translation () =>
-            translatedDocument.Find<Group>(chapter1).Title.ShouldEqual("глава 1");
+            translatedDocument.Find<Group>(chapter1).Title.Should().Be("глава 1");
 
         [NUnit.Framework.Test] public void should_not_translate_chapter_title_which_does_not_have_translation () =>
-            translatedDocument.Find<Group>(chapter2).Title.ShouldEqual("chapter 2");
+            translatedDocument.Find<Group>(chapter2).Title.Should().Be("chapter 2");
 
         [NUnit.Framework.Test] public void should_translate_static_text_which_has_translation () =>
-            translatedDocument.Find<StaticText>(staticText1).Text.ShouldEqual("текст 1");
+            translatedDocument.Find<StaticText>(staticText1).Text.Should().Be("текст 1");
 
         [NUnit.Framework.Test] public void should_not_translate_static_text_which_does_not_have_translation () =>
-            translatedDocument.Find<StaticText>(staticText2).Text.ShouldEqual("text 2");
+            translatedDocument.Find<StaticText>(staticText2).Text.Should().Be("text 2");
 
         [NUnit.Framework.Test] public void should_translate_question_text_which_has_translation () =>
-            translatedDocument.Find<IQuestion>(question1).QuestionText.ShouldEqual("вопрос 1");
+            translatedDocument.Find<IQuestion>(question1).QuestionText.Should().Be("вопрос 1");
 
         [NUnit.Framework.Test] public void should_not_translate_question_text_which_does_not_have_translation () =>
-            translatedDocument.Find<IQuestion>(question2).QuestionText.ShouldEqual("question 2");
+            translatedDocument.Find<IQuestion>(question2).QuestionText.Should().Be("question 2");
 
         [NUnit.Framework.Test] public void should_translate_question_instruction_which_has_translation () =>
-            translatedDocument.Find<IQuestion>(question1).Instructions.ShouldEqual("инструкция 1");
+            translatedDocument.Find<IQuestion>(question1).Instructions.Should().Be("инструкция 1");
 
         [NUnit.Framework.Test] public void should_not_translate_question_instruction_which_does_not_have_translation () =>
-            translatedDocument.Find<IQuestion>(question2).Instructions.ShouldEqual("instruction 2");
+            translatedDocument.Find<IQuestion>(question2).Instructions.Should().Be("instruction 2");
 
         [NUnit.Framework.Test] public void should_translate_single_option_question_option_which_has_translation () =>
-            translatedDocument.Find<IQuestion>(singleOptionQuestion).Answers.Single(a => a.AnswerValue == radioOption1).AnswerText.ShouldEqual("радио 1");
+            translatedDocument.Find<IQuestion>(singleOptionQuestion).Answers.Single(a => a.AnswerValue == radioOption1).AnswerText.Should().Be("радио 1");
 
         [NUnit.Framework.Test] public void should_not_translate_single_option_question_option_which_does_not_have_translation () =>
-            translatedDocument.Find<IQuestion>(singleOptionQuestion).Answers.Single(a => a.AnswerValue == radioOption2).AnswerText.ShouldEqual("radio 2");
+            translatedDocument.Find<IQuestion>(singleOptionQuestion).Answers.Single(a => a.AnswerValue == radioOption2).AnswerText.Should().Be("radio 2");
 
         [NUnit.Framework.Test] public void should_translate_multiple_options_question_option_which_has_translation () =>
-            translatedDocument.Find<IQuestion>(multipleOptionsQuestion).Answers.Single(a => a.AnswerValue == checkOption1).AnswerText.ShouldEqual("галочка 1");
+            translatedDocument.Find<IQuestion>(multipleOptionsQuestion).Answers.Single(a => a.AnswerValue == checkOption1).AnswerText.Should().Be("галочка 1");
 
         [NUnit.Framework.Test] public void should_not_translate_multiple_options_question_option_which_does_not_have_translation () =>
-            translatedDocument.Find<IQuestion>(multipleOptionsQuestion).Answers.Single(a => a.AnswerValue == checkOption2).AnswerText.ShouldEqual("check 2");
+            translatedDocument.Find<IQuestion>(multipleOptionsQuestion).Answers.Single(a => a.AnswerValue == checkOption2).AnswerText.Should().Be("check 2");
 
         [NUnit.Framework.Test] public void should_translate_question_validation_message_which_has_translation () =>
-            translatedDocument.Find<IQuestion>(questionWithValidations).ValidationConditions[0].Message.ShouldEqual("валидация вопроса 1");
+            translatedDocument.Find<IQuestion>(questionWithValidations).ValidationConditions[0].Message.Should().Be("валидация вопроса 1");
 
         [NUnit.Framework.Test] public void should_not_translate_question_validation_message_which_does_not_have_translation () =>
-            translatedDocument.Find<IQuestion>(questionWithValidations).ValidationConditions[1].Message.ShouldEqual("question validation 2");
+            translatedDocument.Find<IQuestion>(questionWithValidations).ValidationConditions[1].Message.Should().Be("question validation 2");
 
         [NUnit.Framework.Test] public void should_translate_static_text_validation_message_which_has_translation () =>
-            translatedDocument.Find<IStaticText>(staticTextWithValidations).ValidationConditions[0].Message.ShouldEqual("валидация текста 1");
+            translatedDocument.Find<IStaticText>(staticTextWithValidations).ValidationConditions[0].Message.Should().Be("валидация текста 1");
 
         [NUnit.Framework.Test] public void should_not_translate_static_text_validation_message_which_does_not_have_translation () =>
-            translatedDocument.Find<IStaticText>(staticTextWithValidations).ValidationConditions[1].Message.ShouldEqual("text validation 2");
+            translatedDocument.Find<IStaticText>(staticTextWithValidations).ValidationConditions[1].Message.Should().Be("text validation 2");
 
         [NUnit.Framework.Test] public void should_translate_fixed_roster_title_which_has_translation () =>
-            translatedDocument.Find<IGroup>(fixedRoster).FixedRosterTitles.Single(t => t.Value == rosterTitleValue1).Title.ShouldEqual("титул ростера 1");
+            translatedDocument.Find<IGroup>(fixedRoster).FixedRosterTitles.Single(t => t.Value == rosterTitleValue1).Title.Should().Be("титул ростера 1");
 
         [NUnit.Framework.Test] public void should_not_translate_fixed_roster_title_which_does_not_have_translation () =>
-            translatedDocument.Find<IGroup>(fixedRoster).FixedRosterTitles.Single(t => t.Value == rosterTitleValue2).Title.ShouldEqual("roster title 2");
+            translatedDocument.Find<IGroup>(fixedRoster).FixedRosterTitles.Single(t => t.Value == rosterTitleValue2).Title.Should().Be("roster title 2");
 
         private static QuestionnaireDocument originalDocument;
         private static QuestionnaireTranslator translator;
