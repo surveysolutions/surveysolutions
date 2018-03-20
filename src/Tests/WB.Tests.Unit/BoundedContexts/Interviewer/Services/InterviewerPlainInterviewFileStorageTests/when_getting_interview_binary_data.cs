@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInt
 
         [Test]
         public void should_remove_questionnaire_document_view_from_plain_storage() =>
-            bytesResult.ShouldAllBeEquivalentTo(imageFileBytes);
+            bytesResult.Should().AllBeEquivalentTo(imageFileBytes);
         
         static byte[] bytesResult;
         static InterviewerImageFileStorage interviewerImageFileStorage;
