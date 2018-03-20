@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_removing_numeric_roster_instance_with_nested_multi_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -89,23 +89,23 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_not_remove_answer_in_first_numeric_and_first_muti_roster = () =>
-            results.HasRemoveAnswerInPosition_0_1.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_remove_answer_in_first_numeric_and_first_muti_roster () =>
+            results.HasRemoveAnswerInPosition_0_1.Should().BeFalse();
 
-        It should_not_remove_answer_in_first_numeric_and_second_muti_roster = () =>
-            results.HasRemoveAnswerInPosition_0_2.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_remove_answer_in_first_numeric_and_second_muti_roster () =>
+            results.HasRemoveAnswerInPosition_0_2.Should().BeFalse();
 
-        It should_remove_answer_in_second_numeric_and_first_muti_roster = () =>
-            results.HasRemoveAnswerInPosition_1_1.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_answer_in_second_numeric_and_first_muti_roster () =>
+            results.HasRemoveAnswerInPosition_1_1.Should().BeTrue();
 
-        It should_remove_answer_in_second_numeric_and_second_muti_roster = () =>
-            results.HasRemoveAnswerInPosition_1_2.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_answer_in_second_numeric_and_second_muti_roster () =>
+            results.HasRemoveAnswerInPosition_1_2.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -12,8 +12,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 {
     internal class when_Answering_question_which_changes_value_of_a_variable : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             textQuetionId = Guid.Parse("21111111111111111111111111111111");
@@ -28,18 +27,20 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 
             interview = SetupInterview(questionnaire);
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerTextQuestion(userId, textQuetionId, new decimal[0], DateTime.Now, "Nastya");
 
-        It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
+        [NUnit.Framework.Test] public void should_raise_VariablesValuesChanged_event_for_the_variable () =>
             eventContext.ShouldContainEvent<VariablesChanged>(@event
                 => (long?) @event.ChangedVariables[0].NewValue == 6 && @event.ChangedVariables[0].Identity.Id== variableId);
 

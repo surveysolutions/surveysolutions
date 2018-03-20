@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_creating_interview_on_client_with_fixed_roster_with_3_rows : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -56,17 +50,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 }
             });
 
-        It should_fire_event_that_some_rosters_were_added = () =>
-            results.SomeRosterWasAdded.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_fire_event_that_some_rosters_were_added () =>
+            results.SomeRosterWasAdded.Should().BeTrue();
 
-        It should_fire_event_that_3_rosters_were_added = () =>
-            results.CountOfAddedRosters.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_fire_event_that_3_rosters_were_added () =>
+            results.CountOfAddedRosters.Should().Be(3);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
 

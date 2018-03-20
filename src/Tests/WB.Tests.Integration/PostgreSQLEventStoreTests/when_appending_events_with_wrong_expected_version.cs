@@ -1,20 +1,19 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
     public class when_appending_events_with_wrong_expected_version : with_postgres_db
     {
-        private Establish context = () =>
-        {
+        [Test] public void should_throw_invalid_operation_exception () {
             Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             int sequenceCounter = 1;
@@ -69,17 +68,19 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 4,
                 DateTime.UtcNow,
                 new AccountLocked()));
-        };
 
-        Because of = () => exception = Catch.Only<InvalidOperationException>(() => eventStore.Store(appendStream));
+            var exception = Assert.Throws<InvalidOperationException>(() => eventStore.Store(appendStream));
+            exception.Message.Should().Contain("Unexpected stream version");
+        }
+        
+        public void TearDown()
+        {
+            npgsqlConnection.Close();
+        }
 
-        It should_throw_invalid_operation_exception = () => exception.Message.ShouldContain("Unexpected stream version");
-
-        Cleanup c = () => npgsqlConnection?.Dispose();
 
         static PostgresEventStore eventStore;
         static UncommittedEventStream appendStream;
-        static Exception exception;
         static NpgsqlConnection npgsqlConnection;
     }
 }

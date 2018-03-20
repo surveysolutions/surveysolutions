@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     internal class when_answering_multiple_options_question_which_is_roster_size_question_for_roster_with_linked_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -75,14 +75,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_raise_LinkedOptionsChanged_event = () =>
-            results.WasLinkedOptionsChanged.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_LinkedOptionsChanged_event () =>
+            results.WasLinkedOptionsChanged.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

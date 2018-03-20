@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -12,8 +12,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level3 : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Abc.Create.Entity.TextListQuestion(questionId: rosterSizeQuestion1Id),
@@ -64,34 +63,36 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 new Tuple<decimal, string>(1, "house 2 person 1 pet 1"),
                 new Tuple<decimal, string>(2, "house 2 person 1 pet 2"),
             });
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        public void BecauseOf() =>
             interview.AnswerTextListQuestion(interviewerId, rosterSizeQuestion3Id, Abc.Create.Entity.RosterVector(new[] {2, 2}), DateTime.UtcNow, new[]
             {
                 new Tuple<decimal, string>(1, "house 2 person 2 pet 1"),
                 new Tuple<decimal, string>(2, "house 2 person 2 pet 2"),
             });
 
-        It should_linked_single_question_has_2_options = () =>
+        [NUnit.Framework.Test] public void should_linked_single_question_has_2_options () 
         {
             var identity = Abc.Create.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
-            linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
+            linkedSingleOptionQuestion.Options.Count.Should().Be(2);
             
-            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.First()).ShouldEqual("house 2 person 2 pet 1");
-            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.Last()).ShouldEqual("house 2 person 2 pet 2");
-        };
+            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.First()).Should().Be("house 2 person 2 pet 1");
+            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.Last()).Should().Be("house 2 person 2 pet 2");
+        }
 
-        It should_linked_multi_question_has_2_options = () =>
+        [NUnit.Framework.Test] public void should_linked_multi_question_has_2_options () 
         {
             var identity = Abc.Create.Identity(linkedSingleQuestionId, Abc.Create.Entity.RosterVector(new[] {2, 2, 2}));
             var linkedSingleOptionQuestion = interview.GetLinkedSingleOptionQuestion(identity);
-            linkedSingleOptionQuestion.Options.Count.ShouldEqual(2);
+            linkedSingleOptionQuestion.Options.Count.Should().Be(2);
             
-            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.First()).ShouldEqual("house 2 person 2 pet 1");
-            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.Last()).ShouldEqual("house 2 person 2 pet 2");
-        };
+            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.First()).Should().Be("house 2 person 2 pet 1");
+            interview.GetLinkedOptionTitle(identity, linkedSingleOptionQuestion.Options.Last()).Should().Be("house 2 person 2 pet 2");
+        }
 
         static StatefulInterview interview;
 

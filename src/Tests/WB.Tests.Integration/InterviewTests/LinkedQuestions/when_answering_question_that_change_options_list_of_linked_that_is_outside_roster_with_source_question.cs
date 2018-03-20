@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -11,12 +11,12 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_question_that_change_osptions_list_of_linked_that_is_outside_roster_with_source_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -59,14 +59,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_return_2_options_for_linked_question = () =>
-            results.OptionsCountForLinkedQuestion.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_options_for_linked_question () =>
+            results.OptionsCountForLinkedQuestion.Should().Be(2);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
