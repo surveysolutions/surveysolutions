@@ -114,9 +114,7 @@
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {
-                /*if ($scope.currentChapter.itemId === data.itemId) {
-                    $scope.currentChapter.title = data.title;
-                }*/
+                
                 var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
                 if (_.isNull(itemToFind)) return;
 
