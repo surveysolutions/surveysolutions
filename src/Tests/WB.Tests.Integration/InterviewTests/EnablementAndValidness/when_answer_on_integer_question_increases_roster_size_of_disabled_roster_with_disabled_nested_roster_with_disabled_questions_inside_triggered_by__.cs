@@ -4,7 +4,6 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
-using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness

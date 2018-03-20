@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -13,7 +12,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    [Subject(typeof (Interview))]
     internal class when_answering_categorical_question_with_cascading_options : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {

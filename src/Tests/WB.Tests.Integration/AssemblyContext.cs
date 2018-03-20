@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Threading;
-using Machine.Specifications;
 using Moq;
 using Ncqrs;
 using NUnit.Framework;
@@ -10,13 +9,12 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Integration
 {
     [SetUpFixture]
-    public class AssemblyContext : IAssemblyContext
+    public class AssemblyContext 
     {
         [OneTimeSetUp]
         public void OnAssemblyStart()

@@ -3,7 +3,6 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {

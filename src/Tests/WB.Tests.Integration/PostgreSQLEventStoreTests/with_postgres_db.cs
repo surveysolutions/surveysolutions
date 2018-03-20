@@ -1,6 +1,5 @@
 using System;
 using System.Configuration;
-using FluentAssertions;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;

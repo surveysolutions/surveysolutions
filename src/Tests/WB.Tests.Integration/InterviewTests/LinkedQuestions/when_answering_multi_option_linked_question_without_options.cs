@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;

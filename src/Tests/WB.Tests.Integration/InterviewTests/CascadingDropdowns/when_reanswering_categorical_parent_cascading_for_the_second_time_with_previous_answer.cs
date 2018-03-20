@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -13,7 +12,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    [Subject(typeof(Interview))]
     internal class when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer : InterviewTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {

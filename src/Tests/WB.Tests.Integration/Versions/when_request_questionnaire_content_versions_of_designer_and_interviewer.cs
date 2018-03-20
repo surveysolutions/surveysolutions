@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 
@@ -6,20 +6,20 @@ namespace WB.Tests.Integration.Versions
 {
     internal class when_request_questionnaire_content_versions_of_designer_and_interviewer
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             designerEngineVersionService = new DesignerEngineVersionService();
             questionnaireContentVersionProvider = new QuestionnaireContentVersionProvider();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             questionnaireContentVersion = questionnaireContentVersionProvider.GetSupportedQuestionnaireContentVersion().Major;
             designerLatestSupportedVersion = designerEngineVersionService.LatestSupportedVersion;
-        };
+        }
 
-        It should_return_same_versions_for_tester_version_and_designer_latest_supported_version = () =>
-            questionnaireContentVersion.ShouldEqual(designerLatestSupportedVersion);
+        [NUnit.Framework.Test] public void should_return_same_versions_for_tester_version_and_designer_latest_supported_version () =>
+            questionnaireContentVersion.Should().Be(designerLatestSupportedVersion);
 
         private static int questionnaireContentVersion;
         private static int designerLatestSupportedVersion;
