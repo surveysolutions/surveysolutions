@@ -20,7 +20,8 @@
             </div>
         </div>
         <div class="form-group">
-            <button type="submit" id="edit-post-comment-button" class="btn btn-lg " ng-class="{ 'btn-primary': addCommentForm.$dirty }" unsaved-warning-clear ng-click="postComment()" ng-disabled="!addCommentForm.$valid" ng-i18next>Add comment</button>
+            <button type="submit" id="edit-post-comment-button" class="btn btn-lg " ng-class="{ 'btn-primary': addCommentForm.$dirty }" unsaved-warning-clear 
+                    ng-click="postComment()" ng-if="!questionnaire.isReadOnlyForUser" ng-disabled="!addCommentForm.$valid" ng-i18next>Add comment</button>
         </div>
     </div>
 </form>
