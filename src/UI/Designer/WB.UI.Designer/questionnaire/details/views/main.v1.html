@@ -637,7 +637,7 @@
                         <li class="comment-thread" ng-repeat="commentThread in commentThreads">
                             <a class="reference-item" href="javascript:void(0);" ng-click="showCommentsAndNavigateTo(commentThread.entity)">
                                 <span ng-if="commentThread.entity.type == 'Question'" class="icon {{commentThread.entity.questionType}} "></span>
-                                <span ng-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group'" class="icon icon-{{commentThread.entity.type.toLowerCase()}}"></span>
+                                <span ng-if="commentThread.entity.type !== 'Question' && commentThread.entity.type !== 'Group' && commentThread.entity.type !== 'Roster'" class="icon icon-{{commentThread.entity.type.toLowerCase()}}"></span>
                                 <span class="title">{{commentThread.entity.title | escape}}</span>
                                 <span class="variable" ng-bind-html="commentThread.entity.variable || '&nbsp;'">&nbsp;</span>
                             </a>

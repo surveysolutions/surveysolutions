@@ -2050,6 +2050,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comments.
+        /// </summary>
+        public static string SideBarCommentsTitle {
+            get {
+                return ResourceManager.GetString("SideBarCommentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You will see comments here.
         /// </summary>
         public static string SideBarEmptyCommentsLine {

@@ -87,4 +87,47 @@
             $rootScope.$on('questionnaireLoaded', function () {
                 $scope.loadCommentThreads();
             });
+            
+            $rootScope.$on('questionUpdated', function (event, data) {
+                var itemToFind = _.find($scope.commentThreads, function(thread) { return thread.entity.itemId === data.itemId });
+                if (_.isNull(itemToFind)) return;
+
+                itemToFind.entity.title = data.title;
+                itemToFind.entity.variable = data.variable;
+                itemToFind.entity.questionType = ("icon-" + data.type).toLowerCase(); //map to type
+                
+            });
+
+            $rootScope.$on('staticTextUpdated', function (event, data) {
+                var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
+                if (_.isNull(itemToFind)) return;
+
+                itemToFind.entity.title = data.text;
+            });
+
+            $rootScope.$on('variableUpdated', function (event, data) {
+                var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
+                if (_.isNull(itemToFind)) return;
+
+                itemToFind.entity.variable = data.name;
+                itemToFind.entity.title = data.label;
+            });
+
+            $rootScope.$on('groupUpdated', function (event, data) {
+                /*if ($scope.currentChapter.itemId === data.itemId) {
+                    $scope.currentChapter.title = data.title;
+                }*/
+                var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
+                if (_.isNull(itemToFind)) return;
+
+                itemToFind.entity.title = data.title;
+            });
+
+            $rootScope.$on('rosterUpdated', function (event, data) {
+                var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
+                if (_.isNull(itemToFind)) return;
+
+                itemToFind.entity.title = data.title;
+                itemToFind.entity.variable = data.variable;
+            });
         });
