@@ -90,7 +90,7 @@
             
             $rootScope.$on('questionUpdated', function (event, data) {
                 var itemToFind = _.find($scope.commentThreads, function(thread) { return thread.entity.itemId === data.itemId });
-                if (_.isNull(itemToFind)) return;
+                if (_.isNull(itemToFind) || _.isUndefined(itemToFind)) return;
 
                 itemToFind.entity.title = data.title;
                 itemToFind.entity.variable = data.variable;
@@ -100,14 +100,14 @@
 
             $rootScope.$on('staticTextUpdated', function (event, data) {
                 var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
-                if (_.isNull(itemToFind)) return;
+                if (_.isNull(itemToFind) || _.isUndefined(itemToFind)) return;
 
                 itemToFind.entity.title = data.text;
             });
 
             $rootScope.$on('variableUpdated', function (event, data) {
                 var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
-                if (_.isNull(itemToFind)) return;
+                if (_.isNull(itemToFind) || _.isUndefined(itemToFind)) return;
 
                 itemToFind.entity.variable = data.name;
                 itemToFind.entity.title = data.label;
@@ -116,14 +116,14 @@
             $rootScope.$on('groupUpdated', function (event, data) {
                 
                 var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
-                if (_.isNull(itemToFind)) return;
+                if (_.isNull(itemToFind) || _.isUndefined(itemToFind)) return;
 
                 itemToFind.entity.title = data.title;
             });
 
             $rootScope.$on('rosterUpdated', function (event, data) {
                 var itemToFind = _.find($scope.commentThreads, function (thread) { return thread.entity.itemId === data.itemId });
-                if (_.isNull(itemToFind)) return;
+                if (_.isNull(itemToFind) || _.isUndefined(itemToFind)) return;
 
                 itemToFind.entity.title = data.title;
                 itemToFind.entity.variable = data.variable;
