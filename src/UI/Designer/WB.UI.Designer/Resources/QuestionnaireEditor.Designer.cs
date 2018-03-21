@@ -2878,6 +2878,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variable name.
+        /// </summary>
+        public static string VariableVariableName {
+            get {
+                return ResourceManager.GetString("VariableVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} warning.
         /// </summary>
         public static string WarningsCounter {

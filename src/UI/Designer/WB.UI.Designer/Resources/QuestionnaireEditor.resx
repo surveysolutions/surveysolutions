@@ -1063,4 +1063,7 @@
   <data name="IsSignature" xml:space="preserve">
     <value>Use signature pad</value>
   </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
 </root>
