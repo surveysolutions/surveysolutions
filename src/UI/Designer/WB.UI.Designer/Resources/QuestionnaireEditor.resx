@@ -317,7 +317,7 @@
     <value>Update</value>
   </data>
   <data name="VariableName" xml:space="preserve">
-    <value>Name</value>
+    <value>name</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} warning</value>
