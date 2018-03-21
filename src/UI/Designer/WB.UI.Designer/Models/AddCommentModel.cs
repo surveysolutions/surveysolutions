@@ -15,7 +15,7 @@ namespace WB.UI.Designer.Models
         public Guid QuestionnaireId { get; set; }
 
         [Required]
-        [StringLength(1000)]
+        [StringLength(1000, ErrorMessageResourceName = nameof(Resources.QuestionnaireEditor.MaxCommentLengthErrorMessage), ErrorMessageResourceType = typeof(Resources.QuestionnaireEditor), ErrorMessage = null)]
         public string Comment { get; set; }
     }
 }

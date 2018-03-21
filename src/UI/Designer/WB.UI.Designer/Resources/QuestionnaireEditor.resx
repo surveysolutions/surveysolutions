@@ -1099,4 +1099,7 @@
   <data name="EditorHideComment" xml:space="preserve">
     <value>Hide comments</value>
   </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>Comment cannot contain more than {1} characters</value>
+  </data>
 </root>
