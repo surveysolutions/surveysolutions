@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Globalization;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using Ncqrs.Eventing;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
     internal class when_variable_value_changed_and_current_culture_is_russian : StaticTextViewModelTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var substitutedVariable1Identity = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             var substitutedVariable2Identity = Create.Identity(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), RosterVector.Empty);
             staticTextIdentity = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
@@ -53,16 +52,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository, registry);
             viewModel.Init(interview.EventSourceId.FormatGuid(), staticTextIdentity, null);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             liteEventBus.PublishCommittedEvents(new CommittedEventStream(interview.EventSourceId, 
             Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(staticTexts: new [] { staticTextIdentity }), eventSourceId: interview.EventSourceId)));
 
-        It should_change_item_title = () => 
-            viewModel.Text.PlainText.ShouldEqual("Your first variable is 2016-01-31 and second is 7,77");
+        [NUnit.Framework.Test] public void should_change_item_title () => 
+            viewModel.Text.PlainText.Should().Be("Your first variable is 2016-01-31 and second is 7,77");
 
-        Cleanup cleanup = () => changedCulture.Dispose();
+        [NUnit.Framework.OneTimeTearDown]
+        public void TearDown() => changedCulture.Dispose();
 
         static StaticTextViewModel viewModel;
         static ILiteEventBus liteEventBus;

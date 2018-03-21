@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
     internal class when_initing_view_model : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewId = "interviewId";
             userId = Guid.NewGuid();
 
@@ -49,13 +48,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             navigationState = Create.Other.NavigationState();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             viewModel.Init(interviewId, questionIdentity, navigationState);
 
-        It should_set_to_filter_text_specified_value = () =>
-            viewModel.FilterText.ShouldEqual("3");
+        [NUnit.Framework.Test] public void should_set_to_filter_text_specified_value () =>
+            viewModel.FilterText.Should().Be("3");
 
         private static FilteredSingleOptionQuestionViewModel viewModel;
         private static NavigationState navigationState;

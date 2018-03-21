@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         [NUnit.Framework.Test] public void should_linked_single_question_from_roster2_has_no_options () 
         {
             interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1)))
-                .Options.ShouldBeEmpty();
+                .Options.Should().BeEmpty();
         }
 
         [NUnit.Framework.Test] public void should_linked_multi_question_from_roster1_has_3_options () 
@@ -73,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
 
         [NUnit.Framework.Test] public void should_linked_multi_question_from_roster2_has_no_options () {
             interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(1)))
-                .Options.ShouldBeEmpty();
+                .Options.Should().BeEmpty();
         }
 
         static StatefulInterview interview;

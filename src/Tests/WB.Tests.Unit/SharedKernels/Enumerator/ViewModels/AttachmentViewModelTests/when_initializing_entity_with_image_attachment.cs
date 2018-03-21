@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
     internal class when_initializing_entity_with_image_attachment : AttachmentViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var attachmentContentId = "cccccc";
             var attachment = Create.Entity.Attachment(attachmentContentId);
@@ -39,13 +38,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
                 && s.GetContent(attachmentContentId) == attachmentContentData.Content);
 
             viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
+        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
 
-        It should_initialize_attachment_as_image = () => viewModel.IsImage.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_initialize_attachment_as_image () => viewModel.IsImage.Should().BeTrue();
 
-        It should_initialize_image_content = () => viewModel.Content.ShouldEqual(attachmentContentData.Content);
+        [NUnit.Framework.Test] public void should_initialize_image_content () => viewModel.Content.Should().BeEquivalentTo(attachmentContentData.Content);
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;

@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -26,7 +27,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         [Test]
         public void should_return_empty_result() =>
-            view.Lines.ShouldBeEmpty();
+            view.Lines.Should().BeEmpty();
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_toggling_answer_and_max_answers_count_reached : YesNoQuestionViewModelTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -57,11 +56,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.First().Selected = true;
-        };
+            BecauseOf();
+        }
 
-        private Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
+        private void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
 
-        private It should_undo_checked_property = () => viewModel.Options.First().YesSelected.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.First().YesSelected.Should().BeFalse();
 
         private static YesNoQuestionViewModel viewModel;
         private static Identity questionId;

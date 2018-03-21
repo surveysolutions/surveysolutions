@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -86,11 +87,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [Test]
         public void It_should_create_roster_instance() => 
-            interview.GetRoster(fixedRosterIdentity).ShouldNotBeNull();
+            interview.GetRoster(fixedRosterIdentity).Should().NotBeNull();
 
         [Test]
         public void It_should_create_nested_roster_instance() => 
-            interview.GetRoster(fixedNestedRosterIdentity).ShouldNotBeNull();
+            interview.GetRoster(fixedNestedRosterIdentity).Should().NotBeNull();
 
         [Test]
         public void It_should_set_answer() => 

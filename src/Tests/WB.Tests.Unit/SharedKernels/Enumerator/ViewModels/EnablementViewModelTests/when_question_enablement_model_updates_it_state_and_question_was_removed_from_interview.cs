@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -7,14 +7,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelTests
 {
     internal class when_question_enablement_model_updates_it_state_and_question_was_removed_from_interview : EnablementViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
              {
                 Create.Entity.MultyOptionsQuestion(multiQuestionId, options: new [] { Create.Entity.Option("1")}),
@@ -33,16 +32,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
             viewModel.Init(interview.EventSourceId.FormatGuid(), numericQuestionIdentity);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             interview.RemoveAnswer(multiQuestionIdentity.Id, multiQuestionIdentity.RosterVector, Guid.NewGuid(), DateTime.Now);
             viewModel.Handle(Create.Event.QuestionsEnabled(multiQuestionIdentity,numericQuestionIdentity));
-        };
+        }
 
-        It should_disable_model = () => 
-            viewModel.Enabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_disable_model () => 
+            viewModel.Enabled.Should().BeFalse();
 
         static EnablementViewModel viewModel;
         static StatefulInterview interview;

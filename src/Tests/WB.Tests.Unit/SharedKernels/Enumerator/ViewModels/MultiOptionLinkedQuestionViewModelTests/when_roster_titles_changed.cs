@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 {
     internal class when_roster_titles_changed : MultiOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             level1TriggerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             level2triggerId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             linkToQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -50,13 +49,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 new[] { new Tuple<decimal, string>(1, "subtitle"), });
 
             interview.AnswerTextQuestion(interviewerId, linkToQuestionId, Create.Entity.RosterVector(1, 1), DateTime.UtcNow, "some text");
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
+        public void BecauseOf() => viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
-        It should_refresh_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_refresh_list_of_options () => viewModel.Options.Count.Should().Be(1);
 
-        It should_prefix_option_with_parent_title = () => viewModel.Options.First().Title.ShouldEqual("title: subtitle: some text");
+        [NUnit.Framework.Test] public void should_prefix_option_with_parent_title () => viewModel.Options.First().Title.Should().Be("title: subtitle: some text");
 
         static MultiOptionLinkedToRosterQuestionQuestionViewModel viewModel;
         static StatefulInterview interview;

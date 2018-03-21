@@ -1,5 +1,7 @@
 using System;
+using FluentAssertions;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -11,30 +13,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_cloning_questionnaire_and_its_disabled
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException_containing_specific_words () {
             var questionnaireBrowseItemStorage = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                 id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem(disabled: true));
 
             questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
-        };
 
-        Because of = () =>
-            questionnaireException = Catch.Only<QuestionnaireException>(() =>
+            var questionnaireException = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
                     questionnaireIdentity: questionnaireIdentity)));
-
-        It should_throw_QuestionnaireException_containing_specific_words = () =>
-            questionnaireException.Message.ToLower().ToSeparateWords().ShouldContain("questionnaire", "disabled");
-
-        It should_throw_QuestionnaireException_containing_questionnaire_id = () =>
+            questionnaireException.Message.ToLower().ToSeparateWords().Should().Contain("questionnaire", "disabled");
             questionnaireException.Message.ShouldContain(questionnaireIdentity.QuestionnaireId.FormatGuid());
-
-        It should_throw_QuestionnaireException_containing_questionnaire_version = () =>
             questionnaireException.Message.ShouldContain(questionnaireIdentity.Version.ToString());
-
-        private static QuestionnaireException questionnaireException;
+        }
+        
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
             = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);

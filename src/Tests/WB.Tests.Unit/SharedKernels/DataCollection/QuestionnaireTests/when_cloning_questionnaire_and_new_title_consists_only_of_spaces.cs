@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
@@ -11,25 +12,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_cloning_questionnaire_and_new_title_consists_only_of_spaces : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException_containing_specific_words () {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage
                 = Setup.PlainStorageAccessorWithOneEntity<QuestionnaireBrowseItem>(
                     id: questionnaireIdentity.ToString(), entity: Create.Entity.QuestionnaireBrowseItem());
 
             questionnaire = Create.AggregateRoot.Questionnaire(
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
-        };
 
-        Because of = () =>
-            questionnaireException = Catch.Only<QuestionnaireException>(() =>
+            var questionnaireException = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
                     questionnaireIdentity: questionnaireIdentity, newTitle: "   ")));
+            questionnaireException.Message.ToLower().ToSeparateWords().Should().Contain("title", "empty");
+        }
 
-        It should_throw_QuestionnaireException_containing_specific_words = () =>
-            questionnaireException.Message.ToLower().ToSeparateWords().ShouldContain("title", "empty");
-
-        private static QuestionnaireException questionnaireException;
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity
             = Create.Entity.QuestionnaireIdentity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), 3);

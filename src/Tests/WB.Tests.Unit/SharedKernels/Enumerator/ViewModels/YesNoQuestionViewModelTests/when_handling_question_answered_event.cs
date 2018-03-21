@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_handling_question_answered_event : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -55,9 +54,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             viewModel.Handle(new YesNoQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []
             {
@@ -65,16 +65,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 new AnsweredYesNoOption(2, false), 
                 new AnsweredYesNoOption(1, true), 
             }));
-        };
+        }
 
-        It should_set_checked_order_to_yes_options = () =>
+        [NUnit.Framework.Test] public void should_set_checked_order_to_yes_options () 
         {
-            viewModel.Options[4].YesAnswerCheckedOrder.ShouldEqual(1);
-            viewModel.Options[1].YesAnswerCheckedOrder.ShouldEqual(null);
-            viewModel.Options[0].YesAnswerCheckedOrder.ShouldEqual(2);
-        };
+            viewModel.Options[4].YesAnswerCheckedOrder.Should().Be(1);
+            viewModel.Options[1].YesAnswerCheckedOrder.Should().Be(null);
+            viewModel.Options[0].YesAnswerCheckedOrder.Should().Be(2);
+        }
 
-        It should_mark_options_as_checked = () => viewModel.Options.Count(x => x.YesSelected).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_mark_options_as_checked () => viewModel.Options.Count(x => x.YesSelected).Should().Be(2);
 
         static YesNoQuestionViewModel viewModel;
         static Identity questionId;

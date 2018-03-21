@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,14 +16,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
     internal class when_deleting_item_and_list_question_and_roster_size_question_and_user_dont_want_delete_roster : TextListQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered() == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
@@ -52,25 +51,25 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 userInteractionService: userInteraction.Object);
 
             listModel.Init(interviewId, questionIdentity, navigationState);
+            BecauseOf();
+        }
 
-        };
-
-        Because of = () =>
+        public void BecauseOf() =>
             answerViewModels[deletedItemIndex].DeleteListItemCommand.Execute();
 
-        It should_not_delete_anything_from_Answers_list = () =>
-            answerViewModels.Count.ShouldEqual(5);
+        [NUnit.Framework.Test] public void should_not_delete_anything_from_Answers_list () =>
+            answerViewModels.Count.Should().Be(5);
 
-        It should_not_delete_item_with_index_equals__deletedItemIndex__ = () =>
+        [NUnit.Framework.Test] public void should_not_delete_item_with_index_equals__deletedItemIndex__ () =>
             answerViewModels.Any(x
                 => x.Value == savedAnswers.ToTupleArray()[deletedItemIndex].Item1
                    && x.Title == savedAnswers.ToTupleArray()[deletedItemIndex].Item2)
-                .ShouldBeTrue();
+                .Should().BeTrue();
 
-        It should_not_contain_add_new_item_view_model = () =>
-            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_not_contain_add_new_item_view_model () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().Should().BeEmpty();
 
-        It should_not_send_answer_command = () =>
+        [NUnit.Framework.Test] public void should_not_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
 
         private static TextListQuestionViewModel listModel;
