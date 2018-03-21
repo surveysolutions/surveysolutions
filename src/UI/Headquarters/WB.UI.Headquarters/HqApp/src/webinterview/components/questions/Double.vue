@@ -10,7 +10,7 @@
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
-                            v-numericFormatting="{aSep: groupSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
+                            v-numericFormatting="{aSep: groupSeparator, aDec:decimalSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
                             <wb-remove-answer v-if="!isSpecialValueSelected" />
                     </div>
                 </div>
@@ -50,8 +50,18 @@
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
             },
             groupSeparator() {
-                if (this.$me.useFormatting) {
+                if (this.$me.useFormatting) {                    
                     var etalon = 1111
+                    var localizedNumber = etalon.toLocaleString()
+                    return localizedNumber.substring(1, localizedNumber.length - 3)
+                }
+
+                return ''
+            },
+            decimalSeparator() {
+                if (this.$me.useFormatting) {
+                    
+                    var etalon = 1.111
                     var localizedNumber = etalon.toLocaleString()
                     return localizedNumber.substring(1, localizedNumber.length - 3)
                 }
