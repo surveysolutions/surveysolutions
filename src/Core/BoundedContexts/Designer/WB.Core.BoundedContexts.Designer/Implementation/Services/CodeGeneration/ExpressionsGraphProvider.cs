@@ -100,7 +100,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                     .Where(x => x.RosterTitleQuestionId.HasValue)
                     .Select(x => new { Key = x.Id, Value = x.RosterTitleQuestionId.Value }))
                 .GroupBy(x => x.Key)
-                .ToDictionary(x => x.Key, x => x.Select(s => s.Value).ToList());        }
+                .ToDictionary(x => x.Key, x => x.Select(s => s.Value).ToList());
+        }
 
         private Dictionary<Guid, List<Guid>> BuildStructuralDependencies(ReadOnlyQuestionnaireDocument questionnaire)
         {
@@ -145,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
 
                 if (entity is IQuestion question)
                 {
-                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression, ignoreReferenceOnSelf: true);
+                    FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.Properties.OptionsFilterExpression);
                     FillDependencies(dependencies, variableNamesByEntitiyIds, allMacroses, question.PublicKey, question.LinkedFilterExpression);
 
                     if (question.CascadeFromQuestionId != null)
@@ -268,7 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Select(x => new { x.VariableName, EntityId = x.PublicKey });
 
             var variablesOfVariables = questionnaireDocument
-                .Find<IVariable>()
+                .Find<IVariable>(x => !string.IsNullOrWhiteSpace(x.VariableName))
                 .Select(x => new { VariableName = x.Name, EntityId = x.PublicKey });
 
             return variablesOfQuestions.Union(variablesOfRosters).Union(variablesOfVariables).ToDictionary(x => x.VariableName, x => x.EntityId);

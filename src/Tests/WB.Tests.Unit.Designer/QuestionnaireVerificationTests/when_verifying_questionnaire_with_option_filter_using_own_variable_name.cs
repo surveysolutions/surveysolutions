@@ -1,17 +1,16 @@
-using System;
 using System.Collections.Generic;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_option_filter_using_own_variable_name : QuestionnaireVerifierTestsContext
     {
@@ -41,11 +40,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         private void BecauseOf() =>
                 verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_not_return_contain_error_WB0056 () =>
-                verificationMessages.ShouldNotContainError("WB0056");
+        [NUnit.Framework.Test] public void should_return_contain_error_WB0056 () =>
+                verificationMessages.ShouldContainError("WB0056");
 
-        [NUnit.Framework.Test] public void should_not_return_message_with_level_general () =>
-                verificationMessages.GetError("WB0056").ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
+                verificationMessages.GetError("WB0056").ShouldNotBeNull();
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

@@ -174,6 +174,18 @@ namespace WB.UI.Headquarters.Code
                     case SynchronizationLogType.GetMap:
                         logItem.Log = SyncLogMessages.GetMap.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
                         break;
+                    case SynchronizationLogType.GetApk:
+                        logItem.Log = SyncLogMessages.ApkRequested;
+                        break;
+                    case SynchronizationLogType.GetExtendedApk:
+                        logItem.Log = SyncLogMessages.ExtendedApkRequested;
+                        break;
+                    case SynchronizationLogType.GetApkPatch:
+                        logItem.Log = SyncLogMessages.PatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetExtendedApkPatch:
+                        logItem.Log = SyncLogMessages.ExtendedPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }

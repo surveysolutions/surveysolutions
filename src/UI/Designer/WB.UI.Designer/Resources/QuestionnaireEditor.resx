@@ -1072,6 +1072,9 @@
   <data name="HelpNewComment" xml:space="preserve">
     <value>add comment</value>
   </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
     <value>{{count}} Comment thread:</value>
   </data>
