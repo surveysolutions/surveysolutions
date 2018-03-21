@@ -95,9 +95,6 @@ namespace WB.UI.Interviewer.Implementations.Services
             {
                 if (rest.StatusCode != HttpStatusCode.NotFound)
                     throw;
-
-                if (!continueIfNoPatch)
-                    return;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -129,19 +126,18 @@ namespace WB.UI.Interviewer.Implementations.Services
                 {
                     this.logger.Error("Were not able to apply delta patch. ", e);
 
-                    if (!continueIfNoPatch)
-                        return;
-
-                    await GetWithFullApk();
+                    if (continueIfNoPatch)
+                        await GetWithFullApk();
                 }
             }
             else
             {
-                if (!continueIfNoPatch)
-                    return;
-
-                await GetWithFullApk();
+                if (continueIfNoPatch)
+                    await GetWithFullApk();
             }
+
+            if (patchOrFullApkBytes == null)
+                return;
 
             cancellationToken.ThrowIfCancellationRequested();
 

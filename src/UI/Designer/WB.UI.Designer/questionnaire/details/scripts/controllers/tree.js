@@ -33,6 +33,7 @@
 
             $scope.highlightedId = null;
             $scope.isSearchInFocus = false;
+            
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
@@ -378,7 +379,7 @@
                     }
                 });
             };
-
+            
             $scope.deleteVariable = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 

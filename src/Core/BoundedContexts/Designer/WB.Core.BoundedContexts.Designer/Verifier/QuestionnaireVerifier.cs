@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             {
                 var references =
                     cycle.Select(guid => questionnaire.Find<IComposite>(guid))
-                        .Select(x => QuestionnaireNodeReference.CreateFrom(x))
+                        .Select(x => QuestionnaireEntityReference.CreateFrom(x))
                         .ToArray();
 
                 yield return QuestionnaireVerificationMessage.Error("WB0056", VerificationMessages.WB0056_EntityShouldNotHaveCircularReferences, references);
@@ -162,27 +162,27 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         private static QuestionnaireVerificationMessage CreateExpressionSyntaxError(ExpressionLocation expressionLocation, IEnumerable<string> compilationErrorMessages)
         {
-            QuestionnaireNodeReference reference;
+            QuestionnaireEntityReference reference;
 
             switch (expressionLocation.ItemType)
             {
                 case ExpressionLocationItemType.Group:
-                    reference = QuestionnaireNodeReference.CreateForGroup(expressionLocation.Id);
+                    reference = QuestionnaireEntityReference.CreateForGroup(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Roster:
-                    reference = QuestionnaireNodeReference.CreateForRoster(expressionLocation.Id);
+                    reference = QuestionnaireEntityReference.CreateForRoster(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Question:
-                    reference = QuestionnaireNodeReference.CreateForQuestion(expressionLocation.Id);
+                    reference = QuestionnaireEntityReference.CreateForQuestion(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.StaticText:
-                    reference = QuestionnaireNodeReference.CreateForStaticText(expressionLocation.Id);
+                    reference = QuestionnaireEntityReference.CreateForStaticText(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.LookupTable:
-                    reference = QuestionnaireNodeReference.CreateForLookupTable(expressionLocation.Id);
+                    reference = QuestionnaireEntityReference.CreateForLookupTable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Variable:
-                    reference = QuestionnaireNodeReference.CreateForVariable(expressionLocation.Id);
+                    reference = QuestionnaireEntityReference.CreateForVariable(expressionLocation.Id);
                     break;
                 case ExpressionLocationItemType.Questionnaire:
                     return QuestionnaireVerificationMessage.Error("WB0096", VerificationMessages.WB0096_GeneralCompilationError);

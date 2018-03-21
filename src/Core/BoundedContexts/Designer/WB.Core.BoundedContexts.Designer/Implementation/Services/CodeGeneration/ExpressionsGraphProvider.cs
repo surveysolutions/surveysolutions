@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneratio
                 .Select(x => new { x.VariableName, EntityId = x.PublicKey });
 
             var variablesOfVariables = questionnaireDocument
-                .Find<IVariable>()
+                .Find<IVariable>(x => !string.IsNullOrWhiteSpace(x.VariableName))
                 .Select(x => new { VariableName = x.Name, EntityId = x.PublicKey });
 
             return variablesOfQuestions.Union(variablesOfRosters).Union(variablesOfVariables).ToDictionary(x => x.VariableName, x => x.EntityId);

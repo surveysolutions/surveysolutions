@@ -21,14 +21,14 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocument(
-                new Group()
+                new Group
                 {
                     PublicKey = new Guid(),
-                    Children = new IComposite[101].Select(_ => new TextQuestion() {PublicKey = new Guid()}).ToList<IComposite>().ToReadOnlyCollection()
+                    Children = new IComposite[101].Select(_ => new TextQuestion {PublicKey = Guid.NewGuid()}).ToList<IComposite>().ToReadOnlyCollection()
                 });
             questionnaireView = CreateQuestionnaireView(questionnaireDocument);
 
-            verificationMessages = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IComposite>(_ => true));
+            verificationMessages = CreateQuestionnaireVerificationErrors(questionnaireDocument.Find<IQuestion>(_ => true));
 
             var questionnaireViewFactory = Mock.Of<IQuestionnaireViewFactory>(x => x.Load(Moq.It.IsAny<QuestionnaireViewInputModel>()) == questionnaireView);
             verifierMock = new Mock<IQuestionnaireVerifier>();

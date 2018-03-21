@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -58,6 +59,7 @@ namespace WB.UI.Designer.Code
             registry.Bind<IExpressionsGraphProvider, ExpressionsGraphProvider>();
             registry.Bind<IExpressionsPlayOrderProvider, ExpressionsPlayOrderProvider>();
             registry.Bind<IQuestionnaireInfoFactory, QuestionnaireInfoFactory>();
+            registry.Bind<ICommentsService, CommentsService>();
             registry.BindToConstant<PdfSettings>(() => pdfSettings);
             registry.BindToConstant<DeskSettings>(() => deskSettings);
             registry.BindToConstant<QuestionnaireHistorySettings>(() => historySettings);

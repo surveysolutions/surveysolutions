@@ -40,6 +40,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid rosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         const string searchFor = "to_replace";
 
-        static IEnumerable<QuestionnaireNodeReference> foundReferences;
+        static IEnumerable<QuestionnaireEntityReference> foundReferences;
     }
 }
