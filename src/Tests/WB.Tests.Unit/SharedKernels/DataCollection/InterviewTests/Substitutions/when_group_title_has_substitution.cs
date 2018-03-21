@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -60,7 +61,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
 
         [Test]
         public void should_raise_title_changed_event_for_group_after_answer() =>
-            events.GetEvent<SubstitutionTitlesChanged>().Groups.ShouldContainOnly(
+            events.GetEvent<SubstitutionTitlesChanged>().Groups.Should().BeEquivalentTo(
                 Create.Entity.Identity(group2Id, Create.Entity.RosterVector(0)),
                 Create.Entity.Identity(group2Id, Create.Entity.RosterVector(1)),
                 Create.Entity.Identity(group1Id, RosterVector.Empty));

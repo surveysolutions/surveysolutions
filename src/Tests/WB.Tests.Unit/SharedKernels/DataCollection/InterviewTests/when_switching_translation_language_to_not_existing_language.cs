@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -12,23 +12,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_switching_translation_language_to_not_existing_language : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), questionnaire
                 => questionnaire.GetTranslationLanguages() == new [] { "English" });
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            interviewException = Catch.Only<InterviewException>(() =>
+        public void BecauseOf() =>
+            interviewException =  NUnit.Framework.Assert.Throws<InterviewException>(() =>
                 interview.SwitchTranslation(new SwitchTranslation(Guid.NewGuid(), language, Guid.NewGuid())));
 
-        It should_throw_InterviewException = () =>
-            interviewException.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_InterviewException () =>
+            interviewException.Should().NotBeNull();
 
-        It should_throw_exception_with_message_containing__translation____language__ = () =>
-            interviewException.Message.ToLower().ToSeparateWords().ShouldContain("translation", "language");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__translation____language__ () =>
+            interviewException.Message.ToLower().ToSeparateWords().Should().Contain("translation", "language");
 
         private static string language = "Afrikaans";
         private static Interview interview;

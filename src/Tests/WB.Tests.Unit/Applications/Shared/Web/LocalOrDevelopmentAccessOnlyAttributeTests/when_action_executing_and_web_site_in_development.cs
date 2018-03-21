@@ -1,32 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Specialized;
 using System.Web.Mvc;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Shared.Web.LocalOrDevelopmentAccessOnlyAttributeTests
 {
     internal class when_action_executing_and_web_site_in_development : LocalOrDevelopmentAccessOnlyAttributeTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_not_throw () {
             var configMock =new Mock<IConfigurationManager>();
             configMock.Setup(_ => _.AppSettings).Returns(new NameValueCollection { { "IsDevelopmentEnvironment", IsWebsiteUnderDevelopment.ToString() } });
             Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IConfigurationManager>()).Returns(configMock.Object);
 
             filter = Create();
-        };
+            filter.OnActionExecuting(actionExecutingContext);
+        }
 
-        Because of = () =>
-            exception = Catch.Exception(() => filter.OnActionExecuting(actionExecutingContext));
-
-        It should_exception_not_null = () =>
-            exception.ShouldBeNull();
-        
         private static LocalOrDevelopmentAccessOnlyAttribute filter;
         private static ActionExecutingContext actionExecutingContext = CreateFilterContext(IsLocalhost);
         private static Exception exception;

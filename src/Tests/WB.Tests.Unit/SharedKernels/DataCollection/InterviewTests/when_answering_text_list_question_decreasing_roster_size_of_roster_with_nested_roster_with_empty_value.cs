@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_text_list_question_decreasing_roster_size_of_roster_with_nested_roster_with_empty_value : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -72,35 +71,36 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.RosterInstancesAdded(nestedRosterGroupId, new decimal[] { 1 }, 2, sortIndex: null));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        private Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        private Because of = () =>
+        private void BecauseOf() =>
             interview.AnswerTextListQuestion(userId, textListQuestionId, new decimal[0], DateTime.Now, new Tuple<decimal, string>[0]);
 
 
-        It should_raise_TextListQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_TextListQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<AnswersRemoved>();
 
-        It should_raise_RosterInstancesRemoved_event_with_4_instances = () =>
-            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().ShouldEqual(4);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_4_instances () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().Should().Be(4);
 
-        It should_raise_RosterInstancesRemoved_event_with_2_instances_where_GroupId_equals_to_rosterAId = () =>
-            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.GroupId == parentRosterGroupId).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_2_instances_where_GroupId_equals_to_rosterAId () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.GroupId == parentRosterGroupId).Should().Be(2);
 
-        It should_raise_RosterInstancesRemoved_event_with_2_instances_where_GroupId_equals_to_rosterBId = () =>
-            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.GroupId == nestedRosterGroupId).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_2_instances_where_GroupId_equals_to_rosterBId () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.GroupId == nestedRosterGroupId).Should().Be(2);
 
-        It should_raise_RosterInstancesRemoved_event_with_2_instances_where_roster_instance_id_equals_to_1 = () =>
-            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.RosterInstanceId == 1).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_2_instances_where_roster_instance_id_equals_to_1 () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.RosterInstanceId == 1).Should().Be(2);
 
-        It should_raise_RosterInstancesRemoved_event_with_2_instances_where_roster_instance_id_equals_to_2 = () =>
-            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.RosterInstanceId == 2).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_2_instances_where_roster_instance_id_equals_to_2 () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count(instance => instance.RosterInstanceId == 2).Should().Be(2);
 
         private static EventContext eventContext;
         private static Interview interview;

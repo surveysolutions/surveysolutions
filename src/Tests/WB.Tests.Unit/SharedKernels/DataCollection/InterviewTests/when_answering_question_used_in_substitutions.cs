@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_question_used_in_substitutions : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
 
             QuestionnaireDocument questionnaire = CreateQuestionnaireDocumentWithOneChapter(new Group("top level fixed group")
@@ -38,22 +37,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             interview.AnswerTextQuestion(Guid.NewGuid(), substitutedQuestionId, Empty.RosterVector, DateTime.Now, "answer");
 
-        It should_raise_substitution_changed_event_with_2_questions = () =>
+        [NUnit.Framework.Test] public void should_raise_substitution_changed_event_with_2_questions () =>
             eventContext.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Questions.Length == 2);
 
-        It should_raise_substitution_changed_event_with_1_static_text = () =>
+        [NUnit.Framework.Test] public void should_raise_substitution_changed_event_with_1_static_text () =>
             eventContext.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.StaticTexts.Length == 1);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         static Guid substitutedQuestionId = Guid.Parse("88888888888888888888888888888888");
         static Guid questionA = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

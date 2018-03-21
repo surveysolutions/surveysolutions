@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using FluentAssertions;
 using FluentAssertions.Extensions;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -9,14 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_single_linked_to_List_question_and_answer_is_specified : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -31,29 +30,30 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.AnswerTextListQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { new Tuple<decimal, string>(1, "one") });
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview.AnswerSingleOptionQuestion(userId: userId, questionId: linkedQuestionId, answerTime: answerTime, rosterVector: propagationVector, selectedValue:1);
+        public void BecauseOf() => interview.AnswerSingleOptionQuestion(userId: userId, questionId: linkedQuestionId, answerTime: answerTime, rosterVector: propagationVector, selectedValue:1);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_SingleOptionQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_SingleOptionQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<SingleOptionQuestionAnswered>();
 
-        It should_raise_SingleOptionQuestionAnswered_event_with_QuestionId_equal_to_questionId = () =>
-            eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().QuestionId.ShouldEqual(linkedQuestionId);
+        [NUnit.Framework.Test] public void should_raise_SingleOptionQuestionAnswered_event_with_QuestionId_equal_to_questionId () =>
+            eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().QuestionId.Should().Be(linkedQuestionId);
 
-        It should_raise_SingleOptionQuestionAnswered_event_with_UserId_equal_to_userId = () =>
-            eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().UserId.ShouldEqual(userId);
+        [NUnit.Framework.Test] public void should_raise_SingleOptionQuestionAnswered_event_with_UserId_equal_to_userId () =>
+            eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().UserId.Should().Be(userId);
 
-        It should_raise_SingleOptionQuestionAnswered_event_with_PropagationVector_equal_to_propagationVector = () =>
-            eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().RosterVector.ShouldEqual(propagationVector);
+        [NUnit.Framework.Test] public void should_raise_SingleOptionQuestionAnswered_event_with_PropagationVector_equal_to_propagationVector () =>
+            eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().RosterVector.Should().BeEquivalentTo(propagationVector);
 
-        It should_raise_SingleOptionQuestionAnswered_event_with_AnswerTime_equal_to_answerTime = () =>
+        [NUnit.Framework.Test] public void should_raise_SingleOptionQuestionAnswered_event_with_AnswerTime_equal_to_answerTime () =>
             eventContext.GetSingleEvent<SingleOptionQuestionAnswered>().AnswerTimeUtc.Should().BeCloseTo(DateTime.UtcNow, 2000);
 
         private static EventContext eventContext;

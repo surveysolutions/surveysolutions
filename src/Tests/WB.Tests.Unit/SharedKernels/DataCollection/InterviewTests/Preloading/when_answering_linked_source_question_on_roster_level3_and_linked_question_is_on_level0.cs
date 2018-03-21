@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
 {
     internal class when_creating_interview_with_preloaded_data_with_nested_rosters : StatefulInterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.NumericIntegerQuestion(id: numericRosterSizeQuestionId),
@@ -57,25 +56,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
 
             command = Create.Command.CreateInterview(Guid.NewGuid(),
                 Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(preloadedLevelDtos).Answers, DateTime.Now, Guid.NewGuid());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.CreateInterview(command);
 
-        It should_set_answers_for_text_question_on_the_3rd_level = () =>
+        [NUnit.Framework.Test] public void should_set_answers_for_text_question_on_the_3rd_level () 
         {
             interview.GetTextQuestion(Create.Entity.Identity(textQuestionId, Create.Entity.RosterVector(0, 1, 5)))
-                .GetAnswer().Value.ShouldEqual("aaa");
+                .GetAnswer().Value.Should().Be("aaa");
 
             interview.GetTextQuestion(Create.Entity.Identity(textQuestionId, Create.Entity.RosterVector(0, 1, 9)))
-                .GetAnswer().Value.ShouldEqual("bbb");
+                .GetAnswer().Value.Should().Be("bbb");
 
             interview.GetTextQuestion(Create.Entity.Identity(textQuestionId, Create.Entity.RosterVector(0, 2, 3)))
-                .GetAnswer().Value.ShouldEqual("ccc");
+                .GetAnswer().Value.Should().Be("ccc");
 
             interview.GetTextQuestion(Create.Entity.Identity(textQuestionId, Create.Entity.RosterVector(0, 2, 4)))
-                .GetAnswer().Value.ShouldEqual("ddd");
-        };
+                .GetAnswer().Value.Should().Be("ddd");
+        }
 
         static StatefulInterview interview;
 

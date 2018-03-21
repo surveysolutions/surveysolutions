@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_hq_approve_hard_deleted_interview : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
 
@@ -29,23 +28,24 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.HardDelete(userId);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>
+        public void BecauseOf() =>
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() =>
                 interview.HqApprove(userId,"my commet"));
 
-        It should_raise_InterviewException = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_raise_InterviewException () =>
+            exception.Should().NotBeNull();
 
-        It should_raise_InterviewException_with_type_InterviewHardDeleted = () =>
-            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewHardDeleted);
+        [NUnit.Framework.Test] public void should_raise_InterviewException_with_type_InterviewHardDeleted () =>
+            exception.ExceptionType.Should().Be(InterviewDomainExceptionType.InterviewHardDeleted);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static Guid userId;
 

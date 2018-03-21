@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     class when_creating_interview_with_preloaded_data_with_multyoption_question_which_triggers_roster : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -45,25 +44,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = new EventContext();
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto.Answers, answersTime, supervisorId, null, null, null));
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_InterviewCreated_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewCreated_event () =>
             eventContext.ShouldContainEvent<InterviewCreated>();
 
-        It should_raise_MultipleOptionsQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>(@event
                 => @event.SelectedValues.SequenceEqual(prefilledQuestionAnswer.Select(v => (decimal) v)) && @event.QuestionId == prefilledQuestionId);
 
-        It should_raise_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.All(i => i.GroupId == rosterGroupId));
 

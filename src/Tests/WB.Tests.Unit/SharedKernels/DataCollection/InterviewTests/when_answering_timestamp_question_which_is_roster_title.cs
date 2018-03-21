@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_timestamp_question_which_is_roster_title : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
             
@@ -42,22 +41,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Command.AnswerNumericIntegerQuestionCommand(interview.EventSourceId, userId, rosterSizeQuestionId, 1));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerDateTimeQuestion(userId, timestampQuestionId, new RosterVector(new []{0m}), DateTime.Now, answerOnDateTimeQuestion);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_DateTimeQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_DateTimeQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<DateTimeQuestionAnswered>();
 
-        It should_set_answer_on_timestamp_question_in_specified_format_for_RosterInstancesTitleChanged_event = () =>
-            eventContext.GetEvent<RosterInstancesTitleChanged>().ChangedInstances[0].Title.ShouldEqual(answerOnDateTimeQuestion.ToString(DateTimeFormat.DateWithTimeFormat));
+        [NUnit.Framework.Test] public void should_set_answer_on_timestamp_question_in_specified_format_for_RosterInstancesTitleChanged_event () =>
+            eventContext.GetEvent<RosterInstancesTitleChanged>().ChangedInstances[0].Title.Should().Be(answerOnDateTimeQuestion.ToString(DateTimeFormat.DateWithTimeFormat));
 
         private static EventContext eventContext;
         private static Interview interview;

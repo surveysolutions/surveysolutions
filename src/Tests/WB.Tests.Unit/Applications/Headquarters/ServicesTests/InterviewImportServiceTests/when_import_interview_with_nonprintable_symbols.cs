@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -13,14 +15,13 @@ using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportServiceTests
 {
     internal class when_import_interview_with_nonprintable_symbols : InterviewImportServiceTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument=
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.NumericQuestion(questionId: Guid.Parse("33333333333333333333333333333333"), variableName: "EANo", prefilled: true, isInteger: true),
@@ -60,22 +61,19 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
                     interviewImportDataParsingService: mockOfSamplePreloadingDataParsingService.Object, 
                     questionnaireDocument: questionnaireDocument,
                     questionnaireBrowseViewFactory: questionnaireFactory);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => exception = Catch.Exception(() =>
-                interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments, false));
+        public void BecauseOf() => interviewImportService.ImportAssignments(questionnaireIdentity, "sampleId", null, Guid.Parse("22222222222222222222222222222222"), AssignmentImportType.Assignments, false);
 
-        It should_not_be_exception = () =>
-            exception.ShouldBeNull();
-
-        It should_call_execute_command_service_once = () =>
+        [NUnit.Framework.Test] public void should_call_execute_command_service_once () =>
             mockOfCommandService.Verify(x=> x.Execute(Moq.It.IsAny<CreateInterview>(), null), Times.Once);
 
-        It should_be_specified_interviewer = () =>
-            executedCommand.InterviewerId.ShouldEqual(interviewerId);
+        [NUnit.Framework.Test] public void should_be_specified_interviewer () =>
+            executedCommand.InterviewerId.Should().Be(interviewerId);
 
-        It should_be_specified_supervisor = () =>
-            executedCommand.SupervisorId.ShouldEqual(supervisorId);
+        [NUnit.Framework.Test] public void should_be_specified_supervisor () =>
+            executedCommand.SupervisorId.Should().Be(supervisorId);
 
         //private static readonly byte[] csvBytes = Encoding.UTF8.GetBytes(
         //    "Responsible	EANo	MapRefNo	DUNo	Prov	LocalMunic	MainPlace	SubPlace	LongLat__Latitude	LongLat__Longitude\r\n" +

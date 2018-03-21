@@ -1,19 +1,18 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronization
 {
     internal class when_rejecting_interview_with_comments_from_HQ : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewSynchronizationDto = new InterviewSynchronizationDto { Status = InterviewStatus.RejectedByHeadquarters };
             commentedQuestionId = Guid.NewGuid();
 
@@ -27,13 +26,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             newComment = new CommentSynchronizationDto
             {
                 Date = new DateTime(2010, 1, 1),
-                Text ="Comment text",
+                Text = "Comment text",
                 UserId = userId
             };
 
             interviewSynchronizationDto.Answers = new[]
             {
-                Create.Entity.AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer", comments: new[] { existingComment, newComment })
+                Create.Entity.AnsweredQuestionSynchronizationDto(commentedQuestionId, new decimal[] { }, "answer",
+                    comments: new[] {existingComment, newComment})
             };
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
@@ -46,16 +46,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview.RejectInterviewFromHeadquarters(userId, supervisorId, interviewerId, interviewSynchronizationDto, DateTime.Now);
+        public void BecauseOf() => interview.RejectInterviewFromHeadquarters(userId, supervisorId, interviewerId, interviewSynchronizationDto, DateTime.Now);
 
 
-        It should_add_new_comments = () => eventContext.ShouldContainEvent<AnswerCommented>(@event => 
+        [NUnit.Framework.Test] public void should_add_new_comments () => eventContext.ShouldContainEvent<AnswerCommented>(@event => 
             @event.Comment == newComment.Text 
         );
 
-        It should_not_add_alrady_saved_comments = () => eventContext.ShouldNotContainEvent<AnswerCommented>(@event => @event.Comment == existingComment.Text);
+        [NUnit.Framework.Test] public void should_not_add_alrady_saved_comments () => eventContext.ShouldNotContainEvent<AnswerCommented>(@event => @event.Comment == existingComment.Text);
 
         static Interview interview;
         static EventContext eventContext;

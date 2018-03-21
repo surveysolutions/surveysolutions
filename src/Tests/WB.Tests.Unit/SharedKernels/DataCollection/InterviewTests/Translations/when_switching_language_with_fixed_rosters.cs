@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 {
     internal class when_switching_language_with_fixed_rosters : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             var chapterId = Guid.Parse("11111111111111111111111111111111");
@@ -53,18 +52,19 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             interview.Apply(Create.Event.RosterInstancesTitleChanged(rosterId, instance2));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
+        public void BecauseOf() => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
 
-        It should_raise_roster_titles_changed_event_for_fixed_roster = () =>
+        [NUnit.Framework.Test] public void should_raise_roster_titles_changed_event_for_fixed_roster () 
         {
             var @event = eventContext.GetSingleEvent<RosterInstancesTitleChanged>();
-            @event.ChangedInstances.Length.ShouldEqual(2);
-            @event.ChangedInstances.All(x => x.RosterInstance.GroupId == rosterId).ShouldBeTrue();
-            @event.ChangedInstances[0].Title.ShouldEqual("тайтл1");
-            @event.ChangedInstances[1].Title.ShouldEqual("тайтл2");
-        };
+            @event.ChangedInstances.Length.Should().Be(2);
+            @event.ChangedInstances.All(x => x.RosterInstance.GroupId == rosterId).Should().BeTrue();
+            @event.ChangedInstances[0].Title.Should().Be("тайтл1");
+            @event.ChangedInstances[1].Title.Should().Be("тайтл2");
+        }
 
         private static Interview interview;
         private static EventContext eventContext;

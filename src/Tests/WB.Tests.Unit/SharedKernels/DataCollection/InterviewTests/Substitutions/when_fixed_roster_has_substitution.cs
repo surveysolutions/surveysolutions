@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
 {
     internal class when_fixed_roster_has_substitution : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             QuestionnaireDocument questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionId: questionId, variable: "subst"), 
                 Create.Entity.Roster(rosterSizeSourceType: RosterSizeSourceType.FixedTitles,
@@ -32,20 +31,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             events = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             interview.AnswerTextQuestion(Guid.NewGuid(), questionId, Empty.RosterVector, DateTime.Now, "foo");
 
-        It should_raise_title_changed_event_for_group_after_answer = () =>
+        [NUnit.Framework.Test] public void should_raise_title_changed_event_for_group_after_answer () 
         {
             var substitutionTitlesChanged = events.GetEvent<SubstitutionTitlesChanged>();
-            substitutionTitlesChanged.ShouldNotBeNull();
-            substitutionTitlesChanged.Groups.Length.ShouldEqual(2);
+            substitutionTitlesChanged.Should().NotBeNull();
+            substitutionTitlesChanged.Groups.Length.Should().Be(2);
 
-            substitutionTitlesChanged.Groups[0].ShouldEqual(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)));
-            substitutionTitlesChanged.Groups[1].ShouldEqual(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2)));
-        };
+            substitutionTitlesChanged.Groups[0].Should().Be(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1)));
+            substitutionTitlesChanged.Groups[1].Should().Be(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2)));
+        }
 
         static Guid questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static Guid rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

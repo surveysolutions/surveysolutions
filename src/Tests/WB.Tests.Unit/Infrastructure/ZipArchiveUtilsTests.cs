@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using FluentAssertions;
 using Ionic.Zip;
 using Machine.Specifications;
 using NUnit.Framework;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Infrastructure
             var protectedZipFile = ZipFile.Read(protectedZipStream);
             var unZippedStream = new MemoryStream();
             foreach (var zipEntry in protectedZipFile)
-                Catch.Only<BadPasswordException>(() => zipEntry.Extract(unZippedStream)).ShouldNotBeNull();
+                Catch.Only<BadPasswordException>(() => zipEntry.Extract(unZippedStream)).Should().NotBeNull();
         }
 
         private static ZipArchiveUtils CreateZipArchiveUtils() => new ZipArchiveUtils();
