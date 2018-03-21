@@ -42,6 +42,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
                 foreach (var documentRow in db.Query<(string id, string value)>(@"select id, value from plainstore.questionnairedocuments", buffered: false))
                 {
+                    var docId = documentRow.id;
                     var doc = JObject.Parse(documentRow.value);
 
                     IEnumerable<QuestionnaireEntity> ExtractEntities(JObject item, JObject parent)
@@ -72,7 +73,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 EntityId = Guid.Parse(item["PublicKey"].Value<string>()),
                                 ParentId = Guid.Parse(parentKey),
                                 QuestionType = (QuestionType?) item["QuestionType"]?.Value<long>(),
-                                QuestionnaireIdentity = documentRow.id,
+                                QuestionnaireIdentity = docId,
                                 Featured = item["Featured"]?.Value<bool>(),
                                 QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>() ?? 0,
                                 EntityType = entityType
