@@ -1015,6 +1015,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment cannot contain more than {1} characters.
+        /// </summary>
+        public static string MaxCommentLengthErrorMessage {
+            get {
+                return ResourceManager.GetString("MaxCommentLengthErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         public static string ModalConfirm {
@@ -2959,6 +2968,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Variable name.
+        /// </summary>
+        public static string VariableVariableName {
+            get {
+                return ResourceManager.GetString("VariableVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View all {{count}} resolved comment.
         /// </summary>
         public static string ViewResolvedCommentsCounter {
@@ -2973,15 +2991,6 @@ namespace WB.UI.Designer.Resources {
         public static string ViewResolvedCommentsCounter_plural {
             get {
                 return ResourceManager.GetString("ViewResolvedCommentsCounter_plural", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Variable name.
-        /// </summary>
-        public static string VariableVariableName {
-            get {
-                return ResourceManager.GetString("VariableVariableName", resourceCulture);
             }
         }
         

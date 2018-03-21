@@ -1072,10 +1072,10 @@
     <value>Использовать подпись</value>
   </data>
   <data name="SideBarCommentsCounter" xml:space="preserve">
-    <value>{{count}} Ветвь обсуждения:</value>
+    <value>{{count}} канал(ов) обсуждения:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{{count}} Ветвей обсуждения:</value>
+    <value>{{count}} канал(ов) обсуждения:</value>
   </data>
   <data name="SideBarEmptyCommentsLine" xml:space="preserve">
     <value>Тут вы увидите комментарии</value>
@@ -1103,5 +1103,9 @@
   </data>
   <data name="VariableVariableName" xml:space="preserve">
     <value>Имя переменной</value>
+  </data>
+    <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>Комментарий не может быть больше чем {1} символов</value>
+    <comment>Комментарий не может быть больше чем {1} символов</comment>
   </data>
 </root>
