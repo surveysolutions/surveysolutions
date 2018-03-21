@@ -40,61 +40,74 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 if(string.IsNullOrWhiteSpace(db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairedocuments')::text")))
                     return;
 
-                foreach (var documentRow in db.Query<(string id, string value)>(@"select id, value from plainstore.questionnairedocuments", buffered: false))
-                {
-                    var docId = documentRow.id;
-                    var doc = JObject.Parse(documentRow.value);
+                int limit = 5;
+                int skip = 0;
+                bool isExistsDocuments = true;
 
-                    IEnumerable<QuestionnaireEntity> ExtractEntities(JObject item, JObject parent)
+                do
+                {
+                    var documentRows = db.Query<(string id, string value)>($"select id, value from plainstore.questionnairedocuments order by id limit {limit} OFFSET {skip}").ToList();
+
+                    foreach (var documentRow in documentRows)
                     {
-                        if (item["Children"] is JArray childs)
+                        var docId = documentRow.id;
+                        var doc = JObject.Parse(documentRow.value);
+
+                        IEnumerable<QuestionnaireEntity> ExtractEntities(JObject item, JObject parent)
                         {
-                            foreach (var child in childs)
+                            if (item["Children"] is JArray childs)
                             {
-                                if (child is JObject childItem)
+                                foreach (var child in childs)
                                 {
-                                    foreach (var entity in ExtractEntities(childItem, item))
+                                    if (child is JObject childItem)
                                     {
-                                        yield return entity;
+                                        foreach (var entity in ExtractEntities(childItem, item))
+                                        {
+                                            yield return entity;
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        if (parent != null)
-                        {
-                            var parentKey = parent["PublicKey"].Value<string>();
-
-                            var type = item["$type"]?.Value<string>();
-                            EntityType? entityType = type == null ? (EntityType?) null : EntityMap[type];
-
-                            var entity = new QuestionnaireEntity
+                            if (parent != null)
                             {
-                                EntityId = Guid.Parse(item["PublicKey"].Value<string>()),
-                                ParentId = Guid.Parse(parentKey),
-                                QuestionType = (QuestionType?) item["QuestionType"]?.Value<long>(),
-                                QuestionnaireIdentity = docId,
-                                Featured = item["Featured"]?.Value<bool>(),
-                                QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>() ?? 0,
-                                EntityType = entityType
-                            };
+                                var parentKey = parent["PublicKey"].Value<string>();
 
-                            yield return entity;
+                                var type = item["$type"]?.Value<string>();
+                                EntityType? entityType = type == null ? (EntityType?) null : EntityMap[type];
+
+                                var entity = new QuestionnaireEntity
+                                {
+                                    EntityId = Guid.Parse(item["PublicKey"].Value<string>()),
+                                    ParentId = Guid.Parse(parentKey),
+                                    QuestionType = (QuestionType?) item["QuestionType"]?.Value<long>(),
+                                    QuestionnaireIdentity = docId,
+                                    Featured = item["Featured"]?.Value<bool>(),
+                                    QuestionScope = (QuestionScope?) item["QuestionScope"]?.Value<long>() ?? 0,
+                                    EntityType = entityType
+                                };
+
+                                yield return entity;
+                            }
+                        }
+
+                        var list = ExtractEntities(doc, null).ToList();
+
+                        foreach (var entity in list)
+                        {
+                            db.Execute(
+                                $@"insert into {schema}.questionnaire_entities 
+                                    (questionnaireidentity, entityid, parentid, question_type, featured, question_scope, entity_type)
+                                values(
+                                    @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @Featured, @QuestionScope, @EntityType)",
+                                entity);
                         }
                     }
 
-                    var list = ExtractEntities(doc, null).ToList();
+                    skip += limit;
+                    isExistsDocuments = documentRows.Count == limit;
 
-                    foreach (var entity in list)
-                    {
-                        db.Execute(
-                            $@"insert into {schema}.questionnaire_entities 
-                                (questionnaireidentity, entityid, parentid, question_type, featured, question_scope, entity_type)
-                            values(
-                                @QuestionnaireIdentity, @EntityId, @ParentId, @QuestionType, @Featured, @QuestionScope, @EntityType)",
-                            entity);
-                    }
-                }
+                } while (isExistsDocuments);
             });
         }
 
