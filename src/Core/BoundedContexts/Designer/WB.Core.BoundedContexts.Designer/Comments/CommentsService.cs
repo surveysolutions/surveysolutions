@@ -72,6 +72,15 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             this.comments.Remove(commentsForEntity);
         }
 
+        public void DeleteAllByQuestionnaireId(Guid questionnaireId)
+        {
+            var commentsForEntity = this.comments.Query(_ => _
+                .Where(x => x.QuestionnaireId == questionnaireId)
+                .ToList());
+
+            this.comments.Remove(commentsForEntity);
+        }
+
         public void ResolveComment(Guid commentdId)
         {
             var comment = this.comments.GetById(commentdId);

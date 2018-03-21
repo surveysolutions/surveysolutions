@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Designer.Comments
         List<CommentThread> LoadCommentThreads(Guid questionnaireId);
 
         void RemoveAllCommentsByEntity(Guid questionnaireId, Guid entityId);
+        void DeleteAllByQuestionnaireId(Guid questionnaireId);
     }
 }
