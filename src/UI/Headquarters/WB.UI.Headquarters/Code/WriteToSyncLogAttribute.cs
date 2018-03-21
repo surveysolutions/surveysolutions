@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters.Code
             {
                 if (!this.authorizedUser.IsAuthenticated)
                 {
-                    var authHeader = context.Request.Headers.Authorization?.ToString();
+                    var authHeader = context.Request?.Headers?.Authorization?.ToString();
 
                     if (authHeader != null)
                         await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
