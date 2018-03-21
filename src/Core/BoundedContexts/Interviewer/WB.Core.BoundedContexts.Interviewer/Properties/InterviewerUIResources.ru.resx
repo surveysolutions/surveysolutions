@@ -731,7 +731,8 @@
     <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Загружено {0} из {1} при {2} ({3}%)</value>
     <comment>Загружено {0} из {1} ({2}%)</comment>
-  </data>  <data name="Dashboard_SearchResult" xml:space="preserve">
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
     <value>Найдено {0} элементов</value>
     <comment>Найдено {0} элементов по введенному тексту</comment>
   </data>
