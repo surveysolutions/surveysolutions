@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Machine.Specifications;
 using WB.Core.SharedKernels.Enumerator.Services.MaskText;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests

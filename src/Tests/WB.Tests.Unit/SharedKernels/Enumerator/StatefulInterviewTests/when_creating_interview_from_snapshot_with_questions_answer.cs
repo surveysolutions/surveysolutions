@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -83,7 +82,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [Test]
         public void It_should_return_empty_failed_condition_messages() => 
-            interview.GetFailedValidationMessages(questionIdentity, "Error").Count().ShouldEqual(0);
+            interview.GetFailedValidationMessages(questionIdentity, "Error").Count().Should().Be(0);
 
         [Test]
         public void It_should_create_roster_instance() => 
@@ -95,7 +94,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [Test]
         public void It_should_set_answer() => 
-            interview.GetQuestion(questionIdentity).GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.ShouldEqual(1);
+            interview.GetQuestion(questionIdentity).GetAsInterviewTreeIntegerQuestion().GetAnswer().Value.Should().Be(1);
 
         [Test]
         public void It_should_not_switch_translation() =>

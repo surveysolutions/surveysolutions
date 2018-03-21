@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Main.Core.Entities.Composite;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;

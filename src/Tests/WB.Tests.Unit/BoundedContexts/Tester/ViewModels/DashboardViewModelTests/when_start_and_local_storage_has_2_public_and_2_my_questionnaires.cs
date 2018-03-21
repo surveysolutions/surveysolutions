@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         [Test]
         public void should_Questionnaires_have_my_questionnaires_only() =>
             viewModel.Questionnaires.All(questionnaire => questionnaire.Id == firstMyQuestionnaire ||
-                                                          questionnaire.Id == secondMyQuestionnaire).ShouldBeTrue();
+                                                          questionnaire.Id == secondMyQuestionnaire).Should().BeTrue();
 
         static DashboardViewModel viewModel;
 

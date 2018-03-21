@@ -1,10 +1,9 @@
 using System;
 using FluentAssertions;
-using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.FileSystem;
 
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
@@ -18,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
         }
 
         public void BecauseOf() =>
-            exception = Catch.Only<ArgumentException>(() => questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireId, version, data1));
+            exception = Assert.Throws<ArgumentException>(() => questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireId, version, data1));
 
         [NUnit.Framework.Test] public void should_not_exception_be_null () =>
             exception.Should().NotBeNull();
@@ -27,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAc
             exception.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__dont_have_permissions__ () =>
-            new[] { "assembly", "empty", version.ToString() }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+            new[] { "assembly", "empty", version.ToString() }.Should().OnlyContain(keyword => exception.Message.ToLower().Contains(keyword));
 
 
         private static QuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;

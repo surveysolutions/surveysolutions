@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Moq;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;

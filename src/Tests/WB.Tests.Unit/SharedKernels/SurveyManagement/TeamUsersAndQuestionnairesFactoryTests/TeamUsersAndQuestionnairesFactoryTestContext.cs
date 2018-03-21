@@ -1,5 +1,4 @@
-﻿using Machine.Specifications;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+﻿using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.PlainStorage;

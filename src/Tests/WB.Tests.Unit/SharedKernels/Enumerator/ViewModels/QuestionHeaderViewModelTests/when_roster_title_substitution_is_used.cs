@@ -2,7 +2,6 @@ using System;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;

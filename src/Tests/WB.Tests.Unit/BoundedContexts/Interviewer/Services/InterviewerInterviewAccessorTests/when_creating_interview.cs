@@ -1,6 +1,5 @@
 using System;
 using System.Threading;
-using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;

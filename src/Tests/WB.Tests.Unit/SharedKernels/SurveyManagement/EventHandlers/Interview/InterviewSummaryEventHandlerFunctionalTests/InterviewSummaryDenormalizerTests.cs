@@ -1,6 +1,5 @@
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
@@ -20,8 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.Completed));
 
             //assert
-            updatedModel.Status.ShouldEqual(InterviewStatus.Completed);
-            updatedModel.WasCompleted.ShouldBeTrue();
+            updatedModel.Status.Should().Be(InterviewStatus.Completed);
+            updatedModel.WasCompleted.Should().BeTrue();
         }
 
         [Test]
@@ -35,8 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var updatedModel = denormalizer.Update(viewModel, Create.PublishedEvent.InterviewStatusChanged(InterviewStatus.SupervisorAssigned));
 
             //assert
-            updatedModel.Status.ShouldEqual(InterviewStatus.SupervisorAssigned);
-            updatedModel.WasCompleted.ShouldBeTrue();
+            updatedModel.Status.Should().Be(InterviewStatus.SupervisorAssigned);
+            updatedModel.WasCompleted.Should().BeTrue();
         }
     }
 }

@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Linq.Expressions;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.Services

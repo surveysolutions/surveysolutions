@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.FileSystem;

@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Tests.Unit.SharedKernels.DataCollection.Views;

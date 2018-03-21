@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
         [Test]
         public void should_store_prefilled_GPS_question_ID_to_result_dashboard_item() =>
-            dashboardItem.LocationQuestionId.ShouldEqual(prefilledGpsQuestionId);
+            dashboardItem.LocationQuestionId.Should().Be(prefilledGpsQuestionId);
 
         static InterviewerDashboardEventHandler denormalizer;
         static IPublishedEvent<InterviewOnClientCreated> @event;

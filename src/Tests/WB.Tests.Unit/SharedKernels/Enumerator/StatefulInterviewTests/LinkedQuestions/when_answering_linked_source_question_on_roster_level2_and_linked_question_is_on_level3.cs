@@ -1,10 +1,9 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQuestions
@@ -51,19 +50,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 0));
 
-            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(2);
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.Should().Be(2);
 
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).ShouldEqual("answer 0.1");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).ShouldEqual("answer 0.2");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).Should().Be("answer 0.1");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).Should().Be("answer 0.2");
         }
 
         [NUnit.Framework.Test] public void should_put__2__options_in_linked_single_question_from_roster__0_1_1__ () 
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0, 1, 1));
 
-            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(2);
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).ShouldEqual("answer 0.1");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).ShouldEqual("answer 0.2");
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.Should().Be(2);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1)).Should().Be("answer 0.1");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2)).Should().Be("answer 0.2");
         }
 
         static StatefulInterview interview;

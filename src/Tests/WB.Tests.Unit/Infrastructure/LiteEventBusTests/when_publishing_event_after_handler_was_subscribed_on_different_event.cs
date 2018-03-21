@@ -1,9 +1,7 @@
 using System;
-using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Abc;
 

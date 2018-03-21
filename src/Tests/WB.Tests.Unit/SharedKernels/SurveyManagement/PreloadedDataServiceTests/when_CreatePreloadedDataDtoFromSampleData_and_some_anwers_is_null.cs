@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -10,7 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
     internal class when_CreatePreloadedDataDtoFromSampleData_and_some_anwers_is_null : PreloadedDataServiceTestContext
     {
-        [NUnit.Framework.OneTimeSetUp]
+        [NUnit.Framework.Test]
         public void context()
         {
             questionnaireDocument =
@@ -23,17 +22,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
                     });
 
             importDataParsingService = CreatePreloadedDataService(questionnaireDocument);
-            BecauseOf();
+            importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(
+                CreatePreloadedDataByFile(header: new[] {"Id", "nq1"},
+                    content: new[] {new[] {"1", null}},
+                    fileName: "some file name"));
         }
-
-        private void BecauseOf() => exception = Catch.Exception(() => importDataParsingService.CreatePreloadedDataDtoFromAssignmentData(
-                CreatePreloadedDataByFile(header: new[] { "Id", "nq1" },
-                    content: new[] { new[] { "1", null } },
-                    fileName: "some file name")));
-
-        [NUnit.Framework.Test]
-        public void should_not_throw_null_reference_exception() =>
-            exception.Should().BeNull();
 
         private static ImportDataParsingService importDataParsingService;
         private static QuestionnaireDocument questionnaireDocument;
