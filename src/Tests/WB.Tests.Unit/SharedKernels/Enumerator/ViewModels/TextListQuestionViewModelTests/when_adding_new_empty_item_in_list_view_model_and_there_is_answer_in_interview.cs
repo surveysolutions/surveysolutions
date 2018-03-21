@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
     internal class when_adding_new_empty_item_in_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.IsAnswered() == false);
 
             var interview = Mock.Of<IStatefulInterview>(_ => _.QuestionnaireId == questionnaireId
@@ -41,19 +40,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 principal: principal);
 
             listModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             var textListAddNewItemViewModel = listModel.Answers.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
 
             textListAddNewItemViewModel.Text = string.Empty;
-        };
+        }
 
-        It should_not_add_anything_in_list_of_answers = () =>
-            listModel.Answers.OfType<TextListItemViewModel>().Count().ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_add_anything_in_list_of_answers () =>
+            listModel.Answers.OfType<TextListItemViewModel>().Count().Should().Be(0);
 
-        It should_not_send_answer_command = () =>
+        [NUnit.Framework.Test] public void should_not_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Never);
 
         private static TextListQuestionViewModel listModel;

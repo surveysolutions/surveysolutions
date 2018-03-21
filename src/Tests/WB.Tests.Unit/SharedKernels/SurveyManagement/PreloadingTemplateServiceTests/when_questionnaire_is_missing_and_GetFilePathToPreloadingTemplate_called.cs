@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateService
         Because of = () => result = assignmentImportTemplateGenerator.GetFilePathToPreloadingTemplate(Guid.NewGuid(), 1);
 
         It should_return_be_null = () =>
-           result.ShouldBeNull();
+           result.Should().BeNull();
 
         private static AssignmentImportTemplateGenerator assignmentImportTemplateGenerator;
         private static string result;

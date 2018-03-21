@@ -1,28 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Tests.Unit.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueVectorTests
 {
     internal class when_comparing_ValueVector_with_non_ValueVector_object
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             valueVector = new ValueVector<Guid>();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            result = valueVector.Equals(new object());
 
-       It should_return_false_result = () =>
-            result.ShouldEqual(false);
+       [NUnit.Framework.Test] public void should_return_false_result () =>
+            result.Should().Be(false);
 
         private static ValueVector<Guid> valueVector;
         private static bool result;

@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_answer_types : PlainQuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.SingleQuestion(id: singleOptionQuestionId),
@@ -30,55 +29,56 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                 Create.Entity.QRBarcodeQuestion(questionId: qrQuestionId),
                 Create.Entity.MultimediaQuestion(questionId: multimediaQuestionId)
             });
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
 
-        It should_return_optioncode_answer_type_for_single_option_question = () =>
-            plainQuestionnaire.GetAnswerType(singleOptionQuestionId).ShouldEqual(AnswerType.OptionCode);
+        [NUnit.Framework.Test] public void should_return_optioncode_answer_type_for_single_option_question () =>
+            plainQuestionnaire.GetAnswerType(singleOptionQuestionId).Should().Be(AnswerType.OptionCode);
 
-        It should_return_RosterVector_answer_type_for_single_option_linked_on_question = () =>
-           plainQuestionnaire.GetAnswerType(singleOptionLinkedOnQuestionId).ShouldEqual(AnswerType.RosterVector);
+        [NUnit.Framework.Test] public void should_return_RosterVector_answer_type_for_single_option_linked_on_question () =>
+           plainQuestionnaire.GetAnswerType(singleOptionLinkedOnQuestionId).Should().Be(AnswerType.RosterVector);
 
-        It should_return_RosterVector_answer_type_for_single_option_linked_on_roster = () =>
-           plainQuestionnaire.GetAnswerType(singleOptionLinkedOnRosterId).ShouldEqual(AnswerType.RosterVector);
+        [NUnit.Framework.Test] public void should_return_RosterVector_answer_type_for_single_option_linked_on_roster () =>
+           plainQuestionnaire.GetAnswerType(singleOptionLinkedOnRosterId).Should().Be(AnswerType.RosterVector);
 
-        It should_return_OptionCodeArray_answer_type_for_multi_option_question = () =>
-            plainQuestionnaire.GetAnswerType(multiOptionQuestionId).ShouldEqual(AnswerType.OptionCodeArray);
+        [NUnit.Framework.Test] public void should_return_OptionCodeArray_answer_type_for_multi_option_question () =>
+            plainQuestionnaire.GetAnswerType(multiOptionQuestionId).Should().Be(AnswerType.OptionCodeArray);
 
-        It should_return_YesNoArray_answer_type_for_multi_option_yesno_question = () =>
-           plainQuestionnaire.GetAnswerType(multiOptionYesNoQuestionId).ShouldEqual(AnswerType.YesNoArray);
+        [NUnit.Framework.Test] public void should_return_YesNoArray_answer_type_for_multi_option_yesno_question () =>
+           plainQuestionnaire.GetAnswerType(multiOptionYesNoQuestionId).Should().Be(AnswerType.YesNoArray);
 
-        It should_return_RosterVectorArray_answer_type_for_multioption_linked_on_question = () =>
-            plainQuestionnaire.GetAnswerType(multiOptionLinkedOnQuestionId).ShouldEqual(AnswerType.RosterVectorArray);
+        [NUnit.Framework.Test] public void should_return_RosterVectorArray_answer_type_for_multioption_linked_on_question () =>
+            plainQuestionnaire.GetAnswerType(multiOptionLinkedOnQuestionId).Should().Be(AnswerType.RosterVectorArray);
 
-        It should_return_RosterVectorArray_answer_type_for_multioption_linked_on_roster = () =>
-            plainQuestionnaire.GetAnswerType(multiOptionLinkedOnRosterId).ShouldEqual(AnswerType.RosterVectorArray);
+        [NUnit.Framework.Test] public void should_return_RosterVectorArray_answer_type_for_multioption_linked_on_roster () =>
+            plainQuestionnaire.GetAnswerType(multiOptionLinkedOnRosterId).Should().Be(AnswerType.RosterVectorArray);
 
-        It should_return_Decimal_answer_type_for_numeric_real_question = () =>
-            plainQuestionnaire.GetAnswerType(numericQuestionId).ShouldEqual(AnswerType.Decimal);
+        [NUnit.Framework.Test] public void should_return_Decimal_answer_type_for_numeric_real_question () =>
+            plainQuestionnaire.GetAnswerType(numericQuestionId).Should().Be(AnswerType.Decimal);
 
-        It should_return_Integer_answer_type_for_numeric_int_question = () =>
-            plainQuestionnaire.GetAnswerType(numericIntQuestionId).ShouldEqual(AnswerType.Integer);
+        [NUnit.Framework.Test] public void should_return_Integer_answer_type_for_numeric_int_question () =>
+            plainQuestionnaire.GetAnswerType(numericIntQuestionId).Should().Be(AnswerType.Integer);
 
-        It should_return_DateTime_answer_type_for_datetime_question = () =>
-           plainQuestionnaire.GetAnswerType(dateTitleQuestionId).ShouldEqual(AnswerType.DateTime);
+        [NUnit.Framework.Test] public void should_return_DateTime_answer_type_for_datetime_question () =>
+           plainQuestionnaire.GetAnswerType(dateTitleQuestionId).Should().Be(AnswerType.DateTime);
 
-        It should_return_GpsData_answer_type_for_gps_question = () =>
-            plainQuestionnaire.GetAnswerType(gpsQuestionId).ShouldEqual(AnswerType.GpsData);
+        [NUnit.Framework.Test] public void should_return_GpsData_answer_type_for_gps_question () =>
+            plainQuestionnaire.GetAnswerType(gpsQuestionId).Should().Be(AnswerType.GpsData);
 
-        It should_return_String_answer_type_for_tex_question = () =>
-           plainQuestionnaire.GetAnswerType(textQuestionId).ShouldEqual(AnswerType.String);
+        [NUnit.Framework.Test] public void should_return_String_answer_type_for_tex_question () =>
+           plainQuestionnaire.GetAnswerType(textQuestionId).Should().Be(AnswerType.String);
 
-        It should_return_DecimalAndStringArray_answer_type_for_textlist_question = () =>
-            plainQuestionnaire.GetAnswerType(textListQuestionId).ShouldEqual(AnswerType.DecimalAndStringArray);
+        [NUnit.Framework.Test] public void should_return_DecimalAndStringArray_answer_type_for_textlist_question () =>
+            plainQuestionnaire.GetAnswerType(textListQuestionId).Should().Be(AnswerType.DecimalAndStringArray);
 
-        It should_return_String_answer_type_for_qr_question = () =>
-           plainQuestionnaire.GetAnswerType(qrQuestionId).ShouldEqual(AnswerType.String);
+        [NUnit.Framework.Test] public void should_return_String_answer_type_for_qr_question () =>
+           plainQuestionnaire.GetAnswerType(qrQuestionId).Should().Be(AnswerType.String);
 
-        It should_return_FileName_answer_type_for_multimedia_question = () =>
-            plainQuestionnaire.GetAnswerType(multimediaQuestionId).ShouldEqual(AnswerType.FileName);
+        [NUnit.Framework.Test] public void should_return_FileName_answer_type_for_multimedia_question () =>
+            plainQuestionnaire.GetAnswerType(multimediaQuestionId).Should().Be(AnswerType.FileName);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static readonly Guid singleOptionQuestionId = Guid.NewGuid();

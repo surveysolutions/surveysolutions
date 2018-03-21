@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -16,14 +16,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
     internal class when_adding_new_item_in_list_view_model_and_there_is_answer_in_interview : TextListQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.GetAnswer() == savedAnswers && _.IsAnswered() == true);
 
             var interview = Mock.Of<IStatefulInterview>(_
@@ -45,29 +44,30 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 principal: principal);
 
             listModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf()
         {
             var textListAddNewItemViewModel = listModel.Answers.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
 
             textListAddNewItemViewModel.Text = newListItemTitle;
             textListAddNewItemViewModel.AddNewItemCommand.Execute();
-        };
+        }
 
-        It should_create_list_with_5_answers = () =>
-            answerViewModels.Count.ShouldEqual(5);
+        [NUnit.Framework.Test] public void should_create_list_with_5_answers () =>
+            answerViewModels.Count.Should().Be(5);
 
-        It should_add_item_with_Title_equals_trimmed_newListItemTitle = () =>
-            answerViewModels.Last().Title.ShouldEqual(newListItemTitle.Trim());
+        [NUnit.Framework.Test] public void should_add_item_with_Title_equals_trimmed_newListItemTitle () =>
+            answerViewModels.Last().Title.Should().Be(newListItemTitle.Trim());
 
-        It should_add_new_item_with_Value_equals_9 = () =>
-            answerViewModels.Last().Value.ShouldEqual(9m);
+        [NUnit.Framework.Test] public void should_add_new_item_with_Value_equals_9 () =>
+            answerViewModels.Last().Value.Should().Be(9m);
 
-        It should_not_contain_add_new_item_view_model = () =>
-            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_not_contain_add_new_item_view_model () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().Should().BeEmpty();
 
-        It should_send_answer_command = () =>
+        [NUnit.Framework.Test] public void should_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerTextListQuestionCommand>()), Times.Once);
 
         private static TextListQuestionViewModel listModel;

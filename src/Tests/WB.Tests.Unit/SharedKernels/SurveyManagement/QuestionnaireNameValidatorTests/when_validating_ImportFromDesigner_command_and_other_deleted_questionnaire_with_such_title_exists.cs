@@ -1,4 +1,5 @@
 using System;
+using FluentAssertions;
 using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
         Because of = () => exception = Catch.Exception(() => validator.Validate(null, command));
 
         It should_not_throw_exception = () =>
-            exception.ShouldBeNull();
+            exception.Should().BeNull();
 
         private static QuestionnaireNameValidator validator;
         private static Exception exception;

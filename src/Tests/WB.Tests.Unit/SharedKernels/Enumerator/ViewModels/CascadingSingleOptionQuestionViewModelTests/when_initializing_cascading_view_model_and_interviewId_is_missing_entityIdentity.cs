@@ -1,28 +1,23 @@
 using System;
+using FluentAssertions;
 using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_initializing_cascading_view_model_and_interviewId_is_missing_entityIdentity : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_throw_exception_with_ParamName_equals_interviewId () {
             SetUp();
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel();
-        };
 
-        Because of = () =>
-            exception = Catch.Exception(() => cascadingModel.Init(null, null, null));
+            var exception = Assert.Throws<ArgumentNullException>(() => cascadingModel.Init(null, null, null));
+            exception.ParamName.Should().Be("interviewId");
 
-        It should_throw_ArgumentNullException_exception = () =>
-            exception.ShouldBeOfExactType<ArgumentNullException>();
-
-        It should_throw_exception_with_ParamName_equals_interviewId = () =>
-            (exception as ArgumentNullException).ParamName.ShouldEqual("interviewId");
+        }
 
         static CascadingSingleOptionQuestionViewModel cascadingModel;
-        private static Exception exception;
     }
 }

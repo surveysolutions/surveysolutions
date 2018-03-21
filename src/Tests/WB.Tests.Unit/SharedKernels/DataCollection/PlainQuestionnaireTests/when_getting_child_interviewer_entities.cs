@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_child_interviewer_entities_after_getting_all_child_entities : PlainQuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             rootChapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -27,11 +26,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
             plainQuestionnaire.GetChildEntityIds(rootChapterId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => foundQuestions = plainQuestionnaire.GetAllUnderlyingInterviewerEntities(rootChapterId);
+        public void BecauseOf() => foundQuestions = plainQuestionnaire.GetAllUnderlyingInterviewerEntities(rootChapterId);
 
-        It should_return_questions_and_variables_as_interviewer_entities = () => 
+        [NUnit.Framework.Test] public void should_return_questions_and_variables_as_interviewer_entities () => 
             foundQuestions.Should().Contain(questionId).And.Contain(variableId);
 
         static Guid questionId;

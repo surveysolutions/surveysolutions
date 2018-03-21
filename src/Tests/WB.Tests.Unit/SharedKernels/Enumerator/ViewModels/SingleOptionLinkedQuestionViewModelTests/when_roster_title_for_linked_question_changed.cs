@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -12,14 +12,13 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
     internal class when_roster_title_for_linked_question_changed : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var level1TriggerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var level2triggerId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var linkToQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -51,14 +50,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
             viewModel.Init(interview.Id.FormatGuid(), questionIdentity, Create.Other.NavigationState());
-        };
 
-        Because of = () => 
+            BecauseOf();
+        }
+
+        public void BecauseOf() => 
             viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: topRosterId));
 
-        It should_refresh_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_refresh_list_of_options () => viewModel.Options.Count.Should().Be(1);
 
-        It should_prefix_option_with_parent_title = () => viewModel.Options.First().Title.ShouldEqual("title: subtitle");
+        [NUnit.Framework.Test] public void should_prefix_option_with_parent_title () => viewModel.Options.First().Title.Should().Be("title: subtitle");
 
         static SingleOptionLinkedQuestionViewModel viewModel;
         static Guid topRosterId;
