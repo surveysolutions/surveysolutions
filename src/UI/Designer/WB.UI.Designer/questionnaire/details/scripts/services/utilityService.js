@@ -195,6 +195,15 @@
                 }
             }
 
+            utilityService.scrollToElement = function(parent, id) {
+                if (_.isNull(parent) || _.isNull(id))
+                    return;
+                
+                _.defer(function () {
+                    $(parent).scrollTo(id, 500, { easing: 'swing', offset: -10 });
+                });
+            }
+
             return utilityService;
         }
     );

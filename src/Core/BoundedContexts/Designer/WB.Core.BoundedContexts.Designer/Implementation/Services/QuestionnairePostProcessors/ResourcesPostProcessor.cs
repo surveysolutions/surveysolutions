@@ -3,6 +3,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -17,12 +18,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IAttachmentService attachmentService => ServiceLocator.Current.GetInstance<IAttachmentService>();
         private ILookupTableService lookupTableService => ServiceLocator.Current.GetInstance<ILookupTableService>();
         private ITranslationsService translationsService => ServiceLocator.Current.GetInstance<ITranslationsService>();
+        private ICommentsService commentsService => ServiceLocator.Current.GetInstance<ICommentsService>();
 
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command)
         {
             this.translationsService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
             this.lookupTableService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
             this.attachmentService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
+            this.commentsService.DeleteAllByQuestionnaireId(command.QuestionnaireId);
         }
     }
 }

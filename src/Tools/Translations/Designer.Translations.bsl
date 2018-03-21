@@ -5,372 +5,490 @@
       <locales>
         <locale />
         <locale>ru</locale>
+        <locale>es</locale>
+        <locale>fr</locale>
       </locales>
       <items>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\Common.resx" nm="PublicQuestionnaires" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Public Questionnaires" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Общие Опросники" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="AttachmentIdIsMissing" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Missing attachment with id {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Не найдено вложение с ключом {0}" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Archivo adjunto inexistente id {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="Attachments_Unsupported_content" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Uploaded content is not supported" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Данные в загруженном формате не поддерживаются" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Tipo de archivo adjunto no está soportado" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le contenu importé n'est pas du format voulu" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="Attachments_uploaded_file_is_not_image" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Uploaded file is not an image" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загруженный файл не является изображением" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Archivo adjunto no es una imagen" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le fichier chargé n'est pas une image" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantMoveSubsectionInWrongPosition" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You can't move to sub-section {0} because it position {1} in not acceptable." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Недопустимо перемещение подсекции  {0} в позицию {1}." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible mover la sub-sección {0} porque su posición {1} no es correcta." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Vous ne pouvez pas passer à la sous-section {0} car la position {1} n'est pas acceptable." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantPasteQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question cannot be pasted here." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вопрос не может быть перемещен сюда." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible incrustar la pregunta" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La question ne peut pas être collée ici." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantRemoveLastSectionInQuestionnaire" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Last existing section can not be removed from questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Последняя секция не может быть удалена из опросника" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible eliminar del cuestionario la ultima sección" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La dernière section existante ne peut pas être supprimée du questionnaire" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CantRemoveUserFromTheList" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Couldn't remove user, because it doesn't exist in share list" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Нельзя удалить пользователя из списка, поскольку он в нем отсутсвует" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible eliminar el usuario ya que no se encuentra en la lista de trabajo" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Impossible de supprimer l'utilisateur, car il n'existe pas dans la liste de partage" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsCantContainsEmptyParentValueField" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Options in cascading question can not have empty ParentValue column." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опции каскадного вопроса не могут содержать пустые значения в колонке ParentValue." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Las opciones de preguntas en cascada no pueden tener nula la columna Parent Value" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Les options dans la question en cascade ne peuvent pas avoir une colonne ParentValue vide." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Options in cascading question can not have not numeric value in ParentValue column." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опции каскадного вопроса должны содержать только численные значения в колонках Value и ParentValue." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Las opciones de preguntas en cascada no pueden tener un valor numerico en la columna ParentValue" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Les options de la question en cascade ne peuvent pas avoir de valeur numérique dans la colonne ParentValue." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="There is at least one duplicate of Title + Parent Value pairs. List of options should not contain any duplicates of such type." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Найдена как минимум одна одинаковая пара Title + Parent Value. Список опций не должен сожержать дубликаты такого типа." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="Existe al menos un duplicado en cuanto a Titulo + Valor del Padre. La lista de opciones no debe contener ningún tipo de duplicados" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Il y a au moins un doublon de Titre + Parent Value. La liste des options ne doit pas contenir de doublons de ce type." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="ComboboxCannotBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Combo box question with public key {0} can't be found" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Комбобокс вопрос с ключом {0} не найден." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="No se ha encontrado ninguna pregunta en la caja combo con la llave {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Impossible de trouver la question de type combo box avec la clé publique {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="FailedToAddGroup" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Fail attempt to add group {0} into group {1}. But group {1} doesnt exist in document {2}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Неудачная попытка добавить группу {0} в группу {1}. Но группа {1} не существует в опроснике {2}" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Ha fallado el intento por adicionar el grupo {0} en el grupo {1} . El grupo {1} no existe en el documento {2}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Échec de tentative d'ajout du groupe {0} dans le groupe {1}. Mais le groupe {1} n'existe pas dans le document {2}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="ImportOfDeletedQuestionnaire" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Trying to import template of deleted questionnaire" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Вы пытаетесь импортировать удаленный опросник." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="Intentando importar la plantilla del cuestionario eliminado " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Essayer d'importer le modèle du questionnaire supprimé" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="InvalidFixedTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Invalid title list" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Неверный список элементов" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Título de lista es inválido " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Liste de titres invalide" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="InvalidValueOfFixedTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Fixed set of items roster value is required" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Все значения для фиксированного ростера обязательны." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="Es necesario indicar el número de ítems de la lista " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Un ensemble d'éléments fixes est requis" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="ItemWithIdExistsAlready" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="One or more questionnaire item(s) with same ID {0} already exists." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Один или болеее элементов с ключом {0} уже существуют в опроснике." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Uno o mas ítems del cuestionario con el mismo id ya existe {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Un ou plusieurs éléments de questionnaire ayant le même ID {0} existent déjà." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTableAlreadyExist" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table with such id already exist." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Таблица поиска с таким ключом уже существует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="Ya existe tabla de búsqueda con el mismo id" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Une table de référence avec un tel identifiant existe déjà." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTableHasEmptyContent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table with id {0} doen't have content" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Таблица поиска с ключом {0} пустая" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Tabla de búsqueda con id {0} no tiene contenido" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTableIsAbsent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table with such id is absent." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Таблица поиска с таким ключом отсутсвует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="No existe tabla de búsqueda con ese id" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La table de référence avec un tel identifiant n'existe pas." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTableIsMissing" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Lookup table with id {0} is missing" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Таблица поиска с ключом {0} не может быть найдена" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Tabla de búsqueda con id {0} inexistente" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_cant_has_empty_content" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="File with no data can not be loaded" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пустой файл не может быть сохранен" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible cargar un archivo vacío " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Fichier sans données ne peut pas être chargé" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_data_value_cannot_be_parsed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Value {0} can not be parsed as decimal number. Column {1}, row {2}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Значение {0} не может быть прочитано как целое число. Колонка {1}, строка {2}." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El valor {0} no es posible tratarlo como número decimal. Columna {1}, Fila {2}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La valeur {0} ne peut pas être analysée en tant que nombre décimal. Colonne {1}, ligne {2}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_duplicating_headers_are_not_allowed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Headers with the same name are not allowed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Заголовки с одинаковым именем запрещены" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible definir encabezados bajo el mismo nombre" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Les en-têtes portant le même nom ne sont pas autorisés" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_empty_or_invalid_header_are_not_allowed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Empty or invalid headers are not allowed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Заголовки с пустым или неверным именем запрещены" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No se permiten encabezados sin nombre o con valores inválidos" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Les en-têtes vides ou non valides ne sont pas autorisés" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_rowcode_column_is_mandatory" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Mandatory rowcode column is missing" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Обязательная колонка rowcode отсутсвует" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El código de fila es mandatorio" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La colonne de code de rang obligatoire est manquante" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_rowcode_value_cannot_be_parsed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Value {0} can not be parsed as long integer number. Column {1}, row {2}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Значение {0} не может быть прочитано как дробное число. Колонка {1}, строка {2}." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Valor {0} no puede ser procesado como un número entero. Columna {1}, Fila {2}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La valeur {0} ne peut pas être analysée en tant que nombre entier. Colonne {1}, ligne {2}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_rowcode_values_must_be_unique" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Rowcode values must be unique" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Значения колонки rowcode должны быть уникальны" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El código de fila debe ser único" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Les valeurs de code de ligne doivent être uniques" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_too_many_columns" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Too many columns in uploaded file. Max columns count is {0}" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Слишком много колонок в загруженном файле. Граничное количесово колонок - {0}." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="El archivo a cargar contiene demasiadas columnas. El número máximo de columnas es {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Trop de colonnes dans le fichier chargé. Le nombre maximal de colonnes est {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="LookupTables_too_many_rows" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Max rows count limit ({0} rows) was exceeded." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Превышена максимальная граница ({0}) колочества строк." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El número máximo de filas ({0}) ha sido excedido" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La limite de nombre de lignes maximum ({0} lignes) a été dépassée." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MacroAlreadyExist" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Macro with such is is already exist." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Макрос с таким ключом уже существует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="Ya existe una macro como la indicada " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Macro avec tel est déjà existant." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MacroIsAbsent" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Macro with such is is absent." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Макрос с таким ключом отсутствует" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="No existe una macro como la indicada" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Macro avec tel est absent." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MoreThanOneQuestionWithSameId" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="One or more question(s) with same ID {0} already exist:{1}{2}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Один или более вопросов с одинаковым ключом {0} уже существуют:{1}{2}." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Una o mas preguntas presentan el mismo id {0}, el cual existe {1}{2}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Une ou plusieurs questions ayant le même identifiant {0} existent déjà: {1} {2}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="MoreThanOneSubSectionWithSameId" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="One or more sub-section(s) with same ID {0} already exist:{1}{2}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Одна или более секций с одинаковым ключом {0} уже существуют:{1}{2}." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Una o mas sub-secciones el mismo id {0}, el cual existe {1}{2}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Une ou plusieurs sous-sections avec le même ID {0} existent déjà: {1} {2}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="NoPremissionsToEditQuestionnaire" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You don't have permissions for changing this questionnaire" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="У вас недостаточно прав для изменения опросника" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No posee privilegios para cambiar este cuestionario" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Vous n'êtes pas autorisé à modifier ce questionnaire" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="OldAttachmentIdIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Old attachment id is empty and file is absent for attachment {0} in questionnaire {1}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Старый ключ вложения пуст и файл отсутствует для вложения {0} для опросника {1}" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El id del archivo adjunto se encuentra vacío. El archivo adjunto {0} no existe en el cuestionario {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="OnlyQuestionnaireDocumentsAreSupported" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Only QuestionnaireDocuments are supported for now" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Поддерживаются только QuestionnaireDocuments." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="En este momento solo se encuentran soportados documentos asociados a cuestionarios" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Seuls les QuestionnaireDocuments sont admisiblses pour le moment" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="OptionValuesShouldBeNumbers" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Option value should have only number characters" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Значения опций должны содержать только числовые значения" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El valor de la opción solo puede contener caracteres numéricos " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La valeur de l'option ne doit comporter que des caractères numériques" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionCannotBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question with public key {0} can't be found." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вопрос с ключом {0} не найден." ts="Changed" qs="ToReview" />
+            <li lc="es" tx="No fue posible encontrar la pregunta con el id {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La question avec la clé publique {0} est introuvable." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionIsNotCombobox" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question {0} is not a combo box" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Вопрос {0} не является комбобоксом." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="La pregunta {0} no es un caja combo" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La question {0} n'est pas un combo box" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionnaireCantBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire item with id {0} can't be found." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник с ключом {0} не найден." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El elemento del cuestionario con ID {0} no se puede encontrar." ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Impossible de trouver l'élément de questionnaire avec l'ID {0}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionnaireRevisionCantBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnire {0} of version {1} can't be found" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Опросник {0} версии {1} не найден." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="No fue posible encontrar la pregunta {0} de la versión {1} " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Impossible de trouver le questionnaire {0} de la version {1}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionnaireTitleIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire's title can not be empty or contains whitespace only." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Имя опросника не может быть пустым." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El título del cuestionario no puede ser vacío o contener solamente espacios en blanco" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le titre du questionnaire ne peut pas être vide ou contenir uniquement des espaces." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="QuestionTypeIsNotSupported" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Question type is not supported: {0}" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Неподдерживаемый тип вопроса: {0}." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="El tipo de la pregunta no está soportado {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le type de question n'est pas valide: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="RosterCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Roster cannot be pasted here." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ростер не может быть скопирован сюда." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible incrustar la lista en este lugar" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le roster ne peut pas être collée ici." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SectionCantHaveMoreThan_Items" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Section cannot have more than {0} child items" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Секция не может содержать более {0} дочерних элементов." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="es" tx="La sección no puede tener mas de {0} ítems" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La section ne peut pas contenir plus de {0} éléments enfants" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="StaticTextCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Static Text cannot be pasted here." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Статический текст не может быть скопирован сюда." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible incrustar texto estático en este lugar " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le texte statique ne peut pas être collé ici." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SubSectionCantBeFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sub-section with public key {0} can't be found." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Группа с ключом {0} не может быть найдена." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No ha sido posible encontrar la sub-sección con llave {0} " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La sous-section avec la clé publique {0} est introuvable." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="SubSectionDepthLimit" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Sub-section or roster depth cannot be higher than {0}." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вложенность подсекций и ростеров не может быть больше чем {0}." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="La profundidad de la sección o la lista no pueda ser mayor a {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La profondeur de la sous-section ou du roster ne peut pas être supérieure à {0}." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranlationExcelFileHasErrors" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Found errors in excel file" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Найдены ошибки в excel файле" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Se encontraron errores en el archivo Excel" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranslationCel_A_lIsInvalid" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} has invalid id at [{1}]" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Неверное значение ключа {0} по адресу [{1}]" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="{0} contiene el id inválido {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranslationCellIndexIsInvalid" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} has invalid index at [{1}]" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Неверное значение индекса {0} по адресу [{1}]" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="{0} contiene un valor inválido de índice {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranslationCellTypeIsInvalid" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} has invalid type [{1}]" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Неверное значение типа {0} по адресу [{1}]" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="{0} contiene un valor inválido de tipo {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranslationFileIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Excel file is empty - contains no worksheets" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Excel файл пуст и не содержит листов с переводами" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="El archivo de Excel está vacío o no contiene ninguna hoja" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranslationsCantBeExtracted" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Failed to extract translations from uploaded file" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Произошла ошибка при попытке разбора загруженного файла с переводами" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No fue posible extraer las traducciones del archivo cargado" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="TranslationWorksheetIsMissing" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Worksheet with translations not found" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Лист с переводами не найден" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No se encontraron hojas con traducciones" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="UnknownTypeCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Unknown item type. Paste failed." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Элемент неизвестного типа. Вставка невозможна." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Tipo de ítem desconocido, no fue posible incrustarlo" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Type d'élément inconnu Collage a échoué." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="UserIsInTheList" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="User {0} already exist in share list." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пользователь {0} уже присуствует в списке." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Usuario {0} ya existe en la lista" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="L'utilisateur {0} existe déjà dans la liste de partage." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="UserIsOwner" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="User {0} is an owner of this questionnaire. Please, input another email." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пользователь {0}  является владельцем опросника. Введите другой email, пожалуйста." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
+            <li lc="es" tx="Usuario {0} es un propietario del cuestionario. Por favor ingrese otro email" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="L'utilisateur {0} est un propriétaire de ce questionnaire. Veuillez saisir un autre e-mail." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="ValueOfFixedTitleCantBeParsed" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Fixed set of items roster value should have only number characters" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Все значения для фиксированного ростера должны быть числами." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="El valor que indica el número de ítems de la lista solo puede contener caracteres numéricos" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Le roster fixe ne doit contenir que des caractères numériques" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="VariableCantBePaste" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Variable cannot be pasted here." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Переменная не может быть скопирована сюда." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="No es posible incrustar variables" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="La variable ne peut pas être collée ici." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\ExceptionMessages.resx" nm="VariableWithIdWasNotFound" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Variable with id {0} was not found in questionnaire {1}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Переменная с ключом {0} не найдена в опроснике {1}" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Variable con id {0} no fue encontrada en el cuestionario {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Appendix_Conditions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -395,6 +513,12 @@
           <lis>
             <li lc="nn-nn" tx="Appendix {0} {1} options" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Приложение {0} {1} опции" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Appendix_SpecialValues" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Appendix {0} {1} special values" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Приложение {0} {1} специальные значения" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Appendix_Validations" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -429,8 +553,8 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="GeneratedBy" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="This PDF generated by {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Этот PDF сгенерирован: {0}" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Generated by {0}" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Сгенерирован: {0}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="LastEdited" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -449,6 +573,132 @@
           <lis>
             <li lc="nn-nn" tx="Legend" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Легенда" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataAgreeToMakeThisQuestionnairePublic" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Agree to make this questionnaire public" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Согласен, чтоб опросник был общедоступным" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataConsultants" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Consultants" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Консультанты" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataCountry" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Country" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Страна" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataCoverage" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Coverage" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Покрытие" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataFunding" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Funding" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Финансирование" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataKeywords" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Keywords" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ключевые слова" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataKindOfData" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Kind of data" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вид данных" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataLanguages" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Languages" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Языки" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataModeOfDataCollection" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Mode of Data Collection" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Режим сбора данных" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataNotes" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Notes" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заметки" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataPrimaryInvestigator" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Primary Investigator" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Основной исследователь" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataSectionSubTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="questionnaire description" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="описание опросника" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataSectionTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Survey identification information" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Информация об опросе" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataStudyType" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Study type" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Тип исследования" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataSubtitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Subtitle" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Подзаголовок" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Title" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заголовок" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataUnitOfAlalysis" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Unit of analysis" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Единица анализа" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataUniverse" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Universe" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Генеральная совокупность" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataVersionIdentificator" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Version identificator" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Версия" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataVersionNotes" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Version notes" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заметки о версии" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="MetadataYear" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Year" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Год" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="NeverEdited" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -653,6 +903,36 @@
           <lis>
             <li lc="nn-nn" tx="Shared with:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Доступ открыт:" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="SideBarMetadataAdditionalInfo" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Additional info" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Дополнительная информация" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="SideBarMetadataBasicInfo" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Basic information" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Базовая информация" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="SideBarMetadataSurveyDataInfo" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Survey data information" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Информация о данных по обследованию" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="SideBarMetadataSurveyInfo" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Survey information" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Информация об обследовании" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="SpecialValues" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Special values" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Специальные значения" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="Stat_NoQuestions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1437,8 +1717,8 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0097_QuestionnaireTitleHasInvalidCharacters" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Questionnaire title contains characters that are not allowed. Only non Unicode letters, numbers, space and _ are allowed." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя опросника содержит символы, которые не разрешены. Разрешены только буквы, цифры, пробелы и _ .  Unicode символы не разрешены." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Only the following characters may be used in the questionnaire title: A..Z a..z 0..9 ( ) \ / _ - and space." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Имя опросника может содержать только следующие символы:  A..Z a..z 0..9 ( ) \ / _ - и пробел." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0098_QuestionnaireHasSizeMoreThan5MB" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1633,6 +1913,48 @@
             <li lc="ru" tx="Нельзя ссылаться на дочерние элементы во включающих условиях секций, подсекций и ростеров." ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0131_SpecialValuesHasNonIntegerOptionsValues" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Special values support only integer values in range from {0} to {1}." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Специальные значения могут быть только целыми числами в диапазоне от {0} до {1}." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0132_SpecialValuesHasOptionsWithLongTexts" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Special value title is empty or too long. Title's length should be in range from {0} to {1} characters." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заголовоки специальных значений пустые или слишком длинные. Длина заголовка должна быть от {0} до {1} символов." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Special values must be unique." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Специальные значения должны быть уникальными." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0134_SpecialValuesCountMoreThanMaxOptionCount" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Contains more than {0} special values." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Содержит более {0} специальных значений." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Question contains a special value, which is too large and can't be used in this question since it determines the size of a roster." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос содержит специальное значение, которое слишком велико и не может быть использовано, поскольку вопрос определяет количество строк ростера." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0136_SpecialValuesHaveOptionsWithEmptyValue" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Question has special value(s) with empty value." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вопрос содержит специальное значение с пустым значением." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0137_SpecialValuesTitlesMustBeUnique" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Special values titles must be unique." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Заголовки специальных значений должны быть уникальны." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0200_LargeNumberOfRostersIsCreated" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters." ts="Translated" qs="ToReview" />
@@ -1810,7 +2132,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0229_SupervisorQuestionInValidation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Supervisor question is used in validation. Check the condition accounts for supervisor non-response or instruct supervisors to always respond." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. " er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="В проверочном выражении используется супервизоровский вопрос. Убедитесь, что условие включения учитывает отвеченность супервизоровского вопроса или проинструктируйте супервизоров всегда отвечать на него. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0230_NonconsecutiveCascadings" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1948,7 +2270,7 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0264_GpsQuestion" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="You have a GPS question. Tablets must support geolocation to be used with this questionnaire." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. " er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросник содержит GPS вопрос. Планшеты, в которых будет использоваться этот тип вопроса должны поддерживать функцию геолокации. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0265_MoreThan30PercentQuestionsAreText" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1977,8 +2299,8 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0269_QuestionTitleIsEmpty" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Question cannot have empty option titlet." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="У вопроса не может быть пустой текст опции." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Question cannot have empty option title." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="У вопроса не может быть пустой текст опции." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0270_SectionContainsTooManyQuestions" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1993,6 +2315,36 @@
             <li lc="ru" tx="Макрос не может быть пустым." ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0272_ConditionUsingForbiddenClasses" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Enabling condition is using forbidden type." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Условие включения использует запрещённый тип." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0273_ValidationConditionUsingForbiddenClasses" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Validation condition is using forbidden type." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Проверочное условие использует запрещённый тип." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0274_VariableUsingForbiddenClasses" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Variable is using forbidden type." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Переменная использует запрещённый тип." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0275_FilterExpressionIsUsingForbiddenClasses" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Filter expression is using forbidden type." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Фильтр использует запрещённый тип." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\VerificationMessages.resx" nm="WB0276_RownameIsNotSupported" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="@rowname variable is not supported anymore." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="@rowname переменная не поддерживается больше." ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="AllRights" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="All Rights Reserved." ts="Translated" qs="ToReview" />
@@ -2001,8 +2353,8 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="AppDescription" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="This is a tool for creating surveys for The World Bank’s CAPI platform with collaboration capabilities and export to PDF." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Это инструмент для создания опросов на платформе CAPI  от Всемирного банка с возможностями совместной работы и экспорта в PDF." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="A collaborative tool to create questionnaires for the World Bank CAPI/CAWI platform." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Инструмент для совместного создания опросников для CAPI/CAWI платформы Мирового Банка" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="AppName" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2565,8 +2917,8 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="ConfirmationEmail" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Hello {0},   To complete the registration process click on this link: " ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс регистрации, нажмите на эту ссылку:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Hello {0}, &lt;br/&gt;&#xD;&#xA;&lt;br/&gt; &#xD;&#xA;To complete the registration process click on this link:" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс регистрации, нажмите на эту ссылку:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="MailNotifier_NotifyOwnerAboutShareChange_view" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2596,7 +2948,7 @@
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Hello {0}, &lt;br&gt;  {1} has invited {2} to {3} your questionnaire: " ts="Changed" qs="ToReview" />
-            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; пользователь {1}  дал доступ пользователю {2} {3} к Вашему опроснику:" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте {0}, &lt;br&gt; пользователь {1}  дал доступ пользователю {2} {3} к Вашему опроснику:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2613,8 +2965,8 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="ResetPasswordEmail" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Hello {0}, To complete the password reset process click on this link:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс сброса пароля, нажмите на эту ссылку:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Hello {0}, &lt;br/&gt;&lt;br/&gt;  To complete the registration process click on this link:" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс сброса пароля, нажмите на эту ссылку:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="SystemMailer_ConfirmationEmail_Complete_Registration_Process" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2757,14 +3109,14 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ChooseLanguage" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Choose language" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Выберите язык" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Choose translation" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Выберите перевод" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ChooseLanguageTitle" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Please choose language to render pdf questionnaire on it" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Выберите язык для использования его в pdf " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Please choose translation" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Пожалуйста, выберите перевод" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Close" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2827,6 +3179,12 @@
             <li lc="ru" tx="Создать подпапку" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="CreatingHtml" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Creating Html for &quot;{0}&quot;" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Создание Html для &quot;{0}&quot;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Delete" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Delete" ts="Translated" qs="ToReview" />
@@ -2837,6 +3195,12 @@
           <lis>
             <li lc="nn-nn" tx="Do you really want to delete &quot;{0}&quot; questionnaire?" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Вы действительно хотите удалить опросник &quot;{0}&quot;?" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="DeleteFolderConfirmation" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Are you sure to want to delete folder {0} ?" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Вы точно хотите удалить папку {0} ?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Deleting" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2875,6 +3239,12 @@
             <li lc="ru" tx="Во время обработки Вашего запроса произошла ошибка" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ExportAsHtml" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Export as Html" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Экспортировать как Html" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ExportAsPDF" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Export as PDF" ts="Translated" qs="ToReview" />
@@ -2883,8 +3253,8 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="FoldersDescription" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:&#xD;&#xA;&lt;br/&gt;- &quot;Create folder&quot; use for creating subfolder &#xD;&#xA;&lt;br/&gt;- &quot;Edit&quot; to rename folder name&#xD;&#xA;&lt;br/&gt;- &quot;Remove&quot; to delete folder with subfolders" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вы можете настроить структуру папок для страницы общих опросников. Для этого нажмите правую кнопку на папке, а затем используйте одну из следующих операций:&#xD;&#xA;&lt;br/&gt;- «Создать папку» для создания вложенной папки&#xD;&#xA;&lt;br/&gt;- «Изменить», чтобы переименовать название папки&#xD;&#xA;&lt;br/&gt;- «Удалить» для удаления папки с подпапками" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:&#xD;&#xA;&lt;br/&gt;- &quot;Create SubFolder&quot; use for creating subfolder &#xD;&#xA;&lt;br/&gt;- &quot;Rename&quot; to rename folder name&#xD;&#xA;&lt;br/&gt;- &quot;Delete&quot; to delete folder with subfolders" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Вы можете настроить структуру папок для страницы общих опросников. Для этого нажмите правую кнопку на папке, а затем используйте одну из следующих операций:&#xD;&#xA;&lt;br/&gt;- «Создать папку» для создания вложенной папки&#xD;&#xA;&lt;br/&gt;- «Изменить», чтобы переименовать название папки&#xD;&#xA;&lt;br/&gt;- «Удалить» для удаления папки с подпапками" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="FoldersManagement" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2923,6 +3293,12 @@
             <li lc="ru" tx="Создаю pdf для &quot;{0}&quot;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="GetHtml" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Export Html" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Экспорт Html" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Hello" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Hi, {0}" ts="Translated" qs="ToReview" />
@@ -2941,6 +3317,12 @@
             <li lc="ru" tx="Дата изменения" ts="Changed" qs="ToReview" />
           </lis>
         </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Location" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Location:  " ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Расположение:  " ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="ManageUsers" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Manage users" ts="Translated" qs="ToReview" />
@@ -2951,6 +3333,12 @@
           <lis>
             <li lc="nn-nn" tx="My Questionnaires" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Мои опросники" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="NewFolder" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="New Folder" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Новая папка" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="Open" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -2999,6 +3387,12 @@
           <lis>
             <li lc="nn-nn" tx="Choose tab-separated values file to upload, please" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Пожалуйста, выберите файл со значениями разделенными табуляцией" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="SharedQuestionnaires" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Questionnaires shared with me" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Общие со мной опросники" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="SuccessDeleteMessage" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">

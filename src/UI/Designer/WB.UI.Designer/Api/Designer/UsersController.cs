@@ -1,6 +1,7 @@
 using System.Web.Http;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.UI.Designer.Filters;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Filters;
@@ -134,9 +135,14 @@ namespace WB.UI.Designer.Api
 
         [Authorize]
         [HttpGet]
-        public string CurrentLogin()
+        [CamelCase]
+        public dynamic CurrentLogin()
         {
-            return this.membership.WebUser.UserName;
+            return new
+            {
+                UserName = this.membership.WebUser.UserName,
+                Email = this.membership.WebUser.MembershipUser.Email,
+            };
         }
 
         private bool ShouldShowCaptchaByUserName(string userName)
