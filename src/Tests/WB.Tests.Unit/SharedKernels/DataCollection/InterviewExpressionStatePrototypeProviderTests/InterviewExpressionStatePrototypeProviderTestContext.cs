@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStatePrototypeProviderTests
 {
-    [Subject(typeof(InterviewExpressionStatePrototypeProvider))]
+    [NUnit.Framework.TestOf(typeof(InterviewExpressionStatePrototypeProvider))]
     internal class InterviewExpressionStatePrototypeProviderTestContext
     {
         protected static InterviewExpressionStatePrototypeProvider CreateInterviewExpressionStatePrototype(IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor)

@@ -44,8 +44,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
 
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.Should().BeNull();
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[variableId].ShouldNotBeNull();
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster1Id }].HeaderItems[variableInRosterId].ShouldNotBeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[variableId].Should().NotBeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster1Id }].HeaderItems[variableInRosterId].Should().NotBeNull();
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]

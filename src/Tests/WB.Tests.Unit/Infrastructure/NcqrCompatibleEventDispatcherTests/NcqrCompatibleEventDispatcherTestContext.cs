@@ -10,7 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
-    [Subject(typeof(NcqrCompatibleEventDispatcher))]
+    [NUnit.Framework.TestOf(typeof(NcqrCompatibleEventDispatcher))]
     internal class NcqrCompatibleEventDispatcherTestContext
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null)

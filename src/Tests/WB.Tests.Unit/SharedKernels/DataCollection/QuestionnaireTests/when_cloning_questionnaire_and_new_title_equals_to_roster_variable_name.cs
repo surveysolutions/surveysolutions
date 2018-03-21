@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
                     questionnaireIdentity: questionnaireIdentity, newTitle: rosterVariableName)));
             questionnaireException.Message.ToLower().ToSeparateWords().Should().Contain("title", "roster");
-            questionnaireException.Message.ShouldContain(rosterVariableName);
+            questionnaireException.Message.Should().Contain(rosterVariableName);
 
         }
 

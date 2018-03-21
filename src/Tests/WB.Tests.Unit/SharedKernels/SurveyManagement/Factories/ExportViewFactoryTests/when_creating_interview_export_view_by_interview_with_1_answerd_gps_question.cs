@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -10,14 +10,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_interview_export_view_by_interview_with_1_answerd_gps_question : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             gpsQuestionId = Guid.Parse("10000000000000000000000000000000");
 
             geoPosition = Create.Entity.GeoPosition();
@@ -32,15 +31,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1),
                 interviewData);
 
-        It should_create_record__with_one_gps_question_which_contains_composite_answer = () =>
+        [NUnit.Framework.Test] public void should_create_record__with_one_gps_question_which_contains_composite_answer () =>
           result.Levels[0].Records[0].GetPlainAnswers().First()
-                    .ShouldEqual(new[] { "1", "2", "3", "4", geoPosition.Timestamp.DateTime.ToString(ExportFormatSettings.ExportDateTimeFormat) });
+                    .Should().BeEquivalentTo(new[] { "1", "2", "3", "4", geoPosition.Timestamp.DateTime.ToString(ExportFormatSettings.ExportDateTimeFormat) });
 
         private static ExportViewFactory exportViewFactory;
         private static InterviewDataExportView result;

@@ -12,7 +12,7 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests
 {
-    [Subject(typeof(CommentsExporter))]
+    [NUnit.Framework.TestOf(typeof(CommentsExporter))]
     internal class CommentsExporterTestsContext
     {
         protected static CommentsExporter CreateExporter(IFileSystemAccessor fileSystemAccessor = null, 

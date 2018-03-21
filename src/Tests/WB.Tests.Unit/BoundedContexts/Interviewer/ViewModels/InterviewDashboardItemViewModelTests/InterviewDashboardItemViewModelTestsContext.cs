@@ -17,7 +17,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboardItemViewModelTests
 {
-    [Subject(typeof(InterviewDashboardItemViewModel))]    
     [TestOf(typeof(InterviewDashboardItemViewModel))]
     public class InterviewDashboardItemViewModelTestsContext 
     {

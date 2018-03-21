@@ -24,8 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
                     questionnaireIdentity: questionnaireIdentity)));
             questionnaireException.Message.ToLower().ToSeparateWords().Should().Contain("questionnaire", "disabled");
-            questionnaireException.Message.ShouldContain(questionnaireIdentity.QuestionnaireId.FormatGuid());
-            questionnaireException.Message.ShouldContain(questionnaireIdentity.Version.ToString());
+            questionnaireException.Message.Should().Contain(questionnaireIdentity.QuestionnaireId.FormatGuid());
+            questionnaireException.Message.Should().Contain(questionnaireIdentity.Version.ToString());
         }
         
         private static Questionnaire questionnaire;

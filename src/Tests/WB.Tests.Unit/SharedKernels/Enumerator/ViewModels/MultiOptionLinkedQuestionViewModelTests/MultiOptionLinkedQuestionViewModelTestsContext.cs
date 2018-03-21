@@ -16,7 +16,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
-    [Subject(typeof(MultiOptionLinkedToRosterQuestionQuestionViewModel))]
+    [NUnit.Framework.TestOf(typeof(MultiOptionLinkedToRosterQuestionQuestionViewModel))]
     internal class MultiOptionLinkedQuestionViewModelTestsContext
     {
         protected static MultiOptionLinkedToRosterQuestionQuestionViewModel CreateViewModel(QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState = null, 

@@ -8,7 +8,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelTests
 {
-    [Subject(typeof(EnablementViewModel))]
+    [NUnit.Framework.TestOf(typeof(EnablementViewModel))]
     internal class EnablementViewModelTestsContext
     {
         public static EnablementViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,

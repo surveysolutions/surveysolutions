@@ -12,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
 {
-    [Subject(typeof(MemoryCachedReadSideStorage<>))]
+    [NUnit.Framework.TestOf(typeof(MemoryCachedReadSideStorage<>))]
     internal class MemoryCachedReadSideStoreTestContext
     {
         protected static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> CreateMemoryCachedReadSideStore(

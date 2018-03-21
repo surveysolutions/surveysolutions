@@ -33,7 +33,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
-    [Subject(typeof(ImportDataVerifier))]
     [TestOf(typeof(ImportDataVerifier))]
     internal class PreloadedDataVerifierTestContext
     {

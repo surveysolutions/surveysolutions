@@ -1,35 +1,35 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControllerTests
 {
     internal class when_info_package_requested: TabletReportControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var tabletInformationService = new Mock<ITabletInformationService>();
             tabletInformationService.Setup(x => x.GetFileName(packageName, Moq.It.IsAny<string>())).Returns(packageName);
             tabletInformationService.Setup(x => x.GetFullPathToContentFile(packageName)).Returns(packageName);
 
             tabletReportController = CreateTabletReportController(tabletInformationService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = tabletReportController.DownloadPackages(packageName) as FilePathResult;
+        public void BecauseOf() => result = tabletReportController.DownloadPackages(packageName) as FilePathResult;
 
-        It should_return_FilePathResult = () =>
-         result.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_return_FilePathResult () =>
+         result.Should().NotBeNull();
 
-        It should_file_name_be_equal_to_passed = () =>
-            result.FileDownloadName.ShouldEqual(packageName);
+        [NUnit.Framework.Test] public void should_file_name_be_equal_to_passed () =>
+            result.FileDownloadName.Should().Be(packageName);
 
         private static TabletReportController tabletReportController;
         private const string packageName = "package name";

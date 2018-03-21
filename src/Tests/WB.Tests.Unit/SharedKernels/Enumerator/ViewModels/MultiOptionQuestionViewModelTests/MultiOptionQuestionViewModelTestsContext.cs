@@ -17,7 +17,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
-    [Subject(typeof(MultiOptionQuestionViewModel))]
     [TestOf(typeof(MultiOptionQuestionViewModel))]
     internal class MultiOptionQuestionViewModelTestsContext
     {

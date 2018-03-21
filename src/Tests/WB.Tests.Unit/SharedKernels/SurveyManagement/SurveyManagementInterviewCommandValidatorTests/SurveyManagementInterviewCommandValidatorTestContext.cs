@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterviewCommandValidatorTests
 {
-    [Subject(typeof(SurveyManagementInterviewCommandValidator))]
+    [NUnit.Framework.TestOf(typeof(SurveyManagementInterviewCommandValidator))]
     internal class SurveyManagementInterviewCommandValidatorTestContext
     {
         protected static SurveyManagementInterviewCommandValidator CreateSurveyManagementInterviewCommandValidator(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage=null, int? limit=null)

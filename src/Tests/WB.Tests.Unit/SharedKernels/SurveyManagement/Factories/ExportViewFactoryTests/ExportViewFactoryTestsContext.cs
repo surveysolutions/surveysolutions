@@ -25,7 +25,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    [Subject(typeof(ExportViewFactory))]
+    [NUnit.Framework.TestOf(typeof(ExportViewFactory))]
     internal class ExportViewFactoryTestsContext
     {
         protected static ExportViewFactory CreateExportViewFactory(

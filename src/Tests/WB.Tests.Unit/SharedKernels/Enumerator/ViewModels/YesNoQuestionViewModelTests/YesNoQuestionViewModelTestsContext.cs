@@ -17,7 +17,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
-    [Subject(typeof(YesNoQuestionViewModel))]
+    [NUnit.Framework.TestOf(typeof(YesNoQuestionViewModel))]
     public class YesNoQuestionViewModelTestsContext
     {
         protected static YesNoQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null,

@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
-    [Subject(typeof (QuestionDataParser))]
+    [NUnit.Framework.TestOf(typeof (QuestionDataParser))]
     internal class QuestionDataParserTestContext
     {
         protected static QuestionDataParser CreateQuestionDataParser()

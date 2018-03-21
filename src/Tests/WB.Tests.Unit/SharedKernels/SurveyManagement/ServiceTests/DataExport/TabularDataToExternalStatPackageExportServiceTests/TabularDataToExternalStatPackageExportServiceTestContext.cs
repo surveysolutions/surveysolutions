@@ -20,7 +20,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.TabularDataToExternalStatPackageExportServiceTests
 {
-    [Subject(typeof (TabularDataToExternalStatPackageExportService))]
+    [NUnit.Framework.TestOf(typeof (TabularDataToExternalStatPackageExportService))]
     internal class TabularDataToExternalStatPackageExportServiceTestContext
     {
         protected static TabularDataToExternalStatPackageExportService CreateSqlToTabDataExportService(

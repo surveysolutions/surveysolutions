@@ -18,7 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandlerTests
 {
-    [Subject(typeof(BinaryFormatDataExportHandler))]
+    [NUnit.Framework.TestOf(typeof(BinaryFormatDataExportHandler))]
     internal class BinaryFormatDataExportHandlerTestContext
     {
         protected static BinaryFormatDataExportHandler CreateBinaryFormatDataExportHandler(

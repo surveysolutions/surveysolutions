@@ -10,7 +10,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
-    [Subject(typeof(StaticTextViewModel))]
+    [NUnit.Framework.TestOf(typeof(StaticTextViewModel))]
     internal class StaticTextViewModelTestsContext
     {
         public static StaticTextViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null, 

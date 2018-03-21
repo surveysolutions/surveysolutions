@@ -22,7 +22,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
 {
-    [Subject(typeof(ImportDataParsingService))]
+    [NUnit.Framework.TestOf(typeof(ImportDataParsingService))]
     internal class PreloadedDataServiceTestContext
     {
         protected static ImportDataParsingService CreatePreloadedDataService(

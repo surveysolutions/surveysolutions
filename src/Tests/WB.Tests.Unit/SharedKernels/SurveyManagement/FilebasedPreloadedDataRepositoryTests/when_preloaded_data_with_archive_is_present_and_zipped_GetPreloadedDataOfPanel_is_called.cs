@@ -1,19 +1,18 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
     internal class when_preloaded_data_with_archive_is_present_and_zipped_GetPreloadedDataOfPanel_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + archiveId)).Returns(true);
 
@@ -27,14 +26,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
 
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
+        public void BecauseOf() => result = filebasedPreloadedDataRepository.GetPreloadedDataOfPanel(archiveId);
 
-        It should_result_has_0_elements = () =>
-            result.Length.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_result_has_0_elements () =>
+            result.Length.Should().Be(0);
 
-        private It should_archive_be_unziped_once = () =>
+        [NUnit.Framework.Test] public void should_archive_be_unziped_once () =>
             archiveUtils.Verify(x => x.Unzip(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;

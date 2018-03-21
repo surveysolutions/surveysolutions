@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
 {
-    [Subject(typeof (DdiMetadataFactory))]
+    [NUnit.Framework.TestOf(typeof (DdiMetadataFactory))]
     internal class MetadataExportServiceTestContext
     {
         protected static DdiMetadataFactory CreateMetadataExportService(

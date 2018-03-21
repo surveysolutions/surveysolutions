@@ -18,7 +18,7 @@ using Group = Main.Core.Entities.SubEntities.Group;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
-    [Subject(typeof(Questionnaire))]
+    [NUnit.Framework.TestOf(typeof(Questionnaire))]
     internal class QuestionnaireTestsContext
     {
         public static T GetSingleEvent<T>(EventContext eventContext)

@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateServiceTests
 {
-    [Subject(typeof(AssignmentImportTemplateGenerator))]
+    [NUnit.Framework.TestOf(typeof(AssignmentImportTemplateGenerator))]
     internal class PreloadingTemplateServiceTestContext
     {
         protected static AssignmentImportTemplateGenerator CreatePreloadingTemplateService(

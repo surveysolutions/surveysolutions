@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
-    [Subject(typeof(FilebasedPreloadedDataRepository))]
+    [NUnit.Framework.TestOf(typeof(FilebasedPreloadedDataRepository))]
     internal class FilebasedPreloadedDataRepositoryTestContext
     {
         protected static FilebasedPreloadedDataRepository CreateFilebasedPreloadedDataRepository(

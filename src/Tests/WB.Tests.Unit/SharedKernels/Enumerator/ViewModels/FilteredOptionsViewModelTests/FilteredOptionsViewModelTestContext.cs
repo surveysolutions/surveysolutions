@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewModelTests
 {
-    [Subject(typeof(FilteredOptionsViewModel))]
+    [NUnit.Framework.TestOf(typeof(FilteredOptionsViewModel))]
     public class FilteredOptionsViewModelTestContext
     {
         protected static FilteredOptionsViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,

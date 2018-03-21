@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
             actionResult.Should().BeOfType<ViewResult>();
 
         [NUnit.Framework.Test] public void should_execute_CreateUserCommand_onece () =>
-            controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).ShouldContain("Could not update user information because current user does not exist");
+            controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).Should().Contain("Could not update user information because current user does not exist");
 
 
         private static Mock<TestHqUserManager> userManagerMock = new Mock<TestHqUserManager>();
