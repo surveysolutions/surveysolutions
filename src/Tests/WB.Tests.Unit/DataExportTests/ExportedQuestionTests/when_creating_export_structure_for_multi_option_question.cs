@@ -1,22 +1,26 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_multi_option_question : ExportedQuestionTestContext
     {
-        Establish context = () => { };
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new [] {2, 0});
             disabledQuestion = CreateDisabledExportedQuestion(QuestionType.MultyOption, columnsCount: 3);
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.MultyOption, columnsCount: 3);
-        };
+        }
 
-        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "1", "0", "1" });
-        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableValue, DisableValue, DisableValue });
-        It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue });
+        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo(new []{ "1", "0", "1" });
+        [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => disabledQuestion.Should().BeEquivalentTo(new []{ DisableValue, DisableValue, DisableValue });
+        [NUnit.Framework.Test] public void should_return_correct_missing_answer () => missingQuestion.Should().BeEquivalentTo(new []{ MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue });
 
 
         private static string[] filledQuestion;

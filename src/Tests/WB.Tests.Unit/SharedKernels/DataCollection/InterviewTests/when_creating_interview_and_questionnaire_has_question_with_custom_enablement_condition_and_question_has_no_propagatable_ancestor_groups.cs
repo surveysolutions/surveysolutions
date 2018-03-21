@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -11,15 +11,14 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("C#, KP-4390 Interview creation")]
+    [NUnit.Framework.Ignore("C#, KP-4390 Interview creation")]
     internal class when_creating_interview_and_questionnaire_has_question_with_custom_enablement_condition_and_question_has_no_propagatable_ancestor_groups : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -38,27 +37,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
                 answersToFeaturedQuestions, answersTime: answersTime, userId: userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.CreateInterview(command);
 
-        It should_raise_QuestionsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event () =>
             eventContext.ShouldContainEvent<QuestionsDisabled>();
 
-        It should_provide_id_of_group_with_custom_enablement_condition_in_QuestionsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_provide_id_of_group_with_custom_enablement_condition_in_QuestionsDisabled_event () =>
             eventContext.GetEvent<QuestionsDisabled>().Questions.Single()
-                .Id.ShouldEqual(questionId);
+                .Id.Should().Be(questionId);
 
-        It should_provide_zero_dimensional_propagation_vector_in_QuestionsDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_provide_zero_dimensional_propagation_vector_in_QuestionsDisabled_event () =>
             eventContext.GetEvent<QuestionsDisabled>().Questions.Single()
-                .RosterVector.Length.ShouldEqual(0);
+                .RosterVector.Length.Should().Be(0);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static EventContext eventContext;
         private static Guid questionId;

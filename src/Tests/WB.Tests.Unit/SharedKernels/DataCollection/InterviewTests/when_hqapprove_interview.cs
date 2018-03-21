@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_hqapprove_interview : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
             supervisorId = Guid.Parse("BBAA0000AAAA00000000AAAA0000AAAA");
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
@@ -31,25 +30,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Approve(userId, string.Empty, DateTime.Now);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.HqApprove(userId, string.Empty);
 
-        It should_raise_two_events = () =>
-            eventContext.Events.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_two_events () =>
+            eventContext.Events.Count().Should().Be(2);
 
-        It should_raise_InterviewApprovedByHQ_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewApprovedByHQ_event () =>
             eventContext.ShouldContainEvent<InterviewApprovedByHQ>(@event => @event.UserId == userId);
 
-        It should_raise_InterviewStatusChanged_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewStatusChanged_event () =>
             eventContext.ShouldContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.ApprovedByHeadquarters);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static Guid userId;
         private static Guid supervisorId;

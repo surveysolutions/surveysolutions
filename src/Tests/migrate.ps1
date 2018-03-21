@@ -1,4 +1,4 @@
-$files = Get-ChildItem -Path E:\surveysolutions\src\Tests\WB.Tests.Unit\BoundedContexts -Recurse -Include *.cs -Force
+$files = Get-ChildItem -Path E:\surveysolutions\src\Tests\WB.Tests.Unit -Recurse -Include *.cs -Force
 $itRegex = 'It\s+([^\s]+)\s+=\s*\(\s*\)\s*=>'
 $shouldEqualRegex = '\.ShouldEqual\('
 $establishRegex = 'Establish\s+([^\s]+)\s+=\s*\(\s*\)\s*=>\s+{'
@@ -8,8 +8,8 @@ $files| ForEach-Object {
     $fileName =  $_.FullName
     
     $text = [system.io.file]::ReadAllText($fileName) -replace $shouldEqualRegex, ".Should().Be(" -replace "using Machine\.Specifications;", "using FluentAssertions;" -replace "Cleanup stuff = \(\) =>", "[NUnit.Framework.OneTimeTearDown] public void CleanUp()"
-    $text = $text -replace "\.ShouldBeFalse\(", ".Should().BeFalse(" -replace "\.ShouldBeTrue\(", ".Should().BeTrue(" -replace "Because of = \(\) =>", "public void BecauseOf() =>" -replace "\)\.ShouldContain\(" ").Should().Contain("
-    $text = $text -replace "using It = Machine.Specifications\.It;" ""
+    $text = $text -replace "\.ShouldBeFalse\(", ".Should().BeFalse(" -replace "\.ShouldBeTrue\(", ".Should().BeTrue(" -replace "Because of = \(\) =>", "public void BecauseOf() =>" -replace "\)\.ShouldContain\(", ").Should().Contain("
+    $text = $text -replace "using It = Machine.Specifications\.It;", ""
 
     
     if ($text) {

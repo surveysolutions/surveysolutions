@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_remove_answer_from_textlist_roster_size_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             rosterId = Guid.Parse("21111111111111111111111111111111");
@@ -38,28 +37,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 DateTime.Now,
                 new [] {new Tuple<decimal, string>(0, "a"), new Tuple<decimal, string>(1, "b")});
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.RemoveAnswer(questionWhichIncreasesRosterSizeId, new decimal[0], userId, DateTime.Now);
 
-        It should_raise_AnswerRemoved_event_for_first_row = () =>
-            eventContext.GetEvent<AnswersRemoved>().Questions.ShouldContain(Create.Entity.Identity(questionWhichIncreasesRosterSizeId, RosterVector.Empty));
+        [NUnit.Framework.Test] public void should_raise_AnswerRemoved_event_for_first_row () =>
+            eventContext.GetEvent<AnswersRemoved>().Questions.Should().Contain(Create.Entity.Identity(questionWhichIncreasesRosterSizeId, RosterVector.Empty));
 
-        It should_not_raise_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>();
 
-        It should_raise_RosterInstancesRemoved_event_for_first_roster_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_for_first_roster_row () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances.Any(instance => instance.GroupId == rosterId && instance.RosterInstanceId == 0));
 
-        It should_raise_RosterInstancesRemoved_event_for_second_roster_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_for_second_roster_row () =>
           eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
               => @event.Instances.Any(instance => instance.GroupId == rosterId && instance.RosterInstanceId == 1));
 

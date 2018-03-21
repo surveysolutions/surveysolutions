@@ -1,19 +1,18 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
     internal class when_publishing_event_after_two_handlers_were_subscribed_on_same_event : LiteEventBusTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             dummyEventStub = CreateDummyEvent();
             eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, dummyEventStub);
@@ -26,15 +25,16 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 
             secondHandlerMock = new Mock<ILiteEventHandler<DummyEvent>>();
             eventRegistry.Subscribe(secondHandlerMock.Object, eventSourceId.FormatGuid());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             eventBus.PublishCommittedEvents(eventsToPublish);
 
-        It should_call_Handle_once_for_first_handler = () =>
+        [NUnit.Framework.Test] public void should_call_Handle_once_for_first_handler () =>
             firstHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());
 
-        It should_call_Handle_once_for_second_handler = () =>
+        [NUnit.Framework.Test] public void should_call_Handle_once_for_second_handler () =>
             secondHandlerMock.Verify(s => s.Handle(dummyEventStub), Times.Once());
 
 

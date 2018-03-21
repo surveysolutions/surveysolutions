@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_propagatable : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -30,19 +29,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 new List<InterviewAnswer>(), answersTime: answersTime, userId: userId);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.CreateInterview(command);
 
-        It should_not_raise_GroupDisabled_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_GroupDisabled_event () =>
             eventContext.ShouldNotContainEvent<GroupsDisabled>();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         static EventContext eventContext;
         static Guid userId;

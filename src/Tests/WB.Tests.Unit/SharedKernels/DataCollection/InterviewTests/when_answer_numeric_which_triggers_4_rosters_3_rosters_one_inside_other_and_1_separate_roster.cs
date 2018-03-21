@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -15,14 +15,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_numeric_which_triggers_4_rosters_3_rosters_one_inside_other_and_1_separate_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -75,21 +74,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, 2);
 
-        It should_produce_one_event_roster_instance_added = () =>
-            eventContext.GetEvents<RosterInstancesAdded>().Count().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_produce_one_event_roster_instance_added () =>
+            eventContext.GetEvents<RosterInstancesAdded>().Count().Should().Be(1);
 
-        It should_put_16_instances_to_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_put_16_instances_to_RosterInstancesAdded_event () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event => @event.Instances.Length == 16);
 
         private static EventContext eventContext;

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -12,11 +12,10 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Ignore("KP-6150")]
+    [NUnit.Framework.Ignore("KP-6150")]
     internal class when_remove_answer_from_link_source_question_of_multi_option_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             rosterId = Guid.Parse("21111111111111111111111111111111");
@@ -44,22 +43,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now,
                 new RosterVector[] {new decimal[] {0}, new decimal[] {1}});
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.RemoveAnswer(sourceOfLinkQuestionId, new decimal[] { 0 }, userId, DateTime.Now);
 
-        It should_raise_AnswerRemoved_event_for_first_row = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswerRemoved_event_for_first_row () =>
             eventContext.ShouldContainEvent<AnswerRemoved>(@event
                 => @event.QuestionId == sourceOfLinkQuestionId && @event.RosterVector.SequenceEqual(new decimal[] { 0 }));
 
-        It should_not_raise_AnswersRemoved_event_for_answered_linked_Question = () =>
+        [NUnit.Framework.Test] public void should_not_raise_AnswersRemoved_event_for_answered_linked_Question () =>
             eventContext.ShouldNotContainEvent<AnswersRemoved>(@event
                 => @event.Questions.Count(q => q.Id == linkedQuestionId && !q.RosterVector.Any()) == 1);
 

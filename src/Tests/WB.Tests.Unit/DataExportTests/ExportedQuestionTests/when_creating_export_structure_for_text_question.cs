@@ -1,22 +1,26 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_text_question : ExportedQuestionTestContext
     {
-        Establish context = () => { };
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             filledQuestion = CreateFilledExportedQuestion(QuestionType.Text, "filled");
             disabledQuestion = CreateDisabledExportedQuestion(QuestionType.Text);
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.Text);
-        };
+        }
 
-        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "filled"});
-        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableValue });
-        It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingStringQuestionValue });
+        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo(new []{ "filled"});
+        [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => disabledQuestion.Should().BeEquivalentTo(new []{ DisableValue });
+        [NUnit.Framework.Test] public void should_return_correct_missing_answer () => missingQuestion.Should().BeEquivalentTo(new []{ MissingStringQuestionValue });
 
 
         private static string[] filledQuestion;

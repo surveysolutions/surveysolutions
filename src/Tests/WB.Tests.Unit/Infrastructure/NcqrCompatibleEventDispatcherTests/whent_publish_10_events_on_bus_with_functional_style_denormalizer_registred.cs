@@ -1,21 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class whent_publish_10_events_on_bus_with_functional_style_denormalizer_registred : NcqrCompatibleEventDispatcherTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var ncqrsStyleDenormalizerMock = new Mock<IEventHandler>();
             functionalStyleEventHandlerMock = ncqrsStyleDenormalizerMock.As<IFunctionalEventHandler>();
 
@@ -24,11 +23,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             eventSourceId = Guid.NewGuid();
             eventsToPublish = CreatePublishableEvents(10, eventSourceId).ToArray();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => ncqrCompatibleEventDispatcher.Publish(eventsToPublish);
+        public void BecauseOf() => ncqrCompatibleEventDispatcher.Publish(eventsToPublish);
 
-        It should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream = () =>
+        [NUnit.Framework.Test] public void should_functional_denormalizer_method_handle_be_called_once_with_whole_published_stream () =>
             functionalStyleEventHandlerMock.Verify(
                 handler => handler.Handle(Moq.It.Is<IEnumerable<IPublishableEvent>>(events => events.SequenceEqual(eventsToPublish)), eventSourceId),
                 Times.Once());

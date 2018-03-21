@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
         private void BecauseOf() => actionResult = controller.Create(inputModel).Result;
 
         [NUnit.Framework.Test] public void should_return_ViewResult () =>
-            actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
+            actionResult.Should().BeOfType<RedirectToRouteResult>();
 
         [NUnit.Framework.Test] public void should_user_be_created () =>
             userManagerMock.Verify(x => x.CreateUserAsync(Moq.It.IsAny<HqUser>(), Moq.It.IsAny<string>(), Moq.It.IsAny<UserRoles>()), Times.Once);

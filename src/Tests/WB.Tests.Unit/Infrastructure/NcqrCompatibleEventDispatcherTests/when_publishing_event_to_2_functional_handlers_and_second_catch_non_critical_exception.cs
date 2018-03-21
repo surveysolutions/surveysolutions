@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
@@ -13,7 +14,7 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
@@ -34,8 +35,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
                 throw new NotImplementedException();
             }
         }
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             publishableEvent = Create.Fake.PublishableEvent(payload: new FunctionalEventHandlerEvent());
 
             var secondFunctionalEventHandler = new FunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
@@ -54,26 +54,27 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             eventDispatcher.Register(Setup.FailingFunctionalEventHandlerHavingUniqueType<int>());
             eventDispatcher.Register(secondFunctionalEventHandler);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            aggregateException = Catch.Only<AggregateException>(() =>
+        public void BecauseOf() =>
+            aggregateException = Assert.Throws<AggregateException>(() =>
                 eventDispatcher.Publish(publishableEvent.ToEnumerable().ToArray()));
 
-        It should_throw_AggregateException = () =>
-            aggregateException.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_AggregateException () =>
+            aggregateException.Should().NotBeNull();
 
-        It should_put_1_exception_to_AggregateException = () =>
-            aggregateException.InnerExceptions.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_put_1_exception_to_AggregateException () =>
+            aggregateException.InnerExceptions.Count.Should().Be(1);
 
-        It should_log_catched_exception = () =>
+        [NUnit.Framework.Test] public void should_log_catched_exception () =>
             loggerMock.Verify(x => x.Error(Moq.It.IsAny<string>(), Moq.It.IsAny<Exception>()), Times.Once);
 
-        It should_be_handled_event_handler_exception = () =>
-            handledNonCriticalEventHandlerException.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_be_handled_event_handler_exception () =>
+            handledNonCriticalEventHandlerException.Should().NotBeNull();
 
-        It should_not_event_handler_exception_be_critical = () =>
-            handledNonCriticalEventHandlerException.IsCritical.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_event_handler_exception_be_critical () =>
+            handledNonCriticalEventHandlerException.IsCritical.Should().BeFalse();
 
         private static NcqrCompatibleEventDispatcher eventDispatcher;
         private static IPublishableEvent publishableEvent;

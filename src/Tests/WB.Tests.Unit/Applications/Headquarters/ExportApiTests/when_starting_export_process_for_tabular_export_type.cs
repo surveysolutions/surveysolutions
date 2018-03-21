@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http;
 using System.Web.Http.Results;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         Because BecauseOf = () => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_ok_response () =>
-            result.ShouldBeOfExactType<OkResult>();
+            result.Should().BeOfType<OkResult>();
 
         [NUnit.Framework.Test] public void should_call_add_export_method_in_data_export_processes_service () =>
             mockOfDataExportProcessesService.Verify(x=>x.AddDataExport(Moq.It.IsAny<DataExportProcessDetails>()), Times.Once);
