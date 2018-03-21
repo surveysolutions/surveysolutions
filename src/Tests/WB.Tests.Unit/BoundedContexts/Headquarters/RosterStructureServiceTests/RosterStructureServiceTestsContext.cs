@@ -4,7 +4,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.RosterStructureServiceTests
 {
-    [Subject(typeof(RosterStructureService))]
+    [NUnit.Framework.TestOf(typeof(RosterStructureService))]
     public class RosterStructureServiceTestsContext
     {
         protected static RosterStructureService GetService()

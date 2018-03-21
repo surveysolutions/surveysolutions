@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_question_text_contains_html : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion(
                     id: questionWithHtml,
@@ -29,13 +28,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()))
                                     .Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1));
 
-        It should_cut_html_tags_from_header = () =>
-             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithHtml].ColumnHeaders[0].Title.ShouldEqual("with html");
+        [NUnit.Framework.Test] public void should_cut_html_tags_from_header () =>
+             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithHtml].ColumnHeaders[0].Title.Should().Be("with html");
 
         static QuestionnaireExportStructure questionnaireExportStructure;
         static ExportViewFactory exportViewFactory;

@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
-    [Subject(typeof(SingleOptionLinkedQuestionViewModel))]
+    [NUnit.Framework.TestOf(typeof(SingleOptionLinkedQuestionViewModel))]
     internal class SingleOptionLinkedQuestionViewModelTestsContext
     {
     }

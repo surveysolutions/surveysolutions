@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             exception.Message.Should().Contain("3");
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__event____sequence____missing__ () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("event", "sequence", "missing");
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("event", "sequence", "missing");
 
         private static Exception exception;
         private static InterviewerInterviewAccessor interviewAccessor;

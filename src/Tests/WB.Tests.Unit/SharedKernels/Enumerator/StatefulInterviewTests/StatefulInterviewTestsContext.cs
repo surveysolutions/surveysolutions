@@ -12,7 +12,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Subject(typeof(StatefulInterview))]
     [TestOf(typeof(StatefulInterview))]
     internal class StatefulInterviewTestsContext
     {

@@ -1,24 +1,24 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
 {
     internal class when_posting_image_by_interview : InterviewsApiV2ControllerTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateInterviewerInterviewsController(
                 imageFileStorage: mockOflainInterviewFileStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => controller.PostImage(new PostFileRequest { InterviewId = interviewId, FileName =  imageFileName, Data = imageAsBase64String });
+        public void BecauseOf() => controller.PostImage(new PostFileRequest { InterviewId = interviewId, FileName =  imageFileName, Data = imageAsBase64String });
 
-        It should_store_image_to_plain_storage = () =>
+        [NUnit.Framework.Test] public void should_store_image_to_plain_storage () =>
             mockOflainInterviewFileStorage.Verify(x=>x.StoreInterviewBinaryData(interviewId, imageFileName, imageBytes, null), Times.Once);
         
         

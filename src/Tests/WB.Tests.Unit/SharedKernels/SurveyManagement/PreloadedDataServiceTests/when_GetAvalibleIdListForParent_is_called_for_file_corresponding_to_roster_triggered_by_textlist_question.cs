@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using FluentAssertions;
 using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -42,7 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataServiceTests
         
         [Test]
         public void  should_return_not_null_result() =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [Test]
         public void should_result_have_2_ids_1_and_2() =>

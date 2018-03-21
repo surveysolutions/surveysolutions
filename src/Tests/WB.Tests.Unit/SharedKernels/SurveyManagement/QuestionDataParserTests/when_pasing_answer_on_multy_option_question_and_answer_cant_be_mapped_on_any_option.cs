@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Machine.Specifications;
+using System.Collections.Generic;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_multy_option_question_and_answer_cant_be_mapped_on_any_option : QuestionDataParserTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             answer = "1";
             questionDataParser = CreateQuestionDataParser();
             question = new MultyOptionsQuestion()
@@ -23,10 +22,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                     Create.Entity.Answer("foo", 3m)
                 }
             };
-        };
+            BecauseOf();
+        }
 
-        Because of =  () => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__1", question, out parcedValue, out parsedSingleColumnAnswer);
+        private void BecauseOf() => parsingResult = questionDataParser.TryParse(answer, questionVarName + "__1", question, out parcedValue, out parsedSingleColumnAnswer);
 
-        It should_result_be_ParsedValueIsNotAllowed = () => parsingResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);
+        [NUnit.Framework.Test] public void should_result_be_ParsedValueIsNotAllowed () => parsingResult.Should().Be(ValueParsingResult.ParsedValueIsNotAllowed);
     }
 }

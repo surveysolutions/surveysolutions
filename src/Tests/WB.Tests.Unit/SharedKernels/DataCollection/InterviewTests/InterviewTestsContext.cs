@@ -18,7 +18,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
-    [Subject(typeof(Interview))]
     [TestOf(typeof(Interview))]
     public class InterviewTestsContext
     {

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -16,24 +16,23 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     class when_creating_interview_export_view_by_interview_with_roster_with_2_rows : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             firstQuestionId = Guid.Parse("12222222222222222222222222222222");
             secondQuestionId = Guid.Parse("11111111111111111111111111111111");
             propagatedGroup = Guid.Parse("13333333333333333333333333333333");
 
             levelCount = 2;
-            
+
             variableNameAndQuestionId = new Dictionary<string, Guid>
             {
-                { "q1", firstQuestionId },
-                { "q2", secondQuestionId }
+                {"q1", firstQuestionId},
+                {"q2", secondQuestionId}
             };
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
@@ -43,26 +42,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
                 CreateInterviewDataWith2PropagatedLevels());
 
-        It should_records_count_equals_4 = () =>
-           GetLevel(result, new[] { propagationScopeKey }).Records.Length.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_records_count_equals_4 () =>
+           GetLevel(result, new[] { propagationScopeKey }).Records.Length.Should().Be(2);
 
-        It should_first_record_id_equals_0 = () =>
-           GetLevel(result, new[] { propagationScopeKey }).Records[0].RecordId.ShouldEqual("0");
+        [NUnit.Framework.Test] public void should_first_record_id_equals_0 () =>
+           GetLevel(result, new[] { propagationScopeKey }).Records[0].RecordId.Should().Be("0");
 
-        It should_second_record_id_equals_1 = () =>
-           GetLevel(result, new[] { propagationScopeKey }).Records[1].RecordId.ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_second_record_id_equals_1 () =>
+           GetLevel(result, new[] { propagationScopeKey }).Records[1].RecordId.Should().Be("1");
 
-        It should_first_rosters_record_parent_ids_contains_only_main_level_record_id = () =>
-          GetLevel(result, new[] { propagationScopeKey }).Records[0].ParentRecordIds.ShouldEqual(new string[] { GetLevel(result, new Guid[0]).Records[0].RecordId });
+        [NUnit.Framework.Test] public void should_first_rosters_record_parent_ids_contains_only_main_level_record_id () =>
+          GetLevel(result, new[] { propagationScopeKey }).Records[0].ParentRecordIds.Should().BeEquivalentTo(new string[] { GetLevel(result, new Guid[0]).Records[0].RecordId });
 
-        It should_second_rosters_record_parent_ids_contains_only_main_level_record_id = () =>
-           GetLevel(result, new[] { propagationScopeKey }).Records[1].ParentRecordIds.ShouldEqual(new string[] { GetLevel(result, new Guid[0]).Records[0].RecordId});
+        [NUnit.Framework.Test] public void should_second_rosters_record_parent_ids_contains_only_main_level_record_id () =>
+           GetLevel(result, new[] { propagationScopeKey }).Records[1].ParentRecordIds.Should().BeEquivalentTo(new string[] { GetLevel(result, new Guid[0]).Records[0].RecordId});
 
         private static QuestionnaireDocument CreateQuestionnaireDocumentWith1PropagationLevel()
         {

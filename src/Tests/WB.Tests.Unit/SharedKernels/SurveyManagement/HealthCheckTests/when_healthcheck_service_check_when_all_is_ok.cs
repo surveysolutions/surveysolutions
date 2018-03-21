@@ -1,16 +1,15 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 {
     internal class when_healthcheck_service_check_when_all_is_ok : HealthCheckTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Happy());
             var numberOfUnhandledPackagesChecker = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Happy(0));
             var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
@@ -22,18 +21,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
                 numberOfUnhandledPackagesChecker,
                 folderPermissionChecker,
                 readSideHealthChecker);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             result = service.Check();
-        };
+        }
 
-        It should_return_HealthCheckResults = () =>
-            result.ShouldBeOfExactType<HealthCheckResults>();
+        [NUnit.Framework.Test] public void should_return_HealthCheckResults () =>
+            result.Should().BeOfType<HealthCheckResults>();
 
-        It should_return_Happy_status = () =>
-            result.Status.ShouldEqual(HealthCheckStatus.Happy);
+        [NUnit.Framework.Test] public void should_return_Happy_status () =>
+            result.Status.Should().Be(HealthCheckStatus.Happy);
 
 
         private static HealthCheckResults result;

@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 {
     internal class when_HeaderStructureForLevel_has_one_question_with_no_labels : StataEnvironmentContentGeneratorTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(dataFileName, exportedQuestionHeaderItems: new [] { CreateExportedHeaderItem(questionsVariableName, questionsTitle)});
             questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
@@ -23,18 +22,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 oneQuestionHeaderStructureForLevel);
             stataEnvironmentContentService =
                 CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() =>
                 stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
                     default(CancellationToken));//stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath);
 
-        It should_contain_stata_script_for_insheet_file = () =>
-            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName));
+        [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
+            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName));
 
-        It should_contain_stata_variable_on_title_mapping = () =>
-           stataGeneratedContent.ShouldContain(string.Format("label variable {0} `\"{1}\"'",questionsVariableName,questionsTitle));
+        [NUnit.Framework.Test] public void should_contain_stata_variable_on_title_mapping () =>
+           stataGeneratedContent.Should().Contain(string.Format("label variable {0} `\"{1}\"'",questionsVariableName,questionsTitle));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel oneQuestionHeaderStructureForLevel;

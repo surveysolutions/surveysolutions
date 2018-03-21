@@ -12,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
-    [Subject(typeof(StataEnvironmentContentService))]
+    [NUnit.Framework.TestOf(typeof(StataEnvironmentContentService))]
     internal class StataEnvironmentContentGeneratorTestContext
     {
         protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(

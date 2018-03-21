@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
 {
-    [Subject(typeof(DataExportStatusReader))]
+    [NUnit.Framework.TestOf(typeof(DataExportStatusReader))]
     internal class DataExportStatusReaderTestContext
     {
         protected static DataExportStatusReader CreateDataExportStatusReader(

@@ -11,7 +11,7 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServiceTests
 {
-    [Subject(typeof(QuestionnaireUpgradeService))]
+    [NUnit.Framework.TestOf(typeof(QuestionnaireUpgradeService))]
     internal class QuestionnaireUpgradeServiceTestContext
     {
         protected static QuestionnaireUpgradeService CreateQuestionnaireUpgradeService()

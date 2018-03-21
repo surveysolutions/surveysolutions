@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -11,14 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_questionnaire_has_multioption_linked_question : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             multyOptionLinkedQuestionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
             linkedSourceQuestionId = Guid.NewGuid();
 
@@ -38,20 +37,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.PublicKey, 1);
+        public void BecauseOf() => questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.PublicKey, 1);
 
-        It should_fill_multioption_question_header_title = () =>
+        [NUnit.Framework.Test] public void should_fill_multioption_question_header_title () 
         {
             HeaderStructureForLevel headerStructureForLevel = questionnaaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()];
             ExportedQuestionHeaderItem exportedQuestionHeaderItem = headerStructureForLevel.HeaderItems[multyOptionLinkedQuestionId] as ExportedQuestionHeaderItem;
 
-            exportedQuestionHeaderItem.ColumnHeaders.Count.ShouldEqual(2);
-            exportedQuestionHeaderItem.ColumnHeaders.Select(x=>x.Name).SequenceEqual(new[] { "mult__0", "mult__1" }).ShouldBeTrue();
-            exportedQuestionHeaderItem.QuestionSubType.ShouldEqual(QuestionSubtype.MultyOption_Linked);
-            exportedQuestionHeaderItem.QuestionType.ShouldEqual(QuestionType.MultyOption);
-        };
+            exportedQuestionHeaderItem.ColumnHeaders.Count.Should().Be(2);
+            exportedQuestionHeaderItem.ColumnHeaders.Select(x=>x.Name).SequenceEqual(new[] { "mult__0", "mult__1" }).Should().BeTrue();
+            exportedQuestionHeaderItem.QuestionSubType.Should().Be(QuestionSubtype.MultyOption_Linked);
+            exportedQuestionHeaderItem.QuestionType.Should().Be(QuestionType.MultyOption);
+        }
 
         static ExportViewFactory exportViewFactory;
         static QuestionnaireExportStructure questionnaaireExportStructure;

@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
@@ -6,8 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_geolocation_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             answer = "1";
             questionDataParser = CreateQuestionDataParser();
             question = new GpsCoordinateQuestion()
@@ -16,14 +15,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = questionVarName
             };
-        };
+            BecauseOf();
+        }
 
-        private Because of =
-            () =>
+        private void BecauseOf() =>
                 parsingResult =
                     questionDataParser.TryParse(answer, questionVarName + "__Latitude", question, out parcedValue, out parsedSingleColumnAnswer);
 
-        private It should_result_be_type_of_double = () =>
-            parcedValue.ShouldBeOfExactType<double>();
+        [NUnit.Framework.Test] public void should_result_be_type_of_double () =>
+            parcedValue.Should().BeOfType<double>();
     }
 }

@@ -16,7 +16,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [Subject(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
     internal class when_synchronize_and_census_questionnaire_removed_on_server
     {
         [Test]

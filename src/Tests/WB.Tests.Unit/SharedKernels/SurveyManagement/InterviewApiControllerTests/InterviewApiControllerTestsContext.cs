@@ -11,7 +11,7 @@ using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
-    [Subject(typeof(InterviewApiController))]
+    [NUnit.Framework.TestOf(typeof(InterviewApiController))]
     internal class InterviewApiControllerTestsContext
     {
         protected static InterviewApiController CreateController(ICommandService commandService = null,

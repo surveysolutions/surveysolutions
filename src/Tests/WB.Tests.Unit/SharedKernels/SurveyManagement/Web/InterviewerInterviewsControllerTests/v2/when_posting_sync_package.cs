@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -7,21 +7,21 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
 {
     internal class when_posting_sync_package : InterviewsApiV2ControllerTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateInterviewerInterviewsController(
                 incomingSyncPackagesQueue: mockOfInterviewPackagesService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => controller.Post(new InterviewPackageApiView { InterviewId = interviewId, Events = eventsInJsonString, MetaInfo = interviewMetaInfo});
+        public void BecauseOf() => controller.Post(new InterviewPackageApiView { InterviewId = interviewId, Events = eventsInJsonString, MetaInfo = interviewMetaInfo});
 
-        It should_store_package_to_storage = () =>
+        [NUnit.Framework.Test] public void should_store_package_to_storage () =>
             mockOfInterviewPackagesService.Verify(x =>
                 x.StoreOrProcessPackage(Moq.It.IsAny<InterviewPackage>()), Times.Once);
 

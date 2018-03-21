@@ -1,33 +1,33 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
     internal class when_storing_new_preloaded_data_file : FilebasedPreloadedDataRepositoryTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.OpenOrCreateFile(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>())).Returns(CreateStream());
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = filebasedPreloadedDataRepository.StorePanelData(CreateStream(), "fileName.zip");
+        public void BecauseOf() => result = filebasedPreloadedDataRepository.StorePanelData(CreateStream(), "fileName.zip");
 
-        It should_return_not_null_result = () =>
-            result.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_return_not_null_result () =>
+            result.Should().NotBeNull();
 
-        private It should_directory_with_result_in_name_be_created = () =>
+        [NUnit.Framework.Test] public void should_directory_with_result_in_name_be_created () =>
             fileSystemAccessor.Verify(x => x.CreateDirectory(string.Format(@"PreLoadedData\{0}",result)), Times.Once);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;

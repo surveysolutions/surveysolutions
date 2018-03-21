@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
-    [Subject(typeof(AttachmentViewModel))]
+    [NUnit.Framework.TestOf(typeof(AttachmentViewModel))]
 
     public class AttachmentViewModelTestContext
     {

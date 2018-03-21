@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_export_structure_from_questionnaire_with_no_rosters_but_roster_is_present_in_roster_stucture : ExportViewFactoryTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_InvalidOperationException_be_thrown () {
             misteriousRosterGroupId = Guid.Parse("00F000AAA111EE2DD2EE111AAA000FFF");
 
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
@@ -42,14 +42,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaireMock.Object);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object, rosterStructureService : rostrerStructureService.Object);
-        };
 
-        Because of = () =>
-            invalidOperationException = Catch.Exception(() => exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, 1))) as InvalidOperationException;
+            Assert.Throws<InvalidOperationException>(() => exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, 1)));
+        }
 
-        It should_InvalidOperationException_be_thrown = () =>
-            invalidOperationException.ShouldNotBeNull();
-        
         private static ExportViewFactory exportViewFactory;
         private static InvalidOperationException invalidOperationException;
         private static QuestionnaireDocument questionnaire;

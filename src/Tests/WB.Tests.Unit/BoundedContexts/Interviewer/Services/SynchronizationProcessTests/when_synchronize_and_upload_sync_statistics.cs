@@ -22,7 +22,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [Subject(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
     internal class when_synchronize_and_upload_sync_statistics
     {
         private Mock<ISynchronizationService> synchronizationServiceMock;
