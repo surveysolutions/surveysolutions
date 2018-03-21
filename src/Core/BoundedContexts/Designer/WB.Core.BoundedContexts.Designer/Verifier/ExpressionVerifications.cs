@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 )
                 return true;
 
-            if (node is IVariable variable && variable.Expression.Contains(RowName))
+            if (node is IVariable variable && (variable.Expression?.Contains(RowName) ?? false))
                 return true;
 
             return false;
