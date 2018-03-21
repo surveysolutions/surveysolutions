@@ -74,6 +74,7 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetApk)]
         public virtual HttpResponseMessage Get()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
@@ -82,8 +83,9 @@ namespace WB.UI.Headquarters.API.Interviewer
 
             return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
         }
-
+        
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
         public virtual HttpResponseMessage GetExtended()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
@@ -113,8 +115,16 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
-        public virtual HttpResponseMessage Patch(int deviceVersion)
+        [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
+        public virtual async Task<HttpResponseMessage> Patch(int deviceVersion)
         {
+            var authHeader = Request.Headers.Authorization?.ToString();
+
+            if (authHeader != null)
+            {
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+            }
+
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if(clientVersion == ClientVersionFromUserAgent.WithMaps)
                 return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
@@ -123,8 +133,16 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
-        public virtual HttpResponseMessage PatchExtended(int deviceVersion)
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
+        public virtual async Task<HttpResponseMessage> PatchExtended(int deviceVersion)
         {
+            var authHeader = Request.Headers.Authorization?.ToString();
+
+            if (authHeader != null)
+            {
+                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+            }
+
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
                 return GetPatchFile($@"WBCapi.{deviceVersion}.delta");

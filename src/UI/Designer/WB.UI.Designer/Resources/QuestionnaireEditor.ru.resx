@@ -1101,4 +1101,7 @@
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>Комментарии</value>
   </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Имя переменной</value>
+  </data>
 </root>

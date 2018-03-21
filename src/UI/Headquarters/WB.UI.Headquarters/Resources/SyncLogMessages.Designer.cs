@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New application file requested.
+        /// </summary>
+        public static string ApkRequested {
+            get {
+                return ResourceManager.GetString("ApkRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start synchronization.
         /// </summary>
         public static string CanSynchronize {
@@ -120,6 +129,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string EmptyDevice {
             get {
                 return ResourceManager.GetString("EmptyDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New extended application file requested.
+        /// </summary>
+        public static string ExtendedApkRequested {
+            get {
+                return ResourceManager.GetString("ExtendedApkRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patch file requested for extended version {0}.
+        /// </summary>
+        public static string ExtendedPatchRequestedFormat {
+            get {
+                return ResourceManager.GetString("ExtendedPatchRequestedFormat", resourceCulture);
             }
         }
         
@@ -327,6 +354,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string NoNewInterviewPackagesToDownload {
             get {
                 return ResourceManager.GetString("NoNewInterviewPackagesToDownload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patch file requested for version {0}.
+        /// </summary>
+        public static string PatchRequestedFormat {
+            get {
+                return ResourceManager.GetString("PatchRequestedFormat", resourceCulture);
             }
         }
         
