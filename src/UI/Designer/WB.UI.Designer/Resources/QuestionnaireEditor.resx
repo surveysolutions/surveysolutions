@@ -1096,6 +1096,9 @@
   <data name="EditorAddComment" xml:space="preserve">
     <value>Add comment</value>
   </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Resolve</value>
+  </data>
   <data name="EditorHideComment" xml:space="preserve">
     <value>Hide comments</value>
   </data>

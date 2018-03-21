@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolve.
+        /// </summary>
+        public static string CommentEditorResolve {
+            get {
+                return ResourceManager.GetString("CommentEditorResolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} error found.
         /// </summary>
         public static string CompilationErrorsCounter {
