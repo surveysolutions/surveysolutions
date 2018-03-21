@@ -2860,7 +2860,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name.
+        ///   Looks up a localized string similar to name.
         /// </summary>
         public static string VariableName {
             get {

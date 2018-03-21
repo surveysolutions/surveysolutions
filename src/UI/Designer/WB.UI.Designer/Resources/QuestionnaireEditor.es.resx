@@ -952,7 +952,7 @@
     <value>Etiqueta de variable</value>
   </data>
   <data name="VariableName" xml:space="preserve">
-    <value>Nombre</value>
+    <value>nombre</value>
   </data>
   <data name="VariableType" xml:space="preserve">
     <value>Tipo de variable</value>

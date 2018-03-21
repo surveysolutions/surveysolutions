@@ -284,7 +284,7 @@
     <value>Обновить</value>
   </data>
   <data name="VariableName" xml:space="preserve">
-    <value>Имя</value>
+    <value>имя</value>
   </data>
   <data name="WarningsCounter" xml:space="preserve">
     <value>{{count}} предупреждение</value>

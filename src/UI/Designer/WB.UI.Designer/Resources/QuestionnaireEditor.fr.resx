@@ -913,7 +913,7 @@
     <value>Label de la variable</value>
   </data>
   <data name="VariableName" xml:space="preserve">
-    <value>Nom</value>
+    <value>nom</value>
   </data>
   <data name="VariableType" xml:space="preserve">
     <value>Type de variable</value>
