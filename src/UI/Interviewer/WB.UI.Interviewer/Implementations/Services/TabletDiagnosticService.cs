@@ -54,7 +54,9 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.CurrentActivity.StartActivity(Intent.CreateChooser(shareIntent, title));
         }
 
-        public async Task UpdateTheApp(CancellationToken cancellationToken, Action<Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+        public async Task UpdateTheApp(CancellationToken cancellationToken, 
+            bool continueIfNoPatch = true,
+            Action<Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 
@@ -91,12 +93,13 @@ namespace WB.UI.Interviewer.Implementations.Services
             }
             catch (SynchronizationException ex) when (ex.InnerException is RestException rest)
             {
-                if (rest.StatusCode != HttpStatusCode.NotFound) throw;
+                if (rest.StatusCode != HttpStatusCode.NotFound)
+                    throw;
             }
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            async Task UpdateWithFullApk()
+            async Task GetWithFullApk()
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 patchOrFullApkBytes = await this.synchronizationService.GetApplicationAsync(cancellationToken, onDownloadProgressChanged);
@@ -122,13 +125,19 @@ namespace WB.UI.Interviewer.Implementations.Services
                 catch(Exception e)
                 {
                     this.logger.Error("Were not able to apply delta patch. ", e);
-                    await UpdateWithFullApk();
+
+                    if (continueIfNoPatch)
+                        await GetWithFullApk();
                 }
             }
             else
             {
-                await UpdateWithFullApk();
+                if (continueIfNoPatch)
+                    await GetWithFullApk();
             }
+
+            if (patchOrFullApkBytes == null)
+                return;
 
             cancellationToken.ThrowIfCancellationRequested();
 

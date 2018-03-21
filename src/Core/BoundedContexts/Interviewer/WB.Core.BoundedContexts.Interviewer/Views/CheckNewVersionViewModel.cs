@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
 
-                await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token,
+                await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token, true,
                     progress =>
                     {
                         this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait

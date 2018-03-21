@@ -11,9 +11,9 @@ namespace WB.UI.WebTester.Services.Implementation
 
         public IEnumerable<T> GetArea(Guid area)
         {
-            if (!memoryCache.TryGetValue(area, out var cache)) return null;
+            memoryCache.TryGetValue(area, out var cache);
 
-            return cache.Values;
+            return (IEnumerable<T>)cache?.Values ?? Array.Empty<T>();
         }
 
         public void Remove(TK id, Guid area = default(Guid))
