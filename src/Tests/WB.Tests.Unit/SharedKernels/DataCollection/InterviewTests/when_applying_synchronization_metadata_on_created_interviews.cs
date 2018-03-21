@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,28 +12,28 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_applying_synchronization_metadata_on_created_interviews : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventContext = new EventContext();
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.Version == questionnaireVersion);
 
             questionnaireRepository = Stub<IQuestionnaireStorage>.Returning(questionnaire);
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             foreach (var originalInterviewStatus in Enum.GetValues(typeof (InterviewStatus)).Cast<InterviewStatus>())
             {
@@ -53,59 +53,59 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 if (exceptionByStatuses.Any())
                     interviewStatusesWhichWasChangedWithoutException.Add(originalInterviewStatus, exceptionByStatuses.ToArray());
             }
-        };
+        }
 
-        It should_count_of_interview_statuses_succefully_updated_be_equal_to_9 = () =>
-            interviewStatusesWhichWasChangedWithoutException.Keys.Count().ShouldEqual(9);
+        [NUnit.Framework.Test] public void should_count_of_interview_statuses_succefully_updated_be_equal_to_9 () =>
+            interviewStatusesWhichWasChangedWithoutException.Keys.Count().Should().Be(9);
 
-        It should_interview_in_status_Deleted_be_allowed_to_change_on_any_status = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Deleted].Length.ShouldEqual(
+        [NUnit.Framework.Test] public void should_interview_in_status_Deleted_be_allowed_to_change_on_any_status () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Deleted].Length.Should().Be(
                 Enum.GetValues(typeof (InterviewStatus)).Length);
 
-        It should_interview_in_status_Restored_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restored].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_Restored_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restored].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
             });
 
-        It should_interview_in_status_SupervisorAssigned_be_allowed_to_change_on_ApprovedBySupervisor_InterviewerAssigned_recheck_this_one  = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.SupervisorAssigned].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_SupervisorAssigned_be_allowed_to_change_on_ApprovedBySupervisor_InterviewerAssigned_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.SupervisorAssigned].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.ApprovedBySupervisor
             });
 
-        It should_interview_in_status_InterviewerAssigned_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_ApprovedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.InterviewerAssigned].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_InterviewerAssigned_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_ApprovedBySupervisor_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.InterviewerAssigned].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor
             });
 
-        It should_interview_in_status_Completed_be_allowed_to_change_on_InterviewerAssigned_RejectedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Completed].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_Completed_be_allowed_to_change_on_InterviewerAssigned_RejectedBySupervisor_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Completed].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor
             });
 
-        It should_interview_in_status_Restarted_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one = () =>
-             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restarted].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_Restarted_be_allowed_to_change_on_Completed_RejectedBySupervisor_InterviewerAssigned_recheck_this_one () =>
+             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.Restarted].Should().BeEquivalentTo(new[]
              {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
              });
 
-        It should_interview_in_status_RejectedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedBySupervisor].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_RejectedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedBySupervisor].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
             });
 
-        It should_interview_in_status_ApprovedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.ApprovedBySupervisor].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_ApprovedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.ApprovedBySupervisor].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.RejectedBySupervisor
             });
 
-        It should_interview_in_status_RejectedByHeadquarters_be_allowed_to_change_on_ApprovedBySupervisor_recheck_this_one = () =>
-            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedByHeadquarters].ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_interview_in_status_RejectedByHeadquarters_be_allowed_to_change_on_ApprovedBySupervisor_recheck_this_one () =>
+            interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedByHeadquarters].Should().BeEquivalentTo(new[]
             {
                 InterviewStatus.ApprovedBySupervisor
             });

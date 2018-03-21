@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -15,8 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_substuting_question_title_inside_roster_with_reference_to_roster_size_question : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionA = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionB = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -44,12 +43,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             events = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestionId, Empty.RosterVector, DateTime.Now, 2);
 
-        It should_raise_titles_changed_for_new_roster_instances = () => 
+        [NUnit.Framework.Test] public void should_raise_titles_changed_for_new_roster_instances () => 
             events.ShouldContainEvent<SubstitutionTitlesChanged>(x => x.Questions.Length == 4);
 
         static EventContext events;

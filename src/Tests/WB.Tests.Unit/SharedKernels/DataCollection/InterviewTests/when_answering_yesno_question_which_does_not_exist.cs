@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -7,14 +7,13 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_yesno_question_which_does_not_exist
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             command = Create.Command.AnswerYesNoQuestion(questionId: Guid.Parse("11111111111111111111111111111111"));
 
             var questionnaire = Mock.Of<IQuestionnaire>
@@ -23,20 +22,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             );
 
             interview = Setup.InterviewForQuestionnaire(questionnaire);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>
+        public void BecauseOf() =>
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() =>
                 interview.AnswerYesNoQuestion(command));
 
-        It should_throw_InterviewException = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_InterviewException () =>
+            exception.Should().NotBeNull();
 
-        It should_throw_exception_with_message_containing__question____missing__ = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("question", "missing");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__question____missing__ () =>
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("question", "missing");
 
-        It should_throw_exception_with_message_containing_question_id_from_command = () =>
-            exception.Message.ShouldContain(command.QuestionId.FormatGuid());
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing_question_id_from_command () =>
+            exception.Message.Should().Contain(command.QuestionId.FormatGuid());
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;

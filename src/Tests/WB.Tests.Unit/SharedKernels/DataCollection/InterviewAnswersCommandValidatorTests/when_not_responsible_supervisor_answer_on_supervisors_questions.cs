@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -11,30 +12,29 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandValidatorTests
 {
-    [Subject(typeof(InterviewAnswersCommandValidator))]
     internal class when_not_responsible_supervisor_answer_on_supervisors_questions
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfInterviewSummaryViewFactory = new Mock<IInterviewSummaryViewFactory>();
             mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
             {
                 TeamLeadId = Guid.NewGuid()
             });
             commandValidator = Create.Service.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => commandValidations.ForEach(validate => exceptions.Add(Catch.Only<InterviewException>(validate)));
+        public void BecauseOf() => commandValidations.ForEach(validate => exceptions.Add( Assert.Throws<InterviewException>(() => validate())));
 
-        It should_exceptions_have_specified_error_messages = () =>
-            exceptions.ShouldEachConformTo(x => x.Message == CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
+        [NUnit.Framework.Test] public void should_exceptions_have_specified_error_messages () =>
+            exceptions.Should().OnlyContain(x => x.Message == CommandValidatorsMessages.UserDontHavePermissionsToAnswer);
 
-        It should_number_of_raised_interviewExceptions_be_equal_to_number_of_commands = () =>
-            exceptions.All(x => x != null).ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_number_of_raised_interviewExceptions_be_equal_to_number_of_commands () =>
+            exceptions.All(x => x != null).Should().BeTrue();
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");

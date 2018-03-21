@@ -1,20 +1,19 @@
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class with_event_context
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventContext = new EventContext();
-        };
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         protected static EventContext eventContext;
     }

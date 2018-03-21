@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
@@ -8,14 +8,13 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
     internal class when_publishing_event_by_ignored_event_source : NcqrCompatibleEventDispatcherTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var secondEventHandlerMock = new Mock<IEventHandler>();
             secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();
             ncqrCompatibleEventDispatcher =
@@ -25,11 +24,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
                 });
 
             ncqrCompatibleEventDispatcher.Register(secondEventHandlerMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId:ignoredEvenetSource) });
+        public void BecauseOf() => ncqrCompatibleEventDispatcher.Publish(new[] { Create.Fake.PublishableEvent(eventSourceId:ignoredEvenetSource) });
 
-        It should_not_call_registred_event_handler = () =>
+        [NUnit.Framework.Test] public void should_not_call_registred_event_handler () =>
          secondOldSchoolEventHandlerMock.Verify(x => x.Handle(
              Moq.It.IsAny<IPublishedEvent<IEvent>>()),
              Times.Never);

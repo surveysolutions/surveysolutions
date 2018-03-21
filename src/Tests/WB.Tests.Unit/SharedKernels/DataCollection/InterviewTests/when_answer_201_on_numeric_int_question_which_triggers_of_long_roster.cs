@@ -1,16 +1,17 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_201_on_numeric_int_question_which_triggers_of_long_roster : InterviewTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_throw_InterviewException()
         {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
@@ -25,16 +26,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
 
-        Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, 201));
-
-        It should_throw_InterviewException = () =>
-            exception.ShouldNotBeNull();
-
-        It should_throw_InterviewException_with_explanation = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("answer", "'201'", "question", "roster", "greater", "200");
+            exception = NUnit.Framework.Assert.Throws<AnswerNotAcceptedException>(() => interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, 201));
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("answer", "'201'", "question", "roster", "greater", "200");
+        }
 
         private static Interview interview;
         private static Guid userId;

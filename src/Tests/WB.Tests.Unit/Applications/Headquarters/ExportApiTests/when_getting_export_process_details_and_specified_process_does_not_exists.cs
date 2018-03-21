@@ -1,6 +1,7 @@
 using System;
 using System.Web.Http;
 using System.Web.Http.Results;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -27,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private void BecauseOf() => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_not_found_response () =>
-            result.ShouldBeOfExactType<NotFoundResult>();
+            result.Should().BeOfType<NotFoundResult>();
 
         private static ExportController controller;
 

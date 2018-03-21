@@ -1,28 +1,28 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_questionnaires_controller_questionnaries_statuses : ApiTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateQuestionnairesController();
-        };
+            BecauseOf();
+        }
         
-        Because of = () =>
+        public void BecauseOf() 
         {
             actionResult = controller.QuestionnairesStatuses();
-        };
+        }
 
-        It should_return_IEnumerable_string = () =>
-            actionResult.ShouldBeAssignableTo<IEnumerable<string>>();
+        [NUnit.Framework.Test] public void should_return_IEnumerable_string () =>
+            actionResult.Should().BeAssignableTo<IEnumerable<string>>();
 
-        It should_count_be_positive = () =>
-            actionResult.Count().ShouldBeGreaterThan(0);
+        [NUnit.Framework.Test] public void should_count_be_positive () =>
+            actionResult.Count().Should().BeGreaterThan(0);
         
         private static IEnumerable<string> actionResult;
         private static QuestionnairesController controller;

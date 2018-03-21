@@ -1,20 +1,19 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
 {
     internal class when_getting_attachment_content_and_headers_contains_etag
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             mockOfAttachmentContentService.Setup(x => x.GetAttachmentContent(attachmentContentId)).Returns(expectedAttachmentContent);
 
             controller = Create.Controller.AttachmentsController(mockOfAttachmentContentService.Object);
@@ -25,11 +24,12 @@ namespace WB.Tests.Unit.Applications.Shared.Web.AttachmentsControllerTests
                     IfNoneMatch = {new EntityTagHeaderValue($"\"{expectedAttachmentContent.ContentHash}\"", false)}
                 }
             };
-        };
+            BecauseOf();
+        }
 
-        Because of = () => response = controller.Content(attachmentContentId);
+        public void BecauseOf() => response = controller.Content(attachmentContentId);
 
-        It should_return_NotNModified_response = () => response.StatusCode.ShouldEqual(HttpStatusCode.NotModified);
+        [NUnit.Framework.Test] public void should_return_NotNModified_response () => response.StatusCode.Should().Be(HttpStatusCode.NotModified);
 
         private static AttachmentsController controller;
         private static string attachmentContentId = "Attahcment Content Id";

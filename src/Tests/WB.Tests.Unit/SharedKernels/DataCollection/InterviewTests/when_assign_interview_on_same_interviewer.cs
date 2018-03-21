@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_assign_interview_on_same_interviewer : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewerId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
             supervisorId = Guid.Parse("BBAA0000AAAA00000000AAAA0000AAAA");
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
@@ -30,21 +29,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             interview.AssignInterviewer(supervisorId, interviewerId, DateTime.Now);
-        };
+            BecauseOf();
+        }
 
-        private Because of = () =>
-            exception = Catch.Exception(() => interview.AssignInterviewer(supervisorId, interviewerId, DateTime.Now));
+        private void BecauseOf() =>
+            exception = NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AssignInterviewer(supervisorId, interviewerId, DateTime.Now));
 
-        It should_exists_exception = () =>
-            exception.ShouldNotBeNull();
-
-        It should_raise_InterviewException = () =>
-            exception.ShouldBeOfExactType(typeof(InterviewException));
-
-        It should_contains_exseption_message = () =>
-            exception.Message.ShouldNotBeNull();
-
-
+        [NUnit.Framework.Test] public void should_contains_exseption_message () =>
+            exception.Message.Should().NotBeNull();
 
         private static Guid interviewerId;
         private static Guid supervisorId;

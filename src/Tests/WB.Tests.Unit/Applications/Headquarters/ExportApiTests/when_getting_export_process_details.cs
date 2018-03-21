@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using Newtonsoft.Json;
@@ -51,7 +52,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private void BecauseOf() => result = controller.ProcessDetails(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_ok_response () =>
-            result.ShouldBeOfExactType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
+            result.Should().BeOfType<OkNegotiatedContentResult<ExportController.ExportDetails>>();
 
         [NUnit.Framework.Test] public void should_return_specified_json_object ()
         {

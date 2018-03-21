@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -12,14 +12,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_length_of_selected_values_less_than_max_for_selected_answer_options_for_multiquestion : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -35,12 +34,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () => interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, selectedValues);
+        private void BecauseOf() => interview.AnswerMultipleOptionsQuestion(userId, validatingQuestionId, new decimal[] { }, DateTime.Now, selectedValues);
 
-        It should_raise_MultipleOptionsQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>(@event
                 => @event.QuestionId == validatingQuestionId && @event.SelectedValues.Select(x => (int) x).SequenceEqual(selectedValues));
 
