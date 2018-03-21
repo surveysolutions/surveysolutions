@@ -1108,4 +1108,8 @@
     <value>Комментарий не может быть больше чем {1} символов</value>
     <comment>Комментарий не может быть больше чем {1} символов</comment>
   </data>
+    <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Обработать</value>
+    <comment>Обработать</comment>
+  </data>
 </root>
