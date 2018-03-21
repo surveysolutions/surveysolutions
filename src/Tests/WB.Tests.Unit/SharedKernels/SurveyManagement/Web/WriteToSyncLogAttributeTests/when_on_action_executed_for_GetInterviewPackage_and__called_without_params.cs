@@ -1,36 +1,33 @@
 ﻿using System;
-using System.Web.Http.Controllers;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http.Filters;
-using Machine.Specifications;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttributeTests
 {
     internal class when_on_action_executed_for_GetInterviewPackage_and__called_without_params : WriteToSyncLogAttributeTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public async Task should_store_log_item()
         {
-            synchronizationLogItemPlainStorageAccessorMock = new Mock<IPlainStorageAccessor<SynchronizationLogItem>>();
+            Mock<IPlainStorageAccessor<SynchronizationLogItem>> synchronizationLogItemPlainStorageAccessorMock =
+                new Mock<IPlainStorageAccessor<SynchronizationLogItem>>();
 
             SetupContext(synchronizationLogItemPlainStorageAccessorMock.Object);
-            attribute = Create(SynchronizationLogType.GetInterviewPackage);
+            WriteToSyncLogAttribute attribute = Create(SynchronizationLogType.GetInterviewPackage);
 
-            actionContext = CreateActionContext();
-        };
+            HttpActionExecutedContext actionContext = CreateActionContext();
 
-        Because of = () => attribute.OnActionExecuted(actionContext);
+            await attribute.OnActionExecutedAsync(actionContext, new CancellationToken());
 
-        private It should_store_log_item = () =>
+
             synchronizationLogItemPlainStorageAccessorMock.Verify(
-                x => x.Store(Moq.It.IsAny<SynchronizationLogItem>(), Moq.It.IsAny<Guid>()),Times.Once);
-
-        private static Mock<IPlainStorageAccessor<SynchronizationLogItem>> synchronizationLogItemPlainStorageAccessorMock; 
-
-        private static WriteToSyncLogAttribute attribute;
-        private static HttpActionExecutedContext actionContext;
+                x => x.Store(Moq.It.IsAny<SynchronizationLogItem>(), Moq.It.IsAny<Guid>()), Times.Once);
+        }
     }
 }
