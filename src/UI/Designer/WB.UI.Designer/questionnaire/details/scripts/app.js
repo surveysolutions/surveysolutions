@@ -90,6 +90,10 @@
                     '': {
                         templateUrl: 'views/question.html',
                         controller: 'QuestionCtrl'
+                    },
+                    'comments': {
+                        templateUrl: 'views/comments.html',
+                        controller: 'CommentsEditorCtrl'
                     }
                 }
             }).state('questionnaire.chapter.group', {
@@ -102,6 +106,10 @@
                     '': {
                         templateUrl: 'views/group.html',
                         controller: 'GroupCtrl'
+                    },
+                    'comments': {
+                        templateUrl: 'views/comments.html',
+                        controller: 'CommentsEditorCtrl'
                     }
                 }
             }).state('questionnaire.chapter.variable', {
@@ -114,6 +122,10 @@
                     '': {
                         templateUrl: 'views/variable.html',
                         controller: 'VariableCtrl'
+                    },
+                    'comments': {
+                        templateUrl: 'views/comments.html',
+                        controller: 'CommentsEditorCtrl'
                     }
                 }
             }).state('questionnaire.chapter.roster', {
@@ -126,6 +138,10 @@
                     '': {
                         templateUrl: 'views/roster.html',
                         controller: 'RosterCtrl'
+                    },
+                    'comments': {
+                        templateUrl: 'views/comments.html',
+                        controller: 'CommentsEditorCtrl'
                     }
                 }
             }).state('questionnaire.chapter.statictext', {
@@ -138,6 +154,10 @@
                     '': {
                         templateUrl: 'views/static-text.v1.html',
                         controller: 'StaticTextCtrl'
+                    },
+                    'comments': {
+                        templateUrl: 'views/comments.html',
+                        controller: 'CommentsEditorCtrl'
                     }
                 }
             });

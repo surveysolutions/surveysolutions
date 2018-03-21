@@ -4,6 +4,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         }
 
         private void BecauseOf() =>
-            result = mapper.EnrichVerificationErrors(verificationMessages, document);
+            result = mapper.EnrichVerificationErrors(verificationMessages, document.AsReadOnly());
 
         [NUnit.Framework.Test] public void should_return_2_errors () => 
             result.Length.Should().Be(3);

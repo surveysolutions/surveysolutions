@@ -376,9 +376,9 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Attention! this interview has corrupted data, &lt;br /&gt;
-        ///only previous version of interview is available, &lt;br /&gt;
-        ///contact HQ support get assistance..
+        ///   Looks up a localized string similar to Attention! This interview has corrupted data, &lt;br /&gt;
+        ///only previous version of interview is available. &lt;br /&gt;
+        ///Contact support for assistance..
         /// </summary>
         internal static string CoverBrokenPackegeText {
             get {

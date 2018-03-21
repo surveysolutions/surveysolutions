@@ -33,6 +33,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static Guid staticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static string searchFor = "With Casing";
-        static IEnumerable<QuestionnaireNodeReference> matches;
+        static IEnumerable<QuestionnaireEntityReference> matches;
     }
 }

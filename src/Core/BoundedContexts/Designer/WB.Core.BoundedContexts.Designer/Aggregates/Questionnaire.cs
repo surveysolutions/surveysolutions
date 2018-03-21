@@ -226,7 +226,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        public IEnumerable<QuestionnaireEntityReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
             IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
@@ -237,11 +237,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
                 if (MatchesSearchTerm(variable, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
+                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
                 }
                 if (MatchesSearchTerm(title, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
+                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
                 }
                 
                 var question = questionnaireItem as IQuestion;
@@ -253,14 +253,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         {
                             if (MatchesSearchTerm(question.Answers[i].AnswerText, searchRegex))
                             {
-                                yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
+                                yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
                             }
                         }
                     }
 
                     if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex) || MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
                     {
-                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
                 }
 
@@ -273,7 +273,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         {
                             if (MatchesSearchTerm(group.FixedRosterTitles[i].Title, searchRegex))
                             {
-                                yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.FixedRosterItem, i);
+                                yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.FixedRosterItem, i);
                             }
                         }
                     }
@@ -282,7 +282,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var conditional = questionnaireItem as IConditional;
                 if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
+                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -292,11 +292,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         if(MatchesSearchTerm(validatable.ValidationConditions[i].Expression, searchRegex))
                         {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
+                            yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
                         }
                         if (MatchesSearchTerm(validatable.ValidationConditions[i].Message, searchRegex))
                         {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
+                            yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
                         }
                     }
                 }
@@ -306,19 +306,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
                     {
-                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
                     }
 
                     if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
                     {
-                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
                     }
                 }
 
                 var staticText = questionnaireItem as IStaticText;
                 if (staticText != null && MatchesSearchTerm(staticText.AttachmentName, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
+                    yield return QuestionnaireEntityReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
                 }
             }
 
@@ -326,7 +326,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 if (MatchesSearchTerm(macro.Value.Content, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
+                    yield return QuestionnaireEntityReference.CreateForMacro(macro.Key);
                 }
             }
         }

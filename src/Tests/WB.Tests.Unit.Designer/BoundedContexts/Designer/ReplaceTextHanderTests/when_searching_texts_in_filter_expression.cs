@@ -30,6 +30,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         const string searchFor = "to_search";
         static readonly Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static readonly Guid filteredQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-        static IEnumerable<QuestionnaireNodeReference> matches;
+        static IEnumerable<QuestionnaireEntityReference> matches;
     }
 }
