@@ -1,6 +1,4 @@
 using System;
-using FluentAssertions;
-using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;

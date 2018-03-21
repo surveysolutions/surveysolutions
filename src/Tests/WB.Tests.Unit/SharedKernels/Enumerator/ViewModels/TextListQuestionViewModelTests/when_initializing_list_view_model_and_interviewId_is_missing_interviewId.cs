@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Machine.Specifications;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

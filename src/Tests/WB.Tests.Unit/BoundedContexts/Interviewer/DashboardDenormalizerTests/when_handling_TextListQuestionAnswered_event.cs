@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
@@ -41,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
         [Test]
         public void should_set_answer_time_as_start_date_for_interview() =>
-            interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.ShouldEqual(answerTimeUtc);
+            interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().Be(answerTimeUtc);
 
         private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<TextListQuestionAnswered> evnt;

@@ -2,7 +2,6 @@ using System.Net;
 using System.Web.Http;
 using System.Web.Http.Results;
 using FluentAssertions;
-using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.UI.Headquarters.API.PublicApi;
 

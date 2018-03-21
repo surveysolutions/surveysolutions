@@ -2,7 +2,6 @@
 using System.Web.Http;
 using System.Web.Http.Results;
 using FluentAssertions;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -19,7 +18,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             BecauseOf();
         }
 
-        Because BecauseOf = () => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
+        public void BecauseOf() => result = controller.StartProcess(questionnaireIdentity.ToString(), DataExportFormat.Paradata);
 
         [NUnit.Framework.Test] public void should_return_http_ok_response () =>
             result.Should().BeOfType<OkResult>();

@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
-using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing
 {

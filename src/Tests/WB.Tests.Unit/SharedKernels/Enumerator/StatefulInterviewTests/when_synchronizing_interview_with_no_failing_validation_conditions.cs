@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -82,7 +81,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [Test]
         public void It_should_return_empty_failed_condition_messages()
-            => interview.GetFailedValidationMessages(questionIdentity, "Error").Count().ShouldEqual(0);
+            => interview.GetFailedValidationMessages(questionIdentity, "Error").Count().Should().Be(0);
 
         [Test]
         public void It_should_not_apply_TranslationSwitched_event()

@@ -1,6 +1,4 @@
 using System;
-
-using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;

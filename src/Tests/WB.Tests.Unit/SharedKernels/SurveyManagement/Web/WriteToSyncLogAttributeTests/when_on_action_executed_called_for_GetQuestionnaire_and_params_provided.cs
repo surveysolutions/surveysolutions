@@ -1,7 +1,5 @@
 using System;
-using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;

@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 

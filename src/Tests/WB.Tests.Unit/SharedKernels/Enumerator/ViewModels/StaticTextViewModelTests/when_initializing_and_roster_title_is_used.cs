@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;

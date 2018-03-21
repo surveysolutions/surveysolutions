@@ -1,5 +1,4 @@
 using FluentAssertions;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests

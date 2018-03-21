@@ -1,7 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -65,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
         [Test]
         public void It_should_return_empty_failed_condition_messages() => 
-            interview.GetFailedValidationMessages(questionIdentity, "Error").Count().ShouldEqual(0);
+            interview.GetFailedValidationMessages(questionIdentity, "Error").Count().Should().Be(0);
 
         [Test]
         public void It_should_switch_translation() =>

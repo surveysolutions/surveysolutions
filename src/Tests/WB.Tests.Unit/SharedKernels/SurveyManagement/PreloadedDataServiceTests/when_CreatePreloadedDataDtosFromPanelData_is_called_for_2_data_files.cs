@@ -1,9 +1,5 @@
-﻿using System;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
+﻿using Main.Core.Entities.Composite;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 

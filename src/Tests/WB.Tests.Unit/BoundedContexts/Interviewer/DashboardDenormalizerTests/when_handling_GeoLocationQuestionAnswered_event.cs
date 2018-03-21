@@ -10,8 +10,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
-using it = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
@@ -28,10 +26,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             @event = Create.Event.GeoLocationQuestionAnswered(Create.Entity.Identity("11111111111111111111111111111111", RosterVector.Empty), answerLatitude, answerLongitude).ToPublishedEvent();
 
             var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer => 
-            writer.GetById(it.IsAny<string>()) == dashboardItem);
+            writer.GetById(It.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Setup(storage => storage.Store(It.IsAny<InterviewView>()))
                 .Callback<InterviewView>((view) => dashboardItem = view);
 
             var questionnaire = Mock.Of<IQuestionnaire>(q => q.IsPrefilled(gpsQuestionId) == true);

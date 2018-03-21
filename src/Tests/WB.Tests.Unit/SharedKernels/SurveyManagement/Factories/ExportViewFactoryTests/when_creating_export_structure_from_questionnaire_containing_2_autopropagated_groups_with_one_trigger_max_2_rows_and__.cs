@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;

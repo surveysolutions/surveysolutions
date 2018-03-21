@@ -1,12 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
-using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
-using WB.Core.Infrastructure.FileSystem;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTabletInformationServiceTests

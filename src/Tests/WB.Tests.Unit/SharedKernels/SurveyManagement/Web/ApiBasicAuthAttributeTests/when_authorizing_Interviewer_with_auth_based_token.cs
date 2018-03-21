@@ -3,7 +3,6 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;

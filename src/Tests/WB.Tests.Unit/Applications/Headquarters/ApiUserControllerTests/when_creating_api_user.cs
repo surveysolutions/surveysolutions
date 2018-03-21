@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
 using FluentAssertions;

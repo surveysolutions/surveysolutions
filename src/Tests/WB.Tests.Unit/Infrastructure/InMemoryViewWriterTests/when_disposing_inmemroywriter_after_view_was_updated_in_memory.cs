@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;

@@ -1,9 +1,7 @@
 ﻿using System;
 using FluentAssertions;
-using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {

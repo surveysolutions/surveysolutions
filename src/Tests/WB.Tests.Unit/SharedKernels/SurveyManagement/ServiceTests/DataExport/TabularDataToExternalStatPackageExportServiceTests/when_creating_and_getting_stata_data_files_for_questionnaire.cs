@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Threading;
-using FluentAssertions;
 using Moq;
 using StatData.Core;
 using StatData.Writers;

@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Utils;
 

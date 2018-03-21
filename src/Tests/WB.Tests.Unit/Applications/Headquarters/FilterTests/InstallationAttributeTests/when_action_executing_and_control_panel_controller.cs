@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Filters;
 

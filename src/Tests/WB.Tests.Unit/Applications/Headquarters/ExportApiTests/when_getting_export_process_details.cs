@@ -1,18 +1,12 @@
 using System;
-using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
 using FluentAssertions;
-using Machine.Specifications;
 using Moq;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
@@ -58,12 +52,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         {
             var jsonResult = ((OkNegotiatedContentResult<ExportController.ExportDetails>) result).Content;
 
-            jsonResult.ExportStatus.ShouldEqual(dataExportStatusView.DataExports[0].StatusOfLatestExportProcess);
-            jsonResult.HasExportedFile.ShouldEqual(dataExportStatusView.DataExports[0].HasDataToExport);
-            jsonResult.LastUpdateDate.ShouldEqual(dataExportStatusView.DataExports[0].LastUpdateDate);
-            jsonResult.RunningProcess.ProgressInPercents.ShouldEqual(
+            jsonResult.ExportStatus.Should().Be(dataExportStatusView.DataExports[0].StatusOfLatestExportProcess);
+            jsonResult.HasExportedFile.Should().Be(dataExportStatusView.DataExports[0].HasDataToExport);
+            jsonResult.LastUpdateDate.Should().Be(dataExportStatusView.DataExports[0].LastUpdateDate);
+            jsonResult.RunningProcess.ProgressInPercents.Should().Be(
                 dataExportStatusView.RunningDataExportProcesses[0].Progress);
-            jsonResult.RunningProcess.StartDate.ShouldEqual(dataExportStatusView.RunningDataExportProcesses[0].BeginDate);
+            jsonResult.RunningProcess.StartDate.Should().Be(dataExportStatusView.RunningDataExportProcesses[0].BeginDate);
 
         }
             

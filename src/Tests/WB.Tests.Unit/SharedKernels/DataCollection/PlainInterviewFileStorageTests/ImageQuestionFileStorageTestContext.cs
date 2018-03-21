@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;

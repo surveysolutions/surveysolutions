@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Machine.Specifications;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
