@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;

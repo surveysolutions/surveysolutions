@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Documents;
@@ -8,7 +7,6 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.EventBus;

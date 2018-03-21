@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;

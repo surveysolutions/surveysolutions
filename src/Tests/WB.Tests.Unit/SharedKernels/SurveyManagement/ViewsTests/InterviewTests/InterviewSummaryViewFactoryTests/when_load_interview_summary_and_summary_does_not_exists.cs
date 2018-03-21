@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;

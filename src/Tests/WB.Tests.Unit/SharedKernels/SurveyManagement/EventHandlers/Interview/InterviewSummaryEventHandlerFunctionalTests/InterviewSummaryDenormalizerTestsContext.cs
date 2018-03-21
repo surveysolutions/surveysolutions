@@ -1,5 +1,4 @@
 ﻿using System;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;

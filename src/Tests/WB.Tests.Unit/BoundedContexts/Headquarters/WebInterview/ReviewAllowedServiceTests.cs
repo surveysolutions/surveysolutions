@@ -1,5 +1,4 @@
-﻿using System;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -10,7 +9,6 @@ using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
-using WB.UI.Headquarters.Code;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 {

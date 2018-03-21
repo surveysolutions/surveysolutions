@@ -1,19 +1,14 @@
 using System;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
-using it = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
@@ -41,10 +36,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                     => storage.GetQuestionnaireDocument(QuestionnaireIdentity.Parse(questionnaireId)) == questionnaire);
 
             var interviewViewStorage = Mock.Of<IPlainStorage<InterviewView>>(writer =>
-            writer.GetById(it.IsAny<string>()) == dashboardItem);
+            writer.GetById(It.IsAny<string>()) == dashboardItem);
 
             Mock.Get(interviewViewStorage)
-                .Setup(storage => storage.Store(it.IsAny<InterviewView>()))
+                .Setup(storage => storage.Store(It.IsAny<InterviewView>()))
                 .Callback<InterviewView>((view) => dashboardItem = view);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage,

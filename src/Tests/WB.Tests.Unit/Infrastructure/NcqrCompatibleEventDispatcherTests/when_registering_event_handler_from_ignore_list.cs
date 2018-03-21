@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
-using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 
 

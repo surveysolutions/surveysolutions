@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;

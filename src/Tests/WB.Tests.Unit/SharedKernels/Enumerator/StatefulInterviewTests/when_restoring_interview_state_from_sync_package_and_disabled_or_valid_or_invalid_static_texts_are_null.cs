@@ -1,5 +1,4 @@
 using System;
-using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;

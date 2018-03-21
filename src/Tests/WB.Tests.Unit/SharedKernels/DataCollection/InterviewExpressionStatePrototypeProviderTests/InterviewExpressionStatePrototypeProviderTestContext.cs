@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Machine.Specifications;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;

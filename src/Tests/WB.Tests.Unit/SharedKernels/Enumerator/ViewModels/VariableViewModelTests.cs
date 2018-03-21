@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             //act
             viewModel.Init("interviewid", variableIdentity, Create.Other.NavigationState());
             //assert
-            viewModel.Text.ShouldEqual("v1 : <empty>");
+            viewModel.Text.Should().Be("v1 : <empty>");
         }
     }
 }

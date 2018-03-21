@@ -1,4 +1,3 @@
-using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;

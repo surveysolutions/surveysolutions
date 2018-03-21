@@ -1,6 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
-using MvvmCross.Platform.Core;
+﻿using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;

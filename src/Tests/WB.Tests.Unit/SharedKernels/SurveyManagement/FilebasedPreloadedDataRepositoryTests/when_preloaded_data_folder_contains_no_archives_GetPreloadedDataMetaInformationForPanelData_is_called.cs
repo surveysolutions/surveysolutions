@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;

@@ -1,7 +1,6 @@
 using System;
 using FluentAssertions;
 using FluentAssertions.Extensions;
-using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;

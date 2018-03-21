@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.Services;

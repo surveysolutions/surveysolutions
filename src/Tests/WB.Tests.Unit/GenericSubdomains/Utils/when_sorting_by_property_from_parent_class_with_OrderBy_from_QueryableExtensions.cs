@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils

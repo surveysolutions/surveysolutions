@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;

@@ -1,6 +1,4 @@
-﻿using Machine.Specifications;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+﻿using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.RosterStructureServiceTests
 {

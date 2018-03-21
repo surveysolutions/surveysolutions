@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;

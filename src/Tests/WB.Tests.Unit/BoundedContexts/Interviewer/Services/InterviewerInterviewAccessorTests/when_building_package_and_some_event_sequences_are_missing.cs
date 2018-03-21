@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Machine.Specifications;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;

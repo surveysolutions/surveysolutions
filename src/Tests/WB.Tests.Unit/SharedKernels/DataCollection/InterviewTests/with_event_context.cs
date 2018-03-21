@@ -1,4 +1,3 @@
-using FluentAssertions;
 using Ncqrs.Spec;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests

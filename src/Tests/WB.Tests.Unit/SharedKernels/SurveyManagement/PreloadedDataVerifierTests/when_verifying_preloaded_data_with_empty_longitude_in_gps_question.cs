@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private void BecauseOf() => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
         [NUnit.Framework.Test] public void should_return_1_error_PL0030 () =>
-            status.VerificationState.Errors.Single().Code.ShouldEqual("PL0030");
+            status.VerificationState.Errors.Single().Code.Should().Be("PL0030");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

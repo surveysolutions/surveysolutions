@@ -1,7 +1,6 @@
 using System;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
-using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;

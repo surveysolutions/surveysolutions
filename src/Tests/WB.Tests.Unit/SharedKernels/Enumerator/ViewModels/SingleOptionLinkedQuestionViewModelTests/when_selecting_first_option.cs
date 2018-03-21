@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;

@@ -4,7 +4,6 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {

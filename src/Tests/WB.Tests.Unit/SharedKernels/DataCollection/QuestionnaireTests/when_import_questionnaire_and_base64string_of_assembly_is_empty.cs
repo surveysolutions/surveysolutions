@@ -3,7 +3,6 @@ using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 

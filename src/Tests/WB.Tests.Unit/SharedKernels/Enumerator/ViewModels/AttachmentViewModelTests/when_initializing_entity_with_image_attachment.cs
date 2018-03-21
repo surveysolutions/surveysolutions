@@ -1,17 +1,10 @@
 using System;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
 
 

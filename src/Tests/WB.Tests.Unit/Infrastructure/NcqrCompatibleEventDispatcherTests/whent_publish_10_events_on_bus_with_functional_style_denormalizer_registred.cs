@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;

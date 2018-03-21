@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.AspNet.Identity;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Tests.Abc;

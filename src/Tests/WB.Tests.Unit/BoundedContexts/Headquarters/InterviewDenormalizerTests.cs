@@ -7,7 +7,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters
