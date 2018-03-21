@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 if(string.IsNullOrWhiteSpace(db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairedocuments')::text")))
                     return;
 
-                foreach (var documentRow in db.Query<(string id, string value)>(@"select id, value from plainstore.questionnairedocuments"))
+                foreach (var documentRow in db.Query<(string id, string value)>(@"select id, value from plainstore.questionnairedocuments", buffered: false))
                 {
                     var doc = JObject.Parse(documentRow.value);
 
