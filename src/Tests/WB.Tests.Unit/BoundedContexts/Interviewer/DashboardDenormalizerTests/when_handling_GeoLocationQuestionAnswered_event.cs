@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
     internal class when_handling_GeoLocationQuestionAnswered_event
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.NewGuid(), 1);
             var gpsQuestionId = Guid.Parse("11111111111111111111111111111111");
 
@@ -40,35 +39,22 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 r.GetQuestionnaire(questionnaireIdentity, Moq.It.IsAny<string>()) == questionnaire);
 
             denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage, questionnaireStorage: plainQuestionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             denormalizer.Handle(@event);
 
-        It should_set_GPS_location_latitude_to_answered_value = () =>
-            dashboardItem.LocationLatitude.ShouldEqual(answerLatitude);
+        [NUnit.Framework.Test] public void should_set_GPS_location_latitude_to_answered_value () =>
+            dashboardItem.LocationLatitude.Should().Be(answerLatitude);
 
-        It should_set_GPS_location_longitude_to_answered_value = () =>
-            dashboardItem.LocationLongitude.ShouldEqual(answerLongitude);
+        [NUnit.Framework.Test] public void should_set_GPS_location_longitude_to_answered_value () =>
+            dashboardItem.LocationLongitude.Should().Be(answerLongitude);
 
         private static InterviewerDashboardEventHandler denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> @event;
         private static InterviewView dashboardItem;
         private static double answerLatitude = 10;
         private static double answerLongitude = 20;
-        private static void aaa() { }
-
-        public Establish Context
-        {
-            get
-            {
-                return context;
-            }
-
-            set
-            {
-                this.context = value;
-            }
-        }
     }
 }

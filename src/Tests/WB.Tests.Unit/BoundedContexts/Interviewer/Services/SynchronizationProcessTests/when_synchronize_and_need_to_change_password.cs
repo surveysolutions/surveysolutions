@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -14,15 +13,13 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [Subject(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
     internal class when_synchronize_and_need_to_change_password
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewerIdentity = new InterviewerIdentity() {Name = "name", Token = "Outdated token"};
 
             principalMock
@@ -60,19 +57,20 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewersPlainStorage: interviewerStorageMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,
                 passwordHasher: passwordHasherMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None).WaitAndUnwrapException();
+        public void BecauseOf() => viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None).WaitAndUnwrapException();
 
-        It should_store_updated_user_password_in_plain_storage = () =>
+        [NUnit.Framework.Test] public void should_store_updated_user_password_in_plain_storage () =>
             interviewerStorageMock.Verify(
                 x => x.Store(Moq.It.Is<InterviewerIdentity>(i => i.PasswordHash == "new password")), Times.Once);
 
-        It should_store_updated_user_token_in_plain_storage = () =>
+        [NUnit.Framework.Test] public void should_store_updated_user_token_in_plain_storage () =>
             interviewerStorageMock.Verify(
                 x => x.Store(Moq.It.Is<InterviewerIdentity>(i => i.Token == "new token")), Times.Once);
 
-        It should_sign_in_user_with_new_credentials = () =>
+        [NUnit.Framework.Test] public void should_sign_in_user_with_new_credentials () =>
            principalMock.Verify(x => x.SignIn("name", "new password", true), Times.Once);
 
         static SynchronizationProcess viewModel;
