@@ -11,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLinkedQuestionViewModelTests
 {
-    [Subject(typeof(SingleOptionRosterLinkedQuestionViewModel))]
+    [NUnit.Framework.TestOf(typeof(SingleOptionRosterLinkedQuestionViewModel))]
     internal class SingleOptionRosterLinkedQuestionViewModelTestsContext
     {
         protected static SingleOptionRosterLinkedQuestionViewModel CreateViewModel(IStatefulInterviewRepository interviewRepository = null, 

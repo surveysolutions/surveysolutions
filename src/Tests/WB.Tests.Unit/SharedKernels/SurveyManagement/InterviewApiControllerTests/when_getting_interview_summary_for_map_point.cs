@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
     internal class when_getting_interview_summary_for_map_point : InterviewApiControllerTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewSummaryViewFactoryMock = new Mock<IInterviewSummaryViewFactory>();
             var interviewSummary = new InterviewSummary()
             {
@@ -28,26 +27,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
             interviewSummaryViewFactoryMock.Setup(_ => _.Load(interviewId)).Returns(interviewSummary);
 
             controller = CreateController(interviewSummaryViewFactory: interviewSummaryViewFactoryMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             viewModel =
                 controller.InterviewSummaryForMapPoint(new InterviewSummaryForMapPointViewModel() { InterviewId = interviewId });
 
-        It should_view_model_not_be_null = () =>
-            viewModel.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_view_model_not_be_null () =>
+            viewModel.Should().NotBeNull();
 
-        It should_interviewer_name_be_equal_to_interviewerName = () =>
-            viewModel.InterviewerName.ShouldEqual(interviewerName);
+        [NUnit.Framework.Test] public void should_interviewer_name_be_equal_to_interviewerName () =>
+            viewModel.InterviewerName.Should().Be(interviewerName);
 
-        It should_supervisor_name_be_equal_to_supervisorName = () =>
-            viewModel.SupervisorName.ShouldEqual(supervisorName);
+        [NUnit.Framework.Test] public void should_supervisor_name_be_equal_to_supervisorName () =>
+            viewModel.SupervisorName.Should().Be(supervisorName);
 
-        It should_last_status_be_equal_to_lastStatus = () =>
-            viewModel.LastStatus.ShouldEqual(lastStatus.ToLocalizeString());
+        [NUnit.Framework.Test] public void should_last_status_be_equal_to_lastStatus () =>
+            viewModel.LastStatus.Should().Be(lastStatus.ToLocalizeString());
 
-        It should_last_status_date_be_equal_to_lastStatusDate = () =>
-            viewModel.LastUpdatedDate.ShouldEqual(AnswerUtils.AnswerToString(lastStatusDateTime));
+        [NUnit.Framework.Test] public void should_last_status_date_be_equal_to_lastStatusDate () =>
+            viewModel.LastUpdatedDate.Should().Be(AnswerUtils.AnswerToString(lastStatusDateTime));
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;

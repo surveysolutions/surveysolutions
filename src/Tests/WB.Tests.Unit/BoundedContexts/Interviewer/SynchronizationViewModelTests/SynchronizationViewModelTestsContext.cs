@@ -4,7 +4,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.SynchronizationViewModelTests
 {
-    [Subject(typeof(SynchronizationViewModel))]
+    [NUnit.Framework.TestOf(typeof(SynchronizationViewModel))]
     internal class SynchronizationViewModelTestsContext
     {
 

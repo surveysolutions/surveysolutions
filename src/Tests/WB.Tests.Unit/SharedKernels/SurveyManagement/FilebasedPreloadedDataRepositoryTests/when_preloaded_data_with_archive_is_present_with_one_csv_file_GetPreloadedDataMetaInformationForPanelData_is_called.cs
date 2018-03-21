@@ -1,23 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRepositoryTests
 {
     internal class when_preloaded_data_with_archive_is_present_with_one_csv_file_GetPreloadedDataMetaInformationForPanelData_is_called : FilebasedPreloadedDataRepositoryTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileSystemAccessor = CreateIFileSystemAccessorMock();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists("PreLoadedData\\" + archiveId)).Returns(true);
             fileSystemAccessor.Setup(x => x.GetFileExtension(tabFileName)).Returns(".tab");
@@ -32,24 +31,25 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
                 .Returns(new Dictionary<string, long>() { { tabFileName, 20 },{fileNameWithoutExtension,1} });
             recordsAccessorFactory = new Mock<IRecordsAccessorFactory>();
             filebasedPreloadedDataRepository = CreateFilebasedPreloadedDataRepository(fileSystemAccessor.Object, archiveUtils.Object, recordsAccessorFactory.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(archiveId);
+        public void BecauseOf() => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(archiveId);
 
-        It should_result_has_info_about_2_elements = () =>
-            result.FilesMetaInformation.Length.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_result_has_info_about_2_elements () =>
+            result.FilesMetaInformation.Length.Should().Be(2);
 
-        It should_result_has_info_about_first_element_with_name_1_tab = () =>
-          result.FilesMetaInformation[0].FileName.ShouldEqual(tabFileName);
+        [NUnit.Framework.Test] public void should_result_has_info_about_first_element_with_name_1_tab () =>
+          result.FilesMetaInformation[0].FileName.Should().Be(tabFileName);
 
-        It should_first_element_be_marked_and_CanBeHandled = () =>
-         result.FilesMetaInformation[0].CanBeHandled.ShouldEqual(true);
+        [NUnit.Framework.Test] public void should_first_element_be_marked_and_CanBeHandled () =>
+         result.FilesMetaInformation[0].CanBeHandled.Should().Be(true);
 
-        It should_result_has_info_about_second_element_with_name_nastya = () =>
-         result.FilesMetaInformation[1].FileName.ShouldEqual(fileNameWithoutExtension);
+        [NUnit.Framework.Test] public void should_result_has_info_about_second_element_with_name_nastya () =>
+         result.FilesMetaInformation[1].FileName.Should().Be(fileNameWithoutExtension);
 
-        It should_second_element_be_marked_and_CanBeHandled = () =>
-        result.FilesMetaInformation[1].CanBeHandled.ShouldEqual(false);
+        [NUnit.Framework.Test] public void should_second_element_be_marked_and_CanBeHandled () =>
+        result.FilesMetaInformation[1].CanBeHandled.Should().Be(false);
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;

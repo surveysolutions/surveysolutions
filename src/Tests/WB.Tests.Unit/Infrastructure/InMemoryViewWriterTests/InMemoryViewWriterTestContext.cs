@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Infrastructure.InMemoryViewWriterTests
 {
-    [Subject(typeof(InMemoryViewWriter<>))]
+    [NUnit.Framework.TestOf(typeof(InMemoryViewWriter<>))]
     internal class InMemoryViewWriterTestContext
     {
         protected static InMemoryViewWriter<T> CreateInMemoryViewWriter<T>(IReadSideRepositoryWriter<T> readSideRepositoryWriter = null,

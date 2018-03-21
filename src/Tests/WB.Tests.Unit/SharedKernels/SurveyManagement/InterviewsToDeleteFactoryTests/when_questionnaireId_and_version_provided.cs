@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,11 +10,10 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewsToDeleteFactoryTests
 {
-    [Subject(typeof(InterviewsToDeleteFactory))]
+    [NUnit.Framework.TestOf(typeof(InterviewsToDeleteFactory))]
     internal class when_questionnaireId_and_version_provided 
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviews = new List<InterviewSummary>();
             questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaireVersion = 1;
@@ -28,15 +27,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewsToDeleteFactory
 
 
             factory = new InterviewsToDeleteFactory(writer);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => foundSummaries = factory.Load(questionnaireId, questionnaireVersion);
+        public void BecauseOf() => foundSummaries = factory.Load(questionnaireId, questionnaireVersion);
 
-        It should_return_interviews_by_version_and_questionnaire_id = () =>
+        [NUnit.Framework.Test] public void should_return_interviews_by_version_and_questionnaire_id () 
         {
-            foundSummaries.Count.ShouldEqual(1);
-            foundSummaries.First().ShouldBeLike(expectedSummary);
-        };
+            foundSummaries.Count.Should().Be(1);
+            foundSummaries.First().Should().BeEquivalentTo(expectedSummary);
+        }
 
         static InterviewsToDeleteFactory factory;
         static Guid questionnaireId;

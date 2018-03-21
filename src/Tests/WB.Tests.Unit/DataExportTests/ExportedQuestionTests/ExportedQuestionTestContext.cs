@@ -11,7 +11,7 @@ using QuestionState = WB.Core.SharedKernels.DataCollection.ValueObjects.Intervie
 
 namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
-    [Subject(typeof(ExportQuestionService))]
+    [NUnit.Framework.TestOf(typeof(ExportQuestionService))]
     public class ExportedQuestionTestContext
     {
         public static string MissingNumericQuestionValue { get { return ExportFormatSettings.MissingNumericQuestionValue; } }

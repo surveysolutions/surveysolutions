@@ -7,7 +7,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
-    [Subject(typeof(SurveysAndStatusesReport))]
+    [NUnit.Framework.TestOf(typeof(SurveysAndStatusesReport))]
     internal class SurveysAndStatusesReportTestsContext
     {
         protected static SurveysAndStatusesReport CreateSurveysAndStatusesReport(INativeReadSideStorage<InterviewSummary> summariesRepository = null)

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     internal class when_requesting_report_by_responsible : SurveysAndStatusesReportTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -32,12 +31,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             interviews.ForEach(summary => interviewsReader.Store(summary, Guid.NewGuid().FormatGuid()));
 
             reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { ResponsibleName = responsibleName });
+        public void BecauseOf() => report = reportFactory.Load(new SurveysAndStatusesReportInputModel { ResponsibleName = responsibleName });
 
-        It should_count_only_interviews_by_responsible = () => 
-            report.Items.First().CompletedCount.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_count_only_interviews_by_responsible () => 
+            report.Items.First().CompletedCount.Should().Be(2);
 
         static Guid userId;
         static string responsibleName = "userName";

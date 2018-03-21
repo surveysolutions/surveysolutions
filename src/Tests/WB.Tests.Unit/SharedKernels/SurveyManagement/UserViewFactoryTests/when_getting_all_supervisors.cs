@@ -1,19 +1,18 @@
-﻿using System.Linq;
-using Machine.Specifications;
+using System.Linq;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
     internal class when_getting_all_supervisors : UserViewFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var readerWithUsers = CreateQueryableReadSideRepositoryReaderWithUsers(new []
             {
                 Create.Entity.HqUser(Id.g1, userName: superBName, isLockedByHQ: true, role: UserRoles.Supervisor),
@@ -25,34 +24,35 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 
 
             teamFactory = CreateInterviewersViewFactory(readerWithUsers);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = teamFactory.GetAllSupervisors(12, "", showLocked: true);
 
-        It should_return_3_supervisors = () =>
-            result.TotalCountByQuery.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_return_3_supervisors () =>
+            result.TotalCountByQuery.Should().Be(3);
 
-        It should_return_supervisor_with_specified_properties_at_position_0 = () =>
+        [NUnit.Framework.Test] public void should_return_supervisor_with_specified_properties_at_position_0 () 
         {
             var user = result.Users.ElementAt(0);
-            user.UserId.ShouldEqual(Id.g2);
-            user.UserName.ShouldEqual(superAName);
-        };
+            user.UserId.Should().Be(Id.g2);
+            user.UserName.Should().Be(superAName);
+        }
 
-        It should_return_supervisor_with_specified_properties_at_position_1 = () =>
+        [NUnit.Framework.Test] public void should_return_supervisor_with_specified_properties_at_position_1 () 
         {
             var user = result.Users.ElementAt(1);
-            user.UserId.ShouldEqual(Id.g1);
-            user.UserName.ShouldEqual(superBName);
-        };
+            user.UserId.Should().Be(Id.g1);
+            user.UserName.Should().Be(superBName);
+        }
 
-        It should_return_supervisor_with_specified_properties_at_position_2 = () =>
+        [NUnit.Framework.Test] public void should_return_supervisor_with_specified_properties_at_position_2 () 
         {
             var user = result.Users.ElementAt(2);
-            user.UserId.ShouldEqual(Id.g3);
-            user.UserName.ShouldEqual(superCName);
-        };
+            user.UserId.Should().Be(Id.g3);
+            user.UserName.Should().Be(superCName);
+        }
 
         private static IUserViewFactory teamFactory;
         private static UsersView result;

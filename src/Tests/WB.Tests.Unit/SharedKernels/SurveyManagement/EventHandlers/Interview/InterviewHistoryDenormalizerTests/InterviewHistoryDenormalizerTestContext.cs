@@ -28,7 +28,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
-    [Subject(typeof(InterviewParaDataEventHandler))]
+    [NUnit.Framework.TestOf(typeof(InterviewParaDataEventHandler))]
     internal class InterviewHistoryDenormalizerTestContext
     {
         protected static InterviewParaDataEventHandler CreateInterviewHistoryDenormalizer(IReadSideRepositoryWriter<InterviewHistoryView> interviewHistoryViewWriter=null,

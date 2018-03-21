@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
@@ -10,14 +10,13 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests
 {
     class when_getting_data_files_for_questionnaire_and_exported_cell_contains_new_line_symbol : CommentsExporterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(Moq.It.IsAny<string>())).Returns(false);
             fileSystemAccessor.Setup(x => x.GetFilesInDirectory(Moq.It.IsAny<string>(), Moq.It.IsAny<bool>())).Returns(new[] { fileName, "2.txt" });
@@ -42,12 +41,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.C
                     fileSystemAccessor: fileSystemAccessor.Object,
                     interviewCommentaries: interviewCommentaries,
                     csvWriter: csvWriterMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             readSideToTabularFormatExportService.Export(questionnaireExportStructure, new List<Guid>(), "", new Progress<int>());
 
-        It should_return_correct_file_name = () =>
+        [NUnit.Framework.Test] public void should_return_correct_file_name () =>
             csvWriterMock.Verify(x => x.WriteData(fileName, Moq.It.IsAny<IEnumerable<string[]>>(), Moq.It.IsAny<string>()));
 
         private static CommentsExporter readSideToTabularFormatExportService;

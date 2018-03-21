@@ -15,7 +15,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
 {
-    [Subject(typeof(DeleteQuestionnaireService))]
+    [NUnit.Framework.TestOf(typeof(DeleteQuestionnaireService))]
     internal class DeleteQuestionnaireServiceTestContext
     {
         protected static DeleteQuestionnaireService CreateDeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory = null,

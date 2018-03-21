@@ -1,24 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.TabletReportControllerTests
 {
     internal class when_list_of_info_packages_is_requested : TabletReportControllerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             tabletReportController = CreateTabletReportController();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = tabletReportController.PackagesInfo() as ViewResult;
+        public void BecauseOf() => result = tabletReportController.PackagesInfo() as ViewResult;
 
-        It should_return_ViewResult = () => result.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_return_ViewResult () => result.Should().NotBeNull();
 
         
         private static TabletReportController tabletReportController;

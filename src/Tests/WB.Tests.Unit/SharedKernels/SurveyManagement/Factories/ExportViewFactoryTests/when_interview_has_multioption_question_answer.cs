@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -10,14 +10,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_interview_has_multioption_question_answer : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.Parse("d7127d06-5668-4fa3-b255-8a2a0aaaa020");
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -31,19 +30,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaire.PublicKey, 1);
 
             interview = Create.Entity.InterviewData(Create.Entity.InterviewQuestion(questionId, new [] {42, 18}));
-        };
+            BecauseOf();
+        }
 
-         Because of = () => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);
+         public void BecauseOf() => result = exportViewFactory.CreateInterviewDataExportView(questionnaaireExportStructure, interview);
 
-        It should_put_answers_to_export = () => result.Levels.Length.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_put_answers_to_export () => result.Levels.Length.Should().Be(1);
 
-        It should_put_answers_to_export_in_appropriate_order = () =>
+        [NUnit.Framework.Test] public void should_put_answers_to_export_in_appropriate_order () 
         {
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
-            exportedQuestion.Length.ShouldEqual(3);
-            exportedQuestion.ShouldEqual(new [] {"0", "1", "1"});
-        };
+            exportedQuestion.Length.Should().Be(3);
+            exportedQuestion.Should().BeEquivalentTo(new [] {"0", "1", "1"});
+        }
 
         static ExportViewFactory exportViewFactory;
         static QuestionnaireExportStructure questionnaaireExportStructure;

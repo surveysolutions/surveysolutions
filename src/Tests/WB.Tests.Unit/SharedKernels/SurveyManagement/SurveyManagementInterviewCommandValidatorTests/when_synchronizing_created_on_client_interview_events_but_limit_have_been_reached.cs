@@ -1,5 +1,6 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -7,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterviewCommandValidatorTests
 {
     internal class when_synchronizing_created_on_client_interview_events_but_limit_have_been_reached : SurveyManagementInterviewCommandValidatorTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_throw_exception_that_contains_such_words () {
             var summaries = new TestInMemoryWriter<InterviewSummary>();
             summaries.Store(Create.Entity.InterviewSummary(), "id1");
             summaries.Store(Create.Entity.InterviewSummary(), "id2");
@@ -24,23 +24,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.SurveyManagementInterview
                   interviewSummaryStorage: summaries);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: Mock.Of<IQuestionnaireStorage>(), shouldBeInitialized: false);
-        };
 
-        Because of = () =>
-          exception = Catch.Only<InterviewException>(() => surveyManagementInterviewCommandValidator.Validate(interview, Create.Command.SynchronizeInterviewEventsCommand()));
+            var exception = Assert.Throws<InterviewException>(() => surveyManagementInterviewCommandValidator.Validate(interview, Create.Command.SynchronizeInterviewEventsCommand()));
+            exception.ExceptionType.Should().Be(InterviewDomainExceptionType.InterviewLimitReached);
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("limit", "interviews", "allowed", maxNumberOfInterviews.ToString());
+        }
 
-        It should_raise_InterviewException = () =>
-            exception.ShouldNotBeNull();
-
-        It should_raise_InterviewException_with_type_InterviewLimitReached = () =>
-           exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewLimitReached);
-
-        It should_throw_exception_that_contains_such_words = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("limit", "interviews", "allowed", maxNumberOfInterviews.ToString());
 
         private static StatefulInterview interview;
 
-        private static InterviewException exception;
         private static int maxNumberOfInterviews = 1;
         private static SurveyManagementInterviewCommandValidator surveyManagementInterviewCommandValidator;
     }

@@ -1,18 +1,17 @@
 using System;
 using FluentAssertions;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidatorTests
 {
     internal class when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_not_throw_exception () {
             command = Create.Command.ImportFromDesigner(title: title, questionnaireId: importedQuestionnaireId);
 
             var questionnaireBrowseItemStorage = Create.Storage.InMemoryPlainStorage<QuestionnaireBrowseItem>();
@@ -23,12 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
             questionnaireBrowseItemStorage.Store(deletedQuestionnaireBrowseItem, differentQuestionnaireId);
 
             validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
-        };
 
-        Because of = () => exception = Catch.Exception(() => validator.Validate(null, command));
-
-        It should_not_throw_exception = () =>
-            exception.Should().BeNull();
+            validator.Validate(null, command);
+        }
 
         private static QuestionnaireNameValidator validator;
         private static Exception exception;

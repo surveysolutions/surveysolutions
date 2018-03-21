@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.PlainStorage;
@@ -11,18 +11,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.TeamUsersAndQuestionnaire
 {
     internal class when_questionnaire_is_deleted : TeamUsersAndQuestionnairesFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = new TestPlainStorage<QuestionnaireBrowseItem>();
             var questionnaireBrowseItem = Create.Entity.QuestionnaireBrowseItem();
             questionnaireBrowseItem.IsDeleted = true;
             questionnaires.Store(questionnaireBrowseItem, "id");
             viewFactory = CreateViewFactory(questionnaires);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => view = viewFactory.Load(new TeamUsersAndQuestionnairesInputModel(Guid.Empty));
+        public void BecauseOf() => view = viewFactory.Load(new TeamUsersAndQuestionnairesInputModel(Guid.Empty));
 
-        It should_not_return_deleted_questionnaires = () => view.Questionnaires.Count().ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_return_deleted_questionnaires () => view.Questionnaires.Count().Should().Be(0);
 
         static TeamUsersAndQuestionnairesFactory viewFactory;
         static TeamUsersAndQuestionnairesView view;

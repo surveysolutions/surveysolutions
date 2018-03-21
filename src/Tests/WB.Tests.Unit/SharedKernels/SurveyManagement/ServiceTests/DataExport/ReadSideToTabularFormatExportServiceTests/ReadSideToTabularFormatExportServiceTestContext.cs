@@ -124,7 +124,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         }
     }
 
-    [Subject(typeof(ReadSideToTabularFormatExportService))]
+    [NUnit.Framework.TestOf(typeof(ReadSideToTabularFormatExportService))]
     internal class ReadSideToTabularFormatExportServiceTestContext
     {
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(

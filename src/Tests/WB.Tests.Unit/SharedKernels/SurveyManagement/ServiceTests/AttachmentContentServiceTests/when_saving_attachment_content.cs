@@ -1,25 +1,25 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentContentServiceTests
 {
     class when_saving_attachment_content : CommentsExporterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentService = Create.Service.AttachmentContentService(mockOfAttachmentContentPlainStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             attachmentContentService.SaveAttachmentContent(contentHash, contentType, content);
 
-        It should_store_attachment_content_to_plain_storage = () =>
+        [NUnit.Framework.Test] public void should_store_attachment_content_to_plain_storage () =>
             mockOfAttachmentContentPlainStorage.Verify(x=>x.Store(Moq.It.IsAny<AttachmentContent>(), contentHash), Times.Once);
 
         private static AttachmentContentService attachmentContentService;
