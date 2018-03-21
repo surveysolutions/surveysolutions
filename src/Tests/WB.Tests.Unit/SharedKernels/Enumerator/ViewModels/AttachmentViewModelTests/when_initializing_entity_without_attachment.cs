@@ -1,19 +1,18 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelTests
 {
     internal class when_initializing_entity_without_attachment : AttachmentViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
@@ -25,19 +24,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             attachmentContentStorage = Mock.Of<IAttachmentContentStorage>();
 
             viewModel = Create.ViewModel.AttachmentViewModel(questionnaireRepository, interviewRepository, attachmentContentStorage);
-        };
+        }
 
-        Because of = () => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
+        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
 
 
-        It should_dont_call_attachment_content = () =>
+        [NUnit.Framework.Test] public void should_dont_call_attachment_content () =>
             Mock.Get(attachmentContentStorage).Verify(s => s.GetMetadata(Moq.It.IsAny<string>()), Times.Never());
 
-        It should_initialize_image_flag_as_false = () => 
-            viewModel.IsImage.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_initialize_image_flag_as_false () => 
+            viewModel.IsImage.Should().BeFalse();
 
-        It should_be_empty_attachment_content = () => 
-            viewModel.Content.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_be_empty_attachment_content () => 
+            viewModel.Content.Should().BeNull();
 
 
         static AttachmentViewModel viewModel;

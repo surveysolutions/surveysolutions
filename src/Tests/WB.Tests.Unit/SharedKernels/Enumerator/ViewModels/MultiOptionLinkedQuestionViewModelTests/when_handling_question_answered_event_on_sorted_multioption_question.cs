@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.SharedKernels.DataCollection;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
     internal class when_handling_question_answered_event_on_sorted_multioption_question : MultiOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             
             questionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -40,19 +39,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             questionViewModel = CreateViewModel(interviewRepository: interviews, questionnaireStorage: questionnaires, eventRegistry: eventRegistry);
             questionViewModel.Init(interviewId.FormatGuid(), questionId, Create.Other.NavigationState());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             interview.AnswerMultipleOptionsLinkedQuestion(interviewerId, questionId.Id, RosterVector.Empty,
                 DateTime.UtcNow, new RosterVector[] {new decimal[] {2}, new decimal[] {1}});
 
             Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
-        };
+        }
 
-        It should_put_answers_order_on_option1 = () => questionViewModel.Options.First().CheckedOrder.ShouldEqual(2);
-        It should_put_answers_order_on_option2 = () => questionViewModel.Options.Second().CheckedOrder.ShouldEqual(1);
-        It should_put_checked_on_checked_items = () => questionViewModel.Options.Count(x => x.Checked).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_put_answers_order_on_option1 () => questionViewModel.Options.First().CheckedOrder.Should().Be(2);
+        [NUnit.Framework.Test] public void should_put_answers_order_on_option2 () => questionViewModel.Options.Second().CheckedOrder.Should().Be(1);
+        [NUnit.Framework.Test] public void should_put_checked_on_checked_items () => questionViewModel.Options.Count(x => x.Checked).Should().Be(2);
 
         static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static Identity questionId;

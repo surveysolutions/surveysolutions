@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTes
                 controller.InterviewSummaryForMapPoint(new InterviewSummaryForMapPointViewModel(){InterviewId = interviewId});
 
         It should_view_model_be_null = () =>
-            viewModel.ShouldBeNull();
+            viewModel.Should().BeNull();
 
         private static InterviewApiController controller;
         private static InterviewSummaryForMapPointView viewModel;

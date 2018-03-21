@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.EventBus;
@@ -8,14 +8,13 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
     internal class when_status_changing_events_recived : InterviewHistoryDenormalizerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             statusEvents = new List<IEvent>();
             statusEvents.Add(new InterviewerAssigned(interviewId, Guid.NewGuid(), DateTime.Now));
             statusEvents.Add(new InterviewReceivedByInterviewer());
@@ -34,49 +33,50 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewHistoryView = CreateInterviewHistoryView(interviewId);
 
             interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
           PublishEventsOnOnInterviewExportedDataDenormalizer(statusEvents, interviewHistoryView, interviewExportedDataDenormalizer);
 
-        It should_action_of_1_record_be_InterviewerAssigned = () =>
-            interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.InterviewerAssigned);
+        [NUnit.Framework.Test] public void should_action_of_1_record_be_InterviewerAssigned () =>
+            interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.InterviewerAssigned);
 
-        It should_action_of_2_record_be_ReceivedByInterviewer = () =>
-            interviewHistoryView.Records[1].Action.ShouldEqual(InterviewHistoricalAction.ReceivedByInterviewer);
+        [NUnit.Framework.Test] public void should_action_of_2_record_be_ReceivedByInterviewer () =>
+            interviewHistoryView.Records[1].Action.Should().Be(InterviewHistoricalAction.ReceivedByInterviewer);
 
-        It should_action_of_3_record_be_Completed = () =>
-          interviewHistoryView.Records[2].Action.ShouldEqual(InterviewHistoricalAction.Completed);
+        [NUnit.Framework.Test] public void should_action_of_3_record_be_Completed () =>
+          interviewHistoryView.Records[2].Action.Should().Be(InterviewHistoricalAction.Completed);
 
-        It should_action_of_4_record_be_Restarted = () =>
-          interviewHistoryView.Records[3].Action.ShouldEqual(InterviewHistoricalAction.Restarted);
+        [NUnit.Framework.Test] public void should_action_of_4_record_be_Restarted () =>
+          interviewHistoryView.Records[3].Action.Should().Be(InterviewHistoricalAction.Restarted);
 
-        It should_action_of_5_record_be_ReceivedBySupervisor = () =>
-          interviewHistoryView.Records[4].Action.ShouldEqual(InterviewHistoricalAction.ReceivedBySupervisor);
+        [NUnit.Framework.Test] public void should_action_of_5_record_be_ReceivedBySupervisor () =>
+          interviewHistoryView.Records[4].Action.Should().Be(InterviewHistoricalAction.ReceivedBySupervisor);
 
-        It should_action_of_6_record_be_RejectedBySupervisor = () =>
-            interviewHistoryView.Records[5].Action.ShouldEqual(InterviewHistoricalAction.RejectedBySupervisor);
+        [NUnit.Framework.Test] public void should_action_of_6_record_be_RejectedBySupervisor () =>
+            interviewHistoryView.Records[5].Action.Should().Be(InterviewHistoricalAction.RejectedBySupervisor);
 
-        It should_action_of_7_record_be_ApproveBySupervisor = () =>
-          interviewHistoryView.Records[6].Action.ShouldEqual(InterviewHistoricalAction.ApproveBySupervisor);
+        [NUnit.Framework.Test] public void should_action_of_7_record_be_ApproveBySupervisor () =>
+          interviewHistoryView.Records[6].Action.Should().Be(InterviewHistoricalAction.ApproveBySupervisor);
 
-        It should_action_of_8_record_be_Restored = () =>
-          interviewHistoryView.Records[7].Action.ShouldEqual(InterviewHistoricalAction.Restored);
+        [NUnit.Framework.Test] public void should_action_of_8_record_be_Restored () =>
+          interviewHistoryView.Records[7].Action.Should().Be(InterviewHistoricalAction.Restored);
 
-        It should_action_of_9_record_be_RejectedByHeadquarter = () =>
-           interviewHistoryView.Records[8].Action.ShouldEqual(InterviewHistoricalAction.RejectedByHeadquarter);
+        [NUnit.Framework.Test] public void should_action_of_9_record_be_RejectedByHeadquarter () =>
+           interviewHistoryView.Records[8].Action.Should().Be(InterviewHistoricalAction.RejectedByHeadquarter);
 
-        It should_action_of_10_record_be_ApproveByHeadquarter = () =>
-          interviewHistoryView.Records[9].Action.ShouldEqual(InterviewHistoricalAction.ApproveByHeadquarter);
+        [NUnit.Framework.Test] public void should_action_of_10_record_be_ApproveByHeadquarter () =>
+          interviewHistoryView.Records[9].Action.Should().Be(InterviewHistoricalAction.ApproveByHeadquarter);
         
-        It should_action_of_11_record_be_ApproveByHeadquarter = () =>
-          interviewHistoryView.Records[10].Action.ShouldEqual(InterviewHistoricalAction.UnapproveByHeadquarters);
+        [NUnit.Framework.Test] public void should_action_of_11_record_be_ApproveByHeadquarter () =>
+          interviewHistoryView.Records[10].Action.Should().Be(InterviewHistoricalAction.UnapproveByHeadquarters);
 
-        It should_action_of_12_record_be_ApproveByHeadquarter = () =>
-          interviewHistoryView.Records[11].Action.ShouldEqual(InterviewHistoricalAction.ApproveByHeadquarter);
+        [NUnit.Framework.Test] public void should_action_of_12_record_be_ApproveByHeadquarter () =>
+          interviewHistoryView.Records[11].Action.Should().Be(InterviewHistoricalAction.ApproveByHeadquarter);
 
-        It should_action_of_13_record_be_Deleted = () =>
-          interviewHistoryView.Records[12].Action.ShouldEqual(InterviewHistoricalAction.Deleted);
+        [NUnit.Framework.Test] public void should_action_of_13_record_be_Deleted () =>
+          interviewHistoryView.Records[12].Action.Should().Be(InterviewHistoricalAction.Deleted);
 
 
         private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;

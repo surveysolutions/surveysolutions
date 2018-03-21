@@ -1,17 +1,17 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.RepositoryKeyHelperTests
 {
     internal class when_creating_key_for_readside_versioned_repository_reader
     {
-        Establish context = () => {};
+        [NUnit.Framework.OneTimeSetUp] public void context () {BecauseOf();}
 
-        Because of = () => 
+        public void BecauseOf() => 
             key = RepositoryKeysHelper.GetVersionedKey("11111111111111111111111111111111", 1);
 
-        It should_create_key_11111111111111111111111111111111_1 = () =>
-            key.ShouldEqual("11111111111111111111111111111111-1");
+        [NUnit.Framework.Test] public void should_create_key_11111111111111111111111111111111_1 () =>
+            key.Should().Be("11111111111111111111111111111111-1");
 
         private static string key;
     }

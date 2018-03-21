@@ -1,21 +1,21 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Moq;
+using NSubstitute.ExceptionExtensions;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_setting_FilterText_and_text_contains_special_regex_characters : CascadingSingleOptionQuestionViewModelTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_not_throw_argument_exception () {
             SetUp();
 
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == false);
@@ -46,11 +46,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
-
-        Because of = () => exception = Catch.Only<ArgumentException>(() => { cascadingModel.FilterCommand.ExecuteAsync(@"(+").Await(); });
-
-        It should_not_throw_argument_exception = () => exception.ShouldBeNull();
+           
+            Assert.DoesNotThrowAsync(async () => await cascadingModel.FilterCommand.ExecuteAsync(@"(+"));
+        }
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static ArgumentException exception;

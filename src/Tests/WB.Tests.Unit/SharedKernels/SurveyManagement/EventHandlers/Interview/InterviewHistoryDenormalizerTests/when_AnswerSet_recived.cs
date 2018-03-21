@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -20,8 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class when_AnswerSet_recived : InterviewHistoryDenormalizerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewHistoryView = CreateInterviewHistoryView(interviewId);
             var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new[]
             {
@@ -47,85 +46,85 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(
                 questionnaire: CreateQuestionnaireExportStructure(questionId, variableName),
                 questionnaireStorage: questionnaireStorage);
-        };
+            BecauseOf();
+        }
 
-         Because of =
-            () => PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, interviewExportedDataDenormalizer);
+         private void BecauseOf() => PublishEventsOnOnInterviewExportedDataDenormalizer(answerEvents, interviewHistoryView, interviewExportedDataDenormalizer);
 
-        It should_action_of_TextQuestionAnswered_be_AnswerSet = () =>
-           interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_TextQuestionAnswered_be_AnswerSet () =>
+           interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_TextQuestionAnswered_be_hi = () =>
-            interviewHistoryView.Records[0].Parameters["answer"].ShouldEqual("hi");
+        [NUnit.Framework.Test] public void should_answer_on_TextQuestionAnswered_be_hi () =>
+            interviewHistoryView.Records[0].Parameters["answer"].Should().Be("hi");
 
-        It should_roster_Vector_on_TextQuestionAnswered_be_1_2 = () =>
-          interviewHistoryView.Records[0].Parameters["roster"].ShouldEqual("1,2");
+        [NUnit.Framework.Test] public void should_roster_Vector_on_TextQuestionAnswered_be_1_2 () =>
+          interviewHistoryView.Records[0].Parameters["roster"].Should().Be("1,2");
 
-        It should_action_of_MultipleOptionsQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[1].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_MultipleOptionsQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[1].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_MultipleOptionsQuestionAnswered_be_1_and_2 = () =>
-            interviewHistoryView.Records[1].Parameters["answer"].ShouldEqual("1, 2");
+        [NUnit.Framework.Test] public void should_answer_on_MultipleOptionsQuestionAnswered_be_1_and_2 () =>
+            interviewHistoryView.Records[1].Parameters["answer"].Should().Be("1, 2");
 
-        It should_action_of_SingleOptionQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[2].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_SingleOptionQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[2].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_SingleOptionQuestionAnswered_be_1 = () =>
-            interviewHistoryView.Records[2].Parameters["answer"].ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_answer_on_SingleOptionQuestionAnswered_be_1 () =>
+            interviewHistoryView.Records[2].Parameters["answer"].Should().Be("1");
 
-        It should_action_of_NumericRealQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[3].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_NumericRealQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[3].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_NumericRealQuestionAnswered_be_1 = () =>
-            interviewHistoryView.Records[3].Parameters["answer"].ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_answer_on_NumericRealQuestionAnswered_be_1 () =>
+            interviewHistoryView.Records[3].Parameters["answer"].Should().Be("1");
 
-        It should_action_of_NumericIntegerQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[4].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_NumericIntegerQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[4].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_NumericIntegerQuestionAnswered_be_1 = () =>
-            interviewHistoryView.Records[4].Parameters["answer"].ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_answer_on_NumericIntegerQuestionAnswered_be_1 () =>
+            interviewHistoryView.Records[4].Parameters["answer"].Should().Be("1");
 
-        It should_action_of_DateTimeQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[5].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_DateTimeQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[5].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_DateTimeQuestionAnswered_be_4_18_1984 = () =>
-            interviewHistoryView.Records[5].Parameters["answer"].ShouldEqual("1984-04-18");
+        [NUnit.Framework.Test] public void should_answer_on_DateTimeQuestionAnswered_be_4_18_1984 () =>
+            interviewHistoryView.Records[5].Parameters["answer"].Should().Be("1984-04-18");
 
-        It should_action_of_GeoLocationQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[6].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_GeoLocationQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[6].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_GeoLocationQuestionAnswered_be_1_2_3_4 = () =>
-            interviewHistoryView.Records[6].Parameters["answer"].ShouldEqual("1,2[3]4");
+        [NUnit.Framework.Test] public void should_answer_on_GeoLocationQuestionAnswered_be_1_2_3_4 () =>
+            interviewHistoryView.Records[6].Parameters["answer"].Should().Be("1,2[3]4");
 
-        It should_action_of_MultipleOptionsLinkedQuestionAnswered_be_AnswerSet = () =>
-         interviewHistoryView.Records[7].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_MultipleOptionsLinkedQuestionAnswered_be_AnswerSet () =>
+         interviewHistoryView.Records[7].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_MultipleOptionsLinkedQuestionAnswered_be_1_3_3 = () =>
-            interviewHistoryView.Records[7].Parameters["answer"].ShouldEqual("1, 3, 3");
+        [NUnit.Framework.Test] public void should_answer_on_MultipleOptionsLinkedQuestionAnswered_be_1_3_3 () =>
+            interviewHistoryView.Records[7].Parameters["answer"].Should().Be("1, 3, 3");
 
-        It should_action_of_SingleOptionLinkedQuestionAnswered_be_AnswerSet = () =>
-         interviewHistoryView.Records[8].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_SingleOptionLinkedQuestionAnswered_be_AnswerSet () =>
+         interviewHistoryView.Records[8].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_SingleOptionLinkedQuestionAnswered_be_1_2 = () =>
-            interviewHistoryView.Records[8].Parameters["answer"].ShouldEqual("1, 2");
+        [NUnit.Framework.Test] public void should_answer_on_SingleOptionLinkedQuestionAnswered_be_1_2 () =>
+            interviewHistoryView.Records[8].Parameters["answer"].Should().Be("1, 2");
 
-        It should_action_of_TextListQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[9].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_TextListQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[9].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_TextListQuestionAnswered_be_2_3 = () =>
-            interviewHistoryView.Records[9].Parameters["answer"].ShouldEqual("2|3");
+        [NUnit.Framework.Test] public void should_answer_on_TextListQuestionAnswered_be_2_3 () =>
+            interviewHistoryView.Records[9].Parameters["answer"].Should().Be("2|3");
 
-        It should_action_of_QRBarcodeQuestionAnswered_be_AnswerSet = () =>
-            interviewHistoryView.Records[10].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_QRBarcodeQuestionAnswered_be_AnswerSet () =>
+            interviewHistoryView.Records[10].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_QRBarcodeQuestionAnswered_be_test = () =>
-            interviewHistoryView.Records[10].Parameters["answer"].ShouldEqual("test");
+        [NUnit.Framework.Test] public void should_answer_on_QRBarcodeQuestionAnswered_be_test () =>
+            interviewHistoryView.Records[10].Parameters["answer"].Should().Be("test");
 
-        It should_action_of_PictureQuestionAnswered_be_AnswerSet = () =>
-          interviewHistoryView.Records[11].Action.ShouldEqual(InterviewHistoricalAction.AnswerSet);
+        [NUnit.Framework.Test] public void should_action_of_PictureQuestionAnswered_be_AnswerSet () =>
+          interviewHistoryView.Records[11].Action.Should().Be(InterviewHistoricalAction.AnswerSet);
 
-        It should_answer_on_PictureQuestionAnswered_be_my_png = () =>
-            interviewHistoryView.Records[11].Parameters["answer"].ShouldEqual("my.png");
+        [NUnit.Framework.Test] public void should_answer_on_PictureQuestionAnswered_be_my_png () =>
+            interviewHistoryView.Records[11].Parameters["answer"].Should().Be("my.png");
 
         private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;
         private static Guid interviewId = Guid.NewGuid();

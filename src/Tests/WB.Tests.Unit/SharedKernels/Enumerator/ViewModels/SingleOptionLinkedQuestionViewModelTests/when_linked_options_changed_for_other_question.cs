@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 {
     internal class when_linked_options_changed_for_other_question : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkSourceQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkedQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
@@ -44,13 +43,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             viewModel = Create.ViewModel.SingleOptionLinkedQuestionViewModel(interview: interview, questionnaire: Create.Entity.PlainQuestionnaire(questionnaire));
             viewModel.Init(interviewId, Identity.Create(linkedQuestionId, RosterVector.Empty), Create.Other.NavigationState());
-        };
 
-        Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
+            BecauseOf();
+        }
 
-        It should_not_modify_list_of_options = () => viewModel.Options.Count.ShouldEqual(1);
+        public void BecauseOf() => viewModel.Handle(Create.Event.LinkedOptionsChanged(eventData));
 
-        It should_not_modify_option_title = () => viewModel.Options.First().Title.ShouldEqual(linkedOptionTextInInterview);
+        [NUnit.Framework.Test] public void should_not_modify_list_of_options () => viewModel.Options.Count.Should().Be(1);
+
+        [NUnit.Framework.Test] public void should_not_modify_option_title () => viewModel.Options.First().Title.Should().Be(linkedOptionTextInInterview);
 
         static SingleOptionLinkedQuestionViewModel viewModel;
         static Guid linkSourceQuestionId;

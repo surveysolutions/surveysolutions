@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -20,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
         Because of = () => viewModel = factory.Load(interviewId);
 
         It should_view_model_be_null = () =>
-            viewModel.ShouldBeNull();
+            viewModel.Should().BeNull();
 
         private static InterviewSummaryViewFactory factory;
 

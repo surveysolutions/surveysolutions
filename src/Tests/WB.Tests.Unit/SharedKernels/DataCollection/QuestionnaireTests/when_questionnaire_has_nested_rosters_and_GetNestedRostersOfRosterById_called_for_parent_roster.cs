@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -18,8 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_questionnaire_has_nested_rosters_and_GetNestedRostersOfRosterById_called_for_parent_roster : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
@@ -40,16 +39,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                         }.ToReadOnlyCollection()
                 }
             });
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             nestedRosters = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1).GetNestedRostersOfGroupById(rosterGroupId);
 
-        It should_rosterGroups_not_be_empty = () =>
-            nestedRosters.ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_rosterGroups_not_be_empty () =>
+            nestedRosters.Should().NotBeEmpty();
 
-        It should_rosterGroups_have_only_1_roster_group = () =>
-            nestedRosters.ShouldContainOnly(nestedRosterId);
+        [NUnit.Framework.Test] public void should_rosterGroups_have_only_1_roster_group () =>
+            nestedRosters.Should().BeEquivalentTo(nestedRosterId);
 
         private static IEnumerable<Guid> nestedRosters;
         private static QuestionnaireDocument questionnaireDocument;

@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.FilebasedPreloadedDataRep
         Because of = () => result = filebasedPreloadedDataRepository.GetPreloadedDataMetaInformationForPanelData(Guid.NewGuid().FormatGuid());
 
         It should_result_be_null = () =>
-            result.ShouldBeNull();
+            result.Should().BeNull();
 
         private static Mock<IFileSystemAccessor> fileSystemAccessor;
         private static FilebasedPreloadedDataRepository filebasedPreloadedDataRepository;

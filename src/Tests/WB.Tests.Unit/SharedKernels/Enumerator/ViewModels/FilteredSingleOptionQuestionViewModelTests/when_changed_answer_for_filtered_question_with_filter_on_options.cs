@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
@@ -11,20 +9,18 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
     internal class when_changed_answer_for_filtered_question_with_filter_on_options : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewId = "interviewId";
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             
@@ -56,14 +52,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             viewModel.Init(interviewId, questionIdentity, navigationState);
             Thread.Sleep(1000);
             filteredOptionsViewModel.ResetCalls();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => {
+        public void BecauseOf() {
             filteredOptionsViewModel.Raise(_ => _.OptionsChanged -= null, EventArgs.Empty);
             Thread.Sleep(1000);
-        };
+        }
 
-        It should_update_suggestions_list = () =>
+        [NUnit.Framework.Test] public void should_update_suggestions_list () =>
             filteredOptionsViewModel.Verify(_ => _.GetOptions(Moq.It.IsAny<string>()), Times.Once);
 
         private static FilteredSingleOptionQuestionViewModel viewModel;

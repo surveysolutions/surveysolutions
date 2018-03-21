@@ -1,17 +1,16 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
     internal class when_initializing_and_roster_title_is_used : StaticTextViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterTitleAnswerValue = "answer";
             staticTextWithSubstitutionToRosterTitleId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
@@ -26,13 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             viewModel.Init("interview", Create.Identity(staticTextWithSubstitutionToRosterTitleId, Create.Entity.RosterVector(1)), null);
 
-        It should_substitute_roster_title_value = () => 
-            viewModel.Text.PlainText.ShouldEqual($"uses {rosterTitleAnswerValue}");
+        [NUnit.Framework.Test] public void should_substitute_roster_title_value () => 
+            viewModel.Text.PlainText.Should().Be($"uses {rosterTitleAnswerValue}");
 
         static StaticTextViewModel viewModel;
         static Guid staticTextWithSubstitutionToRosterTitleId;

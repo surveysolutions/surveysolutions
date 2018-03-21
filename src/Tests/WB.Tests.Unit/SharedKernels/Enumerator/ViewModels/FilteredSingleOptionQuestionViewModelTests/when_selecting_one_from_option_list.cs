@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,14 +17,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
     internal class when_selecting_one_from_option_list : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             interviewId = "interviewId";
             userId = Guid.NewGuid();
 
@@ -54,11 +54,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var navigationState = Create.Other.NavigationState();
             
             viewModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            await BecauseOf();
+        }
 
-        Because of = () => viewModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("html").Await();
+        public async Task BecauseOf() => await viewModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("html");
 
-        It should_save_answer = () =>
+        [NUnit.Framework.Test] public void should_save_answer () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerSingleOptionQuestionCommand>(y=>y.SelectedValue == 4)), Times.Once);
 
         private static FilteredSingleOptionQuestionViewModel viewModel;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using Machine.Specifications;
+using FluentAssertions;
 
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_interviewer_underlying_questions_in_group
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocument(
                 children: new List<IComposite>
                 {
@@ -37,13 +36,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                 });
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             underlyingInterviewerQuestions = plainQuestionnaire.GetAllUnderlyingInterviewerQuestions(chapterId);
 
-        It should_find_3_interviewer_questions = () => 
-            underlyingInterviewerQuestions.ShouldContain(question1Id, question2Id, question2Id);
+        [NUnit.Framework.Test] public void should_find_3_interviewer_questions () => 
+            underlyingInterviewerQuestions.Should().BeEquivalentTo(question1Id, question2Id, question3Id);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static readonly Guid question1Id = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

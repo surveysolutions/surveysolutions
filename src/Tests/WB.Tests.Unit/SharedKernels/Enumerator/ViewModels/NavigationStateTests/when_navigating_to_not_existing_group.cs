@@ -1,18 +1,17 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     internal class when_navigating_to_not_existing_group
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.HasGroup(notExistingGroup) == false
                    && _.IsEnabled(notExistingGroup) == true);
@@ -21,13 +20,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             navigationState.NavigateTo(NavigationIdentity.CreateForGroup(notExistingGroup));
 
-        It should_not_navigate = () =>
-            navigatedTo.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_navigate () =>
+            navigatedTo.Should().BeNull();
 
         private static NavigationState navigationState;
         private static Identity notExistingGroup = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);

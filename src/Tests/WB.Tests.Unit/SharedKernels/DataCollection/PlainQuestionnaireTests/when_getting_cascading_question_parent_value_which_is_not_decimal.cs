@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
@@ -11,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_cascading_question_parent_value_which_is_not_decimal : PlainQuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_throw_exception_type_of_QuestionnaireException () {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.SingleQuestion(id: questionId,
@@ -22,17 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
-        };
 
-        Because of = () =>
-            exception = Catch.Exception(() => plainQuestionnaire.GetCascadingParentValue(questionId, 1m)
-        );
+            var exception = Assert.Throws<QuestionnaireException>(() => plainQuestionnaire.GetCascadingParentValue(questionId, 1m));
 
-        It should_throw_exception_type_of_QuestionnaireException = () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("no", "parent");
 
-        It should_throw_exception_with_message_containing__parse____decimal = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("no", "parent");
+        }
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static readonly Guid questionId = Guid.Parse("00000000000000000000000000000000");

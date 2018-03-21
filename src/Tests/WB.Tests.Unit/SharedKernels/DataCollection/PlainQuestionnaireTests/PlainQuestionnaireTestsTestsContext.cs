@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -10,9 +10,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
     [TestOf(typeof(PlainQuestionnaire))]
     internal class PlainQuestionnaireTestsContext
     {
-        public static Establish baseContext = () =>
+        [NUnit.Framework.OneTimeSetUp]
+        public void baseContext()
         {
             Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
-        };
+        }
     }
 }

@@ -1,5 +1,5 @@
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_initializing_cascading_view_model_and_child_and_parent_question_are_answered_and_question_2_level_roster : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             SetUp();
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(answerOnChildQuestion));
             var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(1));
@@ -37,30 +36,31 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel = CreateCascadingSingleOptionQuestionViewModel(
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => cascadingModel.Init(interviewId, questionIdentity, navigationState);
+        public void BecauseOf() => cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
-        It should_get_answer_for_parent_question_once = () =>
+        [NUnit.Framework.Test] public void should_get_answer_for_parent_question_once () =>
             StatefulInterviewMock.Verify(x => x.GetSingleOptionQuestion(parentIdentity), Times.Once);
 
-        It should_get_answer_for_question_once = () =>
+        [NUnit.Framework.Test] public void should_get_answer_for_question_once () =>
             StatefulInterviewMock.Verify(x => x.GetSingleOptionQuestion(questionIdentity), Times.Once);
 
-        It should_initialize_question_state = () =>
+        [NUnit.Framework.Test] public void should_initialize_question_state () =>
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
-        It should_subscribe_for_events = () =>
+        [NUnit.Framework.Test] public void should_subscribe_for_events () =>
             EventRegistry.Verify(x => x.Subscribe(cascadingModel, Moq.It.IsAny<string>()), Times.Once);
         
-        It should_set_filter_text = () =>
-            cascadingModel.FilterText.ShouldEqual("3");
+        [NUnit.Framework.Test] public void should_set_filter_text () =>
+            cascadingModel.FilterText.Should().Be("3");
 
-        It should_set_1_item_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_set_1_item_list_in_AutoCompleteSuggestions () =>
+            cascadingModel.AutoCompleteSuggestions.Count.Should().Be(1);
 
-        It should_format_first_option_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ElementAt(0).ShouldContain("title klo <b>3</b>");
+        [NUnit.Framework.Test] public void should_format_first_option_in_AutoCompleteSuggestions () =>
+            cascadingModel.AutoCompleteSuggestions.ElementAt(0).Should().Contain("title klo <b>3</b>");
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         private static readonly Mock<IStatefulInterview> StatefulInterviewMock = new Mock<IStatefulInterview>();

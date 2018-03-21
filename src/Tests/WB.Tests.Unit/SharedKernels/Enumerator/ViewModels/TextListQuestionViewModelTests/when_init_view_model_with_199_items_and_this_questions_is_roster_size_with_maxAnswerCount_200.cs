@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,14 +14,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
     internal class when_init_view_model_with_199_items_and_this_questions_is_roster_size_with_maxAnswerCount_200 : TextListQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var answersAsTuple = new Tuple<decimal, string>[199];
             for (int i = 1; i <= 199; i++)
             {
@@ -49,12 +48,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 principal: principal);
 
             listModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => listModel.Init(interviewId, questionIdentity, navigationState);
+        public void BecauseOf() => listModel.Init(interviewId, questionIdentity, navigationState);
         
-        It should_not_contain_add_new_item_view_model = () =>
-            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_not_contain_add_new_item_view_model () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().Should().BeEmpty();
 
         private static TextListQuestionViewModel listModel;
         private static readonly NavigationState navigationState = Create.Other.NavigationState();

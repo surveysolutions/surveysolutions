@@ -1,4 +1,5 @@
-﻿using Machine.Specifications;
+﻿using FluentAssertions;
+using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
@@ -38,7 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
             result.EventstoreConnectionStatus.Status.ShouldEqual(HealthCheckStatus.Happy);
 
         It should_return_empty_error_message_for_EventStore_check = () =>
-            result.EventstoreConnectionStatus.ErrorMessage.ShouldBeNull();
+            result.EventstoreConnectionStatus.ErrorMessage.Should().BeNull();
 
         It should_return_Warning_status_for_NumberOfUnhandledPackages_check = () =>
             result.NumberOfUnhandledPackages.Status.ShouldEqual(HealthCheckStatus.Warning);

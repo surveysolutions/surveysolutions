@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_selecting_object_in_cascading_view_model_set_in_null : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             SetUp();
 
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
@@ -42,14 +41,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => cascadingModel.ShowErrorIfNoAnswerCommand.Execute(null);
+        public void BecauseOf() => cascadingModel.ShowErrorIfNoAnswerCommand.Execute(null);
 
-        It should_not_send_answer_command = () =>
+        [NUnit.Framework.Test] public void should_not_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
 
-        It should_show_validation_message = () =>
+        [NUnit.Framework.Test] public void should_show_validation_message () =>
             QuestionStateMock.Verify(x=>x.Validity.MarkAnswerAsNotSavedWithMessage(Moq.It.IsAny<string>()), Times.Once);
         
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
