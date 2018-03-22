@@ -2,7 +2,7 @@
     <wb-question :question="$me" questionCssClassName="single-select-question">
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                <div class="radio" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
                     <div class="field">
                         <input class="wb-radio" type="radio" 
                             :id="$me.id + '_' + option.value" 
@@ -16,6 +16,9 @@
                         <wb-remove-answer />
                     </div>
                 </div>
+                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                    <span></span>
+                </button>
                 <div v-if="noOptions" class="options-not-available">{{ $t("WebInterviewUI.OptionsAvailableAfterAnswer") }}</div>
                 <wb-lock />
             </div>            
@@ -28,7 +31,22 @@
 
     export default {
         name: "LinkedSingle",
+        data(){
+            return {
+                showAllOptions: false
+            }
+        },
         computed: {
+            shouldShowAnsweredOptionsOnly(){
+                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer;
+            },
+            answeredOrAllOptions(){
+                if(!this.shouldShowAnsweredOptionsOnly)
+                    return this.$me.options;
+                
+                var self = this;
+                return [find(this.$me.options, function(o) { return o.value == self.answer; })];
+            },
             answer: {
                 get() {
                     if (this.$me.options == null || this.$me.answer == null)
@@ -46,7 +64,11 @@
                 return this.$me.options == null || this.$me.options.length == 0
             }
         },
-        mixins: [entityDetails]
+        mixins: [entityDetails],
+        methods: {
+            toggleOptions(){
+                this.showAllOptions = !this.showAllOptions;
+            }
+        }
     }
-
 </script>
