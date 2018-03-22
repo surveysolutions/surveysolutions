@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var title = questionnaireItem.GetTitle();
                 var variable = questionnaireItem.GetVariable();
 
-                if (MatchesSearchTerm(variable, searchRegex))
+                if (MatchesSearchTerm(variable, searchRegex) || questionnaireItem.PublicKey.ToString().Equals(searchFor, StringComparison.InvariantCultureIgnoreCase))
                 {
                     yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
                 }
