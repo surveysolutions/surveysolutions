@@ -111,6 +111,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
                 {
                     ItemId = reference.Id.FormatGuid(),
                     Type = reference.Type,
+                    Title = variable.Label,
                     Variable = variable.Name,
                     ChapterId = parent?.PublicKey.FormatGuid()
                 };
