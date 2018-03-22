@@ -1104,12 +1104,15 @@
   <data name="VariableVariableName" xml:space="preserve">
     <value>Имя переменной</value>
   </data>
-    <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
     <value>Комментарий не может быть больше чем {1} символов</value>
     <comment>Комментарий не может быть больше чем {1} символов</comment>
   </data>
-    <data name="CommentEditorResolve" xml:space="preserve">
+  <data name="CommentEditorResolve" xml:space="preserve">
     <value>Обработать</value>
     <comment>Обработать</comment>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>Предупреждение</value>
   </data>
 </root>
