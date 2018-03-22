@@ -117,14 +117,7 @@ namespace WB.UI.Headquarters.API.Interviewer
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
         public virtual async Task<HttpResponseMessage> Patch(int deviceVersion)
-        {
-            var authHeader = Request.Headers.Authorization?.ToString();
-
-            if (authHeader != null)
-            {
-                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
-            }
-
+        {            
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if(clientVersion == ClientVersionFromUserAgent.WithMaps)
                 return GetPatchFile($@"WBCapi.{deviceVersion}.Ext.delta");
@@ -136,13 +129,6 @@ namespace WB.UI.Headquarters.API.Interviewer
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
         public virtual async Task<HttpResponseMessage> PatchExtended(int deviceVersion)
         {
-            var authHeader = Request.Headers.Authorization?.ToString();
-
-            if (authHeader != null)
-            {
-                await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
-            }
-
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
                 return GetPatchFile($@"WBCapi.{deviceVersion}.delta");
