@@ -156,7 +156,6 @@ namespace WB.UI.Headquarters.Controllers
 
             var model = this.GetStartModel(assignment.QuestionnaireId, webInterviewConfig);
             model.ServerUnderLoad = !this.connectionLimiter.CanConnect();
-            model.CustomMessages = webInterviewConfig.CustomMessages;
             return this.View(model);
         }
 
@@ -239,7 +238,7 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction("Resume", routeValues: new { id = id, returnUrl = returnUrl });
             }
 
-            var finishWebInterview = this.GetFinishModel(interview);
+            var finishWebInterview = this.GetFinishModel(interview, webInterviewConfig);
             finishWebInterview.CustomMessages = webInterviewConfig.CustomMessages;
 
             return View(finishWebInterview);
@@ -387,12 +386,13 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 UseCaptcha = webInterviewConfig.UseCaptcha,
+                CustomMessages = webInterviewConfig.CustomMessages
             };
 
             return view;
         }
 
-        private FinishWebInterview GetFinishModel(IStatefulInterview interview)
+        private FinishWebInterview GetFinishModel(IStatefulInterview interview, WebInterviewConfig webInterviewConfig)
         {
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(interview.QuestionnaireIdentity);
 
@@ -405,7 +405,8 @@ namespace WB.UI.Headquarters.Controllers
             {
                 QuestionnaireTitle = questionnaireBrowseItem.Title,
                 StartedDate = interview.StartedDate,
-                CompletedDate = interview.CompletedDate
+                CompletedDate = interview.CompletedDate,
+                CustomMessages = webInterviewConfig.CustomMessages
             };
         }
 
