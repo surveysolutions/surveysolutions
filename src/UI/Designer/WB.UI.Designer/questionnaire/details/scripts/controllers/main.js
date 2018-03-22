@@ -134,6 +134,19 @@ angular.module('designerApp')
                     });
                 }
             };
+            $('body').on('mousedown', '.findReplaceModal', function () {
+                $(this).addClass('draggable').parents().on('mousemove', function (e) {
+                    $('.draggable').offset({
+                        top: e.pageY - $('.draggable').outerHeight() / 8,
+                        left: e.pageX - $('.draggable').outerWidth() / 8
+                    }).on('mouseup', function () {
+                        $(this).removeClass('draggable');
+                    });
+                    e.preventDefault();
+                });
+            }).on('mouseup', function () {
+                $('.draggable').removeClass('draggable');
+            });
 
             $scope.questionnaireId = $state.params.questionnaireId;
             var ERROR = "error";

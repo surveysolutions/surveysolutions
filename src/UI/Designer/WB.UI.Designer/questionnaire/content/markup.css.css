@@ -9944,6 +9944,9 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .findReplaceModal .modal-dialog {
   width: 650px;
 }
+.findReplaceModal .modal-dialog .modal-header {
+  cursor: move;
+}
 .findReplaceModal .modal-dialog .modal-body {
   min-height: 160px;
   word-break: break-all;
