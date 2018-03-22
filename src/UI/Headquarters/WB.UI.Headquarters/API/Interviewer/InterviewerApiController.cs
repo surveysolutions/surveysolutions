@@ -116,7 +116,7 @@ namespace WB.UI.Headquarters.API.Interviewer
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApkPatch)]
-        public virtual async Task<HttpResponseMessage> Patch(int deviceVersion)
+        public virtual HttpResponseMessage Patch(int deviceVersion)
         {            
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if(clientVersion == ClientVersionFromUserAgent.WithMaps)
@@ -127,7 +127,7 @@ namespace WB.UI.Headquarters.API.Interviewer
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetExtendedApkPatch)]
-        public virtual async Task<HttpResponseMessage> PatchExtended(int deviceVersion)
+        public virtual HttpResponseMessage PatchExtended(int deviceVersion)
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
