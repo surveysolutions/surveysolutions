@@ -11,7 +11,7 @@
                         :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                         :class="{ 'special-value-selected': isSpecialValueSelected }"
                         @blur="answerIntegerQuestion" 
-                        v-numericFormatting="{aSep: groupSeparator, mDec: 0, vMin: '-2147483648', vMax: '2147483647', aPad: false }">
+                        v-numericFormatting="{digitGroupSeparator: groupSeparator, decimalPlaces: 0, decimalPlaces: 0, minimumValue: '-2147483648', maximumValue: '2147483647'}">
                         <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
                     </div>
                 </div>
@@ -41,8 +41,12 @@
     import * as $ from "jquery"
     import modal from "../modal"
     import numerics from "../numerics"
-
+    
     export default {
+        data() {
+            return {
+                autoNumericElement: null}
+            },
         name: 'Integer',
         mixins: [entityDetails],
         computed: { 
@@ -74,7 +78,7 @@
         },
         methods: {
             answerIntegerQuestion(evnt) {
-                const answerString = numerics.get($(evnt.target))
+                const answerString = this.autoNumericElement.getNumericString();
                 const answer = answerString != undefined && answerString != ''
                     ? parseInt(answerString)
                     : null;
@@ -143,6 +147,10 @@
                 if (!this.$me.isAnswered) {
                     return
                 }
+                
+                if(this.autoNumericElement)
+                    this.autoNumericElement.clear()
+                
                 if (!this.$me.isRosterSize) {
                     this.$store.dispatch("removeAnswer", this.id)
                     return
@@ -176,7 +184,11 @@
                 }
                 return false;
             }
+        },
+        beforeDestroy () {
+            if (this.autoNumericElement) {
+                this.autoNumericElement.remove()
+            }
         }
     }
-
 </script>
