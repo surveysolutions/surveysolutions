@@ -1105,4 +1105,7 @@
   <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
     <value>Comment cannot contain more than {1} characters</value>
   </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>Is warning</value>
+  </data>
 </root>

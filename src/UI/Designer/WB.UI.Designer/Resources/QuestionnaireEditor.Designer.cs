@@ -1006,6 +1006,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is warning.
+        /// </summary>
+        public static string IsWarning {
+            get {
+                return ResourceManager.GetString("IsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log out.
         /// </summary>
         public static string LogOut {
