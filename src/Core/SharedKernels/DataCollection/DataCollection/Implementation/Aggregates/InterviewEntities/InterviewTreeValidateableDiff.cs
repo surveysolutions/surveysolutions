@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool AreValidationMessagesChangedIml(IInterviewTreeValidateable source, IInterviewTreeValidateable result)
         {
             if (this.IsNodeRemoved) return false;
-            if (result.IsValid) return false;
+            if (result.IsValid && result.IsPlausible) return false;
             var changedMessages = result.ValidationMessages.Select(x => x.Text).ToArray();
             if (this.IsNodeAdded && !changedMessages.Any()) return false;
             var validationMessages = source?.ValidationMessages;
@@ -93,6 +93,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public interface IInterviewTreeValidateable
     {
         bool IsValid { get; }
+
+        bool IsPlausible { get; }
+
         SubstitutionText[] ValidationMessages { get; }
 
         IReadOnlyList<FailedValidationCondition> FailedErrors { get; }

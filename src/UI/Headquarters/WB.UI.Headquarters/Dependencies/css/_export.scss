@@ -5,7 +5,26 @@
 	max-width: 900px;
 	@include transition(margin, 0.3s);
 	background-color: #fff;
-
+	.format-data{
+		&:before{
+			background-position: 10px -200px;
+		}
+		&.separated-data:before{
+			background-position: 10px -120px;
+		}
+		&.xlsx:before{
+			background-position: 10px -78px;
+		}
+		&.stata:before{
+			background-position: 10px 4px;
+		}
+		&.spss:before{
+			background-position: 0px -38px;
+		}
+		&.zip:before{
+			background-position: 5px -165px;
+		}
+	}
 	.data{
 		h3{
 			margin-left: 15px;
@@ -242,7 +261,7 @@
 			  			padding: 50px 0 0;
 			  			
 			  			&:before{
-			  				left: 43%;
+			  				left: calc(50% - 31px);
 			  				top: 0;
 			  			}
 						&.stata:before{
@@ -308,9 +327,6 @@
 			background-color: $red-super-light;
 		}
 		.format-data{
-			&:before{
-				top: calc(50% - 20px);
-			}
 			.action-block{
 				margin-top: 15px;
 				&.wrapper-progress{
@@ -332,6 +348,7 @@
 	&:before{
 		display: block;
 		@include absolute(0, null, null, 0);
+		top: calc(50% - 21px);
 		@include size(63px, 41px);
 		content: "";
 		background: url("#{$assetsPath}/img/data-image.png") no-repeat;
