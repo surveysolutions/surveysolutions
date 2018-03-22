@@ -3,7 +3,7 @@
         <div class="question-unit">
             <div class="yes-no-mark">{{ $t("WebInterviewUI.Yes") }} <b>/</b> {{ $t("WebInterviewUI.No")}}</div>
             <div class="options-group">
-                <div class="radio" v-for="option in $me.options" :key="$me.id + '_' + option.value">
+                <div class="radio" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
                     <div class="field">
                         <input class="wb-radio" type="radio" 
                             :name="$me.id + '_' + option.value" 
@@ -34,6 +34,9 @@
                         <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value)}}</div>
                     </div>
                 </div>
+                <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
+                    <span></span>
+                </button>
                 <wb-lock />
             </div>
         </div>
@@ -48,14 +51,38 @@
 
     export default {
         name: 'CategoricalYesNo',
+        data(){
+            return {
+                showAllOptions: false
+            }
+        },
         computed: {
             allAnswersGiven() {
                 const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
                 const isMaxLimitReached = this.$me.maxSelectedAnswersCount && yesAnswers.length >= this.$me.maxSelectedAnswersCount;
                 return isMaxLimitReached;
+            },
+            shouldShowAnsweredOptionsOnly(){
+                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions &&                     
+                    this.$me.answer.length > 0 && this.$me.answer.length < this.$me.options.length;
+            },
+            answeredOrAllOptions(){
+                if(!this.shouldShowAnsweredOptionsOnly)
+                    return this.$me.options;
+                
+                var self = this;
+                return filter(this.$me.options, function(option) {
+                    return $.grep(self.$me.answer, (e) => { return e.value == option.value; }).length != 0 
+                    });
+            },
+            noOptions() {
+                return this.$me.options == null || this.$me.options.length == 0;
             }
         },
         methods: {
+            toggleOptions(){
+                this.showAllOptions = !this.showAllOptions;
+            },
             answerYes(optionValue){
                  this.sendAnswer(optionValue, true);
                  return true;
