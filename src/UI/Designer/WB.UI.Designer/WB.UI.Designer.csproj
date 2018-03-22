@@ -104,8 +104,8 @@
     <Reference Include="NConfig, Version=1.1.23.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NConfig.1.1.23\lib\Net40\NConfig.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -132,7 +132,7 @@
       <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.WebHost.3.3.0\lib\net45\Ninject.Web.WebApi.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.4.4.13\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
