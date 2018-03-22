@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     }
 
                     skip += limit;
-                    isExistsDocuments = documentRows.Count == limit;
+                    isExistsDocuments = documentRows.Count >= limit;
 
                 } while (isExistsDocuments);
             });
