@@ -392,7 +392,7 @@
                         commandService.deleteVariable($state.params.questionnaireId, itemIdToDelete).then(function () {
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
-                            $rootScope.$emit('varibleDeleted', itemIdToDelete);
+                            $rootScope.$emit('variableDeleted', itemIdToDelete);
                             removeSelectionIfHighlighted(itemIdToDelete);
                         });
                     }
@@ -473,7 +473,7 @@
                                 if (result.data.IsSuccess) {
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
-                                    $rootScope.$emit('staticTextDeleted');
+                                    $rootScope.$emit('statictextDeleted', itemIdToDelete);
                                     removeSelectionIfHighlighted(itemIdToDelete);
                                 }
                             });
