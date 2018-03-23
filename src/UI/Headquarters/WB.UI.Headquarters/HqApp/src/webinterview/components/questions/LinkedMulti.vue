@@ -27,7 +27,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
 
-    import { map, find, isEqual } from "lodash";
+    import { map, find, isEqual, filter } from "lodash";
     
     export default {
         name: 'LinkedMulti',
