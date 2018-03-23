@@ -380,9 +380,11 @@
     <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:scaleType">fitCenter</item>
     <item name="android:layout_gravity">center_vertical</item>
-    <item name="android:background">@drawable/spyglass_black</item>
+    <item name="android:src">?attr/homeAsUpIndicator</item>
+    <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
   </style>
 
   <style name="Dashboard_SearchView_Container">
