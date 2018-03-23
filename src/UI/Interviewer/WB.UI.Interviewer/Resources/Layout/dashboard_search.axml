@@ -6,7 +6,8 @@
     android:layout_height="match_parent">
 
   <LinearLayout style="@style/Dashboard_SearchView_Container" local:MvxBind="Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation);">
-    <ImageView style="@style/Dashboard_SearchView_SearchIcon" />
+    <ImageView style="@style/Dashboard_SearchView_SearchIcon" 
+               local:MvxBind="Click ExitSearchCommand" />
     <EditText style="@style/Dashboard_SearchView_FilterInput"
               local:MvxBind="SetFocus Not(Or(IsInProgressLongOperation, IsInProgressLongOperation)); 
                                      Watermark EmptySearchText; 

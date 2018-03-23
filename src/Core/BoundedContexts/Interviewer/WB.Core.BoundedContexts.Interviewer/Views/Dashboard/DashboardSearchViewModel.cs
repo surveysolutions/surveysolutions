@@ -95,9 +95,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             base.Load();
         }
 
-        private IReadOnlyCollection<InterviewView> interviews;
-        private IReadOnlyCollection<InterviewView> GetInterviewItems()
-            => interviews ?? (interviews = this.interviewViewRepository.LoadAll());
+        private List<InterviewView> interviews;
+        private List<InterviewView> GetInterviewItems()
+            => interviews ?? (interviews = this.interviewViewRepository.LoadAll().ToList());
 
         private ILookup<Guid, PrefilledQuestionView> identifyingQuestions;
         private ILookup<Guid, PrefilledQuestionView> GetIdentifyingQuestions()
@@ -106,7 +106,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private IReadOnlyCollection<AssignmentDocument> assignments;
         private IReadOnlyCollection<AssignmentDocument> GetAssignmentItems()
             => assignments ?? (assignments = this.assignmentsRepository.LoadAll());
-
 
         public event EventHandler OnItemsLoaded;
 
@@ -150,10 +149,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.UiItems.ReplaceWith(items);
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
             finally
             {
                 this.IsInProgressItemsLoading = false;
@@ -173,6 +168,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 if (assesment?.CreatedInterviewsCount != null)
                     assesment.CreatedInterviewsCount--;
             }
+
+            this.interviews.RemoveAll(x => x.InterviewId == item.InterviewId);
 
             UiItems.Remove(item);
 
