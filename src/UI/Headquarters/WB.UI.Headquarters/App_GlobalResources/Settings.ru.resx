@@ -198,6 +198,6 @@
     <comment>Включить автоматическое обновление андроид приложений</comment>
   </data>
     <data name="InterviewerSettings_Description" xml:space="preserve">
-    <value>Расширенные настройки для андроид версии интервьюер приложения</value>
+    <value>Расширенные настройки для андроид версии Interviewer приложения</value>
   </data>
 </root>
