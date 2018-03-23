@@ -502,7 +502,7 @@
     <value>Специальные значения могут быть только целыми числами в диапазоне от {0} до {1}.</value>
   </data>
   <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
-    <value>Заголовоки специальных значений пустые или слишком длинные. Длина заголовка должна быть от {0} до {1} символов.</value>
+    <value>Заголовки специальных значений пустые или слишком длинные. Длина заголовка должна быть от {0} до {1} символов.</value>
   </data>
   <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
     <value>Специальные значения должны быть уникальными.</value>
