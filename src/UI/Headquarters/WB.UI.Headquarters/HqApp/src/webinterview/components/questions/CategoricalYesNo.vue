@@ -47,8 +47,8 @@
 
     import * as $ from "jquery"
     import modal from "../modal"
-    import { findIndex } from "lodash"
-
+    import { findIndex, filter } from "lodash"
+    
     export default {
         name: 'CategoricalYesNo',
         data(){
