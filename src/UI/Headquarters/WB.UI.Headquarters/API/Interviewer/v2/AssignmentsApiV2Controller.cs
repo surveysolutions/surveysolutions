@@ -32,14 +32,16 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
         {
             var authorizedUserId = this.authorizedUser.Id;
 
-            var assignment = this.assignmentsService.GetAssignment(id);
+            Assignment assignment = this.assignmentsService.GetAssignment(id);
 
             if (assignment.ResponsibleId != authorizedUserId)
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
 
-            return Task.FromResult(this.assignmentsService.MapAssignment(assignment));
+            AssignmentApiDocument assignmentApiDocument = this.assignmentsService.MapAssignment(assignment);
+
+            return Task.FromResult(assignmentApiDocument);
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetAssignmentsList)]
