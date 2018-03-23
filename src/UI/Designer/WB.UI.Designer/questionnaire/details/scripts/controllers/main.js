@@ -412,7 +412,7 @@ angular.module('designerApp')
                 $rootScope.removeLocalVariable(removedItemId);
             });
 
-            $rootScope.$on('varibleDeleted', function (scope, removedItemId) {
+            $rootScope.$on('variableDeleted', function (scope, removedItemId) {
                 $scope.removeItemWithIdFromErrors(removedItemId);
 
                 $rootScope.removeLocalVariable(removedItemId);
