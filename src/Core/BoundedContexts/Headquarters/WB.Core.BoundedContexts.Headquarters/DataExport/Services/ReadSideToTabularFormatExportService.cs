@@ -131,6 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public IEnumerable<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status, CancellationToken cancellationToken, DateTime? fromDate, DateTime? toDate)
         {
+            string lastRecivedId = null;
             var skipInterviewsCount = 0;
             List<InterviewToExport> batchInterviews;
 
@@ -140,13 +141,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var count = skipInterviewsCount;
                 batchInterviews = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
                     this.interviewSummaries.Query(_ => this.Filter(_, questionnaireIdentity, status, fromDate, toDate)
+                        .OrderBy(x => x.InterviewId)
+                        .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
                         .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.HasErrors, x.Status))
-                        .Skip(count)
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
                         .ToList()));
+
+                if (batchInterviews.Count > 0)
+                    lastRecivedId = batchInterviews.Last().Id.FormatGuid();
 
                 skipInterviewsCount += batchInterviews.Count;
                 this.logger.Debug($"Received {skipInterviewsCount:n0} interview ids.");
@@ -186,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 queryable = queryable.Where(x => x.UpdateDate < filteredToDate);
             }
 
-            return queryable.OrderBy(q => q.UpdateDate);
+            return queryable;
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
