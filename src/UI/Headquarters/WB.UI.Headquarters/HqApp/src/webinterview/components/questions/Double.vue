@@ -66,7 +66,7 @@
                     return localizedNumber.substring(1, localizedNumber.length - 3)
                 }
 
-                return ''
+                return '.'
             },
             specialValue: {
                 get() {
