@@ -95,7 +95,6 @@
                 itemToFind.entity.title = data.title;
                 itemToFind.entity.variable = data.variable;
                 itemToFind.entity.questionType = ("icon-" + data.type).toLowerCase(); //map to type
-                
             });
 
             $rootScope.$on('staticTextUpdated', function (event, data) {
@@ -128,4 +127,32 @@
                 itemToFind.entity.title = data.title;
                 itemToFind.entity.variable = data.variable;
             });
+
+            $rootScope.$on('rosterDeleted', function (event, entityId) {
+                $scope.removeCommentsForEntity(entityId);
+            });
+
+            $rootScope.$on('groupDeleted', function (event, entityId) {
+                $scope.removeCommentsForEntity(entityId);
+            });
+
+            $rootScope.$on('questionDeleted', function (event, entityId) {
+                $scope.removeCommentsForEntity(entityId);
+            });
+
+            $rootScope.$on('statictextDeleted', function (event, entityId) {
+                $scope.removeCommentsForEntity(entityId);
+            });
+
+            $rootScope.$on('variableDeleted', function (event, entityId) {
+                $scope.removeCommentsForEntity(entityId);
+            });
+
+            $scope.removeCommentsForEntity = function(entityId) {
+                var itemIndex = _.findIndex($scope.commentThreads, function (thread) { return thread.entity.itemId === entityId });
+                if (_.isNull(itemIndex) || _.isUndefined(itemIndex) || itemIndex < 0) return;
+
+                $scope.commentThreads.splice(itemIndex, 1);
+            }
+
         });
