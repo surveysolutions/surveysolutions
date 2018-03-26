@@ -6,8 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public interface IAssignmentsImportService
     {
-        PreloadedDataByFile ParseText(Stream inputStream, string fileName);
-        IEnumerable<PreloadedDataByFile> ParseZip(Stream inputStream);
+        PreloadedFile ParseText(Stream inputStream, string fileName);
+        IEnumerable<PreloadedFile> ParseZip(Stream inputStream);
         IEnumerable<PreloadedFileMetaData> ParseZipMetadata(Stream inputStream);
     }
 }

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             IPreloadedDataService preloadedDataService = null,
             IUserViewFactory userViewFactory=null)
         {
-            return new ImportDataVerifier(userViewFactory ?? Mock.Of<IUserViewFactory>());
+            return new ImportDataVerifier(userViewFactory ?? Mock.Of<IUserViewFactory>(), TODO);
         }
 
         protected static PreloadedDataByFile CreatePreloadedDataByFile(string[] header=null, string[][] content=null, string fileName=null)

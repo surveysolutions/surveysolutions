@@ -35,19 +35,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             }
         }
 
+        public IEnumerable<dynamic> GetRecords(Stream csvFileStream, string delimiter)
+        {
+            csvFileStream.Seek(0, SeekOrigin.Begin);
+
+            using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
+                GetConfiguration(delimiter, true), true))
+            {
+                foreach (var record in reader.GetRecords<dynamic>())
+                    yield return record;
+            }
+        }
+
         public string[] ReadHeader(Stream csvFileStream, string delimiter)
         {
-            using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
-                new Configuration
-                {
-                    MissingFieldFound = null,
-                    Delimiter = delimiter,
-                    BadDataFound = delegate(IReadingContext context) {  }
-                }))
-            {
-                reader.Read();
+            csvFileStream.Seek(0, SeekOrigin.Begin);
 
-                return reader.ReadHeader() ? reader.Context.HeaderRecord : new string[0];
+            using (var parser = new CsvHelper.CsvParser(new StreamReader(csvFileStream),
+                GetConfiguration(delimiter, true), true))
+            {
+                return parser.Read() ?? new string[] { };
             }
         }
 
