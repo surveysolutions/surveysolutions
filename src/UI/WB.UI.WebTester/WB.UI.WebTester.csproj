@@ -370,7 +370,7 @@
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
+      <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
