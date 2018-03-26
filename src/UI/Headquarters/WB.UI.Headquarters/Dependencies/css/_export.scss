@@ -5,9 +5,14 @@
 	max-width: 900px;
 	@include transition(margin, 0.3s);
 	background-color: #fff;
+	.table-data{
+		position: relative;
+	}
 	.format-data{
+		position: static;
 		&:before{
 			background-position: 10px -200px;
+			left: 20px;
 		}
 		&.separated-data:before{
 			background-position: 10px -120px;
@@ -216,6 +221,11 @@
 	.export-types{
 		margin-left: 0;
 		padding: 0 10px 0;
+		.format-data{
+			&:before{
+				left: 10px;
+			}
+		}
 		h2{
 			margin-bottom: 25px;
 			@include font(24px, 26px);
@@ -262,7 +272,7 @@
 			  			
 			  			&:before{
 			  				left: calc(50% - 31px);
-			  				top: 0;
+			  				top: 15px;
 			  			}
 						&.stata:before{
 							left: 45%;
