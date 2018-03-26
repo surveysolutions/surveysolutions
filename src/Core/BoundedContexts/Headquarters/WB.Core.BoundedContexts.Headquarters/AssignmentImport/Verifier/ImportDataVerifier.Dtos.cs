@@ -39,6 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             public string AsString { get; set; }
             public int? AsInt { get; set; }
             public double? AsDouble { get; set; }
+            public decimal? AsDecimal { get; set; }
             public DateTime? AsDateTime { get; set; }
         }
 
@@ -47,8 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             public int Code { get; set; }
         }
 
-        private class AssignmentAnswers : AssignmentAnswer
+        private class AssignmentAnswers : AssignmentValue
         {
+            public string VariableName { get; set; }
             public AssignmentAnswer[] Values { get; set; }
         }
 
@@ -93,6 +95,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             public InterviewQuestionType Type { get; set; }
             public bool IsRosterSize { get; set; }
             public bool IsRosterSizeForLongRoster { get; set; }
+            public int? MaxAnswersCount { get; set; }
+            public string Mask { get; set; }
         }
 
         private class InterviewRoster

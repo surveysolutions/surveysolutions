@@ -6,6 +6,7 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -59,9 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 cells[variableName].Add(new PreloadingValue
                 {
                     VariableOrCodeOrPropertyName = GetVariable(compositeColumnValues, variableName),
-                    Value = value,
                     Row = rowIndex,
-                    Column = kv.Key
+                    Column = kv.Key,
+                    Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
+                        .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
+                        .Replace(ExportFormatSettings.MissingQuantityValue, string.Empty),
                 });
             }
 
