@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
@@ -14,20 +17,77 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IArchiveUtils archiveUtils;
         private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
 
+        private static readonly string[] ignoredPreloadingColumns =
+            ServiceColumns.SystemVariables.Values.Select(x => x.VariableExportColumnName).ToArray();
+
         public AssignmentsImportService(ICsvReader csvReader, IArchiveUtils archiveUtils)
         {
             this.csvReader = csvReader;
             this.archiveUtils = archiveUtils;
         }
 
-        public PreloadedDataByFile ParseText(Stream inputStream, string fileName)
+        private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
         {
-            var rows = this.csvReader.ReadRowsWithHeader(inputStream, TabExportFile.Delimiter).ToArray();
+            var cells = new Dictionary<string, List<PreloadingValue>>();
+            string interviewId = null;
 
-            return new PreloadedDataByFile(fileName, rows?.FirstOrDefault(), rows.Skip(1).ToArray());
+            string GetVariable(string[] compositeColumnValues, string variableName) 
+                => compositeColumnValues.Length > 1 && string.Format(ServiceColumns.IdSuffixFormat, variableName) != variableName
+                ? compositeColumnValues[1]
+                : variableName;
+
+            foreach (var kv in record)
+            {
+                var variableName = kv.Key.ToLower();
+                var value = (string) kv.Value;
+
+                if (ignoredPreloadingColumns.Contains(variableName)) continue;
+                if (variableName == ServiceColumns.InterviewId)
+                {
+                    interviewId = value;
+                    continue;
+                }
+
+                var compositeColumnValues = kv.Key.Split(new[] { QuestionDataParser.ColumnDelimiter },
+                    StringSplitOptions.RemoveEmptyEntries);
+
+                variableName = compositeColumnValues[0].ToLower();
+
+                if (!cells.ContainsKey(variableName))
+                    cells[variableName] = new List<PreloadingValue>();
+
+                cells[variableName].Add(new PreloadingValue
+                {
+                    VariableOrCodeOrPropertyName = GetVariable(compositeColumnValues, variableName),
+                    Value = value,
+                    Row = rowIndex,
+                    Column = kv.Key
+                });
+            }
+
+            return new PreloadingRow
+            {
+                InterviewId = interviewId,
+                Cells = cells.Select(x => x.Value.Count == 1
+                    ? x.Value[0]
+                    : (PreloadingCell) new PreloadingCompositeValue
+                    {
+                        VariableOrCodeOrPropertyName = x.Key,
+                        Values = x.Value.ToArray()
+                    }).ToArray()
+            };
         }
 
-        public IEnumerable<PreloadedDataByFile> ParseZip(Stream inputStream)
+        public PreloadedFile ParseText(Stream inputStream, string fileName) => new PreloadedFile
+        {
+            FileName = fileName,
+            QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
+            Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+            Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
+                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
+        };
+
+        public IEnumerable<PreloadedFile> ParseZip(Stream inputStream)
         {
             if(!this.archiveUtils.IsZipStream(inputStream))
                 yield break;

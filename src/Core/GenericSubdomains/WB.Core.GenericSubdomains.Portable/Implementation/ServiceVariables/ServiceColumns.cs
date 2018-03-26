@@ -5,7 +5,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
     public static class ServiceColumns
     {
         //Id of the row
-        
+        public static readonly string InterviewRandom = "ssSys_IRnd";
         public static readonly string HasAnyError = "has__errors";
         public static readonly string Key = "interview__key";
         public static readonly string InterviewId = "interview__id";
@@ -22,10 +22,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         //system generated
         public static readonly SortedDictionary<ServiceVariableType, ServiceVariable> SystemVariables = new SortedDictionary<ServiceVariableType, ServiceVariable>
         {
-            { ServiceVariableType.InterviewRandom,  new ServiceVariable(ServiceVariableType.InterviewRandom, "ssSys_IRnd", 0)},
-            { ServiceVariableType.InterviewKey,  new ServiceVariable(ServiceVariableType.InterviewKey, ServiceColumns.Key, 1)},
-            { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, ServiceColumns.HasAnyError, 2)},
-            { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, ServiceColumns.InterviewStatus, 3)},
+            { ServiceVariableType.InterviewRandom,  new ServiceVariable(ServiceVariableType.InterviewRandom, InterviewRandom, 0)},
+            { ServiceVariableType.InterviewKey,  new ServiceVariable(ServiceVariableType.InterviewKey, Key, 1)},
+            { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, HasAnyError, 2)},
+            { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, InterviewStatus, 3)},
         };
     }
 }

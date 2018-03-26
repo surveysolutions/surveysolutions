@@ -8,6 +8,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         void Store(Stream preloadedFile);
         PreloadedDataByFile GetPreloadedDataOfSample();
         PreloadedDataByFile[] GetPreloadedDataOfPanel();
+
+        PreloadedFile GetPreloadedDataOfSample1();
+        PreloadedFile[] GetPreloadedDataOfPanel1();
         void DeletePreloadedData();
     }
 }

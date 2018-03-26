@@ -35,8 +35,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             using (var fileStream = File.Create(this.importedFile))
                 stream.CopyTo(fileStream);
         }
-        
+
         public PreloadedDataByFile GetPreloadedDataOfSample()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public PreloadedDataByFile[] GetPreloadedDataOfPanel()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public PreloadedFile GetPreloadedDataOfSample1()
         {
             using (var fileStream = File.OpenRead(this.importedFile))
             {
@@ -46,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
             }
         }
 
-        public PreloadedDataByFile[] GetPreloadedDataOfPanel()
+        public PreloadedFile[] GetPreloadedDataOfPanel1()
         {
             using (var fileStream = File.OpenRead(this.importedFile))
             {
