@@ -69,4 +69,7 @@
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
+  </ItemGroup>
 </Project>
