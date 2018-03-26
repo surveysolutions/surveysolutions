@@ -33,7 +33,7 @@
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Dropbox.Api" Version="4.7.0" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="EPPlus" Version="4.1.1" />
+    <PackageReference Include="EPPlus" Version="4.5.1" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.32.2.1170" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />
