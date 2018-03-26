@@ -21,7 +21,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
 
             var recyclerView = this.FindViewById<MvxRecyclerView>(Resource.Id.dashboard_tab_recycler);
             recyclerView.HasFixedSize = true;
