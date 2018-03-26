@@ -321,6 +321,7 @@
                                 .then(
                                     function () {
                                         $rootScope.$emit('questionMoved', movedItem.itemId);
+                                        connectTree();
                                     },
                                     function () {
                                         rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -329,6 +330,7 @@
                             questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .then(function () {
                                     $rootScope.$emit('staticTextMoved', movedItem.itemId);
+                                    connectTree();
                                 },
                                 function () {
                                     rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -339,6 +341,7 @@
                             questionnaireService.moveVariable(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .then(function () {
                                     $rootScope.$emit('variableMoved', movedItem.itemId);
+                                    connectTree();
                                 },
                                 function () {
                                     rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -348,6 +351,7 @@
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .then(function () {
                                     $rootScope.$emit('groupMoved', movedItem.itemId);
+                                    connectTree();
                                 },
                                 function () {
                                     rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
