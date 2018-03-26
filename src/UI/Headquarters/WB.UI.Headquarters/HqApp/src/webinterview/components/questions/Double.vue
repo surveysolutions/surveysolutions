@@ -5,14 +5,13 @@
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered }"> 
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
-                            ref="inputDouble"
                             :placeholder="noAnswerWatermark" 
                             :title="noAnswerWatermark"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
-                            v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',maximumValue: '99999999999999.99999999999999',digitGroupSeparator: groupSeparator,decimalCharacter: decimalSeparator,decimalPlaces: $me.countOfDecimalPlaces}">
-                            <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
+                            v-numericFormatting="{aSep: groupSeparator, aDec:decimalSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
+                            <wb-remove-answer v-if="!isSpecialValueSelected" />
                     </div>
                 </div>
                 <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
@@ -27,7 +26,7 @@
                         <label :for="$me.id + '_' + option.value">
                             <span class="tick"></span> {{option.title}}
                         </label>
-                        <wb-remove-answer :on-remove="removeAnswer"/>
+                        <wb-remove-answer />
                     </div>
                 </div>
                 <wb-lock />
@@ -38,13 +37,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
-    import numerics from "../numerics"
-
     export default {
-        data() {
-            return {
-                autoNumericElement: null}
-            },
         name: 'Double',
         mixins: [entityDetails],
         computed: {
@@ -83,10 +76,10 @@
                     this.saveAnswer(value, true);
                 }
             }
-        },        
+        },
         methods: {
             answerDoubleQuestion(evnt) {
-                const answerString = this.autoNumericElement.getNumericString();
+                const answerString = $(evnt.target).autoNumeric('get');
                 if (answerString.replace(/[^0-9]/g, "").length > 15) {
                     this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
                     return
@@ -122,18 +115,6 @@
                         return true;
                 }
                 return false;
-            },
-            removeAnswer() {                                
-                if(this.autoNumericElement)
-                    this.autoNumericElement.clear()
-                
-                this.$store.dispatch("removeAnswer", this.id)
-                    return
-                }
-        },
-        beforeDestroy () {
-            if (this.autoNumericElement) {
-                this.autoNumericElement.remove()
             }
         }
     }

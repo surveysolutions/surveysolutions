@@ -1,17 +1,23 @@
 import * as $ from "jquery"
 import Vue from "vue"
-import AutoNumeric from "autoNumeric"
+import numerics from "../components/numerics"
 
 const defaults = {
-    digitGroupSeparator: "",
-    decimalPlaces: 0
+        aSep: "",
+        aPad: false
 }
 
-Vue.directive("numericFormatting",{ 
-    bind:(el, binding, vnode) => {
-       const settings = $.extend( {}, defaults, binding.value )
-       vnode.context.autoNumericElement = new AutoNumeric(
-           el,
-           settings)   
-   }
+Vue.directive("numericFormatting", {
+    bind: (el, binding) => {
+        const settings = $.extend( {}, defaults, binding.value )
+        numerics.init(el, settings)// $(el).autoNumeric("init", settings)
+        numerics.update(el, settings) // $(el).autoNumeric("update", settings)
+    },
+    update: (el, binding) => {
+        if (binding.value) {
+            const settings = $.extend( {}, defaults, binding.value )
+            numerics.update(el, settings) // $(el).autoNumeric("update", settings)
+        }
+    },
+    unbind: (el) => numerics.destroy(el)
 })
