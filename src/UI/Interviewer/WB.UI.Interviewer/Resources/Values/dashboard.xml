@@ -412,19 +412,4 @@
     <item name="android:textSize">@dimen/textsize_18</item>
     <item name="android:fontFamily">Roboto</item>
   </style>
-
-  <style name="Dashboard_Search_ExitSearch">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:clickable">true</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
-    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
-    <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
-    <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginLeft</item>
-    <item name="android:textSize">@dimen/textsize_14</item>
-    <item name="android:fontFamily">Roboto</item>
-    <item name="android:textColor">@color/dashboard_search_exit_color</item>
-  </style>
-
 </resources>
