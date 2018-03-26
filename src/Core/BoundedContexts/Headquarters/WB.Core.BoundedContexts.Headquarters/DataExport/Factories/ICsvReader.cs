@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         IEnumerable<T> ReadAll<T>(Stream csvFileStream, string delimiter, bool hasHeaderRow = true);
         string[] ReadHeader(Stream csvFileStream, string delimiter);
         IEnumerable<string[]> ReadRowsWithHeader(Stream csvFileStream, string delimiter);
+        IEnumerable<dynamic> GetRecords(Stream csvFileStream, string delimiter);
     }
 }

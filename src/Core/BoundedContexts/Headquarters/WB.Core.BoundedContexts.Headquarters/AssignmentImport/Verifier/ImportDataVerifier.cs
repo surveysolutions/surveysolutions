@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -11,19 +10,157 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using messages = WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerificationMessages;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
-    internal class ImportDataVerifier : IPreloadedDataVerifier
+    
+    internal partial class ImportDataVerifier : IPreloadedDataVerifier
     {
         private readonly IUserViewFactory userViewFactory;
-
-        public ImportDataVerifier(IUserViewFactory userViewFactory)
+        private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly Dictionary<string, UserToVerify> users = new Dictionary<string, UserToVerify>();
+        
+        public ImportDataVerifier(IUserViewFactory userViewFactory, IQuestionnaireStorage questionnaireStorage)
         {
             this.userViewFactory = userViewFactory;
+            this.questionnaireStorage = questionnaireStorage;
         }
+
+        
+        public IEnumerable<PanelImportVerificationError> VerifyAnswers(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            var questionnairetoVerify = this.ToQuestionnaire(questionnaire);
+
+            foreach (var assignmentRow in this.ToAssignmentRows(questionnairetoVerify, file))
+            foreach (var assignmentValue in assignmentRow.Answers)
+            foreach (var error in this.Verifiers.Select(x => x.Invoke(assignmentValue, questionnairetoVerify)))
+                if (error != null) yield return error;
+        }
+
+        public IEnumerable<PanelImportVerificationError> VerifyColumnsAndRosters(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file)
+        {
+            yield break;
+        }
+
+        private static Func<AssignmentValue, Questionnaire, PanelImportVerificationError> Error<TValue>(
+            Func<TValue, Questionnaire, bool> hasError, string code, string message) where TValue: AssignmentValue => (value, questionnaire) =>
+            value is TValue && hasError((TValue)value, questionnaire) ? ToVerificationError(code, message, value) : null;
+
+        private static Func<AssignmentValue, Questionnaire, PanelImportVerificationError> Error<TValue>(
+            Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (value, questionnaire) =>
+            value is TValue && hasError((TValue)value) ? ToVerificationError(code, message, value) : null;
+
+        private static PanelImportVerificationError ToVerificationError(string code, string message, AssignmentValue assignmentValue) 
+            => new PanelImportVerificationError(code, message, new PreloadedDataVerificationReference(assignmentValue.Row, 0, PreloadedDataVerificationReferenceType.Cell,
+                assignmentValue.Value, assignmentValue.FileName));
+
+        private IEnumerable<Func<AssignmentValue, Questionnaire, PanelImportVerificationError>> Verifiers => new[]
+        {
+            Error<AssignmentResponsible>(ResponsibleIsEmpty, "PL0025", messages.PL0025_ResponsibleNameIsEmpty),
+            Error<AssignmentResponsible>(ResponsibleNotFound, "PL0026", messages.PL0026_ResponsibleWasNotFound),
+            Error<AssignmentResponsible>(ResponsibleIsLocked, "PL0027", messages.PL0027_ResponsibleIsLocked),
+            Error<AssignmentResponsible>(ResponsibleHasInvalidRole, "PL0028", messages.PL0028_UserIsNotSupervisorOrInterviewer),
+            Error<AssignmentQuantity>(QuantityIsNotInteger, "PL0035", messages.PL0035_QuantityNotParsed),
+            Error<AssignmentQuantity>(QuantityIsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
+            Error<AssignmentAnswer>(QuestionNotFound, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
+            Error<AssignmentAnswer>(QuestionIsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
+            Error<AssignmentAnswer>(QuestionExceededRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxRosterRowCount)),
+            Error<AssignmentAnswer>(QuestionExceededLongRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxLongRosterRowCount)),
+            Error<AssignmentAnswers>(Gps_DontHaveLongitudeOrLatitude, "PL0030", messages.PL0030_GpsMandatoryFilds),
+            Error<AssignmentAnswers>(Gps_LatitudeMustBeGeaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
+            Error<AssignmentAnswers>(Gps_LongitudeMustBeGeaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
+        };
+
+        private bool Gps_LongitudeMustBeGeaterThenN180AndLessThen180(AssignmentAnswers answer, Questionnaire questionnaire)
+        {
+            if(questionnaire.Questions[answer.VariableName].Type != InterviewQuestionType.Gps) return false;
+            if (this.Gps_DontHaveLongitudeOrLatitude(answer, questionnaire)) return false;
+
+            var longitude = answer.Values.FirstOrDefault(x => x.VariableName == "longitude").Answer.AsInt;
+
+            return longitude < -180 || longitude > 180;
+        }
+
+        private bool Gps_LatitudeMustBeGeaterThenN90AndLessThen90(AssignmentAnswers answer, Questionnaire questionnaire)
+        {
+            if (questionnaire.Questions[answer.VariableName].Type != InterviewQuestionType.Gps) return false;
+            if (this.Gps_DontHaveLongitudeOrLatitude(answer, questionnaire)) return false;
+
+            var latitude = answer.Values.FirstOrDefault(x => x.VariableName == "latitude").Answer.AsInt;
+
+            return latitude < -90 || latitude > 90;
+        }
+
+        private bool Gps_DontHaveLongitudeOrLatitude(AssignmentAnswers answer, Questionnaire questionnaire)
+        {
+            if(questionnaire.Questions[answer.VariableName].Type == InterviewQuestionType.Gps) return false;
+
+            var latitude = answer.Values.FirstOrDefault(x => x.VariableName == "latitude")?.Answer?.AsInt;
+            var longitude =  answer.Values.FirstOrDefault(x => x.VariableName == "longitude")?.Answer?.AsInt;
+
+            return !latitude.HasValue || !longitude.HasValue;
+        }
+
+        private bool QuestionExceededRosterSize(AssignmentAnswer answer, Questionnaire questionnaire)
+        {
+            if (this.QuestionIsNegativeRosterSize(answer, questionnaire)) return false;
+
+            return !questionnaire.Questions[answer.VariableName].IsRosterSizeForLongRoster &&
+                   answer.Answer?.AsInt != null && answer.Answer.AsInt > Constants.MaxLongRosterRowCount;
+        }
+
+        private bool QuestionExceededLongRosterSize(AssignmentAnswer answer, Questionnaire questionnaire)
+        {
+            if (this.QuestionIsNegativeRosterSize(answer, questionnaire)) return false;
+
+            return questionnaire.Questions[answer.VariableName].IsRosterSizeForLongRoster &&
+                   answer.Answer?.AsInt != null && answer.Answer.AsInt > Constants.MaxLongRosterRowCount;
+        }
+
+        private bool QuestionIsNegativeRosterSize(AssignmentAnswer answer, Questionnaire questionnaire)
+        {
+            if (this.QuestionNotFound(answer, questionnaire)) return false;
+
+            var question = questionnaire.Questions[answer.VariableName];
+
+            if (!question.IsRosterSize || question.Type != InterviewQuestionType.Integer) return false;
+
+            return answer.Answer.AsInt < 0;
+        }
+
+        private bool QuestionNotFound(AssignmentAnswer answer, Questionnaire questionnaire) 
+            => !questionnaire.Questions.ContainsKey(answer.VariableName);
+
+        private bool ResponsibleHasInvalidRole(AssignmentResponsible responsible)
+            => !this.ResponsibleNotFound(responsible) && responsible.Responsible.IsSupervisorOrInterviewer;
+
+        private bool ResponsibleIsLocked(AssignmentResponsible responsible) 
+            => !this.ResponsibleNotFound(responsible) && responsible.Responsible.IsLocked;
+
+        private bool ResponsibleNotFound(AssignmentResponsible responsible) 
+            => !this.ResponsibleIsEmpty(responsible) && responsible.Responsible == null;
+
+        private bool ResponsibleIsEmpty(AssignmentResponsible responsible) 
+            => string.IsNullOrWhiteSpace(responsible.Value);
+
+        private bool QuantityIsNotInteger(AssignmentQuantity quantity)
+        {
+            if (string.IsNullOrWhiteSpace(quantity.Value) ||
+                quantity.Value == "-1" ||
+                quantity.Value == "INF") return false;
+
+            return quantity.Quantity == null;
+        }
+        private bool QuantityIsNegative(AssignmentQuantity quantity)
+            => !QuantityIsNotInteger(quantity) && quantity.Quantity < 1;
+
+        #region OLD OLD CODE
 
         private int GetColumnIndexByHeaderName(PreloadedDataByFile dataFile, string columnName)
             => dataFile?.Header.ToList().FindIndex(header => string.Equals(header, columnName, StringComparison.InvariantCultureIgnoreCase)) ?? -1;
@@ -32,6 +169,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.GetColumnIndexByHeaderName(data, ServiceColumns.ResponsibleColumnName);
 
         public bool HasResponsibleNames(PreloadedDataByFile data) => this.GetResponsibleColumnIndex(data) >= 0;
+
+        public IEnumerable<PanelImportVerificationError> VerifyPanelFiles(PreloadedDataByFile[] allLevels, IPreloadedDataService dataService,
+            QuestionnaireIdentity questionnaireIdentity)
+        {
+            throw new NotImplementedException();
+        }
 
         public ImportDataInfo GetDetails(PreloadedDataByFile data)
         {
@@ -59,9 +202,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     data.Header, data.Content)
             }, preloadedDataService));
 
-        public IEnumerable<PanelImportVerificationError> VerifyPanelFiles(PreloadedDataByFile[] data, IPreloadedDataService preloadedDataService)
-            => this.PanelVerifiers.SelectMany(verifier => verifier.Invoke(data, preloadedDataService));
-
         private IEnumerable<Func<PreloadedDataByFile[], IPreloadedDataService, IEnumerable<PanelImportVerificationError>>> PanelVerifiers => new[]
         {
             this.Verifier(this.FileWasntMappedOnQuestionnaireLevel, "PL0004", messages.PL0004_FileWasntMappedRoster, PreloadedDataVerificationReferenceType.File),
@@ -76,12 +216,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column),
             this.Verifier(this.ErrorsByQuestionsWasntParsed),
-            this.Verifier(this.ErrorsByQuantityColumn),
-            this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
-            this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
             this.Verifier(this.ColumnDuplications),
             this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption),
-            this.Verifier(this.ErrorsByResposibleName)
         };
 
         private IEnumerable<string> ColumnWasntMappedOnQuestionInTemplate(PreloadedDataByFile levelData, IPreloadedDataService preloadedDataService)
@@ -325,70 +461,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                             messages.PL0031_ColumnNameDuplicatesFound,
                             columnsWithDuplicate.Value.ToArray()));
         }
-
-        private IEnumerable<PanelImportVerificationError> ErrorsByGpsQuestions(
-            HeaderStructureForLevel level,
-            ExportedQuestionHeaderItem gpsExportedQuestion,
-            PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
-        {
-            var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                $"{gpsExportedQuestion.VariableName}__latitude");
-
-            var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                $"{gpsExportedQuestion.VariableName}__longitude");
-
-            var altitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                $"{gpsExportedQuestion.VariableName}__altitude");
-
-            if (latitudeColumnIndex < 0 && longitudeColumnIndex < 0 && altitudeColumnIndex < 0)
-                yield break;
-
-            if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
-            {
-                yield return new PanelImportVerificationError("PL0030", messages.PL0030_GpsFieldsRequired, this.CreateReference(0, levelData));
-                yield break;
-            }
-
-            for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
-            {
-                var latitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
-                        latitudeColumnIndex, level, preloadedDataService);
-
-                var longitude = this.GetValue<double>(levelData.Content[rowIndex], levelData.Header,
-                        longitudeColumnIndex, level, preloadedDataService);
-
-                if (!latitude.HasValue && !longitude.HasValue)
-                    continue;
-
-                if (!latitude.HasValue)
-                {
-                    yield return new PanelImportVerificationError("PL0030",
-                        messages.PL0030_GpsMandatoryFilds,
-                        this.CreateReference(latitudeColumnIndex, rowIndex, levelData));
-                }
-
-                if (!longitude.HasValue)
-                {
-                    yield return new PanelImportVerificationError("PL0030",
-                        messages.PL0030_GpsMandatoryFilds,
-                        this.CreateReference(longitudeColumnIndex, rowIndex, levelData));
-                }
-
-                if (latitude.HasValue && (latitude.Value < -90 || latitude.Value > 90))
-                    yield return new PanelImportVerificationError("PL0032",
-                        PreloadingVerificationMessages
-                            .PL0032_LatitudeMustBeGeaterThenN90AndLessThen90,
-                        this.CreateReference(latitudeColumnIndex, rowIndex, levelData));
-
-                if (longitude.HasValue && (longitude.Value < -180 || longitude.Value > 180))
-                    yield return new PanelImportVerificationError("PL0033",
-                        PreloadingVerificationMessages
-                            .PL0033_LongitudeMustBeGeaterThenN180AndLessThen180,
-                        this.CreateReference(longitudeColumnIndex, rowIndex, levelData));
-            }
-        }
-
                 
         private IEnumerable<PanelImportVerificationError> ErrorsByMultipleChoiseQuestions(HeaderStructureForLevel level,
             ExportedQuestionHeaderItem question,
@@ -430,52 +502,27 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             }
         }
-        
-        private IEnumerable<PanelImportVerificationError> ErrorsByNumericQuestions(
+
+        private IEnumerable<PanelImportVerificationError> ErrorsByGpsQuestions(
             HeaderStructureForLevel level,
-            ExportedQuestionHeaderItem numericExportedQuestion,
+            ExportedQuestionHeaderItem gpsExportedQuestion,
             PreloadedDataByFile levelData,
             IPreloadedDataService preloadedDataService)
         {
-            if (!preloadedDataService.IsQuestionRosterSize(numericExportedQuestion.VariableName))
-                yield break;
-           
-            var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
-                numericExportedQuestion.VariableName);
+            var latitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__latitude");
 
-            if (columnIndex < 0)
-                yield break;
+            var longitudeColumnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData,
+                $"{gpsExportedQuestion.VariableName}__longitude");
 
-            var isRosterSizeForLongRoster = preloadedDataService.IsRosterSizeQuestionForLongRoster(numericExportedQuestion.PublicKey);
-
-            for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
+            if (latitudeColumnIndex < 0 || longitudeColumnIndex < 0)
             {
-                var parsedValue = this.GetValue<int>(levelData.Content[rowIndex], levelData.Header,
-                    columnIndex, level, preloadedDataService);
-
-                if (!parsedValue.HasValue)
-                    continue;
-
-                if (parsedValue < 0)
-                {
-                    
-                    yield return new PanelImportVerificationError("PL0022",
-                        messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative,
-                        this.CreateReference(columnIndex, rowIndex, levelData));
-                }
-
-                var maxNumericValue = isRosterSizeForLongRoster
-                    ? Constants.MaxLongRosterRowCount
-                    : Constants.MaxRosterRowCount;
-
-                if (parsedValue > maxNumericValue)
-                {
-                    yield return new PanelImportVerificationError("PL0029",
-                        string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, maxNumericValue),
-                        this.CreateReference(columnIndex, rowIndex, levelData));
-                }
+                yield return new PanelImportVerificationError("PL0030", messages.PL0030_GpsFieldsRequired, this.CreateReference(0, levelData));
+                yield break;
             }
         }
+
+
 
         private T? GetValue<T>(string[] row, string[] header, int columnIndex, HeaderStructureForLevel level, IPreloadedDataService preloadedDataService) where T : struct
         {
@@ -708,116 +755,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private PreloadedDataVerificationReference CreateReference(int x, int y, PreloadedDataByFile levelData) 
             => new PreloadedDataVerificationReference(x, y, PreloadedDataVerificationReferenceType.Cell, $"{levelData.Header[x]}:{levelData.Content[y][x]}", levelData.FileName);
-
-        private IEnumerable<PanelImportVerificationError> ErrorsByQuantityColumn(PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
-        {
-            var quantityColumnIndex =
-                preloadedDataService.GetColumnIndexByHeaderName(levelData, ServiceColumns.AssignmentsCountColumnName);
-
-            if (quantityColumnIndex < 0)
-                yield break;
-
-            for (int y = 0; y < levelData.Content.Length; y++)
-            {
-                var row = levelData.Content[y];
-                var quantityString = row[quantityColumnIndex]?.Trim();
-
-                if (String.IsNullOrWhiteSpace(quantityString))
-                    continue;
-
-                if (quantityString == "-1" || quantityString == "INF")
-                    continue;
-
-                if (!int.TryParse(quantityString, out int quantity))
-                {
-                    yield return
-                        new PanelImportVerificationError("PL0035",
-                            messages.PL0035_QuantityNotParsed,
-                            new PreloadedDataVerificationReference(quantityColumnIndex, y,
-                                PreloadedDataVerificationReferenceType.Cell,
-                                "",
-                                levelData.FileName));
-                    continue;
-                }
-
-                if (quantity < -1)
-                {
-                    yield return
-                        new PanelImportVerificationError("PL0036",
-                            messages.PL0036_QuantityShouldBeGreaterThanMinus1,
-                            new PreloadedDataVerificationReference(quantityColumnIndex, y,
-                                PreloadedDataVerificationReferenceType.Cell,
-                                "",
-                                levelData.FileName));
-                    continue;
-                }
-            }
-        }
-
-        private IEnumerable<PanelImportVerificationError> ErrorsByResposibleName(PreloadedDataByFile levelData,
-            IPreloadedDataService preloadedDataService)
-        {
-            var usersToVerify = this.GetUserNames(levelData);
-            if (usersToVerify.Length == 0)
-                yield break;
-
-            var dbUsers = this.userViewFactory.GetUsersByUserNames(usersToVerify)
-                .ToDictionary(x => x.UserName.ToLower());
-
-            var responsibleNameIndex = this.GetResponsibleColumnIndex(levelData);
-
-            for (int y = 0; y < levelData.Content.Length; y++)
-            {
-                var userNameToVerify = levelData.Content[y][responsibleNameIndex]?.ToLower();
-
-                if (string.IsNullOrWhiteSpace(userNameToVerify))
-                {
-                    yield return new PanelImportVerificationError("PL0025",
-                        messages.PL0025_ResponsibleNameIsEmpty,
-                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                            PreloadedDataVerificationReferenceType.Cell,
-                            "",
-                            levelData.FileName));
-                    continue;
-                }
-
-                var userState = dbUsers.ContainsKey(userNameToVerify) ? dbUsers[userNameToVerify] : null;
-                if (userState == null)
-                {
-
-                    yield return new PanelImportVerificationError("PL0026",
-                        messages.PL0026_ResponsibleWasNotFound,
-                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                            PreloadedDataVerificationReferenceType.Cell,
-                            "",
-                            levelData.FileName));
-                    continue;
-                }
-
-                if (userState.IsLocked)
-                {
-                    yield return new PanelImportVerificationError("PL0027",
-                        messages.PL0027_ResponsibleIsLocked,
-                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                            PreloadedDataVerificationReferenceType.Cell,
-                            "",
-                            levelData.FileName));
-                    continue;
-                }
-
-                if (!userState.IsSupervisorOrInterviewer)
-                {
-                    yield return new PanelImportVerificationError("PL0028",
-                        messages.PL0028_UserIsNotSupervisorOrInterviewer,
-                        new PreloadedDataVerificationReference(responsibleNameIndex, y,
-                            PreloadedDataVerificationReferenceType.Cell,
-                            "",
-                            levelData.FileName));
-                }
-            }
-        }
-
+        
 
         private string[] GetUserNames(PreloadedDataByFile data)
         {
@@ -828,5 +766,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             return data.Content.Select(x => x[responsibleColumnIndex]?.ToLower()).Distinct().ToArray();
         }
+        #endregion
     }
 }
