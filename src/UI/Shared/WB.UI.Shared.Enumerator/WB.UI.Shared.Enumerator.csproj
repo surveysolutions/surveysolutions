@@ -374,9 +374,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\delete_button_pressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\default_input_button.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -430,9 +427,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\group_with_invalid_answers_unpressed.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\ic_action_cancel.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\interview_section_background.xml">
