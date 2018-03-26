@@ -149,11 +149,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"AND {Column.AsAudio} IS NOT NULL " +
                 $"AND {Column.IsEnabled} = true").ToArray();
 
-        private static readonly int[] DisabledForGpsStatuses =
+        private static string DisabledForGpsStatuses { get; } = string.Join(",", new []
         {
             (int) InterviewStatus.ApprovedBySupervisor,
             (int) InterviewStatus.ApprovedByHeadquarters
-        };
+        });
 
         public InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
@@ -168,9 +168,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         join {Table.InterviewSummaries} s on s.interviewid = i.interviewid
                         where 
                             i.asgps is not null and s.questionnaireidentity = @Questionnaire and i.entityid = @QuestionId
-                            and (@supervisorId is null OR s.teamleadid = @supervisorId)
+                            and (@supervisorId is null 
+                                OR (s.teamleadid = @supervisorId 
+                                    and s.status not in ({DisabledForGpsStatuses})))
                             and i.{Column.IsEnabled} = true
-                            and s.status not in ({string.Join(", ", DisabledForGpsStatuses)})
 	                    ) as q
                     where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
                         and longitude > @SouthWestCornerLongtitude
