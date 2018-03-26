@@ -46,9 +46,6 @@
                   local:MvxTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
                   local:MvxBind="ItemsSource UiItems;" />
 
-              <TextView style="@style/Dashboard_Search_ExitSearch" 
-                local:MvxBind="Text Localization('Dashboard_Search_ExitSearch'); Click ExitSearchCommand;" />
-
             </LinearLayout>
             <LinearLayout style="@style/Interview_GroupWithDivider"
                           local:MvxBind="Enabled Not(Or(IsInProgressLongOperation, IsInProgressItemsLoading)); Clickable Or(IsInProgressLongOperation, IsInProgressItemsLoading);"
