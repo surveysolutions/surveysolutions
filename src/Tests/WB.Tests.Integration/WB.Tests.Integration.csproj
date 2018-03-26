@@ -46,7 +46,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="2.7.0" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
-    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="MvvmCross.Core" Version="5.6.2" />
     <PackageReference Include="MvvmCross.Platform" Version="5.6.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.6.2" />
