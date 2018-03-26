@@ -328,9 +328,11 @@ atob@^2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.0.3.tgz#19c7a760473774468f20b2d2d03372ad7d4cbf5d"
 
-autonumeric@^4.2.7:
-  version "4.2.7"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.2.7.tgz#6a69cee855afe3451170ef1fce27a4abbb580720"
+autonumeric@=1.9.46:
+  version "1.9.46"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-1.9.46.tgz#b7b058a717049af45abe0bf6eed0e81038d2a617"
+  dependencies:
+    jquery ">=1.7"
 
 autoprefixer@^6.3.1:
   version "6.7.7"
