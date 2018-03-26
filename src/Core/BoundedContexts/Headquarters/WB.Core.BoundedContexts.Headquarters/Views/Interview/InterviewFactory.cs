@@ -149,7 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 $"AND {Column.AsAudio} IS NOT NULL " +
                 $"AND {Column.IsEnabled} = true").ToArray();
 
-        private static string DisabledForGpsStatuses { get; } = string.Join(",", new []
+        private static string DisabledForGpsStatuses { get; } = string.Join(",", new[]
         {
             (int) InterviewStatus.ApprovedBySupervisor,
             (int) InterviewStatus.ApprovedByHeadquarters
@@ -161,23 +161,37 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Guid? supervisorId)
         {
             var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
-                $@"select interviewid, latitude, longitude
-                    from (
-	                    select s.interviewid, (i.asgps ->> 'Latitude')::float8 as latitude, (i.asgps ->> 'Longitude')::float8 as longitude
-                        from {Table.InterviewsView} i
-                        join {Table.InterviewSummaries} s on s.interviewid = i.interviewid
-                        where 
-                            i.asgps is not null and s.questionnaireidentity = @Questionnaire and i.entityid = @QuestionId
-                            and (@supervisorId is null 
-                                OR (s.teamleadid = @supervisorId 
-                                    and s.status not in ({DisabledForGpsStatuses})))
-                            and i.{Column.IsEnabled} = true
-	                    ) as q
+                $@"with interviews as(
+                    select teamleadid, interviewid, latitude, longitude
+                    from
+                        (
+                            select
+                                s.teamleadid,
+                                s.interviewid,
+                                (i.asgps ->> 'Latitude')::float8 as latitude,
+                                (i.asgps ->> 'Longitude')::float8 as longitude
+                            from
+                                readside.interviews_view i
+                            join readside.interviewsummaries s on
+                                s.interviewid = i.interviewid
+                            where
+                                i.asgps is not null
+                                and (@supervisorId is null OR s.status not in({DisabledForGpsStatuses}))
+                                and s.questionnaireidentity = @Questionnaire
+                                and i.entityid = @QuestionId
+                                and i.isenabled = true
+                        ) as q
                     where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
-                        and longitude > @SouthWestCornerLongtitude
-                            {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
+                        and longitude > @SouthWestCornerLongtitude {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
                             longitude < @NorthEastCornerLongtitude
-                    limit @MaxCount",
+                ) 
+                select
+                    interviewid, latitude, longitude
+                from
+                    interviews
+                where
+                    (@supervisorId is null or teamleadid = @supervisorId)
+                limit @MaxCount;",
                 new
                 {
                     supervisorId,
@@ -268,7 +282,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .Query<(int id, Guid entityId)>(
                     @"SELECT id, entityid FROM readside.questionnaire_entities where questionnaireidentity = @questionnaireIdentity",
                     new { questionnaireIdentity });
-            
+
             var entitiesMap = entities.ToDictionary(q => q.entityId, q => q.id);
             cache.Add(cacheKey, entitiesMap, new CacheItemPolicy { SlidingExpiration = TimeSpan.FromMinutes(10) });
 
@@ -303,7 +317,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var conn = sessionProvider.GetSession().Connection;
 
             var interview = GetInterviewId(interviewId);
-            
+
             var entityMap = GetQuestionnaireEntities(interview.questionnaireId);
 
             conn.Execute($@"delete from {Table.Interviews} where {Column.InterviewId} = {interview.id}");
