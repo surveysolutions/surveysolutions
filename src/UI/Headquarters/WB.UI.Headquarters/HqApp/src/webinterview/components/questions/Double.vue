@@ -38,8 +38,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
-    import numerics from "../numerics"
-
+    
     export default {
         data() {
             return {
