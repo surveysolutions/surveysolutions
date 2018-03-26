@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -171,7 +172,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.interviews.RemoveAll(x => x.InterviewId == item.InterviewId);
 
-            UiItems.Remove(item);
+            UiItems.RemoveItems(item.ToEnumerable());
 
             var countOfItems = UiItems.Count;
             SerchResultText = countOfItems > 0
