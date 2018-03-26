@@ -23,35 +23,27 @@
 
     <ProgressBar style="@style/Dashboard_Progress_Indicator"
             local:MvxBind="ShowProgress Or(IsInProgressLongOperation, IsInProgressItemsLoading); Visibility VisibleOrInvisible(Or(IsInProgressLongOperation, IsInProgressItemsLoading))" />
+
     <LinearLayout
-      android:layout_width="match_parent"
-      android:orientation="vertical"
-      android:layout_height="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:descendantFocusability="blocksDescendants">
 
-        <FrameLayout android:layout_width="match_parent"
-                     android:layout_height="match_parent">
-            <LinearLayout
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:descendantFocusability="blocksDescendants">
-
-              <TextView style="@style/Dashboard_Search_SearchResult" 
-                local:MvxBind="Text SerchResultText;" />
+        <TextView style="@style/Dashboard_Search_SearchResult" 
+        local:MvxBind="Text SerchResultText;" />
               
-              <MvxRecyclerView
-                  style="@style/FullWidthWrappingLayout"
-                  android:id="@+id/dashboard_tab_recycler"
-                  android:scrollbars="vertical"
-                  local:MvxTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
-                  local:MvxBind="ItemsSource UiItems;" />
+        <MvxRecyclerView
+            style="@style/FullWidthWrappingLayout"
+            android:id="@+id/dashboard_tab_recycler"
+            android:scrollbars="vertical"
+            local:MvxTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
+            local:MvxBind="ItemsSource UiItems;" />
 
-            </LinearLayout>
-            <LinearLayout style="@style/Interview_GroupWithDivider"
-                          local:MvxBind="Enabled Not(Or(IsInProgressLongOperation, IsInProgressItemsLoading)); Clickable Or(IsInProgressLongOperation, IsInProgressItemsLoading);"
-                          android:layout_height="match_parent">
-            </LinearLayout>
-        </FrameLayout>
+    </LinearLayout>
+    <LinearLayout style="@style/Interview_GroupWithDivider"
+                    local:MvxBind="Enabled Not(Or(IsInProgressLongOperation, IsInProgressItemsLoading)); Clickable Or(IsInProgressLongOperation, IsInProgressItemsLoading);"
+                    android:layout_height="match_parent">
     </LinearLayout>
   </FrameLayout>
 </LinearLayout>
