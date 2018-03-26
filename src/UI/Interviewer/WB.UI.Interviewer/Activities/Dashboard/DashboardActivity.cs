@@ -45,7 +45,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
 
         protected override void OnCreate(Bundle bundle)
         {
-            Mvx.Trace("Dashboard activity started");
             base.OnCreate(bundle);
             this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
         }

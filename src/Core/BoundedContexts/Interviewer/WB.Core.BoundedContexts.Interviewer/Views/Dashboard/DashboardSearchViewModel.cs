@@ -117,13 +117,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        private int itemsCount;
-        public int ItemsCount
-        {
-            get => this.itemsCount;
-            protected set => this.RaiseAndSetIfChanged(ref this.itemsCount, value);
-        }
-
         protected void UpdateUiItems(string searctText) => Task.Run(() =>
         {
             this.IsInProgressItemsLoading = true;
