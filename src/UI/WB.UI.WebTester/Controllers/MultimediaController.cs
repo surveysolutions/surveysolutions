@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.UI.Shared.Web.Services;
@@ -136,7 +136,8 @@ namespace WB.UI.WebTester.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    fileName = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}.jpg";
+                    fileName = GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
+
                     var responsibleId = interview.CurrentResponsibleId;
 
                     this.mediaStorage.Store(new MultimediaFile
@@ -160,5 +161,7 @@ namespace WB.UI.WebTester.Controllers
 
             return this.Json("ok");
         }
+
+        private string GetPictureFileName(string variableName, RosterVector rosterVector) => AnswerUtils.GetPictureFileName(variableName, rosterVector);
     }
 }
