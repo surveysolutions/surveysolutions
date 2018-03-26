@@ -10,6 +10,8 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const _ = require("lodash")
 const localization = require("./localization")
 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 const devMode = process.env.NODE_ENV != 'production';
 const isHot = process.env.NODE_ENV === "hot";
 const path = require('path')
@@ -159,10 +161,10 @@ module.exports = function (appConfig) {
             devMode ? null : new webpack.optimize.ModuleConcatenationPlugin(),
 
             // minizing js files
-            devMode ? null : new webpack.optimize.UglifyJsPlugin({
+            new UglifyJsPlugin({
                 sourceMap: true,
-                minimize: true,
-                compress: { // https://medium.com/tldr-tech/web-performance-a-poc-by-example-41307c7e6cbe
+                //minimize: true,
+                uglifyOptions: { // https://medium.com/tldr-tech/web-performance-a-poc-by-example-41307c7e6cbe
                   warnings: false, // warn about potentially dangerous optimizations/code
                   sequences: true,  // join consecutive statemets with the “comma operator”
                   properties: true,  // optimize property access: a["foo"] → a.foo
@@ -180,8 +182,10 @@ module.exports = function (appConfig) {
                   if_return: true,  // optimize if-s followed by return/continue
                   join_vars: true,  // join var declarations
                   cascade: true,  // try to cascade `right` into `left` in sequences
-                  side_effects: true,  // drop side-effect-free statements
-                }
+                  side_effects: true,  // drop side-effect-free statements         
+				  
+				  compress:true
+				}
             }),
 
             // make sure that build will be optimized for production. Required by vuejs
@@ -229,7 +233,6 @@ module.exports = function (appConfig) {
                 openAnalyzer: false,
                 statsOptions: { chunkModules: true, assets: true },
             })
-
         ]).filter(x => x != null),
 
         devServer: {
