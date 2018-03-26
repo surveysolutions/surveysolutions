@@ -64,7 +64,7 @@
     },
     "dependencies": {
         "append-query": "^2.0.1",
-        "autonumeric": "=1.9.46",
+        "autonumeric": "^4.2.7",
         "axios": "^0.17.1",
         "bootbox": "^4.4.0",
         "bootstrap": "^3.3.7",
