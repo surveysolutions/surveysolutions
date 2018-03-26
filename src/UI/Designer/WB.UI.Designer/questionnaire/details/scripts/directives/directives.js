@@ -55,5 +55,29 @@
         return {
             link: linkFn
         };
+    }).directive('dragAndDrop', function () {
+
+        var linkFn = function (scope, element, attrs) {
+            element.bind("mousedown", function (event) {
+                element.addClass('draggable').parents().on('mousemove', function (e) {
+                    $('.draggable').offset({
+                        top: e.pageY - element.outerHeight() / 8,
+                        left: e.pageX - element.outerWidth() / 8
+                    }).on('mouseup', function () {
+                        element.removeClass('draggable');
+                    });
+                    e.preventDefault();
+                });
+            });
+
+            element.bind("mouseup", function (event) {
+                element.removeClass('draggable');
+            });
+        };
+
+        return {
+            restrict: 'AC',
+            link: linkFn
+        };
     });
 })(jQuery);
