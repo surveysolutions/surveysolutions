@@ -191,5 +191,8 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
             return parsedValue;
         }
+
+
+        public static string GetPictureFileName(string variableName, RosterVector rosterVector) => $"{variableName}__{rosterVector}.jpg";
     }
 }

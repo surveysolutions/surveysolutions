@@ -46,7 +46,11 @@
                     return this.$me.options;
                 
                 var self = this;
-                return filter(this.$me.options, function(o) { return self.$me.answer.indexOf(o.value) >= 0; });
+                return filter(this.$me.options, function(o) {
+                        return find(self.$me.answer, (a) => {
+                            return isEqual(a, o.rosterVector)
+                            });               
+                     });
             },
             answer: {
                 get() {
