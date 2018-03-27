@@ -138,7 +138,7 @@ namespace WB.UI.Designer.Api
 
                 foreach (var content in multipartStreamProvider.Contents)
                 {
-                    switch (content.Headers.ContentDisposition.Name.Replace(@"\", string.Empty))
+                    switch (content.Headers.ContentDisposition.Name.Replace("\"", string.Empty))
                     {
                         case fileParameterName:
                             fileStreamContent = await content.ReadAsStringAsync();
