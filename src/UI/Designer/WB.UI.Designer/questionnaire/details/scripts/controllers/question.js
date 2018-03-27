@@ -94,7 +94,9 @@
 
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
-                $scope.activeQuestion.questionScope = _.find(question.allQuestionScopeOptions, {value: question.isPreFilled ? 'Identifying' : question.questionScope});
+                $scope.activeQuestion.questionScope = question.isPreFilled
+                    ? 'Identifying' 
+                    : question.questionScope;
 
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
