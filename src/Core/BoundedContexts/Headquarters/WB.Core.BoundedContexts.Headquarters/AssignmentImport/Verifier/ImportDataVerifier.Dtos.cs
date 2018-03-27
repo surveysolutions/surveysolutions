@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -12,58 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
     internal partial class ImportDataVerifier
     {
-        private class AssignmentRow
-        {
-            public AssignmentValue[] Answers { get; set; }
-        }
-
-        private abstract class AssignmentValue
-        {
-            public string FileName { get; set; }
-            public int Row { get; set; }
-            public string Column { get; set; }
-            public string Value { get; set; }
-            public string InterviewId { get; set; }
-        }
-
-        private class AssignmentUnknownValue : AssignmentValue { }
-
-
-        private class AssignmentAnswer : AssignmentValue
-        {
-            public string VariableName { get; set; }
-            public AnswerValue Answer { get; set; }
-        }
-        private class AnswerValue
-        {
-            public string AsString { get; set; }
-            public int? AsInt { get; set; }
-            public double? AsDouble { get; set; }
-            public decimal? AsDecimal { get; set; }
-            public DateTime? AsDateTime { get; set; }
-        }
-
-        private class AssignmentRosterInstanceCode : AssignmentAnswer
-        {
-            public int Code { get; set; }
-        }
-
-        private class AssignmentAnswers : AssignmentValue
-        {
-            public string VariableName { get; set; }
-            public AssignmentAnswer[] Values { get; set; }
-        }
-
-        private class AssignmentResponsible : AssignmentValue
-        {
-            public UserToVerify Responsible { get; set; }
-        }
-
-        private class AssignmentQuantity : AssignmentValue
-        {
-            public int? Quantity { get; set; }
-        }
-        
         private IEnumerable<AssignmentRow> ToAssignmentRows(Questionnaire questionnaire, PreloadedFile file)
         {
             var rosterSizeQuestionColumns = questionnaire.Rosters.ContainsKey(file.QuestionnaireOrRosterName)
@@ -153,14 +100,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 FileName = fileName,
                 Column = answer.Column,
                 Row = answer.Row,
-                Value = answer.Value,
-                Answer = ToAnswerValue(answer, questionnaire)
+                Value = answer.Value
             };
-
-        private static AnswerValue ToAnswerValue(PreloadingValue answer, Questionnaire questionnaire)
-        {
-            throw new NotImplementedException();
-        }
 
         private static AssignmentQuantity ToAssignmentQuantity(string fileName, string interviewId, PreloadingValue answer)
         {
