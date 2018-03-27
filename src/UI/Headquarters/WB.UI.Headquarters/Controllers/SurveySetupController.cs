@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -256,15 +258,16 @@ namespace WB.UI.Headquarters.Controllers
 
             this.preloadedDataRepository.Store(model.File.InputStream);
             
-            //var importDataInfo = this.preloadedDataVerifier.GetDetails(mainImportedFile);
-
             this.interviewImportService.Status.VerificationState.FileName = model.File.FileName;
             this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
             this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
-            //this.interviewImportService.Status.VerificationState.SupervisorsCount = importDataInfo.SupervisorsCount;
-            //this.interviewImportService.Status.VerificationState.EnumeratorsCount = importDataInfo.EnumeratorsCount;
-            //this.interviewImportService.Status.VerificationState.EntitiesCount = importDataInfo.EntitiesCount;
-            //this.interviewImportService.Status.VerificationState.WasResponsibleProvided = this.preloadedDataVerifier.HasResponsibleNames(mainImportedFile);
+            this.interviewImportService.Status.VerificationState.SupervisorsCount = mainImportedFile.Rows.Sum(x =>
+                x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsSupervisor));
+            this.interviewImportService.Status.VerificationState.EnumeratorsCount = mainImportedFile.Rows.Sum(x =>
+                x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsInterviewer));
+            this.interviewImportService.Status.VerificationState.EntitiesCount = mainImportedFile.Rows.Length;
+            this.interviewImportService.Status.VerificationState.WasResponsibleProvided = mainImportedFile.Columns.Select(x => x.ToLower())
+                .Contains(ServiceColumns.ResponsibleColumnName);
 
             Task.Factory.StartNew(() =>
             {
@@ -355,17 +358,13 @@ namespace WB.UI.Headquarters.Controllers
                         model.File.FileName));
             }
 
-            //var hasResponsibleNames = this.preloadedDataVerifier.HasResponsibleNames(preloadedSample);
-
-            //var preloadedDataService = this.CreatePreloadedDataService(questionnaireIdentity);
-
+            var hasResponsibleNames = preloadedSample.Columns.Select(x => x.ToLower())
+                .Contains(ServiceColumns.ResponsibleColumnName);
+            
             try
             {
-                var verificationStatus = this.preloadedDataVerifier
-                    .VerifyAssignmentsSample(null, null)
-                    .Take(10)
-                    .ToArray();
-
+                var verificationStatus =
+                    this.GetErrors(new[] {preloadedSample}, questionnaireIdentity).Take(10).ToArray();
 
                 if (verificationStatus.Any())
                 {
@@ -396,20 +395,18 @@ namespace WB.UI.Headquarters.Controllers
 
             this.preloadedDataRepository.Store(model.File.InputStream);
 
-            //var importDataInfo = this.preloadedDataVerifier.GetDetails(preloadedSample);
-
-            //this.TempData[$@"InterviewImportConfirmation"] = new PreloadedDataConfirmationModel
-            //{
-            //    QuestionnaireId = model.QuestionnaireId,
-            //    Version = model.QuestionnaireVersion,
-            //    QuestionnaireTitle = questionnaireInfo?.Title,
-            //    WasResponsibleProvided = hasResponsibleNames,
-            //    AssignmentImportType = AssignmentImportType.Assignments,
-            //    FileName = preloadedSample.FileName,
-            //    EnumeratorsCount = importDataInfo.EnumeratorsCount,
-            //    SupervisorsCount = importDataInfo.SupervisorsCount,
-            //    EntitiesCount = importDataInfo.EntitiesCount
-            //};
+            this.TempData[$@"InterviewImportConfirmation"] = new PreloadedDataConfirmationModel
+            {
+                QuestionnaireId = model.QuestionnaireId,
+                Version = model.QuestionnaireVersion,
+                QuestionnaireTitle = questionnaireInfo?.Title,
+                WasResponsibleProvided = hasResponsibleNames,
+                AssignmentImportType = AssignmentImportType.Assignments,
+                FileName = preloadedSample.FileName,
+                EnumeratorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsInterviewer)),
+                SupervisorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsSupervisor)),
+                EntitiesCount = preloadedSample.Rows.Length
+            };
 
             return this.RedirectToAction("InterviewImportConfirmation",
                 new
