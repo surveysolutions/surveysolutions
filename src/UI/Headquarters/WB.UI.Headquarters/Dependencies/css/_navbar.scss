@@ -227,7 +227,7 @@ $width-right-menu-small: 380px;
 		}
 	}
 	.nav.navbar-right{
-		max-width: $max-width-right-menu;
+	    max-width: $max-width-right-menu;
 		min-width: $min-width-right-menu;
 		& > li{
 			float: right;
@@ -258,7 +258,8 @@ $width-right-menu-small: 380px;
 .language{
 	background: url("#{$assetsPath}/img/language.png") 0 15px no-repeat;
 	padding-left: 40px;
-	max-width: 60%;
+	max-width: 300px;
+	min-width: 130px;
 	& > a{
 		white-space: nowrap;
 
