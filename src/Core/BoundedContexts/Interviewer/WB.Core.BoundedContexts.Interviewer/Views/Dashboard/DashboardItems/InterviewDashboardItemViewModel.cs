@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
             serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
 
-        private ILogger logger => serviceLocator.GetInstance<ILogger>();
+        private ILogger logger => serviceLocator.GetInstance<ILoggerProvider>().GetForType(typeof(InterviewDashboardItemViewModel));
 
         public event EventHandler OnItemRemoved;
         private bool isInterviewReadyToLoad = true;
