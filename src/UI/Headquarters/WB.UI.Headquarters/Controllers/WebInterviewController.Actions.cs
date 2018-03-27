@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
 
@@ -79,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     this.imageProcessingService.ValidateImage(ms.ToArray());
 
-                    filename = $@"{question.VariableName}{string.Join(@"-", questionIdentity.RosterVector.Select(rv => rv))}.jpg";
+                    filename = AnswerUtils.GetPictureFileName(question.VariableName, questionIdentity.RosterVector);
                     var responsibleId = interview.CurrentResponsibleId;
 
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
@@ -88,7 +89,7 @@ namespace WB.UI.Headquarters.Controllers
                     this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                 }
             }
-            catch (Exception e)
+            catch (Exception e) 
             {
                 if(filename != null)
                     this.imageFileStorage.RemoveInterviewBinaryData(interview.Id, filename);

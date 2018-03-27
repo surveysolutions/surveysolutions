@@ -95,7 +95,7 @@
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
                 $scope.activeQuestion.questionScope = question.isPreFilled
-                    ? 'Identifying' 
+                    ? _.find(question.allQuestionScopeOptions, { value: 'Identifying' })
                     : question.questionScope;
 
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
@@ -240,7 +240,7 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
-                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Identifying';
+                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope.value === 'Supervisor' || $scope.activeQuestion.questionScope.value === 'Identifying';
                 if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
@@ -249,7 +249,7 @@
                     $scope.activeQuestion.allQuestionScopeOptions = _.filter($scope.activeQuestion.allQuestionScopeOptions, function (val) {
                         return val.value !== 'Supervisor';
                     });
-                    if ($scope.activeQuestion.questionScope === 'Supervisor') {
+                    if ($scope.activeQuestion.questionScope.value === 'Supervisor') {
                         $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                     }
                 }
@@ -257,11 +257,11 @@
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
-                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
+                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope.value === 'Supervisor') {
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
-                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
+                if (type === 'MultyOption' && $scope.activeQuestion.questionScope.value === 'Identifying') {
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
@@ -478,7 +478,7 @@
                 if ($scope.activeQuestion) {
                     if (newValue) {
                         if ($scope.activeQuestion.questionScope.value !== 'Interviewer' && $scope.activeQuestion.questionScope.value !== 'Hidden') {
-                            $scope.activeQuestion.questionScope = 'Interviewer';
+                            changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                             $scope.activeQuestion.optionsFilterExpression = null;
                         }
                     } else {
@@ -538,7 +538,7 @@
             };
 
             $scope.doesQuestionSupportEnablementConditions = function () {
-                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
+                return $scope.activeQuestion && ($scope.activeQuestion.questionScope.value != 'Identifying')
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 
