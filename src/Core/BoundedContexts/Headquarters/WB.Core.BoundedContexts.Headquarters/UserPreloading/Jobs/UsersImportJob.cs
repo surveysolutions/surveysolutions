@@ -26,7 +26,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IUserImportService importUsersService => ServiceLocator.Current
             .GetInstance<IUserImportService>();
 
-        public void Execute(IJobExecutionContext context)
+#pragma warning disable 1998
+        public async Task Execute(IJobExecutionContext context)
+#pragma warning restore 1998
         {
             this.logger.Info("User import job: Started");
 
