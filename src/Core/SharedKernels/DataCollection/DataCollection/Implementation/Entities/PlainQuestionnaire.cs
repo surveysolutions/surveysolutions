@@ -47,6 +47,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IVariable> variablesCache = null;
         private Dictionary<Guid, IStaticText> staticTextsCache = null;
         private Dictionary<Guid, IQuestion> questionsCache = null;
+        private Dictionary<string, IQuestion> questionsByVariableCache = null;
         private Dictionary<Guid, IGroup> groupsCache = null;
         private Dictionary<Guid, IComposite> entitiesCache = null;
         private ReadOnlyCollection<Guid> sectionsCache = null;
@@ -148,6 +149,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                             question => question));
             }
         }
+
+        private Dictionary<string, IQuestion> QuestionsByVariableCache
+            => this.questionsByVariableCache ?? (this.questionsByVariableCache
+                   = this.innerDocument.Find<IQuestion>(_ => true)
+                       .ToDictionary(question => question.VariableName.ToLower(), question => question));
 
         private Dictionary<Guid, IGroup> GroupCache
         {
@@ -303,10 +309,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
         }
 
-        public Guid? GetQuestionIdByVariable(string variable)
-        {
-            return this.QuestionCache.Values.FirstOrDefault(x => x.StataExportCaption == variable)?.PublicKey;
-        }
+        public Guid? GetQuestionIdByVariable(string variable) => this.QuestionsByVariableCache.ContainsKey(variable)
+            ? this.QuestionsByVariableCache[variable].PublicKey
+            : (Guid?)null;
 
         public Guid GetVariableIdByVariableName(string variableName)
         {
