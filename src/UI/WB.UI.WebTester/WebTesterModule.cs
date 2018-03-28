@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Reactive.Subjects;
 using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.AspNet.SignalR.Hubs;
