@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class RelinkDeviceViewModel : BaseViewModel
+    public class RelinkDeviceViewModel : BaseViewModel<RelinkDeviceViewModelArg>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
@@ -31,26 +31,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewersPlainStorage = interviewersPlainStorage;
         }
 
-        public override bool IsAuthenticationRequired => false;
+        protected override bool IsAuthenticationRequired => false;
 
         private string errorMessage;
         public string ErrorMessage
         {
-            get { return this.errorMessage; }
+            get => this.errorMessage;
             set { this.errorMessage = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
+            get => this.isInProgress;
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
-        public IMvxCommand CancelCommand => new MvxCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
+        public IMvxCommand CancelCommand => new MvxAsyncCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand
-            => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>(),
+            => new MvxCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>(),
                 () => !this.IsInProgress);
 
         private IMvxAsyncCommand relinkCommand;
@@ -65,9 +65,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private InterviewerIdentity userIdentityToRelink;
 
-        public void Init(InterviewerIdentity userIdentity)
+        public override void Prepare(RelinkDeviceViewModelArg parameter)
         {
-            this.userIdentityToRelink = userIdentity;
+            this.userIdentityToRelink = parameter.Identity;
         }
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
@@ -85,8 +85,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     token: this.cancellationTokenSource.Token).ConfigureAwait(false);
 
                 this.interviewersPlainStorage.Store(this.userIdentityToRelink);
-                this.principal.SignIn(this.userIdentityToRelink.Id, true);
-                await this.viewModelNavigationService.NavigateToDashboard();
+                this.Principal.SignIn(this.userIdentityToRelink.Id, true);
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
             {
@@ -102,10 +102,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public void NavigateToPreviousViewModel()
+        public Task NavigateToPreviousViewModel()
         {
             this.cancellationTokenSource.Cancel();
-            this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>(this.userIdentityToRelink);
+            return this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel, FinishInstallationViewModelArg>(new FinishInstallationViewModelArg(this.userIdentityToRelink));
         }
     }
 }

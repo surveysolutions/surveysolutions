@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.questionnaireDownloader = questionnaireDownloader;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 
@@ -53,7 +53,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsInProgress = true;
             try
             {
-                var interview = this.interviewRepository.Get(this.interviewId);
+                var interview = this.interviewRepository.Get(this.InterviewId);
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
                 bool succeeded = await this.questionnaireDownloader.ReloadQuestionnaireAsync(
@@ -72,13 +72,13 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() =>
         {
-            this.viewModelNavigationService.NavigateToDashboard();
+            this.viewModelNavigationService.NavigateToDashboardAsync();
             this.Dispose();
         });
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
         public IMvxCommand SignOutCommand => new MvxCommand(() =>
         {
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
     }

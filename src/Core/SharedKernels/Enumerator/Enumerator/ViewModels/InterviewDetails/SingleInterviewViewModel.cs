@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -8,8 +9,9 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public abstract class SingleInterviewViewModel : BaseViewModel
+    public abstract class SingleInterviewViewModel : BaseViewModel<InterviewViewModelArgs>
     {
+        private readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly ICommandService commandService;
         protected readonly VibrationViewModel vibrationViewModel;
 
@@ -20,8 +22,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             VibrationViewModel vibrationViewModel)
             : base(principal, viewModelNavigationService)
         {
+            this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
             this.vibrationViewModel = vibrationViewModel;
+        }
+
+        public override void Prepare(InterviewViewModelArgs parameter)
+        {
+            this.InterviewId = parameter.InterviewId;
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            if (this.InterviewId == null)
+            {
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
+            }
+
+            this.vibrationViewModel.Initialize(this.InterviewId);
         }
 
         public bool IsSuccessfullyLoaded { get; protected set; }
@@ -30,34 +49,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public abstract string CurrentLanguage { get; }
         public abstract IMvxCommand ReloadCommand { get; }
 
-        protected string interviewId;
+        protected string InterviewId;
 
-        protected override void InitFromBundle(IMvxBundle parameters)
+        protected override void ReloadFromBundle(IMvxBundle state)
         {
-            base.InitFromBundle(parameters);
-            if (parameters.Data.ContainsKey("interviewId"))
+            if (state.Data.ContainsKey("interviewId"))
             {
-                this.Initialize(parameters.Data["interviewId"]);
+                this.InterviewId = state.Data["interviewId"];
             }
         }
 
         protected override void SaveStateToBundle(IMvxBundle bundle)
         {
             base.SaveStateToBundle(bundle);
-            bundle.Data["interviewId"] = this.interviewId;
-        }
-
-        protected void Initialize(string interviewId)
-        {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.interviewId = interviewId;
-            this.vibrationViewModel.Initialize(interviewId);
+            bundle.Data["interviewId"] = this.InterviewId;
         }
 
         public IMvxCommand SwitchTranslationCommand => new MvxCommand<string>(this.SwitchTranslation);
 
         private void SwitchTranslation(string language) => this.commandService.Execute(
-            new SwitchTranslation(Guid.Parse(this.interviewId), language, this.principal.CurrentUserIdentity.UserId));
+            new SwitchTranslation(Guid.Parse(this.InterviewId), language, this.Principal.CurrentUserIdentity.UserId));
 
         public virtual void Dispose()
         {

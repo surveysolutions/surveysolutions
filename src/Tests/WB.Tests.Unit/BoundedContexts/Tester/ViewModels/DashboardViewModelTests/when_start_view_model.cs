@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_start_view_model : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
@@ -60,10 +60,10 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
                 questionnaireListStorage: storageAccessor);
 
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.Load();
+        public async Task Because() => await viewModel.Initialize();
 
         [Test] public void should_set_ShowEmptyQuestionnaireListText_to_true() => viewModel.ShowEmptyQuestionnaireListText.Should().BeTrue();
         [Test] public void should_set_IsPublicShowed_to_false() => viewModel.IsPublicShowed.Should().BeFalse();

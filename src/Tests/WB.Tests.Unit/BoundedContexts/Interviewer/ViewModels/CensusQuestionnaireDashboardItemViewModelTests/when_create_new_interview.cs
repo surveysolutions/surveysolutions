@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.CensusQuestionnai
                     Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         [NUnit.Framework.Test] public void should_navigate_to_prefilled_questions_view_model () =>
-            mockOfViewModelNavigationService.Verify(x=>x.NavigateToPrefilledQuestions(Moq.It.IsAny<string>()), Times.Once);
+            mockOfViewModelNavigationService.Verify(x=>x.NavigateToPrefilledQuestionsAsync(Moq.It.IsAny<string>()), Times.Once);
 
         static CensusQuestionnaireDashboardItemViewModel viewModel;
         static readonly Mock<IMvxMessenger> mockOfMvxMessenger = new Mock<IMvxMessenger>();

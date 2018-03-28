@@ -60,8 +60,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override void Load()
+        public override async Task Initialize()
         {
+            await base.Initialize();
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
@@ -239,7 +240,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             this.CancelLoadServerQuestionnaires();
             
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void ShowPublicQuestionnaires()

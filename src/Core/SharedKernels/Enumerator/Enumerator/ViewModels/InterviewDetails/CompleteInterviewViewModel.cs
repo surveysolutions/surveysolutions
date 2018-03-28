@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual async Task CloseInterview()
         {
-            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId.ToString());
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }

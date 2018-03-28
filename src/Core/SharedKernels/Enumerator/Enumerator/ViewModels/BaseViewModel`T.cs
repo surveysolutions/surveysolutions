@@ -9,17 +9,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         protected readonly IPrincipal Principal;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        protected virtual bool IsAuthenticationRequired => true;
 
         protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
         {
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
             this.viewModelNavigationService = viewModelNavigationService ?? throw new ArgumentNullException(nameof(viewModelNavigationService));
         }
-
+        
         public override void Prepare()
         {
             base.Prepare();
-            if (!this.Principal.IsAuthenticated)
+            
+            if (this.IsAuthenticationRequired && !this.Principal.IsAuthenticated)
             {
                 this.viewModelNavigationService.NavigateToSplashScreen();
             }

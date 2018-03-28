@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         }
 
         private readonly IPermissions permissions;
-        private IViewModelNavigationService viewModelNavigationService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public AreaEditService(IPermissions permissions,
             IViewModelNavigationService viewModelNavigationService)
@@ -53,14 +53,14 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             return await this.EditArea(area);
         }
         
-        private Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
+        private async Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
         {
             var tcs = new TaskCompletionSource<AreaEditResult>();
 
-            this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
+            await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(new AreaEditorViewModelArgs
             {
-                geometry = area?.Geometry,
-                mapName = area?.MapName
+                Geometry = area?.Geometry,
+                MapName = area?.MapName
             });
 
             AreaEditorActivity.OnAreaEditCompleted += (editResult =>
@@ -68,7 +68,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 tcs.TrySetResult(
                     editResult == null
                         ? null
-                        : new AreaEditResult()
+                        : new AreaEditResult
                         {
                             Geometry = editResult.Geometry,
                             MapName = editResult.MapName,
@@ -80,7 +80,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         });
             });
 
-            return tcs.Task;
+            return await tcs.Task;
         }
     }
 }

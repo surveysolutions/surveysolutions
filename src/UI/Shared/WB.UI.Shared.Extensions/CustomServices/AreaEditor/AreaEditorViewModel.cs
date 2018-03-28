@@ -19,7 +19,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
-    public class AreaEditorViewModel : BaseViewModel
+    public class AreaEditorViewModelArgs
+    {
+        public string Geometry { get; set; }
+        public string MapName { get; set; }
+    }
+
+    public class AreaEditorViewModel : BaseViewModel<AreaEditorViewModelArgs>
     {
         public event Action<AreaEditorResult> OnAreaEditCompleted;
 
@@ -43,8 +49,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public override void Load()
+        public override async Task Initialize()
         {
+            await base.Initialize();
             var localmaps = this.mapService.GetAvailableMaps();
             localmaps.Add(this.mapService.PrepareAndGetDefaultMap());
 
@@ -84,7 +91,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public string SelectedMap
         {
             get => this.selectedMap;
-            set => RaiseAndSetIfChanged(ref this.selectedMap, value);
+            set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
             
         }
 
@@ -145,20 +152,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         }
 
 
-        public void Init(string geometry, string mapName)
+        public override void Prepare(AreaEditorViewModelArgs parameter)
         {
-            this.MapName = mapName;
+            this.MapName = parameter.MapName;
 
-            if (!string.IsNullOrEmpty(geometry))
+            if (!string.IsNullOrEmpty(parameter.Geometry))
             {
-                this.Geometry = Geometry.FromJson(geometry);
+                this.Geometry = Geometry.FromJson(parameter.Geometry);
 
                 this.GeometryArea = GeometryEngine.AreaGeodetic(this.Geometry).ToString("#.##");
                 this.GeometryLength = GeometryEngine.LengthGeodetic(this.Geometry).ToString("#.##");
             }
         }
 
-        private Geometry Geometry { set; get; } = null;
+        private Geometry Geometry { set; get; }
         public string MapName { set; get; }
 
         private Map map;

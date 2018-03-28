@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 {
     public class when_initializing_and_user_activated_on_device : LoginViewModelTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var interview = Substitute.For<IStatefulInterview>();
 
             var interviewer = CreateInterviewerIdentity(userName);
@@ -24,10 +25,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
                 interviewersPlainStorage: InterviewersPlainStorageMock.Object);
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Load();
+        public async Task BecauseOf() => await viewModel.Initialize();
 
         [NUnit.Framework.Test] public void should_fill_user_name () =>
             viewModel.UserName.Should().Be(userName);
