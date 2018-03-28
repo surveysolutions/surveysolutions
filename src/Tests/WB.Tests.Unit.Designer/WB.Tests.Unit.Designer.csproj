@@ -77,7 +77,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NHibernate" Version="5.1.0" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
-    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
     <PackageReference Include="Quartz" Version="3.0.4" />
