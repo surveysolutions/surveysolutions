@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public bool IsRosterSize { get; set; }
         public int? Answer { get; set; }
     }
-    public class AssignmentDataTimeAnswer : AssignmentAnswer
+    public class AssignmentDateTimeAnswer : AssignmentAnswer
     {
         public DateTime? Answer { get; set; }
     }
@@ -38,6 +38,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     {
         public double? Answer { get; set; }
     }
+
+    public class AssignmentCategoricalSingleAnswer : AssignmentAnswers { }
 
     public class AssignmentCategoricalMultiAnswer : AssignmentAnswers
     {
@@ -51,10 +53,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentRosterInstanceCode : AssignmentAnswer
     {
-        public int Code { get; set; }
+        public int? Code { get; set; }
     }
 
-    public class AssignmentAnswers : AssignmentValue
+    public class AssignmentAnswers: AssignmentValue
     {
         public string VariableName { get; set; }
         public AssignmentAnswer[] Values { get; set; }

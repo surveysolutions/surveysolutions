@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         public PreloadingRow[] Rows { get; set; }
     }
 
-    [DebuggerDisplay("{InterviewId ?? \"No interview id\"} [{Cells.Length} cells]")]
+    [DebuggerDisplay("[{Cells.Length} cells]")]
     public class PreloadingRow
     {
         public string InterviewId { get; set; }
@@ -27,7 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         public string VariableOrCodeOrPropertyName { get; set; }
     }
 
-    [DebuggerDisplay("[{Row}, {Column}] value='{Value}'")]
+    [DebuggerDisplay("[{Column}]={Value}")]
     public class PreloadingValue : PreloadingCell
     {
         public int Row { get; set; }
@@ -35,13 +35,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         public string Value { get; set; }
     }
 
-    [DebuggerDisplay("{ToString()}")]
+    [DebuggerDisplay("composite[{VariableOrCodeOrPropertyName}]")]
     public class PreloadingCompositeValue : PreloadingCell
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public PreloadingValue[] Values { get; set; }
 
         public override string ToString() =>
             $"[{Values.FirstOrDefault().Row}, {VariableOrCodeOrPropertyName}] " +
             $"values= {string.Join(", ", Values.Select(x => $"[{x.VariableOrCodeOrPropertyName}={x.Value}]"))}";
     }
+
+    [DebuggerDisplay("roster instance id[{Column}]={Value}")]
+    public class PreloadingRosterInstanceIdValue : PreloadingValue { }
 }

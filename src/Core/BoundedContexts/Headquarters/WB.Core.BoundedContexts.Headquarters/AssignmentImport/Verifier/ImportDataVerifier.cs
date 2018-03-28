@@ -16,13 +16,21 @@ using messages = WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerifi
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
     
-    internal partial class ImportDataVerifier : IPreloadedDataVerifier
+    internal class ImportDataVerifier : IPreloadedDataVerifier
     {
         public IEnumerable<PanelImportVerificationError> VerifyAnswers(AssignmentRow assignmentRow)
         {
             foreach (var assignmentValue in assignmentRow.Answers)
-            foreach (var error in this.Verifiers.Select(x => x.Invoke(assignmentValue)))
-                if (error != null) yield return error;
+            {
+                foreach (var error in this.Verifiers.Select(x => x.Invoke(assignmentValue)))
+                    if (error != null) yield return error;
+
+                if (!(assignmentValue is AssignmentAnswers compositeValue)) continue;
+
+                foreach (var value in compositeValue.Values)
+                foreach (var error in this.Verifiers.Select(x => x.Invoke(value)))
+                    if (error != null) yield return error;
+            }
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyColumnsAndRosters(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file)
@@ -62,10 +70,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<AssignmentValue, PanelImportVerificationError>> Verifiers => new[]
         {
             Error<AssignmentTextAnswer>(Text_HasInvalidMask, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
-            Error<AssignmentDataTimeAnswer>(DateTime_NotParsed, "PL0016", messages.PL0016_ExpectedDateTimeNotParsed),
+            Error<AssignmentDateTimeAnswer>(DateTime_NotParsed, "PL0016", messages.PL0016_ExpectedDateTimeNotParsed),
             Error<AssignmentGpsAnswer>(Gps_NotParsed, "PL0017", messages.PL0017_ExpectedGpsNotParsed),
             Error<AssignmentIntegerAnswer>(Interger_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
-            Error<AssignmentAnswer>(ExpectedDecimalNotParsed, "PL0019", messages.PL0019_ExpectedDecimalNotParsed),
+            Error<AssignmentDoubleAnswer>(Double_NotParsed, "PL0019", messages.PL0019_ExpectedDecimalNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_IsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
             Error<AssignmentResponsible>(Responsible_IsEmpty, "PL0025", messages.PL0025_ResponsibleNameIsEmpty),
             Error<AssignmentResponsible>(Responsible_NotFound, "PL0026", messages.PL0026_ResponsibleWasNotFound),
@@ -80,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentIntegerAnswer>(Integer_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
             Error<AssignmentQuantity>(Quantity_IsNotInteger, "PL0035", messages.PL0035_QuantityNotParsed),
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
-            Error<AssignmentCategoricalMultiAnswer>(Categorical_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
+            Error<AssignmentCategoricalMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
         };
 
         private bool Text_HasInvalidMask(AssignmentTextAnswer answer)
@@ -91,15 +99,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return !new MaskedFormatter(answer.Mask).IsTextMaskMatched(answer.Value);
         }
 
-        private bool DateTime_NotParsed(AssignmentDataTimeAnswer answer)
+        private bool DateTime_NotParsed(AssignmentDateTimeAnswer answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Answer.HasValue;
 
-        private bool ExpectedDecimalNotParsed(AssignmentAnswer answer)
-        {
-            throw new NotImplementedException();
-        }
+        private bool Double_NotParsed(AssignmentDoubleAnswer answer)
+            => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Answer.HasValue;
 
-        private bool Categorical_AnswerExceedsMaxAnswersCount(AssignmentCategoricalMultiAnswer answer)
+        private bool CategoricalMulti_AnswerExceedsMaxAnswersCount(AssignmentCategoricalMultiAnswer answer)
             => answer.MaxAnswersCount.HasValue &&
                answer.Values.OfType<AssignmentIntegerAnswer>().Count(x => x.Answer.HasValue) > answer.MaxAnswersCount;
 

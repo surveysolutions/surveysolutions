@@ -1,16 +1,21 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -39,18 +44,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<AssignmentRow> GetAssignmentRows(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-            var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
-
-            var rosterSizeQuestionColumns = rosterId.HasValue
-                ? questionnaire.GetRostersFromTopToSpecifiedEntity(rosterId.Value)
-                    .Select(questionnaire.GetRosterVariableName)
-                    .Union(new[] {questionnaire.GetRosterVariableName(rosterId.Value)})
-                    .Select(x => string.Format(ServiceColumns.IdSuffixFormat, x)).ToArray()
-                : new string[0];
 
             foreach (var preloadingRow in file.Rows)
             {
-                var assignmentAnswers = this.ToAssignmentAnswers(file.FileName, rosterSizeQuestionColumns, preloadingRow);
+                var assignmentAnswers = this.ToAssignmentAnswers(file.FileName,
+                    preloadingRow, questionnaire);
 
                 yield return new AssignmentRow
                 {
@@ -59,16 +57,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
         }
 
-        private IEnumerable<AssignmentValue> ToAssignmentAnswers(string fileName, string[] rosterInstanceColumns, PreloadingRow row)
+        private IEnumerable<AssignmentValue> ToAssignmentAnswers(string fileName, PreloadingRow row, IQuestionnaire questionnaire)
         {
             foreach (var answer in row.Cells)
             {
-                if (rosterInstanceColumns.Contains(answer.VariableOrCodeOrPropertyName)) continue;
-
                 switch (answer)
                 {
                     case PreloadingCompositeValue compositeCell:
-                        yield return ToAssignmentAnswers(fileName, row, compositeCell);
+                        yield return ToAssignmentAnswers(fileName, row, compositeCell, questionnaire);
+                        break;
+                    case PreloadingRosterInstanceIdValue rosterInstanceIdCell:
+                        yield return this.ToAssignmentRosterInstanceId(fileName, row, rosterInstanceIdCell, questionnaire);
                         break;
                     case PreloadingValue regularCell:
                         switch (answer.VariableOrCodeOrPropertyName)
@@ -80,10 +79,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                                 yield return ToAssignmentQuantity(fileName, row.InterviewId, regularCell);
                                 break;
                             default:
-                                yield return ToAssignmentAnswer(fileName, row, regularCell);
+                                yield return ToAssignmentAnswer(fileName, row, regularCell, questionnaire);
                                 break;
                         }
-
                         break;
                 }
             }
@@ -91,32 +89,165 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         private static AssignmentAnswers ToAssignmentAnswers(string fileName, PreloadingRow row,
-            PreloadingCompositeValue preloadingCompositeValue) => new AssignmentAnswers
-            {
-                InterviewId = row.InterviewId,
-                VariableName = preloadingCompositeValue.VariableOrCodeOrPropertyName,
-                Values = preloadingCompositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x)).ToArray(),
-            };
+            PreloadingCompositeValue compositeValue, IQuestionnaire questionnaire)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(compositeValue.VariableOrCodeOrPropertyName);
 
-        private static AssignmentAnswer ToAssignmentAnswer(string fileName, PreloadingRow row,
-            PreloadingValue answer) => new AssignmentAnswer
+            if (questionId.HasValue)
             {
+                var questionType = GetQuestionType(questionId.Value, questionnaire);
+
+                switch (questionType)
+                {
+                    case InterviewQuestionType.YesNo:
+                    case InterviewQuestionType.TextList:
+                    case InterviewQuestionType.Gps:
+                    case InterviewQuestionType.MultiFixedOption:
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            return new AssignmentAnswers
+            {
+                VariableName = compositeValue.VariableOrCodeOrPropertyName,
+                Values = compositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x, questionnaire))
+                    .ToArray(),
+            };
+        }
+
+        private AssignmentValue ToAssignmentRosterInstanceId(string fileName, PreloadingRow row,
+            PreloadingRosterInstanceIdValue answer, IQuestionnaire questionnaire)
+        {
+            int? intValue = null;
+            if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
+                out var intNumericValue))
+                intValue = intNumericValue;
+
+            return new AssignmentRosterInstanceCode
+            {
+                Code = intValue,
                 InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
                 FileName = fileName,
                 Column = answer.Column,
                 Row = answer.Row,
-                Value = answer.Value
+                Value = answer.Value,
             };
+        }
+
+        private static AssignmentAnswer ToAssignmentAnswer(string fileName, PreloadingRow row,
+            PreloadingValue answer, IQuestionnaire questionnaire)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableOrCodeOrPropertyName);
+
+            if (questionId.HasValue)
+            {
+                var questionType = GetQuestionType(questionId.Value, questionnaire);
+
+                switch (questionType)
+                {
+                    case InterviewQuestionType.Text:
+                    case InterviewQuestionType.QRBarcode:
+                    case InterviewQuestionType.TextList:
+                        return ToAssignmentTextAnswer(questionId.Value, questionnaire, fileName, row, answer);
+                    case InterviewQuestionType.Integer:
+                        return ToAssignmentIntegerAnswer(questionId.Value, questionnaire, fileName, row, answer);
+                    case InterviewQuestionType.SingleFixedOption:
+                    case InterviewQuestionType.Cascading:
+                    case InterviewQuestionType.Double:
+                        return ToAssignmentDoubleAnswer(questionId.Value, fileName, row, answer);
+                    case InterviewQuestionType.DateTime:
+                        return ToAssignmentDateTimeAnswer(questionId.Value, fileName, row, answer);
+                    default:
+                        throw new NotSupportedException();
+                }
+            }
+
+            return new AssignmentAnswer();
+        }
+
+        private static AssignmentAnswer ToAssignmentDoubleAnswer(Guid questionId, string fileName, PreloadingRow row, PreloadingValue answer)
+        {
+            double? doubleValue = null;
+            if (double.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var doubleNumericValue))
+                doubleValue = doubleNumericValue;
+
+            return new AssignmentDoubleAnswer
+            {
+                Answer = doubleValue,
+                InterviewId = row.InterviewId,
+                VariableName = answer.VariableOrCodeOrPropertyName,
+                FileName = fileName,
+                Column = answer.Column,
+                Row = answer.Row,
+                Value = answer.Value,
+        };
+        }
+
+        private static AssignmentAnswer ToAssignmentDateTimeAnswer(Guid questionId, string fileName, PreloadingRow row, PreloadingValue answer)
+        {
+            DateTime? dataTimeValue = null;
+            if (DateTime.TryParse(answer.Value, out var date))
+                dataTimeValue = date;
+
+            return new AssignmentDateTimeAnswer
+            {
+                Answer = dataTimeValue,
+                InterviewId = row.InterviewId,
+                VariableName = answer.VariableOrCodeOrPropertyName,
+                FileName = fileName,
+                Column = answer.Column,
+                Row = answer.Row,
+                Value = answer.Value,
+            };
+        }
+
+        private static AssignmentTextAnswer ToAssignmentTextAnswer(Guid questionId, IQuestionnaire questionnaire, string fileName, PreloadingRow row, PreloadingValue answer)
+            => new AssignmentTextAnswer
+            {
+                Mask = questionnaire.GetTextQuestionMask(questionId),
+                InterviewId = row.InterviewId,
+                VariableName = answer.VariableOrCodeOrPropertyName,
+                FileName = fileName,
+                Column = answer.Column,
+                Row = answer.Row,
+                Value = answer.Value,
+            };
+
+        private static AssignmentAnswer ToAssignmentIntegerAnswer(Guid questionId, IQuestionnaire questionnaire, string fileName, PreloadingRow row, PreloadingValue answer)
+        {
+            int? intValue = null;
+            if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
+                out var intNumericValue))
+                intValue = intNumericValue;
+
+            return new AssignmentIntegerAnswer
+            {
+                IsRosterSize = questionnaire.IsRosterSizeQuestion(questionId),
+                IsRosterSizeForLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId),
+                Answer = intValue,
+                InterviewId = row.InterviewId,
+                VariableName = answer.VariableOrCodeOrPropertyName,
+                FileName = fileName,
+                Column = answer.Column,
+                Row = answer.Row,
+                Value = answer.Value,
+            };
+        }
 
         private static AssignmentQuantity ToAssignmentQuantity(string fileName, string interviewId, PreloadingValue answer)
         {
-            int.TryParse(answer.Value, out var quantity);
+            int? quantityValue = null;
+
+            if (int.TryParse(answer.Value, out var quantity))
+                quantityValue = quantity;
 
             return new AssignmentQuantity
             {
                 InterviewId = interviewId,
-                Quantity = quantity,
+                Quantity = quantityValue,
                 FileName = fileName,
                 Column = answer.Column,
                 Row = answer.Row,
@@ -148,121 +279,111 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return responsible;
         }
 
-        //private InterviewQuestion ToQuestion(Guid questionId, IQuestionnaire questionnaire)
-        //{
-        //    var questionType = questionnaire.GetQuestionType(questionId);
-        //    bool isYesNoQuestion = questionnaire.IsQuestionYesNo(questionId);
-        //    bool isDecimalQuestion = !questionnaire.IsQuestionInteger(questionId);
-        //    Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionId);
-        //    Guid? sourceForLinkedQuestion = null;
+        private static InterviewQuestionType GetQuestionType(Guid questionId, IQuestionnaire questionnaire)
+        {
+            var questionType = questionnaire.GetQuestionType(questionId);
+            bool isYesNo = questionnaire.IsQuestionYesNo(questionId);
+            bool isDecimal = !questionnaire.IsQuestionInteger(questionId);
+            Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionId);
+            Guid? sourceForLinkedQuestion = null;
 
-        //    var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId);
-        //    var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId);
-        //    var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionId);
+            var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId);
+            var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId);
+            var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionId);
 
-        //    if (isLinkedToQuestion)
-        //        sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId);
+            if (isLinkedToQuestion)
+                sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId);
 
-        //    if (isLinkedToRoster)
-        //        sourceForLinkedQuestion = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
+            if (isLinkedToRoster)
+                sourceForLinkedQuestion = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
 
-        //    return new InterviewQuestion
-        //    {
-        //        Id = questionId,
-        //        IsRosterSize = questionnaire.IsRosterSizeQuestion(questionId),
-        //        IsRosterSizeForLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId),
-        //        Variable = questionnaire.GetQuestionVariableName(questionId).ToLower(),
-        //        Type = GetQuestionType(questionType, cascadingParentQuestionId, isYesNoQuestion, isDecimalQuestion,
-        //            isLinkedToListQuestion, sourceForLinkedQuestion)
-        //    };
-        //}
-        //private static InterviewQuestionType GetQuestionType(
-        //    QuestionType questionType,
-        //    Guid? cascadingParentQuestionId,
-        //    bool isYesNo,
-        //    bool isDecimal,
-        //    bool isLinkedToListQuestion,
-        //    Guid? linkedSourceId = null)
-
-        //{
-        //    switch (questionType)
-        //    {
-        //        case QuestionType.SingleOption:
-        //            {
-        //                return linkedSourceId.HasValue
-        //                    ? (isLinkedToListQuestion
-        //                        ? InterviewQuestionType.SingleLinkedToList
-        //                        : InterviewQuestionType.SingleLinkedOption)
-        //                    : (cascadingParentQuestionId.HasValue
-        //                        ? InterviewQuestionType.Cascading
-        //                        : InterviewQuestionType.SingleFixedOption);
-        //            }
-        //        case QuestionType.MultyOption:
-        //            {
-        //                return isYesNo
-        //                    ? InterviewQuestionType.YesNo
-        //                    : (linkedSourceId.HasValue
-        //                        ? (isLinkedToListQuestion
-        //                            ? InterviewQuestionType.MultiLinkedToList
-        //                            : InterviewQuestionType.MultiLinkedOption)
-        //                        : InterviewQuestionType.MultiFixedOption);
-        //            }
-        //        case QuestionType.DateTime:
-        //            return InterviewQuestionType.DateTime;
-        //        case QuestionType.GpsCoordinates:
-        //            return InterviewQuestionType.Gps;
-        //        case QuestionType.Multimedia:
-        //            return InterviewQuestionType.Multimedia;
-        //        case QuestionType.Numeric:
-        //            return isDecimal ? InterviewQuestionType.Double : InterviewQuestionType.Integer;
-        //        case QuestionType.QRBarcode:
-        //            return InterviewQuestionType.QRBarcode;
-        //        case QuestionType.Area:
-        //            return InterviewQuestionType.Area;
-        //        case QuestionType.Text:
-        //            return InterviewQuestionType.Text;
-        //        case QuestionType.TextList:
-        //            return InterviewQuestionType.TextList;
-        //        case QuestionType.Audio:
-        //            return InterviewQuestionType.Audio;
-        //        default:
-        //            throw new NotSupportedException($"Not supported question type: {questionType}");
-        //    }
-        //}
+            switch (questionType)
+            {
+                case QuestionType.SingleOption:
+                    {
+                        return sourceForLinkedQuestion.HasValue
+                            ? (isLinkedToListQuestion
+                                ? InterviewQuestionType.SingleLinkedToList
+                                : InterviewQuestionType.SingleLinkedOption)
+                            : (cascadingParentQuestionId.HasValue
+                                ? InterviewQuestionType.Cascading
+                                : InterviewQuestionType.SingleFixedOption);
+                    }
+                case QuestionType.MultyOption:
+                    {
+                        return isYesNo
+                            ? InterviewQuestionType.YesNo
+                            : (sourceForLinkedQuestion.HasValue
+                                ? (isLinkedToListQuestion
+                                    ? InterviewQuestionType.MultiLinkedToList
+                                    : InterviewQuestionType.MultiLinkedOption)
+                                : InterviewQuestionType.MultiFixedOption);
+                    }
+                case QuestionType.DateTime:
+                    return InterviewQuestionType.DateTime;
+                case QuestionType.GpsCoordinates:
+                    return InterviewQuestionType.Gps;
+                case QuestionType.Multimedia:
+                    return InterviewQuestionType.Multimedia;
+                case QuestionType.Numeric:
+                    return isDecimal ? InterviewQuestionType.Double : InterviewQuestionType.Integer;
+                case QuestionType.QRBarcode:
+                    return InterviewQuestionType.QRBarcode;
+                case QuestionType.Area:
+                    return InterviewQuestionType.Area;
+                case QuestionType.Text:
+                    return InterviewQuestionType.Text;
+                case QuestionType.TextList:
+                    return InterviewQuestionType.TextList;
+                case QuestionType.Audio:
+                    return InterviewQuestionType.Audio;
+                default:
+                    throw new NotSupportedException($"Not supported question type: {questionType}");
+            }
+        }
 
         private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
         {
             var cells = new Dictionary<string, List<PreloadingValue>>();
             string interviewId = null;
-
-            string GetVariable(string[] compositeColumnValues, string variableName) 
-                => compositeColumnValues.Length > 1 && string.Format(ServiceColumns.IdSuffixFormat, variableName) != variableName
-                ? compositeColumnValues[1]
-                : variableName;
-
+            
             foreach (var kv in record)
             {
-                var variableName = kv.Key.ToLower();
+                var columnName = kv.Key.ToLower();
                 var value = (string) kv.Value;
 
-                if (ignoredPreloadingColumns.Contains(variableName)) continue;
-                if (variableName == ServiceColumns.InterviewId)
+                if (ignoredPreloadingColumns.Contains(columnName)) continue;
+                if (columnName == ServiceColumns.InterviewId)
                 {
                     interviewId = value;
                     continue;
                 }
 
-                var compositeColumnValues = kv.Key.Split(new[] { QuestionDataParser.ColumnDelimiter },
+                var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
                     StringSplitOptions.RemoveEmptyEntries);
 
-                variableName = compositeColumnValues[0].ToLower();
+                var variableName = compositeColumnValues[0].ToLower();
 
                 if (!cells.ContainsKey(variableName))
                     cells[variableName] = new List<PreloadingValue>();
 
+                var isRosterInstanceIdValue = string.Format(ServiceColumns.IdSuffixFormat, variableName) == columnName;
+                if (isRosterInstanceIdValue)
+                {
+                    cells[variableName].Add(new PreloadingRosterInstanceIdValue
+                    {
+                        VariableOrCodeOrPropertyName = columnName,
+                        Row = rowIndex,
+                        Column = kv.Key,
+                        Value = value
+                    });
+                    continue;
+                }
+
                 cells[variableName].Add(new PreloadingValue
                 {
-                    VariableOrCodeOrPropertyName = GetVariable(compositeColumnValues, variableName),
+                    VariableOrCodeOrPropertyName =
+                        compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName,
                     Row = rowIndex,
                     Column = kv.Key,
                     Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
