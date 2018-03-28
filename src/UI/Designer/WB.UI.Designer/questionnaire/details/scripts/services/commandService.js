@@ -222,9 +222,9 @@
                     }
                 };
 
-                var isPrefilledScopeSelected = question.questionScope.value === 'Identifying';
+                var isPrefilledScopeSelected = question.questionScope === 'Identifying';
                 command.isPreFilled = isPrefilledScopeSelected;
-                command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope.value;
+                command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
 
                 switch (question.type) {
                     case "SingleOption":
