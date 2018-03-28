@@ -42,8 +42,15 @@ namespace WB.UI.Interviewer.Implementations.Services
 
         public Task NavigateToDashboard(string interviewId = null)
         {
-            this.NavigateTo<DashboardViewModel>(new { lastVisitedInterviewId = interviewId });
-            return Task.CompletedTask;
+            if (interviewId == null)
+            {
+                return this.navigationService.Navigate<DashboardViewModel>();
+            }
+
+            return this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            {
+                InterviewId = Guid.Parse(interviewId)
+            });
         }
 
         public void NavigateToPrefilledQuestions(string interviewId) => 
