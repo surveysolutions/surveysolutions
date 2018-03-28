@@ -6,12 +6,10 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using messages = WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerificationMessages;
 
@@ -20,23 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     
     internal partial class ImportDataVerifier : IPreloadedDataVerifier
     {
-        private readonly IUserViewFactory userViewFactory;
-        private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly Dictionary<string, UserToVerify> users = new Dictionary<string, UserToVerify>();
-        
-        public ImportDataVerifier(IUserViewFactory userViewFactory, IQuestionnaireStorage questionnaireStorage)
+        public IEnumerable<PanelImportVerificationError> VerifyAnswers(AssignmentRow assignmentRow)
         {
-            this.userViewFactory = userViewFactory;
-            this.questionnaireStorage = questionnaireStorage;
-        }
-
-        
-        public IEnumerable<PanelImportVerificationError> VerifyAnswers(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file)
-        {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-            var questionnairetoVerify = this.ToQuestionnaire(questionnaire);
-
-            foreach (var assignmentRow in this.ToAssignmentRows(questionnairetoVerify, file))
             foreach (var assignmentValue in assignmentRow.Answers)
             foreach (var error in this.Verifiers.Select(x => x.Invoke(assignmentValue)))
                 if (error != null) yield return error;
