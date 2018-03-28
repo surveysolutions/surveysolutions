@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 }
 
                 logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
-                this.ViewModelNavigationService.NavigateTo<LoadingViewModel>(new { interviewId = this.interview.InterviewId });
+                await this.ViewModelNavigationService.NavigateToAsync<LoadingViewModel, LoaginViewModelArg>(new LoaginViewModelArg{ InterviewId = this.interview.InterviewId });
             }
             finally
             {

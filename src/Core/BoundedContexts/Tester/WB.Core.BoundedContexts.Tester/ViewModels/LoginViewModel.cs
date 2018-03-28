@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     this.dashboardLastUpdateStorage.RemoveAll();
                     this.questionnairesStorage.RemoveAll();
                     this.principal.SignIn(userName: this.LoginName, password: this.Password, staySignedIn: this.StaySignedIn);
-                    this.viewModelNavigationService.NavigateTo<DashboardViewModel>();   
+                    this.viewModelNavigationService.NavigateToAsync<DashboardViewModel>();   
                 }
             }
             catch (RestException ex)

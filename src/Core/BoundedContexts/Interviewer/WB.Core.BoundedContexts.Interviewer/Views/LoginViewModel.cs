@@ -85,15 +85,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
-        public override void Load()
+        public override async Task Initialize()
         {
+            await base.Initialize();
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.FirstOrDefault();
 
             if (currentInterviewer == null)
             {
-                this.viewModelNavigationService.NavigateTo<FinishInstallationViewModel>();
+                await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>();
                 return;
             }
 
@@ -118,7 +119,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 return;
             }
 
-            await this.viewModelNavigationService.NavigateToDashboard();
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
         }
 
         private async Task RemoteSignInAsync()

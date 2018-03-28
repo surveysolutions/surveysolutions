@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using System.Diagnostics;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -26,7 +27,7 @@ namespace WB.UI.Interviewer.Activities
 
             this.BackwardCompatibility();
 
-            Mvx.Resolve<IViewModelNavigationService>().NavigateToLogin();
+            Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync().WaitAndUnwrapException();
         }
 
         [Conditional("RELEASE")]

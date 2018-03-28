@@ -85,7 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.NavigateToDiagnostics);
 
@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+            this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
 
         private bool isInProgress;
@@ -182,13 +182,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void NavigateToDiagnostics()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>();
+            this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
         }
 
-        private void SignOut()
+        private async Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)
@@ -246,7 +246,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public IMvxCommand ShowSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateTo<DashboardSearchViewModel>());
+        public IMvxCommand ShowSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>());
     }
 
     public class DashboardViewModelArgs

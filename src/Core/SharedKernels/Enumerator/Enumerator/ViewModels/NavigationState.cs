@@ -79,11 +79,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.NavigateBackImpl(navigateToIfHistoryIsEmpty);
         }
 
-        private void NavigateToImpl(NavigationIdentity navigationItem)
+        private async Task NavigateToImpl(NavigationIdentity navigationItem)
         {
             if (navigationItem.TargetScreen == ScreenType.PrefieldScreen)
             {
-                viewModelNavigationService.NavigateToPrefilledQuestions(InterviewId);
+                await viewModelNavigationService.NavigateToPrefilledQuestionsAsync(InterviewId);
             }
             else
             {

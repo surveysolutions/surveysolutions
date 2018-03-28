@@ -19,22 +19,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public virtual bool IsAuthenticationRequired => true;
 
-        public virtual void Load() { }
-
-        protected override void InitFromBundle(IMvxBundle parameters)
+        public override void Prepare()
         {
-            base.InitFromBundle(parameters);
-            this.LoadFromBundle(parameters);
+            base.Prepare();
+            
+            if (this.IsAuthenticationRequired && !this.principal.IsAuthenticated)
+            {
+                this.viewModelNavigationService.NavigateToSplashScreen();
+            }
         }
 
         protected override void ReloadFromBundle(IMvxBundle parameters)
         {
             base.ReloadFromBundle(parameters);
-            this.LoadFromBundle(parameters);
-        }
-
-        private void LoadFromBundle(IMvxBundle parameters)
-        {
             if (parameters.Data.ContainsKey("userName") && !this.principal.IsAuthenticated)
             {
                 this.principal.SignInWithHash(parameters.Data["userName"], parameters.Data["passwordHash"], true);
@@ -49,19 +46,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 bundle.Data["userName"] = this.principal.CurrentUserIdentity.Name;
                 bundle.Data["passwordHash"] = this.principal.CurrentUserIdentity.PasswordHash;
             }
-        }
-
-        public override void Start()
-        {
-            base.Start();
-
-            if (this.IsAuthenticationRequired && !this.principal.IsAuthenticated)
-            {
-                this.viewModelNavigationService.NavigateToSplashScreen();
-                return;
-            }
-
-            this.Load();
         }
 
         // it's much more performant, as original extension call new Action<...> on every call

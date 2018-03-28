@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_showed_public_questionnaires : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor,
                 designerApiService: designerApiService);
-            viewModel.Load();
+            await viewModel.Initialize();
 
             Because();
         }
