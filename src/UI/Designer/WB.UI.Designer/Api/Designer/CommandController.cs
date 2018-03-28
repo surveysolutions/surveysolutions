@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MultipartDataMediaFormatter.Infrastructure;
@@ -151,6 +152,16 @@ namespace WB.UI.Designer.Api
 
                 updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent);
 
+                if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
+                {
+                    var lookupContent = this.lookupTableService.GetLookupTableContentFile(updateLookupTableCommand.QuestionnaireId, updateLookupTableCommand.OldLookupTableId.Value);
+
+                    if (lookupContent != null)
+                    {
+                        fileStreamContent = Encoding.UTF8.GetString(lookupContent.Content);
+                    }
+                }
+
                 if (!string.IsNullOrWhiteSpace(fileStreamContent))
                 {
                     this.lookupTableService.SaveLookupTableContent(
@@ -166,7 +177,7 @@ namespace WB.UI.Designer.Api
             }
             catch (ArgumentException e)
             {
-                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e); 
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
