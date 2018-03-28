@@ -192,7 +192,7 @@ namespace WB.UI.Headquarters.Controllers
                         model.File.FileName));
             }
             
-            var allImportedFiles = this.assignmentsImportService.ParseZip(model.File.InputStream);
+            var allImportedFiles = this.assignmentsImportService.ParseZip(model.File.InputStream).ToArray();
             if (allImportedFiles == null || !allImportedFiles.Any())
             {
                 return this.View("InterviewImportVerificationErrors",
@@ -285,16 +285,24 @@ namespace WB.UI.Headquarters.Controllers
             return this.RedirectToAction("InterviewVerificationProgress");
         }
 
-        private IEnumerable<PanelImportVerificationError> GetErrors(IEnumerable<PreloadedFile> allImportedFiles, QuestionnaireIdentity questionnaireIdentity)
+        private IEnumerable<PanelImportVerificationError> GetErrors(IEnumerable<PreloadedFile> allImportedFiles,
+            QuestionnaireIdentity questionnaireIdentity)
         {
-            foreach (var importedFile in allImportedFiles)
-            {
-                foreach (var columnOrRosterError in this.preloadedDataVerifier.VerifyColumnsAndRosters(questionnaireIdentity, importedFile))
-                    yield return columnOrRosterError;
+            bool hasErrorsByColumnsOrRosters = false;
 
-                foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(questionnaireIdentity, importedFile))
-                    yield return answerError;
+            foreach (var importedFile in allImportedFiles)
+            foreach (var columnOrRosterError in this.preloadedDataVerifier.VerifyColumnsAndRosters(questionnaireIdentity, importedFile))
+            {
+                hasErrorsByColumnsOrRosters = true;
+                yield return columnOrRosterError;
             }
+
+            if (hasErrorsByColumnsOrRosters) yield break;
+
+            foreach (var importedFile in allImportedFiles)
+            foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, importedFile))
+            foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(assignmentRow))
+                yield return answerError;
         }
 
         [HttpPost]
