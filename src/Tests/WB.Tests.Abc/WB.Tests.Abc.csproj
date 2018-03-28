@@ -46,7 +46,7 @@
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
-    <PackageReference Include="Quartz" Version="2.6.1" />
+    <PackageReference Include="Quartz" Version="3.0.4" />
     <PackageReference Include="ReflectionMagic" Version="3.1.0" />
     <PackageReference Include="Remotion.Linq" Version="2.1.2" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.1.0" />
