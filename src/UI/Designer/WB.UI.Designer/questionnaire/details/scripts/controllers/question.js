@@ -95,7 +95,7 @@
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
                 $scope.activeQuestion.questionScope = question.isPreFilled
-                    ? _.find(question.allQuestionScopeOptions, { value: 'Identifying' })
+                    ? 'Identifying' 
                     : question.questionScope;
 
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
@@ -240,7 +240,7 @@
                 $scope.activeQuestion.typeName = _.find($scope.activeQuestion.questionTypeOptions, { value: type }).text;
                 $scope.activeQuestion.allQuestionScopeOptions = dictionnaires.allQuestionScopeOptions;
 
-                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope.value === 'Supervisor' || $scope.activeQuestion.questionScope.value === 'Identifying';
+                var isQuestionScopeSupervisorOrPrefilled = $scope.activeQuestion.questionScope === 'Supervisor' || $scope.activeQuestion.questionScope === 'Identifying';
                 if (type === 'TextList' && isQuestionScopeSupervisorOrPrefilled) {
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
@@ -249,7 +249,7 @@
                     $scope.activeQuestion.allQuestionScopeOptions = _.filter($scope.activeQuestion.allQuestionScopeOptions, function (val) {
                         return val.value !== 'Supervisor';
                     });
-                    if ($scope.activeQuestion.questionScope.value === 'Supervisor') {
+                    if ($scope.activeQuestion.questionScope === 'Supervisor') {
                         $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                     }
                 }
@@ -257,11 +257,11 @@
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
-                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope.value === 'Supervisor') {
+                if (type === 'GpsCoordinates' && $scope.activeQuestion.questionScope === 'Supervisor') {
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
-                if (type === 'MultyOption' && $scope.activeQuestion.questionScope.value === 'Identifying') {
+                if (type === 'MultyOption' && $scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                 }
 
@@ -423,8 +423,8 @@
             }
 
             $scope.changeQuestionScope = function (scope) {
-                $scope.activeQuestion.questionScope = scope;
-                if ($scope.activeQuestion.questionScope.value === 'Identifying') {
+                $scope.activeQuestion.questionScope = scope.value;
+                if ($scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 markFormAsChanged();
@@ -477,7 +477,7 @@
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        if ($scope.activeQuestion.questionScope.value !== 'Interviewer' && $scope.activeQuestion.questionScope.value !== 'Hidden') {
+                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
                             changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                             $scope.activeQuestion.optionsFilterExpression = null;
                         }
@@ -538,7 +538,7 @@
             };
 
             $scope.doesQuestionSupportEnablementConditions = function () {
-                return $scope.activeQuestion && ($scope.activeQuestion.questionScope.value != 'Identifying')
+                return $scope.activeQuestion && ($scope.activeQuestion.questionScope != 'Identifying')
                     && !($scope.activeQuestion.isCascade && $scope.activeQuestion.cascadeFromQuestionId);
             };
 
