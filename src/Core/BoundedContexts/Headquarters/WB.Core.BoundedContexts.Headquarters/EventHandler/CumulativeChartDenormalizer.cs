@@ -42,44 +42,48 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
         {
-            var lastStatusChangeEvent = publishableEvents.LastOrDefault(x => x.Payload is InterviewStatusChanged);
+            var statusChangeEvents = publishableEvents.Where(x => x.Payload is InterviewStatusChanged).ToList();
 
-            if (lastStatusChangeEvent == null)
+            if (!statusChangeEvents.Any())
                 return;
-
-            var interviewStatusChanged = lastStatusChangeEvent.Payload as InterviewStatusChanged;
 
             var state = new CumulativeState
             {
-                LastInterviewStatus = interviewStatusChanged?.PreviousStatus ?? cumulativeReportReader.Query(_ => _
-                    .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
-                    .OrderByDescending(x => x.EventSequence)
-                    .FirstOrDefault())?.Status,
                 QuestionnaireIdentity = this.interviewReferencesStorage.GetQuestionnaireIdentity(eventSourceId)
             };
 
-            this.Update(state, interviewStatusChanged, lastStatusChangeEvent);
+            foreach (var statusChangeEvent in statusChangeEvents)
+            {
+                var interviewStatusChanged = statusChangeEvent.Payload as InterviewStatusChanged;
 
+                state.LastInterviewStatus = interviewStatusChanged?.PreviousStatus ?? cumulativeReportReader.Query(_ => _
+                                          .Where(x => x.InterviewId == eventSourceId && x.ChangeValue > 0)
+                                          .OrderByDescending(x => x.EventSequence)
+                                          .FirstOrDefault())?.Status;
+
+                this.Update(state, interviewStatusChanged, statusChangeEvent);
+            }
+            
             if (state.IsDirty)
                 this.SaveState(state);
         }
 
-        private void Update(CumulativeState state, InterviewStatusChanged statusCanged, IPublishableEvent publishableEvent)
+        private void Update(CumulativeState state, InterviewStatusChanged statusChanged, IPublishableEvent publishableEvent)
         {
-            InterviewStatus? oldStatus = state.LastInterviewStatus;
+            InterviewStatus? previouStatus = state.LastInterviewStatus;
 
-            InterviewStatus newStatus = statusCanged.Status;
+            InterviewStatus newStatus = statusChanged.Status;
             if (newStatus == InterviewStatus.Deleted)
                 return;
 
-            if (oldStatus != null)
+            if (previouStatus != null)
             {
                 var minusChange = new CumulativeReportStatusChange(
                     $"{publishableEvent.EventIdentifier.FormatGuid()}-minus",
                     state.QuestionnaireIdentity.QuestionnaireId,
                     state.QuestionnaireIdentity.Version,
                     publishableEvent.EventTimeStamp.Date, // time of synchronization
-                    oldStatus.Value,
+                    previouStatus.Value,
                     -1,
                     publishableEvent.EventSourceId,
                     publishableEvent.GlobalSequence);
