@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.Content;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.Infrastructure.CommandBus;
@@ -9,24 +11,27 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
-    public abstract class BaseViewModelNavigationService : MvxNavigatingObject
+    public abstract class BaseViewModelNavigationService
     {
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IUserInterfaceStateService userInterfaceStateService;
         private readonly IMvxAndroidCurrentTopActivity topActivity;
+        private readonly IMvxNavigationService navigationService;
         private readonly IPrincipal principal;
 
         protected BaseViewModelNavigationService(ICommandService commandService,
             IUserInteractionService userInteractionService,
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity topActivity,
+            IMvxNavigationService navigationService,
             IPrincipal principal)
         {
             this.commandService = commandService;
             this.userInteractionService = userInteractionService;
             this.userInterfaceStateService = userInterfaceStateService;
             this.topActivity = topActivity;
+            this.navigationService = navigationService;
             this.principal = principal;
         }
 
@@ -34,27 +39,35 @@ namespace WB.UI.Shared.Enumerator.Services
                                                     this.userInteractionService.HasPendingUserInterations ||
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
-        public abstract void NavigateToLogin();
+        public abstract Task NavigateToLoginAsync();
         protected abstract void FinishActivity();
 
         protected abstract void NavigateToSettingsImpl();
 
-        public virtual void NavigateTo<TViewModel>(object parameters) where TViewModel : IMvxViewModel
+        public async Task NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>
         {
             if (this.HasPendingOperations)
                 this.ShowWaitMessage();
             else
-                this.ShowViewModel<TViewModel>(parameters);
+                await this.navigationService.Navigate<TViewModel, TParam>(param);
         }
 
-        public void SignOutAndNavigateToLogin()
+        public async Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
+        {
+            if (this.HasPendingOperations)
+                this.ShowWaitMessage();
+            else
+                await this.navigationService.Navigate<TViewModel>();
+        }
+
+        public async Task SignOutAndNavigateToLoginAsync()
         {
             if (this.HasPendingOperations)
                 this.ShowWaitMessage();
             else
             {
                 this.principal.SignOut();
-                this.NavigateToLogin();
+                await this.NavigateToLoginAsync();
                 this.FinishActivity();
             }
         }

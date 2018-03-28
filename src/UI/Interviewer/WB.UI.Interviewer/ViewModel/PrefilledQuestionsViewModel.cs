@@ -33,18 +33,18 @@ namespace WB.UI.Interviewer.ViewModel
                 compositeCollectionInflationService,
                 vibrationViewModel) {}
 
-        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxCommand(() =>
         {
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
 
@@ -52,7 +52,7 @@ namespace WB.UI.Interviewer.ViewModel
 
         private void NavigateToMaps()
         {
-            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
+            this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
     }
 }

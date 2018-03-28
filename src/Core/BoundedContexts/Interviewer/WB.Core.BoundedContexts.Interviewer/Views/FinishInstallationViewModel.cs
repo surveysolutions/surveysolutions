@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class FinishInstallationViewModel : BaseViewModel
+    public class FinishInstallationViewModel : BaseViewModel<FinishInstallationViewModelArg>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPasswordHasher passwordHasher;
@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userInteractionService = userInteractionService;
         }
 
-        public override bool IsAuthenticationRequired => false;
+        protected override bool IsAuthenticationRequired => false;
 
         private string endpoint;
         public string Endpoint
@@ -103,16 +103,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
         }
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
 
         private InterviewerIdentity userIdentity;
-        public void Init(InterviewerIdentity userIdentity)
+
+        public override void Prepare(FinishInstallationViewModelArg parameter)
         {
-            this.userIdentity = userIdentity;
+            this.userIdentity = parameter.UserIdentity;
         }
 
-        public override void Load()
+        public override async Task Initialize()
         {
+            await base.Initialize();
             this.IsUserValid = true;
             this.IsEndpointValid = true;
             this.Endpoint =  this.interviewerSettings.Endpoint;
@@ -195,8 +197,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 
                 this.interviewersPlainStorage.Store(interviewerIdentity);
 
-                this.principal.SignIn(restCredentials.Login, this.Password, true);
-                await this.viewModelNavigationService.NavigateToDashboard();
+                this.Principal.SignIn(restCredentials.Login, this.Password, true);
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
             {
@@ -231,7 +233,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             if (isNeedNavigateToRelinkPage)
-                this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
+                await this.viewModelNavigationService.NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(new RelinkDeviceViewModelArg{ Identity = interviewerIdentity});
         }
 
         public void CancellInProgressTask()

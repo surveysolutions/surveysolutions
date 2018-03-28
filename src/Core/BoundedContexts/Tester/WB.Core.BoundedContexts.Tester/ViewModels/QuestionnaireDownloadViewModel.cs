@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 var interviewId = await this.CreateInterview(questionnaireIdentity, progress);
 
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
             }
 
             return questionnaireIdentity != null;
@@ -91,14 +91,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         sycnhronizedInterview: synchronizationDto);
                     await this.commandService.ExecuteAsync(createInterviewCommand, null, cancellationToken);
 
-                    this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationIdentity);
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
                 }
                 catch (Exception e)
                 {
                     logger.Warn("Cant reload questionnaire with data", e);
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(newInterviewId.FormatGuid());
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
                 }
             }
 

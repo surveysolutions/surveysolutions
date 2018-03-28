@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using FluentAssertions;
 
 using Moq;
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 {
     public class when_singing_in_and_user_exist_and_wrong_password_were_entered_4_times : LoginViewModelTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(userPassword) == userPasswordHash);
 
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
-            viewModel.Load();
+            await viewModel.Initialize();
             viewModel.Password = wrongPassword;
 
             viewModel.SignInCommand.Execute();
@@ -44,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         public void BecauseOf() => viewModel.SignInCommand.Execute();
 
         [NUnit.Framework.Test] public void should_not_navigate_to_dashboard () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(null), Times.Never);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(null), Times.Never);
 
         [NUnit.Framework.Test] public void should_show_online_login_button () =>
             viewModel.IsOnlineLoginButtonVisible.Should().BeTrue();

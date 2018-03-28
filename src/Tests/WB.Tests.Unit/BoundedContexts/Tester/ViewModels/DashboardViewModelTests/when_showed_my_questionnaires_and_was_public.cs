@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -13,7 +14,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_showed_my_questionnaires_and_was_public : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
             storageAccessor.Store(Questionnaires);
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel = CreateDashboardViewModel(
                 questionnaireListStorage: storageAccessor);
 
-            viewModel.Load();
+            await viewModel.Initialize();
             viewModel.ShowPublicQuestionnairesCommand.Execute();
 
             Because();

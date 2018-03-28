@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(formatGuid);
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(formatGuid);
             }
             catch (InterviewException e)
             {

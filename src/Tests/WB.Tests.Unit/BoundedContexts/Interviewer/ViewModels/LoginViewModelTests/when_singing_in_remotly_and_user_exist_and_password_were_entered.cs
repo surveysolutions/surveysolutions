@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 synchronizationService: synchronizationServiceMock.Object,
                 principal: principal.Object);
 
-            viewModel.Load();
+            await viewModel.Initialize();
             viewModel.Password = newUserPassword;
 
             // Act
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
 
         [NUnit.Framework.Test]
         public void should_navigate_to_dashboard() =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(null), Times.Once);
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(null), Times.Once);
 
         [NUnit.Framework.Test]
         public void should_store_entered_password() =>

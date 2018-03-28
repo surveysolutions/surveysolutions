@@ -38,8 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private async Task StartInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
-
-            this.viewModelNavigationService.NavigateToInterview(interviewId, navigationIdentity: null);
+            await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId, navigationIdentity: null);
             this.OnInterviewStarted();
         }
 
