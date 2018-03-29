@@ -53,24 +53,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             session.Delete(entity);
         }
-        
-        public void RemoveIfStartsWith(string beginingOfId)
-        {
-            var session = this.sessionProvider.GetSession();
-
-            string hql = $"DELETE {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
-
-            session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            var session = this.sessionProvider.GetSession();
-
-            string hql = $"SELECT e.{entityIdentifierColumnName} FROM {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
-
-            return session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").List<string>().ToList();
-        }
 
         public virtual void Store(TEntity entity, string id)
         {

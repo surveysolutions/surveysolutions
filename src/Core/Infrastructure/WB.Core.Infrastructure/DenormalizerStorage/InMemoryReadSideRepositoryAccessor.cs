@@ -47,26 +47,6 @@ namespace Main.DenormalizerStorage
             }
         }
 
-        public void RemoveIfStartsWith(string beginingOfId)
-        {
-            lock (locker)
-            {
-                var allKeyToRemove = this.repository.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
-                foreach (var keyToRemove in allKeyToRemove)
-                {
-                    this.repository.Remove(keyToRemove);
-                }
-            }
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            lock (locker)
-            {
-                return this.repository.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
-            }
-        }
-
         public void Store(TView view, string id)
         {
             lock (locker)
