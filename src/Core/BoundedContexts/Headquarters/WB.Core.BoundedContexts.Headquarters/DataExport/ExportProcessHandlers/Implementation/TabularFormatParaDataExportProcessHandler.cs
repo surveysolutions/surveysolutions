@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -17,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
