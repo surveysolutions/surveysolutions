@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 {
-    internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
+    internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> storage;
@@ -44,13 +44,6 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
         public Type ViewType => typeof(TEntity);
 
         public bool IsCacheEnabled => this.isCacheEnabled;
-
-        public void Clear()
-        {
-            var readSideRepositoryCleaner = this.storage as IReadSideRepositoryCleaner;
-            if(readSideRepositoryCleaner!=null)
-                readSideRepositoryCleaner.Clear();
-        }
 
         public TEntity GetById(string id)
         {

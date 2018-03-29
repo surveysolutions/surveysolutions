@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
-        IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
+        IReadSideKeyValueStorage<TEntity>, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;

@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.SurveySolutions;
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgreReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>,
-        IReadSideRepositoryCleaner,
         INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
