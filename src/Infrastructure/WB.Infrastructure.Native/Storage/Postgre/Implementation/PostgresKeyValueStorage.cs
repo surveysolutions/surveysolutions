@@ -77,17 +77,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     $"Unexpected row count of deleted records. Expected to delete 1 row, but affected {queryResult} number of rows");
             }
         }
-        public virtual void RemoveIfStartsWith(string beginingOfId)
-        {
-            using (var command = new NpgsqlCommand())
-            {
-                command.CommandText = $"DELETE FROM {this.tableName} WHERE id like :id";
-                var parameter = new NpgsqlParameter("id", NpgsqlDbType.Varchar) { Value = $"{beginingOfId}%" };
-                command.Parameters.Add(parameter);
 
-                this.ExecuteNonQuery(command);
-            }
-        }
         public virtual void Store(TEntity view, string id)
         {
             bool entityExists;
