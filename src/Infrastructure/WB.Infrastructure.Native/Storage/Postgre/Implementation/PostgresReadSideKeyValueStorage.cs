@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using Ninject;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -41,11 +40,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection;
             session.Transaction.Enlist(command);
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Flush()
