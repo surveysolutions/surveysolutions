@@ -6,8 +6,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, 
-        IQueryableReadSideRepositoryReader<TView>, 
+    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, 
         IReadSideRepositoryWriter<TView>, 
         IReadSideKeyValueStorage<TView> 
         where TView : class, IReadSideRepositoryEntity
