@@ -18,10 +18,6 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 
         void Remove(string id);
 
-        void RemoveIfStartsWith(string beginingOfId);
-
-        IEnumerable<string> GetIdsStartWith(string beginingOfId);
-
         void Store(TEntity view, string id);
 
         void BulkStore(List<Tuple<TEntity, string>> bulk);
