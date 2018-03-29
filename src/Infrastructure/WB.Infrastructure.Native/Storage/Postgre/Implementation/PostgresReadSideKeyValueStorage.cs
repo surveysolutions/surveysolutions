@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using Ninject;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -10,7 +9,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresReadSideKeyValueStorage<TEntity> : PostgresKeyValueStorageWithCache<TEntity>,
-        IReadSideKeyValueStorage<TEntity>, IReadSideRepositoryCleaner, IDisposable
+        IReadSideKeyValueStorage<TEntity>, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;
@@ -41,11 +40,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             var session = this.sessionProvider.GetSession();
             command.Connection = session.Connection;
             session.Transaction.Enlist(command);
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            throw new NotImplementedException();
         }
 
         public void Flush()

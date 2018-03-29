@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         public void Load(IIocRegistry registry)
         {
             registry.Bind<ISchedulerFactory, NinjectSchedulerFactory>();
-            registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler());
+            registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler().Result);
         }
     }
 }

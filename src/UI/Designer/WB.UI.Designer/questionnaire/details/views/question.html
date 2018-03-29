@@ -39,7 +39,7 @@
                        class="form-control" maxlength="32">
             </div>
         </div>
-        <div class="form-group" ng-show="activeQuestion.type=='GpsCoordinates' && activeQuestion.questionScope.value == 'Identifying'">
+        <div class="form-group" ng-show="activeQuestion.type=='GpsCoordinates' && activeQuestion.questionScope == 'Identifying'">
             <span class="edit-question-note" ng-i18next="QuestionGpsNavigation">
             </span>
         </div>
@@ -126,9 +126,10 @@
     <div class="form-group">
         <div class="form-group pull-right">
             <label for="Question-scope">{{'QuestionScope' | i18next }}&nbsp;</label>
+
             <div class="btn-group dropup " uib-dropdown>
                 <button class="btn dropdown-toggle" id="Question-scope" uib-dropdown-toggle type="button">
-                    {{ activeQuestion.questionScope.text }}
+                    {{ (getQuestionScopes(activeQuestion) | filter : {value : activeQuestion.questionScope})[0].text | i18next }}
                     <span class="dropdown-arrow"></span>
                 </button>
 

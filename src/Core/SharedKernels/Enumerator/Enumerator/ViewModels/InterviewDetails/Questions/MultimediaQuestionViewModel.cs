@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -256,7 +257,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private string GetSignaturePointsFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}__signature.json";
-        private string GetPictureFileName() => $"{this.variableName}__{this.questionIdentity.RosterVector}.jpg";
+        private string GetPictureFileName() => AnswerUtils.GetPictureFileName(this.variableName, this.questionIdentity.RosterVector);
 
         public void Dispose()
         {

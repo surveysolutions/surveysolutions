@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 {
-    internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter, IReadSideRepositoryCleaner
+    internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly IReadSideStorage<TEntity> storage;
@@ -45,13 +45,6 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 
         public bool IsCacheEnabled => this.isCacheEnabled;
 
-        public void Clear()
-        {
-            var readSideRepositoryCleaner = this.storage as IReadSideRepositoryCleaner;
-            if(readSideRepositoryCleaner!=null)
-                readSideRepositoryCleaner.Clear();
-        }
-
         public TEntity GetById(string id)
         {
             return this.isCacheEnabled
@@ -69,28 +62,6 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             {
                 this.storage.Remove(id);
             }
-        }
-
-        public void RemoveIfStartsWith(string beginingOfId)
-        {
-            if (this.isCacheEnabled)
-            {
-                var allKeyToRemove = this.cache.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
-                foreach (var keyToRemove in allKeyToRemove)
-                {
-                    this.cache.Remove(keyToRemove);
-                    this.storage.Remove(keyToRemove);
-                }
-            }
-            else
-            {
-                this.storage.RemoveIfStartsWith(beginingOfId);
-            }
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            return this.storage.GetIdsStartWith(beginingOfId);
         }
 
         public void Store(TEntity view, string id)
