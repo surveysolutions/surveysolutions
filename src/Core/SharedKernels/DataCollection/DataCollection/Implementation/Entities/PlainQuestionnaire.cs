@@ -309,9 +309,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionCache.Values.Where(x => x.LinkedToQuestionId.HasValue).Select(x => x.PublicKey).ToArray();
         }
 
-        public Guid? GetQuestionIdByVariable(string variable) => this.QuestionsByVariableCache.ContainsKey(variable)
-            ? this.QuestionsByVariableCache[variable].PublicKey
-            : (Guid?)null;
+        public Guid? GetQuestionIdByVariable(string variable)
+        {
+            variable = variable.ToLower();
+
+            return this.QuestionsByVariableCache.ContainsKey(variable)
+                ? this.QuestionsByVariableCache[variable].PublicKey
+                : (Guid?) null;
+        }
 
         public Guid GetVariableIdByVariableName(string variableName)
         {
