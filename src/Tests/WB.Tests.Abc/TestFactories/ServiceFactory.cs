@@ -10,6 +10,8 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -596,7 +598,8 @@ namespace WB.Tests.Abc.TestFactories
             UsersImportTask usersImportTask = null)
         {
             usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
-                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
+                                  x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()) 
+                                  == Task.FromResult(Array.Empty<IJobExecutionContext>().ToIReadOnlyCollection())));
 
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(
