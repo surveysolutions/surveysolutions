@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
+      <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+      <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SharedKernels\DataCollection\InterviewItemIdTests.cs" />
@@ -42,22 +44,22 @@
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.1" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.4" />
+    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.4" />
     <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.2.1" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
-    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.4" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.4" />
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.4" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.4" />
+    <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.4" />
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.6.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.7.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.1.0" />
-    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Owin" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Owin.Security" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="4.0.0" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="Moq" Version="4.8.2" />
