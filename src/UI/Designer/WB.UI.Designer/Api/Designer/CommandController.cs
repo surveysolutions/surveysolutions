@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MultipartDataMediaFormatter.Infrastructure;
@@ -75,7 +77,7 @@ namespace WB.UI.Designer.Api
             AddOrUpdateAttachment command;
             try
             {
-                command = (AddOrUpdateAttachment) this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateAttachment)this.commandDeserializer.Deserialize(commandType, model.Command);
 
                 if (model.File != null)
                 {
@@ -117,8 +119,8 @@ namespace WB.UI.Designer.Api
         public async Task<HttpResponseMessage> UpdateLookupTable()
         {
             var commandType = "UpdateLookupTable";
-            string fileParameterName = "file";
-            string commandParameterName = "command";
+            const string fileParameterName = "file";
+            const string commandParameterName = "command";
 
             if (!this.Request.Content.IsMimeMultipartContent())
             {
@@ -131,25 +133,41 @@ namespace WB.UI.Designer.Api
             try
             {
                 await this.Request.Content.ReadAsMultipartAsync(multipartStreamProvider);
+                
+                string fileStreamContent = string.Empty;
+                string commandContent = string.Empty;
 
-                var multipartContents = multipartStreamProvider.Contents.Select(x => new
+                foreach (var content in multipartStreamProvider.Contents)
                 {
-                    ParamName = x.Headers.ContentDisposition.Name.Replace("\"", string.Empty),
-                    StringContent = x.ReadAsStringAsync().Result
-                }).ToList();
+                    switch (content.Headers.ContentDisposition.Name.Replace("\"", string.Empty))
+                    {
+                        case fileParameterName:
+                            fileStreamContent = await content.ReadAsStringAsync();
+                            break;
+                        case commandParameterName:
+                            commandContent = await content.ReadAsStringAsync();
+                            break;
+                    }
+                }
 
-                var fileStreamContent = multipartContents.Single(x => x.ParamName == fileParameterName);
-                var commandContent = multipartContents.Single(x => x.ParamName == commandParameterName);
+                updateLookupTableCommand = (UpdateLookupTable)this.commandDeserializer.Deserialize(commandType, commandContent);
 
-                updateLookupTableCommand =
-                    (UpdateLookupTable) this.commandDeserializer.Deserialize(commandType, commandContent.StringContent);
+                if (string.IsNullOrWhiteSpace(fileStreamContent) && updateLookupTableCommand.OldLookupTableId.HasValue)
+                {
+                    var lookupContent = this.lookupTableService.GetLookupTableContentFile(updateLookupTableCommand.QuestionnaireId, updateLookupTableCommand.OldLookupTableId.Value);
 
-                if (fileStreamContent.StringContent != null)
+                    if (lookupContent != null)
+                    {
+                        fileStreamContent = Encoding.UTF8.GetString(lookupContent.Content);
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(fileStreamContent))
                 {
                     this.lookupTableService.SaveLookupTableContent(
                         updateLookupTableCommand.QuestionnaireId,
                         updateLookupTableCommand.LookupTableId,
-                        fileStreamContent.StringContent);
+                        fileStreamContent);
                 }
             }
             catch (FormatException)
@@ -159,7 +177,7 @@ namespace WB.UI.Designer.Api
             }
             catch (ArgumentException e)
             {
-                this.logger.Error(string.Format("Error on command of type ({0}) handling ", commandType), e);
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e); 
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
 
@@ -195,7 +213,7 @@ namespace WB.UI.Designer.Api
             AddOrUpdateTranslation command;
             try
             {
-                command = (AddOrUpdateTranslation) this.commandDeserializer.Deserialize(commandType, model.Command);
+                command = (AddOrUpdateTranslation)this.commandDeserializer.Deserialize(commandType, model.Command);
                 if (model.File != null && model.File.Buffer?.Length > 0)
                 {
                     this.translationsService.Store(command.QuestionnaireId,

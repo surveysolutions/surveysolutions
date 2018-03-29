@@ -94,7 +94,9 @@
 
                 $scope.activeQuestion.countOfDecimalPlaces = question.countOfDecimalPlaces;
 
-                $scope.activeQuestion.questionScope = _.find(question.allQuestionScopeOptions, {value: question.isPreFilled ? 'Identifying' : question.questionScope});
+                $scope.activeQuestion.questionScope = question.isPreFilled
+                    ? 'Identifying' 
+                    : question.questionScope;
 
                 $scope.setLinkSource(question.linkedToEntityId, question.linkedFilterExpression);
                 $scope.setCascadeSource(question.cascadeFromQuestionId);
@@ -421,8 +423,8 @@
             }
 
             $scope.changeQuestionScope = function (scope) {
-                $scope.activeQuestion.questionScope = scope;
-                if ($scope.activeQuestion.questionScope.value === 'Identifying') {
+                $scope.activeQuestion.questionScope = scope.value;
+                if ($scope.activeQuestion.questionScope === 'Identifying') {
                     $scope.activeQuestion.enablementCondition = '';
                 }
                 markFormAsChanged();
@@ -475,8 +477,8 @@
             $scope.$watch('activeQuestion.isCascade', function (newValue) {
                 if ($scope.activeQuestion) {
                     if (newValue) {
-                        if ($scope.activeQuestion.questionScope.value !== 'Interviewer' && $scope.activeQuestion.questionScope.value !== 'Hidden') {
-                            $scope.activeQuestion.questionScope = 'Interviewer';
+                        if ($scope.activeQuestion.questionScope !== 'Interviewer' && $scope.activeQuestion.questionScope !== 'Hidden') {
+                            changeQuestionScope($scope.getQuestionScopeByValue('Interviewer'));
                             $scope.activeQuestion.optionsFilterExpression = null;
                         }
                     } else {

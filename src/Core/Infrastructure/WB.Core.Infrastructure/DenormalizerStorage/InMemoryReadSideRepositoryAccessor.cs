@@ -4,10 +4,9 @@ using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace Main.DenormalizerStorage
+namespace WB.Core.Infrastructure.DenormalizerStorage
 {
-    public class InMemoryReadSideRepositoryAccessor<TView> : IReadSideRepositoryCleaner, 
-        IQueryableReadSideRepositoryReader<TView>, 
+    public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, 
         IReadSideRepositoryWriter<TView>, 
         IReadSideKeyValueStorage<TView> 
         where TView : class, IReadSideRepositoryEntity
@@ -44,26 +43,6 @@ namespace Main.DenormalizerStorage
             lock (locker)
             {
                 this.repository.Remove(id);
-            }
-        }
-
-        public void RemoveIfStartsWith(string beginingOfId)
-        {
-            lock (locker)
-            {
-                var allKeyToRemove = this.repository.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
-                foreach (var keyToRemove in allKeyToRemove)
-                {
-                    this.repository.Remove(keyToRemove);
-                }
-            }
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            lock (locker)
-            {
-                return this.repository.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
             }
         }
 

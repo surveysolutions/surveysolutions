@@ -29,6 +29,14 @@ namespace WB.Core.GenericSubdomains.Portable
             => source as ReadOnlyCollection<T>
             ?? source.ToList().ToReadOnlyCollection();
 
+        public static IReadOnlyCollection<T> ToIReadOnlyCollection<T>(this IList<T> source)
+            => source as ReadOnlyCollection<T>
+            ?? new ReadOnlyCollection<T>(source);
+
+        public static IReadOnlyCollection<T> ToIReadOnlyCollection<T>(this IEnumerable<T> source)
+            => source as ReadOnlyCollection<T>
+            ?? source.ToList().ToReadOnlyCollection();
+
         public static IEnumerable<T> Except<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             return enumerable.Where(element => !predicate.Invoke(element));
