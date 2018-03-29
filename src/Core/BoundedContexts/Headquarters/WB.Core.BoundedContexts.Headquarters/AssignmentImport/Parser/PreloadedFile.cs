@@ -3,15 +3,21 @@ using System.Linq;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
-    [DebuggerDisplay("{FileName} [{Rows.Length} rows]")]
-    public class PreloadedFile
+    [DebuggerDisplay("{FileName} [{Columns.Length} rows]")]
+    public class PreloadedFileInfo
     {
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
-
         public string[] Columns { get; set; }
+    }
+
+    [DebuggerDisplay("{FileInfo.FileName} [{Rows.Length} rows]")]
+    public class PreloadedFile
+    {
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public PreloadingRow[] Rows { get; set; }
+
+        public PreloadedFileInfo FileInfo { get; set; }
     }
 
     [DebuggerDisplay("[{Cells.Length} cells]")]

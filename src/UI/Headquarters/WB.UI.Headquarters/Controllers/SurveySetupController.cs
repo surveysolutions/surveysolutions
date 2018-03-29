@@ -206,7 +206,7 @@ namespace WB.UI.Headquarters.Controllers
             }
 
             var mainImportedFile = allImportedFiles.FirstOrDefault(d =>
-                Path.GetFileNameWithoutExtension(d.FileName) == questionnaireInfo.Title);
+                Path.GetFileNameWithoutExtension(d.FileInfo.FileName) == questionnaireInfo.Title);
 
             if (mainImportedFile == null)
             {
@@ -266,7 +266,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewImportService.Status.VerificationState.EnumeratorsCount = mainImportedFile.Rows.Sum(x =>
                 x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsInterviewer));
             this.interviewImportService.Status.VerificationState.EntitiesCount = mainImportedFile.Rows.Length;
-            this.interviewImportService.Status.VerificationState.WasResponsibleProvided = mainImportedFile.Columns.Select(x => x.ToLower())
+            this.interviewImportService.Status.VerificationState.WasResponsibleProvided = mainImportedFile.FileInfo.Columns.Select(x => x.ToLower())
                 .Contains(ServiceColumns.ResponsibleColumnName);
 
             Task.Factory.StartNew(() =>
@@ -290,11 +290,22 @@ namespace WB.UI.Headquarters.Controllers
         {
             bool hasErrorsByColumnsOrRosters = false;
 
-            foreach (var importedFile in allImportedFiles)
-            foreach (var columnOrRosterError in this.preloadedDataVerifier.VerifyColumnsAndRosters(questionnaireIdentity, importedFile))
+            var preloadedFileInfos = allImportedFiles.Select(x => x.FileInfo).ToArray();
+
+            foreach (var rosterError in this.preloadedDataVerifier.VerifyRosters(
+                questionnaireIdentity, preloadedFileInfos))
             {
                 hasErrorsByColumnsOrRosters = true;
-                yield return columnOrRosterError;
+                yield return rosterError;
+            }
+
+            if (hasErrorsByColumnsOrRosters) yield break;
+
+            foreach (var columnError in this.preloadedDataVerifier.VerifyColumns(
+                questionnaireIdentity, preloadedFileInfos))
+            {
+                hasErrorsByColumnsOrRosters = true;
+                yield return columnError;
             }
 
             if (hasErrorsByColumnsOrRosters) yield break;
@@ -303,6 +314,40 @@ namespace WB.UI.Headquarters.Controllers
             foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, importedFile))
             foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(assignmentRow))
                 yield return answerError;
+
+            //this.Verifier(this.IdDuplication, "PL0006", messages.PL0006_IdDublication),   
+            //private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
+            //    IPreloadedDataService preloadedDataService)
+            //{
+            //    var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
+            //    var parentIdColumnIndexes = preloadedDataService.GetParentIdColumnIndexes(levelData);
+
+            //    if (idColumnIndex < 0 || parentIdColumnIndexes == null)
+            //        yield break;
+
+            //    var idAndParentContainer = new HashSet<string>();
+            //    for (int y = 0; y < levelData.Content.Length; y++)
+            //    {
+            //        var idValue = levelData.Content[y][idColumnIndex];
+            //        if (string.IsNullOrEmpty(idValue))
+            //        {
+            //            yield return
+            //                new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "",
+            //                    levelData.FileName);
+            //            continue;
+            //        }
+            //        var parentIdValue = string.Join(",", parentIdColumnIndexes.Select(parentidIndex => levelData.Content[y][parentidIndex]));
+            //        string itemKey = String.Format("{0}\t{1}", idValue, parentIdValue);
+            //        if (idAndParentContainer.Contains(itemKey))
+            //        {
+            //            yield return
+            //                new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell,
+            //                    string.Format("id:{0}, parentId: {1}", idValue, parentIdValue), levelData.FileName);
+            //            continue;
+            //        }
+            //        idAndParentContainer.Add(itemKey);
+            //    }
+            //}
         }
 
         [HttpPost]
@@ -366,7 +411,7 @@ namespace WB.UI.Headquarters.Controllers
                         model.File.FileName));
             }
 
-            var hasResponsibleNames = preloadedSample.Columns.Select(x => x.ToLower())
+            var hasResponsibleNames = preloadedSample.FileInfo.Columns.Select(x => x.ToLower())
                 .Contains(ServiceColumns.ResponsibleColumnName);
             
             try
@@ -382,9 +427,9 @@ namespace WB.UI.Headquarters.Controllers
                         questionnaireInfo?.Title,
                         verificationStatus,
                         new InterviewImportError[0],
-                        false,//hasResponsibleNames,
+                        hasResponsibleNames,
                         AssignmentImportType.Assignments,
-                        preloadedSample?.FileName));
+                        preloadedSample.FileInfo?.FileName));
                 }
             }
             catch (Exception e)
@@ -410,7 +455,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireTitle = questionnaireInfo?.Title,
                 WasResponsibleProvided = hasResponsibleNames,
                 AssignmentImportType = AssignmentImportType.Assignments,
-                FileName = preloadedSample.FileName,
+                FileName = preloadedSample.FileInfo.FileName,
                 EnumeratorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsInterviewer)),
                 SupervisorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsSupervisor)),
                 EntitiesCount = preloadedSample.Rows.Length
