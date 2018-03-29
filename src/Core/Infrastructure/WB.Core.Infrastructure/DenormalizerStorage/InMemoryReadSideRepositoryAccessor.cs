@@ -4,7 +4,7 @@ using System.Linq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
 
-namespace Main.DenormalizerStorage
+namespace WB.Core.Infrastructure.DenormalizerStorage
 {
     public class InMemoryReadSideRepositoryAccessor<TView> : IQueryableReadSideRepositoryReader<TView>, 
         IReadSideRepositoryWriter<TView>, 
