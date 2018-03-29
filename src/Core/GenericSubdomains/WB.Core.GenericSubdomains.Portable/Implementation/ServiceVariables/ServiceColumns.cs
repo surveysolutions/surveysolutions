@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 {
@@ -27,5 +28,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
             { ServiceVariableType.HasAnyError,  new ServiceVariable(ServiceVariableType.HasAnyError, HasAnyError, 2)},
             { ServiceVariableType.InterviewStatus,  new ServiceVariable(ServiceVariableType.InterviewStatus, InterviewStatus, 3)},
         };
+
+        public static readonly string[] AllSystemVariables = SystemVariables.Values
+            .Select(x => x.VariableExportColumnName).Union(new[]
+            {
+                InterviewId,
+                ResponsibleColumnName,
+                AssignmentsCountColumnName
+            }).ToArray();
     }
 }

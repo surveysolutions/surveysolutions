@@ -9,6 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
     public interface IPreloadedDataVerifier
     {
         IEnumerable<PanelImportVerificationError> VerifyAnswers(AssignmentRow assignmentRow);
-        IEnumerable<PanelImportVerificationError> VerifyColumnsAndRosters(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file);
+        IEnumerable<PanelImportVerificationError> VerifyColumns(QuestionnaireIdentity questionnaireIdentity, PreloadedFileInfo[] files);
+        IEnumerable<PanelImportVerificationError> VerifyRosters(QuestionnaireIdentity questionnaireIdentity, PreloadedFileInfo[] files);
     }
 }

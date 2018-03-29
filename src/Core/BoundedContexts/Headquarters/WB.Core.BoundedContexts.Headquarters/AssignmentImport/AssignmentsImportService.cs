@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
@@ -47,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var preloadingRow in file.Rows)
             {
-                var assignmentAnswers = this.ToAssignmentAnswers(file.FileName,
+                var assignmentAnswers = this.ToAssignmentAnswers(file.FileInfo.FileName,
                     preloadingRow, questionnaire);
 
                 yield return new AssignmentRow
@@ -407,11 +406,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public PreloadedFile ParseText(Stream inputStream, string fileName) => new PreloadedFile
         {
-            FileName = fileName,
-            QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
-            Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+            FileInfo = new PreloadedFileInfo
+            {
+                FileName = fileName,
+                QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
+                Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+            },
             Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
+                .Select((record, rowIndex) => (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
         };
 
         public IEnumerable<PreloadedFile> ParseZip(Stream inputStream)
