@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
@@ -45,7 +46,7 @@ namespace WB.UI.Shared.Web.Modules
             initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
         }
 
-        public void Init()
+        public async Task Init()
         {
             this.Kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             this.Kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
@@ -53,7 +54,10 @@ namespace WB.UI.Shared.Web.Modules
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(this.Kernel);
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(this.Kernel);
 
-            initModules.ForEach(m => m.Init(ServiceLocator.Current));
+            foreach (var module in initModules)
+            {
+                await module.Init(ServiceLocator.Current);
+            }
         }
     }
 }
