@@ -13,7 +13,4 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="NETStandard.Library" Version="2.0.1" />
-  </ItemGroup>
 </Project>
