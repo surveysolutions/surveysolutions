@@ -1,4 +1,5 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -45,12 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
-
-        private void NavigateToMaps()
-        {
-            this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
-        }
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
         public IMvxCommand SignOutCommand
             => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
