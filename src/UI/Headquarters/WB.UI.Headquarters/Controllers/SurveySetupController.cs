@@ -312,7 +312,7 @@ namespace WB.UI.Headquarters.Controllers
 
             foreach (var importedFile in allImportedFiles)
             foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, importedFile))
-            foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(assignmentRow))
+            foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(questionnaireIdentity, assignmentRow))
                 yield return answerError;
 
             //this.Verifier(this.IdDuplication, "PL0006", messages.PL0006_IdDublication),   
