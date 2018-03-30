@@ -12,7 +12,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueVectorTests
             result.Should().BeEquivalentTo(new Guid[] {guid1, guid2, guid3});
         }
 
-        private static ValueVector<Guid> result;
         private static Guid guid1 = Guid.Parse("11111111111111111111111111111111");
         private static Guid guid2 = Guid.Parse("22222222222222222222222222222222");
         private static Guid guid3 = Guid.Parse("33333333333333333333333333333333");

@@ -48,7 +48,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         static StatefulInterview interview;
         static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
         static Identity questionIdentity;
-        static Exception exception;
         private static CreateInterviewFromSnapshotCommand command;
     }
 }

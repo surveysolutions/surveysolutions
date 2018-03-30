@@ -32,7 +32,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
         }
 
         private static QuestionnaireNameValidator validator;
-        private static Exception exception;
         private static ImportFromDesigner command;
         private static string title = "The Title";
         private static Guid importedQuestionnaireId = Guid.Parse("11111111111111111111111111111111");

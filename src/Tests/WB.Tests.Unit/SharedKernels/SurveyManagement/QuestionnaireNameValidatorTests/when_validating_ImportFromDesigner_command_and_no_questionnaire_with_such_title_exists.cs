@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -13,7 +14,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
 {
     internal class when_validating_ImportFromDesigner_command_and_no_questionnaire_with_such_title_exists
     {
-        [NUnit.Framework.Test] public void should_not_throw_exception () {
+        [Test] public void should_not_throw_exception () 
+        {
             command = Create.Command.ImportFromDesigner(title: title, questionnaireId: importedQuestionnaireId);
 
             var questionnaireBrowseItemStorage = Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
@@ -27,11 +29,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
 
             validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
 
-            validator.Validate(null, command);
+            Assert.DoesNotThrow(() => validator.Validate(null, command));
         }
 
         private static QuestionnaireNameValidator validator;
-        private static Exception exception;
         private static ImportFromDesigner command;
         private static string title = "The Title";
         private static Guid importedQuestionnaireId = Guid.Parse("11111111111111111111111111111111");

@@ -50,6 +50,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
         }
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
-        private static ArgumentException exception;
     }
 }

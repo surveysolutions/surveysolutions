@@ -77,19 +77,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
         //    @"GONZALES	138215891	318	2513	<?=/)L62O]#)7P#I_JOG[;>)1'	;A)=1C9'82LQ+K-S;YJ`AR	OR	`^!!4_!\\QF@RG_HL73ZD\	-6	1");
 
         private static CreateInterview executedCommand = null;
-        private static Exception exception;
         private static InterviewImportService interviewImportService;
         private static readonly Mock<ICommandService> mockOfCommandService = new Mock<ICommandService>();
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Guid longlatId = Guid.Parse("10101010101010101010101010101010");
-        private static readonly Guid subplaceId = Guid.Parse("99999999999999999999999999999999");
-        private static readonly Guid mainplaceId = Guid.Parse("88888888888888888888888888888888");
-        private static readonly Guid localmunicId = Guid.Parse("77777777777777777777777777777777");
-        private static readonly Guid provId = Guid.Parse("66666666666666666666666666666666");
-        private static readonly Guid dunoId = Guid.Parse("55555555555555555555555555555555");
-        private static readonly Guid maprefnoId = Guid.Parse("44444444444444444444444444444444");
-        private static readonly Guid eanoId = Guid.Parse("33333333333333333333333333333333");
-        private static readonly Guid headquartersId = Guid.Parse("22222222222222222222222222222222");
         private static readonly Guid supervisorId = Guid.Parse("13131313131313131313131313131313");
         private static readonly Guid interviewerId = Guid.Parse("12121212121212121212121212121212");
     }
