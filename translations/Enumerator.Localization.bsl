@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en" IsTranslationPackage="false" AllowEditingInvariant="true" RemoveOrhpanedStrings="true" GridLayoutXml="" DockManagerLayoutXml="">
+<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en" IsTranslationPackage="false" AllowEditingInvariant="true" GridLayoutXml="" DockManagerLayoutXml="">
   <Projects>
-    <Project xsi:type="VSLocalizationProject" Name="WB.Core.SharedKernels.Enumerator" VisualStudioProjectFilename="..\src\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" ProjectType="Other" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.Core.SharedKernels.Enumerator" AssemblyType="Dll" RootNamespace="WB.Core.SharedKernels.Enumerator" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.Core.SharedKernels.Enumerator" VisualStudioProjectFilename="..\src\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" AssemblyName="WB.Core.SharedKernels.Enumerator" AssemblyType="Dll" RootNamespace="WB.Core.SharedKernels.Enumerator" InvariantLocale="en">
       <locales>
         <locale />
         <locale>ru-RU</locale>
@@ -15,6 +15,7 @@
         <locale>ar</locale>
         <locale>zh-CN</locale>
         <locale>km</locale>
+        <locale>ro</locale>
       </locales>
       <items>
         <it rn="Properties\UIResources.resx" nm="Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -31,6 +32,7 @@
             <li lc="fr-FR" tx="Annuler" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="km" tx="លុបចោល" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptyQuestionnairesList" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -47,6 +49,7 @@
             <li lc="fr-FR" tx="Aucun questionnaire disponible pour l'instant&#xD;&#xA;&#xD;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Changed" qs="ToReview" />
             <li lc="km" tx="មិនមានកម្រងសំនូរទេ​&#xD;&#xA;អ្នកអាចបង្កើត ឬពិនិត្យកែ កម្រងសំនួររបស់អ្នក ក្នុង រៀបការបង្កើត Survey Solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Nu există chestionare&#xD;&#xA;&#xD;&#xA;Puteți crea sau edita chestionare utilizând Survey Solutions Designer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_EmptySearchResult" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -63,6 +66,7 @@
             <li lc="fr-FR" tx="Aucun questionnaire trouvé" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="没有找到调查问卷" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មិនអាចស្វែងរកកម្រងសំនួរ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu a fost găsit niciun chestionar" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_LastEntryDate_Format" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -78,7 +82,8 @@
             <li lc="ar" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="fr-FR" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
-            <li lc="km" tx="{0:dd MMM HH:mm}" er="" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_MyQuestionnairesLinkText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -95,6 +100,7 @@
             <li lc="fr-FR" tx="Mes questionnaires" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="我的调查问卷" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កម្រងសំនួររបស់ខ្ញុំ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chestionarele mele" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_PublicQuestionnairesLinkText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -111,6 +117,7 @@
             <li lc="fr-FR" tx="Questionnaires publics" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="公共调查问卷" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បង្ហាញកម្រងសំនួរ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chestionare publice" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Dashboard_ToolbarText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -127,6 +134,7 @@
             <li lc="fr-FR" tx="Questionnaires" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="调查问卷" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កម្រងសំនួរ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="DateQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -143,6 +151,7 @@
             <li lc="fr-FR" tx="Appuyer pour sélectionner la date" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击输入日期" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយបញ្ចូលកាលបរិច្ចេទ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a înregistrarea datei" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="EndpointHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -159,6 +168,7 @@
             <li lc="fr-FR" tx="Point de synchronisation" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="同步端点" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំនុចចុងក្រោយសំរាប់គ្រប់គ្រងរូម" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Synchronization endpoint" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="EndpointText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -175,11 +185,12 @@
             <li lc="fr-FR" tx="Web Service Endpoint:" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="网络服务端点：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="ចំនុចបញ្ចប់ សេវាweb" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Web Service Endpoint:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_AccountIsLockedOnServer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Your user account is locked. Please contact the support team at support@mysurvey.solutions." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Your user account is locked. Please contact the support team at " ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Ваша учетная запись заблокирована. Обратитесь в службу поддержки по адресу support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="Обліковий запис користувача заблоковано. Будь ласка, зв'яжіться з підтримкоб support@mysurvey.solutions." ts="Translated" qs="ToReview" />
             <li lc="es-ES" tx="Su cuenta de usuario está bloqueada. Por favor, póngase en contacto con el equipo de soporte escribiendo a support@mysurvey.solutions." ts="Translated" qs="ToReview" />
@@ -191,6 +202,7 @@
             <li lc="fr-FR" tx="Votre compte d'utilisateur est verrouillé. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions." ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="您的账户已被锁定。请联系支持团队：support@mysurvey.solutions。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="គណនីអ្នកប្រើបានចាក់សោរ។ សូមទាក់ទងទៅក្រុមជំនួយ តាមអ៊ីមែល​៖ support@mysurvey.solutions" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Contul dvs. este blocat. Vă rugăm să contactați echipa de suport." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_AccountIsNotApprovedOnServer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -207,6 +219,7 @@
             <li lc="fr-FR" tx="Votre compte n'est pas approuvé. Veuillez confirmer votre compte d'abord." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="您的账户未获批准。请首先确认您的账户。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="គណនីរបស់អ្នកមិនដំណើរការ។ សូមបញ្ជាក់គណនីដំបូងរបស់អ្នក" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Contul dvs. nu a fost aprobat. Vă rugăm să îl confirmați." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_InternalServerError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -223,6 +236,7 @@
             <li lc="fr-FR" tx="Erreur de serveur. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="服务器错误。请联系支持团队：support@mysurvey.solutions。" ts="Translated" qs="ToReview" />
             <li lc="km" tx="Server មិនដំណើរការ។ សូមទាក់ទងទៅក្រុមជំនួយ តាមអ៊ីមែល​៖ support@mysurvey.solutions" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare de server. Vă rugăm să contactați echipa de suport." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_InvalidEndpoint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -239,6 +253,7 @@
             <li lc="fr-FR" tx="Ll'URL de Survey Solutions Designer n'est pas valide. Vérifiez l'adresse dans les paramètres." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="提供的Survey Solutions Designer网址无效。请检查设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="Survey Solutions Designer URL មិនមានដំណើរការ។ សូមពិនិត្យទៅ ស៊ីតធីង" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Adresa URL introdusă nu este validă. Verificați setările." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_Maintenance" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -255,6 +270,7 @@
             <li lc="fr-FR" tx="Le site web de Survey Solutions Designer est actuellement en cours de maintenance. Désolé pour le désagrément" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="Survey Solutions Designer网站正处于维护模式。抱歉给您带来不便。" ts="Translated" qs="ToReview" />
             <li lc="km" tx="គេហទំព័រ របស់ Survey Solutions Designer ឥឡូវកំពុងរៀបចំ។ សូមអាធ្យាស្រ័យសំរាប់ការរអាក់រអួល" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Site-ul Survey Solutions Designer este în mentenanță. Ne cerem scuze pentru inconvenient." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_RequestTimeout" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -271,6 +287,7 @@
             <li lc="fr-FR" tx="Dépassement du délai de réponses lors de la connexion au au site web de Survey Solutions Designer. Vérifiez votre connexion internet." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="连接到Survey Solutions Designer网站时超时。请检查您的网络连接。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="មិនអាចដំណើរការ ពេលភ្ជាប់ទៅ​គេហទំព័រ Survey Solutions Designer ។ សូមពិនិត្យការភ្ជាប់អ៊ិនធឺណែតរបស់អ្នក។" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Eroare de conexiune la site-ul Survey Solutions Designer. Verificați conexiunea la Internet." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_ServiceUnavailable" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -287,6 +304,7 @@
             <li lc="fr-FR" tx="Aucune connexion avec le site Designer de Survey Solutions. Veuillez vous assurer que le site est disponible." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="没有连接到Survey Solutions Designer网站。请确保网站是可用的。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="មិនអាចភ្ជាប់ទៅនឹងSurvey Solutions Designer។ សូមប្រាកដាថា ឈ្មោះគេហទំព័រត្រឹមត្រូវ" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Nu se poate conecta la Survey Solutions Designer. Verificați disponibilitatea site-ului." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_Unauthorized" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -303,6 +321,7 @@
             <li lc="fr-FR" tx="Votre login ou mot de passe est invalide" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="您的用户名或密码不正确" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចុះឈ្មោះចូល ឬ លេខកូដរបស់អ្នកមិនត្រឹមត្រូវ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Datele de autentificare sunt incorecte." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="ErrorMessage_UpgradeRequired" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -319,6 +338,7 @@
             <li lc="fr-FR" tx="Nouvelle version de l'application disponible. Veuillez mettre à jour l'application" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="应用程序的新版本已发布，请更新应用程序。" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កំណែថ្មីនៃឯកសារត្រូវបានជំនួស។ សូមធ្វើបច្ចប្បន្នភាពឯកសារ។​" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="A fost lansată o nouă versiune a aplicației. Vă rugăm sa actualizați aplicația. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="FilteredComboboxQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -335,6 +355,7 @@
             <li lc="fr-FR" tx="Appuyer pour saisir du texte" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击输入文本" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយបញ្ចូលកាលបរិច្ចេទ" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Apăsați pentru a introduce text" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="GpsQuestion_Timeout" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -351,6 +372,7 @@
             <li lc="fr-FR" tx="GPS n'a pas pu fixer vos coordonnées. Pour dépanner, essayez les actions suivantes : s'assurer que vous êtes à l'extérieur, vérifiez que votre GPS est activé, ou modifier le paramètre de délai de réponse de votre GPS." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="全球定位系统（GPS）无法确定您的位置。为排除故障，请尝试以下方法：确保您在户外、确保您的GPS已启用或更改您的GPS超时设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="ជីភីអេស មិនអាចកំណត់ទីតាំងរបស់អ្នកបានទេ។ មានការរំខានខ្លះ សូមព្យាយាមដូចខាងក្រោម៖ ប្រាកដថា អ្នកនៅខាងក្រៅផ្ទះ។ បញ្ជាក់ថា ជី ភី អេស របស់អ្នកដំណើរការ ឬផ្លាស់ប្តូរGPS's timeout setting។​ " er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="GPS-ul nu poate detecta locația. Pentru a depana, vă rugăm încercați următoarele: asigurați-vă că vă aflați în aer liber, confirmați că GPS-ul dvs. este activat sau modificați setările de conexiune ale GPS-ului." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="IntegerQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -367,6 +389,7 @@
             <li lc="fr-FR" tx="Appuyer pour saisir un nombre entier" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击输入数字" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយបញ្ចូលលេខ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce numărul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Comment_Interviewer_Caption" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -383,6 +406,7 @@
             <li lc="fr-FR" tx="Votre commentaire" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="您的评论" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មតិយោបល់របស់អ្នក" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariul dvs." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Answered" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -399,6 +423,7 @@
             <li lc="fr-FR" tx="Renseignées" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="已回答" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Întrebări completate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Button" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -415,6 +440,7 @@
             <li lc="fr-FR" tx="Terminer" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh-CN" tx="完成" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បញ្ចប់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sfârșitul chestionarului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Consequences_Instrunction" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -431,6 +457,7 @@
             <li lc="fr-FR" tx="Après avoir marqué cet entretien comme étant, il sera transféré au superviseur lors de votre prochaine synchronisation" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="结束调查后，问卷将被标记为已完成，并将在下次同步时上传给督导员。" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បន្ទាប់ពីអ្នកសម្ភាសន៍ចប់ វានឹងកំណត់ថា​បានបញ្ចប់ និង បន្តuploaded ទៅប្រធានក្រុម កំឡុងពេល អ្នករៀបចំគ្រប់គ្រងរូម(synchronization)" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="După ce terminați interviul, acesta va avea statusul &quot;Finalizat&quot; și va fi trimis către supervizor la următoarea sincronizare." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Errors" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -447,6 +474,7 @@
             <li lc="fr-FR" tx="Erreurs" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="错误" ts="Changed" qs="ToReview" />
             <li lc="km" tx="ខុស" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare (erori)" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_No" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -463,6 +491,7 @@
             <li lc="fr-FR" tx="Non" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="否" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ទេ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Fără" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Note_For_Supervisor" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -479,6 +508,7 @@
             <li lc="fr-FR" tx="Remarque à l'attention du superviseur" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="给督导员的说明" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កំណត់សំគាល់របស់ប្រធានក្រុម" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariu pentru supervizor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Questions_Status" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -495,6 +525,7 @@
             <li lc="fr-FR" tx="Statut du questionnaire" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="问题状态" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ស្ថានភាពសំនួរ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Statusul îintrebării" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Screen_Description" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -511,6 +542,7 @@
             <li lc="fr-FR" tx="Vous êtes sur le point d'achever cet entretien" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="您即将完成这次调查" ts="Translated" qs="ToReview" />
             <li lc="km" tx="អ្នកបំពេញការសម្ភាសន៍នេះ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sunteți pe punctul de a finaliza interviul." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Screen_Title" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -527,6 +559,7 @@
             <li lc="fr-FR" tx="Résumé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh-CN" tx="完成" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បញ្ចប់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sfârșitul chestionarului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Complete_Unanswered" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -543,6 +576,7 @@
             <li lc="fr-FR" tx="Sans réponse" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="未回答" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មិនឆ្លើយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Întrebări necompletate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_CompleteScreen_ButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -558,6 +592,7 @@
             <li lc="zh-CN" tx="转到完成屏幕" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Chuyển tới màn hình hoàn thành" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បំពេញក្រុមមុខ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Finalizați chestionarul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -574,6 +609,7 @@
             <li lc="fr-FR" tx="{0} réponses" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="{0}个答案" ts="Translated" qs="ToReview" />
             <li lc="km" tx="{0} ចំលើយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} răspunsuri" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_One" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -590,6 +626,7 @@
             <li lc="fr-FR" tx="une seule réponse" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="1个答案" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយមួយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="un răspuns" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_ManyFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -606,6 +643,7 @@
             <li lc="fr-FR" tx="{0} erreurs" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="{0}个错误" ts="Translated" qs="ToReview" />
             <li lc="km" tx="{0} ខុស" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} erori" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_One" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -622,6 +660,7 @@
             <li lc="fr-FR" tx="une seule erreur" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="1个错误" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ខុសមួយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="o eroare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Status_CompletedFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -638,6 +677,7 @@
             <li lc="fr-FR" tx="Section terminée : {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="本部分已完成：{0}" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បំពេញផ្នែក {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiune completă: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Status_NotStarted" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -647,13 +687,14 @@
             <li lc="uk-UA" tx="Розділ не розпочато" ts="Translated" qs="AutoTranslated" />
             <li lc="es-ES" tx="Sección no iniciada" ts="Translated" qs="ToReview" />
             <li lc="th-TH" tx="ตอนที่ยังไม่เริ่ม" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Số mục chưa phỏng vấn" er="" ts="Translated" qs="ToReview" />
+            <li lc="vi-VN" tx="Số mục chưa phỏng vấn" ts="Translated" qs="ToReview" />
             <li lc="id-ID" tx="Bagian belum dimulai" ts="Translated" qs="ToReview" />
             <li lc="pt-PT" tx="Seção não começada" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم لم تبدأ" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Section non encore entamée" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="本部分尚未开始" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកនេះមិនទាន់ចាប់ផ្តើម" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiune neîncepută" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Status_StartedIncompleteFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -670,6 +711,7 @@
             <li lc="fr-FR" tx="Section entamée : {0}" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="本部分已开始：{0}" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកនេះចាប់ផ្តើម  {0}" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Secțiune începută: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Subgroups_ManyFormat" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -686,6 +728,7 @@
             <li lc="fr-FR" tx="{0} sous-sections" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="{0}个子部分" ts="Translated" qs="ToReview" />
             <li lc="km" tx=" {0} ផ្នែកតូចបន្ទាប់" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} sub-secțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Subgroups_One" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -702,6 +745,7 @@
             <li lc="fr-FR" tx="une sous-section" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="一个子部分" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកតូចបន្ទាប់មួយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="o sub-secțiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Group_Subgroups_Zero" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -718,6 +762,7 @@
             <li lc="fr-FR" tx="aucune sous-section" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="没有子部分" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មិនមានផ្នែកតូចបន្ទាប់ទេ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="fără sub-secțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Instruction_ShowInstruction" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -725,6 +770,7 @@
             <li lc="nn-nn" tx="Show instruction" ts="Translated" qs="ToReview" />
             <li lc="ru-RU" tx="Показать инструкцию" ts="Translated" qs="ToReview" />
             <li lc="km" tx="បង្ហាញការណែនាំ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Arată instrucțiunile" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Instruction_Title" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -741,6 +787,7 @@
             <li lc="fr-FR" tx="Instruction" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="说明" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ការណែនាំ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Instrucțiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_LinkedQuestion_Empty" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -757,6 +804,7 @@
             <li lc="fr-FR" tx="Les modalités ne seront disponibles qu'après avoir renseigné la question référencée" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="回答完参照问题后选项才可用" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ជំរើសនឹងមានបន្ទាប់ពីឆ្លើយសំនួរយោង" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Opțiunile vor fi disponibile după ce răspundeți la întrebarea de referință" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_NextSection_ButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -773,6 +821,7 @@
             <li lc="fr-FR" tx="Section suivante" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="下一部分" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ផ្នែកបន្ទាប់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiunea următoare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_ParentGroup_ButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -788,6 +837,7 @@
             <li lc="zh-CN" tx="转到上一屏" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Về mục chính" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ទៅ ឪពុកម្តាយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Către întrebarea de legătură" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_AnsweredQuestions" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -804,6 +854,7 @@
             <li lc="fr-FR" tx="Chacun des {0} questions a été renseigné" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="已回答全部{0}个问题" ts="Translated" qs="ToReview" />
             <li lc="km" tx="គ្រប់សំនួរចំលើយ {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate cele {0} întrebări sunt completate." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_UnansweredQuestions" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -820,6 +871,7 @@
             <li lc="fr-FR" tx="Remarque : {0} questions sont sans réponse" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="注意：{0}个问题没有回答" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កំណត់សំគាល់{0} សំនួរគឺមិនបានឆ្លើយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx=" {0} întrebări sunt necompletate." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Cascading_NoMatchingValue" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -836,6 +888,7 @@
             <li lc="fr-FR" tx="La réponse « {0} » ne correspond pas à une modalité possible" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="答案“{0}”未能匹配任何选项" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយ{0} មិនត្រូវនឹងជំរើសណាខ្លះទេ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Varianta de răspuns {0} nu se potrivește." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Filter_MatchError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -852,6 +905,7 @@
             <li lc="fr-FR" tx="La réponse « {0} » ne correspond pas à une modalité possible" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="答案“{0}”未能匹配任何选项" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយ{0} មិនត្រូវនឹងជំរើសណាខ្លះទេ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Varianta de răspuns {0} nu se potrivește." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_EmptyValueError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -868,6 +922,7 @@
             <li lc="fr-FR" tx="Impossible d'enregistrer une valeur vide" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="不能保存空值" ts="Translated" qs="ToReview" />
             <li lc="km" tx="អត់មានតំលៃលេខ មិនអាចរក្សាទុកបាន។ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Valorile necompletate nu pot fi salvate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_NegativeRosterSizeAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -884,6 +939,7 @@
             <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle définit la taille du roster mais elle est négative" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="答案“{0}”不正确，因为本问题的答案将用于设置名单项目的数量，而给出的答案为负值。" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយ  '{0}'  គឺមិនត្រឹមត្រូវ ពីព្រោះ សំនួរប្រើទំហំចំនួន បញ្ជីរាយនាម និង បញ្ជាក់ពីចំលើយអវិជ្ជមាន។​" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul {0} este incorect. Valoarea acesteia nu poate fi negativă." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_ParsingError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -900,6 +956,7 @@
             <li lc="fr-FR" tx="Valeur inscrite ne peut pas être analysée comme un nombre entier" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="输入的数值不能被解析为整数" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយលេខ មិនអាចដកឃ្លាពីលេខគត់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Valoarea introdusă nu poate fi număr întreg." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -916,6 +973,7 @@
             <li lc="fr-FR" tx="La réponse &quot;{0}&quot; est invalide parce qu'elle dépasse à la limite supérieure du roster « {1} »." ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="答案“{0}”不正确，因为超过了名单项目的上限'{1}'。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="ចំលើយ'{0}' មិនត្រឹមត្រូវ ពីព្រោះ ចំលើយធំជាង បញ្ជីរាយនាម តំឡើង '{1}'។​  " er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Răspunsul {0} este incorect. Este mai mare decât limita acceptată. " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_List_Empty_Values_Are_Not_Allowed" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -932,6 +990,7 @@
             <li lc="fr-FR" tx="Les valeurs vides ne sont pas autorisés" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="不能是空值" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មិនមានលេខមិនអាចបន្តទៅទៀតបានទេ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Valorile necompletate nu sunt permise." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Real_ParsingError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -948,6 +1007,7 @@
             <li lc="fr-FR" tx="Valeur composé ne peut pas être analysée comme valeur décimale" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="输入的数值不能被解析为小数" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយលេខមិនអាចដកឃ្លា ដូចតំលៃលេខទសភាគ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Valoarea introdusă nu poate fi număr zecimal." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Question_Text_MaskError" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -964,6 +1024,7 @@
             <li lc="fr-FR" tx="Veuillez remplir toutes les cases requises" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="请填写所有必需的数值" ts="Translated" qs="ToReview" />
             <li lc="km" tx="សូម បំពេញគ្រប់លេខតំរូវអោយវាយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Completați valorile." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_Gps_SaveAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -980,6 +1041,7 @@
             <li lc="fr-FR" tx="Appuyer pour enregistrer les coordonnées GPS" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击记录GPS位置" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កត់ជី ភីអេស" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru înregistrarea locației." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_Multimedia_TapToTakePhoto" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -996,6 +1058,7 @@
             <li lc="fr-FR" tx="Appuyer pour prendre une photo" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击拍照" ts="Translated" qs="ToReview" />
             <li lc="km" tx="សូមថតរូប" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a face o fotografie." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_QrBarcode_SaveAnswer" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1012,6 +1075,7 @@
             <li lc="fr-FR" tx="Appuyer pour capter le code-barres" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击扫描条形码" ts="Translated" qs="ToReview" />
             <li lc="km" tx="យករូបbarcode" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a fotografia codul de bare." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interview_Questions_RemoveRowFromRosterMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1028,6 +1092,7 @@
             <li lc="fr-FR" tx="Êtes-vous sûr de vouloir supprimer {0} ligne (s) de chaque roster qui y est lié ?" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="您确定要从每个相关的名单中删除{0}行吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="km" tx="តើអ្នកប្រាកដទេដែលអ្នកចង់លុប {0} ជួរដេកពីបញ្ជីរាយនាម?" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sunteți sigur că doriți să eliminați înregistrarea?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_ApplicationName" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1044,6 +1109,7 @@
             <li lc="fr-FR" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="Survey Solutions调查员" ts="Translated" qs="ToReview" />
             <li lc="km" tx="អ្នកសម្ភាសន៍ Survey Solutions" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_Diagnostics" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1054,6 +1120,7 @@
             <li lc="zh-CN" tx="诊断" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Xem lỗi " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
             <li lc="km" tx="អ្នកវិនិច្ឆ័យរោគ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Diagnostics" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_Cancel" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1070,6 +1137,7 @@
             <li lc="fr-FR" tx="Annuler" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="km" tx="លុបចោល" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1086,6 +1154,7 @@
             <li lc="fr-FR" tx="Votre compte est déjà associé à un autre appareil" ts="Changed" qs="ToReview" />
             <li lc="zh-CN" tx="您已经被分配到另外一台设备" ts="Translated" qs="ToReview" />
             <li lc="km" tx="អ្នករួចរាល់សំរាប់កំណត់ការបែងចែកផ្សេងទៀត" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sunteți deja autentificat pe altă tabletă." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_RelinkButtonText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1102,6 +1171,7 @@
             <li lc="fr-FR" tx="S'associer à cet appareil" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="重新链接" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ភ្ជាប់ម្តងទៀត" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Reautentificare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_RelinkDevice_RelinkMessage" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1118,6 +1188,7 @@
             <li lc="fr-FR" tx="Si vous liez votre compte à ce nouvel appareil&lt;br&gt;toutes les données sur votre ancien appareil seront supprimées" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="如果您重新链接到这台设备 &lt;br/&gt; 旧设备上的所有数据将会丢失" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ប្រសិនបើអ្នក រីលីង សំរាប់ការបែងចែកនេះ &lt;br/&gt; គ្រប់ទិន្នន័យទាំងអស់ចាស់នឹងបាត់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Dacă vă reautentificați pe această tabletă &lt;br/&gt; toate datele de pe cealaltă tabletă se vor pierde." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Interviewer_TryOnlineLogin" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1134,6 +1205,7 @@
             <li lc="fr-FR" tx="Essayez de vous connecter en ligne" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="尝试在线登录" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ព្យាយាមចុះឈ្មោះតាមOnline" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încercați să vă autentificați online" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="LoginNameHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1150,6 +1222,7 @@
             <li lc="fr-FR" tx="Votre login" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="您的用户名" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ការចុះឈ្មោះចូលរបស់អ្នក" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Utilizator" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="LoginText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1166,6 +1239,7 @@
             <li lc="fr-FR" tx="S'identifer" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="登录" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ការចុះឈ្មោះចូល​" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Intră în cont" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="LoginTitleText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1182,6 +1256,7 @@
             <li lc="fr-FR" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="Survey Solutions问卷测试" ts="Translated" qs="ToReview" />
             <li lc="km" tx="កម្រងសំនួរ សាកល្បង Survey Solutios" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="No" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1198,6 +1273,7 @@
             <li lc="fr-FR" tx="Non" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="否" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ទេ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PasswordHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1214,6 +1290,7 @@
             <li lc="fr-FR" tx="Mot de passe" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="密码" ts="Translated" qs="ToReview" />
             <li lc="km" tx="លេខកូដ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Parolă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1230,6 +1307,7 @@
             <li lc="fr-FR" tx="Google Play Services n'est pas disponible" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="Google Play服务不可用" ts="Translated" qs="ToReview" />
             <li lc="km" tx="សេវា Google play មិនដំំណើរការ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Google Play nu este disponibil" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PlayServicesLocationWatcher_Location_Client_not_started" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1246,6 +1324,7 @@
             <li lc="fr-FR" tx="Location Client n'a pas démarré" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="位置客户端未启动" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ទីតាំងនៃអតិថិជនមិនចាប់ផ្តើម" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Location Client neinițializată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1262,6 +1341,7 @@
             <li lc="fr-FR" tx="Impossible de démarrer le service MvxLocation plus d'une fois" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="您不能重复启动MvxLocation服务" ts="Translated" qs="ToReview" />
             <li lc="km" tx="អ្នកមិនអាចចាប់ផ្តើម សេវាទីតាំងMvxច្រើនជាងមួយ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Puteți inițializa serviciul MvxLocation o singură dată." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="PrefilledQuestions_StartInterview" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1278,6 +1358,7 @@
             <li lc="fr-FR" tx="DÉBUT" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="开始" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចាប់ផ្តើម" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="START" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracySubTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1285,6 +1366,7 @@
             <li lc="nn-nn" tx="Number of meters to set accuracy" ts="Changed" qs="ToReview" />
             <li lc="ru-RU" tx="Значение в метрах для задания точности." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="km" tx="ចំងាយគិតជាម៉ែត្រដើម្បីកំណត់ភាពជាក់លាក់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Numărul de metri necesari pentru a stabili acuratețea" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracyTitle" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1293,6 +1375,7 @@
             <li lc="ru-RU" tx="Желаемая точность GPS вопроса" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Độ chính xác mong muốn của các câu hỏi GPS" ts="Translated" qs="ToReview" />
             <li lc="km" tx="សំនួរ ជី ភី អេស ចង់បានភាពជាក់លាក់" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Acuratețe necesară pentru întrebările GPS" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="RealQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1309,6 +1392,7 @@
             <li lc="fr-FR" tx="Appuyer pour saisir un nombre décimal" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击输入小数" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយបញ្ចូលទសភាគ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce zecimale" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="StaySignedInText" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1325,6 +1409,7 @@
             <li lc="fr-FR" tx="Rester connecté" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="保持登录状态" ts="Translated" qs="ToReview" />
             <li lc="km" tx="នៅរក្សាក្នុង ការចុះឈ្មោះ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Rămâneți autentificat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Synchronization_UserLinkedToAnotherDevice_Description" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1341,6 +1426,7 @@
             <li lc="fr-FR" tx="Vous n'avez aucune affectations sur cet appareil. Envoyer des données du système de la tablette, effacer les données de l'application et se connecter avec un autre compte d'utilisateur" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="您在这台设备上没有调查任务。请发送平板电脑信息、清除应用程序数据并使用另外一个账户登录。" ts="Translated" qs="ToReview" />
             <li lc="km" tx="អ្នកមិនអាចមានការស្នើសុំមួយណា សំរាប់ការបែងចែកនេះ។ ផ្ញើរពត៌មានអំពី ធេប សំរាប់សំអាតទិន្នន័យ និង ចុះឈ្មោះចូលដោយគណនីមួយទៀត" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu aveți nicio alocare pe acest dispozitiv. Trimiteți informații despre tabletă, ștergeți datele aplicației și conectați-vă cu alt cont." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="TextListQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1357,6 +1443,7 @@
             <li lc="fr-FR" tx="Appuyer pour ajouter de nouveaux éléments à la liste" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击输入新的项目" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយបញ្ចុលសំភារៈថ្មី" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce o nouă valoare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="TextQuestion_Hint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1373,6 +1460,7 @@
             <li lc="fr-FR" tx="Appuyer pour saisir du texte" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="点击输入文本" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយជាអត្ថបទ" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Apăsați pentru a introduce text" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="TextQuestion_MaskHint" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1389,6 +1477,7 @@
             <li lc="fr-FR" tx="Appuyer pour saisir du texte ({0})" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="点击输入文本（{0}）" ts="Translated" qs="ToReview" />
             <li lc="km" tx="វាយជាអត្ថបទ ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce text ({0})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Validity_Answered_Invalid_ErrorCaption" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1405,6 +1494,7 @@
             <li lc="fr-FR" tx="La réponse est invalide" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="答案无效" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយមិនត្រូវ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul este invalid" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Validity_NotAnswered_InterviewException_ErrorCaption" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1421,6 +1511,7 @@
             <li lc="fr-FR" tx="La réponse n'a pas été enregistrée" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="答案未保存" ts="Translated" qs="ToReview" />
             <li lc="km" tx="ចំលើយមិនបានរក្សាទុក" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul nu a fost salvat." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\UIResources.resx" nm="Yes" rc="" dnt="false" nms="WB.Core.SharedKernels.Enumerator.Properties" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -1437,6 +1528,7 @@
             <li lc="fr-FR" tx="Oui" ts="Translated" qs="AutoTranslated" />
             <li lc="zh-CN" tx="是" ts="Translated" qs="ToReview" />
             <li lc="km" tx="មាន" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Da" ts="Translated" qs="ToReview" />
           </lis>
         </it>
       </items>

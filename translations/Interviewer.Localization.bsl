@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en-US" IsTranslationPackage="false" AllowEditingInvariant="true" RemoveOrhpanedStrings="true" GridLayoutXml="" DockManagerLayoutXml="">
+<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en-US" IsTranslationPackage="false" AllowEditingInvariant="true" GridLayoutXml="" DockManagerLayoutXml="">
   <Projects>
-    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Interviewer" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" ProjectType="Other" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.Core.BoundedContexts.Interviewer" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Interviewer" InvariantLocale="en-US">
+    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Interviewer" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" AssemblyName="WB.Core.BoundedContexts.Interviewer" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Interviewer" InvariantLocale="en-US">
       <locales>
         <locale />
         <locale>ru-RU</locale>
@@ -16,6 +16,7 @@
         <locale>pt-PT</locale>
         <locale>zh-CN</locale>
         <locale>km</locale>
+        <locale>ro</locale>
       </locales>
       <items>
         <it rn="Properties\InterviewerUIResources.resx" nm="AccountIsLockedOnServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -303,7 +304,7 @@
             <li lc="ar" tx="وضع تعداد، والمقابلات التي تم إنشاؤها: {0}" ts="Translated" qs="AutoTranslated" />
             <li lc="fr-FR" tx="Mode recensement, Entretiens créés : {0}" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="普查模式，已创建调查：{0}" ts="Translated" qs="ToReview" />
-            <li lc="km" tx="គំរូជំរឿន បង្កើតការសម្ភាសន៍៖ {0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="km" tx="គំរូជំរឿន បង្កើតការសម្ភាសន៍៖ {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties\InterviewerUIResources.resx" nm="DashboardItem_CompletedOn" rc="" dnt="false" nms="WB.Core.BoundedContexts.Interviewer.Properties" cln="InterviewerUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
