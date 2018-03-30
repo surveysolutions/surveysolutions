@@ -1,4 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Portable.Services;
+﻿using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Infrastructure.Native.Logging
@@ -16,6 +17,11 @@ namespace WB.Infrastructure.Native.Logging
 
                 return new NLogLogger("UNKNOWN");
             });
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }

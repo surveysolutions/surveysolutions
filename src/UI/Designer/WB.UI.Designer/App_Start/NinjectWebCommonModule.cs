@@ -5,6 +5,7 @@ using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Designer.Implementation.Services;
@@ -35,6 +36,11 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<IRecaptchaService, RecaptchaService>();
             registry.Bind<QuestionnaireDowngradeService>();
             registry.Bind<IQuestionnireHistoryVersionsService, QuestionnireHistoryVersionsService>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }
