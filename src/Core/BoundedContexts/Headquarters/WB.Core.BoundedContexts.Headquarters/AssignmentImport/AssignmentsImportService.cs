@@ -98,22 +98,51 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 switch (questionType)
                 {
-                    case InterviewQuestionType.YesNo:
-                    case InterviewQuestionType.TextList:
                     case InterviewQuestionType.Gps:
+                        return new AssignmentGpsAnswer
+                        {
+                            Values = compositeValue.Values.Select(x => ToGpsPropertyAnswer(fileName, row, x)).ToArray()
+                        };
+                    case InterviewQuestionType.TextList:
+                        return new AssignmentCategoricalMultiAnswer
+                        {
+                            Values = compositeValue.Values.Select(x => ToAssignmentTextAnswer(fileName, row, x)).ToArray()
+                        };
+                    case InterviewQuestionType.YesNo:
                     case InterviewQuestionType.MultiFixedOption:
-                        break;
-                    default:
-                        throw new NotSupportedException();
+                        return new AssignmentCategoricalMultiAnswer
+                        {
+                            Values = compositeValue.Values.Select(x => ToAssignmentDoubleAnswer(fileName, row, x)).ToArray()
+                        };
                 }
             }
 
             return new AssignmentAnswers
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x, questionnaire))
-                    .ToArray(),
+                Values = compositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x, questionnaire)).ToArray(),
             };
+        }
+
+        private static AssignmentAnswer ToGpsPropertyAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        {
+            var doublePropertyNames = new[]
+            {
+                nameof(GeoPosition.Longitude).ToLower(),
+                nameof(GeoPosition.Latitude).ToLower(),
+                nameof(GeoPosition.Altitude).ToLower(),
+                nameof(GeoPosition.Accuracy).ToLower(),
+            };
+
+            if (doublePropertyNames.Contains(answer.VariableOrCodeOrPropertyName))
+                return ToAssignmentDoubleAnswer(fileName, row, answer);
+
+            if (answer.VariableOrCodeOrPropertyName == nameof(GeoPosition.Timestamp).ToLower())
+                return ToAssignmentDateTimeAnswer(fileName, row, answer);
+
+            throw new NotSupportedException(
+                $"Gps property {answer.Value} not supported. " +
+                $"Supported properties: {string.Join(", ", GeoPosition.PropertyNames)}");
         }
 
         private AssignmentValue ToAssignmentRosterInstanceId(string fileName, PreloadingRow row,
@@ -150,24 +179,30 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     case InterviewQuestionType.Text:
                     case InterviewQuestionType.QRBarcode:
                     case InterviewQuestionType.TextList:
-                        return ToAssignmentTextAnswer(questionId.Value, questionnaire, fileName, row, answer);
+                        return ToAssignmentTextAnswer(fileName, row, answer);
                     case InterviewQuestionType.Integer:
-                        return ToAssignmentIntegerAnswer(questionId.Value, questionnaire, fileName, row, answer);
+                        return ToAssignmentIntegerAnswer(fileName, row, answer);
                     case InterviewQuestionType.SingleFixedOption:
                     case InterviewQuestionType.Cascading:
                     case InterviewQuestionType.Double:
-                        return ToAssignmentDoubleAnswer(questionId.Value, fileName, row, answer);
+                        return ToAssignmentDoubleAnswer(fileName, row, answer);
                     case InterviewQuestionType.DateTime:
-                        return ToAssignmentDateTimeAnswer(questionId.Value, fileName, row, answer);
-                    default:
-                        throw new NotSupportedException();
+                        return ToAssignmentDateTimeAnswer(fileName, row, answer);
                 }
             }
 
-            return new AssignmentAnswer();
+            return new AssignmentAnswer
+            {
+                FileName = fileName,
+                Column = answer.Column,
+                Row = answer.Row,
+                Value = answer.Value,
+                InterviewId = row.InterviewId,
+                VariableName = answer.Column
+            };
         }
 
-        private static AssignmentAnswer ToAssignmentDoubleAnswer(Guid questionId, string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentDoubleAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
         {
             double? doubleValue = null;
             if (double.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var doubleNumericValue))
@@ -185,7 +220,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         };
         }
 
-        private static AssignmentAnswer ToAssignmentDateTimeAnswer(Guid questionId, string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentDateTimeAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
         {
             DateTime? dataTimeValue = null;
             if (DateTime.TryParse(answer.Value, out var date))
@@ -203,10 +238,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             };
         }
 
-        private static AssignmentTextAnswer ToAssignmentTextAnswer(Guid questionId, IQuestionnaire questionnaire, string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentTextAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
             => new AssignmentTextAnswer
             {
-                Mask = questionnaire.GetTextQuestionMask(questionId),
                 InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
                 FileName = fileName,
@@ -215,7 +249,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Value = answer.Value,
             };
 
-        private static AssignmentAnswer ToAssignmentIntegerAnswer(Guid questionId, IQuestionnaire questionnaire, string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentIntegerAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
         {
             int? intValue = null;
             if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
@@ -224,8 +258,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             return new AssignmentIntegerAnswer
             {
-                IsRosterSize = questionnaire.IsRosterSizeQuestion(questionId),
-                IsRosterSizeForLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId),
                 Answer = intValue,
                 InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,

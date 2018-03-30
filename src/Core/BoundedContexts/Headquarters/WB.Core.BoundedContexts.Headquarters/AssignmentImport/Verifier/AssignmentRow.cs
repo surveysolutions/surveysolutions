@@ -17,16 +17,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public string InterviewId { get; set; }
     }
 
-    public class AssignmentTextAnswer : AssignmentAnswer
-    {
-        public string Mask { get; set; }
-    }
+    public class AssignmentTextAnswer : AssignmentAnswer { }
     public class AssignmentGpsAnswer : AssignmentAnswers { }
 
     public class AssignmentIntegerAnswer : AssignmentAnswer
     {
-        public bool IsRosterSizeForLongRoster { get; set; }
-        public bool IsRosterSize { get; set; }
         public int? Answer { get; set; }
     }
     public class AssignmentDateTimeAnswer : AssignmentAnswer
@@ -39,11 +34,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public double? Answer { get; set; }
     }
 
-    public class AssignmentCategoricalSingleAnswer : AssignmentAnswer { }
-
     public class AssignmentCategoricalMultiAnswer : AssignmentAnswers
     {
-        public int? MaxAnswersCount { get; set; }
     }
 
     public class AssignmentAnswer : AssignmentValue
