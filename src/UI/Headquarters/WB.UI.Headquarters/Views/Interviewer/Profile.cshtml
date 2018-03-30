@@ -262,7 +262,12 @@
                         </li>
                         @if (Model.DeviceAssignmentDate.HasValue)
                         {
-                            <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</b></li>
+                            <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)
+                                    @if (Model.RegistredDevicesCount > 1)
+                                    {
+                                        <span style="color: red;">(Relinked)</span>
+                                    }</b>
+                                </li>
                         }
                     </ul>
                     <ul class="list-unstyled">
