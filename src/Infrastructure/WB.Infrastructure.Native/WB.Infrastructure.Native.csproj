@@ -34,17 +34,6 @@
     <PackageReference Include="NLog" Version="4.5.0" />
     <PackageReference Include="Npgsql" Version="3.2.7" />
     <PackageReference Include="prometheus-net" Version="2.0.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-    <PackageReference Include="System.Globalization" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Net.Http" Version="4.3.3" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.0" />
     <PackageReference Include="WebActivatorEx" Version="2.2.0" />
   </ItemGroup>
   <ItemGroup>
