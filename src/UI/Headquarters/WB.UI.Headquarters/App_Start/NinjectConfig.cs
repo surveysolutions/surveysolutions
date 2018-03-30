@@ -227,7 +227,7 @@ namespace WB.UI.Headquarters
             kernel.Load(mainModule);
 
             // init
-            kernel.Init();
+            kernel.Init().Wait();
             
             return kernel.Kernel;
         }
