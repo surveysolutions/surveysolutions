@@ -1,9 +1,11 @@
-﻿namespace WB.Core.Infrastructure.Modularity
+﻿using System.Threading.Tasks;
+
+namespace WB.Core.Infrastructure.Modularity
 {
     public interface IKernel
     {
         void Load(params IModule[] modules);
 
-        void Init();
+        Task Init();
     }
 }
