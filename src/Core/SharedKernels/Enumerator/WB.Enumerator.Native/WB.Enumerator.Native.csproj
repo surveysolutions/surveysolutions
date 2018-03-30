@@ -1,188 +1,49 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4004D8CD-D2B4-4E81-93FF-9798599B2168}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Enumerator.Native</RootNamespace>
-    <AssemblyName>WB.Enumerator.Native</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.3.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Microsoft.Owin.Security.3.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.dll</HintPath>
-    </Reference>
-    <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="JsonConversion\FilteredCamelCasePropertyNamesContractResolver.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Questionnaire\ITranslationManagementService.cs" />
-    <Compile Include="Questionnaire\TranslationInstance.cs" />
-    <Compile Include="Questionnaire\Impl\TranslationManagementService.cs" />
-    <Compile Include="WebInterview\IInterviewBrokenPackagesService.cs" />
-    <Compile Include="WebInterview\InterviewAccessException.cs" />
-    <Compile Include="Resources\WebInterview.Designer.cs">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="WebInterview\IConnectionLimiter.cs" />
-    <Compile Include="WebInterview\IConnectionsMonitor.cs" />
-    <Compile Include="WebInterview\IErrorDetailsProvider.cs" />
-    <Compile Include="WebInterview\InterviewLifecycleEventHandler.cs" />
-    <Compile Include="WebInterview\IWebInterviewInterviewEntityFactory.cs" />
-    <Compile Include="WebInterview\IWebInterviewInvoker.cs" />
-    <Compile Include="WebInterview\IWebInterviewNotificationService.cs" />
-    <Compile Include="WebInterview\Models\InterviewEntityType.cs" />
-    <Compile Include="WebInterview\Models\InterviewEntityWithType.cs" />
-    <Compile Include="WebInterview\Models\PrefilledPageData.cs" />
-    <Compile Include="WebInterview\Models\WebInterivewDtos.cs" />
-    <Compile Include="WebInterview\Models\WebInterviewAutoMapProfile.cs" />
-    <Compile Include="WebInterview\ObserverNotAllowedAttribute.cs" />
-    <Compile Include="WebInterview\Pipeline\SignalrErrorHandler.cs" />
-    <Compile Include="WebInterview\Pipeline\WebInterviewConnectionsCounter.cs" />
-    <Compile Include="WebInterview\Pipeline\WebInterviewStateManager.cs" />
-    <Compile Include="WebInterview\Services\AudioProcessingService.cs" />
-    <Compile Include="WebInterview\Services\ConnectionLimiter.cs" />
-    <Compile Include="WebInterview\Services\ConnectionsMonitor.cs" />
-    <Compile Include="Questionnaire\Impl\QuestionnaireQuestionOptionsRepository.cs" />
-    <Compile Include="WebInterview\Services\IAudioProcessingService.cs" />
-    <Compile Include="WebInterview\Services\WebInterviewInterviewEntityFactory.cs" />
-    <Compile Include="WebInterview\Services\WebInterviewInvoker.cs" />
-    <Compile Include="WebInterview\Services\WebInterviewLazyNotificationService.cs" />
-    <Compile Include="WebInterview\Services\WebInterviewNotificationService.cs" />
-    <Compile Include="WebInterview\WebInterview.CommandService.cs" />
-    <Compile Include="WebInterview\WebInterview.cs" />
-    <Compile Include="WebInterview\WebInterview.StatefullInterview.cs" />
-    <Compile Include="WebInterview\WebInterviewModule.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}</Project>
-      <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762E2D-1380-441B-B924-7CAEAFAF5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553b4fc2-5fc7-4256-b14d-82758d64a3bd}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{89b14b50-5305-45e2-9835-7a05bd0b97a9}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{D6616C1D-7C3A-4576-B82B-098721CD4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\WebInterview.ar.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.es.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.fr.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.ka.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>WebInterview.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.ru.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\WebInterview.zh.resx">
-      <DependentUpon>WebInterview.resx</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net471</TargetFramework>
+        <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+        <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+        <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+        <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+        <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+        <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
+        <ProjectReference Include="..\..\..\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
+        <ProjectReference Include="..\..\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
+        <ProjectReference Include="..\..\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Antlr" Version="3.5.0.2" />
+        <PackageReference Include="AutoMapper" Version="6.2.2" />
+        <PackageReference Include="CSCore" Version="1.2.1.2" />
+        <PackageReference Include="Dapper" Version="1.50.4" />
+        <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
+        <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.2.1" />
+        <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
+        <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+        <PackageReference Include="Owin" Version="1.0" />
+        <PackageReference Include="StackExchange.Exceptional" Version="2.0.0-alpha3-00183" />
+        <PackageReference Include="StackExchange.Exceptional.Shared" Version="2.0.0-alpha3-00183" />
+        <PackageReference Include="WebGrease" Version="1.6.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <Reference Include="System.Configuration" />
+        <Reference Include="System.Transactions" />
+        <Reference Include="System.Web" />
+        <Reference Include="System.Web.Extensions" />
+        <Reference Include="System.Data.DataSetExtensions" />
+        <Reference Include="System.Net.Http" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Update="Resources\WebInterview.Designer.cs">
+            <DependentUpon>WebInterview.resx</DependentUpon>
+        </Compile>
+    </ItemGroup>
 </Project>
