@@ -49,8 +49,10 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
+            var registredDeviceCount = this.deviceSyncInfoRepository.GetRegistredDeviceCount(userId);
 
-            InterviewerProfileModel profile = this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
+            InterviewerProfileModel profile = 
+                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -65,6 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.WaitingInterviewsForApprovalCount = completedInterviewCount;
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;
             profile.SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId);
+            profile.RegistredDevicesCount = registredDeviceCount;
 
             return profile;
         }

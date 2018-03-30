@@ -17,5 +17,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         SynchronizationActivity GetSynchronizationActivity(Guid interviewerId);
 
         IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds);
+
+        int GetRegistredDeviceCount(Guid interviewerId);
     }
 }
