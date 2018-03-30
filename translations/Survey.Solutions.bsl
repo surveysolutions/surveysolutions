@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en" IsTranslationPackage="false" AllowEditingInvariant="true" RemoveOrhpanedStrings="true" GridLayoutXml="" DockManagerLayoutXml="">
+<LocalizationSolution xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" AutoDoNotTranslate="true" InvariantLocale="en" IsTranslationPackage="false" AllowEditingInvariant="true" GridLayoutXml="" DockManagerLayoutXml="">
   <Projects>
-    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Headquarter.L" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarter.L\WB.Core.BoundedContexts.Headquarter.L.csproj" ProjectType="Other" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.Core.BoundedContexts.Headquarter.L" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Headquarter.L" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.Core.BoundedContexts.Headquarter.L" VisualStudioProjectFilename="..\src\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarter.L\WB.Core.BoundedContexts.Headquarter.L.csproj" AssemblyName="WB.Core.BoundedContexts.Headquarter.L" AssemblyType="Dll" RootNamespace="WB.Core.BoundedContexts.Headquarter.L" InvariantLocale="en">
       <locales>
         <locale>fr</locale>
         <locale>pt</locale>
@@ -17,6 +17,7 @@
         <locale>uk-UA</locale>
         <locale>vi-VN</locale>
         <locale>zh-CN</locale>
+        <locale>ro</locale>
       </locales>
       <items>
         <it rn="Properties-E\UIResources.resx" nm="AreaMap_Active_Map_Title" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarter.L.Properties_E" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -159,7 +160,7 @@
             <li lc="nn-nn" tx="{0} of audio recording" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} аудио записи" ts="Translated" qs="ToReview" />
             <li lc="uk-UA" tx="{0} аудіо запису" ts="Translated" qs="ToReview" />
-            <li lc="ka" tx="{0} აუდიო ჩანაწერის" er="" ts="Translated" qs="ToReview" />
+            <li lc="ka" tx="{0} აუდიო ჩანაწერის" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties-E\UIResources.resx" nm="Cancel" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarter.L.Properties_E" cln="UIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4299,7 +4300,7 @@
             <li lc="th-TH" tx="รายการถูกปรับปรุง {0}" ts="Translated" qs="ToReview" />
             <li lc="vi-VN" tx="Danh sách đã được cập nhật {0}" ts="Translated" qs="ToReview" />
             <li lc="zh-CN" tx="列表已更新{0}" ts="Translated" qs="ToReview" />
-            <li lc="ka" tx="ჩამონათვალი განახლდა {0}" er="" ts="Translated" qs="ToReview" />
+            <li lc="ka" tx="ჩამონათვალი განახლდა {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Properties-T\TesterUIResources.resx" nm="ImportQuestionnaire_CheckConnectionToServer" rc="" dnt="false" nms="WB.Core.BoundedContexts.Headquarter.L.Properties_T" cln="TesterUIResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6018,7 +6019,7 @@
       </items>
       <ExcludedItems />
     </Project>
-    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Headquarters" VisualStudioProjectFilename="..\src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" ProjectType="WebApplication" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.UI.Headquarters" AssemblyType="Dll" RootNamespace="WB.UI.Headquarters" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Headquarters" VisualStudioProjectFilename="..\src\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" AssemblyName="WB.UI.Headquarters" AssemblyType="Dll" RootNamespace="WB.UI.Headquarters" InvariantLocale="en">
       <locales>
         <locale>fr</locale>
         <locale>pt</locale>
@@ -6028,6 +6029,7 @@
         <locale>ar</locale>
         <locale>es</locale>
         <locale>ka</locale>
+        <locale>ro</locale>
       </locales>
       <items>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AdvancedMode" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
@@ -7776,7 +7778,7 @@
             <li lc="fr" tx="Questionnaires" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Questionários" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Questionnaires" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросники" er="" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Опросники" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="AutoTranslated" />
             <li lc="ka" tx="კითხვარები" ts="Translated" qs="ToReview" />
@@ -8179,7 +8181,7 @@
             <li lc="fr" tx="Questionnaires" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Questionários" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Questionnaires" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросники" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросники" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="AutoTranslated" />
             <li lc="ka" tx="კითხვარები" ts="Translated" qs="ToReview" />
@@ -8651,7 +8653,7 @@
             <li lc="ru" tx="Вопросник «{0}» успешно клонирован с новым названием «{1}»." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="成功地以一个新标题'{1}'复制了问卷'{0}'。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استبيان '| 0 |' تم بنجاح استنساخ مع عنوان جديد '| 1 |'." er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ErrorVerifier" />
-            <li lc="ka" tx="კითხვარი '{0}' წარმატებით დაიკლონა ახალი სათაურით '{1}'." er="" ts="Translated" qs="ToReview" />
+            <li lc="ka" tx="კითხვარი '{0}' წარმატებით დაიკლონა ახალი სათაურით '{1}'." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\HQ.resx" nm="QuestionnaireClonedFormat" rc="" dnt="false" nms="Resources" cln="HQ" bac="Content" hgt="0" wdt="0">
@@ -8929,7 +8931,7 @@
         <it rn="App_GlobalResources\MainMenu.resx" nm="Questionnaires" rc="" dnt="false" nms="Resources" cln="MainMenu" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaires" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросники" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Опросники" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="AutoTranslated" />
             <li lc="ka" tx="კითხვარები" ts="Translated" qs="ToReview" />
           </lis>
@@ -15165,7 +15167,7 @@
           <lis>
             <li lc="nn-nn" tx="Click on a Login Name to modify profile of an existing HQ user. " ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Кликните по Логину, чтобы изменить профиль существующего хэдквотера." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="انقر فوق &quot;اسم تسجيل الدخول&quot; لتعديل التشكيل الجانبي لمستخدم موجود HQ. " er="" ts="Translated" qs="ToReview" />
+            <li lc="ar" tx="انقر فوق &quot;اسم تسجيل الدخول&quot; لتعديل التشكيل الجانبي لمستخدم موجود HQ. " ts="Translated" qs="ToReview" />
             <li lc="ka" tx="დაწკაპეთ შესასვლელ სახელს, რათა შეიცვალოთ არსებული სათაოს ოფისის მომხმარებლის პროფილი" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -16505,12 +16507,12 @@
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0009" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx=" Rôle invalide. Seules les valeurs « Supervisor » ou « Interviewer » sont autorisés" er="" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx=" Papel é inválido. São permitidos apenas valores &quot;Supervisor&quot; ou &quot;Entrevistador&quot;" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx=" Rôle invalide. Seules les valeurs « Supervisor » ou « Interviewer » sont autorisés" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx=" Papel é inválido. São permitidos apenas valores &quot;Supervisor&quot; ou &quot;Entrevistador&quot;" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx=" Role is invalid. Only &quot;Supervisor&quot; or &quot;Interviewer&quot; are allowed" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Недопустимая роль. Допускаются только значения «Supervisor» или «Interviewer»" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="角色无效。只允许取Supervisor或Interviewer值" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx=" دور غير صالح. يتم السماح فقط &quot;مشرف&quot; أو &quot;المقابلة&quot;" er="" ts="Translated" qs="ToReview" />
+            <li lc="ar" tx=" دور غير صالح. يتم السماح فقط &quot;مشرف&quot; أو &quot;المقابلة&quot;" ts="Translated" qs="ToReview" />
             <li lc="ka" tx=" როლი არასწორია. მხოლოდ ,,ზედამხედველი'' და ,,ინტერვიუერი'' არის დასაშვები." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -16599,7 +16601,7 @@
             <li lc="nn-nn" tx="Cookies are not enabled in your browser. Please enable cookies in your browser preferences to continue" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的浏览器未启用cookies。请在浏览器偏好中启用cookies然后继续。" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Для работы интервью требуются куки. Пожалуйста убедитесь, что куки включены в настройках Вашего браузера" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="الكوكيز (Cookies) غير ممكّنة في متصفحك.  يرجى تمكين الكوكيز في تفضيلات متصفحك من أجل المتابعة" er="" ts="Translated" qs="ToReview" />
+            <li lc="ar" tx="الكوكيز (Cookies) غير ممكّنة في متصفحك.  يرجى تمكين الكوكيز في تفضيلات متصفحك من أجل المتابعة" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Las cookies no están habilitadas en tu navegador. Por favor, habilita las cookies en las preferencias de tu navegador para continuar" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ბრაუზერში არ არის ჩართული Cookies. გთხოვთ, გაააქტიუროთ თქვენი ბრაუზერის პარამეტრებში ქუქი-ჩანაწერები გაგრძელებისთვის." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
@@ -18051,7 +18053,7 @@
       </items>
       <ExcludedItems />
     </Project>
-    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Shared.Web" VisualStudioProjectFilename="..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" ProjectType="ClassLibrary" ProjectProgrammingLanguage="C_Sharp" AssemblyName="WB.UI.Shared.Web" AssemblyType="Dll" RootNamespace="WB.UI.Shared.Web" InvariantLocale="en">
+    <Project xsi:type="VSLocalizationProject" Name="WB.UI.Shared.Web" VisualStudioProjectFilename="..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" AssemblyName="WB.UI.Shared.Web" AssemblyType="Dll" RootNamespace="WB.UI.Shared.Web" InvariantLocale="en">
       <locales>
         <locale />
         <locale>zh</locale>
@@ -18061,6 +18063,7 @@
         <locale>ar</locale>
         <locale>es</locale>
         <locale>ka</locale>
+        <locale>ro</locale>
       </locales>
       <items>
         <it rn="Resources\Captcha.resx" nm="EnterText" rc="" dnt="false" nms="WB.UI.Shared.Web.Resources" cln="Captcha" bac="EmbeddedResource" hgt="0" wdt="0">
