@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override async Task Initialize()
         {
             await base.Initialize();
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
+            if (interviewId == Guid.Empty) throw new ArgumentException(nameof(interviewId));
             this.ProgressDescription = InterviewerUIResources.Interview_Loading;
         }
 
