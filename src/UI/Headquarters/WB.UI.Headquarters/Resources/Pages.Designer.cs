@@ -1510,6 +1510,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relinked.
+        /// </summary>
+        public static string InterviewerProfile_Relinked {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Relinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server time at the beginning of synchronization.
         /// </summary>
         public static string InterviewerProfile_ServerDate {
@@ -1807,7 +1816,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {0}.
+        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {0}..
         /// </summary>
         public static string Interviewers_MoveAllToNewTeam {
             get {
