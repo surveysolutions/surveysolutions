@@ -53,9 +53,6 @@
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="3.0.4" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ddidotnet">
