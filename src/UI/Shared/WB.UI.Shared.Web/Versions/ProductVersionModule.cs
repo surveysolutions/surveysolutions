@@ -1,4 +1,5 @@
 using System.Reflection;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
 
@@ -17,6 +18,11 @@ namespace WB.UI.Shared.Web.Versions
         {
             registry.BindToConstant<IProductVersion>(() => this.productVersion);
             registry.Bind<IProductVersionHistory, ProductVersionHistory>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }

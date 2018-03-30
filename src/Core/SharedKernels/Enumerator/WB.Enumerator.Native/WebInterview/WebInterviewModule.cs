@@ -6,6 +6,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Owin;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview.Services;
 
@@ -31,6 +32,12 @@ namespace WB.Enumerator.Native.WebInterview
                 return new WebInterviewInvoker(lazyClients);
             });
         }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+
+        }
+
 
         public static void Configure(IAppBuilder app, Type[] pipelineModules)
         {

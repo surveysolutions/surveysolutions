@@ -1,6 +1,7 @@
 ﻿using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
@@ -16,6 +17,11 @@ namespace WB.Core.Infrastructure
             registry.Bind<IAggregateSupportsSnapshotValidator, AggregateSupportsSnapshotValidator>();
             registry.Bind<IAggregateSnapshotter, DefaultAggregateSnapshotter>();
             registry.BindAsSingleton<ISnapshotStore, InMemoryCachedSnapshotStore>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }

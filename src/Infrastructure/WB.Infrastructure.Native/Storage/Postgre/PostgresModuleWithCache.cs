@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
@@ -45,6 +46,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 registry.BindToConstant(() => this.cacheSettings);
             }
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }
