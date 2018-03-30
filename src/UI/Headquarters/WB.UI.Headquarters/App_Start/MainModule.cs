@@ -42,7 +42,7 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace WB.UI.Headquarters
 {
-    public class MainModule : IWebModule, IInitModule
+    public class MainModule : IWebModule
     {
         private readonly SettingsProvider settingsProvider;
         private readonly HqSecuritySection applicationSecuritySection;

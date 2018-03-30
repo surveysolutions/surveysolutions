@@ -33,8 +33,6 @@ namespace WB.UI.Shared.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
-            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
-
             registry.Bind<IUserInteractionService, UserInteractionService>();
             registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
@@ -66,6 +64,11 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
             registry.Bind<CoverInterviewFragment>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
         }
     }
 }

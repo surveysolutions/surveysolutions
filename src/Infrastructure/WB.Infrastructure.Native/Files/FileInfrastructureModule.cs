@@ -1,4 +1,5 @@
-﻿using WB.Core.Infrastructure.FileSystem;
+﻿using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
@@ -10,6 +11,11 @@ namespace WB.Infrastructure.Native.Files
         {
             registry.Bind<IFileSystemAccessor, FileSystemIOAccessor>();
             //this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }

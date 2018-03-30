@@ -178,5 +178,10 @@ namespace WB.UI.WebTester
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
+        }
     }
 }

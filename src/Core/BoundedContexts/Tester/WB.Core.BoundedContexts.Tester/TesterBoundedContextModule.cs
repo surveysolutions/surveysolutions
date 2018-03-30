@@ -1,5 +1,6 @@
 ﻿using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
@@ -20,6 +21,11 @@ namespace WB.Core.BoundedContexts.Tester
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton<IPlainStorage<OptionView>, InMemoryPlainStorage<OptionView>>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }

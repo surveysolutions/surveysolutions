@@ -3,6 +3,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -58,6 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
                 registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>(
                     "rootDirectoryPath", this.currentFolderPath);
             }
+        }
+
+        public void Init(IServiceLocator serviceLocator)
+        {
+            
         }
     }
 }
