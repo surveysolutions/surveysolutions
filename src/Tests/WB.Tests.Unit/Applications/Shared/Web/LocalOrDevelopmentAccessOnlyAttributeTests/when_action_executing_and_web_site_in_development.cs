@@ -22,7 +22,6 @@ namespace WB.Tests.Unit.Applications.Shared.Web.LocalOrDevelopmentAccessOnlyAttr
 
         private static LocalOrDevelopmentAccessOnlyAttribute filter;
         private static ActionExecutingContext actionExecutingContext = CreateFilterContext(IsLocalhost);
-        private static Exception exception;
         private static bool IsWebsiteUnderDevelopment = true;
         private static bool IsLocalhost = false;
     }
