@@ -16,32 +16,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
             this.viewModelNavigationService = viewModelNavigationService ?? throw new ArgumentNullException(nameof(viewModelNavigationService));
         }
-        
+
         public override void Prepare()
         {
             base.Prepare();
-            
-            if (this.IsAuthenticationRequired && !this.Principal.IsAuthenticated)
-            {
-                this.viewModelNavigationService.NavigateToSplashScreen();
-            }
-        }
-
-        protected override void SaveStateToBundle(IMvxBundle bundle)
-        {
-            if (this.Principal?.IsAuthenticated ?? false)
-            {
-                bundle.Data["userName"] = this.Principal.CurrentUserIdentity.Name;
-                bundle.Data["passwordHash"] = this.Principal.CurrentUserIdentity.PasswordHash;
-            }
+            BaseViewModelSetupMethods.Prepare(this.IsAuthenticationRequired, this.Principal, this.viewModelNavigationService);
         }
 
         protected override void ReloadFromBundle(IMvxBundle state)
         {
-            if (state.Data.ContainsKey("userName") && !this.Principal.IsAuthenticated)
-            {
-                this.Principal.SignInWithHash(state.Data["userName"], state.Data["passwordHash"], true);
-            }
+            BaseViewModelSetupMethods.ReloadStateFromBundle(this.Principal, state);
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            BaseViewModelSetupMethods.SaveStateToBundle(this.Principal, bundle);
         }
     }
 }
