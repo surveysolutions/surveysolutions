@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 {
     internal class when_delete_not_existing_questionnaire : DeleteQuestionnaireServiceTestContext
     {
-        [NUnit.Framework.Test] public void should_not_throw_ArgumentException () {
+        [Test] public void should_not_throw_ArgumentException () {
             commandServiceMock=new Mock<ICommandService>();
             deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock.Object);
 
@@ -22,6 +22,5 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         private static long questionnaireVersion = 5;
         private static Guid userId = Guid.Parse("22222222222222222222222222222222");
         private static Mock<ICommandService> commandServiceMock;
-        private static Exception exception;
     }
 }

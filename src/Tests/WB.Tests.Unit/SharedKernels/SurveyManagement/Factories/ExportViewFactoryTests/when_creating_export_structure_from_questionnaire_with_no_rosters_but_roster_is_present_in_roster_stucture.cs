@@ -46,7 +46,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         }
 
         private static ExportViewFactory exportViewFactory;
-        private static InvalidOperationException invalidOperationException;
         private static QuestionnaireDocument questionnaire;
         private static Guid misteriousRosterGroupId;
         private static Guid questionnaireId = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000AAA");

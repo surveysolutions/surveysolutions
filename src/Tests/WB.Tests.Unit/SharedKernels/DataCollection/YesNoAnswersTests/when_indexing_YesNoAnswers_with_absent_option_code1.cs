@@ -14,7 +14,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests
         }
 
         private static YesNoAnswers answers;
-        private static Exception exception;
         private static readonly decimal[] allCodes = new decimal[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
         private static readonly decimal[] selectedYes = new decimal[] { 1, 2, 8 };
         private static readonly decimal[] selectedNo = new decimal[] { 10, 6, 3 };
