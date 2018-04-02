@@ -29,7 +29,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         protected void CreateSession()
         {
-            if (this.lazySession != null)
+            if (TransactionStarted)
                 throw new InvalidOperationException();
 
             this.lazySession = new Lazy<ISession>(() =>
