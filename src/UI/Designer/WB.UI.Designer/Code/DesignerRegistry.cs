@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -68,9 +69,9 @@ namespace WB.UI.Designer.Code
             registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

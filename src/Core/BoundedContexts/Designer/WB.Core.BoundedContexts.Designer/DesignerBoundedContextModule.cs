@@ -1,4 +1,5 @@
-﻿using Ncqrs.Eventing.Storage;
+﻿using System.Threading.Tasks;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
@@ -92,7 +93,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             CommandRegistry
                 .Setup<User>()
@@ -177,6 +178,8 @@ namespace WB.Core.BoundedContexts.Designer
                 // Sharing
                 .Handles<AddSharedPersonToQuestionnaire>((command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<RemoveSharedPersonFromQuestionnaire>((command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>());
+
+            return Task.CompletedTask;
         }
     }
 }

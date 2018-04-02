@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
@@ -12,9 +13,9 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionnaireVerifier, QuestionnaireVerifier>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

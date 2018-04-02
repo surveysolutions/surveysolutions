@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using AutoMapper;
 using Main.Core.Documents;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -179,9 +180,9 @@ namespace WB.UI.WebTester
             typeof(WebInterviewConnectionsCounter)
         };
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

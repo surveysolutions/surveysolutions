@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Configuration;
+using System.Threading.Tasks;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -33,9 +34,9 @@ namespace WB.Enumerator.Native.WebInterview
             });
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-
+            return Task.CompletedTask;
         }
 
 

@@ -1,4 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -40,7 +41,7 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
             registry.BindAsSingleton<IWebTesterTranslationService, WebTesterTranslationStorage>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             CommandRegistry
                .Setup<StatefulInterview>()
@@ -64,6 +65,8 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
                .Handles<CommentAnswerCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CommentAnswer(command.UserId, command.QuestionId, command.RosterVector, command.CommentTime, command.Comment))
                .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Complete(command.UserId, command.Comment, command.CompleteTime))
                .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation);
+
+            return Task.CompletedTask;
         }
     }
 }

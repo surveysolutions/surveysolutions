@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Ncqrs.Domain.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
@@ -11,9 +12,9 @@ namespace WB.Core.Infrastructure.Ncqrs
             registry.Bind<IDomainRepository, DomainRepository>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
