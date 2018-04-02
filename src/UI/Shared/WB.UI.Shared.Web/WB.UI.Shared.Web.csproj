@@ -175,6 +175,7 @@
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
+    <Compile Include="Modules\NinjectKernel.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />
     <Compile Include="Modules\NinjectModuleContext.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />

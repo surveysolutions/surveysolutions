@@ -418,7 +418,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
     <Compile Include="Services\IWebTesterService.cs" />
