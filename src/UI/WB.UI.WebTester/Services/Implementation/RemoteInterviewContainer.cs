@@ -99,12 +99,13 @@ namespace WB.UI.WebTester.Services.Implementation
 
         private static void SetupAppDomainsSeviceLocator()
         {
-            ContainerBuilder containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule(new WebTesterAppDomainModule().AsAutofac());
-            containerBuilder.RegisterModule(new NLogLoggingModule().AsAutofac());
+            AutofacKernel kernel = new AutofacKernel();
+            kernel.Load(
+                new WebTesterAppDomainModule(),
+                new NLogLoggingModule()
+                );
 
-            var container = containerBuilder.Build();
-            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+            kernel.Init().Wait();
         }
 
         private static readonly Gauge AppDomainsAliveGauge =
