@@ -6733,7 +6733,8 @@ a.disabled {
 .language {
   background: url("../img/language.png") 0 15px no-repeat;
   padding-left: 40px;
-  max-width: 60%; }
+  max-width: 300px;
+  min-width: 130px; }
   .language > a {
     white-space: nowrap;
     overflow: hidden;

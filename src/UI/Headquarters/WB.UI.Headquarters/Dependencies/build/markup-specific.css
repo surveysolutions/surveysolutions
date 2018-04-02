@@ -418,6 +418,23 @@ main .flex-row {
   -webkit-transition: margin 0.3s linear 0s;
   transition: margin 0.3s linear 0s;
   background-color: #fff; }
+  .export-types .table-data {
+    position: relative; }
+  .export-types .format-data {
+    position: static; }
+    .export-types .format-data:before {
+      background-position: 10px -200px;
+      left: 20px; }
+    .export-types .format-data.separated-data:before {
+      background-position: 10px -120px; }
+    .export-types .format-data.xlsx:before {
+      background-position: 10px -78px; }
+    .export-types .format-data.stata:before {
+      background-position: 10px 4px; }
+    .export-types .format-data.spss:before {
+      background-position: 0px -38px; }
+    .export-types .format-data.zip:before {
+      background-position: 5px -165px; }
   .export-types .data {
     width: 100%;
     margin-bottom: 30px; }
@@ -560,6 +577,8 @@ main .flex-row {
   .export-types {
     margin-left: 0;
     padding: 0 10px 0; }
+    .export-types .format-data:before {
+      left: 10px; }
     .export-types h2 {
       margin-bottom: 25px;
       font-size: 24px;
@@ -595,8 +614,8 @@ main .flex-row {
         .export-types .data .table-data .cell-data.format-data {
           padding: 50px 0 0; }
           .export-types .data .table-data .cell-data.format-data:before {
-            left: 43%;
-            top: 0; }
+            left: calc(50% - 31px);
+            top: 15px; }
           .export-types .data .table-data .cell-data.format-data.stata:before {
             left: 45%; } }
 
@@ -632,8 +651,6 @@ main .flex-row {
       background-color: #d1dfeb; }
     .gray-block .wrapper-data.block-contains-error {
       background-color: #f6d6d0; }
-    .gray-block .wrapper-data .format-data:before {
-      top: calc(50% - 20px); }
     .gray-block .wrapper-data .format-data .action-block {
       margin-top: 15px; }
       .gray-block .wrapper-data .format-data .action-block.wrapper-progress {
@@ -653,6 +670,7 @@ main .flex-row {
     position: absolute;
     top: 0;
     left: 0;
+    top: calc(50% - 21px);
     width: 63px;
     height: 41px;
     content: "";
