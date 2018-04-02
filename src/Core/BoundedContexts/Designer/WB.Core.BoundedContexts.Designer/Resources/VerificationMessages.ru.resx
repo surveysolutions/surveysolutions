@@ -714,4 +714,7 @@
   <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
     <value>@rowname переменная не поддерживается больше.</value>
   </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>Имя опросника не должно содержать двух и более последовательных символов подчеркивания.</value>
+  </data>
 </root>

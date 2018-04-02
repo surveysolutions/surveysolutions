@@ -72,7 +72,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 })
                 .ExpectCritical(errorCode);
 
-        
+        [TestCase("Some __ title", "WB0277")]
+        [TestCase("Some title__", "WB0277")]
+        [TestCase("Some title___", "WB0277")]
+        [TestCase("__Some title", "WB0277")]
+        public void questionnaire_title_has_consecutive_underscores(string questionnaireTitle, string errorCode) 
+            => Create.QuestionnaireDocument(title: questionnaireTitle)
+                .ExpectError(errorCode);
+
         [TestCase("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "WB0121")]
         [TestCase("variable_", "WB0124")]
         [TestCase("vari__able", "WB0125")]
