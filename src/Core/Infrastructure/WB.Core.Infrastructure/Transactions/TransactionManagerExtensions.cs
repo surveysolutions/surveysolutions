@@ -1,10 +1,23 @@
 using System;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.Infrastructure.Transactions
 {
     public static class TransactionManagerExtensions
     {
+        public static void ExecuteInPlainTransaction(this IServiceLocator serviceLocator, Action action)
+        {
+            var plainTransactionManager = serviceLocator.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+            plainTransactionManager.ExecuteInPlainTransaction(action);
+        }
+
+        public static void ExecuteInPlainTransaction(this IServiceLocator serviceLocator, Action<IServiceLocator> action)
+        {
+            var plainTransactionManager = serviceLocator.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+            plainTransactionManager.ExecuteInPlainTransaction(() => action(serviceLocator));
+        }
+
         public static void ExecuteInPlainTransaction(this IPlainTransactionManager transactionManager, Action action)
         {
             transactionManager.ExecuteInPlainTransaction(action.ToFunc());

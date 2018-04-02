@@ -190,7 +190,7 @@
     <value>Процесс интервью требует интернет соединения. Дополнительного программного обеспечения не требуется.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Вы были приглашены для участия в следующем опросе: "{0}"</value>
+    <value>Вы были приглашены для участия в следующем опросе: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Не начато</value>
@@ -214,7 +214,7 @@
     <value>Процесс интервью требует интернет соединения. Дополнительного программного обеспечения не требуется.</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Вы можете перейти к интервью в следующем опросе: "{0}"</value>
+    <value>Вы можете перейти к интервью в следующем опросе: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Здравствуйте и Добро пожаловать в Survey Solutions Веб Опрос</value>
@@ -229,7 +229,7 @@
     <value>Веб опрос</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Опрос: "{0}"</value>
+    <value>Опрос: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>К интервью</value>
@@ -289,13 +289,13 @@
   <data name="Filters_ClearSelection" xml:space="preserve">
     <value>Сбросить фильтры</value>
   </data>
-  <data name="Filters_OldDetailsLink" xml:space="preserve">
-    <value>Деталика интервью (старый дизайн)</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
   <data name="QuestionnaireNameFormat" xml:space="preserve">
     <value>{0} (вер. {1})</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
   </data>
 </root>

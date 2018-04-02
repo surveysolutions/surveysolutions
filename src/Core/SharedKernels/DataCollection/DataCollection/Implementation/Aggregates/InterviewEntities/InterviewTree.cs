@@ -133,27 +133,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     IsTitleChanged(diff) ||
                     IsRosterTitleChanged(diff as InterviewTreeRosterDiff) ||
                     IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff) ||
-                    IsQuestionValid(diff as InterviewTreeQuestionDiff) ||
-                    IsQuestionInalid(diff as InterviewTreeQuestionDiff) ||
-                    IsStaticTextValid(diff as InterviewTreeStaticTextDiff) ||
-                    IsStaticTextInvalid(diff as InterviewTreeStaticTextDiff) ||
+                    IsEntityValid(diff as InterviewTreeValidateableDiff) ||
+                    IsEntityInvalid(diff as InterviewTreeValidateableDiff) ||
+                    IsEntityPlausible(diff as InterviewTreeValidateableDiff) ||
+                    IsEntityImplausible(diff as InterviewTreeValidateableDiff) ||
                     IsVariableChanged(diff as InterviewTreeVariableDiff) ||
                     IsOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
                     IsLinkedToListOptionsSetChanged(diff as InterviewTreeQuestionDiff) ||
-                    IsFailedValidationIndexChanged(diff as InterviewTreeQuestionDiff) ||
-                    IsFailedValidationIndexChanged(diff as InterviewTreeStaticTextDiff))
+                    IsFailedErrorValidationIndexChanged(diff as InterviewTreeValidateableDiff) ||
+                    IsFailedWarningValidationIndexChanged(diff as InterviewTreeValidateableDiff))
                 .ToReadOnlyCollection();
         }
 
-        private bool IsFailedValidationIndexChanged(InterviewTreeQuestionDiff diff)
-        {
-            return diff != null && diff.IsFailedValidationIndexChanged;
-        }
+        private bool IsFailedErrorValidationIndexChanged(InterviewTreeValidateableDiff diff) 
+            => diff != null && diff.IsFailedErrorValidationIndexChanged;
 
-        private bool IsFailedValidationIndexChanged(InterviewTreeStaticTextDiff diff)
-        {
-            return diff != null && diff.IsFailedValidationIndexChanged;
-        }
+        private bool IsFailedWarningValidationIndexChanged(InterviewTreeValidateableDiff diff) 
+            => diff != null && diff.IsFailedErrorValidationIndexChanged;
 
         private bool IsTitleChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
         {
@@ -198,17 +194,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private static bool IsVariableChanged(InterviewTreeVariableDiff diffByVariable)
             => diffByVariable != null && diffByVariable.IsValueChanged;
 
-        private static bool IsQuestionValid(InterviewTreeQuestionDiff diffByQuestion)
+        private static bool IsEntityValid(InterviewTreeValidateableDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.ChangedNodeBecameValid;
 
-        private static bool IsQuestionInalid(InterviewTreeQuestionDiff diffByQuestion)
+        private static bool IsEntityInvalid(InterviewTreeValidateableDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.ChangedNodeBecameInvalid;
 
-        private static bool IsStaticTextValid(InterviewTreeStaticTextDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameValid;
+        private static bool IsEntityPlausible(InterviewTreeValidateableDiff diffByEntity)
+            => diffByEntity != null && diffByEntity.ChangedNodeBecamePlausibled;
 
-        private static bool IsStaticTextInvalid(InterviewTreeStaticTextDiff diffByQuestion)
-            => diffByQuestion != null && diffByQuestion.ChangedNodeBecameInvalid;
+        private static bool IsEntityImplausible(InterviewTreeValidateableDiff diffByEntity)
+            => diffByEntity != null && diffByEntity.ChangedNodeBecameImplausibled;
 
         private static bool IsAnswerByQuestionChanged(InterviewTreeQuestionDiff diffByQuestion)
             => diffByQuestion != null && diffByQuestion.IsAnswerChanged;
@@ -526,7 +522,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public string GetOptionForQuestionByOptionValue(Guid questionId, decimal answerOptionValue)
         {
-            return this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title;
+            var option = this.Questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue);
+            if(Questionnaire.GetQuestionType(questionId) == QuestionType.Numeric && option == null)
+                return null;
+
+            return option.Title;
         }
         
         public IEnumerable<CategoricalOption> GetOptionsForQuestion(Guid questionId, int? parentQuestionValue, string filter)

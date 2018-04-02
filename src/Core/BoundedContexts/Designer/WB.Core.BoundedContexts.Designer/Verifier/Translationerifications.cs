@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return questionnaire => questionnaire
                 .Translations
                 .Where(entity => hasError(entity, questionnaire))
-                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForTranslation(entity.Id)));
+                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireEntityReference.CreateForTranslation(entity.Id)));
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)

@@ -124,7 +124,7 @@ namespace WB.Tests.Unit
         {
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(new AddDefaultTypeQuestion(questionnaire.Id, questionId, parentGroupId, title, responsibleId));
             questionnaire.UpdateNumericQuestion(new UpdateNumericQuestion(questionnaire.Id, questionId, responsibleId, new CommonQuestionParameters() {Title = title}, 
-                isPreFilled,scope, isInteger, false, countOfDecimalPlaces, new List<ValidationCondition>()));
+                isPreFilled,scope, isInteger, false, countOfDecimalPlaces, new List<ValidationCondition>(), null));
         }
 
         public static void AddQRBarcodeQuestion(

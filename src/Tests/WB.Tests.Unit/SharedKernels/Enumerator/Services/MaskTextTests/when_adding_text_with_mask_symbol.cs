@@ -1,25 +1,19 @@
-﻿using Machine.Specifications;
-using WB.Core.SharedKernels.Enumerator.Services.MaskText;
-using It = Machine.Specifications.It;
-
+using FluentAssertions;
+using NUnit.Framework;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.MaskTextTests
 {
     internal class when_adding_text_with_mask_symbol : MaskTextTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public void should_be_pass_1_to_correct_position()
         {
-            maskedText = CreateMaskedText("*--**");
-        };
-
-        Because of = () =>
+            int selection = 12;
+            var maskedText = CreateMaskedText("*--**");
+            //Act
             maskedText.AddString("__1", 0, ref selection);
 
-        It should_be_pass_1_to_correct_position = () =>
-            maskedText.MakeMaskedText().ShouldEqual("_--_1");
-
-
-        static int selection;
-        static MaskedText maskedText;
+            maskedText.MakeMaskedText().Should().Be("_--_1");
+        }
     }
 }

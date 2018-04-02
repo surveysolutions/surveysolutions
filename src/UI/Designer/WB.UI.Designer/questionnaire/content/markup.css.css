@@ -7734,45 +7734,35 @@ input#edit-group-title {
 #sourceOfLinkedEntity.dropdown-with-breadcrumbs-and-icons .select-placeholder {
   color: #c8ccd0;
 }
-.question-editor .singleOption,
-.question-editor .multyOption {
-  background-color: #f1f2f3;
+.question-editor .options-editor {
   margin-top: 0;
   padding: 10px 15px;
   border-radius: 4px;
 }
-.question-editor .singleOption .table-holder,
-.question-editor .multyOption .table-holder {
+.question-editor .options-editor .table-holder {
   display: table;
   width: 100%;
 }
-.question-editor .singleOption .table-holder .table-row,
-.question-editor .multyOption .table-holder .table-row {
+.question-editor .options-editor .table-holder .table-row {
   display: table-row;
   height: 38px;
 }
-.question-editor .singleOption .table-holder .table-row .column-2,
-.question-editor .multyOption .table-holder .table-row .column-2,
-.question-editor .singleOption .table-holder .table-row .column-3,
-.question-editor .multyOption .table-holder .table-row .column-3,
-.question-editor .singleOption .table-holder .table-row .column-4,
-.question-editor .multyOption .table-holder .table-row .column-4 {
+.question-editor .options-editor .table-holder .table-row .column-2,
+.question-editor .options-editor .table-holder .table-row .column-3,
+.question-editor .options-editor .table-holder .table-row .column-4 {
   padding-left: 0;
   padding-right: 0;
   display: table-cell;
   vertical-align: top;
 }
-.question-editor .singleOption .table-holder .table-row .column-4,
-.question-editor .multyOption .table-holder .table-row .column-4 {
+.question-editor .options-editor .table-holder .table-row .column-4 {
   width: 35px;
 }
-.question-editor .singleOption .table-holder .table-row .column-2,
-.question-editor .multyOption .table-holder .table-row .column-2 {
+.question-editor .options-editor .table-holder .table-row .column-2 {
   width: 100px;
   border-radius: 4px 0 0 4px;
 }
-.question-editor .singleOption .table-holder .table-row .column-2 input,
-.question-editor .multyOption .table-holder .table-row .column-2 input {
+.question-editor .options-editor .table-holder .table-row .column-2 input {
   border: 2px solid #f1f2f3;
   border-radius: 4px 0 0 4px;
   border-top-color: #fff;
@@ -7784,41 +7774,35 @@ input#edit-group-title {
   color: #3da802;
   font-size: 14px;
 }
-.question-editor .singleOption .table-holder .table-row .column-2 input:focus,
-.question-editor .multyOption .table-holder .table-row .column-2 input:focus {
+.question-editor .options-editor .table-holder .table-row .column-2 input:focus {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-.question-editor .singleOption .table-holder .table-row .column-2 input.has-error,
-.question-editor .multyOption .table-holder .table-row .column-2 input.has-error {
+.question-editor .options-editor .table-holder .table-row .column-2 input.has-error {
   border-color: #a94442;
   border-width: 2px;
 }
-.question-editor .singleOption .table-holder .table-row .column-3 input,
-.question-editor .multyOption .table-holder .table-row .column-3 input {
+.question-editor .options-editor .table-holder .table-row .column-3 input {
   border-color: #fff;
   box-shadow: none;
   border-radius: 0 4px 4px 0;
   font-family: Arial, Helvetica, sans-serif;
 }
-.question-editor .singleOption .table-holder .table-row .column-3 input:focus,
-.question-editor .multyOption .table-holder .table-row .column-3 input:focus {
+.question-editor .options-editor .table-holder .table-row .column-3 input:focus {
   border-color: #66afe9;
   outline: 0;
   -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
-.question-editor .singleOption .table-holder .table-row .column-4 > a,
-.question-editor .multyOption .table-holder .table-row .column-4 > a {
+.question-editor .options-editor .table-holder .table-row .column-4 > a {
   display: block;
   background: url("i/cross-red.png") center center no-repeat;
   width: 34px;
   height: 34px;
 }
-.question-editor .singleOption p input#edit-question-save-button,
-.question-editor .multyOption p input#edit-question-save-button {
+.question-editor .options-editor p input#edit-question-save-button {
   margin-top: 15px;
 }
 .question-editor button#rosterTypeBtn,
@@ -8039,6 +8023,9 @@ textarea#edit-group-description {
 #left-menu ul li a.left-menu-translations {
   background: url('i/designer-left-icons-2-3.png') 0 -50px no-repeat;
 }
+#left-menu ul li a.left-menu-comments {
+  background: url('i/designer-left-icons-2-3.png') 0 -300px no-repeat;
+}
 #left-menu ul li a:hover {
   background-color: #dbdfe2;
 }
@@ -8062,6 +8049,7 @@ textarea#edit-group-description {
   color: #c1c7cb;
 }
 .left-side-panel .left-side-panel-content {
+  width: 85%;
   background: #e5e8ea;
   height: 100%;
   position: relative;
@@ -8106,23 +8094,9 @@ textarea#edit-group-description {
 .left-side-panel .foldback-region {
   position: absolute;
   top: 0;
-  left: 0;
+  left: 85%;
   right: 0;
   bottom: 0;
-  background: url(i/left-panel-shadow.png) repeat-y;
-}
-.left-side-panel.macroses .foldback-region {
-  left: 85%;
-  background: url(i/left-panel-shadow-small.png) repeat-y;
-}
-.left-side-panel.chapters .foldback-region {
-  left: 75%;
-}
-.left-side-panel.lookup-tables .foldback-region {
-  left: 75%;
-}
-.left-side-panel.attachments .foldback-region {
-  left: 75%;
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
 .left-side-panel .foldback-button {
@@ -8196,9 +8170,6 @@ textarea#edit-group-description {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   text-overflow: ellipsis;
-}
-.lookup-tables-panel {
-  width: 75%;
 }
 .lookup-tables-panel .lookup-tables {
   height: 100%;
@@ -8310,7 +8281,6 @@ textarea#edit-group-description {
   position: static;
 }
 .translations-panel {
-  width: 75%;
   min-width: 538px;
 }
 .translations-panel .translations {
@@ -8390,7 +8360,6 @@ textarea#edit-group-description {
   display: block;
 }
 .attachments-panel {
-  width: 75%;
   min-width: 538px;
 }
 .attachments-panel .attachments {
@@ -8543,9 +8512,6 @@ textarea#edit-group-description {
 .attachments-panel .attachments div.attachment-list div.attachments-panel-item:hover .actions .permanent-actions {
   display: block;
 }
-.macros-panel {
-  width: 85%;
-}
 .macros-panel .macroses {
   height: 100%;
 }
@@ -8624,9 +8590,6 @@ textarea#edit-group-description {
 .macros-panel .macroses ul li button:hover {
   background: #e6e6e6;
 }
-.chapter-panel {
-  width: 75%;
-}
 .chapter-panel .ul-holder {
   width: 100%;
   height: 100%;
@@ -8647,6 +8610,118 @@ textarea#edit-group-description {
 .chapter-panel .ul-holder .chapters .btn-group ul.dropdown-menu {
   left: inherit;
   right: 0;
+}
+.comments-panel .comments {
+  height: 100%;
+}
+.comments-panel ul {
+  margin: 0;
+  padding: 0 20px 0 10px;
+  list-style: none;
+}
+.comments-panel .reference-item {
+  margin-bottom: 5px;
+  border-radius: 4px;
+  padding-left: 18px;
+  white-space: nowrap;
+  height: 36px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  background: #fff;
+  position: relative;
+  display: block;
+  color: #404040;
+}
+.comments-panel .reference-item span {
+  display: inline-block;
+}
+.comments-panel .reference-item .icon {
+  position: absolute;
+  left: 18px;
+  top: 7px;
+}
+.comments-panel .reference-item .title {
+  display: block;
+  padding-left: 29px;
+  line-height: 34px;
+  overflow: hidden;
+}
+.comments-panel .reference-item .title-gradient {
+  position: absolute;
+  right: 0;
+  padding-right: 16px;
+  top: 6px;
+  background: #f2f3f5;
+}
+.comments-panel .reference-item .variable {
+  position: absolute;
+  right: 0;
+  padding-right: 8px;
+  padding-left: 8px;
+  top: 6px;
+  color: #3da802;
+  background: #fff;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.comments-panel .reference-item .variable:before {
+  display: block;
+  position: absolute;
+  height: 100%;
+  content: '';
+  width: 55px;
+  top: 0px;
+  left: -55px;
+  background-image: -webkit-linear-gradient(left, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
+  background-image: -o-linear-gradient(left, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
+  background-image: linear-gradient(to right, rgba(242, 243, 245, 0) 0%, #f2f3f5 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00f2f3f5', endColorstr='#fff2f3f5', GradientType=1);
+}
+.comments-panel .comments-in-thread {
+  margin-bottom: 15px;
+}
+.comments-panel .comments-in-thread ul {
+  padding: 0;
+}
+.comments-panel .comments-in-thread ul li {
+  padding: 0 10px 0 20px;
+  border-bottom: 2px solid #dbdfe2;
+}
+.comments-panel .comments-in-thread ul li:last-of-type {
+  border-bottom: none;
+  margin-bottom: 5px;
+}
+.comments-panel .comments-in-thread .show-more {
+  color: #2a81cb;
+  padding-left: 20px;
+  font-weight: bold;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.comments-panel .comments-in-thread .comment {
+  background: #f2f3f5;
+}
+.comments-panel .comments-in-thread .comment .author {
+  margin-right: 10px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  color: #79838a;
+}
+.comments-panel .comments-in-thread .comment .date {
+  font-family: Georgia, serif;
+  color: #98a0a5;
+  font-style: italic;
+}
+.comments-panel .comments-in-thread .comment .comment-text {
+  color: #000;
+  margin: 0;
+  white-space: pre-line;
+}
+.comments-panel .comments-in-thread .comment.resolved {
+  background: transparent;
 }
 #designer-editor.container {
   width: 100%;
@@ -8877,32 +8952,32 @@ textarea#edit-group-description {
   margin-top: 2px;
   padding: 8px 24px 0 18px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor {
+.question-editor {
   position: relative;
   height: 100%;
   background: white;
   padding: 0;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form {
+.question-editor form {
   width: 100%;
   height: 100%;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder {
+.question-editor form > .form-holder {
   padding: 10px 20px;
   height: calc(100% - 66px);
   overflow: auto;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container {
+.question-editor form > .form-holder .breadcrumbs-container {
   min-height: 25px;
   margin-bottom: 5px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul {
+.question-editor form > .form-holder .breadcrumbs-container .breadcrumbs > ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li > a {
+.question-editor form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li,
+.question-editor form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li > a {
   display: inline;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   font-size: 12px;
@@ -8910,7 +8985,7 @@ textarea#edit-group-description {
   text-transform: uppercase;
   color: #4a4a4a;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li:after {
+.question-editor form > .form-holder .breadcrumbs-container .breadcrumbs > ul > li:after {
   position: relative;
   top: 3px;
   display: inline-block;
@@ -8920,34 +8995,34 @@ textarea#edit-group-description {
   margin: 0 7px;
   background: url(lib/i/breadcrumb-slash.png) no-repeat;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray {
+.question-editor form > .form-holder .gray {
   padding: 8px;
   background: #f1f2f3;
   border-radius: 4px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray:before,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray:after {
+.question-editor form > .form-holder .gray:before,
+.question-editor form > .form-holder .gray:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray:after {
+.question-editor form > .form-holder .gray:after {
   clear: both;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray:before,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray:after {
+.question-editor form > .form-holder .gray:before,
+.question-editor form > .form-holder .gray:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .gray:after {
+.question-editor form > .form-holder .gray:after {
   clear: both;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-holder .form-group > label {
+.question-editor form > .form-holder .form-group > label {
   font-family: "Lucida Console", Monaco, monospace;
   font-size: 14px;
   color: #5d5d5d;
   font-weight: normal;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder {
+.question-editor form > .form-buttons-holder {
   background-color: #fff;
   padding: 10px 20px;
   position: absolute;
@@ -8956,33 +9031,33 @@ textarea#edit-group-description {
   bottom: 0;
   left: 0;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder:before,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder:after {
+.question-editor form > .form-buttons-holder:before,
+.question-editor form > .form-buttons-holder:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder:after {
+.question-editor form > .form-buttons-holder:after {
   clear: both;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder:before,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder:after {
+.question-editor form > .form-buttons-holder:before,
+.question-editor form > .form-buttons-holder:after {
   content: " ";
   display: table;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder:after {
+.question-editor form > .form-buttons-holder:after {
   clear: both;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder .pull-left,
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder .pull-right {
+.question-editor form > .form-buttons-holder .pull-left,
+.question-editor form > .form-buttons-holder .pull-right {
   height: 42px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder .pull-left > * {
+.question-editor form > .form-buttons-holder .pull-left > * {
   margin-right: 12px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder .pull-right > * {
+.question-editor form > .form-buttons-holder .pull-right > * {
   margin-left: 12px;
 }
-#designer-editor.container section#main > .questionnaire-tree > .question-editor > form > .form-buttons-holder > div > a {
+.question-editor form > .form-buttons-holder > div > a {
   cursor: pointer;
   font-family: "Trebuchet MS", Helvetica, sans-serif;
   text-transform: uppercase;
@@ -8990,6 +9065,50 @@ textarea#edit-group-description {
   font-size: 12px;
   line-height: 12px;
   letter-spacing: 1px;
+}
+.question-editor.commenting {
+  height: 50%;
+}
+.comments-editor {
+  height: 50%;
+  padding: 0;
+  border-top: 2px solid #dbdfe2;
+}
+.comments-editor form {
+  width: 100%;
+  height: 100%;
+}
+.comments-editor form .form-holder {
+  padding: 10px 20px;
+  height: 100%;
+  overflow: auto;
+}
+.comments-editor .comment {
+  background: #f1f2f3;
+  padding: 5px 17px;
+  border-bottom: 2px solid #dbdfe2;
+}
+.comments-editor .comment.isResolved {
+  background: transparent;
+}
+.comments-editor .comment .author {
+  margin-right: 10px;
+  font-style: italic;
+  font-family: Georgia, serif;
+  color: #79838a;
+}
+.comments-editor .comment .date {
+  font-family: Georgia, serif;
+  color: #98a0a5;
+  font-style: italic;
+}
+.comments-editor .comment .comment-text {
+  color: #000;
+  margin: 0;
+  white-space: pre-line;
+}
+.comments-editor #edit-entity-comment-row {
+  margin-top: 10px;
 }
 .highlighted-add {
   border-radius: 4px 4px 0 0;
@@ -9842,11 +9961,11 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   background-repeat: no-repeat;
 }
 .metadata-panel {
-  width: 75%;
+  width: 85%;
   min-width: 538px;
 }
 .left-side-panel.metadata .left-side-panel-content h3 {
-  margin-left: 50px;
+  margin-left: 20px;
 }
 .metadata-panel .metadata {
   padding-left: 30px;
@@ -9855,14 +9974,13 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   margin: 18px 24px 20px 18px;
 }
 .left-side-panel.metadata .foldback-region {
-  left: 75%;
+  left: 85%;
   background: url(i/left-panel-shadow-small.png) repeat-y;
 }
 .metadata-blocks {
   margin-bottom: 25px;
 }
 .metadata-blocks > li {
-  margin-left: 30px;
   margin-right: 35px;
   background: #fff;
   margin-bottom: 7px;
@@ -10039,7 +10157,7 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
   background-position: 0px -180px;
 }
 .metadata .form-buttons-holder {
-  margin-left: 60px;
+  margin-left: 13px;
   margin-bottom: 30px;
 }
 .metadata-panel .dropdown-toggle {

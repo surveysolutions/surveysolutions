@@ -148,7 +148,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         private void UpdateListValuesWithRowcodes(TextListAnswer textListAnswer,
             List<PreloadedInterviewBaseLevel> levels,
             string interviewId,
-            RosterVector rosterVector,
+            RosterVector rosterVector, 
             HashSet<Guid> rosterIds, 
             string questionVariableName)
         {
@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             var hasDifferentAmountOfRecordsInListAndRosters = textListAnswer.Rows.Count != listRowsWithNewCodes.Length;
             if (hasDifferentAmountOfRecordsInListAndRosters)
             {
-                throw new InterviewImportException("PL0041", string.Format(PreloadingVerificationMessages.PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile, 
+                throw new InterviewImportException("PL0045", string.Format(PreloadingVerificationMessages.PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile, 
                     rosterLevel.Name, listRowsWithNewCodes.Length, questionVariableName, textListAnswer.Rows.Count, interviewId));
             }
 
@@ -172,8 +172,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             var hasDifferentTextsInListAndRosterTitles = listItemsAbsentInRosterFile.Any();
             if (hasDifferentTextsInListAndRosterTitles)
             {
-                throw new InterviewImportException("PL0042", string.Format(
-                    PreloadingVerificationMessages.PL0042_HasDifferentTextsInListAndRosterTitles,
+                throw new InterviewImportException("PL0046", string.Format(
+                    PreloadingVerificationMessages.PL0046_HasDifferentTextsInListAndRosterTitles,
                     rosterLevel.Name, questionVariableName, string.Join(", ", listItemsAbsentInRosterFile), string.Join(", ", rosterRowsAbsentInListQuestion), interviewId));
             }
 

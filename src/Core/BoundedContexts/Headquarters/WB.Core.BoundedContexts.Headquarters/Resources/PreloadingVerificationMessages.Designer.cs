@@ -313,7 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Identifying GPS question requires Latitude and Longitude to be set..
+        ///   Looks up a localized string similar to GPS question requires Latitude and Longitude to be set..
         /// </summary>
         public static string PL0030_GpsMandatoryFilds {
             get {
@@ -412,20 +412,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}.
+        ///   Looks up a localized string similar to Answer to multiple choice question cannot contain more than {0} answers..
         /// </summary>
-        public static string PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile {
+        public static string PL0041_AnswerExceedsMaxAnswersCount {
             get {
-                return ResourceManager.GetString("PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile", resourceCulture);
+                return ResourceManager.GetString("PL0041_AnswerExceedsMaxAnswersCount", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}.
+        ///   Looks up a localized string similar to Id column doesn&apos;t have any value..
         /// </summary>
-        public static string PL0042_HasDifferentTextsInListAndRosterTitles {
+        public static string PL0042_IdIsEmpty {
             get {
-                return ResourceManager.GetString("PL0042_HasDifferentTextsInListAndRosterTitles", resourceCulture);
+                return ResourceManager.GetString("PL0042_IdIsEmpty", resourceCulture);
             }
         }
         
@@ -444,6 +444,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0044_TextListAnswerHasDuplicatesInCodes {
             get {
                 return ResourceManager.GetString("PL0044_TextListAnswerHasDuplicatesInCodes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}.
+        /// </summary>
+        public static string PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile {
+            get {
+                return ResourceManager.GetString("PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}.
+        /// </summary>
+        public static string PL0046_HasDifferentTextsInListAndRosterTitles {
+            get {
+                return ResourceManager.GetString("PL0046_HasDifferentTextsInListAndRosterTitles", resourceCulture);
             }
         }
     }

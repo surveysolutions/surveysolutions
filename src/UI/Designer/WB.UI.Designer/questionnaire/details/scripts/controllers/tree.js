@@ -33,6 +33,7 @@
 
             $scope.highlightedId = null;
             $scope.isSearchInFocus = false;
+            
 
             $scope.search = { searchText: '' };
             $scope.filtersBoxMode = filtersBlockModes.default;
@@ -320,6 +321,7 @@
                                 .then(
                                     function () {
                                         $rootScope.$emit('questionMoved', movedItem.itemId);
+                                        connectTree();
                                     },
                                     function () {
                                         rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -328,6 +330,7 @@
                             questionnaireService.moveStaticText(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .then(function () {
                                     $rootScope.$emit('staticTextMoved', movedItem.itemId);
+                                    connectTree();
                                 },
                                 function () {
                                     rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -338,6 +341,7 @@
                             questionnaireService.moveVariable(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .then(function () {
                                     $rootScope.$emit('variableMoved', movedItem.itemId);
+                                    connectTree();
                                 },
                                 function () {
                                     rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -347,6 +351,7 @@
                             questionnaireService.moveGroup(movedItem.itemId, event.dest.index, destGroupId, $state.params.questionnaireId)
                                 .then(function () {
                                     $rootScope.$emit('groupMoved', movedItem.itemId);
+                                    connectTree();
                                 },
                                 function () {
                                     rollbackMoveAction(movedItem, me.draggedFrom, event.source.index, event.dest);
@@ -378,7 +383,7 @@
                     }
                 });
             };
-
+            
             $scope.deleteVariable = function (item) {
                 var itemIdToDelete = item.itemId || $state.params.itemId;
 
@@ -391,7 +396,7 @@
                         commandService.deleteVariable($state.params.questionnaireId, itemIdToDelete).then(function () {
                             questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                             $scope.resetSelection();
-                            $rootScope.$emit('varibleDeleted', itemIdToDelete);
+                            $rootScope.$emit('variableDeleted', itemIdToDelete);
                             removeSelectionIfHighlighted(itemIdToDelete);
                         });
                     }
@@ -472,7 +477,7 @@
                                 if (result.data.IsSuccess) {
                                     questionnaireService.removeItemWithId($scope.items, itemIdToDelete);
                                     $scope.resetSelection();
-                                    $rootScope.$emit('staticTextDeleted');
+                                    $rootScope.$emit('statictextDeleted', itemIdToDelete);
                                     removeSelectionIfHighlighted(itemIdToDelete);
                                 }
                             });

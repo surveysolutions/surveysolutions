@@ -133,7 +133,7 @@
     <value>Web interview started</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Starting web interview for {0}</value>
+    <value>Starting web interview for {{name}}</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Web interview setup</value>
@@ -142,13 +142,13 @@
     <value>Web interview setup</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Web interview for {0} started</value>
+    <value>Web interview for {{name}} started</value>
   </data>
   <data name="UseCaptcha" xml:space="preserve">
     <value>Enable spam protection</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>Download ({0})</value>
+    <value>Download ({{count}})</value>
     <comment>{0} - count of interviews in file</comment>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
@@ -156,5 +156,41 @@
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Stop Web Interview</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+    <value>Text shown at final page when interview is completed</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>Invitation text presented to user on initial page. %QUESTIONNAIRE% is substituted with questionnaire name</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>Text shown to returning user when interview is resumed. %QUESTIONNAIRE% is substituted with questionnaire name</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>Header text shown to returning user before resume an interview</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>Name of conducted survey. %QUESTIONNAIRE% is substituted with questionnaire name</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>Header text shown after interview completion</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>Header welcome text on initial page</value>
+  </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>Use custom text</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Texts updated</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Save all</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>Text dispayed to respondents can be customized</value>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Custom message should not contain more than {0} characters (including html)</value>
   </data>
 </root>

@@ -376,6 +376,26 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attention! This interview has corrupted data, &lt;br /&gt;
+        ///only previous version of interview is available. &lt;br /&gt;
+        ///Contact support for assistance..
+        /// </summary>
+        internal static string CoverBrokenPackegeText {
+            get {
+                return ResourceManager.GetString("CoverBrokenPackegeText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error: This interview is corrupted.
+        /// </summary>
+        internal static string CoverBrokenPackegeTitle {
+            get {
+                return ResourceManager.GetString("CoverBrokenPackegeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questions with comments:.
         /// </summary>
         internal static string CoverComments {
@@ -849,6 +869,15 @@ namespace WB.UI.Headquarters.Resources {
         internal static string ToggleNavigation {
             get {
                 return ResourceManager.GetString("ToggleNavigation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warnings.
+        /// </summary>
+        internal static string WarningsHeader {
+            get {
+                return ResourceManager.GetString("WarningsHeader", resourceCulture);
             }
         }
         

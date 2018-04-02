@@ -19,6 +19,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool InterviewCannotBeChanged { get; set; }
         public bool ReceivedByInterviewer { get; set; }
         public bool IsCurrentUserObserving { get; set; }
+        public bool DoesBrokenPackageExist { get; set; }
     }
 
     public class LanguageInfo
@@ -59,6 +60,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool IsRosterSize { get; set; }
         public int? AnswerMaxValue { get; set; }
         public bool UseFormatting { get; set; }
+        public List<CategoricalOption> Options { get; set; }
     }
 
     public class InterviewDoubleQuestion : GenericQuestion
@@ -66,6 +68,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public double? Answer { get; set; }
         public int? CountOfDecimalPlaces { get; set; }
         public bool UseFormatting { get; set; }
+        public List<CategoricalOption> Options { get; set; }
     }
 
     public class InterviewSingleOptionQuestion : CategoricalQuestion
@@ -81,6 +84,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class InterviewMultimediaQuestion : GenericQuestion
     {
         public string Answer { get; set; }
+        public DateTime? AnswerTimeUtc { get; set; }
     }
 
     public class InterviewAudioQuestion : GenericQuestion
@@ -187,6 +191,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public bool IsValid { get; set; }
         public string[] Messages { get; set; }
+        public string[] Warnings { get; set; }
     }
 
     public class Comment

@@ -370,7 +370,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>()
             {
-                new HeaderColumn()
+                new HeaderColumn
                 {
                     Name = question.StataExportCaption,
                     Title = string.IsNullOrEmpty(question.VariableLabel) ? question.QuestionText.RemoveHtmlTags() : question.VariableLabel,
@@ -378,12 +378,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                 }
             };
 
-            exportedHeaderItem.Labels = new Dictionary<Guid, LabelItem>();
+            exportedHeaderItem.Labels = new List<LabelItem>();
             if (question.Answers != null)
             {
                 foreach (var answer in question.Answers)
                 {
-                    exportedHeaderItem.Labels.Add(answer.PublicKey, new LabelItem(answer));
+                    exportedHeaderItem.Labels.Add(new LabelItem(answer));
                 }
             }
 

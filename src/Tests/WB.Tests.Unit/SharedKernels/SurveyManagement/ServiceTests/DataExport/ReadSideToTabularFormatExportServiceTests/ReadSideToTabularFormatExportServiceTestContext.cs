@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -201,7 +202,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
                 recorderRows.Add(currentRow.ToArray());
                 currentRow.Clear();
             }
-
+            
             public List<object[]> Rows
             {
                 get

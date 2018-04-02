@@ -133,7 +133,7 @@
     <value>Web интервью начато</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Начать web интервью для {0}</value>
+    <value>Начать web интервью для {{name}}</value>
   </data>
   <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
     <value>Настройка web интервью</value>
@@ -142,10 +142,10 @@
     <value>Настройка web интервью</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Web интервью для {0} начато</value>
+    <value>Web интервью для {{name}} начато</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>Скачать ({0})</value>
+    <value>Скачать ({{count}})</value>
     <comment>{0} - count of interviews in file</comment>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
@@ -153,5 +153,45 @@
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Остановить web интервью</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+    <value>Текст отображаемый на финальной странице когда интервью завершено</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>Текст приглашения отображаемый на первой странице до начала интервью. %QUESTIONNAIRE% заменяется на имя опросника</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>Текст отображаемый пользователю прежде чем он сможет продолжить начатое интервью. %QUESTIONNAIRE% заменяется на имя опросника</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>Заголовок отображаемый пользователю прежде чем сможет продолжить начатое интервью</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>Название проводимого обследования. %QUESTIONNAIRE% заменяется на имя опросника</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>Заголовк отображаемый на финальной странице когда интервью завершено</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>Заголовок приглашения на первой странице до начала интервью</value>
+  </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>Пользовательский текст</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>Сохранить всё</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>Сообщения для респондентов могут быть изменены</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>Сообщения обновлены</value>
+  </data>
+  <data name="UseCaptcha" xml:space="preserve">
+    <value>Включить защиту от спама</value>
+    <comment>Включить защиту от спама</comment>
+  </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>Сообщение не должно содержать более чем {0} символов (включая html)</value>
   </data>
 </root>

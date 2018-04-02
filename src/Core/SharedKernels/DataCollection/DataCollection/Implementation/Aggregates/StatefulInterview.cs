@@ -223,7 +223,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public string GetAnswerAsString(Identity questionIdentity, CultureInfo cultureInfo = null)
         {
             var question = this.Tree.GetQuestion(questionIdentity);
-
             return question.GetAnswerAsString(cultureInfo ?? CultureInfo.InvariantCulture);
         }
 
@@ -643,37 +642,69 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return staticText?.IsValid ?? false;
         }
 
-        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
+        public bool IsEntityPlausible(Identity identity)
+        {
+            var question = this.Tree.GetQuestion(identity);
+            if (question != null)
+            {
+                return !question.IsAnswered() || question.IsPlausible;
+            }
+            var staticText = this.Tree.GetStaticText(identity);
+            return staticText?.IsPlausible ?? false;
+        }
+
+        public IEnumerable<string> GetFailedWarningMessages(Identity questionOrStaticTextId,
+            string defaltErrorMessageFallback)
         {
             var question = this.Tree.GetQuestion(questionOrStaticTextId);
-            if (question?.FailedValidations != null)
+            if (question?.FailedWarnings != null)
             {
-                var questionValidationMassages = question.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
-                    .ToList();
-
-                if (questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
-
-                return question.FailedValidations.Select(failedValidation =>
-                    $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
-
+                return GetValidationMessages(question.FailedWarnings, question.ValidationMessages, defaltErrorMessageFallback);
             }
-
+            
             var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
-            if (staticText?.FailedValidations != null)
+            if (staticText?.FailedWarnings != null)
             {
-                var staticTextValidationMassages = staticText.ValidationMessages
-                    .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText) ? defaltErrorMessageFallback : substitutionText.BrowserReadyText)
-                    .ToList();
-
-                if (staticTextValidationMassages.Count == 1) return new[] {staticTextValidationMassages[0]};
-
-                return staticText.FailedValidations.Select(failedValidation =>
-                    $"{staticTextValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} " +
-                    $"[{failedValidation.FailedConditionIndex + 1}]");
+                return GetValidationMessages(staticText.FailedWarnings, staticText.ValidationMessages,
+                    defaltErrorMessageFallback);
             }
 
             return Enumerable.Empty<string>();
+        }
+
+        public IEnumerable<string> GetFailedValidationMessages(Identity questionOrStaticTextId, string defaltErrorMessageFallback)
+        {
+            var question = this.Tree.GetQuestion(questionOrStaticTextId);
+            IReadOnlyList<FailedValidationCondition> questionFailedErrorValidations = question?.FailedErrors;
+            if (questionFailedErrorValidations != null)
+            {
+                return GetValidationMessages(questionFailedErrorValidations, question.ValidationMessages, defaltErrorMessageFallback);
+            }
+            
+            var staticText =  this.Tree.GetStaticText(questionOrStaticTextId);
+            if (staticText?.FailedErrors != null)
+            {
+                return GetValidationMessages(staticText.FailedErrors, staticText.ValidationMessages,
+                    defaltErrorMessageFallback);
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        private IEnumerable<string> GetValidationMessages(IReadOnlyList<FailedValidationCondition> failedConditions,
+            SubstitutionText[] texts,
+            string defalutErrorMessageFallback)
+        {
+            var questionValidationMassages = texts
+                .Select(substitutionText => string.IsNullOrWhiteSpace(substitutionText.BrowserReadyText)
+                    ? defalutErrorMessageFallback
+                    : substitutionText.BrowserReadyText)
+                .ToList();
+
+            if (failedConditions.Count > 0 && questionValidationMassages.Count == 1) return new[] {questionValidationMassages[0]};
+
+             return failedConditions.Select(failedValidation =>
+                $"{questionValidationMassages.ElementAt(failedValidation.FailedConditionIndex)} [{failedValidation.FailedConditionIndex + 1}]");
         }
 
         public bool IsEnabled(Identity entityIdentity)
@@ -766,7 +797,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (question.IsAnswered() && !question.IsValid)
                     {
                         invalidAnsweredQuestions.Add(new InterviewItemId(question.Identity.Id, question.Identity.RosterVector));
-                        failedValidationConditions.Add(question.Identity, question.FailedValidations.ToList());
+                        failedValidationConditions.Add(question.Identity, question.FailedErrors.ToList());
                     }
                     if (question.IsValid)
                     {
@@ -794,7 +825,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     if (!staticText.IsValid)
                     {
                         invalidStaticTexts.Add(new KeyValuePair<Identity, List<FailedValidationCondition>>(
-                            staticTextIdentity, staticText.FailedValidations.ToList()));
+                            staticTextIdentity, staticText.FailedErrors.ToList()));
                     }
                 }
                 else
@@ -878,18 +909,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public void Pause(PauseInterviewCommand command)
         {
-            var invariants = new InterviewPropertiesInvariants(properties);
-            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-
-            ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
+            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
+            {
+                ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
+            }
         }
 
         public void Resume(ResumeInterviewCommand command)
         {
-            var invariants = new InterviewPropertiesInvariants(properties);
-            invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.RejectedBySupervisor);
-
-            ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
+            if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
+            {
+                ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
+            }
         }
 
         public void CloseBySupevisor(CloseInterviewBySupervisorCommand command)

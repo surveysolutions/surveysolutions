@@ -2,6 +2,7 @@ using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
@@ -33,6 +34,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 }
 
                 result.AnswerAsString = questionnaire.GetAnswerOptionTitle(result.Identity.Id, singleOptionAnswer);
+            }
+
+            if (questionType == QuestionType.DateTime)
+            {
+                if (DateTime.TryParse(answer, out DateTime parsedResult))
+                {
+                    if (questionnaire.IsTimestampQuestion(questionId.Id))
+                    {
+                        result.AnswerAsString = parsedResult.ToString(DateTimeFormat.DateWithTimeFormat);
+                    }
+                    else
+                    {
+                        result.AnswerAsString = parsedResult.ToString(DateTimeFormat.DateFormat);
+                    }
+                }
             }
 
             return result;

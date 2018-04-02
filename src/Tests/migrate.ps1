@@ -1,4 +1,4 @@
-$files = Get-ChildItem -Path E:\surveysolutions\src\Tests\WB.Tests.Unit\Applications\Headquarters\ExportApiTests -Recurse -Include *.cs -Force
+$files = Get-ChildItem -Path E:\surveysolutions\src\Tests\WB.Tests.Unit\SharedKernels\Enumerator -Recurse -Include *.cs -Force
 $itRegex = 'It\s+([^\s]+)\s+=\s*\(\s*\)\s*=>'
 $establishRegex = 'Establish\s+([^\s]+)\s+=\s*\(\s*\)\s*=>\s+{'
 $becauseRegex = 'Because\s+of\s+=\s*\(\s*\)\s*=>'

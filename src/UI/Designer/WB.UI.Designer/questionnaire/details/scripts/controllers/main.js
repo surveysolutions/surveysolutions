@@ -23,7 +23,6 @@ angular.module('designerApp')
                 combo: openCompilationPage,
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 callback: function (event) {
-
                     window.open("../../questionnaire/expressiongeneration/" + $state.params.questionnaireId);
                     event.preventDefault();
                 }
@@ -34,13 +33,7 @@ angular.module('designerApp')
                 allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
                 description: $i18next.t('HotkeysPrint'),
                 callback: function (event) {
-                    
-                    var printWindow = window.open("../../pdf/printpreview/" + $state.params.questionnaireId);
-                    try{
-                        printWindow.focus();
-                    } catch(e) {
-                        notificationService.notice(e);//"Make sure popups are not blocked");
-                    }
+                    window.open("../../pdf/printpreview/" + $state.params.questionnaireId, "_blank");
                     event.preventDefault();
                 }
             });
@@ -106,6 +99,23 @@ angular.module('designerApp')
                     $scope.showFindReplaceDialog();
                 }
             });
+
+            $scope.isCommentsBlockVisible = false;
+            $scope.toggleComments = function (item) {
+                $scope.isCommentsBlockVisible = !$scope.isCommentsBlockVisible;
+                if ($scope.isCommentsBlockVisible) {
+                    $rootScope.$broadcast("commentsOpened", {});
+                }
+            };
+
+            $rootScope.$on('openCommentEditorRequested', function (event, data) {
+                if ($scope.isCommentsBlockVisible === true)
+                    return;
+                $scope.isCommentsBlockVisible = true;
+                $rootScope.$broadcast("commentsOpened", {});
+            });
+
+
             var searchBoxOpened = false;
             $scope.showFindReplaceDialog = function() {
                 if (!searchBoxOpened) {
@@ -402,7 +412,7 @@ angular.module('designerApp')
                 $rootScope.removeLocalVariable(removedItemId);
             });
 
-            $rootScope.$on('varibleDeleted', function (scope, removedItemId) {
+            $rootScope.$on('variableDeleted', function (scope, removedItemId) {
                 $scope.removeItemWithIdFromErrors(removedItemId);
 
                 $rootScope.removeLocalVariable(removedItemId);
@@ -596,7 +606,8 @@ angular.module('designerApp')
             };
 
             userService.getCurrentUserName().then(function(result) {
-                $scope.currentUserName = result.data;
+                $scope.currentUserName = result.data.userName;
+                $scope.currentUserEmail = result.data.email;
             });
 
             getQuestionnaire();

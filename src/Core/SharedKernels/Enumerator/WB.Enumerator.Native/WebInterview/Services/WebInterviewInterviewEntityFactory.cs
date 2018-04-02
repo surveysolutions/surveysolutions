@@ -127,7 +127,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 var isRosterSizeOfLongRoster = callerQuestionnaire.IsQuestionIsRosterSizeForLongRoster(identity.Id);
                                 interviewIntegerQuestion.AnswerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
                             }
-
+                            interviewIntegerQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                             result = interviewIntegerQuestion;
                         }
                         break;
@@ -138,6 +138,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                             interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
+                            interviewDoubleQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
                             result = interviewDoubleQuestion;
                         }
                         break;
@@ -154,11 +155,21 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                         }
                         break;
+                    case InterviewQuestionType.MultiLinkedOption:
+                        result = this.Map<InterviewLinkedMultiQuestion>(question, res =>
+                        {
+                            res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
+                            res.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                            res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
+                        });
+                        break;
                     case InterviewQuestionType.MultiLinkedToList:
                         result = this.Map<InterviewMutliOptionQuestion>(question, res =>
                         {
-                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity,
-                                (question.GetAsInterviewTreeMultiOptionLinkedToListQuestion()).LinkedSourceId).ToList();
+                            res.Options = GetOptionsLinkedToListQuestion(callerInterview, identity, question.GetAsInterviewTreeMultiOptionLinkedToListQuestion().LinkedSourceId).ToList();
+                            var callerQuestionnaire = questionnaire;
+                            res.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
+                            res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                         });
                         break;
                     case InterviewQuestionType.DateTime:
@@ -195,14 +206,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
                         });
                         break;
-                    case InterviewQuestionType.MultiLinkedOption:
-                        result = this.Map<InterviewLinkedMultiQuestion>(question, res =>
-                        {
-                            res.Options = GetLinkedOptionsForLinkedQuestion(callerInterview, identity, question.AsLinked.Options).ToList();
-                            res.Ordered = questionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
-                            res.MaxSelectedAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(identity.Id);
-                        });
-                        break;
+                   
                     case InterviewQuestionType.Multimedia:
                         result = this.Map<InterviewMultimediaQuestion>(question);
                         break;
@@ -286,8 +290,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
 
         private void PutValidationMessages(Validity validity, IStatefulInterview callerInterview, Identity identity)
         {
-            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Enumerator.Native.Resources.WebInterview.Error)
-                .ToArray();
+            validity.Messages = callerInterview.GetFailedValidationMessages(identity, Resources.WebInterview.Error).ToArray();
+            validity.Warnings = callerInterview.GetFailedWarningMessages(identity, Resources.WebInterview.Warning).ToArray();
         }
 
         private void ApplyDisablement(InterviewEntity result, Identity identity, IQuestionnaire questionnaire)

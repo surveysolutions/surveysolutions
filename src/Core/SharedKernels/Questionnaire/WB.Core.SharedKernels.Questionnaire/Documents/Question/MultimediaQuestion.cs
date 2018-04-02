@@ -30,8 +30,10 @@ namespace Main.Core.Entities.SubEntities.Question
 
         public override QuestionType QuestionType
         {
-            get { return QuestionType.Multimedia; }
+            get => QuestionType.Multimedia;
             set { }
         }
+
+        public bool IsSignature { get; set; }
     }
 }

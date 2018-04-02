@@ -990,11 +990,38 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string Interview_SignatureClear {
+            get {
+                return ResourceManager.GetString("Interview_SignatureClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign here.
+        /// </summary>
+        public static string Interview_SignatureSignHere {
+            get {
+                return ResourceManager.GetString("Interview_SignatureSignHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor comment.
         /// </summary>
         public static string Interview_Supervisor_Comment_Caption {
             get {
                 return ResourceManager.GetString("Interview_Supervisor_Comment_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Store signature.
+        /// </summary>
+        public static string Interview_TakeSignature {
+            get {
+                return ResourceManager.GetString("Interview_TakeSignature", resourceCulture);
             }
         }
         
@@ -1409,6 +1436,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Version_Not_Supports {
             get {
                 return ResourceManager.GetString("Version_Not_Supports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warnings.
+        /// </summary>
+        public static string Warnings {
+            get {
+                return ResourceManager.GetString("Warnings", resourceCulture);
             }
         }
         

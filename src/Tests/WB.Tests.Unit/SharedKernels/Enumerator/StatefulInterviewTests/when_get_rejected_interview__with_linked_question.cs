@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_get_rejected_interview__with_linked_question : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var textListId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             singleLinkedId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
@@ -37,12 +32,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     }, new CommentSynchronizationDto[0]),
                     new AnsweredQuestionSynchronizationDto(singleLinkedId, new decimal[0], 2m, new CommentSynchronizationDto[0]),     
                 })));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => linkedToListQuestion = interview.GetSingleOptionLinkedToListQuestion(Create.Entity.Identity(singleLinkedId));
+        private void BecauseOf() => linkedToListQuestion = interview.GetSingleOptionLinkedToListQuestion(Create.Entity.Identity(singleLinkedId));
 
-        It should_set_linked_answer = () 
-            => linkedToListQuestion.GetAnswer().SelectedValue.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_set_linked_answer () => linkedToListQuestion.GetAnswer().SelectedValue.Should().Be(2);
 
         private static StatefulInterview interview;
         private static Guid singleLinkedId;

@@ -4,5 +4,6 @@
     {
         public string DataUrl { get; set; }
         public string MapsUrl { get; set; }
+        public string UserMapLinkingUrl { get; set; }
     }
 }

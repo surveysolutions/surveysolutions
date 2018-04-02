@@ -81,67 +81,60 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
             var questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Entity.TextListQuestion(listTopQuestionId, variable: "list_top", maxAnswerCount: 2),
-                Create.Entity.ListRoster(topRosterId, variable: "list_roster_top",
-                    rosterSizeQuestionId: listTopQuestionId, children: new IComposite[]
+                Create.Entity.ListRoster(topRosterId, variable: "list_roster_top", rosterSizeQuestionId: listTopQuestionId, children: new IComposite[]
+                {
+                    Create.Entity.TextListQuestion(listInnerQuestionId, variable: "list_inner", maxAnswerCount: 5),
+                    Create.Entity.ListRoster(innerRosterId, variable: "list_roster_inner", rosterSizeQuestionId:listInnerQuestionId, children: new []
                     {
-                        Create.Entity.TextListQuestion(listInnerQuestionId, variable: "list_inner", maxAnswerCount: 5),
-                        Create.Entity.ListRoster(innerRosterId, variable: "list_roster_inner",
-                            rosterSizeQuestionId: listInnerQuestionId, children: new[]
-                            {
-                                Create.Entity.TextQuestion(variable: "q1")
-                            })
-                    }),
+                        Create.Entity.TextQuestion(variable: "q1")
+                    })
+                }),
             });
 
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument);
             var exportStructure = Create.Entity.QuestionnaireExportStructure(questionnaireDocument);
             var service = CreateInterviewImportDataParsingService(dataParser: new QuestionDataParser());
 
-            PreloadedDataByFile preloadedDataByFileMain = new PreloadedDataByFile(questionnaireId.FormatGuid(), null,
-                header: new[] {"interview__id", "bsid", "list_top__0", "list_top__1"},
-                content: new[]
+            PreloadedDataByFile preloadedDataByFileMain = new PreloadedDataByFile(questionnaireId.FormatGuid(), null, 
+                header: new [] { "interview__id",   "bsid", "list_top__0", "list_top__1" },
+                content: new []
                 {
-                    new[] {"2", "20000", "AA", "AB"}
+                    new []{ "2",   "20000",   "AA",  "AB" }
                 });
 
-            PreloadedDataByFile preloadedDataByFileTopRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(),
-                null,
-                header: new[]
+            PreloadedDataByFile preloadedDataByFileTopRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(), null, 
+                header: new []
                 {
-                    "list_roster_top__id", "list_top", "list_inner__0", "list_inner__1", "list_inner__2",
-                    "list_inner__3", "list_inner__4", "interview__id"
+                    "list_roster_top__id",  "list_top", "list_inner__0", "list_inner__1", "list_inner__2", "list_inner__3", "list_inner__4", "interview__id"
                 },
-                content: new[]
+                content: new []
                 {
-                    new[] {"1", "AA", "Member 1", "Member 2", "Member 3", "Member 4", "Member 5", "2"},
-                    new[] {"2", "AB", "Member 1", "Member 3", "Member 5", null, null, "2"}
+                    new []{ "1",   "AA", "Member 1", "Member 2", "Member 3", "Member 4", "Member 5", "2" },
+                    new []{ "2",   "AB", "Member 1", "Member 3", "Member 5", null,        null,      "2" }
                 });
 
-            PreloadedDataByFile preloadedDataByFileInsideRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(),
-                null,
-                header: new[]
+            PreloadedDataByFile preloadedDataByFileInsideRoster = new PreloadedDataByFile(questionnaireId.FormatGuid(), null, 
+                header: new []
                 {
                     "list_roster_inner__id", "list_inner", "q1", "list_roster_top__id", "interview__id"
                 },
-                content: new[]
+                content: new []
                 {
-                    new[] {"1", "Member 1", null, "1", "2"},
-                    new[] {"2", "Member 2", null, "1", "2"},
-                    new[] {"3", "Member 3", null, "1", "2"},
-                    new[] {"4", "Member 4", null, "1", "2"},
-                    new[] {"5", "Member 5", null, "1", "2"},
-                    new[] {"1", "Member 1", null, "2", "2"},
-                    new[] {"2", "Member 3", null, "2", "2"},
-                    new[] {"3", "Member 5", null, "2", "2"},
+                    new []{ "1", "Member 1", null, "1", "2" },
+                    new []{ "2", "Member 2", null, "1", "2" },
+                    new []{ "3", "Member 3", null, "1", "2" },
+                    new []{ "4", "Member 4", null, "1", "2" },
+                    new []{ "5", "Member 5", null, "1", "2" },
+                    new []{ "1", "Member 1", null, "2", "2" },
+                    new []{ "2", "Member 3", null, "2", "2" },
+                    new []{ "3", "Member 5", null, "2", "2" },
                 });
 
             List<PreloadedInterviewBaseLevel> preloadedInterviewBaseLevels = new List<PreloadedInterviewBaseLevel>()
             {
                 new PreloadedInterviewQuestionnaireLevel(preloadedDataByFileMain, exportStructure),
-                new PreloadedInterviewLevel(preloadedDataByFileTopRoster, topRosterId, new Guid[] {listTopQuestionId},
-                    exportStructure),
-                new PreloadedInterviewLevel(preloadedDataByFileInsideRoster, innerRosterId,
-                    new Guid[] {listTopQuestionId, listInnerQuestionId}, exportStructure),
+                new PreloadedInterviewLevel(preloadedDataByFileTopRoster, topRosterId, new Guid[] { listTopQuestionId }, exportStructure),
+                new PreloadedInterviewLevel(preloadedDataByFileInsideRoster, innerRosterId, new Guid[] { listTopQuestionId, listInnerQuestionId }, exportStructure),
             };
 
             //act
@@ -149,31 +142,29 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
 
             //assert
             Assert.That(result, Is.Not.Empty);
-            var topTextListAnswer = (TextListAnswer) result[0].Answers[0].Answer;
+            var topTextListAnswer = (TextListAnswer)result[0].Answers[0].Answer;
             Assert.That(topTextListAnswer.Rows.Select(r => new Tuple<int, string>(r.Value, r.Text)), Is.EqualTo(new[]
             {
                 new Tuple<int, string>(1, "AA"),
                 new Tuple<int, string>(2, "AB"),
             }));
 
-            var innerFirstTextListAnswer = (TextListAnswer) result[0].Answers[1].Answer;
-            Assert.That(innerFirstTextListAnswer.Rows.Select(r => new Tuple<int, string>(r.Value, r.Text)), Is.EqualTo(
-                new[]
-                {
-                    new Tuple<int, string>(1, "Member 1"),
-                    new Tuple<int, string>(2, "Member 2"),
-                    new Tuple<int, string>(3, "Member 3"),
-                    new Tuple<int, string>(4, "Member 4"),
-                    new Tuple<int, string>(5, "Member 5"),
-                }));
-            var innerSecondTextListAnswer = (TextListAnswer) result[0].Answers[2].Answer;
-            Assert.That(innerSecondTextListAnswer.Rows.Select(r => new Tuple<int, string>(r.Value, r.Text)), Is.EqualTo(
-                new[]
-                {
-                    new Tuple<int, string>(1, "Member 1"),
-                    new Tuple<int, string>(2, "Member 3"),
-                    new Tuple<int, string>(3, "Member 5"),
-                }));
+            var innerFirstTextListAnswer = (TextListAnswer)result[0].Answers[1].Answer;
+            Assert.That(innerFirstTextListAnswer.Rows.Select(r => new Tuple<int, string>(r.Value, r.Text)), Is.EqualTo(new[]
+            {
+                new Tuple<int, string>(1, "Member 1"),
+                new Tuple<int, string>(2, "Member 2"),
+                new Tuple<int, string>(3, "Member 3"),
+                new Tuple<int, string>(4, "Member 4"),
+                new Tuple<int, string>(5, "Member 5"),
+            }));
+            var innerSecondTextListAnswer = (TextListAnswer)result[0].Answers[2].Answer;
+            Assert.That(innerSecondTextListAnswer.Rows.Select(r => new Tuple<int, string>(r.Value, r.Text)), Is.EqualTo(new []
+            {
+                new Tuple<int, string>(1, "Member 1"),
+                new Tuple<int, string>(2, "Member 3"),
+                new Tuple<int, string>(3, "Member 5"),
+            }));
         }
 
         [Test]
@@ -217,7 +208,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
 
             //assert
             Assert.That(ex, Is.Not.Null);
-            Assert.That(ex.Code, Is.EqualTo("PL0042"));
+            Assert.That(ex.Code, Is.EqualTo("PL0046"));
             Assert.That(ex.Message, Is.EqualTo("Inconsistency detected between the items lists in the data file list_roster and question list. Items present in the text list and absent in the file: AB. Rows from data file absent in text list question: ABC. Interview id: 111111"));
         }
 
@@ -263,7 +254,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests
 
             //assert
             Assert.That(ex, Is.Not.Null);
-            Assert.That(ex.Code, Is.EqualTo("PL0041"));
+            Assert.That(ex.Code, Is.EqualTo("PL0045"));
             Assert.That(ex.Message, Is.EqualTo("Inconsistency detected between the number of records in the data file list_roster, which has 3 records, and the trigger question list, which has 2 rows. Interview id: 111111"));
         }
 

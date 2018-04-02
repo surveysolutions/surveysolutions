@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -175,12 +176,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
             if (rosterScopeDescription.Type == RosterScopeType.MultyOption)
             {
-                var multiOptionAnswer = rosterSizeAnswer as CategoricalFixedMultiOptionAnswer;
-                if (multiOptionAnswer != null)
+                if (rosterSizeAnswer is CategoricalFixedMultiOptionAnswer multiOptionAnswer)
                     return multiOptionAnswer.CheckedValues.ToArray();
 
-                var yesNoAnswer = rosterSizeAnswer as YesNoAnswer;
-                if (yesNoAnswer != null)
+                if (rosterSizeAnswer is YesNoAnswer yesNoAnswer)
                     return yesNoAnswer.CheckedOptions.Where(v => v.Yes).Select(v => v.Value).ToArray();
             }
 
@@ -399,6 +398,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             var question = this.QuestionsCache[variableName];
 
             return this.GroupsCache.Values.Any(g => g.RosterSizeQuestionId == question.PublicKey);
+        }
+
+        public int? GetMaxAnswersCount(string variableName)
+        {
+            if (!this.QuestionsCache.ContainsKey(variableName))
+                return null;
+
+            var multipleChoiseQuestion = this.QuestionsCache[variableName] as IMultyOptionsQuestion;
+            return multipleChoiseQuestion?.MaxAllowedAnswers;
         }
 
         public bool IsRosterSizeQuestionForLongRoster(Guid questionId)

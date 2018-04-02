@@ -70,7 +70,9 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt;
+        ///&lt;br/&gt; 
+        ///To complete the registration process click on this link:.
         /// </summary>
         public static string ConfirmationEmail {
             get {
@@ -144,7 +146,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Hello {0}, &lt;br/&gt;&lt;br/&gt;  To complete the registration process click on this link:.
         /// </summary>
         public static string ResetPasswordEmail {
             get {

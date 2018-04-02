@@ -4,10 +4,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Filters;
-
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -34,6 +37,8 @@ namespace WB.UI.Headquarters.Code
         private const string UnknownStringArgumentValue = "unknown";
 
         private readonly SynchronizationLogType logAction;
+        private HqSignInManager signInManager
+            => ServiceLocator.Current.GetInstance<HqSignInManager>();
 
         private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
             => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
@@ -53,12 +58,20 @@ namespace WB.UI.Headquarters.Code
             this.logAction = logAction;
         }
 
-        public override void OnActionExecuted(HttpActionExecutedContext context)
+        public override async Task OnActionExecutedAsync(HttpActionExecutedContext context, CancellationToken cancellationToken)
         {
-            base.OnActionExecuted(context);
+            await base.OnActionExecutedAsync(context, cancellationToken);
 
             try
             {
+                if (!this.authorizedUser.IsAuthenticated)
+                {
+                    var authHeader = context.Request?.Headers?.Authorization?.ToString();
+
+                    if (authHeader != null)
+                        await signInManager.SignInWithAuthTokenAsync(authHeader, false, UserRoles.Interviewer);
+                }
+
                 var logItem = new SynchronizationLogItem
                 {
                     DeviceId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.DeviceId : null,
@@ -173,6 +186,18 @@ namespace WB.UI.Headquarters.Code
                         break;
                     case SynchronizationLogType.GetMap:
                         logItem.Log = SyncLogMessages.GetMap.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetApk:
+                        logItem.Log = SyncLogMessages.ApkRequested;
+                        break;
+                    case SynchronizationLogType.GetExtendedApk:
+                        logItem.Log = SyncLogMessages.ExtendedApkRequested;
+                        break;
+                    case SynchronizationLogType.GetApkPatch:
+                        logItem.Log = SyncLogMessages.PatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetExtendedApkPatch:
+                        logItem.Log = SyncLogMessages.ExtendedPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
                         break;
                     default:
                         throw new ArgumentException("logAction");

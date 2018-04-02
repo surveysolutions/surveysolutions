@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             this.questionnaires = questionnaires;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAll(Guid questionnaireId, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        public IEnumerable<QuestionnaireEntityReference> FindAll(Guid questionnaireId, string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             var questionnaire = this.questionnaires.Get(questionnaireId);
             return questionnaire.FindAllTexts(searchFor, matchCase, matchWholeWord, useRegex);

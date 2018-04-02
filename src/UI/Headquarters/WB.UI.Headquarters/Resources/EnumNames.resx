@@ -162,4 +162,25 @@
   <data name="InterviewerFacet_None" xml:space="preserve">
     <value>None</value>
   </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>Finish Text</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>Welcome Invitation</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>Resume Invitation</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>Resume Header</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>Survey Name</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>Finish Header</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>Welcome Header</value>
+  </data>
 </root>

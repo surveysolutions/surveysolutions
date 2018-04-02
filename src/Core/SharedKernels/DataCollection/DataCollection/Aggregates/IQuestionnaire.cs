@@ -264,5 +264,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
         string GetRosterVariableName(Guid id);
+        IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId);
+        bool IsSignature(Guid entityIdentityId);
     }
 }

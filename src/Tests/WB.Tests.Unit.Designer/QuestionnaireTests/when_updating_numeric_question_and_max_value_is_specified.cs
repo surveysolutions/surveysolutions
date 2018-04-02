@@ -36,7 +36,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     useFormatting: false,
                     isInteger: false,
                     countOfDecimalPlaces: null,
-                    validationConditions: new List<ValidationCondition>()));
+                    validationConditions: new List<ValidationCondition>(),
+                    options: null));
 
 
         [NUnit.Framework.Test] public void should_contains_question () =>

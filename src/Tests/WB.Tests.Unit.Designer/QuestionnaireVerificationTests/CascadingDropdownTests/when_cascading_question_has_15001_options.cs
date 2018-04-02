@@ -32,7 +32,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 {
                     AnswerText = "child " + i,
                     AnswerValue = i.ToString(CultureInfo.InvariantCulture),
-                    PublicKey = Guid.NewGuid(),
                     ParentValue = "1"
                 });
             }
@@ -43,8 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 StataExportCaption = "var",
                 QuestionType = QuestionType.SingleOption,
                 Answers = new List<Answer> {
-                            new Answer { AnswerText = "one", AnswerValue = "1", PublicKey = Guid.NewGuid() },
-                            new Answer { AnswerText = "two", AnswerValue = "2", PublicKey = Guid.NewGuid() }
+                            new Answer { AnswerText = "one", AnswerValue = "1" },
+                            new Answer { AnswerText = "two", AnswerValue = "2" }
                         }
                 },
                 childSingleOptionQuestion);

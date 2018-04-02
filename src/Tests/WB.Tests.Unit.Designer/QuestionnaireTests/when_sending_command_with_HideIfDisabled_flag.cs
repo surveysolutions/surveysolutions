@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     questionnaire.Id, questionNumericId, responsibleId,
                     new CommonQuestionParameters() { Title = "title", VariableName = "variableName2" ,VariableLabel = "variableLabel", HideIfDisabled = true},
                     scope: QuestionScope.Interviewer, isInteger: true, countOfDecimalPlaces: null, validationConditions: new List<ValidationCondition>(),
-                    isPreFilled:false,useFormatting:false));
+                    isPreFilled:false,useFormatting:false, options: null));
 
             questionnaire.UpdateDateTimeQuestion(
                 new UpdateDateTimeQuestion(questionnaireId: Guid.Parse("22222222222222222222222222222222"), questionId: questionDateTimeId, 
@@ -51,13 +51,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 isPreFilled: false, scope: QuestionScope.Interviewer,   
                 validationConditions: new List<ValidationCondition>(),validationExpression:null, validationMessage:null));
 
-            questionnaire.UpdateMultimediaQuestion(questionId: questionMultimediaId, title: "title", variableName: "variableName4", 
+            questionnaire.UpdateMultimediaQuestion(
+                Create.Command.UpdateMultimediaQuestion(
+                questionId: questionMultimediaId, title: "title", variableName: "variableName4", 
                 variableLabel: "variableLabel4", enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, 
-                scope: QuestionScope.Interviewer, properties: Create.QuestionProperties());
+                scope: QuestionScope.Interviewer, properties: Create.QuestionProperties(), isSignature: false));
 
             questionnaire.UpdateMultiOptionQuestion(questionId: questionMultyOptionId, title: "title", variableName: "variableName5", 
                 variableLabel: "variableLabel5", scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, 
-                responsibleId: responsibleId, options: new Option[] { new Option(Guid.NewGuid(), "1", "1"), new Option(Guid.NewGuid(), "2", "2"), }, 
+                responsibleId: responsibleId, options: new Option[] { new Option("1", "1"), new Option("2", "2"), }, 
                 linkedToEntityId: null, areAnswersOrdered: false, maxAllowedAnswers: 2, yesNoView: false,
                 validationConditions: new List<ValidationCondition>(), linkedFilterExpression: null, properties: Create.QuestionProperties());
 
@@ -71,8 +73,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             questionnaire.UpdateSingleOptionQuestion(questionId: questionSingleOptionId, title: "title", variableName: "variableName7", 
                 variableLabel: "variableLabel7", isPreFilled: false, scope: QuestionScope.Interviewer, enablementCondition: null, 
-                hideIfDisabled: true, instructions: null, responsibleId: responsibleId, options: new Option[] {new Option(Guid.NewGuid(), "1", "1"),
-                    new Option(Guid.NewGuid(), "2", "2"), }, linkedToEntityId: null, isFilteredCombobox: false,
+                hideIfDisabled: true, instructions: null, responsibleId: responsibleId, options: new Option[] {new Option("1", "1"),
+                    new Option("2", "2"), }, linkedToEntityId: null, isFilteredCombobox: false,
                 cascadeFromQuestionId: null, validationConditions: new List<ValidationCondition>(), linkedFilterExpression: null, 
                 properties: Create.QuestionProperties());
 

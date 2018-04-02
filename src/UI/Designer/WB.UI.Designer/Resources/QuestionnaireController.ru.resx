@@ -248,11 +248,11 @@
     <comment>Сшенерировать pdf</comment>
   </data>
   <data name="ChooseLanguage" xml:space="preserve">
-    <value>Выберите язык</value>
+    <value>Выберите перевод</value>
     <comment>Выберите язык</comment>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>Выберите язык для использования его в pdf </value>
+    <value>Пожалуйста, выберите перевод</value>
     <comment>Выберите язык для использования его в pdf </comment>
   </data>
   <data name="QuestionnaireTreeFolders" xml:space="preserve">
@@ -313,12 +313,20 @@
     <value>Вы точно хотите удалить папку {0} ?</value>
     <comment>Вы точно хотите удалить папку {0} ?</comment>
   </data>
-  <data name="QuestionnaireSubTitle" xml:space="preserve">
-    <value>Подзаголовок опросника</value>
-    <comment>Дополнительное описание опросника</comment>
-  </data>
   <data name="SharedQuestionnaires" xml:space="preserve">
     <value>Общие со мной опросники</value>
     <comment>Общие со мной опросники</comment>
+  </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Создание Html для "{0}"</value>
+    <comment>Создание Html для "{0}"</comment>
+  </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Экспортировать как Html</value>
+    <comment>Экспортировать как Html</comment>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Экспорт Html</value>
+    <comment>Экспорт Html</comment>
   </data>
 </root>

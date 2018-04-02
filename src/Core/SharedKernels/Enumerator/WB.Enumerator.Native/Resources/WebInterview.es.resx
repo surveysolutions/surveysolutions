@@ -193,7 +193,7 @@
     <value>El proceso de la entrevista requiere una conexión a Internet. No se necesita software adicional.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Usted ha sido invitado a participar en la siguiente encuesta: "{0}"</value>
+    <value>Usted ha sido invitado a participar en la siguiente encuesta: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>No empezado</value>
@@ -217,7 +217,7 @@
     <value>El proceso de la entrevista requiere una conexión a Internet. No se necesita software adicional.</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Puede navegar a la entrevista en la siguiente encuesta: "{0}"</value>
+    <value>Puede navegar a la entrevista en la siguiente encuesta: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Hola y bienvenido a la Encuesta Web  de Survey Solutions </value>
@@ -235,7 +235,7 @@
     <value>Encuesta Web</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Encuesta: "{0}"</value>
+    <value>Encuesta: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>Entrevistar</value>
@@ -272,9 +272,6 @@
   </data>
   <data name="Filters_NotFlagged" xml:space="preserve">
     <value>Sin marca</value>
-  </data>
-  <data name="Filters_OldDetailsLink" xml:space="preserve">
-    <value>Detalles de entrevista anterior</value>
   </data>
   <data name="Filters_Title" xml:space="preserve">
     <value>Preguntas filtradas</value>

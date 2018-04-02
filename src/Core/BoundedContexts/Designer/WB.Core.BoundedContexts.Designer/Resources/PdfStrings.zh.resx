@@ -144,9 +144,6 @@
   <data name="EnablementCondition" xml:space="preserve">
     <value>启用的条件：</value>
   </data>
-  <data name="GeneratedBy" xml:space="preserve">
-    <value>该PDF文件由{0}生成</value>
-  </data>
   <data name="LastEdited" xml:space="preserve">
     <value>{0}最后编辑了{1}</value>
   </data>

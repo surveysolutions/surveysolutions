@@ -29,6 +29,8 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.module.Load(this);
         }
+
+        public override string Name => this.module.ToString();
     }
 
     public class NinjectWebModuleAdapter<TModule> : NinjectModuleAdapter
@@ -45,8 +47,10 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.module.Load(this);
         }
+
+        public override string Name => this.module.ToString();
     }
-    
+
     public abstract class NinjectModuleAdapter : NinjectModule, IWebIocRegistry
     {
         void IIocRegistry.Bind<TInterface, TImplementation>()

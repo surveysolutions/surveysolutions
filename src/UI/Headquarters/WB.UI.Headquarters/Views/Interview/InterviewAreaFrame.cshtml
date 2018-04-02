@@ -1,6 +1,6 @@
 ﻿@using WB.Core.SharedKernels.Questionnaire.Documents
 @using WB.UI.Shared.Web.Extensions
-@model WB.Core.BoundedContexts.Headquarters.Views.Interview.InterviewQuestionView
+@model Area
 @{
     Layout = null;
 }
@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area</title>
     @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
-   
+
     <style>
         html, body, #viewDiv {
             padding: 0;
@@ -21,53 +21,53 @@
             width: 100%;
         }
     </style>
-    @if (Model.IsAnswered)
+    @if (Model != null)
     {
-        <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
-        <script src="https://js.arcgis.com/4.3/"></script>
-        <script>
-            require([
-                    "esri/Map",
-                    "esri/views/MapView",
-                    "esri/Graphic",
-                    "esri/geometry/Polygon",
-                    "esri/symbols/SimpleLineSymbol",
-                    "esri/symbols/SimpleFillSymbol",
-                    "dojo/domReady!"
-                ],
-                function(Map, MapView, Graphic, Polygon, SimpleLineSymbol, SimpleFillSymbol) {
-                    var map = new Map({
-                        basemap: "hybrid"
-                    });
-
-                    var geometryJson = @Html.Raw((Model.Answer as Area).Geometry);
-                    var polygon = Polygon.fromJSON(geometryJson);
-
-                    var fillSymbol = new SimpleFillSymbol({
-                        outline: {
-                            color: [255, 255, 255],
-                            width: 1
-                        }
-                    });
-
-                    var polygonGraphic = new Graphic({
-                        geometry: polygon,
-                        symbol: fillSymbol
-                    });
-
-                    var view = new MapView({
-                        container: "viewDiv",
-                        map: map,
-                        spatialReference: polygon.spatialReference
-                    });
-
-                    view.graphics.addMany([polygonGraphic]);
-
-                    var taxLotExtent = view.graphics.items[0].geometry.extent;
-                    view.extent = taxLotExtent;
-
+    <link rel="stylesheet" href="https://js.arcgis.com/4.3/esri/css/main.css">
+    <script src="https://js.arcgis.com/4.3/"></script>
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/Graphic",
+            "esri/geometry/Polygon",
+            "esri/symbols/SimpleLineSymbol",
+            "esri/symbols/SimpleFillSymbol",
+            "dojo/domReady!"
+        ],
+            function (Map, MapView, Graphic, Polygon, SimpleLineSymbol, SimpleFillSymbol) {
+                var map = new Map({
+                    basemap: "hybrid"
                 });
-        </script>
+
+                var geometryJson = @Html.Raw(Model.Geometry);
+                var polygon = Polygon.fromJSON(geometryJson);
+
+                var fillSymbol = new SimpleFillSymbol({
+                    outline: {
+                        color: [255, 255, 255],
+                        width: 1
+                    }
+                });
+
+                var polygonGraphic = new Graphic({
+                    geometry: polygon,
+                    symbol: fillSymbol
+                });
+
+                var view = new MapView({
+                    container: "viewDiv",
+                    map: map,
+                    spatialReference: polygon.spatialReference
+                });
+
+                view.graphics.addMany([polygonGraphic]);
+
+                var taxLotExtent = view.graphics.items[0].geometry.extent;
+                view.extent = taxLotExtent;
+
+            });
+    </script>
     }
 </head>
 <body>

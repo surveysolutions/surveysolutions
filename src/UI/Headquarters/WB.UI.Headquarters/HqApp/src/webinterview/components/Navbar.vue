@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-fixed-top navbar-web-interview" role="navigation">
         <div class="container-fluid ">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -13,7 +13,7 @@
                     <span class="icon-bar bottom-menu"></span>
                 </button>
                 <div class="navbar-brand">
-                    <router-link class="logo" :to="toFirstSection" v-if="$store.state.webinterview.firstSectionId && hqLink == null"></router-link>
+                    <router-link class="logo" :to="toCoverPage" v-if="hqLink == null"></router-link>
                     <a :href="hqLink" v-if="hqLink != null" class="logo"></a>
                 </div>  
                 <button v-if="this.$config.inWebTesterMode" type="button" class="btn btn-default btn-link btn-icon" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
@@ -22,14 +22,14 @@
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar">
-                <p class="navbar-text">{{questionnaireTitle}}</p>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><router-link class="interview-ID" active-class="" :to="toFirstSection" v-if="$store.state.webinterview.firstSectionId">
+                    {{interviewKey}}
+                </router-link></li>
+                </ul>
+                <p class="navbar-text pull-left">{{questionnaireTitle}}</p>
                 <ul class="nav navbar-nav navbar-right">
-                    <li v-if="this.$config.inWebTesterMode">
-                        <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
-                            <span class="glyphicon glyphicon-sort"></span>
-                        </button>
-                    </li>
-
+                    <li class="help-link"><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
                     <li class="dropdown language">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                             :title="currentLanguage">{{currentLanguage}}<span class="caret" v-if="canChangeLanguage"></span></a>
@@ -43,7 +43,11 @@
                             </li>
                         </ul>
                     </li>
-                    <li><a href="http://docs.mysurvey.solutions/web-interview" :title="$t('WebInterviewUI.Help')">{{ $t('WebInterviewUI.Help') }}</a></li>
+                    <li v-if="this.$config.inWebTesterMode">
+                        <button type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
+                            <span class="glyphicon glyphicon-sort"></span>
+                        </button>
+                    </li>                    
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -103,6 +107,9 @@
             },
             toFirstSection(){
                 return { name: 'section', params: { sectionId: this.$store.state.webinterview.firstSectionId } }
+            },
+            toCoverPage() {
+                return { name: 'prefilled' }
             },
             interviewKey() {
                 return this.$store.state.webinterview.interviewKey || this.$t("WebInterviewUI.WebInterview");

@@ -7,27 +7,24 @@ namespace Main.Core.Entities.SubEntities
     {
         public Option() {}
 
-        public Option(Guid id, string value, string title)
+        public Option(string value, string title)
         {
-            this.Id = id;
             this.Value = value;
             this.Title = title;
             this.ParentValue = null;
         }
 
-        public Option(Guid id, string value, string title, string parentValue) 
-            : this(id, value, title)
+        public Option(string value, string title, string parentValue) 
+            : this(value, title)
         {
             this.ParentValue = parentValue;
         }
 
-        public Option(Guid id, string value, string title, decimal? parentValue)
-            : this(id, value, title)
+        public Option(string value, string title, decimal? parentValue)
+            : this(value, title)
         {
             this.ParentValue = parentValue.HasValue ? parentValue.Value.ToString("G29", CultureInfo.InvariantCulture) : null;
         }
-
-        public Guid Id { get; set; }
 
         public string Value { get; set; }
 

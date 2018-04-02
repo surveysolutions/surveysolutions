@@ -177,6 +177,9 @@
   <data name="DeleteQuestionnaire" xml:space="preserve">
     <value>Delete questionnaire</value>
   </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Export questionnaire</value>
+  </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>Questionnaire</value>
   </data>
@@ -195,7 +198,7 @@
   <data name="DeleteMap" xml:space="preserve">
     <value>Delete map</value>
   </data>
-    <data name="DeleteMapUser" xml:space="preserve">
+  <data name="DeleteMapUser" xml:space="preserve">
     <value>Delete map user</value>
   </data>
 

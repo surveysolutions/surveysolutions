@@ -81,9 +81,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var datas = new[] { new PreloadedDataByFile(data.Id, preloadedDataService.GetValidFileNameForTopLevelQuestionnaire(), data.Header, data.Content) };
 
             errors.AddRange(
-                this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003",
-                    PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas,
-                        preloadedDataService));
+                this.Verifier(this.ColumnWasntMappedOnQuestionInTemplate, "PL0003", PreloadingVerificationMessages.PL0003_ColumnWasntMappedOnQuestion, PreloadedDataVerificationReferenceType.Column)(datas, preloadedDataService)
+                );
+            errors.AddRange(this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption)(datas, preloadedDataService));
 
             if(this.ShouldVerificationBeContinued(errors))
                 errors.AddRange(this.ErrorsByQuestionsWasntParsed(datas, preloadedDataService));
@@ -228,7 +228,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.Verifier(this.ColumnDuplications),
             this.Verifier(this.ErrorsByGpsQuestions, QuestionType.GpsCoordinates),
             this.Verifier(this.ErrorsByNumericQuestions, QuestionType.Numeric),
-                    
+            this.Verifier(this.ErrorsByMultipleChoiseQuestions, QuestionType.MultyOption),
+            this.Verifier(this.IdIsEmpty, "PL0042", PreloadingVerificationMessages.PL0042_IdIsEmpty),
+            this.ErrorsByQuantityColumn,
+
             this.ErrorsByResposibleName
         };
 
@@ -537,6 +540,48 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
+                
+        private IEnumerable<PanelImportVerificationError> ErrorsByMultipleChoiseQuestions(HeaderStructureForLevel level,
+            ExportedQuestionHeaderItem question,
+            PreloadedDataByFile levelData,
+            IPreloadedDataService preloadedDataService)
+        {
+            var maxAnswersCount = preloadedDataService.GetMaxAnswersCount(question.VariableName);
+            if (!maxAnswersCount.HasValue)
+            {
+                yield break;
+            }
+
+            for (int rowIndex = 0; rowIndex < levelData.Content.Length; rowIndex++)
+            {
+                var exportedHeaderItem = level.HeaderItems[question.PublicKey];
+                List<decimal> answers = new List<decimal>();
+                foreach (var header in exportedHeaderItem.ColumnHeaders)
+                {
+                    var columnIndex = preloadedDataService.GetColumnIndexByHeaderName(levelData, header.Name);
+
+                    if (columnIndex > -1)
+                    {
+                        var parsedValue = this.GetValue<decimal>(levelData.Content[rowIndex], levelData.Header, columnIndex, level, preloadedDataService);
+                        if (parsedValue.HasValue)
+                        {
+                            answers.Add(parsedValue.Value);
+
+                            if (answers.Count > maxAnswersCount)
+                            {
+                                yield return new PanelImportVerificationError("PL0041",
+                                    string.Format(PreloadingVerificationMessages.PL0041_AnswerExceedsMaxAnswersCount,
+                                        maxAnswersCount),
+                                    this.CreateReference(columnIndex, rowIndex, levelData));
+                                yield break;
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        
         private IEnumerable<PanelImportVerificationError> ErrorsByNumericQuestions(
             HeaderStructureForLevel level,
             ExportedQuestionHeaderItem numericExportedQuestion,
@@ -990,6 +1035,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             return responsiblesCache[userNameLowerCase];
+        }
+
+        private IEnumerable<InterviewImportReference> IdIsEmpty(PreloadedDataByFile levelData, 
+            PreloadedDataByFile[] allLevels,
+            IPreloadedDataService preloadedDataService)
+        {
+            var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
+
+            if (parentDataFile != null)
+                yield break;
+
+            var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
+            if (idColumnIndex < 0)
+                yield break;
+
+            for (int y = 0; y < levelData.Content.Length; y++)
+            {
+                var idValue = levelData.Content[y][idColumnIndex];
+                if (string.IsNullOrEmpty(idValue))
+                {
+                    yield return new InterviewImportReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "", levelData.FileName);
+                }
+            }
         }
     }
 }

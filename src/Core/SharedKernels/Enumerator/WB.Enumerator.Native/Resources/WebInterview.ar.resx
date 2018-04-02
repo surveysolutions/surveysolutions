@@ -196,7 +196,7 @@
     <value>تحتاج عملية الاستجواب إلى الاتصال بالإنترنت.  لا حاجة إلى برمجيات إضافية.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>أنت مدعو إلى المشاركة في الاستجواب التالي: "{0}"</value>
+    <value>أنت مدعو إلى المشاركة في الاستجواب التالي: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>لم يبدأ</value>
@@ -220,7 +220,7 @@
     <value>تحتاج عملية الاستجواب إلى اتصال بالإنترنت، لا حاجة إلى برمجيات إضافية.</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>يمكنك الانتقال إلى الاستجواب في المسح التالي: "{0}"</value>
+    <value>يمكنك الانتقال إلى الاستجواب في المسح التالي: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>مرحباً وأهلاً بك في المسح الإلكتروني من Survey Solutions </value>
@@ -238,7 +238,7 @@
     <value>المسح الإلكتروني</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>المسح: "{0}"</value>
+    <value>المسح: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>للاستجواب</value>

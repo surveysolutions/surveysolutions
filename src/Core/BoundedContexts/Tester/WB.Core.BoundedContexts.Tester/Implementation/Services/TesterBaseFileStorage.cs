@@ -55,7 +55,12 @@ namespace WB.Core.BoundedContexts.Tester.Implementation.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(directoryPath))
                 this.fileSystemAccessor.CreateDirectory(directoryPath);
 
-            this.fileSystemAccessor.WriteAllBytes(this.GetPathToFile(fileName), data);
+            var filePath = this.GetPathToFile(fileName);
+
+            if (fileSystemAccessor.IsFileExists(filePath))
+                fileSystemAccessor.DeleteFile(filePath);
+
+            fileSystemAccessor.WriteAllBytes(filePath, data);
         }
 
         public void RemoveInterviewBinaryData(Guid interviewId, string fileName)

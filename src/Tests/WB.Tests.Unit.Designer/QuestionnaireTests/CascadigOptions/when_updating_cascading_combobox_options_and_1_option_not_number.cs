@@ -48,8 +48,8 @@ namespace WB.Tests.Unit.Designer.QuestionnaireTests.CascadigOptions
                 questionnaire.UpdateCascadingComboboxOptions(questionId: questionId, responsibleId: responsibleId,
                     options: new[]
                     {
-                        new Option(Guid.NewGuid(), "1", "Option 1"),
-                        new Option(Guid.NewGuid(), "not number value", "Option 2")
+                        new Option("1", "Option 1"),
+                        new Option("not number value", "Option 2")
                     }));
             Assert.That(exception.Message, Is.EqualTo(ExceptionMessages.OptionValuesShouldBeNumbers));
         }

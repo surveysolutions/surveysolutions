@@ -1,54 +1,8 @@
-﻿@model WB.Enumerator.Native.WebInterview.Models.SetupModel
-
+﻿@model WB.UI.Headquarters.Controllers.SetupModel
 @{
     ViewBag.Title = WebInterviewSetup.Started_Title;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
 
-<main>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="page-header">
-                <ol class="breadcrumb">
-                    <li>
-                        @Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")
-                    </li>
-                </ol>
-                <h1>@WebInterviewSetup.WebInterviewSetup_PageHeader</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-7">
-                <h3>
-                    @string.Format(WebInterviewSetup.WebInterviewStarted, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.QuestionnaireIdentity.Version))
-                </h3>
-            </div>
-        </div>
-        <div class="row">
-            <form method="post">
-                @Html.AntiForgeryToken()
-                <div class="col-sm-7 col-xs-12 action-buttons">
-                    <div class="import-progress">
-                        <p>@WebInterviewSetup.Done</p>
-                        <p class="success-text">
-                            @WebInterviewSetup.ExportAssignmentsTitle
-                        </p>
-                    </div>
-
-                    <input type="submit" class="btn btn-danger" value="@WebInterviewSetup.StopWebInterview"/>
-
-                    
-                    <a class="btn btn-primary" href="@Url.HttpRouteUrl("DefaultApiWithAction", 
-                                                        new {controller= "LinksExport", action= "Download", id=Model.QuestionnaireIdentity.ToString() })">
-                        @string.Format(WebInterviewSetup.DownloadTitle, Model.AssignmentsCount)
-                    </a>
-
-                    <a href="@Url.Action("Index", "SurveySetup")" class="back-link">
-                        @WebInterviewSetup.BackToQuestionnaires
-                    </a>
-                </div>
-            </form>
-        </div>
-    </div>
-</main>
-
+@Html.RenderHqConfig(Model)
+<div id="vueApp"></div>

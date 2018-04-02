@@ -20,476 +20,509 @@
     @Styles.Render("~/Content/pdf.css")
 </head>
 <body>
-    <header>
-        <div class="column_header authors">
-            <ul>
-                <li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On</span></li>
-                <li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On</span></li>
-                @if (questionnaire.LastModified != null)
-                {
-                    <li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On</span></li>
-                }
-            </ul>
-            @if (questionnaire.SharedPersons.Count() != 0)
-            {
-                <div>@PdfStrings.SharedWith</div>
-                <ul>
-                    @foreach (var person in questionnaire.SharedPersons)
-                    {
-                        <li>
-                            @if (person.Date.HasValue)
-                            {
-                                <span>@string.Format(PdfStrings.LastEdited, person.Name, person.Date)</span>
-                            }
-                            else
-                            {
-                                <span>@string.Format(PdfStrings.NeverEdited, person.Name)</span>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-            else
-            {
-                <div>@PdfStrings.NotShared</div>
-            }
-        </div>
-        <div class="column_header">
-            <ul>
-                <li>
-                    <ul class="group-statistics">
-                        <li>@Pdf.Format(PdfStrings.Stat_Sections, questionnaire.Statistics.SectionsCount.WrapWith("span"))</li>
-                        <li>@Pdf.Format(PdfStrings.Stat_Subsections, questionnaire.Statistics.GroupsCount.WrapWith("span"))</li>
-                        <li>@Pdf.Format(PdfStrings.Stat_Questions, questionnaire.Statistics.QuestionsCount.WrapWith("span"))</li>
-                    </ul>
-                </li>
-                <li>@Pdf.Format(PdfStrings.Stat_QuestionsWithConditions, questionnaire.Statistics.QuestionsWithEnablingConditionsCount.WrapWith("span"))</li>
-                <li>@Pdf.Format(PdfStrings.Stat_QuestionsWithValidation, questionnaire.Statistics.QuestionsWithValidationConditionsCount.WrapWith("span"))</li>
-                <li>@Pdf.Format(PdfStrings.Stat_Rosters, questionnaire.Statistics.RostersCount.WrapWith("span"))</li>
-                <li>@Pdf.Format(PdfStrings.Stat_Variables, questionnaire.Statistics.VariablesCount.WrapWith("span"))</li>
-            </ul>
-        </div>
-        <div class="column_header">
-            <a href="https://solutions.worldbank.org/" target="_blank" class="logo">
-                <img src="~/Content/images/pdf_logo.png" alt="Survey Solutions" />
-            </a>
-        </div>
+	<header>
+		<div class="column_header authors">
+			<ul>
+				<li>@string.Format(PdfStrings.GeneratedBy, questionnaire.Requested.By), <span>@questionnaire.Requested.On</span></li>
+				<li>@string.Format(PdfStrings.CreatedBy, questionnaire.Created.By), <span>@questionnaire.Created.On</span></li>
+				@if (questionnaire.LastModified != null)
+				{
+				<li>@string.Format(PdfStrings.LastModifiedBy, questionnaire.LastModified.By), <span>@questionnaire.LastModified.On</span></li>
+				}
+			</ul>
+			@if (questionnaire.SharedPersons.Count() != 0)
+			{
+			<div>@PdfStrings.SharedWith</div>
+			<ul>
+				@foreach (var person in questionnaire.SharedPersons)
+				{
+				<li>
+					@if (person.Date.HasValue)
+					{
+					<span>@string.Format(PdfStrings.LastEdited, person.Name, person.Date)</span>
+					}
+					else
+					{
+					<span>@string.Format(PdfStrings.NeverEdited, person.Name)</span>
+					}
+				</li>
+				}
+			</ul>
+			}
+			else
+			{
+			<div>@PdfStrings.NotShared</div>
+			}
+		</div>
+		<div class="column_header">
+			<ul>
+				<li>
+					<ul class="group-statistics">
+						<li>@Pdf.Format(PdfStrings.Stat_Sections, questionnaire.Statistics.SectionsCount.WrapWith("span"))</li>
+						<li>@Pdf.Format(PdfStrings.Stat_Subsections, questionnaire.Statistics.GroupsCount.WrapWith("span"))</li>
+						<li>@Pdf.Format(PdfStrings.Stat_Questions, questionnaire.Statistics.QuestionsCount.WrapWith("span"))</li>
+					</ul>
+				</li>
+				<li>@Pdf.Format(PdfStrings.Stat_QuestionsWithConditions, questionnaire.Statistics.QuestionsWithEnablingConditionsCount.WrapWith("span"))</li>
+				<li>@Pdf.Format(PdfStrings.Stat_QuestionsWithValidation, questionnaire.Statistics.QuestionsWithValidationConditionsCount.WrapWith("span"))</li>
+				<li>@Pdf.Format(PdfStrings.Stat_Rosters, questionnaire.Statistics.RostersCount.WrapWith("span"))</li>
+				<li>@Pdf.Format(PdfStrings.Stat_Variables, questionnaire.Statistics.VariablesCount.WrapWith("span"))</li>
+			</ul>
+		</div>
+		<div class="column_header">
+			<a href="https://solutions.worldbank.org/" target="_blank" class="logo">
+				<img src="~/Content/images/pdf_logo.png" alt="Survey Solutions" />
+			</a>
+		</div>
 
-    </header>
-    <article>
-        <section class="questionnaire_info">
-            <div class="questionnaire_title">
-                <h1>@questionnaire.Title</h1>
-            </div>
-        </section>
-        <section class="table_of_contents">
-            <dl>
-                <dt>&nbsp;</dt>
-                <dd>
-                    <a href="#questionnaire_description" class="section_name appendix">@PdfStrings.MetadataSectionTitle<br /> @PdfStrings.MetadataSectionSubTitle</a>
-                </dd>
+	</header>
+	<article>
+		<section class="questionnaire_info">
+			<div class="questionnaire_title">
+				<h1>@questionnaire.Title</h1>
+			</div>
+		</section>
+		<section class="table_of_contents">
+			<dl>
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#questionnaire_description" class="section_name appendix">@PdfStrings.MetadataSectionTitle<br /> @PdfStrings.MetadataSectionSubTitle</a>
+				</dd>
 
-                @foreach (var sectionId in questionnaire.SectionIds)
-                {
-                    var statistics = questionnaire.GetGroupStatistics(sectionId);
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#@questionnaire.GetItemRef(sectionId)" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
-                        <ul class="group-statistics">
-                            @if (statistics.GroupsCount > 0)
-                            {
-                                <li>@Pdf.Format(PdfStrings.Stat_Subsections, statistics.GroupsCount.WrapWith("span"))</li>
-                            }
-                            else
-                            {
-                                <li>@PdfStrings.Stat_NoSubsections</li>
-                            }
-                            @if (statistics.RostersCount > 0)
-                            {
-                                <li>@Pdf.Format(PdfStrings.Stat_Rosters, statistics.RostersCount.WrapWith("span"))</li>
-                            }
-                            else
-                            {
-                                <li>@PdfStrings.Stat_NoRosters</li>
-                            }
-                            @if (statistics.QuestionsCount > 0)
-                            {
-                                <li>@Pdf.Format(PdfStrings.Stat_Questions, statistics.QuestionsCount.WrapWith("span"))</li>
-                            }
-                            else
-                            {
-                                <li>@PdfStrings.Stat_NoQuestions</li>
-                            }
-                            @if (statistics.StaticTextsCount > 0)
-                            {
-                                <li>@Pdf.Format(PdfStrings.Stat_StaticTexts, statistics.StaticTextsCount.WrapWith("span"))</li>
-                            }
-                            @if (statistics.VariablesCount > 0)
-                            {
-                                <li>@Pdf.Format(PdfStrings.Stat_Variables, statistics.VariablesCount.WrapWith("span"))</li>
-                            }
-                        </ul>
-                    </dd>
-                }
-                @if (!questionnaire.IsConditionsAppendixEmpty)
-                {
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#enablements_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Conditions, questionnaire.ConditionsAppendixIndex, "&#8212;")</a>
-                    </dd>
-                }
-                @if (!questionnaire.IsValidationsAppendixEmpty)
-                {
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#validations_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Validations, questionnaire.ValidationsAppendixIndex, "&#8212;")</a>
-                    </dd>
-                }
-                @if (!questionnaire.IsInstructionsAppendixEmpty)
-                {
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#instructions_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Instructions, questionnaire.InstructionsAppendixIndex, "&#8212;")</a>
-                    </dd>
-                }
-                @if (!questionnaire.IsOptionsAppendixEmpty)
-                {
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#options_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Options, questionnaire.OptionsAppendixIndex, "&#8212;")</a>
-                    </dd>
-                }
-                @if (!questionnaire.IsVariablesAppendixEmpty)
-                {
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#variables_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Variables, questionnaire.VariablesAppendixIndex, "&#8212;")</a>
-                    </dd>
-                }
-                @if (!questionnaire.IsOptionsFilterAppendixEmpty)
-                {
-                    <dt>&nbsp;</dt>
-                    <dd>
-                        <a href="#optoins_filters_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</a>
-                    </dd>
-                }
+				@foreach (var sectionId in questionnaire.SectionIds)
+				{
+				var statistics = questionnaire.GetGroupStatistics(sectionId);
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#@questionnaire.GetItemRef(sectionId)" class="section_name">@questionnaire.GetGroupTitle(sectionId)</a>
+					<ul class="group-statistics">
+						@if (statistics.GroupsCount > 0)
+						{
+						<li>@Pdf.Format(PdfStrings.Stat_Subsections, statistics.GroupsCount.WrapWith("span"))</li>
+						}
+						else
+						{
+						<li>@PdfStrings.Stat_NoSubsections</li>
+						}
+						@if (statistics.RostersCount > 0)
+						{
+						<li>@Pdf.Format(PdfStrings.Stat_Rosters, statistics.RostersCount.WrapWith("span"))</li>
+						}
+						else
+						{
+						<li>@PdfStrings.Stat_NoRosters</li>
+						}
+						@if (statistics.QuestionsCount > 0)
+						{
+						<li>@Pdf.Format(PdfStrings.Stat_Questions, statistics.QuestionsCount.WrapWith("span"))</li>
+						}
+						else
+						{
+						<li>@PdfStrings.Stat_NoQuestions</li>
+						}
+						@if (statistics.StaticTextsCount > 0)
+						{
+						<li>@Pdf.Format(PdfStrings.Stat_StaticTexts, statistics.StaticTextsCount.WrapWith("span"))</li>
+						}
+						@if (statistics.VariablesCount > 0)
+						{
+						<li>@Pdf.Format(PdfStrings.Stat_Variables, statistics.VariablesCount.WrapWith("span"))</li>
+						}
+					</ul>
+				</dd>
+				}
+				@if (!questionnaire.IsConditionsAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#enablements_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Conditions, questionnaire.ConditionsAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				@if (!questionnaire.IsValidationsAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#validations_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Validations, questionnaire.ValidationsAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				@if (!questionnaire.IsInstructionsAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#instructions_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Instructions, questionnaire.InstructionsAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				@if (!questionnaire.IsOptionsAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#options_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Options, questionnaire.OptionsAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				@if (!questionnaire.IsVariablesAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#variables_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_Variables, questionnaire.VariablesAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				@if (!questionnaire.IsOptionsFilterAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#optoins_filters_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				@if (!questionnaire.IsSpecialValuesAppendixEmpty)
+				{
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#special_values_appendix" class="section_name appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</a>
+				</dd>
+				}
+				<dt>&nbsp;</dt>
+				<dd>
+					<a href="#legend_appendix" class="section_name appendix">@PdfStrings.Legend</a>
+				</dd>
+			</dl>
+		</section>
+	</article>
 
-                <dt>&nbsp;</dt>
-                <dd>
-                    <a href="#legend_appendix" class="section_name appendix">@PdfStrings.Legend</a>
-                </dd>
-            </dl>
-        </section>
-    </article>
+	<article class="appendix_section identification_information">
+		<h2 id="questionnaire_description">@PdfStrings.MetadataSectionTitle<br /> @PdfStrings.MetadataSectionSubTitle</h2>
+		<section>
+			<h3>@PdfStrings.SideBarMetadataBasicInfo</h3>
+			<dl class="questionnaire_description">
+				<dt>@PdfStrings.MetadataTitle</dt>
+				<dd>@questionnaire.Title</dd>
 
-    <article class="appendix_section identification_information">
-        <h2 id="questionnaire_description">@PdfStrings.MetadataSectionTitle<br /> @PdfStrings.MetadataSectionSubTitle</h2>
-        <section>
-            <h3>@PdfStrings.SideBarMetadataBasicInfo</h3>
-            <dl class="questionnaire_description">
-                <dt>@PdfStrings.MetadataTitle</dt>
-                <dd>@questionnaire.Title</dd>
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.SubTitle))
+				{
+				<dt>@PdfStrings.MetadataSubtitle</dt>
+				<dd>@questionnaire.Metadata.SubTitle</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Version))
+				{
+				<dt>@PdfStrings.MetadataVersionIdentificator</dt>
+				<dd>@questionnaire.Metadata.Version</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.VersionNotes))
+				{
+				<dt>@PdfStrings.MetadataVersionNotes</dt>
+				<dd>@questionnaire.Metadata.VersionNotes</dd>
+				}
+			</dl>
+		</section>
 
-                @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.SubTitle))
-                {
-                    <dt>@PdfStrings.MetadataSubtitle</dt>
-                    <dd>@questionnaire.Metadata.SubTitle</dd>
-                }
-                @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Version))
-                {
-                    <dt>@PdfStrings.MetadataVersionIdentificator</dt>
-                    <dd>@questionnaire.Metadata.Version</dd>
-                }
-                @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.VersionNotes))
-                {
-                    <dt>@PdfStrings.MetadataVersionNotes</dt>
-                    <dd>@questionnaire.Metadata.VersionNotes</dd>
-                }
-            </dl>
-        </section>
-        
-        @if (questionnaire.Metadata.StudyType.HasValue || !string.IsNullOrWhiteSpace(questionnaire.Metadata.KindOfData) || questionnaire.Metadata.ModeOfDataCollection.HasValue)
-        {
-            <section>
-                <h3>@PdfStrings.SideBarMetadataSurveyDataInfo</h3>
-                <dl class="questionnaire_description">
-                    @if (questionnaire.Metadata.StudyType.HasValue)
-                    {
-                        <dt>@PdfStrings.MetadataStudyType</dt>
-                        <dd>@StudyTypeProvider.GetStudyTypeTitleByCode(questionnaire.Metadata.StudyType.Value)</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.KindOfData))
-                    {
-                        <dt>@PdfStrings.MetadataKindOfData</dt>
-                        <dd>@KindOfDataProvider.GetKindOfDataTitleByCode(questionnaire.Metadata.KindOfData)</dd>
-                    }
-                    @if (questionnaire.Metadata.ModeOfDataCollection.HasValue)
-                    {
-                        <dt>@PdfStrings.MetadataModeOfDataCollection</dt>
-                        <dd>@ModeOfDataCollectionProvider.GetModeOfDataCollectionTitleByCode(questionnaire.Metadata.ModeOfDataCollection.Value)</dd>
-                    }
-                </dl>
-            </section>
-        }
-        
-        @if (
-                !string.IsNullOrWhiteSpace(questionnaire.Metadata.Country) 
-                || questionnaire.Metadata.Year.HasValue
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Language)
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.UnitOfAnalysis)
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Coverage)
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Universe)
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.PrimaryInvestigator)
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Consultant)
-                || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Funding)
-            )
-        {
-            <section>
-                <h3>@PdfStrings.SideBarMetadataSurveyInfo</h3>
-                <dl class="questionnaire_description">
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Country))
-                    {
-                        <dt>@PdfStrings.MetadataCountry</dt>
-                        <dd>@CountryListProvider.GetCountryTitleByCode(questionnaire.Metadata.Country)</dd>
-                    }
-                    @if (questionnaire.Metadata.Year.HasValue)
-                    {
-                        <dt>@PdfStrings.MetadataYear</dt>
-                        <dd>@questionnaire.Metadata.Year</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Language))
-                    {
-                        <dt>@PdfStrings.MetadataLanguages</dt>
-                        <dd>@questionnaire.Metadata.Language</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.UnitOfAnalysis))
-                    {
-                        <dt>@PdfStrings.MetadataUnitOfAlalysis</dt>
-                        <dd>@questionnaire.Metadata.UnitOfAnalysis</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Coverage))
-                    {
-                        <dt>@PdfStrings.MetadataCoverage</dt>
-                        <dd>@questionnaire.Metadata.Coverage</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Universe))
-                    {
-                        <dt>@PdfStrings.MetadataUniverse</dt>
-                        <dd>@questionnaire.Metadata.Universe</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.PrimaryInvestigator))
-                    {
-                        <dt>@PdfStrings.MetadataPrimaryInvestigator</dt>
-                        <dd>@questionnaire.Metadata.PrimaryInvestigator</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Consultant))
-                    {
-                        <dt>@PdfStrings.MetadataConsultants</dt>
-                        <dd>                    
-                            <div>
-                                @questionnaire.Metadata.Consultant
-                            </div>
-                        </dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Funding))
-                    {
-                        <dt>@PdfStrings.MetadataFunding</dt>
-                        <dd>@questionnaire.Metadata.Funding</dd>
-                    }
-                </dl>
-            </section>
-        }
+		@if (questionnaire.Metadata.StudyType.HasValue || !string.IsNullOrWhiteSpace(questionnaire.Metadata.KindOfData) || questionnaire.Metadata.ModeOfDataCollection.HasValue)
+		{
+		<section>
+			<h3>@PdfStrings.SideBarMetadataSurveyDataInfo</h3>
+			<dl class="questionnaire_description">
+				@if (questionnaire.Metadata.StudyType.HasValue)
+				{
+				<dt>@PdfStrings.MetadataStudyType</dt>
+				<dd>@StudyTypeProvider.GetStudyTypeTitleByCode(questionnaire.Metadata.StudyType.Value)</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.KindOfData))
+				{
+				<dt>@PdfStrings.MetadataKindOfData</dt>
+				<dd>@KindOfDataProvider.GetKindOfDataTitleByCode(questionnaire.Metadata.KindOfData)</dd>
+				}
+				@if (questionnaire.Metadata.ModeOfDataCollection.HasValue)
+				{
+				<dt>@PdfStrings.MetadataModeOfDataCollection</dt>
+				<dd>@ModeOfDataCollectionProvider.GetModeOfDataCollectionTitleByCode(questionnaire.Metadata.ModeOfDataCollection.Value)</dd>
+				}
+			</dl>
+		</section>
+		}
 
-        @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Notes) || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Keywords))
-        {
-            <section>
-                <h3>@PdfStrings.SideBarMetadataAdditionalInfo</h3>
-                <dl class="questionnaire_description">
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Notes))
-                    {
-                        <dt>@PdfStrings.MetadataNotes</dt>
-                        <dd>@questionnaire.Metadata.Notes</dd>
-                    }
-                    @if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Keywords))
-                    {
-                        <dt>@PdfStrings.MetadataKeywords</dt>
-                        <dd>@questionnaire.Metadata.Keywords</dd>
-                    }
-                </dl>
-            </section>
-        }
-    </article>
-    <article>
-        @foreach (var sectionId in questionnaire.SectionIds)
-        {
-            <section class="section">
-                <div class="section_header">
-                    <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
-                </div>
-                @Html.Partial("_RenderChildren", sectionId)
-            </section>
-        }
-    </article>
-    @if (!questionnaire.IsConditionsAppendixEmpty)
-    {
-        <article class="appendix_section">
-            <h2 id="enablements_appendix">@Pdf.Format(PdfStrings.Appendix_Conditions, questionnaire.ConditionsAppendixIndex, "&#8212;")</h2>
-            <ul class="container">
-                @foreach (var item in questionnaire.ItemsWithLongConditions)
-                {
-                    <li>
-                        <span class="number">[@item.Index]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetConditionRef(item.Id)">
-                                <span>@item.VariableName</span>: @item.Title
-                            </a>
-                            <p>
-                                @PdfStrings.EnablementCondition
-                                <pre>@item.EnablementCondition</pre>
-                            </p>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </article>}
-    @if (!questionnaire.IsValidationsAppendixEmpty)
-    {
-        <article class="appendix_section">
-            <h2 id="validations_appendix">@Pdf.Format(PdfStrings.Appendix_Validations, questionnaire.ValidationsAppendixIndex, "&#8212;")</h2>
-            <ul class="container">
-                @foreach (var item in questionnaire.ItemsWithLongValidations)
-                {
-                    <li>
-                        <span class="number">[@item.Index]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetValidationsRef(item.Id)">
-                                <span>@item.VariableName</span>: @item.Title
-                            </a>
-                            @foreach (var validationCondition in item.ValidationConditions)
-                            {
-                                <p>
-                                    @PdfStrings.ValidationCondition
-                                    <pre>@validationCondition.Expression.Trim()</pre>
-                                </p>
-                                <p>
-                                    @PdfStrings.ValidationMessage
-                                    <span>@validationCondition.Message</span>
-                                </p>
-                            }
-                        </div>
-                    </li>
-                }
+		@if (
+		!string.IsNullOrWhiteSpace(questionnaire.Metadata.Country)
+		|| questionnaire.Metadata.Year.HasValue
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.Language)
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.UnitOfAnalysis)
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.Coverage)
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.Universe)
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.PrimaryInvestigator)
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.Consultant)
+		|| !string.IsNullOrWhiteSpace(questionnaire.Metadata.Funding)
+		)
+		{
+		<section>
+			<h3>@PdfStrings.SideBarMetadataSurveyInfo</h3>
+			<dl class="questionnaire_description">
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Country))
+				{
+				<dt>@PdfStrings.MetadataCountry</dt>
+				<dd>@CountryListProvider.GetCountryTitleByCode(questionnaire.Metadata.Country)</dd>
+				}
+				@if (questionnaire.Metadata.Year.HasValue)
+				{
+				<dt>@PdfStrings.MetadataYear</dt>
+				<dd>@questionnaire.Metadata.Year</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Language))
+				{
+				<dt>@PdfStrings.MetadataLanguages</dt>
+				<dd>@questionnaire.Metadata.Language</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.UnitOfAnalysis))
+				{
+				<dt>@PdfStrings.MetadataUnitOfAlalysis</dt>
+				<dd>@questionnaire.Metadata.UnitOfAnalysis</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Coverage))
+				{
+				<dt>@PdfStrings.MetadataCoverage</dt>
+				<dd>@questionnaire.Metadata.Coverage</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Universe))
+				{
+				<dt>@PdfStrings.MetadataUniverse</dt>
+				<dd>@questionnaire.Metadata.Universe</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.PrimaryInvestigator))
+				{
+				<dt>@PdfStrings.MetadataPrimaryInvestigator</dt>
+				<dd>@questionnaire.Metadata.PrimaryInvestigator</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Consultant))
+				{
+				<dt>@PdfStrings.MetadataConsultants</dt>
+				<dd>
+					<div>
+						@questionnaire.Metadata.Consultant
+					</div>
+				</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Funding))
+				{
+				<dt>@PdfStrings.MetadataFunding</dt>
+				<dd>@questionnaire.Metadata.Funding</dd>
+				}
+			</dl>
+		</section>
+		}
 
-            </ul>
-        </article>
-    }
-    @if (!questionnaire.IsInstructionsAppendixEmpty)
-    {
-        <article class="appendix_section">
-            <h2 id="instructions_appendix">@Pdf.Format(PdfStrings.Appendix_Instructions, questionnaire.InstructionsAppendixIndex, "&#8212;")</h2>
-            <ul class="container">
-                @for (var i = 0; i < questionnaire.QuestionsWithLongInstructions.Count; i++)
-                {
-                    var question = questionnaire.QuestionsWithLongInstructions[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetInstructionsRef(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
-                            </a>
-                            <p>
-                                @question.Instructions
-                            </p>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </article>
-    }
-    @if (!questionnaire.IsOptionsAppendixEmpty)
-    {
-        <article class="appendix_section">
-            <h2 id="options_appendix">@Pdf.Format(PdfStrings.Appendix_Options, questionnaire.OptionsAppendixIndex, "&#8212;")</h2>
-            <ul class="container">
-                @for (var i = 0; i < questionnaire.QuestionsWithLongOptionsList.Count; i++)
-                {
-                    var question = questionnaire.QuestionsWithLongOptionsList[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
-                            </a>
-                            <p>
-                                @PdfStrings.Options
-                                @foreach (var option in question.Answers)
-                                {
-                                    <span><span>@option.AnswerValue:</span>@(option.AnswerText),</span>
-                                }
-                            </p>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </article>
-    }
+		@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Notes) || !string.IsNullOrWhiteSpace(questionnaire.Metadata.Keywords))
+		{
+		<section>
+			<h3>@PdfStrings.SideBarMetadataAdditionalInfo</h3>
+			<dl class="questionnaire_description">
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Notes))
+				{
+				<dt>@PdfStrings.MetadataNotes</dt>
+				<dd>@questionnaire.Metadata.Notes</dd>
+				}
+				@if (!string.IsNullOrWhiteSpace(questionnaire.Metadata.Keywords))
+				{
+				<dt>@PdfStrings.MetadataKeywords</dt>
+				<dd>@questionnaire.Metadata.Keywords</dd>
+				}
+			</dl>
+		</section>
+		}
+	</article>
+	<article>
+		@foreach (var sectionId in questionnaire.SectionIds)
+		{
+		<section class="section">
+			<div class="section_header">
+				<h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
+			</div>
+			@Html.Partial("_RenderChildren", sectionId)
+		</section>
+		}
+	</article>
+	@if (!questionnaire.IsConditionsAppendixEmpty)
+	{
+	<article class="appendix_section">
+		<h2 id="enablements_appendix">@Pdf.Format(PdfStrings.Appendix_Conditions, questionnaire.ConditionsAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@foreach (var item in questionnaire.ItemsWithLongConditions)
+			{
+			<li>
+				<span class="number">[@item.Index]</span>
+				<div class="appendix_detail">
+					<a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetConditionRef(item.Id)">
+						<span>@item.VariableName</span>: @item.Title
+					</a>
+					<p>
+						@PdfStrings.EnablementCondition
+						<pre>@item.EnablementCondition</pre>
+					</p>
+				</div>
+			</li>
+			}
+		</ul>
+	</article>}
+	@if (!questionnaire.IsValidationsAppendixEmpty)
+	{
+	<article class="appendix_section">
+		<h2 id="validations_appendix">@Pdf.Format(PdfStrings.Appendix_Validations, questionnaire.ValidationsAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@foreach (var item in questionnaire.ItemsWithLongValidations)
+			{
+			<li>
+				<span class="number">[@item.Index]</span>
+				<div class="appendix_detail">
+					<a href="#@questionnaire.GetItemRef(item.Id)" id="@questionnaire.GetValidationsRef(item.Id)">
+						<span>@item.VariableName</span>: @item.Title
+					</a>
+					@foreach (var validationCondition in item.ValidationConditions)
+					{
+					<p>
+						@PdfStrings.ValidationCondition
+						<pre>@validationCondition.Expression.Trim()</pre>
+					</p>
+					<p>
+						@PdfStrings.ValidationMessage
+						<span>@validationCondition.Message</span>
+					</p>
+					}
+				</div>
+			</li>
+			}
 
+		</ul>
+	</article>
+	}
+	@if (!questionnaire.IsInstructionsAppendixEmpty)
+	{
+	<article class="appendix_section">
+		<h2 id="instructions_appendix">@Pdf.Format(PdfStrings.Appendix_Instructions, questionnaire.InstructionsAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@for (var i = 0; i < questionnaire.QuestionsWithLongInstructions.Count; i++)
+			{
+			var question = questionnaire.QuestionsWithLongInstructions[i];
+			<li>
+				<span class="number">[@(i + 1)]</span>
+				<div class="appendix_detail">
+					<a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetInstructionsRef(question.PublicKey)">
+						<span>@question.StataExportCaption</span>: @question.QuestionText
+					</a>
+					<p>
+						@question.Instructions
+					</p>
+				</div>
+			</li>
+			}
+		</ul>
+	</article>
+	}
+	@if (!questionnaire.IsOptionsAppendixEmpty)
+	{
+	<article class="appendix_section">
+		<h2 id="options_appendix">@Pdf.Format(PdfStrings.Appendix_Options, questionnaire.OptionsAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@for (var i = 0; i < questionnaire.QuestionsWithLongOptionsList.Count; i++)
+			{
+			var question = questionnaire.QuestionsWithLongOptionsList[i];
+			<li>
+				<span class="number">[@(i + 1)]</span>
+				<div class="appendix_detail">
+					<a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
+						<span>@question.StataExportCaption</span>: @question.QuestionText
+					</a>
+					<p>
+						@PdfStrings.Options
+						@for(var j = 0; j < question.Answers.Count; j ++)
+						{
+							<span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count -1 ? ",":"")</span>
+						}
+					</p>
+				</div>
+			</li>
+			}
+		</ul>
+	</article>
+	}
 
-@if (!questionnaire.IsVariablesAppendixEmpty)
-    {
-        <article class="appendix_section">
-            <h2 id="variables_appendix">@Pdf.Format(PdfStrings.Appendix_Variables, questionnaire.VariablesAppendixIndex, "&#8212;")</h2>
-            <ul class="container">
-                @for (var i = 0; i < questionnaire.VariableWithLongExpressions.Count; i++)
-                {
-                    var variable = questionnaire.VariableWithLongExpressions[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(variable.PublicKey)" id="@questionnaire.GetVariableRef(variable.PublicKey)">
-                                <span>@variable.Name</span>:
-                            </a>
-                            <p>
-                                @variable.Expression
-                            </p>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </article>
-    }
+	@if (!questionnaire.IsVariablesAppendixEmpty)
+	{
+	<article class="appendix_section">
+		<h2 id="variables_appendix">@Pdf.Format(PdfStrings.Appendix_Variables, questionnaire.VariablesAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@for (var i = 0; i < questionnaire.VariableWithLongExpressions.Count; i++)
+			{
+			var variable = questionnaire.VariableWithLongExpressions[i];
+			<li>
+				<span class="number">[@(i + 1)]</span>
+				<div class="appendix_detail">
+					<a href="#@questionnaire.GetItemRef(variable.PublicKey)" id="@questionnaire.GetVariableRef(variable.PublicKey)">
+						<span>@variable.Name</span>:
+					</a>
+					<p>
+						@variable.Expression
+					</p>
+				</div>
+			</li>
+			}
+		</ul>
+	</article>
+	}
 
-    @if (!questionnaire.IsOptionsFilterAppendixEmpty)
-    {
-        <article class="appendix_section">
-            <h2 id="optoins_filters_appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</h2>
-            <ul class="container">
-                @for (var i = 0; i < questionnaire.QuestionsWithLongOptionsFilterExpression.Count; i++)
-                {
-                    var question = questionnaire.QuestionsWithLongOptionsFilterExpression[i];
-                    <li>
-                        <span class="number">[@(i + 1)]</span>
-                        <div class="appendix_detail">
-                            <a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsFilterRef(question.PublicKey)">
-                                <span>@question.StataExportCaption</span>: @question.QuestionText
-                            </a>
-                            <p>
-                                @questionnaire.GetQuestionOptionsFilter(question)
-                            </p>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </article>
-    }
-    
+	@if (!questionnaire.IsOptionsFilterAppendixEmpty)
+	{
+	<article class="appendix_section">
+		<h2 id="optoins_filters_appendix">@Pdf.Format(PdfStrings.Appendix_OptionFilters, questionnaire.OptionsFilterAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@for (var i = 0; i < questionnaire.QuestionsWithLongOptionsFilterExpression.Count; i++)
+			{
+			var question = questionnaire.QuestionsWithLongOptionsFilterExpression[i];
+			<li>
+				<span class="number">[@(i + 1)]</span>
+				<div class="appendix_detail">
+					<a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsFilterRef(question.PublicKey)">
+						<span>@question.StataExportCaption</span>: @question.QuestionText
+					</a>
+					<p>
+						@questionnaire.GetQuestionOptionsFilter(question)
+					</p>
+				</div>
+			</li>
+			}
+		</ul>
+	</article>
+	}
+	
+@if (!questionnaire.IsSpecialValuesAppendixEmpty)
+{
+	<article class="appendix_section">
+		<h2 id="special_values_appendix">@Pdf.Format(PdfStrings.Appendix_SpecialValues, questionnaire.SpecialValuesAppendixIndex, "&#8212;")</h2>
+		<ul class="container">
+			@for (var i = 0; i < questionnaire.QuestionsWithLongSpecialValuesList.Count; i++)
+			{
+				var question = questionnaire.QuestionsWithLongSpecialValuesList[i];
+				<li>
+					<span class="number">[@(i + 1)]</span>
+					<div class="appendix_detail">
+						<a href="#@questionnaire.GetItemRef(question.PublicKey)" id="@questionnaire.GetOptionsRef(question.PublicKey)">
+							<span>@question.StataExportCaption</span>: @question.QuestionText
+						</a>
+						<p>
+							@(PdfStrings.SpecialValues):
+							@for(var j = 0; j < question.Answers.Count; j ++)
+							{
+								<span><span>@question.Answers[j].AnswerValue:</span>@(question.Answers[j].AnswerText)@(j < question.Answers.Count -1 ? ",":"")</span>
+							}
+						</p>
+					</div>
+				</li>
+			}
+		</ul>
+	</article>
+}
+
 <article class="appendix_section legend">
-        <h2 id="legend_appendix">@PdfStrings.Legend</h2>
-        <section>
-            <h3>@PdfStrings.PdfLegend</h3>
-            <img src="~/Content/images/pdf-question-legend.png" />
-            <img src="~/Content/images/pdf-roster-legend.png" />
-        </section>
-    </article>
+		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
+		<section>
+			<h3>@PdfStrings.PdfLegend</h3>
+			<img src="~/Content/images/pdf-question-legend.png" />
+			<img src="~/Content/images/pdf-roster-legend.png" />
+		</section>
+	</article>
 </body>
 </html>

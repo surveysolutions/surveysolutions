@@ -237,4 +237,16 @@
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>Заблокирован Администратором или Хедквотером</value>
   </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>Подтвердите новый пароль</value>
+    <comment>Подтвердите новый пароль</comment>
+  </data>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>Новый пароль</value>
+    <comment>Новый пароль</comment>
+  </data>
+  <data name="UserName_Taken" xml:space="preserve">
+    <value>Выберите другое имя пользователя</value>
+    <comment>Выберите другое имя пользователя</comment>
+  </data>
 </root>

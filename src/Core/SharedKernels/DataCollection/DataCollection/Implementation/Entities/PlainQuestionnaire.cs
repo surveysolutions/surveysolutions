@@ -387,7 +387,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private void CheckShouldQestionProvideOptions(IQuestion question, Guid questionId)
         {
             bool questionTypeDoesNotSupportAnswerOptions
-                = question.QuestionType != QuestionType.SingleOption && question.QuestionType != QuestionType.MultyOption;
+                = question.QuestionType != QuestionType.SingleOption && 
+                  question.QuestionType != QuestionType.MultyOption && 
+                  question.QuestionType != QuestionType.Numeric;
 
             if (questionTypeDoesNotSupportAnswerOptions)
                 throw new QuestionnaireException(
@@ -624,23 +626,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
+        private readonly ConcurrentDictionary<Guid, Guid[]> _getRosterSizeSourcesCache = new ConcurrentDictionary<Guid, Guid[]>();
+
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            var entity = GetEntityOrThrow(entityId);
-            var rosterSizes = new List<Guid>();
-            while (entity != this.innerDocument)
+            return _getRosterSizeSourcesCache.GetOrAdd(entityId, id =>
             {
-                var group = entity as IGroup;
-                if (group != null)
-                {
-                    if (IsRosterGroup(group))
-                        rosterSizes.Add(this.GetRosterSource(group.PublicKey));
+                var entity = GetEntityOrThrow(entityId);
+                var rosterSizes = new List<Guid>();
 
+                while (entity != this.innerDocument)
+                {
+                    if (entity is IGroup group)
+                    {
+                        if (IsRosterGroup(group))
+                            rosterSizes.Insert(0, this.GetRosterSource(group.PublicKey));
+
+                    }
+
+                    entity = entity.GetParent();
                 }
-                entity = entity.GetParent();
-            }
-            rosterSizes.Reverse();
-            return rosterSizes.ToArray();
+
+                return rosterSizes.ToArray();
+            });
         }
 
         public int GetRosterLevelForQuestion(Guid questionId)
@@ -823,6 +831,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public string GetVariableName(Guid variableId) => this.GetVariable(variableId).Name;
         public string GetRosterVariableName(Guid id) => this.GetGroupOrThrow(id).VariableName;
+
+        public IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId)
+        {
+            return GetEntityOrThrow(entityId).GetValidationConditions()
+                .Select((v, i) => new {index = i, validationCondition = v})
+                .Where(v => v.validationCondition.Severity == ValidationSeverity.Warning)
+                .Select(v => v.index)
+                .ToReadOnlyCollection();
+        }
+
+        public bool IsSignature(Guid entityIdentityId)
+        {
+            var question = this.GetQuestion(entityIdentityId) as IMultimediaQuestion;
+            return question?.IsSignature ?? false;
+        }
+
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 

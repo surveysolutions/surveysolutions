@@ -10,7 +10,6 @@
 
 namespace WB.Core.BoundedContexts.Interviewer.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,7 +39,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources", typeof(InterviewerUIResources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources", typeof(InterviewerUIResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -198,6 +197,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Perform search to display results.
+        /// </summary>
+        public static string Dashboard_NeedTextForSearch {
+            get {
+                return ResourceManager.GetString("Dashboard_NeedTextForSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New ({0}).
         /// </summary>
         public static string Dashboard_NewItemsLinkText {
@@ -250,6 +258,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_NoNewItemsLinkText {
             get {
                 return ResourceManager.GetString("Dashboard_NoNewItemsLinkText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing found.
+        /// </summary>
+        public static string Dashboard_NotFoundSearchResult {
+            get {
+                return ResourceManager.GetString("Dashboard_NotFoundSearchResult", resourceCulture);
             }
         }
         
@@ -314,6 +331,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Dashboard_Reopen {
             get {
                 return ResourceManager.GetString("Dashboard_Reopen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit Search.
+        /// </summary>
+        public static string Dashboard_Search_ExitSearch {
+            get {
+                return ResourceManager.GetString("Dashboard_Search_ExitSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} elements found.
+        /// </summary>
+        public static string Dashboard_SearchResult {
+            get {
+                return ResourceManager.GetString("Dashboard_SearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter text for search.
+        /// </summary>
+        public static string Dashboard_SearchWatermark {
+            get {
+                return ResourceManager.GetString("Dashboard_SearchWatermark", resourceCulture);
             }
         }
         
@@ -1042,6 +1086,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string MenuItem_Title_Search {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string MenuItem_Title_Settings {
@@ -1276,6 +1329,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking application updates.
+        /// </summary>
+        public static string Synchronization_CheckNewVersionOfApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_CheckNewVersionOfApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string Synchronization_Done {
@@ -1317,6 +1379,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Download_Title {
             get {
                 return ResourceManager.GetString("Synchronization_Download_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading application updates.
+        /// </summary>
+        public static string Synchronization_DownloadApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received {0} of {1} at {2} ({3}%).
+        /// </summary>
+        public static string Synchronization_DownloadApplication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_DownloadApplication_Description", resourceCulture);
             }
         }
         

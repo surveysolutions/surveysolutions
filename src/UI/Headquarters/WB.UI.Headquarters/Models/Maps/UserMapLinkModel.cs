@@ -9,7 +9,7 @@
         public bool IsObserver { get; set; }
         public bool IsObserving { get; set; }
 
-        public string FileExtension { get; set; }       
-
+        public string FileExtension { get; set; }
+        public string UserMapsUrl { get; set; }
     }
 }

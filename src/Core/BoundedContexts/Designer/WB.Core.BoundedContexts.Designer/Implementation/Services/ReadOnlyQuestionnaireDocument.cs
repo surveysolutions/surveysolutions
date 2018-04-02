@@ -166,8 +166,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             IComposite entity = questionnaireEntity;
             while (entity != null && !(entity is QuestionnaireDocument))
             {
-                IGroup group = entity as IGroup;
-                if (group!=null)
+                if (entity is IGroup @group)
                 {
                     yield return group;
                 }
@@ -248,8 +247,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public  bool IsNumericRosterSizeQuestion(IQuestion question)
         {
-            var numericQuestion = question as NumericQuestion;
-            return numericQuestion != null && numericQuestion.IsInteger;
+            return question is NumericQuestion numericQuestion && numericQuestion.IsInteger;
         }
 
         public bool IsCategoricalRosterSizeQuestion(IQuestion question)
@@ -309,6 +307,25 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public bool IsLinked(IQuestion question)
         {
             return question.LinkedToQuestionId.HasValue || question.LinkedToRosterId.HasValue;
+        }
+
+        public bool IsTriggerForLongRoster(INumericQuestion question)
+        {
+            var rosters = this.Find<IGroup>(group => group.RosterSizeQuestionId == question.PublicKey).ToList();
+
+            if (rosters.Any(x => this.GetRosterScope(x).Length > 1)) return false;
+
+            foreach (var roster in rosters)
+            {
+                var entitiesInRoster = FindInGroup<IComposite>(roster.PublicKey).ToList();
+
+                if (entitiesInRoster.Count > Constants.MaxAmountOfItemsInLongRoster)
+                    return false;
+                if (entitiesInRoster.Any(x => (x as Group)?.IsRoster ?? false))
+                    return false;
+            }
+
+            return true;
         }
     }
 }
