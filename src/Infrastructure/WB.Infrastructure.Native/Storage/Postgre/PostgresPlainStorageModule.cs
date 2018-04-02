@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Humanizer;
 using NHibernate;
 using NHibernate.Cfg;
@@ -55,7 +56,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             try
             {
@@ -68,6 +69,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
 
             DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
+
+            return Task.CompletedTask;
         }
 
 

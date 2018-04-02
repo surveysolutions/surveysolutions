@@ -1,4 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+﻿using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
@@ -13,9 +14,9 @@ namespace WB.Infrastructure.Native.Files
             //this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

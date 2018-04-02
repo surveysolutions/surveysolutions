@@ -1,6 +1,7 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System;
 using System.Configuration;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -295,16 +296,16 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             CommandRegistry
-    .Setup<Questionnaire>()
-    .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-    .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
-    .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
-    .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
-    .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
-    .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
+                .Setup<Questionnaire>()
+                .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
+                .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
+                .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
+                .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)
+                .InitializesWith<CloneQuestionnaire>(aggregate => aggregate.CloneQuestionnaire);
 
             CommandRegistry
                 .Setup<StatefulInterview>()
@@ -358,6 +359,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
+
+            return Task.CompletedTask;
         }
     }
 }

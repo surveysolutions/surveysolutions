@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System.Threading.Tasks;
+using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation;
@@ -23,9 +24,9 @@ namespace WB.Core.BoundedContexts.Tester
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

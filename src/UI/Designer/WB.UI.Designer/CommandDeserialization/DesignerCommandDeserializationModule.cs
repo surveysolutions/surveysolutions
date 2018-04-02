@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -12,9 +13,9 @@ namespace WB.UI.Designer.CommandDeserialization
             registry.Bind<ICommandDeserializer, DesignerCommandDeserializer>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

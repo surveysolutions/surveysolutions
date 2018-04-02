@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.PasswordStrategies;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -19,9 +20,9 @@ namespace WB.UI.Designer.Code
             registry.BindAsSingleton<IRoleRepository, CQRSRoleRepository>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

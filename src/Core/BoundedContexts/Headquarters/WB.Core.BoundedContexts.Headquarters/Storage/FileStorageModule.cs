@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
@@ -61,9 +62,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             }
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

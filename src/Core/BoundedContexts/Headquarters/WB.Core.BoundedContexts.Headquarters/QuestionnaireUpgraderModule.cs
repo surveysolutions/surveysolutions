@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
@@ -12,9 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireUpgradeService, QuestionnaireUpgradeService>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
