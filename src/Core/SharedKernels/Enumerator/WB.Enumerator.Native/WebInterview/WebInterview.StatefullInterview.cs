@@ -39,7 +39,7 @@ namespace WB.Enumerator.Native.WebInterview
             };
         }
 
-        public InterviewInfo GetInterviewDetails()
+        public virtual InterviewInfo GetInterviewDetails()
         {
             var statefulInterview = this.GetCallerInterview();
             if (statefulInterview == null) return null;
@@ -55,7 +55,8 @@ namespace WB.Enumerator.Native.WebInterview
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
                 InterviewCannotBeChanged = statefulInterview.ReceivedByInterviewer || this.IsCurrentUserObserving,
                 ReceivedByInterviewer = statefulInterview.ReceivedByInterviewer,
-                IsCurrentUserObserving = this.IsCurrentUserObserving
+                IsCurrentUserObserving = this.IsCurrentUserObserving,
+                DoesBrokenPackageExist = false
             };
         }
 
@@ -93,7 +94,7 @@ namespace WB.Enumerator.Native.WebInterview
                 string answer = questionAnswer?.Value != null ? $@"{questionAnswer.Value.Latitude},{questionAnswer.Value.Longitude}" : null;
                 result.Answer = answer;
             }
-            if (entityType == InterviewEntityType.DateTime && (interviewQuestion.GetAsInterviewTreeDateTimeQuestion()).IsTimestamp)
+            else if (entityType == InterviewEntityType.DateTime && (interviewQuestion.GetAsInterviewTreeDateTimeQuestion()).IsTimestamp)
             {
                 DateTimeAnswer questionAnswer = interviewQuestion.GetAsInterviewTreeDateTimeQuestion().GetAnswer();
                 string answer = questionAnswer?.Value != null

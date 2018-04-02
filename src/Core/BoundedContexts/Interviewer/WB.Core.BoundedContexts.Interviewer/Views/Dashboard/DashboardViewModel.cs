@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class DashboardViewModel : BaseViewModel, IDisposable
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IPrincipal principal;
         private readonly IMvxMessenger messenger;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
 
@@ -40,7 +39,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPlainStorage<InterviewView> interviewsRepository): base (principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.principal = principal;
             this.messenger = messenger;
             this.interviewsRepository = interviewsRepository;
             this.Synchronization = synchronization;
@@ -74,6 +72,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.RefreshDashboard(this.LastVisitedInterviewId);
             this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
+        }
+
+        public override void ViewAppearing()
+        {
+            base.ViewAppearing();
+            this.RefreshDashboard();
         }
 
         private Guid? LastVisitedInterviewId { set; get; }
@@ -257,5 +261,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
             }
         }
+
+        public IMvxCommand ShowSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateTo<DashboardSearchViewModel>());
     }
 }

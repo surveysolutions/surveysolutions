@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -8,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -134,7 +136,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     break;
 
                 case QuestionType.Multimedia:
-                    this.InterviewQuestion = new InterviewTreeMultimediaQuestion(answer);
+                    this.InterviewQuestion = new InterviewTreeMultimediaQuestion(answer, null);
                     break;
                 case QuestionType.Numeric:
                     {
@@ -196,18 +198,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             get
             {
-                if (this.FailedValidations == null) return this.isValidWithoutFailedValidations;
+                if (this.FailedErrors == null) return this.isValidWithoutFailedValidations;
                 
-                return this.FailedValidations.Count == 0; 
+                return this.FailedErrors.Count == 0; 
             }
         }
+
+        public bool IsPlausible => this.FailedWarnings.Count == 0;
 
         public void RunImportInvariantsOrThrow(InterviewQuestionInvariants questionInvariants)
         {
             this.InterviewQuestion.RunImportInvariants(questionInvariants);
         }
 
-        public IReadOnlyList<FailedValidationCondition> FailedValidations { get; private set; }
+        public IReadOnlyList<FailedValidationCondition> FailedErrors { get; private set; }
 
         public void SetTitle(SubstitutionText title) 
         {
@@ -227,7 +231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void MarkInvalid(IEnumerable<FailedValidationCondition> failedValidations)
         {
-            this.FailedValidations = failedValidations?.ToReadOnlyCollection() ?? throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedErrors = failedValidations?.ToReadOnlyCollection() ?? throw new ArgumentNullException(nameof(failedValidations));
         }
 
         [Obsolete("Since v6.0")]
@@ -238,7 +242,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkValid()
         {
             this.isValidWithoutFailedValidations = true;
-            this.FailedValidations = Enumerable.Empty<FailedValidationCondition>().ToList();
+            this.FailedErrors = Enumerable.Empty<FailedValidationCondition>().ToList();
+        }
+
+        public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; } = Enumerable.Empty<FailedValidationCondition>().ToReadOnlyCollection();
+
+        public void MarkPlausible()
+            => this.FailedWarnings = new List<FailedValidationCondition>();
+
+        public void MarkImplausible(IEnumerable<FailedValidationCondition> failedValidations)
+        {
+            if (failedValidations == null) throw new ArgumentNullException(nameof(failedValidations));
+            this.FailedWarnings = failedValidations.ToReadOnlyCollection();
         }
 
         public InterviewTreeDoubleQuestion GetAsInterviewTreeDoubleQuestion() => this.InterviewQuestion as InterviewTreeDoubleQuestion;
@@ -366,7 +381,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
 
         public override string ToString()
-            => $"{GetTypeAsText()} Question {this.Identity} '{this.Title}'. " +
+            => $"{GetTypeAsText()} Question {this.Identity} '{this.VariableName}'. " +
                $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
                $"{(this.IsDisabled() ? "Disabled" : "Enabled")}. " +
                $"{(this.IsValid ? "Valid" : "Invalid")}";
@@ -440,7 +455,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsInteger) { ((InterviewTreeIntegerQuestion)this.InterviewQuestion).SetAnswer(NumericIntegerAnswer.FromInt(Convert.ToInt32(answer))); return; }
             if (this.IsDouble) { ((InterviewTreeDoubleQuestion)this.InterviewQuestion).SetAnswer(NumericRealAnswer.FromDouble(Convert.ToDouble(answer))); return; }
             if (this.IsDateTime) { ((InterviewTreeDateTimeQuestion)this.InterviewQuestion).SetAnswer(DateTimeAnswer.FromDateTime((DateTime)answer)); return; }
-            if (this.IsMultimedia) { ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).SetAnswer(MultimediaAnswer.FromString(answer as string)); return; }
+            if (this.IsMultimedia) { ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).SetAnswer(MultimediaAnswer.FromString(answer as string, null)); return; }
             if (this.IsQRBarcode) { ((InterviewTreeQRBarcodeQuestion)this.InterviewQuestion).SetAnswer(QRBarcodeAnswer.FromString(answer as string)); return; }
             if (this.IsGps) { ((InterviewTreeGpsQuestion)this.InterviewQuestion).SetAnswer(GpsAnswer.FromGeoPosition((GeoPosition)answer)); return; }
             if (this.IsSingleFixedOption || this.IsCascading) { ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).SetAnswer(CategoricalFixedSingleOptionAnswer.FromInt(Convert.ToInt32(answer))); return; }
@@ -487,8 +502,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultimedia) return ((InterviewTreeMultimediaQuestion)this.InterviewQuestion).GetAnswer()?.FileName;
             if (this.IsQRBarcode) return ((InterviewTreeQRBarcodeQuestion)this.InterviewQuestion).GetAnswer()?.DecodedText;
             if (this.IsArea) return ((InterviewTreeAreaQuestion)this.InterviewQuestion).GetAnswer()?.Value.ToString();
-            if (this.IsInteger) return AnswerUtils.AnswerToString(((InterviewTreeIntegerQuestion)this.InterviewQuestion).GetAnswer()?.Value);
-            if (this.IsDouble) return AnswerUtils.AnswerToString(((InterviewTreeDoubleQuestion)this.InterviewQuestion).GetAnswer()?.Value);
+            if (this.IsInteger)
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeIntegerQuestion)this.InterviewQuestion).GetAnswer()?.Value), GetCategoricalAnswerOptionText);
+            if (this.IsDouble)
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeDoubleQuestion)this.InterviewQuestion).GetAnswer()?.Value), GetCategoricalAnswerOptionText);
             if (this.IsDateTime)
             {
                 var interviewTreeDateTimeQuestion = (InterviewTreeDateTimeQuestion)this.InterviewQuestion;
@@ -517,9 +534,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             string GetCategoricalAnswerOptionText(decimal answerOptionValue) =>
                 this.Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
 
-            if (this.IsSingleFixedOption || this.IsCascading) return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer()?.SelectedValue), GetCategoricalAnswerOptionText);
-            if (this.IsMultiFixedOption) return AnswerUtils.AnswerToString(((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
-            if (this.IsYesNo) return AnswerUtils.AnswerToString(((InterviewTreeYesNoQuestion)this.InterviewQuestion).GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), GetCategoricalAnswerOptionText);
+            if (this.IsSingleFixedOption || this.IsCascading)
+                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer()?.SelectedValue), GetCategoricalAnswerOptionText);
+            if (this.IsMultiFixedOption)
+                return AnswerUtils.AnswerToString(((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
+            if (this.IsYesNo)
+                return AnswerUtils.AnswerToString(((InterviewTreeYesNoQuestion)this.InterviewQuestion).GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), GetCategoricalAnswerOptionText);
 
             if (this.IsSingleLinkedToList)
             {
@@ -540,7 +560,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return string.Empty;
         }
 
-        internal static object GetAnswerAsObject(InterviewTreeQuestion question)
+        public static object GetAnswerAsObject(InterviewTreeQuestion question)
         {
             //for backward compatibility answers were casted to other types
             //please take into concideration in case of changes
@@ -623,7 +643,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             clonedQuestion.Title = this.Title?.Clone();
             clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
-            clonedQuestion.FailedValidations = this.FailedValidations?
+            clonedQuestion.FailedErrors = this.FailedErrors?
+                .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
+                .ToReadOnlyCollection();
+            clonedQuestion.FailedWarnings = this.FailedWarnings?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
                 .ToReadOnlyCollection();
             clonedQuestion.AnswerComments = this.AnswerComments?
@@ -823,9 +846,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public InterviewTreeMultimediaQuestion(object answer):base(InterviewQuestionType.Multimedia)
+        public InterviewTreeMultimediaQuestion(object answer, DateTime? answerTime):base(InterviewQuestionType.Multimedia)
         {
-            this.answer = MultimediaAnswer.FromString(answer as string);
+            this.answer = MultimediaAnswer.FromString(answer as string, answerTime);
         }
 
         public override bool IsAnswered() => this.answer != null;
@@ -1393,6 +1416,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetQuestion(InterviewTreeQuestion question)
         {
             this.question = question;
+        }
+
+        public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
+        {
+            var questionnaire = this.question.Tree.Questionnaire;
+            questionInvariants.RequireFixedSingleOptionAnswerAllowed(GetAnswer().SelectedValue, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
 
         public override string ToString() => string.Join(", ", this.GetCascadingParentQuestion()?.GetAnswer());

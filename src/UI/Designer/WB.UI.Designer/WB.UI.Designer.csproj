@@ -210,9 +210,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Api\Designer\CommentsController.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
+    <Compile Include="Api\Headquarters\HQLookupController.cs" />
+    <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\QuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\WebTesterController.cs" />
@@ -253,6 +256,7 @@
     <Compile Include="Implementation\Services\WebTesterSettings.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M022_AddCommentsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
@@ -271,6 +275,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
+    <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
@@ -282,7 +287,6 @@
     <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
-    <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\Paging.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -459,6 +463,8 @@
     <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
+    <Content Include="questionnaire\details\scripts\controllers\comments.js" />
+    <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
@@ -468,10 +474,13 @@
     <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
+    <Content Include="questionnaire\details\scripts\services\commentsService.js" />
     <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
+    <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
+    <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -856,6 +865,7 @@
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <Content Include="Views\Questionnaire\Shared.cshtml" />
+    <Content Include="Views\Shared\ExportHtmlModalDialog.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -925,6 +935,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">

@@ -1161,16 +1161,16 @@
     <value>Move to another team</value>
   </data>
   <data name="Interviewers_InterviewersToMove" xml:space="preserve">
-    <value>Interviewer(s) {0} will be moved to another team of supervisor {1}.</value>
+    <value>Interviewer(s) {0} will be moved to a team of supervisor {1}.</value>
   </data>
   <data name="Interviewers_InterviewersToStay" xml:space="preserve">
     <value>Interviewer(s) {0} are in the team of supervisor {1} and no actions will be performed.</value>
   </data>
   <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
-    <value>Move interviewer(s) with their assignments and interviews to the new team of supervisor {0}.</value>
+    <value>Move interviewer(s) with their assignments and interviews to the team of supervisor {0}.</value>
   </data>
   <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
-    <value>Select a team to move {0}</value>
+    <value>Select a team where to move {0}</value>
   </data>
   <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
     <value>{0} and {1}</value>
@@ -1179,7 +1179,7 @@
     <value>{0} and {1} more</value>
   </data>
   <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
-    <value>Make original supervisor responsible for the assignments and interviews of the moved interviewer(s).</value>
+    <value>Make original supervisor responsible for the existing assignments and interviews of the moved interviewer(s).</value>
   </data>
   <data name="Interviewers_MovingCompleted" xml:space="preserve">
     <value>Moving users completed</value>

@@ -1771,7 +1771,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviewer(s) {0} will be moved to another team of supervisor {1}..
+        ///   Looks up a localized string similar to Interviewer(s) {0} will be moved to a team of supervisor {1}..
         /// </summary>
         public static string Interviewers_InterviewersToMove {
             get {
@@ -1807,7 +1807,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the new team of supervisor {0}..
+        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {0}.
         /// </summary>
         public static string Interviewers_MoveAllToNewTeam {
             get {
@@ -1816,7 +1816,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select a team to move {0}.
+        ///   Looks up a localized string similar to Select a team where to move {0}.
         /// </summary>
         public static string Interviewers_MoveInterviewerPopupTitle {
             get {
@@ -1897,7 +1897,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make original supervisor responsible for the assignments and interviews of the moved interviewer(s)..
+        ///   Looks up a localized string similar to Make original supervisor responsible for the existing assignments and interviews of the moved interviewer(s)..
         /// </summary>
         public static string Interviewers_ReassigntToOriginalSupervisor {
             get {

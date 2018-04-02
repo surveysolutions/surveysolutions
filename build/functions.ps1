@@ -41,6 +41,10 @@ function GetPathToMSBuild() {
     if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe") {
         return "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\MSBuild.exe"
     }
+	
+    if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe") {
+        return "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\MSBuild.exe"
+    }
      
     if (Test-Path "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe") {
         return "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MSBuild.exe"
@@ -312,19 +316,35 @@ function CopyCapi($Project, $source, $cleanUp) {
     Copy-Item "$source" "$DestinationFolder" -Recurse
 }
 
-function UpdateSourceVersion($Version, $BuildNumber, [string]$file) {
+function UpdateSourceVersion($Version, $BuildNumber, [string]$file, [string] $branch) {
+	if($branch.ToLower() -eq 'release') {
+		$branch = ""
+	} else {
+		$branch = " $branch"
+	}
 
-    $ver = $Version + "." + $BuildNumber
+	if ($Version -match "^[0-9]+\.[0-9]+$") {
+		$ver = $Version + ".0." + $BuildNumber
+	}
+	else {
+		if ($Version -match "^[0-9]+\.[0-9]+\.[0-9]+$") {
+			$ver = $Version + "." + $BuildNumber
+		}
+		else {
+			Throw "Version string $Version must be of form YYY.MM or YYYY.MM.#"
+		}
+	}
+
     $NewVersion = 'AssemblyVersion("' + $ver + '")';
     $NewFileVersion = 'AssemblyFileVersion("' + $ver + '")';
-    $NewInformationalVerson = 'AssemblyInformationalVersion("' + $Version + ' (build ' + $BuildNumber + ')")'
+    $NewInformationalVerson = "AssemblyInformationalVersion(""$Version (build $BuildNumber)$branch"")"
 
     $TmpFile = $tempFile = [System.IO.Path]::GetTempFileName()
 
     get-content $file | 
         % {$_ -replace 'AssemblyVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewVersion } |
         % {$_ -replace 'AssemblyFileVersion\("[0-9]+(\.([0-9]+|\*)){1,3}"\)', $NewFileVersion } |
-        % {$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(build [0-9]+\)"\)', $NewInformationalVerson } > $TmpFile
+        % {$_ -replace 'AssemblyInformationalVersion\("[0-9]+(\.([0-9]+|\*)){1,2} \(build [0-9]+\).*"\)', $NewInformationalVerson } > $TmpFile
 
     move-item $TmpFile $file -force
     Write-Host "##teamcity[message text='Updated $file to version $ver']"
@@ -337,11 +357,11 @@ function GetVersionString([string]$Project) {
     return $ret
 }
 
-function UpdateProjectVersion([string]$BuildNumber, [string]$ver) {
+function UpdateProjectVersion([string]$BuildNumber, [string]$ver, [string] $branch) {
     $foundFiles = get-childitem -include *AssemblyInfo.cs -recurse -ErrorAction SilentlyContinue | `
         ? { $_.fullname -notmatch "\\*.Tests\\?" }
     foreach ($file in $foundFiles) {
-        UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file
+        UpdateSourceVersion -Version $ver -BuildNumber $BuildNumber -file $file -Branch $branch
     }
 }
 

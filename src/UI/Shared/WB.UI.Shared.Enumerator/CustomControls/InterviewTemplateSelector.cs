@@ -48,6 +48,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (SingleOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},
             {typeof (QuestionHeaderViewModel), Resource.Layout.interview_question__header},
             {typeof (ValidityViewModel), Resource.Layout.interview_question__validation},
+            {typeof (WarningsViewModel), Resource.Layout.interview_question__warnings},
             {typeof (CommentsViewModel), Resource.Layout.interview_question__comments},
             {typeof (QuestionInstructionViewModel), Resource.Layout.interview_question__instructions},
             {typeof (AnsweringViewModel), Resource.Layout.interview_question__progressbar},
@@ -55,20 +56,13 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (VariableViewModel), Resource.Layout.interview_variable},
             {typeof (ReadOnlyQuestionViewModel), Resource.Layout.interview_question_readonly},
             {typeof (AreaQuestionViewModel), Resource.Layout.interview_question_area},
-            {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio}
+            {typeof (AudioQuestionViewModel), Resource.Layout.interview_question_audio},
+            {typeof (OptionBorderViewModel), Resource.Layout.interview_question_option_rounded_corner}
         };
 
         public int GetItemViewType(object forItemObject)
         {
             var typeOfViewModel = forItemObject.GetType();
-
-            if (typeOfViewModel.IsGenericType)
-            {
-                if (typeOfViewModel.GetGenericTypeDefinition() == typeof(OptionBorderViewModel<>))
-                {
-                    return Resource.Layout.interview_question_option_rounded_corner;
-                }
-            }
 
             var disabledViewModelTypes = new[]
             {
@@ -107,6 +101,11 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {
                     return Resource.Layout.interview_group_navigation;
                 }
+            }
+
+            if (forItemObject is MultimediaQuestionViewModel multimediaQuestionViewModel && multimediaQuestionViewModel.IsSignature)
+            {
+                return Resource.Layout.interview_question_signature;
             }
 
             return EntityTemplates.ContainsKey(typeOfViewModel)

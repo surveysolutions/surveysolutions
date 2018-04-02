@@ -5,6 +5,9 @@
                     <li>
                         <a :href="$config.model.mapsUrl">{{$t("Pages.MapList_Title")}}</a>
                     </li>
+                    <li>
+                        <a :href="$config.model.userMapsUrl">{{$t('Pages.MapList_UserMapsLink')}}</a>
+                    </li>                    
                 </ol>
                     <h1>{{$t("Pages.MapLinking_DescriptionTitle")}}</h1>
 

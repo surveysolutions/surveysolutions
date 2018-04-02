@@ -1,17 +1,15 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_answering_on_nested_roster_question_which_is_linked_to_question_from_roster : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var linkedSingleQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var linkedMultiQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
 
@@ -49,22 +47,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaireDocument);
             interview.AnswerNumericIntegerQuestion(interviewerId, rosterSizeQuestionId, RosterVector.Empty, DateTime.UtcNow, 2);
             interview.AnswerMultipleOptionsQuestion(interviewerId, nestedRosterSizeQuestionId, new RosterVector(new[] {0m}), DateTime.UtcNow, new[] {1, 2});
-        };
 
-        Because of = () => interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionIdentity.Id,
+            BecauseOf();
+        }
+
+        private void BecauseOf() => interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionIdentity.Id,
             sourceOfLinkedQuestionIdentity.RosterVector, DateTime.UtcNow, expectedLinkedOptionText);
 
-        It should_linked_single_question_has_1_option = () =>
+        [NUnit.Framework.Test] public void should_linked_single_question_has_1_option () 
         {
             interview.GetLinkedSingleOptionQuestion(linkedSingleQuestionIdentity)
-                .Options.ShouldContainOnly(Create.Entity.RosterVector(0, 1));
-        };
+                .Options.Should().BeEquivalentTo(new []{Create.Entity.RosterVector(0, 1)});
+        }
 
-        It should_linked_multi_question_has_1_option = () =>
+        [NUnit.Framework.Test] public void should_linked_multi_question_has_1_option () 
         {
             interview.GetLinkedMultiOptionQuestion(linkedMultiQuestionIdentity)
-                .Options.ShouldContainOnly(Create.Entity.RosterVector(0, 1));
-        };
+                .Options.Should().BeEquivalentTo(new []{Create.Entity.RosterVector(0, 1)});
+        }
 
         static StatefulInterview interview;
         static Identity linkedSingleQuestionIdentity;

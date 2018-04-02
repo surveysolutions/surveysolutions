@@ -159,4 +159,29 @@
   <data name="InterviewerFacet_None" xml:space="preserve">
     <value>Нет</value>
   </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>Завершено текст</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>Приветствие текст</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>Продолжить текст</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>Продолжить заголовок</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>Название обследования</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>Завершено заголовок</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>Приветствие заголовок</value>
+  </data>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>Хедквотер</value>
+    <comment>Хедквотер</comment>
+  </data>
 </root>

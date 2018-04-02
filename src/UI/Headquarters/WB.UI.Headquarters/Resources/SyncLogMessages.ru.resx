@@ -198,4 +198,48 @@
   <data name="GetTranslations" xml:space="preserve">
     <value>Загрузка переводов для опросника &lt;b&gt;{0}&lt;/b&gt; [{1}]</value>
   </data>
+  <data name="GetAssignmentFormat" xml:space="preserve">
+    <value>Загрузка задания ({0})&lt;/br&gt;
+</value>
+    <comment>Загрузка задания ({0})&lt;/br&gt;
+</comment>
+  </data>
+  <data name="GetAssignmentsFormat" xml:space="preserve">
+    <value>Загрузка списка заданий ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;
+</value>
+    <comment>Загрузка списка заданий ({0}). &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;
+</comment>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>Загрузка карты: {0}</value>
+    <comment>Загрузка карты: {0}</comment>
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Загрузка списка карт. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</value>
+    <comment>Загрузка списка карт. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;</comment>
+  </data>
+  <data name="InterviewerFailedToLogin" xml:space="preserve">
+    <value>Интервьюеру не удалось войти в систему</value>
+    <comment>Интервьюеру не удалось войти в систему</comment>
+  </data>
+  <data name="InterviewerLoggedIn" xml:space="preserve">
+    <value>Интервьюер залогинелся и ему выделен AuthToken</value>
+    <comment>Интервьюер залогинелся и ему выделен AuthToken</comment>
+  </data>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>Нет карт для скачивания</value>
+    <comment>Нет карт для скачивания</comment>
+  </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>Запрошена новая версия приложения</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>Запрошена новая версия расширенного приложения</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Запрошен патч для расширенного приложения версии {0}</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Запрошен патч для приложения версии {0}</value>
+  </data>
 </root>

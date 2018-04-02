@@ -121,6 +121,14 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             return results;
         }
 
+        public Dictionary<FilterOption, int> GetStatistics(IStatefulInterview interview)
+        {
+            var stats = new Dictionary<FilterOption, int>();
+            this.GetFilteredNodes(Array.Empty<FilterOption>(), interview, stats).ToArray();
+
+            return stats;
+        }
+
         private IEnumerable<Link> GetBreadcrumbs(IEnumerable<IInterviewTreeNode> nodeParents)
         {
             foreach (var node in nodeParents)

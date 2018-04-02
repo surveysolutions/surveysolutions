@@ -4,6 +4,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview;
+using WB.UI.Headquarters.Models.WebInterview;
 
 namespace WB.UI.Headquarters.Filters
 {

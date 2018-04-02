@@ -124,7 +124,7 @@
     <value>შესრულებულია</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>ჩამოტვირთვა ({0})</value>
+    <value>ჩამოტვირთვა ({{count}})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
     <value>თქვენ შეგიძლიათ ჩამოტვირთოთ ინტერვიუერისთვის შექმნილი დავალებების სია, რათა მიაწოდოთ ვებ ლინკები რესპოდენტებს</value>
@@ -139,7 +139,7 @@
     <value>ვებ-ინტერვიუ დაიწყო</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>ვებ-ინტერიუ იწყება {0}</value>
+    <value>ვებ-ინტერიუ იწყება {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>ვებ ინტერვიუს შეჩერება</value>
@@ -154,6 +154,6 @@
     <value>ვებ ინტერვიუს კონფიგურაცია</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>ვებ-ინტერვიუ {0} დაიწყო</value>
+    <value>ვებ-ინტერვიუ {{name}} დაიწყო</value>
   </data>
 </root>

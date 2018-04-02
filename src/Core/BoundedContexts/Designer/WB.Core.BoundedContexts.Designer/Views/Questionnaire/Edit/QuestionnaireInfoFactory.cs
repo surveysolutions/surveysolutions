@@ -453,6 +453,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     questionView.CountOfDecimalPlaces = numericQuestion.CountOfDecimalPlaces;
                     questionView.IsInteger = numericQuestion.IsInteger;
                     questionView.UseFormatting = numericQuestion.UseFormatting;
+                    questionView.Options = CreateCategoricalOptions(numericQuestion.Answers);
                     return questionView;
                 case QuestionType.SingleOption:
                     var singleoptionQuestion = (SingleQuestion)question;
@@ -472,9 +473,12 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
                     return questionView;
+                case QuestionType.Multimedia:
+                    var multimediaQuestion = (MultimediaQuestion) question;
+                    questionView.IsSignature = multimediaQuestion.IsSignature;
+                    return questionView;
                 case QuestionType.Audio:
                 case QuestionType.QRBarcode:
-                case QuestionType.Multimedia:
                 case QuestionType.GpsCoordinates:
                 case QuestionType.Area:
                     return questionView;
@@ -484,11 +488,19 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         private static CategoricalOption[] CreateCategoricalOptions(List<Answer> answers)
         {
-            return answers?.Select(x => new CategoricalOption
+            if (answers == null)
+                return new CategoricalOption[0];
+            
+            return answers?.Select(x =>
             {
-                Title = x.AnswerText,
-                Value = x.AnswerValue == null ? (decimal?)null : decimal.Parse(x.AnswerValue),
-                ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue)
+                var option = new CategoricalOption();
+                option.Title = x.AnswerText;
+                if (decimal.TryParse(x.AnswerValue, out decimal answerValue))
+                {
+                    option.Value = answerValue;
+                }
+                option.ParentValue = string.IsNullOrWhiteSpace(x.ParentValue) || !x.ParentValue.IsDecimal() ? (decimal?)null : Convert.ToDecimal(x.ParentValue);
+                return option;
             }).ToArray();
         }
 

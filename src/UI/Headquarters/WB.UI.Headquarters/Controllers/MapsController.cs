@@ -88,7 +88,9 @@ namespace WB.UI.Headquarters.Controllers
                 MapsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Maps", action = "Index"}),
                 IsObserver = authorizedUser.IsObserver,
                 IsObserving = authorizedUser.IsObserving,
-                FileExtension = TabExportFile.Extention
+                FileExtension = TabExportFile.Extention,
+
+                UserMapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMaps" })
             };
             return View(model);
         }
@@ -108,6 +110,7 @@ namespace WB.UI.Headquarters.Controllers
                         action = "UserMaps"
                     }),
                 MapsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "Index" }),
+                UserMapLinkingUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Maps", action = "UserMapsLink" })
             };
             return View(model);
         }

@@ -27,6 +27,7 @@
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +35,7 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslations.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -49,7 +51,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
-    <PackageReference Include="Autofixture.AutoMoq" Version="4.0.1" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
@@ -92,5 +93,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 </Project>

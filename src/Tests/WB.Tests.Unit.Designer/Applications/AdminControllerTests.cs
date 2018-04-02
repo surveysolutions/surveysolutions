@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.BootstrapSupport;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;

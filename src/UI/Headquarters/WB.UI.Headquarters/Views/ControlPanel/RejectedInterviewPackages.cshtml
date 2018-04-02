@@ -1,0 +1,28 @@
+﻿@{
+    this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Broken interview packages";
+}
+
+
+@section scripts
+{
+    @Styles.Render("~/Content/bootstrap-datepicker3.css", "~/Scripts/dateRangePicker/daterangepicker.css")
+    @Styles.Render("~/css/list")
+    @Scripts.Render("~/js/list", "~/js/brokeninterviewpackages")
+    <script type="text/javascript">
+        var $interviewPageUrl = '@Html.Raw(@Url.Action("Review", "Interview", new {area = ""}, Request.Url.Scheme))';
+        var controlPanelBrokenInperviewPackagesUrl = '@Html.Raw(@Url.Action("RejectedInterviewPackages", "ControlPanel", new { }, Request.Url.Scheme))';
+        var brokenInperviewPackagesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetRejectedInterviewPackages" })';
+        var exceptionTypesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "GetRejectedInterviewPackageExceptionTypes" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Interviewers" })';
+        var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Questionnaires" })';
+        var reprocessSelectedUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "ReprocessSelectedBrokenPackages" })';
+        $(function () {
+            var viewModel = new Supervisor.VM.ControlPanel.BrokenInterviewPackages(brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl);
+            viewModel.load();
+            ko.applyBindings(viewModel);
+        });
+    </script>
+}
+
+@Html.Partial("_InterviewPackages")

@@ -361,6 +361,9 @@
   <data name="SideBarAttachmentsTitle" xml:space="preserve">
     <value>Attachments</value>
   </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>Comments</value>
+  </data>
   <data name="SideBarMetadataHeader" xml:space="preserve">
     <value>Questionnaire description and survey info</value>
   </data>
@@ -542,7 +545,7 @@
     <value>You entered more than maximum allowed {{max}}</value>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
-    <value>Error message</value>
+    <value>Error or warning message</value>
   </data>
   <data name="OptionsListError" xml:space="preserve">
     <value>You entered an invalid input. Each line should follow the format: "Title...Value". 'Value' must be an integer number. Title must be an alpha-numeric string. No empty lines are allowed.</value>
@@ -854,7 +857,7 @@
     <value>A logical expression that validates an answer to the current question. Might include values of other questions.</value>
   </data>
   <data name="HelpValidationMessage" xml:space="preserve">
-    <value>Error message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
+    <value>Error or warning message is shown when validation condition evaluates to "False" or error occurres during expression evaluation.</value>
   </data>
   <data name="HelpVariableDescription" xml:space="preserve">
     <value>Text that will be shown next to a variable for testing purposes</value>
@@ -1056,5 +1059,53 @@
   </data>
   <data name="Test" xml:space="preserve">
     <value>Test</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Add special value</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>New comment</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Use signature pad</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>add comment</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Variable name</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Comment thread:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}} Comment threads:</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>You will see comments here</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>View all {{count}} resolved comment</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>View all {{count}} resolved comments</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Hide resolved comments</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Add comment</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Resolve</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Hide comments</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>Comment cannot contain more than {1} characters</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>Is warning</value>
   </data>
 </root>

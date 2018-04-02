@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http.Filters;
 using Moq;
 using NUnit.Framework;
@@ -12,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttribu
     public class WriteToSyncLogTests : WriteToSyncLogAttributeTestsContext
     {
         [Test]
-        public void when_getting_translations_Should_log_action()
+        public async Task when_getting_translations_Should_log_action()
         {
             var mock = new Mock<IPlainStorageAccessor<SynchronizationLogItem>>();
 
@@ -22,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttribu
             HttpActionExecutedContext actionContext = CreateActionContext();
 
             // Act
-            syncLogAttribute.OnActionExecuted(actionContext);
+            await syncLogAttribute.OnActionExecutedAsync(actionContext, new CancellationToken());
 
             // Assert
             mock.Verify(

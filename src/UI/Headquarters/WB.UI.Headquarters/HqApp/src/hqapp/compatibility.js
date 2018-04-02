@@ -22,7 +22,13 @@ window.ajustNoticeHeight = function () {
     $(".view-mode + main .container-fluid .panel-details").css("padding-top", height);
 };
 window.ajustDetailsPanelHeight = function () {
-    var height = $(".panel-details").outerHeight();
+    var height = $(".view-mode").outerHeight();
+
+    var panelDetails = $(".panel-details");
+    if(panelDetails.length > 0){
+        height = panelDetails.outerHeight();
+    }
+
     $('.filters').css("top", height + "px");
     $('.filters-results').css("top", height + "px");
     $('.content').css("top", height + "px");
@@ -32,6 +38,10 @@ window.ajustDetailsPanelHeight = function () {
 $(function () {
     var globalSettings = window.input.settings;
 
+    $("#hide-filters").click(function () {
+        $(".filters").toggleClass("hidden-filters");
+        $(this).parents('.row').toggleClass("fullscreen-hidden-filters");
+    });
     $("main").removeClass("hold-transition");
     $("footer").removeClass("hold-transition");
 
@@ -86,6 +96,9 @@ $(function () {
         setInterval(updateQueueLength, 3000);
     }
         
+    window.ajustNoticeHeight();
+    window.ajustDetailsPanelHeight();
+    
     $('.view-mode .alerts .alert').on('closed.bs.alert', function () {
         window.ajustNoticeHeight();
         window.ajustDetailsPanelHeight();

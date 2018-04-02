@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
@@ -320,6 +321,46 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             result.Single().Code.ShouldEqual("WB0031");
         }
-        
+
+        [Test]
+        public void when_enablement_condition_contains_rowname()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.TextQuestion(Id1, variable: "q2", enablementCondition: "@rowname.Contains(\"a\");")
+                })
+                .ExpectError("WB0276");
+
+        [Test]
+        public void when_options_filter_contains_rowname()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.SingleQuestion(Id1, variable: "q2", optionsFilter: "@rowname.Contains(\"a\");")
+                })
+                .ExpectError("WB0276");
+
+        [Test]
+        public void when_linked_filter_contains_rowname()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.SingleQuestion(Id1, variable: "q2", linkedFilter: "@rowname.Contains(\"a\");")
+                })
+                .ExpectError("WB0276");
+
+        [Test]
+        public void when_validation_expression_contains_rowname()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.TextQuestion(Id1, variable: "q2", validationConditions: new ValidationCondition[] { Create.ValidationCondition("@rowname.Contains(\"a\");"), } )
+                })
+                .ExpectError("WB0276");
+
+        [Test]
+        public void when_variable_expression_contains_rowname()
+            => Create.QuestionnaireDocumentWithOneChapter(new IComposite[]
+                {
+                    Create.Variable(Id1, expression: "@rowname.Contains(\"a\");" )
+                })
+                .ExpectError("WB0276");
+
     }
 }

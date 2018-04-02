@@ -5854,7 +5854,7 @@ button.close {
   -webkit-transition: left 0.3s linear 0s;
   transition: left 0.3s linear 0s; }
 
-input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
+input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radio-row ~ label .tick {
   display: inline-block;
   width: 18px;
   height: 18px;
@@ -5864,7 +5864,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
   background-position: 4px 2px;
   margin-right: 12px; }
   @media (min--moz-device-pixel-ratio: 1.3), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
-    input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick {
+    input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radio-row ~ label .tick {
       /* on retina, use image that's scaled by 2 */
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 793px 18px; } }
@@ -6490,6 +6490,48 @@ a.disabled {
       margin-top: 5px;
       color: #3f3f3f; }
 
+.btn-horizontal-hamburger {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  width: 40px;
+  height: 0px; }
+
+.btn-horizontal-hamburger span {
+  vertical-align: middle;
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  -webkit-transition: background 0.3s linear 0s;
+  transition: background 0.3s linear 0s; }
+
+.btn-horizontal-hamburger span:before {
+  content: "";
+  display: block;
+  position: relative;
+  left: -8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  -webkit-transition: background 0.3s linear 0s;
+  transition: background 0.3s linear 0s; }
+
+.btn-horizontal-hamburger span:after {
+  content: "";
+  display: block;
+  position: relative;
+  left: 8px;
+  top: -5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  -webkit-transition: background 0.3s linear 0s;
+  transition: background 0.3s linear 0s; }
+
 .navbar {
   min-width: 360px;
   min-height: 70px;
@@ -6638,19 +6680,47 @@ a.disabled {
   color: white;
   text-decoration: none; }
 
-.navbar-text, .interview-ID {
-  font: 18px/20px "RobotoBold";
+.navbar .navbar-text, .navbar .interview-ID {
+  font: 18px/20px "RobotoBold" !important;
   padding: 24px 9px; }
 
 .interview-ID {
   color: #fff;
   display: inline-block; }
 
+.navbar-header > .interview-ID {
+  display: none; }
+
+.navbar-web-interview .navbar-header > .interview-ID {
+  display: none; }
+
+.navbar-web-interview .nav.navbar-left {
+  max-width: 120px;
+  overflow: hidden; }
+  .navbar-web-interview .nav.navbar-left li {
+    max-width: 100%; }
+    .navbar-web-interview .nav.navbar-left li .interview-ID {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+
+.navbar-web-interview .nav.navbar-right {
+  max-width: 560px;
+  min-width: 220px; }
+  .navbar-web-interview .nav.navbar-right > li {
+    float: right; }
+    .navbar-web-interview .nav.navbar-right > li.help-link {
+      max-width: 120px; }
+    .navbar-web-interview .nav.navbar-right > li > a {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis; }
+
 .navbar-text {
   white-space: nowrap;
   margin-bottom: 0;
   margin-top: 0;
-  width: 50%;
+  max-width: calc(100% - 730px);
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
@@ -6662,7 +6732,27 @@ a.disabled {
 
 .language {
   background: url("../img/language.png") 0 15px no-repeat;
-  padding-left: 40px; }
+  padding-left: 40px;
+  max-width: 60%; }
+  .language > a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; }
+  .language .dropdown-menu {
+    max-width: 350px; }
+    .language .dropdown-menu a {
+      white-space: normal; }
+
+.navbar-web-interview .in .nav.navbar-right {
+  max-width: 100%; }
+
+@media screen and (max-width: 1350px) {
+  .navbar-web-interview .navbar-text {
+    max-width: calc(100% - 550px); }
+  .navbar-web-interview .nav.navbar-right {
+    max-width: 380px; }
+  .navbar-web-interview .language {
+    max-width: 55%; } }
 
 @media (max-width: 1210px) {
   .navbar .container, .navbar .container-fluid {
@@ -6808,6 +6898,14 @@ a.disabled {
     background-color: transparent; } }
 
 @media (max-width: 879px) {
+  .navbar-web-interview .nav.navbar-right > li,
+  .navbar-web-interview .nav.navbar-right > li.help-link,
+  .navbar-web-interview .nav.navbar-left {
+    width: 100%;
+    max-width: 100%;
+    text-align: left; }
+  .language .dropdown-menu {
+    max-width: 80%; }
   .navbar {
     min-height: 60px; }
     .navbar .container, .navbar .container-fluid {
@@ -6820,6 +6918,9 @@ a.disabled {
     .navbar .navbar-header {
       margin: 0;
       padding-top: 5px; }
+      .navbar .navbar-header > .interview-ID {
+        padding: 15px 9px;
+        display: inline-block; }
       .navbar .navbar-header .btn-icon,
       .navbar .navbar-header .badge.badge_nav {
         display: block;
@@ -6956,7 +7057,7 @@ a.disabled {
     float: left;
     background-color: #dbdfe2;
     margin: 0;
-    margin-right: 30px; }
+    margin-right: 20px; }
   .cancelable-progress .btn-link {
     float: left;
     padding: 0;
@@ -7041,7 +7142,8 @@ input.wb-checkbox,
 input.checkbox-filter,
 input.double-checkbox,
 input.double-checkbox-white,
-.radio input.wb-radio {
+.radio input.wb-radio,
+input.radio-row {
   display: block;
   position: absolute;
   left: -999999px; }
@@ -7214,6 +7316,32 @@ input.double-checkbox-white:checked:focus ~ label .tick {
   .radio input.wb-radio:checked:disabled + label:hover .tick,
   .radio input.wb-radio:checked:disabled + label:focus .tick {
     background-position: -531px 2px; }
+
+input.radio-row + label,
+input.radio-row + label .format-data {
+  font-family: "RobotoRegular";
+  font-weight: normal; }
+
+input.radio-row:checked + label,
+input.radio-row:checked + label .format-data {
+  color: #3f3f3f;
+  font-family: "RobotoBold"; }
+
+input.radio-row + label .tick {
+  background-position: -326px 2px; }
+
+input.radio-row + label:hover .tick,
+input.radio-row:focus + label .tick,
+input.radio-row + label:focus .tick {
+  background-position: -367px 2px; }
+
+input.radio-row:checked + label .tick {
+  background-position: -735px 2px; }
+
+input.radio-row:checked + label:hover .tick,
+input.radio-row:checked + label:focus .tick,
+input.radio-row:checked:focus + label .tick {
+  background-position: -449px 2px; }
 
 .control-label {
   font-size: 14px;
@@ -7773,34 +7901,28 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
       margin: 0; }
     .block-filter .form-group:last-of-type {
       margin-bottom: 0; }
-  .block-filter .form-date {
-    margin-bottom: 15px;
-    max-width: 275px; }
-    .block-filter .form-date .input-group.date {
-      width: 100%; }
-      .block-filter .form-date .input-group.date label {
-        display: table-cell;
-        vertical-align: middle;
-        font-size: 14px;
-        line-height: 16px;
-        font-family: inherit;
-        width: 50px;
-        font-weight: normal; }
-      .block-filter .form-date .input-group.date .form-control {
-        border-right: none;
-        border-color: #dbdfe2;
-        border-bottom-left-radius: 4px;
-        border-top-left-radius: 4px; }
 
-.form-date.input-group {
-  max-width: none; }
-
-.form-date .form-control {
-  cursor: pointer;
-  border-right: none;
-  border-color: #dbdfe2;
-  border-bottom-left-radius: 4px;
-  border-top-left-radius: 4px; }
+.form-date {
+  margin-bottom: 15px;
+  max-width: 275px; }
+  .form-date .input-group.date {
+    width: 100%; }
+    .form-date .input-group.date label {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 14px;
+      line-height: 16px;
+      font-family: inherit;
+      width: 50px;
+      font-weight: normal; }
+  .form-date.input-group {
+    max-width: none; }
+  .form-date .form-control {
+    cursor: pointer;
+    border-right: none;
+    border-color: #dbdfe2;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px; }
 
 .calendar {
   width: 21px;

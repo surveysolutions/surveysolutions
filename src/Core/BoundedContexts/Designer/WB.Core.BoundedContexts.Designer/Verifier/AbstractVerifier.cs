@@ -7,6 +7,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Verifier
@@ -51,19 +52,21 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
         protected static readonly Regex VariableNameRegex = new Regex("^(?!.*[_]{2})[A-Za-z][_A-Za-z0-9]*(?<!_)$");
 
-        protected static QuestionnaireNodeReference CreateReference(IQuestionnaireEntity entity)
+        protected static QuestionnaireEntityReference CreateReference(IQuestionnaireEntity entity)
         {
-            return QuestionnaireNodeReference.CreateFrom(entity);
+            return QuestionnaireEntityReference.CreateFrom(entity);
         }
 
-        protected static QuestionnaireNodeReference CreateReference(IComposite entity, int? failedValidationIndex)
+        protected static QuestionnaireEntityReference CreateReference(IComposite entity, int? failedValidationIndex)
         {
-            return new QuestionnaireNodeReference(
+            return new QuestionnaireEntityReference(
                 entity is IGroup
                     ? QuestionnaireVerificationReferenceType.Group
-                    : (entity is IStaticText
+                    : entity is IStaticText
                         ? QuestionnaireVerificationReferenceType.StaticText
-                        : QuestionnaireVerificationReferenceType.Question),
+                        : entity is IVariable
+                            ? QuestionnaireVerificationReferenceType.Variable
+                            : QuestionnaireVerificationReferenceType.Question,
                 entity.PublicKey)
             {
                 IndexOfEntityInProperty = failedValidationIndex

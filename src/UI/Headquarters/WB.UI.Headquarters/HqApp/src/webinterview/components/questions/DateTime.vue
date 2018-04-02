@@ -67,7 +67,7 @@
                         return moment(this.$me.answer).format(DateFormats.dateTime)
                     }
                     else {
-                        const result = moment(this.$me.answer).utc().format(DateFormats.date)
+                        const result = moment(this.$me.answer).format(DateFormats.date)
                         return result;
                     }
                 }

@@ -222,8 +222,8 @@
   <data name="NoAccessToQuestionnaire" xml:space="preserve">
     <value>User has not permissions to access requested questionnaire</value>
   </data>
-  <data name="UserNeedToContactSupport" xml:space="preserve">
-    <value>You are not authorized to perform this action. Please contact support</value>
+  <data name="UserNeedToContactSupportFormat" xml:space="preserve">
+    <value>You are not authorized to perform this action. Please contact support. IP:{0}</value>
   </data>
   <data name="Email_required" xml:space="preserve">
     <value>Email is required</value>

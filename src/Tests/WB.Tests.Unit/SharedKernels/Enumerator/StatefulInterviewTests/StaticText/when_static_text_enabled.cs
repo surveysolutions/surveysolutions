@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
 {
     internal class when_static_text_enabled : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             staticTextIdentity = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
             var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
@@ -19,11 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
                 }));
 
             statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
-        };
 
-        Because of = () => statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));
+            BecauseOf();
+        }
 
-        It should_enable_it = () => statefulInterview.IsEnabled(staticTextIdentity).ShouldBeTrue();
+        private void BecauseOf() => statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));
+
+        [NUnit.Framework.Test] public void should_enable_it () => statefulInterview.IsEnabled(staticTextIdentity).Should().BeTrue();
 
         static StatefulInterview statefulInterview;
         static Identity staticTextIdentity;

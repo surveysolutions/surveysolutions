@@ -160,6 +160,51 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable automatic updates.
+        /// </summary>
+        internal static string InterviewerAutoUpdate {
+            get {
+                return ResourceManager.GetString("InterviewerAutoUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Android applications automatic updates disabled.
+        /// </summary>
+        internal static string InterviewerAutoUpdateDisabled {
+            get {
+                return ResourceManager.GetString("InterviewerAutoUpdateDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Android applications automatic updates enabled.
+        /// </summary>
+        internal static string InterviewerAutoUpdateEnabled {
+            get {
+                return ResourceManager.GetString("InterviewerAutoUpdateEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some specific settings by android version of Interviewer application.
+        /// </summary>
+        internal static string InterviewerSettings_Description {
+            get {
+                return ResourceManager.GetString("InterviewerSettings_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviewer application settings.
+        /// </summary>
+        internal static string InterviewerSettings_Title {
+            get {
+                return ResourceManager.GetString("InterviewerSettings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company logo.
         /// </summary>
         internal static string Logo {

@@ -1,5 +1,6 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System;
+using System.Configuration;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -57,10 +58,12 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
@@ -83,6 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
         private readonly int? interviewLimitCount;
         private readonly string syncDirectoryName;
+        private readonly ExternalStoragesSettings externalStoragesSettings;
         private readonly UserPreloadingSettings userPreloadingSettings;
         private readonly ExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
@@ -99,7 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             SyncSettings syncSettings,
             TrackingSettings trackingSettings, 
             int? interviewLimitCount = null,
-            string syncDirectoryName = "SYNC")
+            string syncDirectoryName = "SYNC",
+            ExternalStoragesSettings externalStoragesSettings = null)
         {
             this.userPreloadingSettings = userPreloadingSettings;
             this.exportSettings = exportSettings;
@@ -110,6 +115,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             this.interviewLimitCount = interviewLimitCount;
             this.syncSettings = syncSettings;
             this.syncDirectoryName = syncDirectoryName;
+            this.externalStoragesSettings = externalStoragesSettings;
             this.trackingSettings = trackingSettings;
         }
 
@@ -119,6 +125,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                 new EventTypeResolver(
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
+
+            registry.BindToConstant(() => this.externalStoragesSettings);
 
             registry.BindToConstant<SyncSettings>(() => this.syncSettings);
             registry.BindToConstant<TrackingSettings>(() => this.trackingSettings);
@@ -235,7 +243,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
             registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory());
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
-            registry.Bind<IInterviewDetailsViewFactory, InterviewDetailsViewFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
             registry.Bind<IChartStatisticsViewFactory, ChartStatisticsViewFactory>();
@@ -276,7 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
 
-            registry.Bind<IInterviewPackagesService, InterviewPackagesService>();
+            registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
             registry.BindAsSingleton<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>, EventStoreHealthChecker>();
@@ -290,18 +297,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>(); // has internal cache, so should be singleton
-
-
-            registry.Bind<IAudioFileStorage, AudioFileStorage>();
-            registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, ImageFileStorage>("rootDirectoryPath", this.currentFolderPath);
-
-            registry.BindAsSingletonWithConstructorArgument<IInterviewSynchronizationFileStorage, InterviewSynchronizationFileStorage>(
-                new[]
-                    {
-                        new ConstructorArgument("rootDirectoryPath", _ => this.currentFolderPath),
-                        new ConstructorArgument("syncDirectoryName", _ => this.syncDirectoryName)
-                    });
+            registry.BindAsSingleton<IQuestionnaireStorage, HqQuestionnaireStorage>(); // has internal cache, so should be singleton
 
             registry.BindAsSingleton<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
            
@@ -326,8 +322,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
-          
-
             registry.Bind<IEnvironmentContentService, StataEnvironmentContentService>();
 
             registry.Bind<TabularFormatDataExportHandler>();

@@ -1,682 +1,98 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{39A777F1-EF3F-457F-80EC-46470EF236E4}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.Tests.Integration</RootNamespace>
-    <AssemblyName>WB.Tests.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030,649</WarningsNotAsErrors>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>0</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
-  </PropertyGroup>
-  <PropertyGroup>
+    <TargetFramework>net471</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="AppDomainToolkit, Version=1.0.4.1, Culture=neutral, PublicKeyToken=f2fc7ab5180cf5c4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\AppDomainToolkit.1.0.4.3\lib\net\AppDomainToolkit.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Dapper, Version=1.50.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Dapper.1.50.4\lib\net451\Dapper.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework6.Npgsql, Version=3.1.1.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentMigrator, Version=1.6.2.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\FluentMigrator.1.6.2\lib\40\FluentMigrator.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Humanizer, Version=2.2.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Iesi.Collections.4.0.2\lib\net461\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications, Version=0.12.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Machine.Specifications.0.12.0\lib\net45\Machine.Specifications.dll</HintPath>
-    </Reference>
-    <Reference Include="Machine.Specifications.Should, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Machine.Specifications.Should.0.11.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Common.2.6.1\lib\netstandard1.3\Microsoft.CodeAnalysis.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.2.6.1\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.Scripting, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.CSharp.Scripting.2.6.1\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.Scripting, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Microsoft.CodeAnalysis.Scripting.Common.2.6.1\lib\netstandard1.3\Microsoft.CodeAnalysis.Scripting.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Core, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.5.6.2\lib\net45\MvvmCross.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Platform, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.5.6.2\lib\net45\MvvmCross.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Platform.Wpf, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Platform.5.6.2\lib\net45\MvvmCross.Platform.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugins.Messenger, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Plugin.Messenger.5.6.2\lib\net45\MvvmCross.Plugins.Messenger.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Wpf, Version=5.6.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\MvvmCross.Core.5.6.2\lib\net45\MvvmCross.Wpf.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate, Version=5.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NHibernate.5.0.3\lib\net461\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
-    </Reference>
-    <Reference Include="Npgsql, Version=3.2.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Npgsql.3.2.6\lib\net451\Npgsql.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="prometheus-net, Version=1.3.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\prometheus-net.dll</HintPath>
-    </Reference>
-    <Reference Include="protobuf-net, Version=2.0.0.668, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\protobuf-net.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Linq, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Remotion.Linq.2.1.2\lib\net45\Remotion.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="Remotion.Linq.EagerFetching, Version=2.1.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\Remotion.Linq.EagerFetching.2.1.0\lib\net45\Remotion.Linq.EagerFetching.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLite-net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\sqlite-net-pcl.1.4.118\lib\netstandard1.1\SQLite-net.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.9\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.bundle_green.1.1.9\lib\net45\SQLitePCLRaw.batteries_v2.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.core.1.1.9\lib\net45\SQLitePCLRaw.core.dll</HintPath>
-    </Reference>
-    <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\SQLitePCLRaw.provider.e_sqlite3.net45.1.1.9\lib\net45\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.AppContext">
-      <HintPath>..\..\..\packages\System.AppContext.4.3.0\lib\net463\System.AppContext.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
+    <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
+    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
+    <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
+    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj" />
+    <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
+    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj" />
+    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
+    <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj" />
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj" />
+    <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj" />
+    <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
+    <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
+    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Dapper" Version="1.50.4" />
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework6.Npgsql" Version="3.1.1" />
+    <PackageReference Include="FluentAssertions" Version="4.19.4" />
+    <PackageReference Include="FluentMigrator" Version="1.6.2" />
+    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="Iesi.Collections" Version="4.0.2" />
+    <PackageReference Include="Machine.Specifications" Version="0.12.0" />
+    <PackageReference Include="Machine.Specifications.Should" Version="0.11.0" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="1.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="2.6.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="2.6.1" />
+    <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
+    <PackageReference Include="Moq" Version="4.7.145" />
+    <PackageReference Include="MvvmCross.Core" Version="5.6.2" />
+    <PackageReference Include="MvvmCross.Platform" Version="5.6.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.6.2" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="NHibernate" Version="5.0.3" />
+    <PackageReference Include="Ninject" Version="3.3.4" />
+    <PackageReference Include="Npgsql" Version="3.2.7" />
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="prometheus-net" Version="1.3.5" />
+    <PackageReference Include="protobuf-net" Version="2.0.0.668" />
+    <PackageReference Include="Remotion.Linq" Version="2.1.2" />
+    <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.1.0" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.9" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.9" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.linux" Version="1.1.9" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.9" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.9" />
+    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.9" />
+    <PackageReference Include="System.AppContext" Version="4.3.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
+    <PackageReference Include="System.Data.SQLite.EF6" Version="1.0.106.0" />
+    <PackageReference Include="System.Reactive.Core" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Interfaces" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.PlatformServices" Version="3.1.1" />
+    <PackageReference Include="System.Reactive.Windows.Threading" Version="3.1.1" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.5.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.1.11" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.1.11" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AutoFixture">
+      <HintPath>..\..\..\..\..\Users\Victo\.nuget\packages\autofixture\4.0.1\lib\net452\AutoFixture.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Console">
-      <HintPath>..\..\..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite.EF6, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Data.SQLite.EF6.1.0.106.0\lib\net46\System.Data.SQLite.EF6.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Diagnostics.FileVersionInfo">
-      <HintPath>..\..\..\packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO">
-      <HintPath>..\..\..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem">
-      <HintPath>..\..\..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.IO.FileSystem.Primitives">
-      <HintPath>..\..\..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Linq">
-      <HintPath>..\..\..\packages\System.Linq.4.3.0\lib\net463\System.Linq.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Linq.Expressions">
-      <HintPath>..\..\..\packages\System.Linq.Expressions.4.3.0\lib\net463\System.Linq.Expressions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\System.Reactive.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\System.Reactive.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\System.Reactive.Linq.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\prometheus-net.1.3.5\lib\net46\System.Reactive.Windows.Threading.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reflection">
-      <HintPath>..\..\..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Reflection.Metadata, Version=1.4.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Reflection.Metadata.1.5.0\lib\netstandard2.0\System.Reflection.Metadata.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime">
-      <HintPath>..\..\..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.Extensions">
-      <HintPath>..\..\..\packages\System.Runtime.Extensions.4.3.0\lib\net462\System.Runtime.Extensions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Runtime.InteropServices">
-      <HintPath>..\..\..\packages\System.Runtime.InteropServices.4.3.0\lib\net463\System.Runtime.InteropServices.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Encoding">
-      <HintPath>..\..\..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.Primitives">
-      <HintPath>..\..\..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Security.Cryptography.X509Certificates">
-      <HintPath>..\..\..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Thread">
-      <HintPath>..\..\..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.ValueTuple">
-      <HintPath>..\..\..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System.Windows" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Xml.ReaderWriter">
-      <HintPath>..\..\..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XmlDocument">
-      <HintPath>..\..\..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XPath">
-      <HintPath>..\..\..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AssemblyContext.cs" />
-    <Compile Include="AssignmentsDeletionServiceTests\AssignmetnsDeletionServiceTests.cs" />
-    <Compile Include="Bootstrap\MessengerPluginBootstrap.cs" />
-    <Compile Include="CommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
-    <Compile Include="CommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
-    <Compile Include="CommandServiceTests\when_executing_command_and_aggregate_root_raised_no_events.cs" />
-    <Compile Include="CommandServiceTests\when_executing_command_handled_by_plain_aggregate_with_post_processor.cs" />
-    <Compile Include="CommandServiceTests\when_executing_stateless_command_and_aggregate_root_raised_no_events.cs" />
-    <Compile Include="CommandServiceTests\when_executing_command_handled_by_event_sourced_aggregate_and_validator_throws_exception.cs" />
-    <Compile Include="CommandServiceTests\when_executing_command_handled_by_plain_aggregate_and_validator_throws_exception.cs" />
-    <Compile Include="CommandServiceTests\when_executing_constructing_command_and_aggregate_root_does_not_exist_in_repository.cs" />
-    <Compile Include="CommandServiceTests\when_executing_constructing_command_handled_by_plain_aggregate_root.cs" />
-    <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_aggregate_root_does_exist_in_repository.cs" />
-    <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_event_sourced_aggregate_root_does_not_exist_in_repository.cs" />
-    <Compile Include="CommandServiceTests\when_executing_not_constructing_command_and_plain_aggregate_root_does_not_exist_in_repository.cs" />
-    <Compile Include="CommandServiceTests\when_executing_not_registered_command.cs" />
-    <Compile Include="CommandServiceTests\when_waiting_for_command_execution_and_there_are_3_commands_executing_each_for_half_a_second.cs" />
-    <Compile Include="IntegrationCreate.cs" />
-    <Compile Include="EventContext.cs" />
-    <Compile Include="EventContextExtensions.cs" />
-    <Compile Include="EventHandler\when_using_AnswerNotifier.cs" />
-    <Compile Include="Execute.cs" />
-    <Compile Include="FileSystemIOAccessorTests\when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist.cs" />
-    <Compile Include="InterviewFactoryTests.cs" />
-    <Compile Include="InterviewTests\AnsweringLinkedQuestionTests.cs" />
-    <Compile Include="InterviewTests\OptionsFilteringTests.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidnessTests.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_makes_interview_invalid.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_cascading_question_used_in_conditions.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_completing_interview_with_disabled_invalid_question.cs" />
-    <Compile Include="InterviewTests\Interview.Synchronization.Tests.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_remove_roster_of_hiddenIfDisabled_roster.cs" />
-    <Compile Include="InterviewTests\Substitution\when_variable_from_one_roster_using_in_another_triggered_by_the_same_question.cs" />
-    <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable_and_then_complete_interview.cs" />
-    <Compile Include="InterviewTests\Variables\when_creating_interview_from_questionnaire_with_selected_default_translation.cs" />
-    <Compile Include="NpgsqltestContext.cs" />
-    <Compile Include="ReportTests\ReportContext.cs" />
-    <Compile Include="ReportTests\SurveyAndStatusesTests\HqSurveysAndStatusesReportTests.cs" />
-    <Compile Include="ReportTests\SurveyAndStatusesTests\SvSurveysAndStatusesReportTests.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\TeamsAndStatusesReportContext.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Hq\when_empty_data_base.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Hq\when_report_is_requested_by_template.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Hq\when_report_requested_by_viewer.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Hq\when_two_responsibles_and_each_status_has_one_interview.cs" />
-    <Compile Include="InterviewPackagesServiceTests\when_processing_package_failed.cs" />
-    <Compile Include="InterviewPackagesServiceTests\when_processing_package.cs" />
-    <Compile Include="InterviewTests\AudioQuestion\AudioQuestionTests.cs" />
-    <Compile Include="InterviewTests\BackwardCompatibility\when_loading_generated_assembly_for_empty_questionnaire_using_minimal_engine_version.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_fixed_roster_and_parent_has_condition.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_for_the_second_time_with_previous_answer.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_creating_interview_with_cascading_questions_in_numeric_roster_and_parent_has_condition.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_from_roster_with_child_parent.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_categorical_question_with_cascading_options.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_off_cascading.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_numeric_question_that_can_turn_on_cascading.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_no_options_for_this_answer_and_it_is_enabled.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_root_cascading_single_option_question_and_dependent_cascading_question_has_options_for_this_answer_and_it_is_disabled.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_answering_single_option_question_that_was_turned_on_by_numeric.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_cascading_question_depends_on_other_question.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_creating_new_interview_with_cascading_options_question.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_categorical_parent_cascading_question.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_reanswering_numeric_question_that_can_turn_off_cascading_chain.cs" />
-    <Compile Include="InterviewTests\CascadingDropdowns\when_remove_answer_from_parent_cascading_question.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\CodeGenerationTestsContext.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_disabled_variable.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_enablement_conditions_and_variable_must_be_disabled.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_enablement_conditions_and_variable_must_be_enabled.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_linked_question_filters_and_filter_throw_exception.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_variables.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_variables_but_result_excecution_throw_exception.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes_variables_but_Result_of_Excecution_didnt_change.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_executes__unchanged_variables_of_cloned_expression_state.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_nested_roster.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_roster.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_condition_expressions_on_scope_roster.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_expression_state_processes_validation_expressions.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_error_in_expressions.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_question_condition_containing_self.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_roster_with_corner_naming.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_has_validation_containing_self.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_and_questionnaire_third_level_nested_roster.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_assembly_with_evaluatorgenerator.cs" />
-    <Compile Include="InterviewTests\CodeGenerationTests\when_generating_models_with_variable_usage_in_nested_roster.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_with_condition_with_rowindex.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_question_that_enables_section_with_nested_rosters_inside_it_after_preloading.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multipleoptionquestion_triggering_roster_having_condition_with_rowindex.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_question_enables_previously_disabled_roster_size_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_index_of_failed_validation_condition_changes.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_referencing_questionnaire_level_roster_in_validation.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_using_IsAnswered_with_yes_no_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_datetime_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_w___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_and_disabled_B_disables_question_C.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_questionnaire_level_with_multiple_conditions.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_1st_level_of_roster_with_multiple_conditions.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_and_roster_was_disabled_and_deleted.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_gps_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_multiple_options_question_which_is_roster_size_question_for_roster_with_linked_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_raises_exception_in_static_text_validation.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_group.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_enables_dependent_static_texts_in_and_out_of_roster.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_makes_dependent_question_invalid.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_on_a_question_with_answer_that_makes_dependent_static_texts_in_and_out_of_roster_invalid.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_single_question_that_is_in_roster_and_triggers_nested_group.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_inside_roster_that_was_disabled_then_deleted_then_added_again.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_three_levels_of_nested_rosters.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_on_2nd_level_of_nested_roster_with_multiple_conditions.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_creating_interview_and_questionnaire_has_group_with_custom_enablement_condition_and_group_is_not_propagatable_and____.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by__.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answer_on_question_disables_roster_size_question.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_roster_size_question_of_nested_roster_increase_row_count_but_row_is_disabled.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_top_level_question_which_enables_nested_roster.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_group_GB_with_question_B_that_disables_group_GC.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_group_GC_with_question_C.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_integer_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_wa___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_real_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_answering_text_question_A_and_that_answer_disables_question_B_and_disabled_B_disables_question_C_and_B_was_a___.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_condition_uses_two_levels_of_nested_rosters.cs" />
-    <Compile Include="InterviewTests\EnablementAndValidness\when_validation_message_contains_substitution.cs" />
-    <Compile Include="InterviewTests\in_standalone_app_domain.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_inside_roster_with_lookup_table_in_validation.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_question_and_static_text_were_invalid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_question_and_static_text_were_valid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_question_and_static_text_were_invalid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_invalid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_invalid_answer_and_all_questions_were_valid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_invalid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_numeric_question_with_valid_answer_and_all_questions_were_valid_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_and_related_group_condition_expression_throws_exception.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_condition_expression_throws_exception.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_validation_expression_throws_exception.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_question_which_is_part_of_condition_expression_in_another_question.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_text_question_having_validation_containing_IRnd.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_disabled_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_question_A_with_answer_which_enables_B_and_disables_C_and_both_B_and_C_were_enabled_before_answer.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answer_on_question_triggers_validation_evaluation_of_unanswered_question.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_all_questions_and_groups_and_rosters_have_empty_enablement_conditions.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_answering_on_text_question_having_validation_containing_regex.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_has_conditions_referencin_random.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_creating_interview_and_question_group_and_roster_have_not_empty_enablement_conditions_and_other_question_group_and_roster_have_empty_enablement_conditions.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_removing_answer_from_yesno_question.cs" />
-    <Compile Include="InterviewTests\LanguageTests\when_removing_answer_from_gps_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_multiple_options_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_datetime_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_roster_and_roster_has_multi_question_as_source.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_integer_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_real_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_single_option_question_which_links_to_text_question_and_which_is_roster_title_for_2_rosters_and_roster_level_is_1.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_linked_source_question_on_roster_level3_and_linked_question_is_on_level3.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_without_options.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_multi_option_linked_question_with_option_not_from_the_list.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_numeric_roster_size_question_and_other_question_is_linked_to_triggered_roster.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_disable_source_of_linked_to_list_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_different_from_source_question_scope.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_upper_than_source_question_that_is_in_nested_rosterss.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_two_levels_deeper_than_source_question_that_is_in_nested_rosterss.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_two_levels_upper_than_source_question_that_is_in_nested_rosterss.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked__that_is_in_same_roster_as_source_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_outside_roster_with_source_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_change_options_list_of_linked_that_is_one_level_deeper_than_source_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_question_that_enables_linked_to_roster_question_with_options_filter .cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_on_roster_title_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_without_options.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_text_question_that_is_source_for_linked_question_and_in_numeric_roster.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_applying_linked_options_changed_event.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_single_option_linked_question_with_option_not_from_the_list.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_two_fixed_rosters_and_question_linked_on_second.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them_with_expression_state_by_questionnaire_version.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_answering_numeric_question_that_affects_filter_of_linked_multioption_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_creating_interview_with_fixed_rosters_and_question_linked_on_them.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_option_that_question_is_linked_to_in_condition_is_removed.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_remove_answer_from_link_source_question.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_link_source_roster.cs" />
-    <Compile Include="InterviewTests\LinkedQuestions\when_remove_row_from_multioption_link_source_roster.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_in_roster_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_multioption_question_removes_rosters_and_answer_for_linked_multi_question.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_removes_rosters_and_answer_for_linked_multi_question.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_removes_rosters_and_answer_for_linked_single_question.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_multi_yesno_question_with_filter_and_3_nested_rosters.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_multi_yesno_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_affects_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_single_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answering_question_that_makes_filtering_options_for_multi_question_invalid_and_answer_using_in_other_enablement_condition.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_answer_is_roster_title_and_removed_because_of_filtering.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_multi_question_in_fixed_roster.cs" />
-    <Compile Include="InterviewTests\OptionsFilter\when_filtering_options_for_single_question_in_fixed_roster.cs" />
-    <Compile Include="InterviewTests\Rosters\when_adding_roster_instance_that_affects_variable.cs" />
-    <Compile Include="InterviewTests\Rosters\when_adding_roster_instance_that_affects_variable_used_in_condition.cs" />
-    <Compile Include="InterviewTests\Rosters\when_answering_question_with_validation_refering_nested_rosters_from_the_same_level.cs" />
-    <Compile Include="InterviewTests\Rosters\when_answering_yesno_question_that_trigger_nested_rosters.cs" />
-    <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_1_option.cs" />
-    <Compile Include="InterviewTests\Rosters\when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_2_option.cs" />
-    <Compile Include="InterviewTests\Rosters\when_creating_interview_with_fixed_roster_with_3_rows.cs" />
-    <Compile Include="InterviewTests\Rosters\when_creating_interview_with_prefilled_numeric_question_and_it_is_roster_size_question.cs" />
-    <Compile Include="InterviewTests\Rosters\when_decreasing_roster_row_count_and_linked_question_has_reference_on_it.cs" />
-    <Compile Include="InterviewTests\Rosters\when_nested_roster_has_enablement_condition.cs" />
-    <Compile Include="InterviewTests\Rosters\when_one_roster_refers_another_roster_in_condition.cs" />
-    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_nested_roster.cs" />
-    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster.cs" />
-    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_different_roster_branches.cs" />
-    <Compile Include="InterviewTests\Rosters\when_removing_answer_that_is_source_for_linked_question_in_other_roster_and_they_in_roster.cs" />
-    <Compile Include="InterviewTests\Rosters\when_removing_numeric_roster_instance_with_nested_multi_roster.cs" />
-    <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value_not_correctly.cs" />
-    <Compile Include="InterviewTests\Rosters\when_answering_on_all_rosters_numeric_questions_with_depended_question_that_calculates_max_value.cs" />
-    <Compile Include="InterviewTests\Rosters\when_answering_question_that_disables_group_and_roster_inside_it.cs" />
-    <Compile Include="InterviewTests\Rosters\when_answering_question_that_disables_group_with_nested_roster_inside_it.cs" />
-    <Compile Include="InterviewTests\Rosters\when_restore_interview_with_nested_rosters.cs" />
-    <Compile Include="InterviewTests\Rosters\when_using_rowcode_to_access_roster.cs" />
-    <Compile Include="InterviewTests\Translation\when_switching_translation_and_fixed_roster_has_question_with_rostertitle_substitutuion.cs" />
-    <Compile Include="InterviewTests\Variables\when_Answering_question_which_changes_value_of_a_variable.cs" />
-    <Compile Include="InterviewTests\Variables\when_Answering_question_which_disables_a_variable.cs" />
-    <Compile Include="InterviewTests\Variables\when_Answering_question_which_enables_a_variable.cs" />
-    <Compile Include="InterviewTests\Variables\when_creating_interview_with_no_featured_questions_but_with_variable.cs" />
-    <Compile Include="InterviewTests\Variables\when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution.cs" />
-    <Compile Include="InterviewTests\Variables\when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution1.cs" />
-    <Compile Include="NCrunch.Framework.cs" />
-    <Compile Include="OldschoolChartStatisticsDataProviderTests\when_count_of_interviews_is_zero.cs" />
-    <Compile Include="OldschoolChartStatisticsDataProviderTests\when_3_interviews_are_completed_during_a_month_period.cs" />
-    <Compile Include="PostgreSQLEventStoreTests\DatabaseTestInitializer.cs" />
-    <Compile Include="PostgreSQLEventStoreTests\when_appending_events_with_wrong_expected_version.cs" />
-    <Compile Include="PostgreSQLEventStoreTests\when_stroring_event.cs" />
-    <Compile Include="PostgreSQLEventStoreTests\with_postgres_db.cs" />
-    <Compile Include="PostgreSQLTests\when_removing_from_repository_storage_if_id_starts_from.cs" />
-    <Compile Include="PostgreSQLTests\when_storing_entity_into_key_value_storage.cs" />
-    <Compile Include="PostgreSQLTests\when_removing_from_keyvalue_storage_if_id_starts_from.cs" />
-    <Compile Include="PostgreSQLTests\with_postgres_db.cs" />
-    <Compile Include="QuestionnaireDocumentExtensions.cs" />
-    <Compile Include="ResourcesTranslationTests\ResourcesTranslationTestsContext.cs" />
-    <Compile Include="ResourcesTranslationTests\when_checking_all_translations.cs" />
-    <Compile Include="ResourcesTranslationTests\when_checking_availability_of_resources_in_Russian_comparing_to_English.cs" />
-    <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_property_names_in_format_elements_as_original.cs" />
-    <Compile Include="ResourcesTranslationTests\when_checking_that_translated_resources_have_same_string_format_elements_as_original.cs" />
-    <Compile Include="SequentialCommandServiceTests\when_canceling_2_commands_after_1_second_of_their_execution_in_parallel_and_each_command_takes_5_seconds_to_execute.cs" />
-    <Compile Include="SequentialCommandServiceTests\when_executing_3_commands_in_parallel_each_taking_1_second_to_execute.cs" />
-    <Compile Include="SequentialCommandServiceTests\when_executing_10_commands_in_parallel_with_small_delays_each_command_taking_half_second_to_execute.cs" />
-    <Compile Include="Setup.cs" />
-    <Compile Include="InterviewTests\InterviewTestsContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InterviewTests\when_decreasing_propagation_count_and_linked_multiple_options_question_is_referenced_to_outer_roster.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShouldExtensions.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="Stub.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Sv\when_empty_data_base.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Sv\when_report_is_requested_by_template.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Sv\when_report_requested_by_viewer.cs" />
-    <Compile Include="ReportTests\TeamsAndStatusesTests\Sv\when_two_responsibles_and_each_status_has_one_interview.cs" />
-    <Compile Include="TeamInterviewsFactoryTests\TeamInterviewsFactoryTestContext.cs" />
-    <Compile Include="TeamInterviewsFactoryTests\when_getting_team_interviews.cs" />
-    <Compile Include="TestEnvironment.cs" />
-    <Compile Include="TesterResourcesTests\TesterResourcesTestsContext.cs" />
-    <Compile Include="TesterResourcesTests\when_getting_dimensions_from_values_large_folder_and_dimensions_from_values_small_folder.cs" />
-    <Compile Include="TesterResourcesTests\when_getting_xml_based_resources_which_contain_hardcoded_dimensions.cs" />
-    <Compile Include="UtilsTest\CreateClassShouldNotContainAdditionalMethods.cs" />
-    <Compile Include="UtilsTest\GuidExtensionsTests.cs" />
-    <Compile Include="UtilsTest\UtilTests.cs" />
-    <Compile Include="Versions\when_request_questionnaire_content_versions_of_designer_and_interviewer.cs" />
-    <Compile Include="WebTester\Services\when_configured.cs" />
-    <Compile Include="WebTester\Services\AppdomainsPerInterviewManagerTestsBase.cs" />
-    <Compile Include="WebTester\Services\when_interview_exception_occures.cs" />
-    <Compile Include="WebTester\Services\when_filter_categorical_options.cs" />
-    <Compile Include="WebTester\Services\when_translation_provided.cs" />
-    <Compile Include="ZipUtilsTests\ZipUtilsTestsFixture.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
-      <Project>{c6ed30a9-4d14-48d1-8311-c2267dfd424f}</Project>
-      <Name>WB.Core.BoundedContexts.Interviewer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
-      <Project>{DCBFC3F0-8E8C-4529-B474-B6A79225450E}</Project>
-      <Name>WB.Core.BoundedContexts.Designer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
-      <Project>{3017ec6d-ae4a-4c19-a653-352999592a7e}</Project>
-      <Name>WB.Core.BoundedContexts.Headquarters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj">
-      <Project>{689346d7-30ac-420e-bc5b-588cc186a466}</Project>
-      <Name>WB.Core.BoundedContexts.Tester</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
-      <Project>{1BB55F28-7905-424D-9AA6-05E4048DFB0C}</Project>
-      <Name>WB.Core.GenericSubdomains.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj">
-      <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
-      <Name>WB.Core.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection.Portable\WB.Core.SharedKernels.DataCollection.Portable.csproj">
-      <Project>{553B4FC2-5FC7-4256-B14D-82758D64A3BD}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection.Portable</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
-      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
-      <Name>WB.Core.SharedKernels.DataCollection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
-      <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
-      <Name>WB.Core.SharedKernels.Enumerator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Enumerator\WB.Enumerator.Native\WB.Enumerator.Native.csproj">
-      <Project>{4004D8CD-D2B4-4E81-93FF-9798599B2168}</Project>
-      <Name>WB.Enumerator.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
-      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
-      <Name>WB.Core.SharedKernels.Questionnaire</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
-      <Name>WB.Infrastructure.Native</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\UI\Headquarters\WB.UI.Headquarters\WB.UI.Headquarters.csproj">
-      <Project>{d3efcc0c-4a50-484d-a9ff-252dc7916ecd}</Project>
-      <Name>WB.UI.Headquarters</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
-      <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
-      <Name>WB.UI.Shared.Web</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\UI\WB.UI.WebTester\WB.UI.WebTester.csproj">
-      <Project>{4BF37870-0CEF-455E-ABF5-682F979D8D8B}</Project>
-      <Name>WB.UI.WebTester</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.Tests.Abc\WB.Tests.Abc.csproj">
-      <Project>{e8409caf-af6f-489d-8ff6-fa1e03a80f7f}</Project>
-      <Name>WB.Tests.Abc</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
-    <Analyzer Include="..\..\..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EntitySerializerTests\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
-    <Error Condition="!Exists('..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
-  </Target>
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
-  <Import Project="..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.9\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
-  <Import Project="..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\..\..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

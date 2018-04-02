@@ -201,9 +201,6 @@
   <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
     <value>Les questions GPS nécessitent des colonnes séparées pour la latitude et la longitude</value>
   </data>
-  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>L'identification de la question GPS nécessite que la latitude et la longitude soient définies.</value>
-  </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
     <value>Deux ou plusieurs colonnes ont le même nom.</value>
   </data>

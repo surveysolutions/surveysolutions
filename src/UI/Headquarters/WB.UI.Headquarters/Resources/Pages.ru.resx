@@ -1211,4 +1211,8 @@
   <data name="MapList_UserMapsTitle" xml:space="preserve">
     <value>Карты пользователей</value>
   </data>
+  <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+    <value>Закончено с ошибками. Повторите позже. Напишите в поддержку если проблема будет повторятся в будущем.</value>
+    <comment>Закончено с ошибками. Повторите позже. Напишите в поддержку если проблема будет повторятся в будущем.</comment>
+  </data>
 </root>

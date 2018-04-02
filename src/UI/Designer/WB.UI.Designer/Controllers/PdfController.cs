@@ -98,9 +98,13 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaireFooter");
         }
 
-        public ActionResult PrintPreview(Guid id)
+        public ActionResult PrintPreview(Guid id, Guid? translation)
         {
-            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation: null, useDefaultTranslation: true);
+            PdfQuestionnaireModel questionnaire = this.LoadQuestionnaireOrThrow404(id, UserHelper.WebUser.UserId, UserHelper.WebUser.UserName, translation: translation, useDefaultTranslation: true);
+            if (questionnaire == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
@@ -141,7 +145,9 @@ namespace WB.UI.Designer.Controllers
             long sizeInKb = this.GetFileSizeInKb(pdfGenerationProgress.FilePath);
 
             if (sizeInKb == 0)
-                return this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate), JsonRequestBehavior.AllowGet);
+                return pdfGenerationProgress.IsFinished 
+                    ? this.Json(PdfStatus.Failed(PdfMessages.FailedToGenerate), JsonRequestBehavior.AllowGet)
+                    : this.Json(PdfStatus.InProgress(PdfMessages.PreparingToGenerate), JsonRequestBehavior.AllowGet);
 
             return this.Json(
                 pdfGenerationProgress.IsFinished

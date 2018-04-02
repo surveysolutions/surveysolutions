@@ -64,6 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Device
 
         public int NewAssignmentsCount { get; set; }
         public int RemovedAssignmentsCount { get; set; }
+        public int RemovedInterviewsCount { get; set; }
         public int AssignmentsOnDeviceCount { get; set; }
 
         [DefaultValue(0)]

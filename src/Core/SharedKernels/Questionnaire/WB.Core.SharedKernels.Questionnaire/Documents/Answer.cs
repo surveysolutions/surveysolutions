@@ -5,19 +5,12 @@ namespace Main.Core.Entities.SubEntities
 {
     public class Answer
     {
-        public Answer()
-        {
-            this.PublicKey = Guid.NewGuid();
-        }
-
         public string AnswerText { get; set; }
 
         public string AnswerValue { get; set; }
 
         public string ParentValue { get; set; }
        
-        public Guid PublicKey { get; set; }
-
         public decimal? AnswerCode { get; set; }
 
         public decimal? ParentCode { get; set; }
@@ -44,8 +37,8 @@ namespace Main.Core.Entities.SubEntities
             {
                 AnswerText = answer.AnswerText,
                 AnswerValue = answer.AnswerValue,
-                PublicKey = answer.PublicKey,
-                ParentValue = answer.ParentValue
+                ParentValue = answer.ParentValue,
+                AnswerCode = answer.AnswerCode
             };
         }
     }

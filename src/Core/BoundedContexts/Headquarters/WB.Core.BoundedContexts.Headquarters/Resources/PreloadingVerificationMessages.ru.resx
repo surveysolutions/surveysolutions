@@ -141,13 +141,144 @@
     <value>Воспрос измерения площади не может быть загружен.</value>
   </data>
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
-    <value>Файл с данными лпросника не найден</value>
+    <value>Файл с данными опросника не найден</value>
     <comment>Файл с данными лпросника не найден</comment>
   </data>
-  <data name="PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>Для GPS вопроса обязательно наличие значений и широты и долготы</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Ответ на вопрос не может содержать более чем {0} отвеченных опций.</value>
+  </data>
+  <data name="PL0001_NoQuestionnaire" xml:space="preserve">
+    <value>[PL0001] Опросник отсутствует на сервере</value>
+    <comment>[PL0001] Опросник отсутствует на сервере</comment>
+  </data>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A</value>
+    <comment>[PL0002] N/A</comment>
+  </data>
+  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
+    <value>[PL0005] N/A</value>
+    <comment>[PL0005] N/A</comment>
+  </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>Найдены повторяющиеся значения идентификатора.</value>
+    <comment>Найдены повторяющиеся значения идентификатора.</comment>
+  </data>
+  <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
+    <value>Отсутствует один или несколько столбцов родительского идентификатора.</value>
+    <comment>Отсутствует один или несколько столбцов родительского идентификатора.</comment>
+  </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>У записи ростера нет родителя.</value>
+    <comment>У записи ростера нет родителя.</comment>
+  </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>Идентификатор ростера не соответствует размеру ростера.</value>
+    <comment>Идентификатор ростера не соответствует размеру ростера.</comment>
+  </data>
+  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
+    <value>Ссылочные вопросы не могут быть предварительно загружены.</value>
+    <comment>Ссылочные вопросы не могут быть предварительно загружены.</comment>
+  </data>
+  <data name="PL0011_GeneralError" xml:space="preserve">
+    <value>Произошла общая ошибка.</value>
+    <comment>Произошла общая ошибка.</comment>
+  </data>
+  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
+    <value>Вопрос, найденный в загруженном файле (файлах), не существует в опроснике</value>
+    <comment>Вопрос, найденный в загруженном файле (файлах), не существует в опроснике</comment>
+  </data>
+  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
+    <value>Значение равно null или пустое</value>
+    <comment>Значение равно null или пустое</comment>
+  </data>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>Значение не допускается в качестве ответа вопрос.</value>
+    <comment>Значение не допускается в качестве ответа вопрос.</comment>
+  </data>
+  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
+    <value>Тип вопроса неверен.</value>
+    <comment>Тип вопроса неверен.</comment>
+  </data>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>Неверное значение даты или времени, введенное в вопросе с типом дата.</value>
+    <comment>Неверное значение даты или времени, введенное в вопросе с типом дата.</comment>
+  </data>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>Недопустимое значение GPS.</value>
+    <comment>Недопустимое значение GPS.</comment>
+  </data>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>Допускаются только целые значения.</value>
+    <comment>Допускаются только целые значения.</comment>
+  </data>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>Разрешены только числовые значения.</value>
+    <comment>Разрешены только числовые значения.</comment>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>Вопрос о размере ростера не может иметь отрицательных значений.</value>
+    <comment>Вопрос о размере ростера не может иметь отрицательных значений.</comment>
+  </data>
+  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
+    <value>Вопрос с картинкой не может быть предварительно загружен.</value>
+    <comment>Вопрос с картинкой не может быть предварительно загружен.</comment>
+  </data>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>Поле с ответственным не было указано </value>
+    <comment>Поле с ответственным не было указано для 1 или более обследований</comment>
+  </data>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Ответственный не существует </value>
+    <comment>Ответственный не существует для 1 или более записей
+</comment>
+  </data>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>Ответственный помечен заблокированный</value>
+    <comment>Ответственный помечен заблокированный</comment>
+  </data>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>Пользователь не является супервизором или интервьюером </value>
+    <comment>Пользователь не является супервизором или интервьюером </comment>
+  </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>Ответ на вопрос о размере списка не может превышать {0}.</value>
+    <comment>Ответ на вопрос о размере списка не может превышать {0}.</comment>
+  </data>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>Вопросы GPS требуют отдельных столбцов для широты и долготы</value>
+    <comment>Вопросы GPS требуют отдельных столбцов для широты и долготы</comment>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>Два или более столбца имеют одно и то же имя.</value>
+    <comment>Два или более столбца имеют одно и то же имя.</comment>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>Широта должна быть больше -90 ° и меньше 90 °.</value>
+    <comment>Широта должна быть больше -90 ° и меньше 90 °.</comment>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>Долгота должна быть больше -180 ° и меньше 180 °.</value>
+    <comment>Долгота должна быть больше -180 ° и меньше 180 °.</comment>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>Недопустимый разделитель десятичной дроби. Символ "," не допускается в числовых ответах. Пожалуйста, используйте "." вместо.</value>
+    <comment>Недопустимый разделитель десятичной дроби. Символ "," не допускается в числовых ответах. Пожалуйста, используйте "." вместо.</comment>
+  </data>
+  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
+    <value>Звуковой вопрос не может быть предварительно загружен.</value>
+    <comment>Звуковой вопрос не может быть предварительно загружен.</comment>
+  </data>
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Отсутствует значение для поля Id интервью</value>
+    <comment>Отсутствует значение для поля Id интервью</comment>
+  </data>
+  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
     <value>Несоответствие найдено между количеством записей в файле {0},  который содержит {1}  записей и вопросом-источником {2}, который содержит {3} строки. Код интервью: {4}</value>
   </data>
-  <data name="PL0042_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
+  <data name="PL0046_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
     <value>Несоответствие найдено между списком в файле с данными {0} и вопросом {1}. Элементы, присутствующие в списковом вопсрое и отсутствующие в файле: {2}. Строки из файла с данными, отсутствующие в списке: {3}. Код интервью: {4}</value>
   </data>
   <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
