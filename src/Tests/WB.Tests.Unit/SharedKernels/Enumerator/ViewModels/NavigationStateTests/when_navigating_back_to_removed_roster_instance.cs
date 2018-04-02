@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     internal class when_navigating_back_to_removed_roster_instance
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             rosterIdentity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), new[] {0m});
             interview = Substitute.For<IStatefulInterview>();
             interview.HasGroup(rosterIdentity)
@@ -19,7 +20,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                      .Returns(true);
 
             navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(rosterIdentity));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(rosterIdentity));
 
             emptyHistoryHandler = () => emptyHandlerCalled = true;
             BecauseOf();

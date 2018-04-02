@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
 
         [Test]
-        public void When_getting_sections_after_closing_section_for_interview_with_nested_rosters_and_nested_roster_open()
+        public async Task When_getting_sections_after_closing_section_for_interview_with_nested_rosters_and_nested_roster_open()
         {
             base.Setup();
 
@@ -55,7 +56,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = Abc.Setup.StatefulInterview(questionnaire);
 
             var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
-            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g5, Create.RosterVector(1, 3))));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g5, Create.RosterVector(1, 3))));
             //-Id.Identity1,
             // +-- Create.Identity(Id.g4, 1),
             // |   +-- Create.Identity(Id.g5, 3),
@@ -88,7 +89,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void When_getting_sections_for_interview_with_fisrt_section_open()
+        public async Task When_getting_sections_for_interview_with_fisrt_section_open()
         {
             base.Setup();
 
@@ -104,7 +105,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = Abc.Setup.StatefulInterview(questionnaire);
 
             var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
-            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Id.Identity1));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Id.Identity1));
 
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
 
@@ -128,7 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
-        public void When_getting_sections_for_interview_with_nested_rosters_and_deepest_roster_is_open()
+        public async Task When_getting_sections_for_interview_with_nested_rosters_and_deepest_roster_is_open()
         {
             base.Setup();
 
@@ -144,7 +145,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var interview = Abc.Setup.StatefulInterview(questionnaire);
 
             var navigationState = Create.Other.NavigationState(Mock.Of<IStatefulInterviewRepository>(x => x.Get(It.IsAny<string>()) == interview));
-            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g6, Create.RosterVector(1, 3, 5))));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(Id.g6, Create.RosterVector(1, 3, 5))));
 
             var viewModel = Create.ViewModel.SidebarSectionsViewModel(questionnaire, interview, eventRegistry, navigationState);
 

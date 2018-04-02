@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     internal class when_navigating_to_not_existing_group
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.HasGroup(notExistingGroup) == false
                    && _.IsEnabled(notExistingGroup) == true);
@@ -20,11 +21,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf() =>
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(notExistingGroup));
+        public async Task BecauseOf() =>
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(notExistingGroup));
 
         [NUnit.Framework.Test] public void should_not_navigate () =>
             navigatedTo.Should().BeNull();

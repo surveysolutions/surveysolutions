@@ -34,10 +34,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public override async Task Initialize()
         {
-            await base.Initialize();
+            await base.Initialize().ConfigureAwait(false);
             if (this.InterviewId == null)
             {
-                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                await this.viewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                return;
             }
 
             this.vibrationViewModel.Initialize(this.InterviewId);

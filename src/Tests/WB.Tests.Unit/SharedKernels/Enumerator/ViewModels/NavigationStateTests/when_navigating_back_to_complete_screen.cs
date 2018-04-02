@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using FluentAssertions;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     internal class when_navigating_back_to_complete_screen
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             section1Identity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             section2Identity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"), Empty.RosterVector);
 
@@ -26,9 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                      .Returns(true);
 
             navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section1Identity));
-            navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section2Identity));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section1Identity));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section2Identity));
 
             emptyHistoryHandler = () => { };
 
