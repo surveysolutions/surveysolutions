@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
+        private const string StateKey = "interviewerIdentity";
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -110,6 +112,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override void Prepare(FinishInstallationViewModelArg parameter)
         {
             this.userIdentity = parameter.UserIdentity;
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            bundle.Data[StateKey] = JsonConvert.SerializeObject(this.userIdentity);
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            base.ReloadFromBundle(state);
+            if (state.Data.ContainsKey(StateKey))
+            {
+                this.userIdentity = JsonConvert.DeserializeObject<InterviewerIdentity>(state.Data[StateKey]);
+            }
         }
 
         public override async Task Initialize()
