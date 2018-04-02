@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
-        public void should_read_roster_instances_ordered_like_options_in_multi_option_question_if_trigger_is_not_ordered()
+        public async Task should_read_roster_instances_ordered_like_options_in_multi_option_question_if_trigger_is_not_ordered()
         {
             // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
@@ -64,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
 
             var navigationState = Create.Other.NavigationState(interviewRepository);
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
             // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
@@ -78,7 +79,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
-        public void should_read_roster_instances_ordered_like_options_in_yes_no_question_if_trigger_is_not_ordered()
+        public async Task should_read_roster_instances_ordered_like_options_in_yes_no_question_if_trigger_is_not_ordered()
         {
             // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
@@ -112,7 +113,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
 
             var navigationState = Create.Other.NavigationState(interviewRepository);
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
             // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
@@ -126,7 +127,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
-        public void should_read_roster_instances_with_the_same_order_as_user_checked_them_if_multi_size_question_is_ordered()
+        public async Task should_read_roster_instances_with_the_same_order_as_user_checked_them_if_multi_size_question_is_ordered()
         {
             // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
@@ -150,7 +151,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
 
             var navigationState = Create.Other.NavigationState(interviewRepository);
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
             // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);
@@ -164,7 +165,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
-        public void should_read_roster_instances_with_the_same_order_as_user_checked_them_if_yes_no_size_question_is_ordered()
+        public async Task should_read_roster_instances_with_the_same_order_as_user_checked_them_if_yes_no_size_question_is_ordered()
         {
             // arrange
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(chapterId: chapterId, children: new IComposite[]
@@ -198,7 +199,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: interviewRepository);
 
             var navigationState = Create.Other.NavigationState(interviewRepository);
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(Create.Entity.Identity(chapterId)));
 
             // act
             viewModel.Init(interview.Id.FormatGuid(), Create.Entity.Identity(roster1Id), navigationState);

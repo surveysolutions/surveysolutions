@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -49,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         public Identity Identity => this.groupIdentity;
 
-        public IMvxCommand NavigateToGroupCommand => new MvxCommand(this.NavigateToGroup);
+        public IMvxCommand NavigateToGroupCommand => new MvxAsyncCommand(this.NavigateToGroup);
 
         protected GroupViewModel()
         {
@@ -114,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             this.RaisePropertyChanged(() => this.GroupState);
         }
 
-        private void NavigateToGroup() => this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
+        private async Task NavigateToGroup() => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.groupIdentity));
 
         public void Handle(RosterInstancesTitleChanged @event)
         {
