@@ -53,49 +53,49 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private string endpoint;
         public string Endpoint
         {
-            get { return this.endpoint; }
+            get => this.endpoint;
             set { this.endpoint = value; RaisePropertyChanged(); }
         }
 
         private string userName;
         public string UserName
         {
-            get { return this.userName; }
+            get => this.userName;
             set { this.userName = value; RaisePropertyChanged(); }
         }
 
         private string password;
         public string Password
         {
-            get { return this.password; }
+            get => this.password;
             set { this.password = value; RaisePropertyChanged(); }
         }
 
         private bool isEndpointValid;
         public bool IsEndpointValid
         {
-            get { return this.isEndpointValid; }
+            get => this.isEndpointValid;
             set { this.isEndpointValid = value; RaisePropertyChanged(); }
         }
 
         private bool isUserValid;
         public bool IsUserValid
         {
-            get { return this.isUserValid; }
+            get => this.isUserValid;
             set { this.isUserValid = value; RaisePropertyChanged(); }
         }
 
         private string errorMessage;
         public string ErrorMessage
         {
-            get { return this.errorMessage; }
+            get => this.errorMessage;
             set { this.errorMessage = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
+            get => this.isInProgress;
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
@@ -105,7 +105,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
         }
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         private InterviewerIdentity userIdentity;
 
@@ -114,24 +114,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userIdentity = parameter.UserIdentity;
         }
 
-        protected override void SaveStateToBundle(IMvxBundle bundle)
+        public override Task Initialize()
         {
-            base.SaveStateToBundle(bundle);
-            bundle.Data[StateKey] = JsonConvert.SerializeObject(this.userIdentity);
-        }
-
-        protected override void ReloadFromBundle(IMvxBundle state)
-        {
-            base.ReloadFromBundle(state);
-            if (state.Data.ContainsKey(StateKey))
-            {
-                this.userIdentity = JsonConvert.DeserializeObject<InterviewerIdentity>(state.Data[StateKey]);
-            }
-        }
-
-        public override async Task Initialize()
-        {
-            await base.Initialize();
             this.IsUserValid = true;
             this.IsEndpointValid = true;
             this.Endpoint =  this.interviewerSettings.Endpoint;
@@ -142,6 +126,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.UserName = "int";
             this.Password = "1";
 #endif
+            return Task.CompletedTask;
         }
 
         public async Task RefreshEndpoint()

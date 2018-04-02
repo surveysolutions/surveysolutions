@@ -6,6 +6,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -35,11 +36,11 @@ namespace WB.UI.Interviewer.Activities
             }
         }
 
-        protected override async void OnResume()
+        protected override void OnResume()
         {
             base.OnResume();
 
-            await this.ViewModel.RefreshEndpoint();
+            this.ViewModel.RefreshEndpoint().WaitAndUnwrapException();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
