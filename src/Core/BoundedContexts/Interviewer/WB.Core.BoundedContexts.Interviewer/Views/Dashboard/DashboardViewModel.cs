@@ -87,14 +87,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.NavigateToDiagnostics);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
 
-        private void NavigateToMaps()
+        private Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
+            return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
 
         private bool isInProgress;
@@ -179,16 +179,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.Synchronize();
         }
 
-        private void NavigateToDiagnostics()
+        private Task NavigateToDiagnostics()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
+            return this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>();
         }
 
-        private async Task SignOut()
+        private Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void DashboardItemOnStartingLongOperation(StartingLongOperationMessage message)

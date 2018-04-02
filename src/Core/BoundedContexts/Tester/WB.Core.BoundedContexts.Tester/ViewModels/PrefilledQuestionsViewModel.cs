@@ -70,15 +70,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() =>
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            this.viewModelNavigationService.NavigateToDashboardAsync();
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
             this.Dispose();
         });
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand SignOutCommand => new MvxCommand(() =>
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
     }

@@ -78,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty);
-        public IMvxCommand ExitSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToDashboardAsync());
         public IMvxCommand SearchCommand => new MvxCommand<string>(Search);
 
         private void Search(string searctText)

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -18,6 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private const string StateKey = "interviewerIdentity";
 
         public RelinkDeviceViewModel(
             IPrincipal principal,
@@ -50,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxCommand CancelCommand => new MvxAsyncCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand
-            => new MvxCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>(),
+            => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>,
                 () => !this.IsInProgress);
 
         private IMvxAsyncCommand relinkCommand;
@@ -68,6 +70,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override void Prepare(RelinkDeviceViewModelArg parameter)
         {
             this.userIdentityToRelink = parameter.Identity;
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            bundle.Data[StateKey] = JsonConvert.SerializeObject(this.userIdentityToRelink);
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            base.ReloadFromBundle(state);
+            if (state.Data.ContainsKey(StateKey))
+            {
+                this.userIdentityToRelink = JsonConvert.DeserializeObject<InterviewerIdentity>(state.Data[StateKey]);
+            }
         }
 
         private async Task RelinkCurrentInterviewerToDeviceAsync()
