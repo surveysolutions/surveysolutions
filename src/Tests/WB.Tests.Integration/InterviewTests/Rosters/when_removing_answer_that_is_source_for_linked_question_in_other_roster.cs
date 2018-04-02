@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                         variable: "fix",
                         children: new IComposite[]
                         {
-                            Abc.Create.Entity.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                            Abc.Create.Entity.SingleOptionQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                         }),
                     Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
                 );
@@ -69,7 +69,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 1 }, DateTime.Now, 17);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[1] { 2 }, DateTime.Now, 66);
 
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[1] { 3 }, DateTime.Now, new RosterVector[] { new decimal[] { 1 }, new decimal[] { 2 } });
+                interview.AnswerSingleOptionLinkedQuestion(userId, linkedId, new decimal[1] { 3 }, DateTime.Now, new decimal[] { 1 } );
                 interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[0], DateTime.Now, new RosterVector[] { new decimal[] { 1 } });
 
                 using (var eventContext = new EventContext())
