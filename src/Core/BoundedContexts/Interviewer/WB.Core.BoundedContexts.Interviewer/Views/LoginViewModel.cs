@@ -85,16 +85,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxAsyncCommand SignInCommand => new MvxAsyncCommand(this.SignIn);
         public IMvxAsyncCommand OnlineSignInCommand => new MvxAsyncCommand(this.RemoteSignInAsync);
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public override async Task Initialize()
         {
-            await base.Initialize();
+            await base.Initialize().ConfigureAwait(false);
             InterviewerIdentity currentInterviewer = this.interviewersPlainStorage.FirstOrDefault();
 
             if (currentInterviewer == null)
             {
-                await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>();
+                await this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>()
+                    .ConfigureAwait(false);
                 return;
             }
 
