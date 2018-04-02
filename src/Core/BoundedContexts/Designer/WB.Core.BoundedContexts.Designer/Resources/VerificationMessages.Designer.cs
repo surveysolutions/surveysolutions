@@ -1851,5 +1851,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0276_RownameIsNotSupported", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        public static string WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore {
+            get {
+                return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
+            }
+        }
+        
     }
 }
