@@ -267,16 +267,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     {
         protected MultimediaAnswer() { }
 
-        private MultimediaAnswer(string fileName)
+        private MultimediaAnswer(string fileName, DateTime? answerTimeUtc)
         {
-            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
-
-            this.FileName = fileName;
+            this.FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            AnswerTimeUtc = answerTimeUtc;
         }
 
         public string FileName { get; set; }
+        public DateTime? AnswerTimeUtc { get; }
 
-        public static MultimediaAnswer FromString(string fileName) => fileName != null ? new MultimediaAnswer(fileName) : null;
+        public static MultimediaAnswer FromString(string fileName, DateTime? answerTimeUtc) 
+            => fileName != null ? new MultimediaAnswer(fileName,answerTimeUtc) : null;
 
         public override string ToString() => FileName;
     }

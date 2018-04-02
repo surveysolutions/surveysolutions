@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 {
     internal class when_verifying_preloaded_data_with_empty_longitude_in_gps_question : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
             var gpsQuestion = Create.Entity.GpsCoordinateQuestion(gpsQuestionId, "gps");
@@ -27,11 +26,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
-        };
 
-        Because of = () => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+            BecauseOf();
+        }
 
-        It should_return_1_error_PL0030 = () =>
+        private void BecauseOf() => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
+
+        [NUnit.Framework.Test] public void should_return_1_error_PL0030 () =>
             status.VerificationState.Errors.Single().Code.ShouldEqual("PL0030");
 
         private static ImportDataVerifier importDataVerifier;

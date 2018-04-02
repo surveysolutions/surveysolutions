@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_options_for_linked_to_list_question_changed : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkedQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkSourceId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
@@ -23,16 +22,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             });
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
-            
-        };
 
-        Because of = () => interview.AnswerTextListQuestion(Guid.NewGuid(), linkSourceId, RosterVector.Empty, DateTime.UtcNow, new[] { new Tuple<decimal, string>(1, "one"), });
+            BecauseOf();
+        }
 
-        It should_calculate_state_of_options_for_linked_question = () =>
+        private void BecauseOf() => interview.AnswerTextListQuestion(Guid.NewGuid(), linkSourceId, RosterVector.Empty, DateTime.UtcNow, new[] { new Tuple<decimal, string>(1, "one"), });
+
+        [NUnit.Framework.Test] public void should_calculate_state_of_options_for_linked_question () 
         {
             interview.GetMultiOptionLinkedToListQuestion(linkedQuestionIdentity)
-                .Options.Length.ShouldEqual(1);
-        };
+                .Options.Length.Should().Be(1);
+        }
 
         static StatefulInterview interview;
         static Guid linkedQuestionId;

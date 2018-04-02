@@ -115,7 +115,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static string enablementCondition = "some condition";
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
-        private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
+        private static Option[] options = new Option[] { new Option("1", "Option 1"), new Option("2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
         private static Guid? сascadeFromQuestionId = (Guid?)null;

@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var translationIdAsString = translationId.FormatGuid();
 
             filter = (filter ?? String.Empty).ToLower();
-            decimal? parentValueAsDecimal = parentValue ?? null;
+            decimal? parentValueAsDecimal = parentValue;
 
             int take = 50;
             int skip = 0;
@@ -58,7 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     .FixedQueryWithSelection(
                         @where => @where.QuestionnaireId == questionnaireIdAsString &&
                                   @where.QuestionId == questionIdAsString &&
-                                  @where.ParentValue == parentValueAsDecimal &&
+                                  (parentValueAsDecimal == null || @where.ParentValue == parentValueAsDecimal) &&
                                   (filter == "" || filter == null || @where.SearchTitle.Contains(filter)) &&
                                   (@where.TranslationId == translationIdAsString || @where.TranslationId == null),
                         @order => @order.SortOrder,
@@ -81,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         .FixedQueryWithSelection(
                             @where => @where.QuestionnaireId == questionnaireIdAsString &&
                                       @where.QuestionId == questionIdAsString &&
-                                      @where.ParentValue == parentValueAsDecimal &&
+                                      (parentValueAsDecimal == null || @where.ParentValue == parentValueAsDecimal) &&
                                       defaultOptionValuesToCheck.Contains(@where.Value) &&
                                       @where.TranslationId == translationIdAsString,
                             @order => @order.SortOrder,
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .Where(x => x.QuestionnaireId == questionnaireIdAsString &&
                             x.QuestionId == questionIdAsString &&
                             x.SearchTitle.ToLower() == optionTitle &&
-                            x.ParentValue == parentQuestionValue &&
+                            (parentQuestionValue == null || x.ParentValue == parentQuestionValue) &&
                             (x.TranslationId == translationIdAsString || x.TranslationId == null))
                 .OrderBy(x => x.TranslationId == null)
                 .FirstOrDefault();

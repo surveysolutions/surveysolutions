@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
+using Humanizer.Bytes;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -15,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
@@ -27,6 +28,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly ITabletDiagnosticService diagnosticService;
+        private readonly IInterviewerSettings interviewerSettings;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -55,7 +58,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
             IPlainStorage<AssignmentDocument, int> assignmentsStorage,
-            IAudioFileStorage audioFileStorage): base(synchronizationService, logger,
+            IAudioFileStorage audioFileStorage,
+            ITabletDiagnosticService diagnosticService,
+            IInterviewerSettings interviewerSettings) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
             interviewViewRepository)
         {
@@ -74,6 +79,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.httpStatistician = httpStatistician;
             this.assignmentsStorage = assignmentsStorage;
             this.audioFileStorage = audioFileStorage;
+            this.diagnosticService = diagnosticService;
+            this.interviewerSettings = interviewerSettings;
         }
 
         
@@ -99,6 +106,57 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.UpdateApplicationAsync(progress, cancellationToken);
+        }
+
+        private async Task UpdateApplicationAsync(IProgress<SyncProgressInfo> progress,
+            CancellationToken cancellationToken)
+        {
+            if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(cancellationToken))
+                return;
+
+            progress.Report(new SyncProgressInfo
+            {
+                Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
+                Status = SynchronizationStatus.Started
+            });
+
+            var versionFromServer = await
+                this.synchronizationService.GetLatestApplicationVersionAsync(cancellationToken);
+
+            if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
+            {
+                Stopwatch sw = null;
+                try
+                {
+                    await this.diagnosticService.UpdateTheApp(cancellationToken, false, downloadProgress =>
+                    {
+                        if (sw == null) sw = Stopwatch.StartNew();
+                        if (downloadProgress.ProgressPercentage % 1 != 0) return;
+
+                        var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
+                        var totalKilobytes = (downloadProgress.TotalBytesToReceive ?? 0).Bytes();
+
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.Synchronization_DownloadApplication,
+                            Description = string.Format(
+                                InterviewerUIResources.Synchronization_DownloadApplication_Description,
+                                receivedKilobytes.Humanize("00.00 MB"),
+                                totalKilobytes.Humanize("00.00 MB"),
+                                receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
+                                (int) downloadProgress.ProgressPercentage),
+                            Status = SynchronizationStatus.Download
+                        });
+                    });
+                }
+                catch (Exception exc)
+                {
+                    this.logger.Error("Error on auto updating", exc);
+                }
+            }
         }
 
         private async Task CheckObsoleteQuestionnairesAsync(IProgress<SyncProgressInfo> progress,
@@ -300,6 +358,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 NewInterviewsOnDeviceCount =
                     this.interviewViewRepository.Count(
                         inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted),
+                RemovedInterviewsCount = statistics.DeletedInterviewsCount,
 
                 NewAssignmentsCount = statistics.NewAssignmentsCount,
                 RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,

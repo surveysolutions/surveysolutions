@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
@@ -40,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IProductVersion productVersion;
         private readonly IProductVersionHistory productVersionHistory;
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
-        private readonly IInterviewPackagesService interviewPackagesService;
+        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IUserViewFactory userViewFactory;
 
 
@@ -51,7 +52,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IProductVersion productVersion,
             IProductVersionHistory productVersionHistory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
-            IInterviewPackagesService interviewPackagesService,
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
             IUserViewFactory userViewFactory)
         {
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
@@ -60,7 +61,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.productVersion = productVersion;
             this.productVersionHistory = productVersionHistory;
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
-            this.interviewPackagesService = interviewPackagesService;
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.userViewFactory = userViewFactory;
         }
         
@@ -88,14 +89,22 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public SynchronizationLogDevicesView SyncLogDevices(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.synchronizationLogViewFactory.GetDevices(pageSize: pageSize, searchBy: query);
 
+        [HttpGet]
+        [ApiNoCache]
+        public BrokenInterviewPackageExceptionTypesView GetRejectedInterviewPackageExceptionTypes(
+            string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+            => this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
+
         [HttpPost]
         public BrokenInterviewPackagesView GetBrokenInterviewPackages(BrokenInterviewPackageFilter filter)
             => this.brokenInterviewPackagesViewFactory.GetFilteredItems(filter);
 
-        [HttpGet]
-        public BrokenInterviewPackageExceptionTypesView GetBrokenInterviewPackageExceptionTypes(
-            string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
-            => this.brokenInterviewPackagesViewFactory.GetExceptionTypes(pageSize: pageSize, searchBy: query);
+        [HttpPost]
+        public BrokenInterviewPackagesView GetRejectedInterviewPackages(BrokenInterviewPackageFilter filter)
+        {
+            filter.ReturnOnlyUnknownExceptionType = true;
+            return this.brokenInterviewPackagesViewFactory.GetFilteredItems(filter);
+        }
 
         [HttpGet]
         public UsersView Interviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
@@ -110,11 +119,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             });
 
         [HttpPost]
-        public void ReprocessBrokenPackages() => this.interviewPackagesService.ReprocessAllBrokenPackages();
-
-        [HttpPost]
         public void ReprocessSelectedBrokenPackages(ReprocessSelectedBrokenPackagesRequestView request) 
-            => this.interviewPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
+            => this.interviewBrokenPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
 
         public class ReprocessSelectedBrokenPackagesRequestView
         {

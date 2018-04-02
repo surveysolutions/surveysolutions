@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -10,10 +12,20 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Substitution
 {
-    internal class when_variable_from_one_roster_using_in_another_triggered_by_the_same_question: in_standalone_app_domain
+    internal class when_variable_from_one_roster_using_in_another_triggered_by_the_same_question: InterviewTestsContext
     {
-        private Because of = () =>
-            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+        private AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        [OneTimeSetUp]
+        public void SetupTest()
+        {
+            appDomainContext = AppDomainContext.Create();
+        }
+
+        [Test]
+        public void should_calculate_substitutions()
+        {
+            var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
 
@@ -66,14 +78,16 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
                 return result;
             });
 
-        It should_change_title_and_inline_variable_substitution_in_roster_1 = () =>
-            results.QuestionTitleWasChangedInRoster1.ShouldBeTrue();
 
-        It should_change_title_and_inline_variable_substitution_in_roster_ = () =>
-            results.QuestionTitleWasChangedInRoster2.ShouldBeTrue();
+            results.QuestionTitleWasChangedInRoster1.Should().BeTrue();
+            results.QuestionTitleWasChangedInRoster2.Should().BeTrue();
+        }
 
-
-        private static InvokeResults results;
+        [TearDown]
+        public void TearDown()
+        {
+            appDomainContext.Dispose();
+        }
 
         [Serializable]
         internal class InvokeResults

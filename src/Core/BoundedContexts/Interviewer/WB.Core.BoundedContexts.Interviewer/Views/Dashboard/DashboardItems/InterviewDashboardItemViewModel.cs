@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -31,6 +32,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         
         private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
             serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
+
+        private ILogger logger => serviceLocator.GetInstance<ILogger>();
 
         public event EventHandler OnItemRemoved;
         private bool isInterviewReadyToLoad = true;
@@ -228,8 +231,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 return;
             }
 
+            logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
             this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
-            this.OnItemRemoved(this, EventArgs.Empty);
+            this.OnItemRemoved.Invoke(this, EventArgs.Empty);
         }
 
         public async Task LoadInterviewAsync()
@@ -250,6 +254,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
                 }
 
+                logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
                 this.ViewModelNavigationService.NavigateTo<LoadingViewModel>(new { interviewId = this.interview.InterviewId });
             }
             finally

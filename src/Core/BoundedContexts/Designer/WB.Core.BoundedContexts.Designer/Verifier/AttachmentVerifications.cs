@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     QuestionnaireVerificationMessage.Error(
                         "WB0065",
                         VerificationMessages.WB0065_NameForAttachmentIsNotUnique,
-                        group.Select(e => QuestionnaireNodeReference.CreateForAttachment(e.AttachmentId)).ToArray()));
+                        group.Select(e => QuestionnaireEntityReference.CreateForAttachment(e.AttachmentId)).ToArray()));
         }
 
         private bool AttachmentHasEmptyContent(Attachment attachment, MultiLanguageQuestionnaireDocument questionnaire)
@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return (questionnaire) => questionnaire
                 .Attachments
                 .Where(entity => hasError(entity, questionnaire))
-                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
+                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireEntityReference.CreateForAttachment(entity.AttachmentId)));
         }
 
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 questionnaire
                     .Attachments
                     .Where(x => hasError(x, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
+                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireEntityReference.CreateForAttachment(entity.AttachmentId)));
         }
 
         private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> Warning(
@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return questionnaire =>
                 this.attachmentService.GetAttachmentSizesByQuestionnaire(questionnaire.PublicKey)
                     .Where(x => hasError(x, questionnaire))
-                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireNodeReference.CreateForAttachment(entity.AttachmentId)));
+                    .Select(entity => QuestionnaireVerificationMessage.Warning(code, message, QuestionnaireEntityReference.CreateForAttachment(entity.AttachmentId)));
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)

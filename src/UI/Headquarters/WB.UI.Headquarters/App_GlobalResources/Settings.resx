@@ -144,6 +144,21 @@
   <data name="LogoUpdated" xml:space="preserve">
     <value>Company logo updated</value>
   </data>
+  <data name="InterviewerSettings_Title" xml:space="preserve">
+    <value>Interviewer application settings</value>
+  </data>
+  <data name="InterviewerSettings_Description" xml:space="preserve">
+    <value>Some specific settings by android version of Interviewer application</value>
+  </data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve">
+    <value>Enable automatic updates</value>
+  </data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+    <value>Android applications automatic updates enabled</value>
+  </data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+    <value>Android applications automatic updates disabled</value>
+  </data>
   <data name="LogoNotUpdated" xml:space="preserve">
     <value>Company logo was not updated. Please provide a valid image</value>
   </data>

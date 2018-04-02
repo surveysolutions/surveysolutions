@@ -7,7 +7,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    [TestOf(typeof(InterviewSummaryDenormalizer))]
     internal class InterviewSummaryDenormalizerTests : InterviewSummaryDenormalizerTestsContext
     {
         [Test]

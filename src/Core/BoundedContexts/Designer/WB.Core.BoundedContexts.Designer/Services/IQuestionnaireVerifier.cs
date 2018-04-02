@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 

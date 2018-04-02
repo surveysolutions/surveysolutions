@@ -42,8 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 responsibleId,
                 options: new[]
                 {
-                    new Option(Guid.NewGuid(),"1", $"1"),
-                    new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+                    new Option("1", $"1"),
+                    new Option("2", $"answer with {searchFor}")
                 });
 
             questionnaire.AddSingleOptionQuestion(filteredQuestionId,
@@ -52,8 +52,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 isFilteredCombobox: true,
                 options: new[]
                 {
-                    new Option(Guid.NewGuid(),"1", $"1"),
-                    new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+                    new Option("1", $"1"),
+                    new Option("2", $"answer with {searchFor}")
                 });
 
             questionnaire.AddSingleOptionQuestion(cascadingQuestionId,
@@ -62,8 +62,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
              cascadeFromQuestionId: filteredQuestionId,
              options: new[]
              {
-                new Option(Guid.NewGuid(),"1", $"1"),
-                new Option(Guid.NewGuid(),"2", $"answer with {searchFor}")
+                new Option("1", $"1"),
+                new Option("2", $"answer with {searchFor}")
              });
 
             questionnaire.AddVariable(
@@ -183,6 +183,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         const string searchFor = "to_replace";
 
-        private static IEnumerable<QuestionnaireNodeReference> foundReferences;
+        private static IEnumerable<QuestionnaireEntityReference> foundReferences;
     }
 }

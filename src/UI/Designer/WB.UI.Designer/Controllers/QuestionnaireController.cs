@@ -299,7 +299,7 @@ namespace WB.UI.Designer.Controllers
             var editQuestionView = this.questionnaireInfoFactory.GetQuestionEditView(id, questionId);
 
             var options = editQuestionView?.Options.Select(
-                              option => new Option(Guid.NewGuid(), option.Value?.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
+                              option => new Option(option.Value?.ToString("G29",CultureInfo.InvariantCulture), option.Title, option.ParentValue)) ?? new Option[0];
             var optionsList = options.ToList();
 
             this.questionWithOptionsViewModel = new EditOptionsViewModel()
@@ -462,11 +462,11 @@ namespace WB.UI.Designer.Controllers
                 {
                     if (isCascade)
                     {
-                        importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
+                        importedOptions.Add(new Option(csvReader.GetField(0), csvReader.GetField(1), csvReader.GetField(2)));
                     }
                     else
                     {
-                        importedOptions.Add(new Option(Guid.NewGuid(), csvReader.GetField(0), csvReader.GetField(1)));    
+                        importedOptions.Add(new Option(csvReader.GetField(0), csvReader.GetField(1)));    
                     }
                 }
             }

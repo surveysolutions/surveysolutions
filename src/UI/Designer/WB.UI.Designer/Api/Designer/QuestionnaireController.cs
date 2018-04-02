@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -197,8 +197,9 @@ namespace WB.UI.Designer.Api
                 .Take(MaxVerificationErrors - verificationErrors.Length)
                 .ToArray();
 
-            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, questionnaireView.Source);
-            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, questionnaireView.Source);
+            var readOnlyQuestionnaire = questionnaireView.Source.AsReadOnly();
+            VerificationMessage[] errors = this.verificationErrorsMapper.EnrichVerificationErrors(verificationErrors, readOnlyQuestionnaire);
+            VerificationMessage[] warnings = this.verificationErrorsMapper.EnrichVerificationErrors(verificationWarnings, readOnlyQuestionnaire);
 
             return new VerificationResult
             {
@@ -240,6 +241,5 @@ namespace WB.UI.Designer.Api
 
             return questionnaire;
         }
-
     }
 }

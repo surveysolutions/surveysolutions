@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -12,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly string apiVersion = @"v3";
         private readonly IStringCompressor zipUtils;
         private readonly IAttachmentContentService attachmentContentService;
+        private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly ITranslationManagementService translationManagementService;
         private readonly ICommandService commandService;
@@ -36,13 +37,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IAuthorizedUser authorizedUser;
         private readonly DesignerUserCredentials designerUserCredentials;
 
-
-        public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider, 
+        public QuestionnaireImportService(ISupportedVersionProvider supportedVersionProvider,
             IRestService restService,
             IStringCompressor zipUtils,
             IAttachmentContentService attachmentContentService,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             ITranslationManagementService translationManagementService,
+            IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
             ICommandService commandService,
             ILogger logger,
             IAuditLog auditLog,
@@ -60,6 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.auditLog = auditLog;
             this.authorizedUser = authorizedUser;
             this.designerUserCredentials = designerUserCredentials;
+            this.lookupTablesStorage = lookupTablesStorage;
         }
 
         public async Task<QuestionnaireImportResult> Import(Guid questionnaireId, string name, bool isCensusMode)
@@ -86,8 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         minSupportedQuestionnaireVersion = this.supportedVersionProvider.GetMinVerstionSupportedByInterviewer()
                     });
 
-                QuestionnaireDocument questionnaire =
-                    this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
+                QuestionnaireDocument questionnaire = this.zipUtils.DecompressString<QuestionnaireDocument>(questionnairePackage.Questionnaire);
                 var questionnaireContentVersion = questionnairePackage.QuestionnaireContentVersion;
                 var questionnaireAssembly = questionnairePackage.QuestionnaireAssembly;
 
@@ -126,9 +127,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                         TranslationIndex = x.TranslationIndex,
                         TranslationId = x.TranslationId
                     }));
-
                 }
-                
+
+                if (questionnaire.LookupTables.Any())
+                {
+                    foreach (var lookupId in questionnaire.LookupTables.Keys)
+                    {
+                        var lookupTable = await this.restService.GetAsync<QuestionnaireLookupTable>(
+                            url: $"{this.apiPrefix}/lookup/{questionnaire.PublicKey}/{lookupId}",
+                            credentials: credentials);
+                        
+                        lookupTablesStorage.Store(lookupTable, questionnaireIdentity, lookupId);
+                    }
+                }
+
                 this.commandService.Execute(new ImportFromDesigner(
                     this.authorizedUser.Id,
                     questionnaire,
@@ -136,7 +148,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     questionnaireAssembly,
                     questionnaireContentVersion,
                     questionnaireVersion));
+
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
+
                 return new QuestionnaireImportResult();
             }
             catch (RestException ex)

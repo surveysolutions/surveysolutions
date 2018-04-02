@@ -4,6 +4,8 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 {
     public interface ILogger
     {
+        void Trace(string message, Exception exception = null);
+
         void Debug(string message, Exception exception = null);
 
         void Info(string message, Exception exception = null);

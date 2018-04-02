@@ -222,9 +222,9 @@
                     }
                 };
 
-                var isPrefilledScopeSelected = question.questionScope.value === 'Identifying';
+                var isPrefilledScopeSelected = question.questionScope === 'Identifying';
                 command.isPreFilled = isPrefilledScopeSelected;
-                command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope.value;
+                command.scope = isPrefilledScopeSelected ? 'Interviewer' : question.questionScope;
 
                 switch (question.type) {
                     case "SingleOption":
@@ -256,6 +256,7 @@
                         command.countOfDecimalPlaces = question.countOfDecimalPlaces;
                         command.maxValue = question.maxValue;
                         command.useFormatting = question.useFormatting;
+                        command.options = question.options;
                         break;
                     case "DateTime":
                         command.isTimestamp = question.isTimestamp;
@@ -269,6 +270,9 @@
                         break;
                     case "TextList":
                         command.maxAnswerCount = question.maxAnswerCount;
+                        break;
+                    case "Multimedia":
+                        command.IsSignature = question.isSignature;
                         break;
                 }
                 var questionType = question.type === "MultyOption" ? "MultiOption" : question.type; // we have different name in enum and in command. Correct one is 'Multi' but we cant change it in enum

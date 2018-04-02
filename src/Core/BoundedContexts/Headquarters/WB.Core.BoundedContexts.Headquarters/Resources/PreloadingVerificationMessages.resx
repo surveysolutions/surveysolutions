@@ -203,7 +203,7 @@
     <value>GPS questions require separate columns for Latitude and Longitude</value>
   </data>
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
-    <value>Identifying GPS question requires Latitude and Longitude to be set.</value>
+    <value>GPS question requires Latitude and Longitude to be set.</value>
   </data>
   <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
     <value>Two or more columns have the same name.</value>
@@ -235,10 +235,16 @@
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>File with questionnaire level data is missing.</value>
   </data>
-  <data name="PL0041_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Answer to multiple choice question cannot contain more than {0} answers.</value>
+  </data>
+  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
     <value>Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}</value>
   </data>
-  <data name="PL0042_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Id column doesn't have any value.</value>
+  </data>
+  <data name="PL0046_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
     <value>Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}</value>
   </data>
   <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">

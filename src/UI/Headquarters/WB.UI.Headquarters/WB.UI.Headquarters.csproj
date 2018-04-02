@@ -212,8 +212,8 @@
     <Reference Include="NLog.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NLog.Web.4.5.1\lib\net35\NLog.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Npgsql, Version=3.2.6.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Npgsql.3.2.6\lib\net451\Npgsql.dll</HintPath>
+    <Reference Include="Npgsql, Version=3.2.7.0, Culture=neutral, PublicKeyToken=5d8b90d52f46fda7, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Npgsql.3.2.7\lib\net451\Npgsql.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -411,7 +411,7 @@
     <Content Include="App_GlobalResources\DataExport.resx">
       <SubType>Designer</SubType>
       <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>DataExport.Designer.cs</LastGenOutput>
+      <LastGenOutput>DataExport.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\DataExport.ru.resx">
       <DependentUpon>DataExport.resx</DependentUpon>
@@ -636,8 +636,12 @@
     <Content Include="App_GlobalResources\TakeNewInterview.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>TakeNewInterview.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App_GlobalResources\TakeNewInterview.zh.resx">
+      <DependentUpon>TakeNewInterview.resx</DependentUpon>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.ru.resx">
       <DependentUpon>TakeNewInterview.resx</DependentUpon>
     </Content>
     <Content Include="App_GlobalResources\Users.es.resx">
@@ -714,6 +718,7 @@
     <Content Include="Content\img\google-maps-markers\m5.png" />
     <Content Include="Content\img\loader.gif" />
     <Content Include="Content\img\loading.gif" />
+    <Content Include="data-export-storages.html" />
     <Content Include="Dependencies\img\back-to-parrent-1-no-animation-4.png" />
     <Content Include="Dependencies\img\Icon-demo-server.png" />
     <Content Include="Dependencies\img\icon-mic-1x.png" />
@@ -971,6 +976,9 @@
     <EmbeddedResource Include="Resources\ReviewInterview.zh.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.ru.resx">
+      <DependentUpon>ReviewInterview.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\SyncLogMessages.es.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1008,7 +1016,6 @@
     <Content Include="Scripts\dateRangePicker\daterangepicker.css" />
     <Content Include="Scripts\dateRangePicker\daterangepicker.js" />
     <Content Include="Scripts\director.js" />
-    <Content Include="Scripts\infobubble.js" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.ttf" />
@@ -1464,7 +1471,6 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="Scripts\lodash.underscore.js" />
     <Content Include="Scripts\lodash.underscore.min.js" />
-    <Content Include="Scripts\markerclusterer_compiled.js" />
     <Content Include="Scripts\Math.uuid.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\moment-with-langs.js" />
@@ -1498,17 +1504,12 @@
     <Content Include="Scripts\viewmodels\pages\interviewers.js" />
     <Content Include="Scripts\viewmodels\pages\interviews.base.js" />
     <Content Include="Scripts\viewmodels\pages\interview\custom.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\config.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\datacontext.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\details.js" />
-    <Content Include="Scripts\viewmodels\pages\interview\details\interviewdetailssettings.js" />
     <Content Include="Scripts\viewmodels\pages\interview\hq.interviews.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\datacontext.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\mapper.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\model.js" />
     <Content Include="Scripts\viewmodels\pages\interview\new\new-assignment.js" />
     <Content Include="Scripts\viewmodels\pages\interview\sv.interviews.js" />
-    <Content Include="Scripts\viewmodels\pages\mapreport.js" />
     <Content Include="Scripts\viewmodels\pages\editable-users.js" />
     <Content Include="Scripts\viewmodels\pages\importquestionaires.js" />
     <Content Include="Scripts\viewmodels\pages\users.js" />
@@ -1578,19 +1579,6 @@
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Error\WebsitePathIsTooLong.cshtml" />
     <Content Include="Views\HealthCheck\Index.cshtml" />
-    <Content Include="Views\Interview\ApproveRejectPartialView.cshtml" />
-    <Content Include="Views\Interview\AttachmentPartialView.cshtml" />
-    <Content Include="Views\Interview\Details.cshtml" />
-    <Content Include="Views\Interview\DetailsQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\DetailsReadOnlyQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\EditableMultiOptionsQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\EditableSupervisorsQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\EditableYesNoQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\HistoryOfStatusesPartialView.cshtml" />
-    <Content Include="Views\Interview\InterviewHistory.cshtml" />
-    <Content Include="Views\Interview\ReadOnlyQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\ReadOnlyYesNoQuestionPartialView.cshtml" />
-    <Content Include="Views\Interview\StaticTextPartialView.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
     <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
@@ -1615,7 +1603,6 @@
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\spin.min.js.map" />
-    <Content Include="Views\Interview\CommentTemplatePartialView.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Shared\_MainLayout.cshtml" />
     <Content Include="Views\Template\Import.cshtml" />
@@ -1653,7 +1640,6 @@
     <Content Include="Views\Shared\_ListDataTablePagingScript.cshtml" />
     <Content Include="Views\TabletReport\_ListViewStatusesScript.cshtml" />
     <Content Include="Views\Shared\typeahead.cshtml" />
-    <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\Download\Index.cshtml" />
     <Content Include="Views\SurveySetup\InterviewVerificationProgress.cshtml" />
     <Content Include="Views\Shared\InterviewerMainMenu.cshtml" />
@@ -1677,6 +1663,10 @@
     <Content Include="Views\Users\index.cshtml" />
     <Content Include="Scripts\knockout.validation.min.js.map" />
     <Content Include="Views\Maps\UserMaps.cshtml" />
+    <Content Include="Views\ControlPanel\_InterviewPackages.cshtml" />
+    <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
+    <Content Include="Views\Interview\InterviewHistory.cshtml" />
+    <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1698,6 +1688,7 @@
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
     <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
@@ -1714,19 +1705,25 @@
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
+    <Compile Include="App_GlobalResources\DataExport.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Maps.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\MainModule.cs" />
+    <Compile Include="App_Start\NinjectKernel.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\AutoMapperResolutionContextExtensions.cs" />
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\InterviewerApkInfo.cs" />
-    <Compile Include="API\Interviewer\v2\CompanyLogoApiV2Controller.cs" />
+    <Compile Include="API\Interviewer\v2\SettingsV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
     <Compile Include="API\ProgressiveDownload.cs" />
@@ -1769,11 +1766,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\DataExport.Designer.cs">
-      <DependentUpon>DataExport.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -1890,9 +1882,11 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201710021139_ChangeJsonToJsonB.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201802191312_AddColumnsToRetryReprocessBrokenPackages.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201711141615_ImportUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710161320_UserMaps.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201802201015.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -1916,6 +1910,11 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201802011630_SpeedupMapReport.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802121400_ExtractQuestionnaireDocumentStructure.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802201614_AddInterviewingTotalTime.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802121510_AddIdToInterviewSummaryId.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802121640_AddSlimdownInterviewsTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201802131620_AddIndexesAndViewsToSlimInterviewTable.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
@@ -2073,6 +2072,7 @@
     <Compile Include="Models\UserPreloading\UserPreloadingProcessView.cs" />
     <Compile Include="Models\UsersListViewModel.cs" />
     <Compile Include="Models\User\UserBrowseItem.cs" />
+    <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
@@ -2190,9 +2190,11 @@
       <DependentUpon>WebInterviewUI.resx</DependentUpon>
     </Compile>
     <Compile Include="ServiceLocationModule.cs" />
+    <Compile Include="Services\IQuestionnaireExporter.cs" />
     <Compile Include="Services\MetricsService.cs" />
     <Compile Include="Services\IInterviewCreatorFromAssignment.cs" />
     <Compile Include="Services\InterviewImportColumn.cs" />
+    <Compile Include="Services\QuestionnaireExporter.cs" />
     <Compile Include="Services\VersionCheckService.cs" />
     <Compile Include="Services\IVersionCheckService.cs" />
     <Compile Include="Startup.cs" />
@@ -2206,7 +2208,6 @@
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
-    <Compile Include="Views\Interview\HtmlExtensions.cs" />
     <Compile Include="Views\Shared\HtmlExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

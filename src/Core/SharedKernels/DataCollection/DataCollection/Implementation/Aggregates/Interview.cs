@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName));
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(@event.PictureFileName, @event.AnswerTimeUtc));
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.UpdateMediaAnswer(@event.QuestionId, @event.RosterVector, @event.PictureFileName);
@@ -362,6 +362,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (this.UsesExpressionStorage) return;
             this.ExpressionProcessorStatePrototype.ApplyStaticTextFailedValidations(staticTextsConditions);
+        }
+
+        public virtual void Apply(AnswersDeclaredPlausible @event)
+        {
+            foreach (var questionIdentity in @event.Questions)
+                this.Tree.GetQuestion(questionIdentity)?.MarkPlausible();
+        }
+
+        public virtual void Apply(AnswersDeclaredImplausible @event)
+        {
+            var questionsConditions = @event.GetFailedValidationConditionsDictionary();
+
+            foreach (var questionIdentity in questionsConditions.Keys)
+                this.Tree.GetQuestion(questionIdentity).MarkImplausible(questionsConditions[questionIdentity]);
+        }
+
+        public virtual void Apply(StaticTextsDeclaredPlausible @event)
+        {
+            foreach (var staticTextIdentity in @event.StaticTexts)
+                this.Tree.GetStaticText(staticTextIdentity).MarkPlausible();
+        }
+
+        public virtual void Apply(StaticTextsDeclaredImplausible @event)
+        {
+            var staticTextsConditions = @event.GetFailedValidationConditionsDictionary();
+
+            foreach (var staticTextIdentity in staticTextsConditions.Keys)
+                this.Tree.GetStaticText(staticTextIdentity).MarkImplausible(staticTextsConditions[staticTextIdentity]);
         }
 
         public void Apply(LinkedOptionsChanged @event)
@@ -790,11 +818,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedValidations);
+                .ToDictionary(x => x.Identity, x => x.FailedErrors);
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
             var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedValidations);
+                .ToDictionary(x => x.Identity, x => x.FailedErrors);
 
             if (validQuestionIdentities.Any()) expressionState.DeclareAnswersValid(validQuestionIdentities);
             if (invalidQuestionIdentities.Any()) expressionState.ApplyFailedValidations(invalidQuestionIdentities);
@@ -1332,7 +1360,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(pictureFileName));
+            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(MultimediaAnswer.FromString(pictureFileName, answerTime));
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
             var treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
@@ -2068,19 +2096,38 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var allChangedStaticTextDiffs = allNotNullableNodes.OfType<InterviewTreeStaticTextDiff>().ToList();
 
             var validQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedValidationIndexChanged).Select(x => x.ChangedNode)
-                .ToDictionary(x => x.Identity, x => x.FailedValidations);
+            var invalidQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
+                .ToDictionary(x => x.Identity, x => x.FailedErrors);
+
+            var plausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
+            var implausibleQuestionIdentities = allChangedQuestionDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
+                //.ToDictionary(x => x.Identity, x => x.FailedWarnings);
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarnings))
+                .ToList();
 
             var validStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameValid).Select(x => x.ChangedNode.Identity).ToArray();
-            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedValidationIndexChanged).Select(x => x.ChangedNode)
-                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedValidations))
+            var invalidStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameInvalid || x.IsFailedErrorValidationIndexChanged).Select(x => x.ChangedNode)
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedErrors))
                 .ToList();
+
+            var plausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecamePlausibled).Select(x => x.ChangedNode.Identity).ToArray();
+            var implausibleStaticTextIdentities = allChangedStaticTextDiffs.Where(x => x.ChangedNodeBecameImplausibled || x.IsFailedWarningValidationIndexChanged).Select(x => x.ChangedNode)
+                //.ToDictionary(x => x.Identity, x => x.FailedWarnings);
+                .Select(x => new KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>(x.Identity, x.FailedWarnings))
+                .ToList();
+
 
             if (validQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredValid(validQuestionIdentities));
             if (invalidQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredInvalid(invalidQuestionIdentities));
 
+            if (plausibleQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredPlausible(plausibleQuestionIdentities));
+            if (implausibleQuestionIdentities.Any()) this.ApplyEvent(new AnswersDeclaredImplausible(implausibleQuestionIdentities));
+
             if (validStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredValid(validStaticTextIdentities));
             if (invalidStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredInvalid(invalidStaticTextIdentities));
+
+            if (plausibleStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredPlausible(plausibleStaticTextIdentities));
+            if (implausibleStaticTextIdentities.Any()) this.ApplyEvent(new StaticTextsDeclaredImplausible(implausibleStaticTextIdentities));
 
             if (HasInvalidAnswers() || HasInvalidStaticTexts)
             {
@@ -2408,8 +2455,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
 
 
-
-
                 IInterviewExpressionStorage expressionStorage = this.GetExpressionStorage();
                 var interviewPropertiesForExpressions = new InterviewPropertiesForExpressions(new InterviewProperties(this.EventSourceId), this.properties);
                 expressionStorage.Initialize(new InterviewStateForExpressions(changedInterviewTree, interviewPropertiesForExpressions));
@@ -2451,7 +2496,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                                         || ((diff as InterviewTreeValidateableDiff)?.AreValidationMessagesChanged ?? false)
                                         || ((diff as InterviewTreeValidateableDiff)?.ChangedNodeBecameInvalid ?? false)
                                         || ((diff as InterviewTreeValidateableDiff)?.ChangedNodeBecameValid ?? false)
-                                        || ((diff as InterviewTreeValidateableDiff)?.IsFailedValidationIndexChanged ?? false)
+                                        || ((diff as InterviewTreeValidateableDiff)?.IsFailedErrorValidationIndexChanged ?? false)
                                         || ((diff as InterviewTreeVariableDiff)?.IsValueChanged ?? false)
                                         || ((diff as InterviewTreeStaticTextDiff)?.IsTitleChanged ?? false);
 
@@ -2489,6 +2534,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                             }
                         }
                     }
+
+                    this.UpdateRosterTitles(changedInterviewTree, questionnaire);
+                    this.UpdateLinkedQuestions(changedInterviewTree, updater);
                 }
             }
             else
@@ -2571,6 +2619,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     roster.UpdateRosterTitle((questionId, answerOptionValue) =>
                         questionnaire.GetOptionForQuestionByOptionValue(questionId, answerOptionValue).Title);
+                }
+            }
+        }
+
+        protected void UpdateLinkedQuestions(InterviewTree interviewTree, InterviewTreeUpdater updater)
+        {
+            foreach (InterviewTreeQuestion question in interviewTree.FindQuestions())
+            {
+                if (question.IsLinked)
+                {
+                    updater.UpdateLinkedQuestion(question);
+                }
+                else if (question.IsLinkedToListQuestion)
+                {
+                    updater.UpdateLinkedToListQuestion(question);
                 }
             }
         }

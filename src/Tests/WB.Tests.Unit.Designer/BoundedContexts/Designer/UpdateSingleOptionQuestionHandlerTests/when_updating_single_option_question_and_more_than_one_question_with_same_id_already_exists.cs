@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateSingleOptionQues
         private static bool isPreFilled = false;
         private static QuestionScope scope = QuestionScope.Interviewer;
         private static string enablementCondition = null;
-        private static Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "Option 1"), new Option(Guid.NewGuid(), "2", "Option 2"), };
+        private static Option[] options = new Option[] { new Option("1", "Option 1"), new Option("2", "Option 2"), };
         private static Guid? linkedToQuestionId = (Guid?)null;
         private static bool isFilteredCombobox = false;
         private static Guid? cascadeFromQuestionId = (Guid?)null;

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FileColumnsMissingFormat" xml:space="preserve">
-    <value>The file '{0}' does not contains required columns: {1}</value>
+    <value>The file '{0}' does not contain required columns: {1}</value>
   </data>
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>The file '{0}' contains the following columns that can't be mapped to any user property (e.g., full name, phone number, etc.) : {1}</value>
@@ -128,5 +128,8 @@
   </data>
   <data name="HasUsersToImport" xml:space="preserve">
     <value>Please, wait until previous import of users is completed</value>
+  </data>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>Provided file has error in row {0} and cannot be parsed</value>
   </data>
 </root>

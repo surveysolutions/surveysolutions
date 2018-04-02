@@ -207,5 +207,6 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult SynchronizationLog() => this.View();
 
         public ActionResult BrokenInterviewPackages() => this.View();
+        public ActionResult RejectedInterviewPackages() => this.View();
     }
 }

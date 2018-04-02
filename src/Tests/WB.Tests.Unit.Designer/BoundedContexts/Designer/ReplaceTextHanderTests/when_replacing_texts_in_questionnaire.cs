@@ -43,8 +43,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
                 parentGroupId: chapterId,
                 options: new []
                 {
-                    new Option(Guid.NewGuid() ,"1",$"answer with {searchFor}"),
-                    new Option(Guid.NewGuid() ,"2",$"2")
+                    new Option("1",$"answer with {searchFor}"),
+                    new Option("2",$"2")
                 });
 
             questionnaire.AddVariable(

@@ -166,6 +166,7 @@
     <item name="android:orientation">horizontal</item>
     <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:background">@android:color/transparent</item>
   </style>
   <style name="Interview_Question_Answer_Recorded_RemoveAnswerWrapper">
     <item name="android:layout_height">fill_parent</item>
@@ -406,6 +407,14 @@
     <item name="android:textStyle">bold|italic</item>
     <item name="android:textColor">@color/errorTextColor</item>
     <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_small_vertical</item>
+  </style>
+
+  <style name="Interview_Question_Warning_Title" parent="Interview_Question_Errors_Title">
+    <item name="android:textColor">@color/warningTextColor</item>
+  </style>
+
+  <style name="Interview_Question_Warning_Details" parent="Interview_Question_Errors_Details">
+    <item name="android:textColor">@color/warningTextColor</item>
   </style>
 
   <style name="Interview_Question_Comments">

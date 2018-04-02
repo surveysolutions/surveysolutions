@@ -42,6 +42,15 @@ namespace ASP
             return string.Format(Pages.QuestionnaireNameVersionFirst, name, version);
         }
 
+        public static IHtmlString SubstituteQuestionnaireName(this HtmlHelper html,
+            string template,
+            string questionnaireName)
+        {
+            if (string.IsNullOrWhiteSpace(template)) return MvcHtmlString.Empty;
+
+            return new MvcHtmlString(template.Replace("%QUESTIONNAIRE%", questionnaireName));
+        }
+
         public static MvcHtmlString HasErrorClassFor<TModel, TProperty>(
             this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression)

@@ -1,6 +1,7 @@
 ﻿using System;
 using Machine.Specifications;
 using Main.Core.Entities.Composite;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,7 +14,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 {
     internal class when_substitution_title_changed : StaticTextViewModelTestsContext
     {
-        Establish context = () =>
+        [OneTimeSetUp]
+        public void SetUp()
         {
             interviewId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             var staticTextWithSubstitutionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -37,17 +39,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository, eventRegistry);
             viewModel.Init(interviewId.FormatGuid(), substitutionIdentity, null);
-        };
-
-        Because of = () =>
-        {
+        
             interview.AnswerNumericRealQuestion(interviewerId, substitedQuestionIdentity.Id,
                 substitedQuestionIdentity.RosterVector, DateTime.UtcNow, answerOnDoubleQuestion);
 
             Setup.ApplyInterviewEventsToViewModels(interview, eventRegistry, interviewId);
-        };
+        }
 
-        It should_change_item_title = () => viewModel.Text.PlainText.ShouldEqual($"Old title {answerOnDoubleQuestion}");
+        [Test]
+        public void should_change_item_title() => viewModel.Text.PlainText.ShouldEqual($"Old title {answerOnDoubleQuestion}");
 
         static StaticTextViewModel viewModel;
         static StatefulInterview interview;

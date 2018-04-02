@@ -1,19 +1,15 @@
-﻿using System;
-using Machine.Specifications;
-using Moq;
+using System;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_getting_answer_on_text_question_from_fixed_roster : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             textQuestionIdentity = Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Create.Entity.RosterVector(0));
 
@@ -28,15 +24,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             IQuestionnaireStorage questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview.AnswerTextQuestion(Guid.NewGuid(), textQuestionIdentity.Id, textQuestionIdentity.RosterVector,
+        private void BecauseOf() => interview.AnswerTextQuestion(Guid.NewGuid(), textQuestionIdentity.Id, textQuestionIdentity.RosterVector,
                     DateTime.UtcNow, answerOnTextQuestionInFidexRoster);
 
-        It should_reduce_roster_vector_to_find_target_question_answer =
-            () => interview.GetTextQuestion(textQuestionIdentity)
+        [NUnit.Framework.Test] public void should_reduce_roster_vector_to_find_target_question_answer () => interview.GetTextQuestion(textQuestionIdentity)
                     .GetAnswer()
-                    .Value.ShouldEqual(answerOnTextQuestionInFidexRoster);
+                    .Value.Should().Be(answerOnTextQuestionInFidexRoster);
 
         private static StatefulInterview interview;
         private static Identity textQuestionIdentity;

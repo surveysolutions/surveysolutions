@@ -114,7 +114,9 @@
             };
 
             $rootScope.$on('$stateChangeSuccess', function () {
-                $scope.foldback();
+                if ($scope.isFolded) {
+                    $scope.foldback();
+                }
             });
 
             $rootScope.$on('groupUpdated', function (event, data) {

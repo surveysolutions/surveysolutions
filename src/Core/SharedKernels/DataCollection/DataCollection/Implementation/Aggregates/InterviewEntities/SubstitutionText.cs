@@ -66,40 +66,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 string substitutionResult = null;
                 bool shouldEncode = true;
 
-                switch (this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity))
+                var treeEntity = this.tree.FindEntityInQuestionBranch(substitution.Id, this.identity);
+                if(treeEntity != null && !treeEntity.IsDisabled())
                 {
-                    case InterviewTreeRoster roster:
-                        substitutionResult = roster.RosterTitle;
-                        break;
+                    switch (treeEntity)
+                    {
+                        case InterviewTreeRoster roster:
+                            substitutionResult = roster.RosterTitle;
+                            break;
 
-                    case InterviewTreeVariable variable:
-                        substitutionResult = this.variableToUiStringService.VariableToUIString(variable.Value);
-                        break;
+                        case InterviewTreeVariable variable:
+                            substitutionResult = this.variableToUiStringService.VariableToUIString(variable.Value);
+                            break;
 
 
-                    case InterviewTreeQuestion question:
-                        string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
-                        shouldEncode = false;
+                        case InterviewTreeQuestion question:
+                            string answerString = question.GetAnswerAsString(CultureInfo.CurrentCulture);
+                            shouldEncode = false;
 
-                        substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
+                            if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
+                            {
+                                var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
+                                var dateTime = asDateTime.GetAnswer().Value;
 
-                        if (shouldAddBrowserTags && question.IsDateTime && question.IsAnswered())
+                                substitutionResult = asDateTime.IsTimestamp 
+                                    ? $"<time datetime=\"{dateTime:O}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>" 
+                                    : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
+                        }
+                        else
                         {
-                            var asDateTime = question.GetAsInterviewTreeDateTimeQuestion();
-                            var dateTime = asDateTime.GetAnswer().Value;
-
-                            substitutionResult = asDateTime.IsTimestamp 
-                                ? $"<time datetime=\"{dateTime:s}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>" 
-                                : $"<time date=\"{dateTime:yyyy-MM-dd}\">{dateTime.ToString(asDateTime.UiFormatString)}</time>";
+                            substitutionResult = shouldAddBrowserTags ? WebUtility.HtmlEncode(answerString ?? string.Empty) : answerString;
                         }
                         
                         break;
-                    case null:
-                        break;
+                    }
                 }
-
                 substitutionResult = shouldAddBrowserTags && shouldEncode 
-                    ? WebUtility.HtmlEncode(substitutionResult)
+                    ? WebUtility.HtmlEncode(substitutionResult) // DO NOT CHANGE TO HttpUtility.HtmlEncode: KP-10869
                     : substitutionResult;
 
                 substitutionResult = string.IsNullOrEmpty(substitutionResult)

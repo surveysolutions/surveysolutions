@@ -136,7 +136,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         protected virtual async Task SaveAnswerAsync(string optionText)
         {
+            //if app crashed and automatically restored 
+            //the state could be broken
+            if (principal?.CurrentUserIdentity == null)
+                return;
+
             var selectedOption = this.GetOptionByFilter(optionText);
+            if (selectedOption == null)
+                throw new InvalidOperationException($"Option was not found for value '{optionText}'");
 
             if (this.answer == selectedOption.Value)
             {

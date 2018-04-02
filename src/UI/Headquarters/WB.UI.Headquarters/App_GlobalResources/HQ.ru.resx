@@ -150,4 +150,8 @@
   <data name="UserWasUpdatedFormat" xml:space="preserve">
     <value>Информация о &lt;b&gt;{0}&lt;/b&gt; успешно обновлена</value>
   </data>
+  <data name="SupervisorNotFound" xml:space="preserve">
+    <value>Не может создать интервьюера. Выбранный супервизор не существует.</value>
+    <comment>Не может создать интервьюера. Выбранный супервизор не существует.</comment>
+  </data>
 </root>

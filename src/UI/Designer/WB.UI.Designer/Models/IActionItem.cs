@@ -20,6 +20,8 @@
 
         bool CanExportToPdf { get; }
 
+        bool CanExportToHtml { get; }
+
         bool CanAssignFolder { get; }
     }
 }

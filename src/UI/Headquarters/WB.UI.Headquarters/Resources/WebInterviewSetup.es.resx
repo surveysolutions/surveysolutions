@@ -124,7 +124,7 @@
     <value>Hecho</value>
   </data>
   <data name="DownloadTitle" xml:space="preserve">
-    <value>Descargar ({0})</value>
+    <value>Descargar ({{count}})</value>
   </data>
   <data name="ExportAssignmentsTitle" xml:space="preserve">
     <value>Puede descargar la lista de las asignaciones creadas que son asignadas al entrevistador para entregar los enlaces web a los encuestados</value>
@@ -139,7 +139,7 @@
     <value>Se inició la entrevista en la Web</value>
   </data>
   <data name="StartInfo" xml:space="preserve">
-    <value>Inicio de la entrevista Web para {0}</value>
+    <value>Inicio de la entrevista Web para {{name}}</value>
   </data>
   <data name="StopWebInterview" xml:space="preserve">
     <value>Detener Entrevista Web</value>
@@ -154,6 +154,6 @@
     <value>Configuración de la entrevista Web</value>
   </data>
   <data name="WebInterviewStarted" xml:space="preserve">
-    <value>Se inició la entrevista Web para {0}</value>
+    <value>Se inició la entrevista Web para {{name}}</value>
   </data>
 </root>

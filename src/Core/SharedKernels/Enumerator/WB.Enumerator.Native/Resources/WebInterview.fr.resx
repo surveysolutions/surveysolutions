@@ -190,7 +190,7 @@
     <value>Le processus d'entrevue nécessite une connexion Internet. Aucun logiciel supplémentaire n'est nécessaire.</value>
   </data>
   <data name="InvitationText" xml:space="preserve">
-    <value>Vous avez été invité à participer à l'enquête suivante: "{0}"</value>
+    <value>Vous avez été invité à participer à l'enquête suivante: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="NotStartedText" xml:space="preserve">
     <value>Pas commencé</value>
@@ -214,7 +214,7 @@
     <value>Le processus d'entrevue nécessite une connexion Internet, aucun logiciel supplémentaire n'est nécessaire</value>
   </data>
   <data name="Resume_InvitationText" xml:space="preserve">
-    <value>Vous pouvez accéder à L'entretien dans l'enquête suivante: "{0}"</value>
+    <value>Vous pouvez accéder à L'entretien dans l'enquête suivante: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="Resume_WelcomeText" xml:space="preserve">
     <value>Bonjour et bienvenue dans l'enquête Web Survey Solutions</value>
@@ -232,7 +232,7 @@
     <value>Enquête Web</value>
   </data>
   <data name="SurveyFormatText" xml:space="preserve">
-    <value>Enquête: "{0}"</value>
+    <value>Enquête: "%QUESTIONNAIRE%"</value>
   </data>
   <data name="ToInterview" xml:space="preserve">
     <value>Aller à l'entretien</value>

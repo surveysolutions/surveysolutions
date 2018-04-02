@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolve.
+        /// </summary>
+        public static string CommentEditorResolve {
+            get {
+                return ResourceManager.GetString("CommentEditorResolve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {{count}} error found.
         /// </summary>
         public static string CompilationErrorsCounter {
@@ -313,6 +322,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add comment.
+        /// </summary>
+        public static string EditorAddComment {
+            get {
+                return ResourceManager.GetString("EditorAddComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide comments.
+        /// </summary>
+        public static string EditorHideComment {
+            get {
+                return ResourceManager.GetString("EditorHideComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This section is empty..
         /// </summary>
         public static string EmptySectionLine1 {
@@ -376,6 +403,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New comment.
+        /// </summary>
+        public static string EntityComment {
+            get {
+                return ResourceManager.GetString("EntityComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entry was not found in questionnaire, please select another..
         /// </summary>
         public static string EntryWasNotFound {
@@ -385,7 +421,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error message.
+        ///   Looks up a localized string similar to Error or warning message.
         /// </summary>
         public static string ErrorMessage {
             get {
@@ -700,6 +736,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to add comment.
+        /// </summary>
+        public static string HelpNewComment {
+            get {
+                return ResourceManager.GetString("HelpNewComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Source question (answer generates number of rows).
         /// </summary>
         public static string HelpSourceQuestion {
@@ -736,7 +781,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error message is shown when validation condition evaluates to &quot;False&quot; or error occurres during expression evaluation..
+        ///   Looks up a localized string similar to Error or warning message is shown when validation condition evaluates to &quot;False&quot; or error occurres during expression evaluation..
         /// </summary>
         public static string HelpValidationMessage {
             get {
@@ -777,6 +822,15 @@ namespace WB.UI.Designer.Resources {
         public static string HideIfDisabled {
             get {
                 return ResourceManager.GetString("HideIfDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide resolved comments.
+        /// </summary>
+        public static string HideResolvedComments {
+            get {
+                return ResourceManager.GetString("HideResolvedComments", resourceCulture);
             }
         }
         
@@ -943,6 +997,24 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use signature pad.
+        /// </summary>
+        public static string IsSignature {
+            get {
+                return ResourceManager.GetString("IsSignature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is warning.
+        /// </summary>
+        public static string IsWarning {
+            get {
+                return ResourceManager.GetString("IsWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log out.
         /// </summary>
         public static string LogOut {
@@ -957,6 +1029,15 @@ namespace WB.UI.Designer.Resources {
         public static string MarkAsDefault {
             get {
                 return ResourceManager.GetString("MarkAsDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment cannot contain more than {1} characters.
+        /// </summary>
+        public static string MaxCommentLengthErrorMessage {
+            get {
+                return ResourceManager.GetString("MaxCommentLengthErrorMessage", resourceCulture);
             }
         }
         
@@ -1155,6 +1236,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionAddOption {
             get {
                 return ResourceManager.GetString("QuestionAddOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add special value.
+        /// </summary>
+        public static string QuestionAddSpecialValues {
+            get {
+                return ResourceManager.GetString("QuestionAddSpecialValues", resourceCulture);
             }
         }
         
@@ -1965,6 +2055,42 @@ namespace WB.UI.Designer.Resources {
         public static string SideBarAttachmentUploaded {
             get {
                 return ResourceManager.GetString("SideBarAttachmentUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Comment thread:.
+        /// </summary>
+        public static string SideBarCommentsCounter {
+            get {
+                return ResourceManager.GetString("SideBarCommentsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {{count}} Comment threads:.
+        /// </summary>
+        public static string SideBarCommentsCounter_plural {
+            get {
+                return ResourceManager.GetString("SideBarCommentsCounter_plural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments.
+        /// </summary>
+        public static string SideBarCommentsTitle {
+            get {
+                return ResourceManager.GetString("SideBarCommentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will see comments here.
+        /// </summary>
+        public static string SideBarEmptyCommentsLine {
+            get {
+                return ResourceManager.GetString("SideBarEmptyCommentsLine", resourceCulture);
             }
         }
         
@@ -2856,6 +2982,33 @@ namespace WB.UI.Designer.Resources {
         public static string VariableType {
             get {
                 return ResourceManager.GetString("VariableType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable name.
+        /// </summary>
+        public static string VariableVariableName {
+            get {
+                return ResourceManager.GetString("VariableVariableName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all {{count}} resolved comment.
+        /// </summary>
+        public static string ViewResolvedCommentsCounter {
+            get {
+                return ResourceManager.GetString("ViewResolvedCommentsCounter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View all {{count}} resolved comments.
+        /// </summary>
+        public static string ViewResolvedCommentsCounter_plural {
+            get {
+                return ResourceManager.GetString("ViewResolvedCommentsCounter_plural", resourceCulture);
             }
         }
         

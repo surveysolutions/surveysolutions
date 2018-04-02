@@ -315,7 +315,6 @@
     <AndroidResource Include="Resources\drawable\dashboard_my_questionnaires_bg.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_public_questionnaires_bg.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_item_bg.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -397,6 +396,9 @@
       <Project>{5daa7eaf-9a68-4302-ae74-ef0daa0bd169}</Project>
       <Name>WB.UI.Shared.Enumerator</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dashboard_search_icon.png" />
   </ItemGroup>
   <Choose>
     <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENSIONS'))">
