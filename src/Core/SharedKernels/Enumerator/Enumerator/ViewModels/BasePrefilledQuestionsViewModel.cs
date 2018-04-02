@@ -66,13 +66,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public override async Task Initialize()
         {
-            await base.Initialize();
+            await base.Initialize().ConfigureAwait(false);
             var interview = this.interviewRepository.Get(this.InterviewId);
 
             if (interview == null)
             {
                 logger.Error("Interview is null. interviewId: " + InterviewId);
-                await viewModelNavigationService.NavigateToDashboardAsync();
+                await viewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                return;
             }
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -80,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (questionnaire.GetPrefilledQuestions().Count == 0)
             {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(InterviewId, navigationIdentity: null);
+                await this.viewModelNavigationService.NavigateToInterviewAsync(InterviewId, navigationIdentity: null).ConfigureAwait(false);
                 return;
             }
 

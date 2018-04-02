@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
@@ -56,19 +55,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public void Init(string interviewId, string questionnaireId)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (questionnaireId == null) throw new ArgumentNullException(nameof(questionnaireId));
-
-            this.InterviewId = interviewId;
-            this.QuestionnaireId = questionnaireId;
+            this.InterviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            this.QuestionnaireId = questionnaireId ?? throw new ArgumentNullException(nameof(questionnaireId));
         }
 
-        public void NavigateTo(NavigationIdentity navigationItem)
+        public async Task NavigateTo(NavigationIdentity navigationItem)
         {
             if (this.viewModelNavigationService.HasPendingOperations)
                 this.viewModelNavigationService.ShowWaitMessage();
             else
-                this.NavigateToImpl(navigationItem);
+                await this.NavigateToImpl(navigationItem);
         }
 
         public void NavigateBack(Action navigateToIfHistoryIsEmpty)
