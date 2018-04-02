@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -111,14 +112,21 @@ namespace WB.UI.Interviewer
 
         private IContainer CreateAndInitializeIoc()
         {
+            var modules = new IModule[] {
+                new NcqrsModule(),
+                new InfrastructureModuleMobile(),
+                new DataCollectionSharedKernelModule(),
+                new InterviewerInfrastructureModule(),
+                new EnumeratorUIModule(),
+                new EnumeratorSharedKernelModule(),
+                new InterviewerUIModule(),
+                };
+
             ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterModule(new NcqrsModule().AsAutofac());
-            builder.RegisterModule(new InfrastructureModuleMobile().AsAutofac());
-            builder.RegisterModule(new DataCollectionSharedKernelModule().AsAutofac());
-            builder.RegisterModule(new InterviewerInfrastructureModule().AsAutofac());
-            builder.RegisterModule(new EnumeratorUIModule().AsAutofac());
-            builder.RegisterModule(new EnumeratorSharedKernelModule().AsAutofac());
-            builder.RegisterModule(new InterviewerUIModule().AsAutofac());
+            foreach (var module in modules)
+            {
+                builder.RegisterModule(module.AsAutofac());
+            }
             builder.RegisterModule(new InterviewerLoggingModule());
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
@@ -131,6 +139,12 @@ namespace WB.UI.Interviewer
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+
+            var serviceLocator = ServiceLocator.Current;
+            foreach (var module in modules)
+            {
+                module.Init(serviceLocator).Wait();
+            }
 
             // need remove in release this line and setting option
             Interview.TestingConditions = false;
