@@ -5,6 +5,9 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Reflection;
 using System.Web.Hosting;
+using System.Web.Mvc;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Ninject;
 using Ninject;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
@@ -22,6 +25,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
@@ -228,7 +232,10 @@ namespace WB.UI.Headquarters
 
             // init
             kernel.Init().Wait();
-            
+
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel.Kernel);
+            ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel.Kernel);
+
             return kernel.Kernel;
         }
 

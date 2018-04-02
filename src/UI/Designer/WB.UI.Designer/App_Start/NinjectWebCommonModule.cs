@@ -30,8 +30,6 @@ namespace WB.UI.Designer.App_Start
                 new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
-            registry.BindToMethod<Func<IKernel>>(ctx => () => new Bootstrapper().Kernel);
-            registry.Bind<IHttpModule, HttpApplicationInitializationHttpModule>();
 
             registry.Bind<IAuthenticationService, AuthenticationService>();
             registry.Bind<IRecaptchaService, RecaptchaService>();
