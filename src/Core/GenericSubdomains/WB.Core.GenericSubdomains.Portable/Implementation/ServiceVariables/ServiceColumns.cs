@@ -35,6 +35,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
                 InterviewId,
                 ResponsibleColumnName,
                 AssignmentsCountColumnName
-            }).ToArray();
+            }).Select(x => x.ToLower()).ToArray();
     }
 }
