@@ -199,7 +199,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
 
-        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
         private System.Windows.Input.ICommand loadQuestionnaireCommand;
 
@@ -236,11 +236,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IsSearchVisible = false;
         }
 
-        private void SignOut()
+        private Task SignOut()
         {
             this.CancelLoadServerQuestionnaires();
             
-            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void ShowPublicQuestionnaires()

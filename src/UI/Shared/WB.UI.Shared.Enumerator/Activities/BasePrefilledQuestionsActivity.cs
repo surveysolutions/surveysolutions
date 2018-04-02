@@ -2,6 +2,7 @@ using Android.OS;
 using Android.Support.V7.Widget;
 using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.CustomControls;
 
@@ -12,7 +13,7 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.prefilled_questions;
 
-        public override void OnBackPressed() => this.ViewModel.NavigateToPreviousViewModel();
+        public override void OnBackPressed() => this.ViewModel.NavigateToPreviousViewModelAsync().WaitAndUnwrapException();
 
         protected override void OnCreate(Bundle bundle)
         {

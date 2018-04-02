@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         /// Hashed password
         /// </summary>
         [Obsolete("Should be removed after 5.19 release of Interviewer")]
+        [JsonIgnore]
         public string Password { get; set; }
 
         /// <summary>

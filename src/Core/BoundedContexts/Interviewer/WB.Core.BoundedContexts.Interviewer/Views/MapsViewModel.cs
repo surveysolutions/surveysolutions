@@ -133,7 +133,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand =>
-            new MvxCommand(() => this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>());
+            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public override async Task Initialize()
         {

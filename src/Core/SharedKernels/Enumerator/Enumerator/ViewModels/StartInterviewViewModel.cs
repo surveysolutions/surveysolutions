@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             get
             {
-                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
+                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxAsyncCommand(async () => await this.StartInterviewAsync()));
             }
         }
 
