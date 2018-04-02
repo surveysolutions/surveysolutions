@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
@@ -66,9 +67,10 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CoverInterviewFragment>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
+            return Task.CompletedTask;
         }
     }
 }

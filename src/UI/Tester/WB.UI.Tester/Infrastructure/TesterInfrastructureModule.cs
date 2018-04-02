@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -78,9 +79,9 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
