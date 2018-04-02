@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Ninject;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Infrastructure.Native.Ioc;
 
 using IKernel = Ninject.IKernel;
@@ -51,12 +47,9 @@ namespace WB.UI.Shared.Web.Modules
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(this.Kernel);
-            ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(this.Kernel);
-
             foreach (var module in initModules)
             {
-                await module.Init(ServiceLocator.Current);
+                await module.Init(ServiceLocator.Current); 
             }
         }
     }
