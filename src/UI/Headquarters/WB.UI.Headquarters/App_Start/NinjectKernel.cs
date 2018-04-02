@@ -23,10 +23,6 @@ namespace WB.UI.Shared.Web.Modules
         {
             var ninjectSettings = new NinjectSettings { InjectNonPublic = true };
             this.Kernel = new StandardKernel(ninjectSettings);
-
-            // ServiceLocator
-            ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
-            this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
         }
 
         public IKernel Kernel { get; set; }
@@ -50,6 +46,10 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             this.Kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+
+            // ServiceLocator
+            this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
+            ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
 
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(this.Kernel);
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(this.Kernel);
