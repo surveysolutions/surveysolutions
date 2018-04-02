@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -26,9 +27,9 @@ namespace WB.UI.Tester.ServiceLocation
 #endif
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
