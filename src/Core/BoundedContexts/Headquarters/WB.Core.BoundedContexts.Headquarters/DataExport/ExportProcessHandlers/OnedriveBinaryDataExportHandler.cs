@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override string CreateApplicationFolder() => "Survey Solutions";
 
-        protected override string CreateFolder(string applicatioFolder, string folderName) => $"{applicatioFolder}/{folderName}";
+        protected override string CreateFolder(string applicationFolder, string folderName) => $"{applicationFolder}/{folderName}";
 
         protected override void UploadFile(string folder, byte[] fileContent, string fileName) 
             => oneDriveClient.Drive.Root.ItemWithPath($"{folder}/{fileName}").Content.Request().PutAsync<Item>(new MemoryStream(fileContent));
