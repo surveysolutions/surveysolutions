@@ -66,6 +66,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildVariables = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
@@ -741,6 +742,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.cacheOfChildQuestions[groupId];
         }
 
+        private ReadOnlyCollection<Guid> GetChildVariables(Guid groupId)
+        {
+            if (!this.cacheOfChildVariables.ContainsKey(groupId))
+            {
+                this.cacheOfChildVariables[groupId] = new ReadOnlyCollection<Guid>(
+                    this.GetGroupOrThrow(groupId)
+                        .Children.OfType<IVariable>()
+                        .Select(variable => variable.PublicKey)
+                        .ToList());
+            }
+
+            return this.cacheOfChildVariables[groupId];
+        }
+
         public IReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
         {
             if (!this.cacheOfChildEntities.ContainsKey(groupId))
@@ -1020,6 +1035,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var @group = this.GetGroup(id);
             return @group != null && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
         }
+
+        public decimal[] GetFixedRosterCodes(Guid rosterId) =>
+            this.GetGroup(rosterId)?.FixedRosterTitles?.Select(x => x.Value).ToArray() ?? Array.Empty<decimal>();
 
         public bool IsNumericRoster(Guid id)
         {
@@ -1441,7 +1459,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Find<IQuestion>(_ => true)
                 .Select(question => question.PublicKey)
                 .ToList();
-
+        
         private IEnumerable<Guid> GetAllUnderlyingGroupsAndRostersImpl(Guid groupId)
             => this
                 .GetGroupOrThrow(groupId)
@@ -1676,6 +1694,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
             return options.Any();
+        }
+
+        public IEnumerable<Guid> GetAllUnderlyingQuestionsOutsideRosters(Guid? groupId)
+        {
+            var groupOrQuestionnaireId = groupId ?? this.QuestionnaireId;
+            foreach (var questionId in this.GetChildQuestions(groupOrQuestionnaireId))
+                yield return questionId;
+
+            foreach (var subGroupId in this.GetAllUnderlyingChildGroups(groupOrQuestionnaireId))
+            foreach (var questionId in this.GetAllUnderlyingQuestionsOutsideRosters(subGroupId))
+                yield return questionId;
+        }
+
+        public IEnumerable<Guid> GetAllUnderlyingVariablesOutsideRosters(Guid? groupId)
+        {
+            var groupOrQuestionnaireId = groupId ?? this.QuestionnaireId;
+
+            foreach (var variableId in this.GetChildVariables(groupOrQuestionnaireId))
+                yield return variableId;
+
+            foreach (var subGroupId in this.GetAllUnderlyingChildGroups(groupOrQuestionnaireId))
+            foreach (var variableId in this.GetAllUnderlyingVariablesOutsideRosters(subGroupId))
+                yield return variableId;
         }
     }
 }

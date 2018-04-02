@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var file in files)
             foreach (var error in this.RosterVerifiers.Select(x => x.Invoke(file, files, questionnaire)))
-                yield return error;
+                if (error != null) yield return error;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyColumns(
@@ -60,8 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var file in files)
             {
                 foreach (var columnName in file.Columns)
-                foreach (var error in this.ColumnVerifiers.Select(x => x.Invoke(file, columnName?.ToLower() ?? string.Empty, questionnaire)))
-                    yield return error;
+                foreach (var error in this.ColumnVerifiers.Select(x => x.Invoke(file, columnName, questionnaire)))
+                    if (error != null) yield return error;
 
                 var lowercaseColumnNames = file.Columns.Select(x => x.ToLower());
                 foreach (var expectedServiceColumn in this.GetRequiredServiceColumns(file, questionnaire))
@@ -75,7 +75,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<PreloadedFileInfo, PreloadedFileInfo[], IQuestionnaire, PanelImportVerificationError>> RosterVerifiers => new[]
         {
             Error(RosterNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster),
-            Error(OrphanRoster, "PL0008", messages.PL0008_OrphanRosterRecord)
+            Error(OrphanRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
+            Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication),
         };
 
         private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, PanelImportVerificationError>> ColumnVerifiers => new[]
@@ -123,17 +124,54 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
 
-            var parentRosterNames = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value);
+            var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value);
 
-            foreach (var parentRosterName in parentRosterNames)
-                yield return string.Format(ServiceColumns.IdSuffixFormat, parentRosterName);
+            foreach (var parentRosterId in parentRosterIds)
+                yield return string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterId));
+        }
+        private bool DuplicatedRosterInstances(PreloadedFileInfo file, PreloadedFileInfo[] allFiles, IQuestionnaire questionnaire)
+        {
+            return false;
+            //this.Verifier(this.IdDuplication, "PL0006", messages.PL0006_IdDublication),   
+            //private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
+            //    IPreloadedDataService preloadedDataService)
+            //{
+            //    var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
+            //    var parentIdColumnIndexes = preloadedDataService.GetParentIdColumnIndexes(levelData);
+
+            //    if (idColumnIndex < 0 || parentIdColumnIndexes == null)
+            //        yield break;
+
+            //    var idAndParentContainer = new HashSet<string>();
+            //    for (int y = 0; y < levelData.Content.Length; y++)
+            //    {
+            //        var idValue = levelData.Content[y][idColumnIndex];
+            //        if (string.IsNullOrEmpty(idValue))
+            //        {
+            //            yield return
+            //                new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "",
+            //                    levelData.FileName);
+            //            continue;
+            //        }
+            //        var parentIdValue = string.Join(",", parentIdColumnIndexes.Select(parentidIndex => levelData.Content[y][parentidIndex]));
+            //        string itemKey = String.Format("{0}\t{1}", idValue, parentIdValue);
+            //        if (idAndParentContainer.Contains(itemKey))
+            //        {
+            //            yield return
+            //                new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell,
+            //                    string.Format("id:{0}, parentId: {1}", idValue, parentIdValue), levelData.FileName);
+            //            continue;
+            //        }
+            //        idAndParentContainer.Add(itemKey);
+            //    }
+            //}
         }
 
         private bool OrphanRoster(PreloadedFileInfo file, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
             if (IsQuestionnaireFile(file, questionnaire)) return false;
 
-            throw new NotImplementedException();
+            return false;
             //var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
 
             //if (parentDataFile == null)
@@ -195,28 +233,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            //var questionOrVariableName = compositeColumnValues[0];
+            var questionOrVariableName = compositeColumnValues[0].ToLower();
 
-            //questionnaire.GetAllParentGroupsForQuestion()
-
-            //foreach (var variableId in questionnaire.GetAllVariables())
-            //{
-            //    if (questionnaire.GetVariableName(variableId) == columnName) return false;
-            //}
-
-            //foreach (var questionId in questionnaire.GetAllQuestions())
-            //{
-            //    if (questionnaire.GetAllUnderlyingQuestions())
-            //}
-
-            if (!IsQuestionnaireFile(file, questionnaire))
+            var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
+            if (rosterId.HasValue)
             {
-                var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
                 var rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId.Value);
 
                 if (questionnaire.GetQuestionType(rosterSizeQuestionId) == QuestionType.TextList &&
-                    questionnaire.GetQuestionVariableName(rosterSizeQuestionId) == columnName) return false;
+                    questionnaire.GetQuestionVariableName(rosterSizeQuestionId).ToLower() == questionOrVariableName) return false;
             }
+
+            foreach (var variableId in questionnaire.GetAllUnderlyingVariablesOutsideRosters(rosterId))
+                if (questionnaire.GetVariableName(variableId).ToLower() == questionOrVariableName) return false;
+
+            foreach (var questionId in questionnaire.GetAllUnderlyingQuestionsOutsideRosters(rosterId))
+                if (questionnaire.GetQuestionVariableName(questionId).ToLower() == questionOrVariableName) return false;
 
             return true;
         }
@@ -228,7 +260,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if (compositeColumnValues.Length < 2) return false;
 
-            var questionVariableName = compositeColumnValues[0];
+            var questionVariableName = compositeColumnValues[0].ToLower();
 
             var questionId = questionnaire.GetQuestionIdByVariable(questionVariableName);
             if (!questionId.HasValue) return false;
@@ -237,8 +269,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var lowercaseColumnNames = file.Columns.Select(x => x.ToLower());
 
-            return !lowercaseColumnNames.Contains($"{questionVariableName}_{nameof(GeoPosition.Latitude).ToLower()}") || 
-                   !lowercaseColumnNames.Contains($"{questionVariableName}_{nameof(GeoPosition.Longitude).ToLower()}");
+            return !lowercaseColumnNames.Contains($"{questionVariableName}{QuestionDataParser.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") || 
+                   !lowercaseColumnNames.Contains($"{questionVariableName}{QuestionDataParser.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}");
         }
 
         private bool DuplicatedColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -260,23 +292,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                    question.Answers.All(x => x.AnswerValue != compositeColumn[1]);
         }
 
-        private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer)
+        private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)
         {
-            throw new NotImplementedException();
+            if (!answer.Code.HasValue) return false;
 
-            //var idValue = levelData.Content[y][idCoulmnIndexFile];
+            var rosterId = questionnaire.GetRosterIdByVariableName(answer.VariableName, true);
+            if (!rosterId.HasValue) return false;
 
-            //var ids = preloadedDataService.GetAvailableIdListForParent(parentDataFile, levelExportStructure.LevelScopeVector,
-            //    this.CreateParentIdsVector(levelData.Content[y], parentIdColumnIndexes), allLevels);
+            if (questionnaire.IsFixedRoster(rosterId.Value))
+                return !questionnaire.GetFixedRosterCodes(rosterId.Value).Contains(answer.Code.Value);
 
-            //if (ids == null)
-            //    continue;
+            var rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId.Value);
 
-            //decimal? decimalId = null;
-            //if (!ids.Contains(Convert.ToInt32(decimalId)))
-            //    yield return
-            //        new PreloadedDataVerificationReference(idCoulmnIndexFile, y, PreloadedDataVerificationReferenceType.Cell, idValue,
-            //            levelData.FileName);
+            var questionType = questionnaire.GetQuestionType(rosterSizeQuestionId);
+            switch (questionType)
+            {
+                case QuestionType.MultyOption:
+                    return !questionnaire.GetMultiSelectAnswerOptionsAsValues(rosterSizeQuestionId).Contains(answer.Code.Value);
+                case QuestionType.Numeric:
+                case QuestionType.TextList:
+                    return answer.Code < 0;
+            }
+
+            return false;
         }
 
         private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer)
@@ -285,6 +323,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool CategoricalSingle_OptionNotFound(AssignmentDoubleAnswer answer, IQuestionnaire questionnaire)
         {
             if (string.IsNullOrEmpty(answer.Value)) return false;
+            if (Double_NotParsed(answer)) return false;
 
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) return false;
@@ -363,7 +402,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var longitude = answer.Values.OfType<AssignmentDoubleAnswer>()
                 .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
 
-            return !latitude.HasValue || !longitude.HasValue;
+            return (!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue);
         }
 
         private bool Gps_NotParsed(AssignmentGpsAnswer answer)
@@ -385,6 +424,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) return false;
+            if (!questionnaire.IsRosterSizeQuestion(questionId.Value)) return false;
 
             return !questionnaire.IsQuestionIsRosterSizeForLongRoster(questionId.Value) &&
                 answer.Answer.HasValue && answer.Answer > questionnaire.GetMaxRosterRowCount();
@@ -432,7 +472,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private static Func<PreloadedFileInfo, string, IQuestionnaire, PanelImportVerificationError> Error(
             Func<PreloadedFileInfo, string, IQuestionnaire, bool> hasError, string code, string message) => (file, columnName, questionnaire) =>
-            hasError(file, columnName, questionnaire) ? ToColumnError(code, message, file.FileName, columnName) : null;
+            hasError(file, columnName?.ToLower(), questionnaire) ? ToColumnError(code, message, file.FileName, columnName) : null;
 
         private static Func<AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
             Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (value, questionnaire) =>

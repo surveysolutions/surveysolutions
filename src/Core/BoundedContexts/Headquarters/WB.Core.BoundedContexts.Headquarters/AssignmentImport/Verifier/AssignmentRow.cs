@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentRosterInstanceCode : AssignmentAnswer
     {
-        public int? Code { get; set; }
+        public decimal? Code { get; set; }
     }
 
     public class AssignmentAnswers: AssignmentValue
