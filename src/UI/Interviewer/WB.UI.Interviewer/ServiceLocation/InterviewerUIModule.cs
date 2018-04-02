@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -100,9 +101,9 @@ namespace WB.UI.Interviewer.ServiceLocation
 #endif
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
