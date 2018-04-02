@@ -101,17 +101,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     case InterviewQuestionType.Gps:
                         return new AssignmentGpsAnswer
                         {
+                            VariableName = compositeValue.VariableOrCodeOrPropertyName,
                             Values = compositeValue.Values.Select(x => ToGpsPropertyAnswer(fileName, row, x)).ToArray()
                         };
                     case InterviewQuestionType.TextList:
                         return new AssignmentCategoricalMultiAnswer
                         {
+                            VariableName = compositeValue.VariableOrCodeOrPropertyName,
                             Values = compositeValue.Values.Select(x => ToAssignmentTextAnswer(fileName, row, x)).ToArray()
                         };
                     case InterviewQuestionType.YesNo:
                     case InterviewQuestionType.MultiFixedOption:
                         return new AssignmentCategoricalMultiAnswer
                         {
+                            VariableName = compositeValue.VariableOrCodeOrPropertyName,
                             Values = compositeValue.Values.Select(x => ToAssignmentDoubleAnswer(fileName, row, x)).ToArray()
                         };
                 }
@@ -148,8 +151,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private AssignmentValue ToAssignmentRosterInstanceId(string fileName, PreloadingRow row,
             PreloadingRosterInstanceIdValue answer, IQuestionnaire questionnaire)
         {
-            int? intValue = null;
-            if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
+            decimal? intValue = null;
+            if (decimal.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
                 out var intNumericValue))
                 intValue = intNumericValue;
 
@@ -403,7 +406,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 {
                     cells[variableName].Add(new PreloadingRosterInstanceIdValue
                     {
-                        VariableOrCodeOrPropertyName = columnName,
+                        VariableOrCodeOrPropertyName = variableName,
                         Row = rowIndex,
                         Column = kv.Key,
                         Value = value
@@ -430,7 +433,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     ? x.Value[0]
                     : (PreloadingCell) new PreloadingCompositeValue
                     {
-                        VariableOrCodeOrPropertyName = x.Key,
+                        VariableOrCodeOrPropertyName = x.Key.ToLower(),
                         Values = x.Value.ToArray()
                     }).ToArray()
             };

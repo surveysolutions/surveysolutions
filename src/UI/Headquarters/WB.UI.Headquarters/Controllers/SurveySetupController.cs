@@ -314,40 +314,6 @@ namespace WB.UI.Headquarters.Controllers
             foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, importedFile))
             foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(questionnaireIdentity, assignmentRow))
                 yield return answerError;
-
-            //this.Verifier(this.IdDuplication, "PL0006", messages.PL0006_IdDublication),   
-            //private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
-            //    IPreloadedDataService preloadedDataService)
-            //{
-            //    var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
-            //    var parentIdColumnIndexes = preloadedDataService.GetParentIdColumnIndexes(levelData);
-
-            //    if (idColumnIndex < 0 || parentIdColumnIndexes == null)
-            //        yield break;
-
-            //    var idAndParentContainer = new HashSet<string>();
-            //    for (int y = 0; y < levelData.Content.Length; y++)
-            //    {
-            //        var idValue = levelData.Content[y][idColumnIndex];
-            //        if (string.IsNullOrEmpty(idValue))
-            //        {
-            //            yield return
-            //                new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "",
-            //                    levelData.FileName);
-            //            continue;
-            //        }
-            //        var parentIdValue = string.Join(",", parentIdColumnIndexes.Select(parentidIndex => levelData.Content[y][parentidIndex]));
-            //        string itemKey = String.Format("{0}\t{1}", idValue, parentIdValue);
-            //        if (idAndParentContainer.Contains(itemKey))
-            //        {
-            //            yield return
-            //                new PreloadedDataVerificationReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell,
-            //                    string.Format("id:{0}, parentId: {1}", idValue, parentIdValue), levelData.FileName);
-            //            continue;
-            //        }
-            //        idAndParentContainer.Add(itemKey);
-            //    }
-            //}
         }
 
         [HttpPost]

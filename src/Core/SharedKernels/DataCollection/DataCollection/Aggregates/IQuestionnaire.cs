@@ -137,6 +137,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
+        IEnumerable<Guid> GetAllUnderlyingQuestionsOutsideRosters(Guid? groupId);
+        IEnumerable<Guid> GetAllUnderlyingVariablesOutsideRosters(Guid? groupId);
+
         IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId);
 
         ReadOnlyCollection<Guid> GetAllUnderlyingInterviewerQuestions(Guid groupId);
@@ -240,6 +243,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsFixedRoster(Guid id);
         bool IsNumericRoster(Guid id);
 
+        decimal[] GetFixedRosterCodes(Guid rosterId);
         IReadOnlyCollection<string> GetTranslationLanguages();
         string GetDefaultTransation();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);
@@ -265,5 +269,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool HasAnyCascadingOptionsForSelectedParentOption(Guid cascadingQuestionId, Guid parenQuestionId, int selectedParentValue);
         string GetRosterVariableName(Guid id);
         IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId);
+        
     }
 }
