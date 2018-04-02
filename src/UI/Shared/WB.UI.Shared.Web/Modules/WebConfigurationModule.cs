@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Threading.Tasks;
 using System.Web.Configuration;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
@@ -22,9 +23,9 @@ namespace WB.UI.Shared.Web.Modules
             );
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

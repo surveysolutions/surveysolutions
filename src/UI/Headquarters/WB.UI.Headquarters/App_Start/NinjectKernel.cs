@@ -48,8 +48,8 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             // ServiceLocator
-            this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
+            this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(this.Kernel);
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(this.Kernel);

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using System.Web.WebPages;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -58,9 +59,9 @@ namespace WB.UI.Designer
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

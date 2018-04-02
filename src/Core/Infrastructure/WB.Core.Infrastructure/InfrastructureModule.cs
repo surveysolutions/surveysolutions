@@ -1,4 +1,5 @@
-﻿using Ncqrs;
+﻿using System.Threading.Tasks;
+using Ncqrs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -18,9 +19,9 @@ namespace WB.Core.Infrastructure
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

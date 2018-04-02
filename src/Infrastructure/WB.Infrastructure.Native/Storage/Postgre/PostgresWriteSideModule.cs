@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using NLog;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -25,7 +26,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             try
             {
@@ -37,6 +38,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 LogManager.GetLogger("maigration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

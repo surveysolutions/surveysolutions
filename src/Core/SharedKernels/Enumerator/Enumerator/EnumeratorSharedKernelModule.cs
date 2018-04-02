@@ -1,4 +1,5 @@
-﻿using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -126,7 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindGeneric(typeof(QuestionStateViewModel<>));
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             CommandRegistry
                 .Setup<StatefulInterview>()
@@ -170,6 +171,8 @@ namespace WB.Core.SharedKernels.Enumerator
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
                 .Handles<ResumeInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Resume)
                 .Handles<PauseInterviewCommand>(command => command.InterviewId, aggregate => aggregate.Pause);
+
+            return Task.CompletedTask;
         }
     }
 }

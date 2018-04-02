@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -22,9 +23,9 @@ namespace WB.Core.Infrastructure
             registry.Bind<IAggregateSnapshotter, DummyAggregateSnapshotter>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
 
         public class DummyEventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository

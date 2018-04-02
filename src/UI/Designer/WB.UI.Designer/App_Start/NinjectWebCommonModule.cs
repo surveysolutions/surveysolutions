@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Filters;
 using Ninject;
@@ -38,9 +39,9 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<IQuestionnireHistoryVersionsService, QuestionnireHistoryVersionsService>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

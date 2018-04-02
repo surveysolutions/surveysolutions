@@ -1,4 +1,5 @@
-﻿using Ncqrs.Domain.Storage;
+﻿using System.Threading.Tasks;
+using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -19,9 +20,9 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<ISnapshotStore, InMemoryCachedSnapshotStore>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

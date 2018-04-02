@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
@@ -100,9 +101,9 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

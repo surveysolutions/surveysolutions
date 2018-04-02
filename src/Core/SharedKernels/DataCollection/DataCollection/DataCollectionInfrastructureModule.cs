@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
@@ -24,9 +25,9 @@ namespace WB.Core.SharedKernels.DataCollection
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
 
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
