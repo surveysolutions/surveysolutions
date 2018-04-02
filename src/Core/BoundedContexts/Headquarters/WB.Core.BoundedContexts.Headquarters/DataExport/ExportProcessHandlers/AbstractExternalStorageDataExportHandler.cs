@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -50,12 +48,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
         protected override bool CompressExportedData => false;
-
+        
         protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(settings.QuestionnaireId);
-            var multimediaQuestionIds = questionnaire.Find<IMultimediaQuestion>().Select(x => x.PublicKey).ToArray();
 
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -80,11 +77,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             {
                 var applicationFolder = this.CreateApplicationFolder();
 
+                string GetInterviewFolder(Guid interviewid) => $"{questionnaire.Title} (ver. {settings.QuestionnaireId.Version})/{interviewid.FormatGuid()}";
+               
                 foreach (var interviewId in interviewIds)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    var interviewFolderPath = this.CreateFolder(applicationFolder, interviewId.ToString());
+                    var interviewFolderPath = this.CreateFolder(applicationFolder, GetInterviewFolder(interviewId));
 
                     foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId)
                         .Select(x => x.Answer))
@@ -122,7 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         private string accessToken;
 
         protected abstract string CreateApplicationFolder();
-        protected abstract string CreateFolder(string applicatioFolder, string folderName);
+        protected abstract string CreateFolder(string applicationFolder, string folderName);
 
         protected abstract void UploadFile(string folder, byte[] fileContent, string fileName);
     }
