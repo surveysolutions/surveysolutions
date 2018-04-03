@@ -60,9 +60,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override async Task Initialize()
+        public override Task Initialize()
         {
-            await base.Initialize();
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
@@ -80,6 +79,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
 
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
+            return Task.CompletedTask;
         }
        
         private void SearchByLocalQuestionnaires(string searchTerm = null)
@@ -201,9 +201,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
-        private System.Windows.Input.ICommand loadQuestionnaireCommand;
+        private IMvxAsyncCommand<QuestionnaireListItem> loadQuestionnaireCommand;
 
-        public System.Windows.Input.ICommand LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
+        public IMvxAsyncCommand<QuestionnaireListItem> LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
             = new MvxAsyncCommand<QuestionnaireListItem>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress));
 
         private IMvxAsyncCommand refreshQuestionnairesCommand;
@@ -269,7 +269,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
             try
             {
-                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress, this.tokenSource.Token);
+                await this.QuestionnaireDownloader.LoadQuestionnaireAsync(questionnaireListItem.Id, questionnaireListItem.Title, progress, this.tokenSource.Token).ConfigureAwait(false);
             }
             finally
             {

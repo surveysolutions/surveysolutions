@@ -63,6 +63,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ProgressDescription = InterviewerUIResources.Interview_Loading;
         }
 
+        public override void ViewAppeared()
+        {
+            Task.Run(RestoreInterviewAndNavigateThereAsync);
+        }
+
         public async Task RestoreInterviewAndNavigateThereAsync()
         {
             this.loadingCancellationTokenSource = new CancellationTokenSource();
@@ -74,12 +79,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                IStatefulInterview interview =
-                    await
-                        this.interviewRepository.GetAsync(interviewIdString, progress,
-                            this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
+                IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token)
+                                                                             .ConfigureAwait(false);
 
-                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
