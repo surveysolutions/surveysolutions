@@ -14,7 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -94,29 +94,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             if (questionId.HasValue)
             {
-                var questionType = GetQuestionType(questionId.Value, questionnaire);
-
-                switch (questionType)
+                var answerType = questionnaire.GetAnswerType(questionId.Value);
+                switch (answerType)
                 {
-                    case InterviewQuestionType.Gps:
-                        return new AssignmentGpsAnswer
-                        {
-                            VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                            Values = compositeValue.Values.Select(x => ToGpsPropertyAnswer(fileName, row, x)).ToArray()
-                        };
-                    case InterviewQuestionType.TextList:
-                        return new AssignmentCategoricalMultiAnswer
-                        {
-                            VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                            Values = compositeValue.Values.Select(x => ToAssignmentTextAnswer(fileName, row, x)).ToArray()
-                        };
-                    case InterviewQuestionType.YesNo:
-                    case InterviewQuestionType.MultiFixedOption:
-                        return new AssignmentCategoricalMultiAnswer
-                        {
-                            VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                            Values = compositeValue.Values.Select(x => ToAssignmentDoubleAnswer(fileName, row, x)).ToArray()
-                        };
+                    case AnswerType.DecimalAndStringArray:
+                        return ToAssignmentTextListAnswer(fileName, row, compositeValue);
+                    case AnswerType.GpsData:
+                        return ToAssignmentGpsAnswer(fileName, row, compositeValue);
+                    case AnswerType.OptionCodeArray:
+                    case AnswerType.YesNoArray:
+                        return ToAssignmentCategoricalMultiAnswer(fileName, row, compositeValue);
                 }
             }
 
@@ -175,22 +162,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             if (questionId.HasValue)
             {
-                var questionType = GetQuestionType(questionId.Value, questionnaire);
+                var answerType = questionnaire.GetAnswerType(questionId.Value);
 
-                switch (questionType)
+                switch (answerType)
                 {
-                    case InterviewQuestionType.Text:
-                    case InterviewQuestionType.QRBarcode:
-                    case InterviewQuestionType.TextList:
-                        return ToAssignmentTextAnswer(fileName, row, answer);
-                    case InterviewQuestionType.Integer:
+                    case AnswerType.Integer:
                         return ToAssignmentIntegerAnswer(fileName, row, answer);
-                    case InterviewQuestionType.SingleFixedOption:
-                    case InterviewQuestionType.Cascading:
-                    case InterviewQuestionType.Double:
+                    case AnswerType.OptionCode:
+                    case AnswerType.Decimal:
                         return ToAssignmentDoubleAnswer(fileName, row, answer);
-                    case InterviewQuestionType.DateTime:
+                    case AnswerType.DateTime:
                         return ToAssignmentDateTimeAnswer(fileName, row, answer);
+                    case AnswerType.String:
+                    case AnswerType.DecimalAndStringArray:
+                        return ToAssignmentTextAnswer(fileName, row, answer);
                 }
             }
 
@@ -204,6 +189,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 VariableName = answer.Column
             };
         }
+
+        private static AssignmentGpsAnswer ToAssignmentGpsAnswer(string fileName, PreloadingRow row, PreloadingCompositeValue compositeValue)
+        {
+            return new AssignmentGpsAnswer
+            {
+                VariableName = compositeValue.VariableOrCodeOrPropertyName,
+                Values = compositeValue.Values.Select(x => ToGpsPropertyAnswer(fileName, row, x)).ToArray()
+            };
+        }
+
+        private static AssignmentCategoricalMultiAnswer ToAssignmentTextListAnswer(string fileName,
+            PreloadingRow row, PreloadingCompositeValue compositeValue) => new AssignmentCategoricalMultiAnswer
+        {
+            VariableName = compositeValue.VariableOrCodeOrPropertyName,
+            Values = compositeValue.Values.Select(x => ToAssignmentTextAnswer(fileName, row, x)).ToArray()
+        };
+
+        private static AssignmentCategoricalMultiAnswer ToAssignmentCategoricalMultiAnswer(string fileName,
+            PreloadingRow row, PreloadingCompositeValue compositeValue) => new AssignmentCategoricalMultiAnswer
+        {
+            VariableName = compositeValue.VariableOrCodeOrPropertyName,
+            Values = compositeValue.Values.Select(x => ToAssignmentDoubleAnswer(fileName, row, x)).ToArray()
+        };
 
         private static AssignmentAnswer ToAssignmentDoubleAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
         {
@@ -313,69 +321,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return responsible;
         }
 
-        private static InterviewQuestionType GetQuestionType(Guid questionId, IQuestionnaire questionnaire)
-        {
-            var questionType = questionnaire.GetQuestionType(questionId);
-            bool isYesNo = questionnaire.IsQuestionYesNo(questionId);
-            bool isDecimal = !questionnaire.IsQuestionInteger(questionId);
-            Guid? cascadingParentQuestionId = questionnaire.GetCascadingQuestionParentId(questionId);
-            Guid? sourceForLinkedQuestion = null;
-
-            var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId);
-            var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId);
-            var isLinkedToListQuestion = questionnaire.IsLinkedToListQuestion(questionId);
-
-            if (isLinkedToQuestion)
-                sourceForLinkedQuestion = questionnaire.GetQuestionReferencedByLinkedQuestion(questionId);
-
-            if (isLinkedToRoster)
-                sourceForLinkedQuestion = questionnaire.GetRosterReferencedByLinkedQuestion(questionId);
-
-            switch (questionType)
-            {
-                case QuestionType.SingleOption:
-                    {
-                        return sourceForLinkedQuestion.HasValue
-                            ? (isLinkedToListQuestion
-                                ? InterviewQuestionType.SingleLinkedToList
-                                : InterviewQuestionType.SingleLinkedOption)
-                            : (cascadingParentQuestionId.HasValue
-                                ? InterviewQuestionType.Cascading
-                                : InterviewQuestionType.SingleFixedOption);
-                    }
-                case QuestionType.MultyOption:
-                    {
-                        return isYesNo
-                            ? InterviewQuestionType.YesNo
-                            : (sourceForLinkedQuestion.HasValue
-                                ? (isLinkedToListQuestion
-                                    ? InterviewQuestionType.MultiLinkedToList
-                                    : InterviewQuestionType.MultiLinkedOption)
-                                : InterviewQuestionType.MultiFixedOption);
-                    }
-                case QuestionType.DateTime:
-                    return InterviewQuestionType.DateTime;
-                case QuestionType.GpsCoordinates:
-                    return InterviewQuestionType.Gps;
-                case QuestionType.Multimedia:
-                    return InterviewQuestionType.Multimedia;
-                case QuestionType.Numeric:
-                    return isDecimal ? InterviewQuestionType.Double : InterviewQuestionType.Integer;
-                case QuestionType.QRBarcode:
-                    return InterviewQuestionType.QRBarcode;
-                case QuestionType.Area:
-                    return InterviewQuestionType.Area;
-                case QuestionType.Text:
-                    return InterviewQuestionType.Text;
-                case QuestionType.TextList:
-                    return InterviewQuestionType.TextList;
-                case QuestionType.Audio:
-                    return InterviewQuestionType.Audio;
-                default:
-                    throw new NotSupportedException($"Not supported question type: {questionType}");
-            }
-        }
-
         private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
         {
             var cells = new Dictionary<string, List<PreloadingValue>>();
@@ -455,20 +400,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             if(!this.archiveUtils.IsZipStream(inputStream))
                 yield break;
-            
+
             foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
-                yield return this.ParseText(new MemoryStream(file.Bytes), file.Name);
-        }
-
-        public IEnumerable<PreloadedFileMetaData> ParseZipMetadata(Stream inputStream)
-        {
-            if (!this.archiveUtils.IsZipStream(inputStream))
-                yield break;
-
-            foreach (var fileInfo in this.archiveUtils.GetArchivedFileNamesAndSize(inputStream))
             {
-                yield return new PreloadedFileMetaData(fileInfo.Key, fileInfo.Value,
-                    permittedFileExtensions.Contains(Path.GetExtension(fileInfo.Key)));
+                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+
+                if (allowedExtension && !isSystemFile)
+                    yield return this.ParseText(new MemoryStream(file.Bytes), file.Name);
             }
         }
     }

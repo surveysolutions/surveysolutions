@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
@@ -19,10 +20,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     internal class ImportDataVerifier : IPreloadedDataVerifier
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IFileSystemAccessor fileSystem;
 
-        public ImportDataVerifier(IQuestionnaireStorage questionnaireStorage)
+        public ImportDataVerifier(IQuestionnaireStorage questionnaireStorage, IFileSystemAccessor fileSystem)
         {
             this.questionnaireStorage = questionnaireStorage;
+            this.fileSystem = fileSystem;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyAnswers(QuestionnaireIdentity questionnaireIdentity, AssignmentRow assignmentRow)
@@ -40,6 +43,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(value, questionnaire)))
                     if (error != null) yield return error;
             }
+        }
+
+        public IEnumerable<PanelImportVerificationError> VerifyFile(QuestionnaireIdentity questionnaireIdentity, PreloadedFileInfo file)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+
+            foreach (var error in this.FileVerifiers.Select(x => x.Invoke(file, questionnaire)))
+                if (error != null) yield return error;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyRosters(
@@ -72,9 +83,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
+        private IEnumerable<Func<PreloadedFileInfo, IQuestionnaire, PanelImportVerificationError>> FileVerifiers => new[]
+        {
+            Error(RosterNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster)
+        };
+
         private IEnumerable<Func<PreloadedFileInfo, PreloadedFileInfo[], IQuestionnaire, PanelImportVerificationError>> RosterVerifiers => new[]
         {
-            Error(RosterNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster),
             Error(OrphanRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication),
             Error(IdIsEmpty, "PL0042", messages.PL0042_IdIsEmpty)
@@ -243,9 +258,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private bool IsQuestionnaireFile(PreloadedFileInfo file, IQuestionnaire questionnaire)
-            => string.Equals(file.QuestionnaireOrRosterName, questionnaire.Title, StringComparison.InvariantCultureIgnoreCase);
+            => string.Equals(this.fileSystem.MakeStataCompatibleFileName(file.QuestionnaireOrRosterName),
+                this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title), StringComparison.InvariantCultureIgnoreCase);
 
-        private bool RosterNotFound(PreloadedFileInfo file, PreloadedFileInfo[] allFiles, IQuestionnaire questionnaire)
+        private bool RosterNotFound(PreloadedFileInfo file, IQuestionnaire questionnaire)
             => !IsQuestionnaireFile(file, questionnaire) && !questionnaire.HasRoster(file.QuestionnaireOrRosterName);
 
         private bool UnknownColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -489,6 +505,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool Quantity_IsNotInteger(AssignmentQuantity quantity)
             => !string.IsNullOrWhiteSpace(quantity.Value) && !quantity.Quantity.HasValue;
 
+        private static Func<PreloadedFileInfo, IQuestionnaire, PanelImportVerificationError> Error(
+            Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message) => (file, questionnaire) =>
+            hasError(file, questionnaire) ? ToFileError(code, message, file) : null;
 
         private static Func<PreloadedFileInfo, PreloadedFileInfo[], IQuestionnaire, PanelImportVerificationError> Error(
             Func<PreloadedFileInfo, PreloadedFileInfo[], IQuestionnaire, bool> hasError, string code, string message) => (file, allFiles, questionnaire) =>
@@ -512,7 +531,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.Column, columnName, fileName));
 
         private static PanelImportVerificationError ToCellError(string code, string message, AssignmentValue assignmentValue)
-            => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Row, 0, PreloadedDataVerificationReferenceType.Cell,
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Column, assignmentValue.Row, PreloadedDataVerificationReferenceType.Cell,
                 assignmentValue.Value, assignmentValue.FileName));
     }
 }

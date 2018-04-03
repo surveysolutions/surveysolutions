@@ -69,8 +69,8 @@
                                     }
 
                                 }
-                                (@if (reference.PositionX.HasValue){<span>@BatchUpload.Column: @reference.PositionX,</span>}
-                                @if (reference.PositionY.HasValue){<span>@BatchUpload.Row: @(reference.PositionY + 1)</span>})
+                                (@if (!string.IsNullOrEmpty(reference.Column)){<span>@BatchUpload.Column: @reference.Column,</span>}
+                                @if (reference.Row.HasValue){<span>@BatchUpload.Row: @(reference.Row + 1)</span>})
                             </p>
                         }
                     </div>
@@ -92,4 +92,3 @@
         </div>
     </div>
 </main>
- 
