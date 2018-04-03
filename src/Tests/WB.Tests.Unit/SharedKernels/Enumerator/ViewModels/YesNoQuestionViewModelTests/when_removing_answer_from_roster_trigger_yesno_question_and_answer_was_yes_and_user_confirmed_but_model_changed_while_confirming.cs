@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -15,14 +14,13 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_removing_answer_from_roster_trigger_yesno_question_and_answer_was_yes_and_user_confirmed_but_model_changed_while_confirming : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewIdAsString = "hello";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
@@ -73,22 +71,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             viewModel.Init(interviewIdAsString, questionId, Create.Other.NavigationState());
             viewModel.Options.Last().Selected = null;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).WaitAndUnwrapException();
+        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).WaitAndUnwrapException();
 
-        It should_not_undo_checked_property_change = () => viewModel.Options.Last().Selected.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_undo_checked_property_change () => viewModel.Options.Last().Selected.Should().BeNull();
 
-        It should_call_userInteractionService_for_reduce_roster_size = () => 
+        [NUnit.Framework.Test] public void should_call_userInteractionService_for_reduce_roster_size () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Once());
-
-        [Ignore("should be removed")]
-        It should_answer_question_with_updated_state_of_options = () =>
-            answeringViewModelMock.Verify(_ => _.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(
-                command => command.AnsweredOptions.Length == 1
-                           && command.AnsweredOptions.Single().OptionValue == 3
-                           && command.AnsweredOptions.Single().Yes == true)),
-                Times.Once());
 
         static YesNoQuestionViewModel viewModel;
         static Mock<IUserInteractionService> userInteractionServiceMock;

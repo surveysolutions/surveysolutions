@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -29,9 +29,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         private void BecauseOf() => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: responsibleId));
 
         [NUnit.Framework.Test] public void should_replace_fixed_roster_title () =>
-                questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).FixedRosterTitles[1].Title.ShouldEqual($"two with {replaceWith}");
+                questionnaire.QuestionnaireDocument.Find<IGroup>(rosterId).FixedRosterTitles[1].Title.Should().Be($"two with {replaceWith}");
 
-        [NUnit.Framework.Test] public void should_record_number_of_replaced_entities () => questionnaire.GetLastReplacedEntriesCount().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_record_number_of_replaced_entities () => questionnaire.GetLastReplacedEntriesCount().Should().Be(1);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;

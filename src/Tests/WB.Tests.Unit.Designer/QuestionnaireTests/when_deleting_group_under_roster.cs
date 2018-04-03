@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         private void BecauseOf() => questionnaire.DeleteGroup(groupInsideRosterId, responsibleId);
 
         [NUnit.Framework.Test] public void should_doesnt_contain_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInsideRosterId).ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupInsideRosterId).Should().BeNull();
 
         
         private static Questionnaire questionnaire;

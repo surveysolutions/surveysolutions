@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         private void BecauseOf() => foundReferences = questionnaire.FindAllTexts(searchFor, false, false, false);
 
         [NUnit.Framework.Test] public void should_find_fixed_roster_items () =>
-            foundReferences.ShouldContain(x => x.Id == rosterId && 
+            foundReferences.Should().Contain(x => x.Id == rosterId && 
                                                   x.Property == QuestionnaireVerificationReferenceProperty.FixedRosterItem &&
                                                   x.IndexOfEntityInProperty == 1);
 
@@ -40,6 +40,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         static readonly Guid rosterId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         const string searchFor = "to_replace";
 
-        static IEnumerable<QuestionnaireNodeReference> foundReferences;
+        static IEnumerable<QuestionnaireEntityReference> foundReferences;
     }
 }

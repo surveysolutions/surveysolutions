@@ -1,25 +1,19 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_unchecking_previously_checked_2nd_and_4th_options_in_multioption_question_used_as_roster_size_and_roster_level_of_question_and_roster_is_zero : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             emptyRosterVector = new decimal[] { };
             userId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -47,37 +41,38 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerMultipleOptionsQuestion(userId, questionId, emptyRosterVector, DateTime.Now, new[] { option2, option3, option4 });
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerMultipleOptionsQuestion(userId, questionId, emptyRosterVector, DateTime.Now, new[] { option3 });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_MultipleOptionsQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
-        It should_not_raise_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>();
 
-        It should_raise_RosterInstancesRemoved_event_with_2_instances = () =>
-            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_with_2_instances () =>
+            eventContext.GetEvent<RosterInstancesRemoved>().Instances.Count().Should().Be(2);
 
-        It should_set_roster_id_to_all_instances_in_RosterInstancesRemoved_event = () =>
+        [NUnit.Framework.Test] public void should_set_roster_id_to_all_instances_in_RosterInstancesRemoved_event () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances
-                .ShouldEachConformTo(instance => instance.GroupId == rosterId);
+                .Should().OnlyContain(instance => instance.GroupId == rosterId);
 
-        It should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesRemoved_event = () =>
+        [NUnit.Framework.Test] public void should_set_empty_outer_roster_vector_to_all_instances_in_RosterInstancesRemoved_event () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances
-                .ShouldEachConformTo(instance => instance.OuterRosterVector.Length == 0);
+                .Should().OnlyContain(instance => instance.OuterRosterVector.Length == 0);
 
-        It should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterInstancesRemoved_event = () =>
+        [NUnit.Framework.Test] public void should_set_2nd_and_4th_options_as_roster_instance_ids_in_RosterInstancesRemoved_event () =>
             eventContext.GetEvent<RosterInstancesRemoved>().Instances.Select(instance => instance.RosterInstanceId).ToArray()
-                .ShouldContainOnly(option2, option4);
+                .Should().BeEquivalentTo(option2, option4);
 
         private static EventContext eventContext;
         private static Interview interview;

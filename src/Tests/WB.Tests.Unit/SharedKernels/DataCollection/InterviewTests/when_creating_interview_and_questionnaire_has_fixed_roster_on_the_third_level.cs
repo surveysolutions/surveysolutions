@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -11,14 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_creating_interview_and_questionnaire_has_fixed_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -43,22 +42,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
                 new List<InterviewAnswer>(), userId);
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.CreateInterview(command);
 
-        It should_raise_RosterInstancesAdded_event_with_3_instances = () =>
-            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_with_3_instances () =>
+            eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().Should().Be(3);
 
-        It should_raise_RosterInstancesTitleChanged_event_with_3_instances = () =>
-          eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesTitleChanged_event_with_3_instances () =>
+          eventContext.GetEvent<RosterInstancesAdded>().Instances.Count().Should().Be(3);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static EventContext eventContext;
         private static Guid userId;

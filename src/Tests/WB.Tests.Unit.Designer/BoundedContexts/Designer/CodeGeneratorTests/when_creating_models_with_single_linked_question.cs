@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -35,25 +35,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_create_model_with_2_questions () =>
-            model.AllQuestions.Count.ShouldEqual(2);
+            model.AllQuestions.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_create_questionnaire_level_with_1_question () =>
-            model.QuestionnaireLevelModel.Questions.Count.ShouldEqual(1);
+            model.QuestionnaireLevelModel.Questions.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_reference_same_question_model_in_AllQuestions_and_questionnaire_level () =>
-            model.QuestionnaireLevelModel.Questions.First().ShouldEqual(model.AllQuestions.First());
+            model.QuestionnaireLevelModel.Questions.First().Should().Be(model.AllQuestions.First());
 
         [NUnit.Framework.Test] public void should_create_singleLinked_question_model () 
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gA);
-            question.VariableName.ShouldEqual("singleLinked");
-            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("singleLinked validation");
-            question.Condition.ShouldEqual("singleLinked condition");
-            question.IsMultiOptionYesNoQuestion.ShouldBeFalse();
-            question.AllMultioptionYesNoCodes.ShouldBeNull();
-            question.TypeName.ShouldEqual("decimal[]");
-            question.RosterScopeName.ShouldEqual(CodeGenerator.QuestionnaireScope);
-            question.ParentScopeTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
+            question.VariableName.Should().Be("singleLinked");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("singleLinked validation");
+            question.Condition.Should().Be("singleLinked condition");
+            question.IsMultiOptionYesNoQuestion.Should().BeFalse();
+            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.TypeName.Should().Be("decimal[]");
+            question.RosterScopeName.Should().Be(CodeGenerator.QuestionnaireScope);
+            question.ParentScopeTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);
         }
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;

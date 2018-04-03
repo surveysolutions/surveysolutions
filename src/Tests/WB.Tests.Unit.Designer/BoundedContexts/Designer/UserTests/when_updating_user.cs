@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
@@ -20,16 +20,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
                 isConfirmed: false, canImportOnHq: false);
 
         [NUnit.Framework.Test] public void should_set_UserName_equal_to_userName () =>
-                user.UserName.ShouldEqual(userName);
+                user.UserName.Should().Be(userName);
 
         [NUnit.Framework.Test] public void should_set_Email_equal_to_userEmail () =>
-                user.Email.ShouldEqual(userEmail);
+                user.Email.Should().Be(userEmail);
 
         [NUnit.Framework.Test] public void should_set_Comment_equal_to_comment () =>
-                user.Comment.ShouldEqual(comment);
+                user.Comment.Should().Be(comment);
         
         [NUnit.Framework.Test] public void should_set_PasswordQuestion_equal_to_passwordQuestion () =>
-                user.PasswordQuestion.ShouldEqual(passwordQuestion);
+                user.PasswordQuestion.Should().Be(passwordQuestion);
 
         private static User user;
         private static string userName;

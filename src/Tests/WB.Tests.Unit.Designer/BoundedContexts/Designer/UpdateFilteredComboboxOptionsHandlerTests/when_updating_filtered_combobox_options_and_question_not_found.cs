@@ -1,6 +1,7 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
 {
     internal class when_updating_filtered_combobox_options_and_question_not_found : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
@@ -21,20 +22,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 variableName: "var"
             );
 
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateFilteredComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__filtered_combobox_cant_be_found__ () =>
-            new[] { "combo box", "can't be found" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "combo", "box", "can't", "be", "found" });
+        }
 
         private static Questionnaire questionnaire;
         private static Exception exception;

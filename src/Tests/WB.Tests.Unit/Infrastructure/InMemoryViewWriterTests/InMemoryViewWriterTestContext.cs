@@ -1,5 +1,4 @@
 ﻿using System;
-using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -7,7 +6,7 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Infrastructure.InMemoryViewWriterTests
 {
-    [Subject(typeof(InMemoryViewWriter<>))]
+    [NUnit.Framework.TestOf(typeof(InMemoryViewWriter<>))]
     internal class InMemoryViewWriterTestContext
     {
         protected static InMemoryViewWriter<T> CreateInMemoryViewWriter<T>(IReadSideRepositoryWriter<T> readSideRepositoryWriter = null,

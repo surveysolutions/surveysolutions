@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         {
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId));
             interviewSummary.TimeSpansBetweenStatuses.First().EndStatus
-                    .ShouldEqual(InterviewExportedAction.ApprovedByHeadquarter);
+                    .Should().Be(InterviewExportedAction.ApprovedByHeadquarter);
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.InterviewSt
         {
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewApprovedByHQ(interviewId: interviewId));
             interviewSummary.TimeSpansBetweenStatuses.First().BeginStatus
-                    .ShouldEqual(InterviewExportedAction.InterviewerAssigned);
+                    .Should().Be(InterviewExportedAction.InterviewerAssigned);
         }
 
         private static InterviewStatusTimeSpanDenormalizer denormalizer;

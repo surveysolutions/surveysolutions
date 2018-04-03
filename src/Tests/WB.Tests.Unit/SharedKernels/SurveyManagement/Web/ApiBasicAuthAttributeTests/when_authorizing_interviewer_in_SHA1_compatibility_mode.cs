@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Tests.Abc;
@@ -23,6 +23,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected override Task BecauseAsync() => this.attribute.OnAuthorizationAsync(this.actionContext, CancellationToken.None);
         
         [Test]
-        public void Should_not_return_any_errors() => this.actionContext.Response.ShouldBeNull();
+        public void Should_not_return_any_errors() => this.actionContext.Response.Should().BeNull();
     }
 }

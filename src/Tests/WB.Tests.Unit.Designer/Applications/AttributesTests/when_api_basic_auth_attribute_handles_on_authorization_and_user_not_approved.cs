@@ -5,8 +5,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
-using System.Web.Security;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
@@ -54,10 +53,10 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
             attribute.OnAuthorization(filterContext);
         
         [NUnit.Framework.Test] public void should_response_context_contains_unauthorized_exception () =>
-            filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Unauthorized);
+            filterContext.Response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
 
         [NUnit.Framework.Test] public void should_response_context_unauthorized_exception_has_specified_reasonphrase () =>
-            filterContext.Response.ReasonPhrase.ShouldEqual(expectedReasonPhrase);
+            filterContext.Response.ReasonPhrase.Should().Be(expectedReasonPhrase);
 
         private static ApiBasicAuthAttribute attribute;
         private static HttpActionContext filterContext;

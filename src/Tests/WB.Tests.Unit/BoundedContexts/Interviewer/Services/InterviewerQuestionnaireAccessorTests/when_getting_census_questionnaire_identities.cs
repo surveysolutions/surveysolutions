@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
@@ -8,8 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc.Storage;
-using WB.Tests.Unit.SharedKernels.SurveyManagement;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
 {

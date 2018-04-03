@@ -1,10 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http.Filters;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Designer.Implementation.Services;
@@ -28,13 +30,16 @@ namespace WB.UI.Designer.App_Start
                 new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
-            registry.BindToMethod<Func<IKernel>>(ctx => () => new Bootstrapper().Kernel);
-            registry.Bind<IHttpModule, HttpApplicationInitializationHttpModule>();
 
             registry.Bind<IAuthenticationService, AuthenticationService>();
             registry.Bind<IRecaptchaService, RecaptchaService>();
             registry.Bind<QuestionnaireDowngradeService>();
             registry.Bind<IQuestionnireHistoryVersionsService, QuestionnireHistoryVersionsService>();
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

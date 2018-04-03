@@ -1,6 +1,5 @@
-﻿using System;
-using System.Linq;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -11,14 +10,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_preloaded_data_file_has_valid_data_by_nested_roster : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var rosterId = Guid.NewGuid();
             var nestedRosterId = Guid.NewGuid();
@@ -63,13 +60,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
-        };
 
-        Because of =
-            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(files, preloadedDataServiceMock.Object).ToList();
+            BecauseOf();
+        }
 
-        It should_result_has_0_errors = () =>
-            VerificationErrors.Count().ShouldEqual(0);
+        private void BecauseOf() => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
+
+        [NUnit.Framework.Test] public void should_result_has_0_errors () =>
+            status.VerificationState.Errors.Should().HaveCount(0);
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

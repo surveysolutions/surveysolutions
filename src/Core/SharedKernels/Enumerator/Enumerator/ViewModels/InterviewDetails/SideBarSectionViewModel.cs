@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
@@ -139,7 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public int NodeDepth { get; set; }
-        public ICommand NavigateToSectionCommand => new MvxCommand(this.NavigateToSection);
+        public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
 
         public ICommand ToggleCommand => new MvxCommand(this.Toggle);
 
@@ -149,10 +150,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.OnSectionUpdated?.Invoke(this, new ToggleSectionEventArgs{ ToggledSection = SectionIdentity, IsExpandedNow = Expanded });
         }
 
-        private void NavigateToSection()
+        private async Task NavigateToSection()
         {
             this.messenger.Publish(new SectionChangeMessage(this));
-            this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
+            await this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
         }
 
         private void UpdateSelection(Identity targetGroup)

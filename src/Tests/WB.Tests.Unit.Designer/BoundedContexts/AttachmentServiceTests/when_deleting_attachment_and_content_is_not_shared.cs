@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
             attachmentService.DeleteAllByQuestionnaireId(questionnaireId);
 
         [NUnit.Framework.Test] public void should_delete_attachment_meta () =>
-            attachmentMetaStorage.GetById(attachmentId).ShouldBeNull();
+            attachmentMetaStorage.GetById(attachmentId).Should().BeNull();
 
         [NUnit.Framework.Test] public void should_delete_attachment_content () =>
-            attachmentContentStorage.GetById(contentHash).ShouldBeNull();
+            attachmentContentStorage.GetById(contentHash).Should().BeNull();
 
         private static AttachmentService attachmentService;
         private static readonly string contentHash = "prev_hash";

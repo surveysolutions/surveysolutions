@@ -166,7 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 await this.commandService.WaitPendingCommandsAsync();
 
-                this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
             }
         }
     }

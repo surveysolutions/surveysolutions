@@ -1,12 +1,11 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
 {
     public class when_formatting_and_use_group_formatting_is_false : NumericTextFormatterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var numericTextFormatterSettings = new NumericTextFormatterSettings
             {
                 IsDecimal = true,
@@ -19,12 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
             };
 
             formatter = CreateNumericTextFormatter(numericTextFormatterSettings);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => actualResult = formatter.Format(expectedResult);
+        public void BecauseOf() => actualResult = formatter.Format(expectedResult);
 
-        It should_return_source_text_without_modifications = () =>
-            actualResult.ShouldEqual(expectedResult);
+        [NUnit.Framework.Test] public void should_return_source_text_without_modifications () =>
+            actualResult.Should().Be(expectedResult);
         
         static NumericTextFormatter formatter;
         const string expectedResult = "-55555555";

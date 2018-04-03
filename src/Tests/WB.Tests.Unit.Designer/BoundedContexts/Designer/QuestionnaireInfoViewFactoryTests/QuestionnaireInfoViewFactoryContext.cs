@@ -12,7 +12,6 @@ using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTests
 {
-    [Machine.Specifications.Subject(typeof(QuestionnaireInfoViewFactory))]
     internal class QuestionnaireInfoViewFactoryContext
     {
         protected static QuestionnaireDocument CreateQuestionnaireDocument(string questionnaireId, string questionnaireTitle)

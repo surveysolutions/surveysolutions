@@ -1,7 +1,4 @@
-﻿using System;
-using Moq;
-using Ncqrs;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using WB.Tests.Abc;
 using WB.UI.Designer.Implementation.Services;
 

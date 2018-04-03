@@ -77,6 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error(RosterNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster),
             Error(OrphanRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication),
+            Error(IdIsEmpty, "PL0042", messages.PL0042_IdIsEmpty)
         };
 
         private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, PanelImportVerificationError>> ColumnVerifiers => new[]
@@ -129,6 +130,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var parentRosterId in parentRosterIds)
                 yield return string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterId));
         }
+
+        private bool IdIsEmpty(PreloadedFileInfo file, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
+        {
+            return false;
+            //var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
+
+            //if (parentDataFile != null)
+            //    yield break;
+
+            //var idColumnIndex = preloadedDataService.GetIdColumnIndex(levelData);
+            //if (idColumnIndex < 0)
+            //    yield break;
+
+            //for (int y = 0; y < levelData.Content.Length; y++)
+            //{
+            //    var idValue = levelData.Content[y][idColumnIndex];
+            //    if (string.IsNullOrEmpty(idValue))
+            //    {
+            //        yield return new InterviewImportReference(idColumnIndex, y, PreloadedDataVerificationReferenceType.Cell, "", levelData.FileName);
+            //    }
+            //}
+        }
+
         private bool DuplicatedRosterInstances(PreloadedFileInfo file, PreloadedFileInfo[] allFiles, IQuestionnaire questionnaire)
         {
             return false;
@@ -483,12 +507,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             value is TValue && hasError((TValue)value, questionnaire) ? ToCellError(code, message, value) : null;
 
         private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo)
-            => new PanelImportVerificationError(code, message, new PreloadedDataVerificationReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, fileInfo.FileName));
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, fileInfo.FileName));
         private static PanelImportVerificationError ToColumnError(string code, string message, string fileName, string columnName)
-            => new PanelImportVerificationError(code, message, new PreloadedDataVerificationReference(PreloadedDataVerificationReferenceType.Column, columnName, fileName));
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.Column, columnName, fileName));
 
         private static PanelImportVerificationError ToCellError(string code, string message, AssignmentValue assignmentValue)
-            => new PanelImportVerificationError(code, message, new PreloadedDataVerificationReference(assignmentValue.Row, 0, PreloadedDataVerificationReferenceType.Cell,
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Row, 0, PreloadedDataVerificationReferenceType.Cell,
                 assignmentValue.Value, assignmentValue.FileName));
     }
 }

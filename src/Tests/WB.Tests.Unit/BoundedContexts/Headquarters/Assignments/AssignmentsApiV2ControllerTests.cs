@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignment = assignmentServiceImpl.MapAssignment(assignmentEntity);
             
             Assert.That(assignment, Has.Property(nameof(AssignmentApiView.Quantity))
-                .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */ + 2 /* interviews sent to device */));
+                .EqualTo(10 /* assignment.Quantity */ - 5 /* interviewSummary.Count */));
         }
     }
 }

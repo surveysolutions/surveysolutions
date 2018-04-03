@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -7,8 +7,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_geolocation_question_which_cant_be_parsed : QuestionDataParserTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             answer = "unparsed";
             questionDataParser = CreateQuestionDataParser();
             question = new GpsCoordinateQuestion()
@@ -17,14 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 QuestionType = QuestionType.GpsCoordinates,
                 StataExportCaption = questionVarName
             };
-        };
+            BecauseOf();
+        }
 
-        private Because of =
-            () =>
+        private void BecauseOf() =>
                 parsingResult =
                     questionDataParser.TryParse(answer,questionVarName+"_aa", question, out parcedValue, out parsedSingleColumnAnswer);
 
-        private It should_result_be_null = () =>
-            parsingResult.ShouldEqual(ValueParsingResult.AnswerAsGpsWasNotParsed);
+        [NUnit.Framework.Test] public void should_result_be_null () =>
+            parsingResult.Should().Be(ValueParsingResult.AnswerAsGpsWasNotParsed);
     }
 }

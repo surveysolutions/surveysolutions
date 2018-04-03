@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
         private void BecauseOf() => questionnaire.AddOrUpdateTranslation(addOrUpdateTranslation);
 
         [NUnit.Framework.Test] public void should_contains_Translation_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Translations.ShouldContain(t => t.Id == translationId);
+            questionnaire.QuestionnaireDocument.Translations.Should().Contain(t => t.Id == translationId);
 
         private static AddOrUpdateTranslation addOrUpdateTranslation;
         private static Questionnaire questionnaire;

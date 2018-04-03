@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
 
 namespace Ncqrs.Spec
 {

@@ -104,8 +104,8 @@
     <Reference Include="NConfig, Version=1.1.23.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NConfig.1.1.23\lib\Net40\NConfig.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -132,7 +132,7 @@
       <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.WebHost.3.3.0\lib\net45\Ninject.Web.WebApi.WebHost.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NLog.4.4.12\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NLog.4.5.0\lib\net45\NLog.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
@@ -152,11 +152,13 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -195,6 +197,7 @@
     <Reference Include="System.Web.WebPages.Razor">
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
     </Reference>
@@ -210,9 +213,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Api\Designer\CommentsController.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
     <Compile Include="Api\Designer\PublicFoldersApiController.cs" />
+    <Compile Include="Api\Headquarters\HQLookupController.cs" />
+    <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\QuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\WebTesterController.cs" />
@@ -253,6 +259,7 @@
     <Compile Include="Implementation\Services\WebTesterSettings.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M022_AddCommentsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M006_AddTablesNeededForStoreQuestionnaireInPlainStorage.cs" />
@@ -271,6 +278,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
+    <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
     <Compile Include="Models\DeploymentUserModel.cs" />
@@ -282,7 +290,6 @@
     <Compile Include="Models\QuestionnaireListModel.cs" />
     <Compile Include="Models\SharingNotificationModel.cs" />
     <Compile Include="Models\VerificationMessageError.cs" />
-    <Compile Include="Models\VerificationReferenceEnriched.cs" />
     <Compile Include="Resources\Paging.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -411,7 +418,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ServiceLocationModule.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
     <Compile Include="Services\IWebTesterService.cs" />
@@ -459,6 +465,8 @@
     <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
+    <Content Include="questionnaire\details\scripts\controllers\comments.js" />
+    <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
@@ -468,10 +476,13 @@
     <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
+    <Content Include="questionnaire\details\scripts\services\commentsService.js" />
     <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
+    <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
+    <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
@@ -926,6 +937,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj">
@@ -949,7 +961,7 @@
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">

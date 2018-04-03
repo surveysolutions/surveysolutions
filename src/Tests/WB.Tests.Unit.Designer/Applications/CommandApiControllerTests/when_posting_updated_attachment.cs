@@ -1,6 +1,4 @@
 using System;
-using System.Net.Http.Headers;
-using Machine.Specifications;
 using Moq;
 using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;

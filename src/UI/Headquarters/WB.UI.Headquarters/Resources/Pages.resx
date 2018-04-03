@@ -483,6 +483,9 @@
   <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
     <value>Last communication date</value>
   </data>
+  <data name="InterviewerProfile_Relinked" xml:space="preserve">
+    <value>Relinked</value>
+  </data>
   <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
     <value>Synchronization duration</value>
   </data>

@@ -97,7 +97,8 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/users/hasdevice", c => c.Action<UsersApiV2Controller>(x => x.HasDevice()));
             config.TypedRoute("api/interviewer/v2/translations/{id}",
                 c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
-            config.TypedRoute("api/interviewer/v2/companyLogo", c => c.Action<CompanyLogoApiV2Controller>(x => x.Get()));
+            config.TypedRoute("api/interviewer/v2/companyLogo", c => c.Action<SettingsV2Controller>(x => x.CompanyLogo()));
+            config.TypedRoute("api/interviewer/v2/autoupdate", c => c.Action<SettingsV2Controller>(x => x.AutoUpdateEnabled()));
             config.TypedRoute("api/interviewer/v2/questionnaires/census",
                 c => c.Action<QuestionnairesApiV2Controller>(x => x.Census()));
             config.TypedRoute("api/interviewer/v2/questionnaires/list",

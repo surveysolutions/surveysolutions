@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
 
@@ -12,12 +13,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
     internal class when_answering_numeric_question_after_answering_single_option_question_and_dependent_cascading_question_has_no_options : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");
@@ -61,17 +62,18 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        It should_not_raise_QuestionsDisabled_event = () =>
-            results.DisabledQuestions.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsDisabled_event () =>
+            results.DisabledQuestions.Should().BeNull();
 
-        It should_not_raise_QuestionsEnabled_event = () =>
-            results.EnabledQuestions.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_raise_QuestionsEnabled_event () =>
+            results.EnabledQuestions.Should().BeNull();
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

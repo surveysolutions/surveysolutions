@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         [Test]
         public void should_be_navigated_to_login_view_model() 
-            => mockOfViewModelNavigationService.Verify(_ => _.SignOutAndNavigateToLogin(), Times.Once);
+            => mockOfViewModelNavigationService.Verify(_ => _.SignOutAndNavigateToLoginAsync(), Times.Once);
 
         private static DashboardViewModel viewModel;
 

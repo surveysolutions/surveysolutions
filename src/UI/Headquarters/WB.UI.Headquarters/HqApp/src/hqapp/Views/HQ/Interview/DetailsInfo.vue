@@ -3,12 +3,16 @@
     <div class="panel panel-details">
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
-                <div class="about-questionnaire-details">
+                <div class="about-questionnaire-details clearfix">
                     <ul class="main-info-column list-unstyled pull-left">
                         <li>{{this.$t('Common.InterviewKey')}}: {{$config.model.key}}({{this.$t('Common.Assignment')}} #{{this.$config.model.assignmentId}})</li>
                         <li class="questionnaire-title">[ver.{{this.$config.model.questionnaireVersion}}] {{this.$config.model.questionnaireTitle}}</li>
                     </ul>
-                    <ul class="list-unstyled pull-left">
+                    <ul class="list-unstyled pull-left table-info">
+                        <li v-if="this.$config.model.interviewDuration">
+                            <span class="data-label">{{this.$t('Details.Duration')}}:</span>
+                            <span class="data">{{this.$config.model.interviewDuration}}</span>
+                        </li>
                         <li>
                             <span class="data-label">{{this.$t('Details.Responsible')}}: </span>
                             <span v-if="isInterviewerResponsible" class="data">
@@ -17,17 +21,17 @@
                             <span v-else class="data supervisor">{{this.$config.model.responsible}}</span>
                         </li>
                         <li>
-                            <span class="data-label">{{this.$t('Users.Supervisor')}} : </span>
+                            <span class="data-label">{{this.$t('Users.Supervisor')}}: </span>
                             <span class="data supervisor">{{this.$config.model.supervisor}}</span>
                         </li>
                     </ul>
-                    <ul class="list-unstyled pull-left">
+                    <ul class="list-unstyled pull-left table-info">
                         <li><span class="data-label">{{this.$t('Details.Status')}}</span> 
                             <span class="data">{{this.$config.model.statusName}}</span>
+                            <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
                         </li>
                         <li><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
-                            <span class="data">{{lastUpdateDate}}</span>
-                            <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
+                            <span class="data">{{lastUpdateDate}}</span>                            
                         </li>
                     </ul>
                 </div>
@@ -40,6 +44,9 @@
                 <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
                     {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
                 </button>
+                <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
+                    {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
+                </button>
             </div>
         </div>
         <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal" />
@@ -51,7 +58,9 @@
             <span class="countDown">{{approveCharsLeft}}</span>
         </Confirm>
 
-        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" :title="$t('Pages.ApproveRejectPartialView_RejectLAbel')" :disableOk="interviewerShouldbeSelected && !newResponsibleId">
+        <Confirm ref="rejectConfirm" id="rejectConfirm" slot="modals" 
+                :title="showUnapproveButton ? $t('Pages.ApproveRejectPartialView_UnapproveLabel') : $t('Pages.ApproveRejectPartialView_RejectLAbel')" 
+                :disableOk="interviewerShouldbeSelected && !newResponsibleId">
             <form v-if="interviewerShouldbeSelected" onsubmit="return false;">
                 <div class="form-group">
                     <label class="control-label" for="newResponsibleId">{{ $t("Details.ChooseResponsibleInterviewer") }}</label>
@@ -133,6 +142,9 @@ export default {
         this.$config.model.approveReject.supervisorApproveAllowed ||
         this.$config.model.approveReject.hqOrAdminApproveAllowed
       );
+    },
+    showUnapproveButton() {
+        return this.$config.model.approveReject.hqOrAdminUnapproveAllowed;
     },
     showRejectButton() {      
       return (

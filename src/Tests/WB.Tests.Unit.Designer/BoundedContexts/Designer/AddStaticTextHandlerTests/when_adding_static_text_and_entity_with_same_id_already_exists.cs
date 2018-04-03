@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -9,26 +10,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
 {
     internal class when_adding_static_text_and_entity_with_same_id_already_exists : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, entityId, "title", responsibleId, chapterId));
-            BecauseOf();
+
+            exception = Assert.Throws<QuestionnaireException>(() =>
+                            questionnaire.AddStaticTextAndMoveIfNeeded(
+                                new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId)));
+
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] {"id", "exists"});
         }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
-                questionnaire.AddStaticTextAndMoveIfNeeded(
-                    new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId)));
-
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__id_exists__ () =>
-             new[] { "id", "exists" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
-
-        
         private static Questionnaire questionnaire;
         private static Exception exception;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

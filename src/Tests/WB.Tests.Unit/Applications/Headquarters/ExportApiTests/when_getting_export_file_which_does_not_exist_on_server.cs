@@ -1,15 +1,13 @@
 using System.Web.Http;
 using System.Web.Http.Results;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
@@ -30,7 +28,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private void BecauseOf() => result = controller.Get(new QuestionnaireIdentity().ToString(), DataExportFormat.SPSS);
 
         [NUnit.Framework.Test] public void should_return_http_not_found_response () =>
-            result.ShouldBeOfExactType<NotFoundResult>();
+            result.Should().BeOfType<NotFoundResult>();
 
         private static ExportController controller;
 

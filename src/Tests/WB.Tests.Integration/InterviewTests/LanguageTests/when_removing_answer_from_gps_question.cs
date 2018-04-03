@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -9,12 +9,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_removing_answer_from_gps_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -38,15 +38,15 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
 
-        It should_mark_gps_question_as_valid = () => 
-            result.AnswersDeclaredValidEventCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_mark_gps_question_as_valid () => 
+            result.AnswersDeclaredValidEventCount.Should().Be(1);
 
         static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static InvokeResult result;

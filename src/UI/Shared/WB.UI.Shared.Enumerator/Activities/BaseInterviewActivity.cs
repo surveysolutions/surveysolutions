@@ -9,6 +9,7 @@ using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -122,7 +123,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 TargetScreen = ScreenType.Group,
                 TargetGroup = Identity.Parse(parts[0]),
                 AnchoredElementIdentity = parts.Length > 1 ? Identity.Parse(parts[1]) : null
-            });
+            }).WaitAndUnwrapException();
         }
     }
 }

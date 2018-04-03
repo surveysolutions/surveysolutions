@@ -1,6 +1,7 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
@@ -10,37 +11,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 {
     internal class when_adding_text_question_and_question_already_exists : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddDefaultTypeQuestionAdnMoveIfNeeded(Create.Command.AddDefaultTypeQuestion(questionnaire.Id, existingQuestionId, "title", responsibleId, chapterId));
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.AddTextQuestion(
                     questionId: existingQuestionId,
                     parentId: chapterId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     isPreFilled: isPreFilled,
                     scope: QuestionScope.Interviewer,
                     enablementCondition: enablementCondition,
                     validationExpression: validationExpression,
                     validationMessage: validationMessage,
                     instructions: instructions,
-                     mask: null,
+                    mask: null,
                     responsibleId: responsibleId));
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__exist__ () =>
-            new[] { "question", "exist" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "question(s)", "exist" });
+        }
 
         private static Questionnaire questionnaire;
         private static Exception exception;

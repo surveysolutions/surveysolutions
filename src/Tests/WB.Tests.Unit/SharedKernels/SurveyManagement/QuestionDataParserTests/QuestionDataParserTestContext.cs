@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,7 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
-    [Subject(typeof (QuestionDataParser))]
+    [NUnit.Framework.TestOf(typeof (QuestionDataParser))]
     internal class QuestionDataParserTestContext
     {
         protected static QuestionDataParser CreateQuestionDataParser()

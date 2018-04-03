@@ -1,22 +1,18 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Moq;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_qr_barcode_question_which_have_incorrect_type : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
@@ -26,17 +22,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-             exception = Catch.Exception(() =>interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, 
+        public void BecauseOf() =>
+             exception = NUnit.Framework.Assert.Throws<AnswerNotAcceptedException>(() =>interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, 
                  answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
 
-        It should_raise_InterviewException = () =>
-           exception.ShouldBeOfExactType<AnswerNotAcceptedException>();
+        [NUnit.Framework.Test] public void should_raise_InterviewException () =>
+           exception.Should().BeOfType<AnswerNotAcceptedException>();
 
-        It should_throw_exception_with_message_containting__type_QRBarcode_expected__ = () =>
-             new [] { "type", QuestionType.QRBarcode.ToString().ToLower(), "expected" }.ShouldEachConformTo(
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__type_QRBarcode_expected__ () =>
+             new [] { "type", QuestionType.QRBarcode.ToString().ToLower(), "expected" }.Should().OnlyContain(
                     keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
 
 

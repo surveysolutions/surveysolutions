@@ -135,9 +135,6 @@
   <data name="AverageInterviewDuration" xml:space="preserve">
     <value>访谈平均持续时间</value>
   </data>
-  <data name="AverageInterviewDurationDescription" xml:space="preserve">
-    <value>从平板电脑上记录第一个答案到点击完成之间的时间。</value>
-  </data>
   <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
     <value>整体平均案例处理时间</value>
   </data>

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
             view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_return_5_lines_the_same_as_statuses_count() => view.Lines.Length.ShouldEqual(5);
+        public void should_return_5_lines_the_same_as_statuses_count() => view.Lines.Length.Should().Be(5);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

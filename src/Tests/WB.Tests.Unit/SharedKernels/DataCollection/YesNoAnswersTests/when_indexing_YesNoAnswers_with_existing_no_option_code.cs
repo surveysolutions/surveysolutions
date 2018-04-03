@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
@@ -8,16 +8,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests
 {
     internal class when_indexing_YesNoAnswers_with_existing_no_option_code
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             answers = Create.Entity.YesNoAnswers(allCodes, new YesNoAnswersOnly(selectedYes, selectedNo));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = answers[10].IsNo();
 
-        It should_return_true = () =>
-            result.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_return_true () =>
+            result.Should().BeTrue();
 
         private static YesNoAnswers answers;
         private static bool result;

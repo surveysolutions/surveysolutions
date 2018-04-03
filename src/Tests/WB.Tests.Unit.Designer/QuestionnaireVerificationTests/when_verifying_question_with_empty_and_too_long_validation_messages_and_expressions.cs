@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -32,16 +31,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_messages_with_codes__WB0104___WB0105___WB0106__ () =>
-            verificationMessages.Select(message => message.Code).ShouldContain("WB0104", "WB0105", "WB0106");
+            verificationMessages.Select(message => message.Code).Should().Contain("WB0104", "WB0105", "WB0106");
 
         [NUnit.Framework.Test] public void should_return_validation_condition_index_in_message_WB0106 () =>
-            verificationMessages.Single(message => message.Code == "WB0106").Message.ShouldContain("#2");
+            verificationMessages.Single(message => message.Code == "WB0106").Message.Should().Contain("#2");
         
         [NUnit.Framework.Test] public void should_return_validation_condition_index_in_message_WB0104 () =>
-            verificationMessages.Single(message => message.Code == "WB0104").Message.ShouldContain("#4");
+            verificationMessages.Single(message => message.Code == "WB0104").Message.Should().Contain("#4");
 
         [NUnit.Framework.Test] public void should_return_validation_condition_index_in_message_WB0105 () =>
-            verificationMessages.Single(message => message.Code == "WB0105").Message.ShouldContain("#5");
+            verificationMessages.Single(message => message.Code == "WB0105").Message.Should().Contain("#5");
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;

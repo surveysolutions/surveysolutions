@@ -1,11 +1,10 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -19,8 +18,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             public void Handle(PlainConstructingCommand command) => handledCommand = command;
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .InitializesWith<PlainConstructingCommand>(_ => Guid.Empty, aggregate => aggregate.Handle);
@@ -29,13 +27,15 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
             commandService = Abc.Create.Service.CommandService(serviceLocator: serviceLocator);
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             commandService.Execute(executedCommand, null);
 
-        It should_pass_command_to_be_handled_by_plain_aggregate_root = () =>
-            handledCommand.ShouldEqual(executedCommand);
+        [NUnit.Framework.Test] public void should_pass_command_to_be_handled_by_plain_aggregate_root () =>
+            handledCommand.Should().Be(executedCommand);
 
         private static CommandService commandService;
         private static PlainConstructingCommand handledCommand = null;

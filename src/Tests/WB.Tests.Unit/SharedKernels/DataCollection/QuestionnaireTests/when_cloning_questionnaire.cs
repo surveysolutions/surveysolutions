@@ -1,23 +1,20 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_cloning_questionnaire : QuestionnaireTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocumentFromRepository = Create.Entity.QuestionnaireDocument();
             questionnaireDocumentFromRepository.Title = originalTitle;
 
@@ -33,14 +30,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 questionnaireStorage: plainQuestionnaireRepositoryMock.Object);
 
             questionnaire.SetId(questionnaireIdentity.QuestionnaireId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
                 questionnaireIdentity: questionnaireIdentity, newTitle: newQuestionnaireTitle,
                 newQuestionnaireVersion: questionnaireIdentity.Version + 1));
 
-        It should_not_store_questionnaire_document_which_was_read_from_repository = () =>
+        [NUnit.Framework.Test] public void should_not_store_questionnaire_document_which_was_read_from_repository () =>
             plainQuestionnaireRepositoryMock.Verify(
                 repository => repository.StoreQuestionnaire(
                     questionnaireIdentity.QuestionnaireId,
@@ -48,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     questionnaireDocumentFromRepository),
                 Times.Never);
 
-        It should_store_questionnaire_document_with_new_title = () =>
+        [NUnit.Framework.Test] public void should_store_questionnaire_document_with_new_title () =>
             plainQuestionnaireRepositoryMock.Verify(
                 repository => repository.StoreQuestionnaire(
                     questionnaireIdentity.QuestionnaireId,
@@ -56,8 +54,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                     Moq.It.Is<QuestionnaireDocument>(document => document.Title == newQuestionnaireTitle)),
                 Times.Once);
 
-        It should_not_change_original_title = () => 
-            questionnaireDocumentFromRepository.Title.ShouldEqual(originalTitle);
+        [NUnit.Framework.Test] public void should_not_change_original_title () => 
+            questionnaireDocumentFromRepository.Title.Should().Be(originalTitle);
 
         private static Questionnaire questionnaire;
         private static QuestionnaireIdentity questionnaireIdentity

@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Tests.Abc.TestFactories;
@@ -31,10 +31,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
         private void BecauseOf() => actionResult = controller.Edit(inputModel).Result;
 
         [NUnit.Framework.Test] public void should_return_ViewResult () =>
-            actionResult.ShouldBeOfExactType<ViewResult>();
+            actionResult.Should().BeOfType<ViewResult>();
 
         [NUnit.Framework.Test] public void should_execute_CreateUserCommand_onece () =>
-            controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).ShouldContain("Could not update user information because current user does not exist");
+            controller.ModelState.SelectMany(x=>x.Value.Errors).Select(x=>x.ErrorMessage).Should().Contain("Could not update user information because current user does not exist");
 
 
         private static Mock<TestHqUserManager> userManagerMock = new Mock<TestHqUserManager>();

@@ -1,20 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 {
     internal class when_getting_team_interviews : TeamInterviewsFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             version = 1;
@@ -35,16 +33,16 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             reportFactory = CreateTeamInterviewsFactory(out repository, out featuredQuestionAnswersReader);
 
             ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
+            BecauseOf();
+        }
 
-        };
-
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
+        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
         {
             QuestionnaireId = questionnaireId,
             QuestionnaireVersion = version,
         }));
 
-        It should_return_correct_total_count = () => report.TotalCount.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_return_correct_total_count () => report.TotalCount.Should().Be(3);
 
         static ITeamInterviewsFactory reportFactory;
         static TeamInterviewsView report;

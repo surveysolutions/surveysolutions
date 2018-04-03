@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -13,9 +12,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 {
     internal class when_updating_gps_coordinates_question_and_variable_name_is_empty : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test]
+        public void should_not_throw_exception()
+        {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
             questionnaire.AddQRBarcodeQuestion(
                 questionId,
                 chapterId,
@@ -24,13 +25,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-            BecauseOf();
-        }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
-                exception = Catch.Exception(() =>
-                questionnaire.UpdateGpsCoordinatesQuestion(
+            questionnaire.UpdateGpsCoordinatesQuestion(
                 new UpdateGpsCoordinatesQuestion(
                     questionnaire.Id,
                     questionId: questionId,
@@ -46,10 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                     isPreFilled: false,
                     scope: scope,
                     responsibleId: responsibleId,
-                    validationConditions: new List<ValidationCondition>()))));
-
-        [NUnit.Framework.Test] public void should_not_throw_exception () => exception.ShouldBeNull();
-
+                    validationConditions: new List<ValidationCondition>()));
+        }
 
         private static Questionnaire questionnaire;
         private static Exception exception;

@@ -1,46 +1,36 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_preloaded_data_with_empty_latitude_in_gps_question : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
-        {
-            questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
+        [Test] 
+        public void should_return_1_error_PL0030 () {
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+            var gpsQuestionId = Guid.Parse("21111111111111111111111111111111");
             var gpsQuestion = Create.Entity.GpsCoordinateQuestion(gpsQuestionId, "gps");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
+            var questionnaire = CreateQuestionnaireDocumentWithOneChapter(gpsQuestion);
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(
+            var preloadedDataByFile = CreatePreloadedDataByFile(
                 new[] { ServiceColumns.InterviewId, "gps__Latitude", "gps__Longitude" },
                 new[] { new[] { "1", "", "1.5" } },
                 "questionnaire.csv");
-            
-            preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
-            importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
-        };
+            var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
 
-        Because of = () => 
-            VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataService).ToList();
+            var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
 
-        It should_return_1_error_PL0030 = () =>
-            VerificationErrors.Single().Code.ShouldEqual("PL0030");
+            // Act
+            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
-        private static ImportDataVerifier importDataVerifier;
-        private static QuestionnaireDocument questionnaire;
-        private static Guid questionnaireId;
-        private static Guid gpsQuestionId;
-        private static PreloadedDataByFile preloadedDataByFile;
-        private static ImportDataParsingService preloadedDataService;
+            // Act
+            status.VerificationState.Errors.Single().Code.Should().Be("PL0030");
+        }
     }
 }

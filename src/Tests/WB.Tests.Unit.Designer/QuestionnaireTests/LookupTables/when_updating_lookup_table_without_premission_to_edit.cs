@@ -1,6 +1,7 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -9,28 +10,18 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
 {
     internal class when_updating_lookup_table_without_premission_to_edit : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddLookupTable(Create.Command.AddLookupTable(questionnaireId, lookupTableId, ownerId));
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             updateLookupTable = Create.Command.UpdateLookupTable(questionnaireId, lookupTableId, sharedPersonId);
-            BecauseOf();
+
+            var exception = Assert.Throws<QuestionnaireException>(() => questionnaire.UpdateLookupTable(updateLookupTable));
+
+            exception.ErrorType.Should().Be(DomainExceptionType.DoesNotHavePermissionsForEdit);
         }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() => questionnaire.UpdateLookupTable(updateLookupTable));
-
-        [NUnit.Framework.Test] public void should_throw_exception () =>
-            exception.ShouldNotBeNull();
-
-        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
-            exception.ShouldBeOfExactType(typeof(QuestionnaireException));
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_type_DoesNotHavePermissionsForEdit () =>
-            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
-
-        private static Exception exception;
         private static UpdateLookupTable updateLookupTable;
         private static Questionnaire questionnaire;
         private static readonly Guid ownerId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

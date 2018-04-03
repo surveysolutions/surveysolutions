@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Machine.Specifications;
-using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 {
-    [Subject(typeof(NcqrCompatibleEventDispatcher))]
+    [NUnit.Framework.TestOf(typeof(NcqrCompatibleEventDispatcher))]
     internal class NcqrCompatibleEventDispatcherTestContext
     {
         protected static NcqrCompatibleEventDispatcher CreateNcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null)

@@ -1,6 +1,7 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -19,13 +20,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
             BecauseOf();
         }
 
-        private void BecauseOf() => exception = Catch.Only<QuestionnaireException>(() => 
+        private void BecauseOf() => exception = Assert.Throws<QuestionnaireException>(() => 
                 questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: Guid.NewGuid())));
 
-        [NUnit.Framework.Test] public void should_not_allow_to_edit_questionnaire () => exception.ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
+        [NUnit.Framework.Test] public void should_not_allow_to_edit_questionnaire () => exception.ErrorType.Should().Be(DomainExceptionType.DoesNotHavePermissionsForEdit);
 
         [NUnit.Framework.Test] public void should_not_change_questionnaire () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).QuestionText.ShouldEqual($"filter with {searchFor}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).QuestionText.Should().Be($"filter with {searchFor}");
 
         static Questionnaire questionnaire;
 

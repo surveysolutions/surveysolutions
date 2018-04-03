@@ -1,79 +1,57 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
     public class InterviewApiDetails
     {
-        public InterviewApiDetails(InterviewDetailsView interview)
+        public InterviewApiDetails(IStatefulInterview interview)
         {
-            this.Questions = new List<QuestionApiItem>();
-            this.Rosters = new List<RosterApiItem>();
+            if (interview == null) return;
 
-            var rosters = new Dictionary<string, RosterApiItem>();
+            var allNodes = interview.GetAllInterviewNodes().ToArray();
+            var entitiesOutOfRosters = allNodes.Where(x => x.Identity.RosterVector == RosterVector.Empty).ToArray();
 
-            if (interview != null)
+            this.Questions = entitiesOutOfRosters.OfType<InterviewTreeQuestion>().Select(ToQuestionApiView).ToList();
+
+            this.Rosters = allNodes.OfType<InterviewTreeRoster>()
+                .Where(x => x.Identity.RosterVector.Length == 1)
+                .Select(ToRosterApiView).ToList();
+        }
+
+        private RosterApiItem ToRosterApiView(InterviewTreeRoster rosterInstance)
+        {
+            var allRosterNodes = rosterInstance.Children.TreeToEnumerable(x => x.Children);
+            var questionsOfRoster = allRosterNodes
+                .OfType<InterviewTreeQuestion>()
+                .Where(x => x.Identity.RosterVector == rosterInstance.RosterVector)
+                .Select(ToQuestionApiView)
+                .ToList();
+
+            var rosterInstancesOfRoster = allRosterNodes
+                .OfType<InterviewTreeRoster>()
+                .Where(x => x.Identity.RosterVector.Length == rosterInstance.Identity.RosterVector.Length + 1)
+                .Select(ToRosterApiView)
+                .ToList();
+
+            return new RosterApiItem
             {
-                foreach (var interviewGroupView in interview.Groups)
-                {
-                    if (interviewGroupView.Id.RosterVector.Length == 0)
-                        AddQuestionsToRoster(this.Questions, interviewGroupView.Entities?.OfType<InterviewQuestionView>());
-                    else
-                    {
-                        var key = CreateLeveKeyFromPropagationVector(interviewGroupView.Id.RosterVector);
-                        RosterApiItem item;
-
-                        if (rosters.ContainsKey(key))
-                            item = rosters[key];
-                        else
-                        {
-                            item = new RosterApiItem()
-                            {
-                                Id = interviewGroupView.Id.Id,
-                                RosterVector = interviewGroupView.Id.RosterVector,
-                                Item = interviewGroupView.Id.RosterVector.Last()
-                            };
-
-                            rosters.Add(key, item);
-                        }
-
-                        AddQuestionsToRoster(item.Questions, interviewGroupView.Entities?.OfType<InterviewQuestionView>());
-                    }
-                }
-
-                foreach (var rosterApiItem in rosters.Values)
-                {
-                    if (rosterApiItem.RosterVector.Length > 1)
-                    {
-                        var key = CreateLeveKeyFromPropagationVector(rosterApiItem.RosterVector.Take(rosterApiItem.RosterVector.Length - 1).ToArray());
-
-                        if (!rosters.ContainsKey(key))
-                            throw new Exception("Error in structure");
-
-                        rosters[key].Rosters.Add(rosterApiItem);
-                    }
-                }
-
-                this.Rosters = rosters.Values.Where(i => i.RosterVector.Length == 1).ToList();
-            }
+                Id = rosterInstance.Identity.Id,
+                RosterVector = rosterInstance.Identity.RosterVector,
+                Questions = questionsOfRoster,
+                Rosters = rosterInstancesOfRoster
+            };
         }
 
-        private static string CreateLeveKeyFromPropagationVector(decimal[] vector)
-        {
-            return string.Join(",", vector.Select(v => v.ToString("0.############################", CultureInfo.InvariantCulture)));
-        }
-
-        private static void AddQuestionsToRoster(List<QuestionApiItem> questions, IEnumerable<InterviewQuestionView> questionsToAdd)
-        {
-            if(questionsToAdd != null)
-                questions.AddRange(questionsToAdd.Select(question => new QuestionApiItem(question.Variable, question.Answer ?? string.Empty)));
-        }
-
+        private QuestionApiItem ToQuestionApiView(InterviewTreeQuestion question) =>
+            new QuestionApiItem(question.VariableName, InterviewTreeQuestion.GetAnswerAsObject(question) ?? string.Empty);
+        
         [DataMember]
         public List<QuestionApiItem> Questions { set; get; }
 

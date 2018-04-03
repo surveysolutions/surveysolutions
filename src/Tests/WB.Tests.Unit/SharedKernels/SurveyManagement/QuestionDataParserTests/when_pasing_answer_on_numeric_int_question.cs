@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 
@@ -6,8 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_numeric_int_question : QuestionDataParserTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             answer = "1";
             questionDataParser = CreateQuestionDataParser();
             question = new NumericQuestion()
@@ -17,14 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 IsInteger = true,
                 StataExportCaption = questionVarName
             };
-        };
+            BecauseOf();
+        }
 
-        private Because of =
-            () =>
+        private void BecauseOf() =>
                 parsingResult =
                     questionDataParser.TryParse(answer, questionVarName, question, out parcedValue, out parsedSingleColumnAnswer);
 
-        private It should_result_be_equal_to_1 = () =>
-            parcedValue.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_result_be_equal_to_1 () =>
+            parcedValue.Should().Be(1);
     }
 }

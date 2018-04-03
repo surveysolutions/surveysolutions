@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -21,23 +20,23 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                     condition: condition, hideIfDisabled: hideIfDisabled, parentGroupId: parentRosterId, isRoster: false, rosterSizeSource: RosterSizeSourceType.Question, rosterFixedTitles: null, rosterTitleQuestionId: null, index: index);
 
         [NUnit.Framework.Test] public void should_create_group_with_GroupId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_create_group_ConditionExpression_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .ConditionExpression.ShouldEqual(condition);
+                .ConditionExpression.Should().Be(condition);
 
         [NUnit.Framework.Test] public void should_create_group_with_HideIfDisabled_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .HideIfDisabled.ShouldEqual(hideIfDisabled);
+                .HideIfDisabled.Should().Be(hideIfDisabled);
 
         [NUnit.Framework.Test] public void should_create_group_with_Title_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .Title.ShouldEqual(title);
+                .Title.Should().Be(title);
 
         [NUnit.Framework.Test] public void should_create_group_with_Description_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .Description.ShouldEqual(description);
+                .Description.Should().Be(description);
 
         private static Questionnaire questionnaire;
         private static Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

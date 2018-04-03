@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -9,9 +10,22 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    internal class when_answering_question_disable_source_of_linked_to_list_question : in_standalone_app_domain
+    internal class when_answering_question_disable_source_of_linked_to_list_question : InterviewTestsContext
     {
-        Because of = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 AssemblyContext.SetupServiceLocator();
@@ -46,10 +60,10 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 }
             });
 
-        It should_remove_answer_for_single_linked_to_list = () => results.SingleQuestionAnswerRemoved.ShouldBeTrue();
-        It should_remove_answer_for_multi_linked_to_list = () => results.MultiQuestionAnswerRemoved.ShouldBeTrue();
-        It should_change_options_for_single_linked_to_list = () => results.SingleQuestionOptionsChanged.ShouldBeTrue();
-        It should_change_options_for_multi_linked_to_list = () => results.MultiQuestionOptionsChanged.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_answer_for_single_linked_to_list () => results.SingleQuestionAnswerRemoved.Should().BeTrue();
+        [NUnit.Framework.Test] public void should_remove_answer_for_multi_linked_to_list () => results.MultiQuestionAnswerRemoved.Should().BeTrue();
+        [NUnit.Framework.Test] public void should_change_options_for_single_linked_to_list () => results.SingleQuestionOptionsChanged.Should().BeTrue();
+        [NUnit.Framework.Test] public void should_change_options_for_multi_linked_to_list () => results.MultiQuestionOptionsChanged.Should().BeTrue();
 
         static InvokeResults results;
         static Guid userId = Guid.Parse("22222222222222222222222222222222");

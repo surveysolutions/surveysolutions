@@ -9,10 +9,12 @@
             $scope.isUnfoldedAttachments = false;
             $scope.isUnfoldedTranslations = false;
             $scope.isUnfoldedMetadata = false;
+            $scope.isUnfoldedComments = false;
 
 
             var closeOpenPanelIfAny = function() {
-                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments || $scope.isUnfoldedTranslations || $scope.isUnfoldedMetadata))
+                if (!($scope.isUnfoldedChapters || $scope.isUnfoldedMacros || $scope.isUnfoldedLookupTables || $scope.isUnfoldedAttachments 
+                    || $scope.isUnfoldedTranslations || $scope.isUnfoldedMetadata  || $scope.isUnfoldedComments))
                     return;
 
                 if ($scope.isUnfoldedChapters) {
@@ -33,6 +35,9 @@
                 if ($scope.isUnfoldedMetadata) {
                     $rootScope.$broadcast("closeMetadataRequested", {});
                 }
+                if ($scope.isUnfoldedComments) {
+                    $rootScope.$broadcast("closeCommentsRequested", {});
+                }
 
             };
 
@@ -43,6 +48,7 @@
                 $scope.isUnfoldedAttachments = false;
                 $scope.isUnfoldedTranslations = false;
                 $scope.isUnfoldedMetadata = false;
+                $scope.isUnfoldedComments = false;
             }
 
             $scope.unfoldChapters = function () {
@@ -98,6 +104,15 @@
                 $rootScope.$broadcast("openMetadata", {});
             };
 
+            $scope.unfoldComments = function () {
+                if ($scope.isUnfoldedComments)
+                    return;
+
+                closeOpenPanelIfAny();
+                $scope.isUnfoldedComments = true;
+                $rootScope.$broadcast("openComments", {});
+            };
+
             $scope.$on('openChaptersList', function () {
                 $scope.isUnfoldedChapters = true;
             });
@@ -116,6 +131,10 @@
 
             $scope.$on('openMetadata', function () {
                 $scope.isUnfoldedMetadata = true;
+            });
+
+            $scope.$on('openComments', function () {
+                $scope.isUnfoldedComments = true;
             });
 
             $scope.$on('openMacrosList', function () {
@@ -143,6 +162,10 @@
             });
 
             $scope.$on('closeMetadata', function () {
+                closeAllPanel();
+            });
+
+            $scope.$on('closeComments', function () {
                 closeAllPanel();
             });
 

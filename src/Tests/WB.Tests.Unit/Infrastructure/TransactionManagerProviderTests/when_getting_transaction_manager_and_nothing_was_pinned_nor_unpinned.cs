@@ -1,24 +1,24 @@
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.TransactionManagerProviderTests
 {
     internal class when_getting_transaction_manager_and_nothing_was_pinned_nor_unpinned
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             transactionManagerProvider = Create.Service.TransactionManagerProvider(transactionManagerFactory: () => transactionManagerFromFactory);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             transactionManager = transactionManagerProvider.GetTransactionManager();
 
-        It should_return_transaction_manager_from_factory = () =>
-            transactionManager.ShouldEqual(transactionManagerFromFactory);
+        [NUnit.Framework.Test] public void should_return_transaction_manager_from_factory () =>
+            transactionManager.Should().Be(transactionManagerFromFactory);
 
         private static TransactionManagerProvider transactionManagerProvider;
         private static ITransactionManager transactionManager;

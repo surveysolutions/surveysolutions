@@ -1,13 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
@@ -44,7 +43,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         private void BecauseOf() => service.Store(Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"), translationId, fileStream);
 
-        [NUnit.Framework.Test] public void should_not_store_entities_from_other_questionnare () => plainStorageAccessor.Query(_ => _.Count()).ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_store_entities_from_other_questionnare () => plainStorageAccessor.Query(_ => _.Count()).Should().Be(0);
 
         static byte[] fileStream;
         static TestPlainStorage<TranslationInstance> plainStorageAccessor;

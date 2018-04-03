@@ -1,19 +1,16 @@
 using System;
-using Machine.Specifications;
-using Main.Core.Entities.SubEntities;
+using FluentAssertions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_numeric_real_question_received_by_interviewer : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -27,16 +24,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new InterviewReceivedByInterviewer());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.AnswerNumericRealQuestion(userId, questionId, new decimal[0], DateTime.Now, 1.11));
+        public void BecauseOf() =>
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AnswerNumericRealQuestion(userId, questionId, new decimal[0], DateTime.Now, 1.11));
 
-        It should_throw_InterviewException = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_InterviewException () =>
+            exception.Should().NotBeNull();
 
-        It should_throw_InterviewException_with_explanation = () =>
-            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId.FormatGuid()} on server, because it received by interviewer.");
+        [NUnit.Framework.Test] public void should_throw_InterviewException_with_explanation () =>
+            exception.Message.Should().Be($"Can't modify Interview {interview.EventSourceId.FormatGuid()} on server, because it received by interviewer.");
 
         private static Interview interview;
         private static Guid userId;

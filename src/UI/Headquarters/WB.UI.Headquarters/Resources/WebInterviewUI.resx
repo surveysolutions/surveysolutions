@@ -360,6 +360,14 @@
   <data name="CoverComments" xml:space="preserve">
     <value>Questions with comments:</value>
   </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Error: This interview is corrupted</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Attention! This interview has corrupted data, &lt;br /&gt;
+only previous version of interview is available. &lt;br /&gt;
+Contact support for assistance.</value>
+  </data>
   <data name="LoadingWait" xml:space="preserve">
     <value>Loading, please wait</value>
   </data>

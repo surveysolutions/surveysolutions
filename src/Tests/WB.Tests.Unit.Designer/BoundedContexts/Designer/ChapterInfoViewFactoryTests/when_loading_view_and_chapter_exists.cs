@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -32,16 +32,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ChapterInfoViewFactory
             view = factory.Load(questionnaireId, chapterId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_find_chapter () =>
-            view.ShouldNotBeNull();
+            view.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_chapter_id_be_equal_chapterId () =>
-            view.Chapter.ItemId.ShouldEqual(chapterId.FormatGuid());
+            view.Chapter.ItemId.Should().Be(chapterId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_view_have_all_variabe_names_ () =>
-            view.VariableNames.Length.ShouldEqual(keywordsAndVariables.Length);
+            view.VariableNames.Length.Should().Be(keywordsAndVariables.Length);
 
         [NUnit.Framework.Test] public void should_contain_all_variabe_names_ () =>
-            view.VariableNames.Select(x => x.Name).ShouldContain(keywordsAndVariables);
+            view.VariableNames.Select(x => x.Name).Should().Contain(keywordsAndVariables);
 
         private static NewChapterView view;
         private static ChapterInfoViewFactory factory;

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -48,11 +48,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         [NUnit.Framework.Test] public void should_contains_question_with_PublicKey_equal_to_roster_title_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)
-                .PublicKey.ShouldEqual(rosterTitleQuestionId);
+                .PublicKey.Should().Be(rosterTitleQuestionId);
 
         [NUnit.Framework.Test] public void should_contains_question_with_GroupKey_equal_to_new_group_id_for_roster_title_question () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(rosterTitleQuestionId)
-                .GetParent().PublicKey.ShouldEqual(targetGroupId);
+                .GetParent().PublicKey.Should().Be(targetGroupId);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId;

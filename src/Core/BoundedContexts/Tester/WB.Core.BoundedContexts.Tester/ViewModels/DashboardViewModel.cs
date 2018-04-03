@@ -60,8 +60,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override void Load()
+        public override async Task Initialize()
         {
+            await base.Initialize();
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
@@ -198,7 +199,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public IMvxCommand SearchCommand => new MvxCommand<string>(this.SearchByLocalQuestionnaires);
 
-        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
         private System.Windows.Input.ICommand loadQuestionnaireCommand;
 
@@ -235,11 +236,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IsSearchVisible = false;
         }
 
-        private void SignOut()
+        private Task SignOut()
         {
             this.CancelLoadServerQuestionnaires();
             
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         private void ShowPublicQuestionnaires()

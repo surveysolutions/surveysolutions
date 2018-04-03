@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState;
         }
 
-        public IMvxCommand NavigateCommand => new MvxCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.ItemId)));
+        public IMvxCommand NavigateCommand => new MvxAsyncCommand(async () => await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.ItemId)));
 
         public void Dispose()
         {

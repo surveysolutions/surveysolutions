@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -50,19 +49,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0074 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0074");
+            verificationMessages.Single().Code.Should().Be("WB0074");
 
         [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(1);
+            verificationMessages.Single().References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Question () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_questionId () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(filteredComboboxId);
+            verificationMessages.Single().References.First().Id.Should().Be(filteredComboboxId);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;

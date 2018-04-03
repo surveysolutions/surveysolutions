@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 using Humanizer;
@@ -14,6 +15,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -59,20 +61,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load(registry);
 
-            if (runInitAndMigrations)
-            {
-                try
-                {
-                    DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
-                }
-                catch (Exception exc)
-                {
-                    LogManager.GetLogger("maigration", typeof(PostgresReadSideModule))
-                        .Fatal(exc, "Error during db initialization.");
-                    throw new InitializationException(Subsystem.Database, null, exc);
-                }
-            }
-
             registry.BindToConstant<PostgreConnectionSettings>(() => new PostgreConnectionSettings
             {
                 ConnectionString = this.connectionString,
@@ -110,11 +98,27 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             registry.BindToMethod<ITransactionManagerProvider>(context => context.Get<TransactionManagerProvider>());
             registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
+        }
 
+        public override Task Init(IServiceLocator serviceLocator)
+        {
             if (runInitAndMigrations)
             {
+                try
+                {
+                    DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
+                }
+                catch (Exception exc)
+                {
+                    LogManager.GetLogger("maigration", typeof(PostgresReadSideModule))
+                        .Fatal(exc, "Error during db initialization.");
+                    throw new InitializationException(Subsystem.Database, null, exc);
+                }
+
                 DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
             }
+
+            return base.Init(serviceLocator);
         }
 
         private object GetEntityIdentifierColumnName(IModuleContext context)

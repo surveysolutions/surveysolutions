@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -12,7 +11,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Variables
 {
-    public class when_creating_interview_from_questionnaire_with_selected_default_translation: in_standalone_app_domain
+    public class when_creating_interview_from_questionnaire_with_selected_default_translation: InterviewTestsContext
     {
         private Interview interview;
         private const string language = "Mova";

@@ -1,5 +1,4 @@
-﻿using System;
-using WB.Core.BoundedContexts.Designer.Aggregates;
+﻿using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
 {

@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
 {
     public class when_filter_formatted_decimal_with_errors : NumericTextFormatterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var numericTextFormatterSettings = new NumericTextFormatterSettings
             {
                 IsDecimal = true,
@@ -21,13 +20,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
             };
 
             formatter = CreateNumericTextFormatter(numericTextFormatterSettings);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => filteredResults =
+        public void BecauseOf() => filteredResults =
             filterFormattedParams.Select(x => formatter.FilterFormatted(x.AddedText, x.SourceText, x.InsertToIndex));
 
-        It should_return_empty_string_for_each_validation = () =>
-            filteredResults.ShouldEachConformTo(filterResult => filterResult == "");
+        [NUnit.Framework.Test] public void should_return_empty_string_for_each_validation () =>
+            filteredResults.Should().OnlyContain(filterResult => filterResult == "");
         
         static NumericTextFormatter formatter;
 

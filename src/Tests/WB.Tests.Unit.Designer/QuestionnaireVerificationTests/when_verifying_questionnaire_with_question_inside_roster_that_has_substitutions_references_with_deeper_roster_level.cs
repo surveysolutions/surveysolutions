@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -65,19 +65,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0019");
 
         [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
-            verificationMessages.GetError("WB0019").References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0019").References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
-            verificationMessages.GetError("WB0019").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0019").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_underDeeperPropagationLevelQuestionId () =>
-            verificationMessages.GetError("WB0019").References.First().Id.ShouldEqual(questionWithSubstitutionsId);
+            verificationMessages.GetError("WB0019").References.First().Id.Should().Be(questionWithSubstitutionsId);
 
         [NUnit.Framework.Test] public void should_return_last_message_reference_with_type_Question () =>
-            verificationMessages.GetError("WB0019").References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0019").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_last_message_reference_with_id_of_underDeeperPropagationLevelQuestionVariableName () =>
-            verificationMessages.GetError("WB0019").References.Last().Id.ShouldEqual(underDeeperRosterLevelQuestionId);
+            verificationMessages.GetError("WB0019").References.Last().Id.Should().Be(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -38,16 +37,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0023");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
-            verificationMessages.GetError("WB0023").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.GetError("WB0023").MessageLevel.Should().Be(VerificationMessageLevel.General);
 
         [NUnit.Framework.Test] public void should_return_message_with_1_references () =>
-            verificationMessages.GetError("WB0023").References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0023").References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
-            verificationMessages.GetError("WB0023").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetError("WB0023").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_questionId () =>
-            verificationMessages.GetError("WB0023").References.First().Id.ShouldEqual(groupId);
+            verificationMessages.GetError("WB0023").References.First().Id.Should().Be(groupId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

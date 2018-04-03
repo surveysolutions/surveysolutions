@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandle
 
 
         [NUnit.Framework.Test] public void should_dont_contains_StaticText () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Should().BeNull();
 
         
         private static Questionnaire questionnaire;

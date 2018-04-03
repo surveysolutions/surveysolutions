@@ -1,12 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using AppDomainToolkit;
 
-using Machine.Specifications;
+using FluentAssertions;
 
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -20,12 +17,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_removing_answer_that_is_source_for_linked_question_in_other_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -86,17 +83,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_remove_answer_for_linked_question_in_roster = () =>
-            results.AnswerForLinkedQuestionWasCleared.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_answer_for_linked_question_in_roster () =>
+            results.AnswerForLinkedQuestionWasCleared.Should().BeTrue();
 
-        It should_remove_answer_for_linked_question_outside_roster = () =>
-           results.AnswerForLinkedQuestionOutsideRosterWasCleared.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_answer_for_linked_question_outside_roster () =>
+           results.AnswerForLinkedQuestionOutsideRosterWasCleared.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

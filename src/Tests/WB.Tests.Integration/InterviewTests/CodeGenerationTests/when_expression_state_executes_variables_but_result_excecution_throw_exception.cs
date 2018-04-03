@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection.V9;
@@ -11,12 +11,12 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_expression_state_executes_variables_but_result_excecution_throw_exception : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -45,14 +45,14 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 };
             });
 
-        It should_result_of_the_variable_be_equal_to_null = () =>
-             results.IntVariableResult.ShouldEqual(null);
+        [NUnit.Framework.Test] public void should_result_of_the_variable_be_equal_to_null () =>
+             results.IntVariableResult.Should().Be(null);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;

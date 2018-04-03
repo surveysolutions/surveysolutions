@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -34,10 +33,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0093");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
-            verificationMessages.GetError("WB0093").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.GetError("WB0093").MessageLevel.Should().Be(VerificationMessageLevel.General);
 
         [NUnit.Framework.Test] public void should_return_message_with_reference_on_question () =>
-            verificationMessages.GetError("WB0093").References.Single().Id.ShouldEqual(questionId);
+            verificationMessages.GetError("WB0093").References.Single().Id.Should().Be(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

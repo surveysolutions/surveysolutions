@@ -1,17 +1,20 @@
-﻿using Machine.Specifications;
-using Main.Core.Documents;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_parsing_empty_string_as_an_answer : QuestionDataParserTestContext
     {
-        Establish context = () => { questionDataParser = CreateQuestionDataParser(); };
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
+            questionDataParser = CreateQuestionDataParser();
+            BecauseOf();
+        }
 
-        Because of =
-            () => parsingResult = questionDataParser.TryParse(string.Empty,"va", null, out parcedValue, out parsedSingleColumnAnswer);
+        private void BecauseOf() => parsingResult = questionDataParser.TryParse(string.Empty,"va", null, out parcedValue, out parsedSingleColumnAnswer);
 
-        It should_result_be_ValueIsNullOrEmpty = () =>
-            parsingResult.ShouldEqual(ValueParsingResult.ValueIsNullOrEmpty);
+        [NUnit.Framework.Test] public void should_result_be_ValueIsNullOrEmpty () =>
+            parsingResult.Should().Be(ValueParsingResult.ValueIsNullOrEmpty);
     }
 }

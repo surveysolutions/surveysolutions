@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         [NUnit.Framework.Test] public void should_return_UpdateSingleOptionQuestionCommand () =>
-            result.ShouldBeOfExactType<UpdateSingleOptionQuestion>();
+            result.Should().BeOfType<UpdateSingleOptionQuestion>();
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

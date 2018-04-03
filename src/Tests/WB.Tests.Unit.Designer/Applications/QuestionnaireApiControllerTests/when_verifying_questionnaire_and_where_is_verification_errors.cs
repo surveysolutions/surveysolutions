@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -17,8 +17,8 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
     internal class when_verifying_questionnaire_and_where_is_verification_errors : QuestionnaireApiControllerTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaireDocument = CreateQuestionnaireDocument();
-            questionnaireView = CreateQuestionnaireView(questionnaireDocument);
+            questionnaireDocument = CreateQuestionnaireDocument().AsReadOnly();
+            questionnaireView = CreateQuestionnaireView(questionnaireDocument.Questionnaire);
 
             verificationMessages = new QuestionnaireVerificationMessage[]
             {
@@ -74,11 +74,11 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             errorsMapperMock = new Mock<IVerificationErrorsMapper>();
 
             errorsMapperMock
-                .Setup(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument))
+                .Setup(x => x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()))
                 .Returns(mappedAndEnrichedVerificationErrors);
 
             errorsMapperMock
-               .Setup(x => x.EnrichVerificationErrors(verificationWarnings, questionnaireDocument))
+               .Setup(x => x.EnrichVerificationErrors(verificationWarnings, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()))
                .Returns(mappedAndEnrichedVerificationWarnings);
 
             controller = CreateQuestionnaireController(
@@ -95,15 +95,15 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             verifierMock.Verify(x => x.Verify(questionnaireView), Times.Once);
 
         [NUnit.Framework.Test] public void should_call_errors_mapper_once () =>
-            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, questionnaireDocument), Times.Once);
+            errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()), Times.Once);
 
         [NUnit.Framework.Test] public void should_return_messages_created_by_mapper_as_action_result () =>
-            result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);
+            result.Errors.Should().BeEquivalentTo(mappedAndEnrichedVerificationErrors);
 
         [NUnit.Framework.Test] public void should_return_warnings_created_by_mapper_as_action_result () =>
-            result.Warnings.ShouldEqual(mappedAndEnrichedVerificationWarnings);
+            result.Warnings.Should().BeEquivalentTo(mappedAndEnrichedVerificationWarnings);
 
-        private static QuestionnaireDocument questionnaireDocument; 
+        private static ReadOnlyQuestionnaireDocument questionnaireDocument; 
         private static QuestionnaireView questionnaireView; 
         private static Mock<IQuestionnaireVerifier> verifierMock ;
         private static Mock<IVerificationErrorsMapper> errorsMapperMock;

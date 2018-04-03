@@ -1,13 +1,10 @@
 using System;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -29,13 +26,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetStaticTextEditView(questionnaireId, entityId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_question_with_Id_equals_questionId () =>
-            result.Id.ShouldEqual(entityId);
+            result.Id.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_return_question_equals_g3 () =>
-            result.Text.ShouldEqual(GetStaticText(entityId).Text);
+            result.Text.Should().Be(GetStaticText(entityId).Text);
 
         private static IStaticText GetStaticText(Guid entityId)
         {

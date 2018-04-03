@@ -76,28 +76,21 @@
 			margin-bottom: 0;
 		}
 	}
-	.form-date{
-		margin-bottom: 15px;
-		max-width: 275px;
-		.input-group.date{
-			width: 100%;
-			label{
-				display: table-cell;
-				vertical-align: middle;
-				@include font(14px, 16px);
-				width: 50px;
-				font-weight: normal;
-			}
-			.form-control{
-				border-right: none;
-				border-color: $gray_form;
-				border-bottom-left-radius: 4px;
-				border-top-left-radius: 4px;
-			}
-		}
-	}
+
 }
 .form-date{
+	margin-bottom: 15px;
+	max-width: 275px;
+	.input-group.date{
+		width: 100%;
+		label{
+			display: table-cell;
+			vertical-align: middle;
+			@include font(14px, 16px);
+			width: 50px;
+			font-weight: normal;
+		}
+	}
 	&.input-group{
 		max-width: none;
 	}

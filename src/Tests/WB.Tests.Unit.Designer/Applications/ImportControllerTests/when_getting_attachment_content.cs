@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Net.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -24,8 +24,8 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         [NUnit.Framework.Test] public void should_return_specified_http_response ()
         {
             response.Content.ReadAsByteArrayAsync().Result.SequenceEqual(expectedAttachmentContent.Content);
-            response.Content.Headers.ContentType.MediaType.ShouldEqual(expectedAttachmentContent.ContentType);
-            response.Headers.ETag.Tag.ShouldEqual($"\"{expectedAttachmentContent.ContentId}\"");
+            response.Content.Headers.ContentType.MediaType.Should().Be(expectedAttachmentContent.ContentType);
+            response.Headers.ETag.Tag.Should().Be($"\"{expectedAttachmentContent.ContentId}\"");
         }
 
         private static ImportV2Controller importController;

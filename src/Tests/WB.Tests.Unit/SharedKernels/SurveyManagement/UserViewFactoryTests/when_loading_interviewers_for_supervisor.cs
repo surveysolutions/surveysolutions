@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
     internal class when_loading_interviewers_for_supervisor : UserViewFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             supervisor1 = Create.Entity.HqUser(supervisor1Id, userName: "supervisor1", role: UserRoles.Supervisor);
             var interviewer11 = Create.Entity.HqUser(interviewer11Id, supervisor1Id, userName: "interviewer11");
             var interviewer12 = Create.Entity.HqUser(interviewer12Id, supervisor1Id, userName: "interviewer12");
@@ -25,21 +24,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
                 interviewer21);
 
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = interviewersViewFactory.GetInterviewers(0, 20, null, null, false, null, supervisor1Id);
+        public void BecauseOf() => result = interviewersViewFactory.GetInterviewers(0, 20, null, null, false, null, supervisor1Id);
 
-        It should_return_2_interviewers = () =>
+        [NUnit.Framework.Test] public void should_return_2_interviewers () 
         {
-            result.TotalCount.ShouldEqual(2);
-            result.Items.Count().ShouldEqual(2);
-        };
+            result.TotalCount.Should().Be(2);
+            result.Items.Count().Should().Be(2);
+        }
 
-        It should_return_only_own_interviewers = () =>
+        [NUnit.Framework.Test] public void should_return_only_own_interviewers () 
         {
-            result.Items.Skip(0).First().UserName.ShouldEqual("interviewer11");
-            result.Items.Skip(1).First().UserName.ShouldEqual("interviewer12");
-        };
+            result.Items.Skip(0).First().UserName.Should().Be("interviewer11");
+            result.Items.Skip(1).First().UserName.Should().Be("interviewer12");
+        }
 
         private static HqUser supervisor1;
         private static HqUser supervisor2;

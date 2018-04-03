@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 {
     internal class when_interview_status_changed : StatusChangeHistoryDenormalizerFunctionalTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             history = new InterviewSummary() { SummaryId = interviewId.FormatGuid() };
 
             var interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
@@ -38,15 +37,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
       
 
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() =>
                 denormalizer.Handle(statusEventsToPublish, interviewId);
 
-        It should_store_all_Status_changes_and_preserve_the_order =
-            () => history.InterviewCommentedStatuses.Select(i => i.Status).ToArray()
-                .ShouldEqual(new[]
+        [NUnit.Framework.Test] public void should_store_all_Status_changes_and_preserve_the_order () => history.InterviewCommentedStatuses.Select(i => i.Status).ToArray()
+                .Should().BeEquivalentTo(new[]
                 {
                     InterviewExportedAction.InterviewerAssigned, 
                     InterviewExportedAction.Completed,
@@ -61,8 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                     InterviewExportedAction.Restored,
                 });
 
-        It should_store_comments_and_preserve_the_order_for_statuses_Completed_Rejected_Approved_RejectedByHQ_Restarted =
-           () => history.InterviewCommentedStatuses.Where(s => 
+        [NUnit.Framework.Test] public void should_store_comments_and_preserve_the_order_for_statuses_Completed_Rejected_Approved_RejectedByHQ_Restarted () => history.InterviewCommentedStatuses.Where(s => 
                new[]
                {
                    InterviewExportedAction.Completed, 
@@ -74,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
                    InterviewExportedAction.UnapprovedByHeadquarter
 
                }.Contains(s.Status)).Select(i => i.Comment).ToArray()
-               .ShouldEqual(new[]
+               .Should().BeEquivalentTo(new[]
                 {
                     "comment Completed", 
                     "comment Rejected",

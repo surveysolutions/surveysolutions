@@ -1,16 +1,14 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewFactoryTests
@@ -44,8 +42,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         [NUnit.Framework.Test] public void should_be_only_1_specified_shared_person ()
         {
-            view.SharedPersons.Count.ShouldEqual(1);
-            view.SharedPersons[0].Email.ShouldEqual(userEmail);
+            view.SharedPersons.Count.Should().Be(1);
+            view.SharedPersons[0].Email.Should().Be(userEmail);
         }
 
         private static QuestionnaireInfoView view;

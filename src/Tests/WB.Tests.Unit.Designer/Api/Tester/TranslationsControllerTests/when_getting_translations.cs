@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
@@ -40,7 +39,7 @@ namespace WB.Tests.Unit.Designer.Api.Tester.TranslationsControllerTests
 
         [Test]
         public void should_return_only_1_translation_by_specified_questionnaire() =>
-            expectedTranslations.Length.ShouldEqual(1);
+            expectedTranslations.Should().HaveCount(1);
 
         private static TranslationController controller;
 

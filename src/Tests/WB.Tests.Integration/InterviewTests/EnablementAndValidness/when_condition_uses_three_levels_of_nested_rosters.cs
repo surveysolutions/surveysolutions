@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -12,12 +12,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     internal class when_condition_uses_three_levels_of_nested_rosters : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -77,14 +77,14 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_enable_final_question = () =>
-            result.FinalQuestionWasEnabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_enable_final_question () =>
+            result.FinalQuestionWasEnabled.Should().BeTrue();
 
         static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static InvokeResult result;

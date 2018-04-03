@@ -1,24 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_options_for_combobox
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var answers = new List<Answer>() {new Answer() { AnswerCode = 1, AnswerText = "1" } , new Answer() {AnswerCode = 2, AnswerText = "2"} }; 
 
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -36,12 +34,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
             Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
             Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
-        };  
+            BecauseOf();
+        }  
 
-        Because of = () => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
+        public void BecauseOf() => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
 
-        It should_find_2_options = () =>
-            categoricalOptions.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_find_2_options () =>
+            categoricalOptions.Count().Should().Be(2);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static Guid questionId;

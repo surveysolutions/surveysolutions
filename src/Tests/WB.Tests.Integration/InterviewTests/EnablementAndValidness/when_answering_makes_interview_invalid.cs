@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using AppDomainToolkit;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -9,8 +8,16 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_makes_interview_invalid : in_standalone_app_domain
+    internal class when_answering_makes_interview_invalid : InterviewTestsContext
     {
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
         private InvokeResults results;
 
         [OneTimeSetUp]

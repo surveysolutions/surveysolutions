@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.Infrastructure.FileSystem;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests.FolderPermissionCheckerTests
 {
-    [Subject(typeof(FolderPermissionChecker))]
+    [NUnit.Framework.TestOf(typeof(FolderPermissionChecker))]
     internal class when_check_folders_permissions
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(Moq.It.IsAny<string>()))
                 .Returns(new[] {"1", "2", "3"});
@@ -30,19 +25,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests.FolderPe
               .Returns(true);
 
             folderPermissionChecker = new FolderPermissionChecker(rootFolder, fileSystemAccessor.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = folderPermissionChecker.Check();
 
-        It should_return_3_allowed_folders = () =>
-            result.AllowedFolders.ShouldEqual(allowedFolders);
+        [NUnit.Framework.Test] public void should_return_3_allowed_folders () =>
+            result.AllowedFolders.Should().BeEquivalentTo(allowedFolders);
 
-        It should_return_1_denied_folder = () =>
-          result.DeniedFolders.ShouldEqual(deniedFolders);
+        [NUnit.Framework.Test] public void should_return_1_denied_folder () =>
+          result.DeniedFolders.Should().BeEquivalentTo(deniedFolders);
 
-        It should_return_Down_status = () =>
-         result.Status.ShouldEqual(HealthCheckStatus.Down);
+        [NUnit.Framework.Test] public void should_return_Down_status () =>
+         result.Status.Should().Be(HealthCheckStatus.Down);
 
         private static FolderPermissionChecker folderPermissionChecker;
         private static FolderPermissionCheckResult result;

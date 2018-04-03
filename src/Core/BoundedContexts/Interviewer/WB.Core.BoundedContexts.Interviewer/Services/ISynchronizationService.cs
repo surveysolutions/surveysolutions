@@ -51,5 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
         Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken);
         Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
+
+        Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
     }
 }

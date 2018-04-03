@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_options_for_regular_single_option
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var answers = new List<Answer>() {new Answer() { AnswerCode = 1, AnswerText = "1" } , new Answer() {AnswerCode = 2, AnswerText = "2"} }; 
 
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -25,12 +24,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                 });
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
-        };  
+            BecauseOf();
+        }  
 
-        Because of = () => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
+        public void BecauseOf() => categoricalOptions = plainQuestionnaire.GetOptionsForQuestion(questionId, null, String.Empty);
 
-        private It should_find_roster_title_substitutions = () =>
-            categoricalOptions.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_find_roster_title_substitutions () =>
+            categoricalOptions.Count().Should().Be(2);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static Guid questionId;

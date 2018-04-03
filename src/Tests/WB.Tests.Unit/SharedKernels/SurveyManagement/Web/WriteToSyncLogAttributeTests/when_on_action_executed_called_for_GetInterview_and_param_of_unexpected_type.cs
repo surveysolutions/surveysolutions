@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http.Filters;
 using Moq;
 using NUnit.Framework;
@@ -11,29 +13,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.WriteToSyncLogAttribu
     [TestFixture]
     internal class when_on_action_executed_called_for_GetInterview_and_param_of_unexpected_type : WriteToSyncLogAttributeTestsContext
     {
-        [OneTimeSetUp]
-        public void context()
+        [Test]
+        public async Task should_store_log_item()
         {
-            synchronizationLogItemPlainStorageAccessorMock = new Mock<IPlainStorageAccessor<SynchronizationLogItem>>();
+            Mock<IPlainStorageAccessor<SynchronizationLogItem>> synchronizationLogItemPlainStorageAccessorMock =
+                new Mock<IPlainStorageAccessor<SynchronizationLogItem>>();
 
             SetupContext(synchronizationLogItemPlainStorageAccessorMock.Object);
-            attribute = Create(SynchronizationLogType.GetInterview);
+            WriteToSyncLogAttribute attribute = Create(SynchronizationLogType.GetInterview);
 
-            actionContext = CreateActionContext();
+            HttpActionExecutedContext actionContext = CreateActionContext();
             actionContext.ActionContext.ActionArguments.Add("id", "test");
-            Becauseof();
-        }
+            await attribute.OnActionExecutedAsync(actionContext, new CancellationToken());
 
-        public void Becauseof() => attribute.OnActionExecuted(actionContext);
-
-        [Test]
-        public void hould_store_log_item() =>
             synchronizationLogItemPlainStorageAccessorMock.Verify(
-                x => x.Store(Moq.It.IsAny<SynchronizationLogItem>(), Moq.It.IsAny<Guid>()),Times.Once);
+                x => x.Store(Moq.It.IsAny<SynchronizationLogItem>(), Moq.It.IsAny<Guid>()), Times.Once);
 
-        private static Mock<IPlainStorageAccessor<SynchronizationLogItem>> synchronizationLogItemPlainStorageAccessorMock; 
-
-        private static WriteToSyncLogAttribute attribute;
-        private static HttpActionExecutedContext actionContext;
+        }
     }
 }

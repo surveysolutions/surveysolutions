@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -38,28 +38,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetRosterEditView(questionnaireId, g3Id);
 
         [NUnit.Framework.Test] public void should_return_empty_grouped_list_of_multi_questions () =>
-            result.NotLinkedMultiOptionQuestions.Count.ShouldEqual(0);
+            result.NotLinkedMultiOptionQuestions.Count.Should().Be(0);
 
         [NUnit.Framework.Test] public void should_return_empty_grouped_list_of_integer_questions () =>
-            result.NumericIntegerQuestions.Count.ShouldEqual(0);
+            result.NumericIntegerQuestions.Count.Should().Be(0);
 
         [NUnit.Framework.Test] public void should_return_empty_grouped_list_of_title_questions () =>
-            result.NumericIntegerTitles.Count.ShouldEqual(0);
+            result.NumericIntegerTitles.Count.Should().Be(0);
        
         [NUnit.Framework.Test] public void should_return_grouped_list_of_integer_questions_with_one_pair () =>
-            result.TextListsQuestions.Count.ShouldEqual(4);
+            result.TextListsQuestions.Count.Should().Be(4);
 
         [NUnit.Framework.Test] public void should_return_list_questions_at_3_with_id_equals_q1Id () =>
-            result.TextListsQuestions.ElementAt(3).Id.ShouldEqual(q1Id.FormatGuid());
+            result.TextListsQuestions.ElementAt(3).Id.Should().Be(q1Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_list_questions_at_3_with_q1_title () =>
-            result.TextListsQuestions.ElementAt(3).Title.ShouldEqual(GetQuestion(q1Id).QuestionText);
+            result.TextListsQuestions.ElementAt(3).Title.Should().Be(GetQuestion(q1Id).QuestionText);
 
         [NUnit.Framework.Test] public void should_return_list_questions_at_1_with_id_equals_q2Id () =>
-            result.TextListsQuestions.ElementAt(1).Id.ShouldEqual(q2Id.FormatGuid());
+            result.TextListsQuestions.ElementAt(1).Id.Should().Be(q2Id.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_list_questions_at_1_with_q2_title () =>
-            result.TextListsQuestions.ElementAt(1).Title.ShouldEqual(GetQuestion(q2Id).QuestionText);
+            result.TextListsQuestions.ElementAt(1).Title.Should().Be(GetQuestion(q2Id).QuestionText);
 
         private static IGroup GetGroup(Guid groupId)
         {

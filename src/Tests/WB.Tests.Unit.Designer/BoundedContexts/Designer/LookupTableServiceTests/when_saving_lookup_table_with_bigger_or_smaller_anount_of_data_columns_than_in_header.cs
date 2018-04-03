@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
@@ -28,19 +28,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent);
 
         [NUnit.Framework.Test] public void should_save_not_null_content () =>
-            lookupTableContent.ShouldNotBeNull();
+            lookupTableContent.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_save_first_row_with_2_values_as_in_header () =>
-            lookupTableContent.Rows.ElementAt(0).Variables.Length.ShouldEqual(3 - 1);
+            lookupTableContent.Rows.ElementAt(0).Variables.Length.Should().Be(3 - 1);
 
         [NUnit.Framework.Test] public void should_save_first_row_with_last_value_5 () =>
-            lookupTableContent.Rows.ElementAt(0).Variables.Last().ShouldEqual(5);
+            lookupTableContent.Rows.ElementAt(0).Variables.Last().Should().Be(5);
 
         [NUnit.Framework.Test] public void should_save_second_row_with_2_values_as_in_header () =>
-            lookupTableContent.Rows.ElementAt(1).Variables.Length.ShouldEqual(3 - 1);
+            lookupTableContent.Rows.ElementAt(1).Variables.Length.Should().Be(3 - 1);
 
         [NUnit.Framework.Test] public void should_save_second_row_with_last_value__null () =>
-            lookupTableContent.Rows.ElementAt(1).Variables.Last().ShouldBeNull();
+            lookupTableContent.Rows.ElementAt(1).Variables.Last().Should().BeNull();
 
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid lookupTableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

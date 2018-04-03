@@ -3,6 +3,7 @@ const path = require('path')
 const baseAppPath = "../"
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const _ = require("lodash")
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = function(packageName, devMode) {
     return {
@@ -31,7 +32,7 @@ module.exports = function(packageName, devMode) {
             new webpack.optimize.ModuleConcatenationPlugin(),
 
             // https://webpack.js.org/guides/production/
-            devMode ? null : new webpack.optimize.UglifyJsPlugin({
+            devMode ? null : new UglifyJsPlugin({
                 sourceMap: true
             }),
 

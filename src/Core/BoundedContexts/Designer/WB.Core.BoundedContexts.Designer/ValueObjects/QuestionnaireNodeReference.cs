@@ -9,13 +9,13 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 namespace WB.Core.BoundedContexts.Designer.ValueObjects
 {
     [DebuggerDisplay("{Type} {Id}")]
-    public class QuestionnaireNodeReference
+    public class QuestionnaireEntityReference
     {
-        public QuestionnaireNodeReference(QuestionnaireVerificationReferenceType type, Guid id)
+        public QuestionnaireEntityReference(QuestionnaireVerificationReferenceType type, Guid id)
         {
-            this.Type = type;
-            this.Id = id;
-            this.ItemId = id.FormatGuid();
+            Type = type;
+            Id = id;
+            ItemId = id.FormatGuid();
         }
 
         public QuestionnaireVerificationReferenceType Type { get; private set; }
@@ -25,70 +25,70 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         public Guid? ChapterId { get; set; }
         public QuestionnaireVerificationReferenceProperty Property { get; set; }
 
-        protected bool Equals(QuestionnaireNodeReference other)
-            => this.Id.Equals(other.Id)
-            && this.Type == other.Type
-            && this.IndexOfEntityInProperty == other.IndexOfEntityInProperty;
+        protected bool Equals(QuestionnaireEntityReference other)
+            => Id.Equals(other.Id)
+            && Type == other.Type
+            && IndexOfEntityInProperty == other.IndexOfEntityInProperty;
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((QuestionnaireNodeReference)obj);
+            if (obj.GetType() != GetType()) return false;
+            return Equals((QuestionnaireEntityReference)obj);
         }
 
         public override int GetHashCode()
         {
             unchecked
             {
-                return (this.Id.GetHashCode() * 397) ^ (int)this.Type;
+                return (Id.GetHashCode() * 397) ^ (int)Type;
             }
         }
 
-        public static QuestionnaireNodeReference CreateForGroup(Guid groupId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Group, groupId);
+        public static QuestionnaireEntityReference CreateForGroup(Guid groupId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Group, groupId);
 
-        public static QuestionnaireNodeReference CreateForVariable(Guid variableId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Variable, variableId);
+        public static QuestionnaireEntityReference CreateForVariable(Guid variableId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Variable, variableId);
 
-        public static QuestionnaireNodeReference CreateForRoster(Guid rosterId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Roster, rosterId);
+        public static QuestionnaireEntityReference CreateForRoster(Guid rosterId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Roster, rosterId);
 
-        public static QuestionnaireNodeReference CreateForQuestion(Guid questionId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question, questionId);
+        public static QuestionnaireEntityReference CreateForQuestion(Guid questionId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Question, questionId);
 
-        public static QuestionnaireNodeReference CreateForMacro(Guid macroId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Macro, macroId);
+        public static QuestionnaireEntityReference CreateForMacro(Guid macroId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Macro, macroId);
 
-        public static QuestionnaireNodeReference CreateForLookupTable(Guid lookupTableId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.LookupTable, lookupTableId);
+        public static QuestionnaireEntityReference CreateForLookupTable(Guid lookupTableId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.LookupTable, lookupTableId);
 
-        public static QuestionnaireNodeReference CreateForAttachment(Guid attachmentId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Attachment, attachmentId);
+        public static QuestionnaireEntityReference CreateForAttachment(Guid attachmentId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Attachment, attachmentId);
 
-        public static QuestionnaireNodeReference CreateForStaticText(Guid staticTextId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.StaticText, staticTextId);
+        public static QuestionnaireEntityReference CreateForStaticText(Guid staticTextId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.StaticText, staticTextId);
 
-        public static QuestionnaireNodeReference CreateForTranslation(Guid translationId)
-            => new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Translation, translationId);
+        public static QuestionnaireEntityReference CreateForTranslation(Guid translationId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Translation, translationId);
 
-        public static QuestionnaireNodeReference CreateFrom(IQuestionnaireEntity entity,
+        public static QuestionnaireEntityReference CreateFrom(IQuestionnaireEntity entity,
             QuestionnaireVerificationReferenceProperty property = QuestionnaireVerificationReferenceProperty.None,
             int? indexOfEntityInProperty = null)
         {
-            QuestionnaireNodeReference result;
+            QuestionnaireEntityReference result;
 
             if (entity is IVariable)
-                result = QuestionnaireNodeReference.CreateForVariable(entity.PublicKey);
+                result = CreateForVariable(entity.PublicKey);
             else if (entity is IGroup)
                 result = ((IGroup) entity).IsRoster
-                    ? QuestionnaireNodeReference.CreateForRoster(entity.PublicKey)
-                    : QuestionnaireNodeReference.CreateForGroup(entity.PublicKey);
+                    ? CreateForRoster(entity.PublicKey)
+                    : CreateForGroup(entity.PublicKey);
             else if (entity is IQuestion)
-                result = QuestionnaireNodeReference.CreateForQuestion(entity.PublicKey);
+                result = CreateForQuestion(entity.PublicKey);
             else
-                result = QuestionnaireNodeReference.CreateForStaticText(entity.PublicKey);
+                result = CreateForStaticText(entity.PublicKey);
 
 
             var section = entity;

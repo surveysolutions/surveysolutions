@@ -1,5 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -9,7 +8,6 @@ using WB.UI.Designer.Api.Headquarters;
 
 namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
 {
-    [Subject(typeof(ImportV2Controller))]
     internal class ImportControllerTestContext
     {
         protected static ImportV2Controller CreateImportController(

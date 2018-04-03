@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_cascading_question_parent_value : PlainQuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
             {
                 Create.Entity.SingleQuestion(id: questionId, 
@@ -21,13 +20,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             });
             
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 0);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = plainQuestionnaire.GetCascadingParentValue(questionId, 1m);
 
-        It result_should_be_equal_1 = () =>
-            result.ShouldEqual(1m);
+        [NUnit.Framework.Test] public void result_should_be_equal_1 () =>
+            result.Should().Be(1m);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static decimal result;

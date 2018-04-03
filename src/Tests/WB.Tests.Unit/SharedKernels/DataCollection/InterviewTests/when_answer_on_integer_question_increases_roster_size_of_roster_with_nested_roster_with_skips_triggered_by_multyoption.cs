@@ -1,27 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_on_integer_question_increases_roster_size_of_roster_with_nested_roster_with_skips_triggered_by_multyoption : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -46,32 +36,33 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new MultipleOptionsQuestionAnswered(userId, multyOptionQuestionWhichIncreasesNestedRosterSizeId, Empty.RosterVector, DateTime.Now, new decimal[] { 5 }));
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, Empty.RosterVector, DateTime.Now, 1);
 
-        It should_raise_RosterInstancesAdded_event_for_first_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_for_first_row () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 0));
 
-        It should_raise_RosterInstancesAdded_event_for_first_nested_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_for_first_nested_row () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 5 && instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
-        It should_raise_RosterRowsTitleChanged_event_for_first_nested_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterRowsTitleChanged_event_for_first_nested_row () =>
             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
                 => @event.ChangedInstances.Count(row =>
                     row.Title == "t1" && row.RosterInstance.GroupId == nestedRosterGroupId && row.RosterInstance.RosterInstanceId == 5 &&
                         row.RosterInstance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })) == 1);
 
-        It should_not_raise_RosterInstancesRemoved_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesRemoved_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId));
 

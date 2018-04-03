@@ -3,38 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Hosting;
 using System.Web.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Ninject;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
 using Ninject;
-using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
+using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
@@ -173,6 +164,39 @@ namespace WB.UI.Headquarters
             var sampleImportSettings = new SampleImportSettings(
                 settingsProvider.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
 
+            ExternalStoragesSettings externalStoragesSettings = new FakeExternalStoragesSettings();
+
+            var externalStoragesSection = settingsProvider.TryGetSection<ExternalStoragesConfigSection>("externalStorages");
+            if (externalStoragesSection != null)
+            {
+                externalStoragesSettings = new ExternalStoragesSettings
+                {
+                    OAuth2 = new ExternalStoragesSettings.OAuth2Settings
+                    {
+                        RedirectUri = externalStoragesSection.OAuth2.RedirectUri,
+                        ResponseType = externalStoragesSection.OAuth2.ResponseType,
+                        OneDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.OneDrive.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.OneDrive.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.OneDrive.Scope
+                        },
+                        Dropbox = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.Dropbox.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.Dropbox.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.Dropbox.Scope
+                        },
+                        GoogleDrive = new ExternalStoragesSettings.ExternalStorageOAuth2Settings
+                        {
+                            ClientId = externalStoragesSection.OAuth2.GoogleDrive.ClientId,
+                            AuthorizationUri = externalStoragesSection.OAuth2.GoogleDrive.AuthorizationUri,
+                            Scope = externalStoragesSection.OAuth2.GoogleDrive.Scope
+                        },
+                    }
+                };
+            }
+
             //for assembly relocation during migration
             var legacyAssemblySettings = new LegacyAssemblySettings()
             {
@@ -197,7 +221,9 @@ namespace WB.UI.Headquarters
                     sampleImportSettings,
                     synchronizationSettings,
                     trackingSettings,
-                    interviewCountLimit),
+                    interviewCountLimit,
+                    externalStoragesSettings: externalStoragesSettings),
+                new FileStorageModule(basePath),
                 new QuartzModule(),
                 new WebInterviewModule(),
                 new HqWebInterviewModule(),
@@ -205,8 +231,11 @@ namespace WB.UI.Headquarters
             kernel.Load(mainModule);
 
             // init
-            kernel.Init();
-            
+            kernel.Init().Wait();
+
+            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel.Kernel);
+            ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel.Kernel);
+
             return kernel.Kernel;
         }
 

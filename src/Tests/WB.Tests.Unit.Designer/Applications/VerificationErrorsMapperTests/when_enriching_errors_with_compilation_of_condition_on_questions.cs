@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -15,13 +16,13 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
             verificationMessages = new[]
             {
                 Create.VerificationError("aaa", "aaaa", new[] {"compile error 1", "compile error 2"},
-                    new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                    new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Question,
                         Guid.Parse(questionId1))),
                 Create.VerificationError("aaa", "aaaa", new[] {"compile error 3"},
-                    new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                    new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Question,
                         Guid.Parse(questionId2))),
                 Create.VerificationError("aaa", "bbbb", new[] {"compile error 3"},
-                    new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                    new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Question,
                         Guid.Parse(questionId2))),
 
             };
@@ -30,55 +31,55 @@ namespace WB.Tests.Unit.Designer.Applications.VerificationErrorsMapperTests
         }
 
         private void BecauseOf() =>
-            result = mapper.EnrichVerificationErrors(verificationMessages, document);
+            result = mapper.EnrichVerificationErrors(verificationMessages, document.AsReadOnly());
 
         [NUnit.Framework.Test] public void should_return_2_errors () => 
-            result.Length.ShouldEqual(2);
+            result.Length.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_same_Code_as_input_error_has ()
         {
-            result.ElementAt(0).Code.ShouldEqual(verificationMessages.ElementAt(0).Code);
-            result.ElementAt(0).Code.ShouldEqual(verificationMessages.ElementAt(1).Code);
+            result.ElementAt(0).Code.Should().Be(verificationMessages.ElementAt(0).Code);
+            result.ElementAt(0).Code.Should().Be(verificationMessages.ElementAt(1).Code);
         }
 
         [NUnit.Framework.Test] public void should_return_first_error_with_same_Message_as_input_error_has ()
         {
-            result.ElementAt(0).Message.ShouldEqual(verificationMessages.ElementAt(0).Message);
-            result.ElementAt(0).Message.ShouldEqual(verificationMessages.ElementAt(1).Message);
+            result.ElementAt(0).Message.Should().Be(verificationMessages.ElementAt(0).Message);
+            result.ElementAt(0).Message.Should().Be(verificationMessages.ElementAt(1).Message);
         }
 
         [NUnit.Framework.Test] public void should_return_first_error_with_same_References_count_as_input_error_has () =>
-            result.ElementAt(0).Errors.SelectMany(e => e.References).Count().ShouldEqual(2);
+            result.ElementAt(0).Errors.SelectMany(e => e.References).Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_first_error_that_references_question_with_questionId ()
         {
-            result.ElementAt(0).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId1);
-            result.ElementAt(0).Errors.Second().References.ElementAt(0).ItemId.ShouldEqual(questionId2);
+            result.ElementAt(0).Errors.First().References.ElementAt(0).ItemId.Should().Be(questionId1);
+            result.ElementAt(0).Errors.Second().References.ElementAt(0).ItemId.Should().Be(questionId2);
         }
 
         [NUnit.Framework.Test] public void should_return_first_error_with_IsGroupOfErrors_field_set_in_true () =>
-            result.ElementAt(0).IsGroupedMessage.ShouldBeTrue();
+            result.ElementAt(0).IsGroupedMessage.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_return_2_errors_in_first_error_group () =>
-            result.ElementAt(0).Errors.Count.ShouldEqual(2);
+            result.ElementAt(0).Errors.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_same_Code_as_input_error_has () =>
-            result.ElementAt(1).Code.ShouldEqual(verificationMessages.ElementAt(2).Code);
+            result.ElementAt(1).Code.Should().Be(verificationMessages.ElementAt(2).Code);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_same_Message_as_input_error_has () =>
-            result.ElementAt(1).Message.ShouldEqual(verificationMessages.ElementAt(2).Message);
+            result.ElementAt(1).Message.Should().Be(verificationMessages.ElementAt(2).Message);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_same_References_count_as_input_error_has () =>
-            result.ElementAt(1).Errors.First().References.Count.ShouldEqual(verificationMessages.ElementAt(2).References.Count());
+            result.ElementAt(1).Errors.First().References.Count.Should().Be(verificationMessages.ElementAt(2).References.Count());
 
         [NUnit.Framework.Test] public void should_return_last_error_that_references_question_with_questionId () =>
-            result.ElementAt(1).Errors.First().References.ElementAt(0).ItemId.ShouldEqual(questionId2);
+            result.ElementAt(1).Errors.First().References.ElementAt(0).ItemId.Should().Be(questionId2);
 
         [NUnit.Framework.Test] public void should_return_last_error_with_IsGroupOfErrors_field_set_in_true () =>
-            result.ElementAt(1).IsGroupedMessage.ShouldBeTrue();
+            result.ElementAt(1).IsGroupedMessage.Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_return_1_error_in_second_error_group () =>
-            result.ElementAt(1).Errors.Count.ShouldEqual(1);
+            result.ElementAt(1).Errors.Count.Should().Be(1);
 
 
         private static IVerificationErrorsMapper mapper;

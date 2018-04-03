@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -10,25 +11,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteStaticTextHandle
 {
     internal class when_deleting_static_text_and_user_dont_have_permissions : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.DeleteStaticText(entityId: entityId, responsibleId: notExistinigUserId));
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "don't", "have", "permissions" });
+        }
 
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__dont__have__permissions__ () =>
-             new[] { "don't", "have", "permissions" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
-
-        
         private static Questionnaire questionnaire;
         private static Exception exception;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

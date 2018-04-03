@@ -1,20 +1,18 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_on_integer_question_decreases_roster_size_of_roster_with_nested_roster_triggered_by_the_same_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -47,28 +45,30 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(new TextQuestionAnswered(userId, questionFromRosterId, Create.Entity.RosterVector(0), DateTime.Now, "t1"));
             interview.Apply(new TextQuestionAnswered(userId, questionFromNestedRosterId, Create.Entity.RosterVector(0, 0), DateTime.Now, "t2"));
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, Create.Entity.RosterVector(), DateTime.Now, 0);
 
-        It should_raise_RosterInstancesRemoved_event_for_parent_roster_row_and_for_nested_roster_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_for_parent_roster_row_and_for_nested_roster_row () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances.Count(instance => instance.GroupId == parentRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Length == 0)==1
                 && @event.Instances.Count(instance => instance.GroupId == nestedRosterGroupId && instance.RosterInstanceId == 0 && instance.OuterRosterVector.Identical(Create.Entity.RosterVector(0)))==1);
 
-        It should_raise_AnswersRemoved_event_for_parent_roster_row_and_for_nested_roster_row = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswersRemoved_event_for_parent_roster_row_and_for_nested_roster_row () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event
                 => @event.Questions.Count(instance => instance.Id == questionFromRosterId && instance.RosterVector.Identical(Create.Entity.RosterVector(0))) == 1
                 && @event.Questions.Count(instance => instance.Id == questionFromNestedRosterId && instance.RosterVector.Identical(Create.Entity.RosterVector(0, 0))) == 1);
 
-        It should_not_raise_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == nestedRosterGroupId));
 

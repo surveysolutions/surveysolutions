@@ -1,4 +1,6 @@
-﻿using WB.Core.Infrastructure.Modularity;
+﻿using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Shared.Web.Captcha
@@ -35,6 +37,11 @@ namespace WB.UI.Shared.Web.Captcha
             }
 
             registry.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

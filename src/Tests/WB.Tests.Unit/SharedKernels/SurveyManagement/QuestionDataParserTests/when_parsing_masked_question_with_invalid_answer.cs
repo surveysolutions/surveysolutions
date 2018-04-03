@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -9,8 +7,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_parsing_masked_question_with_invalid_answer : QuestionDataParserTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDataParser = CreateQuestionDataParser();
             question = new TextQuestion
             {
@@ -19,15 +16,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 QuestionType = QuestionType.Text,
                 StataExportCaption = questionVarName
             };
-        };
+            BecauseOf();
+        }
 
-        Because of =
-          () =>
+        private void BecauseOf() =>
               parseResult =
                   questionDataParser.TryParse("aa",questionVarName,
                       question, out parsedValue, out parsedSingleColumnAnswer);
 
-        It should_return__ParsedValueIsNotAllowed__error = () => parseResult.ShouldEqual(ValueParsingResult.ParsedValueIsNotAllowed);
+        [NUnit.Framework.Test] public void should_return__ParsedValueIsNotAllowed__error () => parseResult.Should().Be(ValueParsingResult.ParsedValueIsNotAllowed);
 
         private static ValueParsingResult parseResult;
         private static object parsedValue;

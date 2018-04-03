@@ -218,16 +218,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             switch (this.NavigationGroupType)
             {
                 case NavigationGroupType.ToParentGroup:
-                    this.navigationState.NavigateTo(
+                    await this.navigationState.NavigateTo(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity,
                             anchoredElementIdentity: this.Identity));
                     break;
                 case NavigationGroupType.Section:
-                    this.navigationState.NavigateTo(
+                    await this.navigationState.NavigateTo(
                         NavigationIdentity.CreateForGroup(this.groupOrSectionToNavigateIdentity));
                     break;
                 case NavigationGroupType.LastSection:
-                    this.navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+                    await this.navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
                     break;
             }
         }

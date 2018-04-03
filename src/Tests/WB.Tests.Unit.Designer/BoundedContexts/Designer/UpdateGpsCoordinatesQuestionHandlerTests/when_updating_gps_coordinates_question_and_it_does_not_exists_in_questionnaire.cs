@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
@@ -14,9 +15,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
 {
     internal class when_updating_gps_coordinates_question_and_it_does_not_exists_in_questionnaire : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test]
+        public void should_throw_QuestionnaireException()
+        {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
             questionnaire.AddQRBarcodeQuestion(
                 questionId,
                 chapterId,
@@ -25,37 +28,30 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateGpsCoordinatesQu
                 instructions: "old instructions",
                 enablementCondition: "old condition",
                 responsibleId: responsibleId);
-            BecauseOf();
-        }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateGpsCoordinatesQuestion(
-                new UpdateGpsCoordinatesQuestion(
-                    questionnaire.Id,
-                    questionId: notExistingQuestionId,
-                    commonQuestionParameters: new CommonQuestionParameters()
-                    {
-                        Title = title,
-                        VariableName = variableName,
-                        
-                        Instructions = instructions,
-                        EnablementCondition = enablementCondition,
-                    },
-                    validationMessage: null,
-                    validationExpression: null,
-                    isPreFilled: false,
-                    scope: scope,
-                    responsibleId: responsibleId,
-                    validationConditions: new List<ValidationCondition>())));
+                    new UpdateGpsCoordinatesQuestion(
+                        questionnaire.Id,
+                        questionId: notExistingQuestionId,
+                        commonQuestionParameters: new CommonQuestionParameters()
+                        {
+                            Title = title,
+                            VariableName = variableName,
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
+                            Instructions = instructions,
+                            EnablementCondition = enablementCondition,
+                        },
+                        validationMessage: null,
+                        validationExpression: null,
+                        isPreFilled: false,
+                        scope: scope,
+                        responsibleId: responsibleId,
+                        validationConditions: new List<ValidationCondition>())));
 
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__cant__found__ () =>
-            new[] { "question", "can't", "found" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "question", "can't", "found" });
+        }
 
         private static Questionnaire questionnaire;
         private static Exception exception;

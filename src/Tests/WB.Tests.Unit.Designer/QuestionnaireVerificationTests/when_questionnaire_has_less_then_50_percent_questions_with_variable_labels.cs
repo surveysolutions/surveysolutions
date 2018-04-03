@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -33,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         [NUnit.Framework.Test] public void should_return_WB0253_warning () => errors.ShouldContainWarning("WB0253", "Too few variable labels are defined. Add variable labels to improve the usability of exported data and to provide input into metadata for Data Documentation Initiative (DDI) format.");
 
-        [NUnit.Framework.Test] public void should_not_return_WB0253_warning_for_prefilled_question () => errors.GetWarnings("WB0253").Count().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_not_return_WB0253_warning_for_prefilled_question () => errors.GetWarnings("WB0253").Count().Should().Be(1);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;
