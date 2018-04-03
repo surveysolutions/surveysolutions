@@ -110,7 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return new AssignmentAnswers
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x, questionnaire)).ToArray(),
+                Values = compositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x)).ToArray(),
             };
         }
 
@@ -179,7 +179,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            return new AssignmentAnswer
+            return ToAssignmentAnswer(fileName, row, answer);
+        }
+
+        private static AssignmentAnswer ToAssignmentAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+            => new AssignmentAnswer
             {
                 FileName = fileName,
                 Column = answer.Column,
@@ -188,7 +192,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 InterviewId = row.InterviewId,
                 VariableName = answer.Column
             };
-        }
 
         private static AssignmentGpsAnswer ToAssignmentGpsAnswer(string fileName, PreloadingRow row, PreloadingCompositeValue compositeValue)
         {
