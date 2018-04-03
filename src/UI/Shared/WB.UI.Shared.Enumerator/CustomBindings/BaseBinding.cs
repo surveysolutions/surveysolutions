@@ -6,6 +6,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     public abstract class BaseBinding<TControl, TValue> : MvxAndroidTargetBinding
         where TControl : class
     {
+        protected bool IsDisposed = false;
+
         protected BaseBinding(TControl androidControl)
             : base(androidControl) {}
 
@@ -24,5 +26,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         }
 
         protected abstract void SetValueToView(TControl control, TValue value);
+
+        protected override void Dispose(bool isDisposing)
+        {
+            if (IsDisposed)
+                return;
+
+            IsDisposed = true;
+            base.Dispose(isDisposing);
+        }
     }
 }
