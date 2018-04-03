@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;

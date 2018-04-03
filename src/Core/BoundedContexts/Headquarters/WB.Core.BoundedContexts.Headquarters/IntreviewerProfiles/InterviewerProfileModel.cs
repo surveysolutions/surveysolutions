@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         public int WaitingInterviewsForApprovalCount { get; set; }
         public int ApprovedInterviewsByHqCount { get; set; }
         public SynchronizationActivity SynchronizationActivity { get; set; }
+        public int RegistredDevicesCount { get; set; }
     }
 
     public class InterviewerProfileSyncStatistics

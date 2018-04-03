@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Tests.Abc;
@@ -10,12 +10,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
     internal class when_filtering_options_for_multi_question_in_fixed_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -44,14 +44,14 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 return results;
             });
 
-        It should_return_2_options = () =>
-            results.CountOfFilteredOptions.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_options () =>
+            results.CountOfFilteredOptions.Should().Be(2);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

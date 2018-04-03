@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_getting_questions_affected_by_substitutions : PlainQuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var rosterSizeId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterTitleid = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             substitutionTargetQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -30,13 +29,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
             plainQuestionnaire.SubstitutionService = new SubstitutionService();
-        };  
+            BecauseOf();
+        }  
 
-        Because of = () => 
+        public void BecauseOf() => 
             affectedQuestions = plainQuestionnaire.GetSubstitutedQuestions(rosterTitleid);
 
-        It should_find_roster_title_substitutions = () => 
-            affectedQuestions.ShouldContain(substitutionTargetQuestionId);
+        [NUnit.Framework.Test] public void should_find_roster_title_substitutions () => 
+            affectedQuestions.Should().Contain(substitutionTargetQuestionId);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static Guid substitutionTargetQuestionId;

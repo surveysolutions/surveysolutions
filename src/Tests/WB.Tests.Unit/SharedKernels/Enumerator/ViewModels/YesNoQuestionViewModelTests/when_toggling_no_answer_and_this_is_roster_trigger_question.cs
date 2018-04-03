@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_toggling_no_answer_and_this_is_roster_trigger_question : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -56,13 +55,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.Last().Selected = false;
-        };
 
-        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).Wait();
+            BecauseOf();
+        }
 
-        It should_undo_checked_property_change = () => viewModel.Options.Last().YesSelected.ShouldBeFalse();
+        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).Wait();
 
-        It should_dont_call_userInteractionService_for_reduce_roster_size = () => 
+        [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().YesSelected.Should().BeFalse();
+
+        [NUnit.Framework.Test] public void should_dont_call_userInteractionService_for_reduce_roster_size () => 
             userInteractionServiceMock.Verify(s => s.ConfirmAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<string>(), Moq.It.IsAny<bool>()), Times.Never());
 
         static YesNoQuestionViewModel viewModel;

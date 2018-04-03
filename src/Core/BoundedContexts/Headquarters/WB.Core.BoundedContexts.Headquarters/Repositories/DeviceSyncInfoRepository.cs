@@ -52,6 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                           device.Statistics.DownloadedInterviewsCount +
                           device.Statistics.UploadedInterviewsCount +
                           device.Statistics.DownloadedQuestionnairesCount +
+                          device.Statistics.RemovedInterviewsCount +
+                          device.Statistics.RemovedAssignmentsCount +
                           device.Statistics.RejectedInterviewsOnDeviceCount > 0)
                 group device by device.InterviewerId
                 into grouping
@@ -85,6 +87,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     yield return lastStat.DeviceInfo;
             }
         }
+
+        public int GetRegistredDeviceCount(Guid interviewerId)
+            => this.dbContext.DeviceSyncInfo
+                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
+                .Select(info => info.DeviceId).Distinct().Count();
 
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)

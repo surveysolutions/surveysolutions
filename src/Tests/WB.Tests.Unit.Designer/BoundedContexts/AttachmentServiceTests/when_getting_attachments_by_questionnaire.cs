@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 
         [NUnit.Framework.Test] public void should_return_2_specified_attachments () 
         {
-            expectedAttachments.Count.ShouldEqual(2);
-            expectedAttachments.All(x => x.QuestionnaireId == questionnaireId).ShouldEqual(true);
+            expectedAttachments.Count.Should().Be(2);
+            expectedAttachments.All(x => x.QuestionnaireId == questionnaireId).Should().Be(true);
         }
         
         private static AttachmentService attachmentService;

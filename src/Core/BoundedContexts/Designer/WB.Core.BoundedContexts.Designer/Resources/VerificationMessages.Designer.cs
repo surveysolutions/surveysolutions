@@ -1205,6 +1205,69 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Special values support only integer values in range from {0} to {1}..
+        /// </summary>
+        public static string WB0131_SpecialValuesHasNonIntegerOptionsValues {
+            get {
+                return ResourceManager.GetString("WB0131_SpecialValuesHasNonIntegerOptionsValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special value title is empty or too long. Title&apos;s length should be in range from {0} to {1} characters..
+        /// </summary>
+        public static string WB0132_SpecialValuesHasOptionsWithLongTexts {
+            get {
+                return ResourceManager.GetString("WB0132_SpecialValuesHasOptionsWithLongTexts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special values must be unique..
+        /// </summary>
+        public static string WB0133_SpecialValuesMustBeUniqueForNumericlQuestion {
+            get {
+                return ResourceManager.GetString("WB0133_SpecialValuesMustBeUniqueForNumericlQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contains more than {0} special values..
+        /// </summary>
+        public static string WB0134_SpecialValuesCountMoreThanMaxOptionCount {
+            get {
+                return ResourceManager.GetString("WB0134_SpecialValuesCountMoreThanMaxOptionCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question contains a special value, which is too large and can&apos;t be used in this question since it determines the size of a roster..
+        /// </summary>
+        public static string WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit {
+            get {
+                return ResourceManager.GetString("WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question has special value(s) with empty value..
+        /// </summary>
+        public static string WB0136_SpecialValuesHaveOptionsWithEmptyValue {
+            get {
+                return ResourceManager.GetString("WB0136_SpecialValuesHaveOptionsWithEmptyValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special values titles must be unique..
+        /// </summary>
+        public static string WB0137_SpecialValuesTitlesMustBeUnique {
+            get {
+                return ResourceManager.GetString("WB0137_SpecialValuesTitlesMustBeUnique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Large number of rosters is created. Exporting this structures into data files might be problematic. Consider reducing number of rosters..
         /// </summary>
         public static string WB0200_LargeNumberOfRostersIsCreated {
@@ -1788,5 +1851,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0276_RownameIsNotSupported", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        public static string WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore {
+            get {
+                return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
+            }
+        }
+        
     }
 }

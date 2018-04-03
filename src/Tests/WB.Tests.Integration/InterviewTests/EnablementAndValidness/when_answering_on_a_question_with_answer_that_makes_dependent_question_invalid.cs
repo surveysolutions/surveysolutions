@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
@@ -8,9 +9,22 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answering_on_a_question_with_answer_that_makes_dependent_question_invalid : in_standalone_app_domain
+    internal class when_answering_on_a_question_with_answer_that_makes_dependent_question_invalid : InterviewTestsContext
     {
-        Because of = () => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
             Setup.MockedServiceLocator();
 
@@ -45,8 +59,8 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             }
         });
 
-        It should_mark_dependent_question_as_invalid = () =>
-            results.WasAnswersDeclaredInvalidEventPublishedForDependentQuestion.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_mark_dependent_question_as_invalid () =>
+            results.WasAnswersDeclaredInvalidEventPublishedForDependentQuestion.Should().BeTrue();
 
         private static InvokeResults results;
 

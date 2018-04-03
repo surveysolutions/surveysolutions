@@ -414,7 +414,7 @@ namespace WB.UI.Headquarters.Controllers
 
             this.preloadedDataRepository.Store(model.File.InputStream);
 
-            this.TempData[$@"InterviewImportConfirmation"] = new PreloadedDataConfirmationModel
+            this.Session[$"InterviewImportConfirmation"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = model.QuestionnaireId,
                 Version = model.QuestionnaireVersion,
@@ -484,7 +484,7 @@ namespace WB.UI.Headquarters.Controllers
                     verificationState.FileName));
             }
 
-            this.TempData[$"InterviewImportConfirmation"] = new PreloadedDataConfirmationModel
+            this.Session[$"InterviewImportConfirmation"] = new PreloadedDataConfirmationModel
             {
                 QuestionnaireId = questionnaireId,
                 Version = version,
@@ -527,9 +527,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var key = $@"InterviewImportConfirmation";
             PreloadedDataConfirmationModel model = null;
-            if (this.TempData.ContainsKey(key))
+            if (this.Session[key] != null)
             {
-                model = this.TempData[key] as PreloadedDataConfirmationModel;
+                model = this.Session[key] as PreloadedDataConfirmationModel;
             }
             if (model == null)
             {

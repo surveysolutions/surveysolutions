@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Accessors
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
 
         string GetExportDirectory();
+        void MoveExportArchive(string tempArchivePath, string archiveName);
     }
 }

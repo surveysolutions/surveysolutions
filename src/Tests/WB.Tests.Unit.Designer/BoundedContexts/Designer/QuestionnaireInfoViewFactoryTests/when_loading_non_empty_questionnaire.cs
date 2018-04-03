@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -57,35 +57,35 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         [Test]
         public void should_count_number_of_questions_in_questionnaire
-            () => view.QuestionsCount.ShouldEqual(1);
+            () => view.QuestionsCount.Should().Be(1);
 
         [Test]
         public void should_count_number_of_groups_in_questionnaire
-            () => view.GroupsCount.ShouldEqual(1);
+            () => view.GroupsCount.Should().Be(1);
 
         [Test]
         public void should_count_number_of_roster_in_questionnaire
-            () => view.RostersCount.ShouldEqual(1);
+            () => view.RostersCount.Should().Be(1);
 
         [Test]
         public void should_contain_email_of_first_element_in_list_of_shared_persons_equal_to_owner_email
-            () => view.SharedPersons[0].Email.ShouldEqual(ownerEmail);
+            () => view.SharedPersons[0].Email.Should().Be(ownerEmail);
 
         [Test]
         public void should_contain_id_of_first_element_in_list_of_shared_persons_equal_to_owner_id
-            () => view.SharedPersons[0].UserId.ShouldEqual(userId);
+            () => view.SharedPersons[0].UserId.Should().Be(userId);
 
         [Test]
         public void should_contain_isOwner_of_first_element_in_list_of_shared_persons_be_true
-            () => view.SharedPersons[0].IsOwner.ShouldEqual(true);
+            () => view.SharedPersons[0].IsOwner.Should().Be(true);
 
         [Test]
         public void should_contain_default_translation_value
-            () => view.Translations[0].IsDefault.ShouldEqual(true);
+            () => view.Translations[0].IsDefault.Should().Be(true);
 
         [Test]
         public void should_not_contain_default_translation_value_for_non_default_translations
-            () => view.Translations[1].IsDefault.ShouldEqual(false);
+            () => view.Translations[1].IsDefault.Should().Be(false);
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

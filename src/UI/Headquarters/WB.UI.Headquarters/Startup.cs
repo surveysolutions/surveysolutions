@@ -23,6 +23,7 @@ using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
+using Npgsql.Logging;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;
@@ -33,6 +34,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
@@ -57,6 +59,9 @@ namespace WB.UI.Headquarters
             SetupNConfig();
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
+            // NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
+            // NpgsqlLogManager.IsParameterLoggingEnabled = true;
+            
         }
 
         public void Configuration(IAppBuilder app)
@@ -73,29 +78,7 @@ namespace WB.UI.Headquarters
             InitializeAppShutdown(app);
             InitializeMVC();
             ConfigureWebApi(app);
-
-            Exceptional.Settings.GetCustomData += (exception, dictionary) =>
-            {
-                void AddAllSqlData(Exception e)
-                {
-                    if (e is Npgsql.PostgresException pe)
-                    {
-                        if (pe.InternalQuery != null)
-                            exception.AddLogData(@"Internal Query", pe.InternalQuery);
-
-                        if (pe.Statement?.SQL != null)
-                            exception.AddLogData(@"SQL Statement", pe.Statement.SQL);
-                    }
-
-                    if (e.InnerException != null)
-                    {
-                        AddAllSqlData(e.InnerException);
-                    }
-                }
-
-                //AddAllSqlData(exception);
-            };
-
+            
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
                 void AddAllSqlData(Exception e)

@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
     internal class when_linked_question_is_linked_to_question_in_roster_2_levels_deeper : MultiOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var level1TriggerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var level2triggerId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             var linkToQuestionId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
@@ -54,14 +53,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
             questionViewModel = CreateViewModel(questionnaireStorage: questionnaireRepository, interviewRepository: interviewRepository);
+            BecauseOf();
             
-        };
+        }
 
-        Because of = () => questionViewModel.Init(null, linkedQuestionIdentity, Create.Other.NavigationState());
+        public void BecauseOf() => questionViewModel.Init(null, linkedQuestionIdentity, Create.Other.NavigationState());
 
-        It should_substitute_titles_from_both_questions = () => questionViewModel.Options.First().Title.ShouldEqual("person 1: child 1: pet 1");
+        [NUnit.Framework.Test] public void should_substitute_titles_from_both_questions () => questionViewModel.Options.First().Title.Should().Be("person 1: child 1: pet 1");
 
-        It should_substitute_titles_all_roster_combinations = () => questionViewModel.Options.Count.ShouldEqual(4);
+        [NUnit.Framework.Test] public void should_substitute_titles_all_roster_combinations () => questionViewModel.Options.Count.Should().Be(4);
 
         static MultiOptionLinkedToRosterQuestionQuestionViewModel questionViewModel;
         static Identity linkedQuestionIdentity;

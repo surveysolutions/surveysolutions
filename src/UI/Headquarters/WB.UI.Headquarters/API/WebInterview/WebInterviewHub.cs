@@ -10,6 +10,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
@@ -20,14 +21,32 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
     {
+        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository, ICommandService commandService, IQuestionnaireStorage questionnaireRepository, IWebInterviewNotificationService webInterviewNotificationService, IAuthorizedUser authorizedUser, IChangeStatusFactory changeStatusFactory, IInterviewFactory interviewFactory, IStatefullInterviewSearcher statefullInterviewSearcher, IWebInterviewInterviewEntityFactory interviewEntityFactory) : 
-            base(statefulInterviewRepository, commandService, questionnaireRepository, webInterviewNotificationService, interviewEntityFactory)
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
+            ICommandService commandService,
+            IQuestionnaireStorage questionnaireRepository,
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IImageFileStorage imageFileStorage,
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            IAudioFileStorage audioFileStorage,
+            IAuthorizedUser authorizedUser,
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewFactory interviewFactory,
+            IStatefullInterviewSearcher statefullInterviewSearcher) : base(statefulInterviewRepository,
+            commandService,
+            questionnaireRepository,
+            webInterviewNotificationService,
+            interviewEntityFactory,
+            imageFileStorage,
+            audioFileStorage)
         {
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.authorizedUser = authorizedUser;
             this.changeStatusFactory = changeStatusFactory;
             this.interviewFactory = interviewFactory;
@@ -68,7 +87,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
-        public List<CommentedStatusHistroyView> GetStatusesHistory()
+        public List<CommentedStatusHistoryView> GetStatusesHistory()
         {
             var statefulInterview = this.GetCallerInterview();
             return this.changeStatusFactory.GetFilteredStatuses(statefulInterview.Id);
@@ -120,10 +139,24 @@ namespace WB.UI.Headquarters.API.WebInterview
             }
             if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
             {
-                var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
-                this.commandService.Execute(command);
+                if (this.GetCallerInterview().Status == InterviewStatus.ApprovedByHeadquarters)
+                {
+                    var command = new UnapproveByHeadquartersCommand(GetCallerInterview().Id, this.CommandResponsibleId, comment);
+                    this.commandService.Execute(command);
+                }
+                else
+                {
+                    var command = new HqRejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
+                    this.commandService.Execute(command);
+                }
             }
+        }
 
+        public override InterviewInfo GetInterviewDetails()
+        {
+            var interviewDetails = base.GetInterviewDetails();
+            interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
+            return interviewDetails;
         }
     }
 }

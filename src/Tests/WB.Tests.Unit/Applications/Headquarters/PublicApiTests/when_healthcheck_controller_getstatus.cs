@@ -1,16 +1,15 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_healthcheck_controller_getstatus : ApiTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             /*KP-4929    var databaseHealthCheck = Mock.Of<IDatabaseHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var eventStoreHealthCheck = Mock.Of<IEventStoreHealthCheck>(m => m.Check() == ConnectionHealthCheckResult.Happy());
             var brokenSyncPackagesStorage = Mock.Of<IBrokenSyncPackagesStorage>(m => m.GetListOfUnhandledPackages() == Enumerable.Empty<string>());
@@ -27,20 +26,21 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                       brokenSyncPackagesStorage,
                      chunkReader,
                 folderPermissionChecker*/);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             result = controller.GetStatus();
-        };
+        }
 
-        It should_return_HealthCheckStatus = () =>
-            result.ShouldBeOfExactType<HealthCheckStatus>();
+        [NUnit.Framework.Test] public void should_return_HealthCheckStatus () =>
+            result.Should().BeOfType<HealthCheckStatus>();
 
-        It should_return_Happy_status = () =>
-            result.ShouldEqual(HealthCheckStatus.Happy);
+        [NUnit.Framework.Test] public void should_return_Happy_status () =>
+            result.Should().Be(HealthCheckStatus.Happy);
 
-        It should_call_IHealthCheckService_Check_once = () =>
+        [NUnit.Framework.Test] public void should_call_IHealthCheckService_Check_once () =>
             healthCheckService.Verify(x => x.Check(), Times.Once());
 
         private static HealthCheckStatus result;

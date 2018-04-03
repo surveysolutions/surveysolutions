@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -25,7 +24,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    [Subject(typeof(ExportViewFactory))]
+    [NUnit.Framework.TestOf(typeof(ExportViewFactory))]
     internal class ExportViewFactoryTestsContext
     {
         protected static ExportViewFactory CreateExportViewFactory(

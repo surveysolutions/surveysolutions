@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript">
+        window.onload = function () {
+            var qs = getHashQueryString();
+
+            if (qs.state) {
+                var state = window.atob(qs.state).split(';');
+                
+                var redirectUrl = decodeURIComponent(state[0]);
+                var processingUrl = decodeURIComponent(state[1]);
+                var dataExportState = state[2];
+
+                var xhr = new XMLHttpRequest();
+                
+                xhr.open("POST", processingUrl, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState != 4) return;
+                    
+                    window.location = redirectUrl;
+                };
+                xhr.send('state=' + dataExportState + '&access_token=' + qs.access_token);
+            }
+        }
+        function getHashQueryString() {
+            var qsObject = {};
+            var query = window.location.hash.substr(1);
+            var vars = query.split('&');
+            for (var i = 0; i < vars.length; i++) {
+                var pair = vars[i].split('=');
+                qsObject[pair[0]] = decodeURIComponent(pair[1]);
+            }
+            return qsObject;
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

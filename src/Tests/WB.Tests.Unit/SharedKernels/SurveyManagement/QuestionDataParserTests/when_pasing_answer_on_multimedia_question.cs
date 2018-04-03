@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
 
@@ -11,22 +7,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_multimedia_question : QuestionDataParserTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDataParser = CreateQuestionDataParser();
             question = new MultimediaQuestion()
             {
                 PublicKey = Guid.NewGuid(),
                 StataExportCaption = questionVarName
             };
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() =>
                 parsingResult =
                     questionDataParser.TryParse("some answer",questionVarName, question, out parcedValue, out parsedSingleColumnAnswer);
 
-        It should_result_be_UnsupportedLinkedQuestion = () =>
-            parsingResult.ShouldEqual(ValueParsingResult.UnsupportedMultimediaQuestion);
+        [NUnit.Framework.Test] public void should_result_be_UnsupportedLinkedQuestion () =>
+            parsingResult.Should().Be(ValueParsingResult.UnsupportedMultimediaQuestion);
     }
 }

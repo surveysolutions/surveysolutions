@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     QuestionnaireVerificationMessage.Error(
                         "WB0020",
                         VerificationMessages.WB0020_NameForMacrosIsNotUnique,
-                        group.Select(e => QuestionnaireNodeReference.CreateForMacro(e.Key)).ToArray()));
+                        group.Select(e => QuestionnaireEntityReference.CreateForMacro(e.Key)).ToArray()));
         }
         private static Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> ErrorForMacro(
             Func<Macro, MultiLanguageQuestionnaireDocument, bool> hasError, string code, string message)
@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return (questionnaire) => questionnaire
                 .Macros
                 .Where(entity => hasError(entity.Value, questionnaire))
-                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireNodeReference.CreateForMacro(entity.Key)));
+                .Select(entity => QuestionnaireVerificationMessage.Error(code, message, QuestionnaireEntityReference.CreateForMacro(entity.Key)));
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)

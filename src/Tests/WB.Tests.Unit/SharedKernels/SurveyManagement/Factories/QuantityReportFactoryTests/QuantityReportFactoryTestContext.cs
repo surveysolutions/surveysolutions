@@ -1,5 +1,4 @@
 ﻿using System;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -9,7 +8,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportFactoryTests
 {
-    [Subject(typeof(QuantityReportFactory))]
+    [NUnit.Framework.TestOf(typeof(QuantityReportFactory))]
     internal class QuantityReportFactoryTestContext
     {
         protected static QuantityReportFactory CreateQuantityReportFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null)

@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -11,20 +10,20 @@ namespace WB.Tests.Integration.CommandServiceTests
     {
         private class NotRegisteredCommand : ICommand { public Guid CommandIdentifier { get; private set; } }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             commandService = Abc.Create.Service.CommandService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Only<CommandServiceException>(() =>
+        private void BecauseOf() =>
+            exception = Assert.Throws<CommandServiceException>(() =>
                 commandService.Execute(new NotRegisteredCommand(), null));
 
-        It should_throw_exception_with_message_containing__not____registered__ = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("not", "registered");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__not____registered__ () =>
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("not", "registered");
 
-        It should_throw_exception_with_message_containing_command_name = () =>
-            exception.Message.ShouldContain(typeof(NotRegisteredCommand).Name);
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing_command_name () =>
+            exception.Message.Should().Contain(typeof(NotRegisteredCommand).Name);
 
         private static CommandServiceException exception;
         private static CommandService commandService;

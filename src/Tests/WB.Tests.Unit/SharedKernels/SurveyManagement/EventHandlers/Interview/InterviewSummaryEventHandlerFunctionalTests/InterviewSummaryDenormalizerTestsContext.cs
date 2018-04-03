@@ -1,24 +1,22 @@
 ﻿using System;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
-using NSubstitute;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    [Subject(typeof(InterviewSummaryDenormalizer))]
+    [TestOf(typeof(InterviewSummaryDenormalizer))]
     public class InterviewSummaryDenormalizerTestsContext
     {
         public static InterviewSummaryDenormalizer CreateDenormalizer()
         {
-            return CreateDenormalizer(users: Mock.Of<IUserViewFactory>());
+            var users = new Mock<IUserViewFactory>();
+            users.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(Create.Entity.UserView());
+            return CreateDenormalizer(users.Object);
         }
 
         public static InterviewSummaryDenormalizer CreateDenormalizer(Guid userId, string userName)

@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
@@ -7,25 +7,25 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.YesNoAnswersTests
 {
     internal class when_creating_YesNoAnswers_from_another_one
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             answers = Create.Entity.YesNoAnswers(allCodes, new YesNoAnswersOnly(selectedYes, selectedNo));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = new YesNoAnswers(answers);
 
-        It should_create_yesno_answers_with_same_all_codes = () =>
-            result.All.ShouldContainOnly(allCodes);
+        [NUnit.Framework.Test] public void should_create_yesno_answers_with_same_all_codes () =>
+            result.All.Should().BeEquivalentTo(allCodes);
 
-        It should_create_yesno_answers_with_same_yes_codes = () =>
-            result.Yes.ShouldContainOnly(selectedYes);
+        [NUnit.Framework.Test] public void should_create_yesno_answers_with_same_yes_codes () =>
+            result.Yes.Should().BeEquivalentTo(selectedYes);
 
-        It should_create_yesno_answers_with_same_no_codes = () =>
-            result.No.ShouldContainOnly(selectedNo);
+        [NUnit.Framework.Test] public void should_create_yesno_answers_with_same_no_codes () =>
+            result.No.Should().BeEquivalentTo(selectedNo);
 
-        It should_create_yesno_answers_with_same_missing_codes = () =>
-            result.Missing.ShouldContainOnly(answers.Missing);
+        [NUnit.Framework.Test] public void should_create_yesno_answers_with_same_missing_codes () =>
+            result.Missing.Should().BeEquivalentTo(answers.Missing);
 
         private static YesNoAnswers answers;
         private static YesNoAnswers result;

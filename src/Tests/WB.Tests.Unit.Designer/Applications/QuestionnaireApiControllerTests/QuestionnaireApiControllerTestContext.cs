@@ -14,7 +14,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Designer.Api;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -97,9 +96,9 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
                 questionnaireItems.Select(
                     questionnaireItem =>
                         Create.VerificationError("aaa", "aaaa",
-                            new QuestionnaireNodeReference[1]
+                            new QuestionnaireEntityReference[1]
                             {
-                                new QuestionnaireNodeReference(QuestionnaireVerificationReferenceType.Question,
+                                new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Question,
                                     questionnaireItem.PublicKey)
                             })).ToArray();
         }

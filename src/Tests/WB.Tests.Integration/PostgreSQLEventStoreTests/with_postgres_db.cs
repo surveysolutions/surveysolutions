@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Configuration;
-using Machine.Specifications;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -24,8 +24,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
         protected class AccountLocked : IEvent { }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
             connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
@@ -48,9 +47,10 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             DatabaseManagement.InitDatabase(connectionStringBuilder.ConnectionString, schemaName);
             DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
-        };
+        }
 
-        Cleanup things = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
 
             using (var connection = new NpgsqlConnection(TestConnectionString))
@@ -64,7 +64,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 }
                 connection.Close();
             }
-        };
+        }
 
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         private static string TestConnectionString;

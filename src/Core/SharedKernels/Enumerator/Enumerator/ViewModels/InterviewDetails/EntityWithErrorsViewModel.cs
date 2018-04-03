@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private NavigationIdentity entityIdentity;
 
-        public IMvxCommand NavigateToSectionCommand => new MvxCommand(()=> this.navigationState.NavigateTo(this.entityIdentity));
+        public IMvxCommand NavigateToSectionCommand => new MvxAsyncCommand(async ()=> await this.navigationState.NavigateTo(this.entityIdentity));
     }
 
     public class EntityWithCommentsViewModel : EntityWithErrorsViewModel

@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -11,14 +11,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_preloaded_data_file_has_roster_row_with_invalid_id : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire =
                 CreateQuestionnaireDocumentWithOneChapter(Create.Entity.FixedRoster(rosterId: Guid.NewGuid(),
@@ -44,28 +42,29 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
                 .Returns(new [] { 0 });
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFileTopLevel, Moq.It.IsAny<string>())).Returns(-1);
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
-        };
 
-        Because of =
-            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(files, preloadedDataServiceMock.Object).ToList();
+            BecauseOf();
+        }
 
-        It should_result_has_1_error = () =>
-            VerificationErrors.Count().ShouldEqual(1);
+        private void BecauseOf() => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
 
-        It should_return_single_PL0009_error = () =>
-            VerificationErrors.First().Code.ShouldEqual("PL0009");
+        [NUnit.Framework.Test] public void should_result_has_1_error () =>
+            status.VerificationState.Errors.Should().HaveCount(1);
 
-        It should_return_reference_with_Cell_type = () =>
-            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+        [NUnit.Framework.Test] public void should_return_single_PL0009_error () =>
+            status.VerificationState.Errors.First().Code.Should().Be("PL0009");
 
-        It should_error_PositionX_be_equal_to_0 = () =>
-            VerificationErrors.First().References.First().PositionX.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_return_reference_with_Cell_type () =>
+            status.VerificationState.Errors.First().References.First().Type.Should().Be(PreloadedDataVerificationReferenceType.Cell);
 
-        It should_error_PositionY_be_equal_to_0 = () =>
-            VerificationErrors.First().References.First().PositionY.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_error_PositionX_be_equal_to_0 () =>
+            status.VerificationState.Errors.First().References.First().PositionX.Should().Be(0);
 
-        It should_error_has_content_id_of_inconsistent_record = () =>
-            VerificationErrors.First().References.First().Content.ShouldEqual("unparsed");
+        [NUnit.Framework.Test] public void should_error_PositionY_be_equal_to_0 () =>
+            status.VerificationState.Errors.First().References.First().PositionY.Should().Be(0);
+
+        [NUnit.Framework.Test] public void should_error_has_content_id_of_inconsistent_record () =>
+            status.VerificationState.Errors.First().References.First().Content.Should().Be("unparsed");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

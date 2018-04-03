@@ -7,14 +7,14 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IViewModelNavigationService
     {
-        void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel;
-        void NavigateTo<TViewModel>(object parameters) where TViewModel : IMvxViewModel;
-        Task NavigateToDashboard(string interviewId = null);
+        Task NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>;
+        Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel;
+        Task NavigateToDashboardAsync(string interviewId = null);
         void NavigateToSettings();
-        void SignOutAndNavigateToLogin();
-        void NavigateToLogin();
-        void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity);
-        void NavigateToPrefilledQuestions(string interviewId);
+        Task SignOutAndNavigateToLoginAsync();
+        Task NavigateToLoginAsync();
+        Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
+        Task NavigateToPrefilledQuestionsAsync(string interviewId);
         void NavigateToSplashScreen();
         void ShowWaitMessage();
         bool HasPendingOperations { get; }

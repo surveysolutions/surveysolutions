@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -34,11 +34,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
         [NUnit.Framework.Test] public void should_raise_GroupBecameARoster_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .PublicKey.ShouldEqual(groupId);
+                .PublicKey.Should().Be(groupId);
 
         [NUnit.Framework.Test] public void should_raise_RosterChanged_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupId)
-                .IsRoster.ShouldBeTrue();
+                .IsRoster.Should().BeTrue();
 
 
         private static Questionnaire questionnaire;

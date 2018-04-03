@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,14 +14,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     internal class when_checking_2_and_1_and_question_is_not_recording_order : MultiOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -59,18 +58,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             Thread.Sleep(1);
             viewModel.Options.First().Checked = true;
             viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
-        };
+        }
 
-        It should_execute_command_with_checked_values_1_and_2 = () =>
+        [NUnit.Framework.Test] public void should_execute_command_with_checked_values_1_and_2 () =>
             ((AnswerMultipleOptionsQuestionCommand) executedCommand)
-                .SelectedValues.ShouldEqual(new[] { 1, 2 });
+                .SelectedValues.Should().BeEquivalentTo(new[] { 1, 2 });
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;

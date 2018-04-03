@@ -1,18 +1,18 @@
 using System;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     internal class when_navigating_to_disabled_group
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.HasGroup(disabledGroup) == true
                    && _.IsEnabled(disabledGroup) == false);
@@ -21,13 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
-        };
+            await BecauseOf();
+        }
 
-        Because of = () =>
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(disabledGroup));
+        public async Task BecauseOf() =>
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(disabledGroup));
 
-        It should_not_navigate = () =>
-            navigatedTo.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_not_navigate () =>
+            navigatedTo.Should().BeNull();
 
         private static NavigationState navigationState;
         private static Identity disabledGroup = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);

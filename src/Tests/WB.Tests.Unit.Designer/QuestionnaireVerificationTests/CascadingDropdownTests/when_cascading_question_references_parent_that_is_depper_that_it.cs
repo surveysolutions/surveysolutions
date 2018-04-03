@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -67,7 +66,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0084_verification_error () => verificationErrors.ShouldContainError("WB0085");
 
         [NUnit.Framework.Test] public void should_return_error_with_reference_to_wrong_question () =>
-            verificationErrors.GetError("WB0085").References.First().Id.ShouldEqual(childCascadedComboboxId);
+            verificationErrors.GetError("WB0085").References.First().Id.Should().Be(childCascadedComboboxId);
 
         static QuestionnaireDocument questionnaire;
         static Guid childCascadedComboboxId;

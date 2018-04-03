@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using System.Threading.Tasks;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -6,14 +6,11 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-using It = Machine.Specifications.It;
-
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
     public class when_singing_in_and_user_exist_and_password_were_entered : LoginViewModelTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var passwordHasher = Mock.Of<IPasswordHasher>(x => x.Hash(userPassword) == userPasswordHash);
 
             var interviewer = CreateInterviewerIdentity(userName, userPasswordHash);
@@ -31,15 +28,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 passwordHasher: passwordHasher,
                 principal: principal.Object);
 
-            viewModel.Load();
+            await viewModel.Initialize();
             viewModel.UserName = userName;
             viewModel.Password = userPassword;
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.SignInCommand.Execute();
+        public void BecauseOf() => viewModel.SignInCommand.Execute();
 
-        It should_navigate_to_dashboard = () =>
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboard(null), Times.Once);
+        [NUnit.Framework.Test] public void should_navigate_to_dashboard () =>
+            ViewModelNavigationServiceMock.Verify(x => x.NavigateToDashboardAsync(null), Times.Once);
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

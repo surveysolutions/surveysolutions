@@ -1,24 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewModelTests
 {
     internal class when_initializing_options_without_filter : FilteredOptionsViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewId = "interview";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
@@ -47,25 +45,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewM
             viewModel = CreateViewModel(questionnaireRepository: questionnaireStorage.Object, 
                 interviewRepository: interviewRepository.Object,
                 answerNotifier:  answerNotifier.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Init(interviewId, questionId, 200);
+        public void BecauseOf() => viewModel.Init(interviewId, questionId, 200);
 
-        It should_build_options = () =>
+        [NUnit.Framework.Test] public void should_build_options () 
         {
-            viewModel.GetOptions().ShouldNotBeNull();
-            viewModel.GetOptions().Count().ShouldEqual(3);
-        };
+            viewModel.GetOptions().Should().NotBeNull();
+            viewModel.GetOptions().Count().Should().Be(3);
+        }
 
-        It should_contains_all_options = () =>
+        [NUnit.Framework.Test] public void should_contains_all_options () 
         {
-            viewModel.GetOptions().ShouldEqual(options);
-        };
+            viewModel.GetOptions().Should().BeEquivalentTo(options);
+        }
 
-        It should_not_subscribe_model_in_answerNotify = () =>
+        [NUnit.Framework.Test] public void should_not_subscribe_model_in_answerNotify () 
         {
             answerNotifier.Verify(x => x.Init(interviewId), Times.Never());
-        };
+        }
 
         static FilteredOptionsViewModel viewModel;
         static string interviewId;

@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private async Task StartInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
-            this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
+            await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
         }
     }
 }

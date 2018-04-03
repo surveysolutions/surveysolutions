@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -19,7 +18,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
 {
-    [Subject(typeof (DdiMetadataFactory))]
+    [NUnit.Framework.TestOf(typeof (DdiMetadataFactory))]
     internal class MetadataExportServiceTestContext
     {
         protected static DdiMetadataFactory CreateMetadataExportService(
@@ -72,7 +71,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 QuestionType = type,
                 VariableName = Guid.NewGuid().ToString(),
                 PublicKey = questionId ?? Guid.NewGuid(),
-                Labels = labels.ToDictionary(x => Guid.NewGuid(), x => x)
+                Labels = labels.ToList()
             };
         }
 

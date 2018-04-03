@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -9,15 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandValidatorTests
 {
-    [Subject(typeof(InterviewAnswersCommandValidator))]
     internal class when_responsible_supervisor_answer_on_supervisors_questions
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var mockOfInterviewSummaryViewFactory = new Mock<IInterviewSummaryViewFactory>();
             mockOfInterviewSummaryViewFactory.Setup(x => x.Load(interviewId)).Returns(new InterviewSummary
             {
@@ -26,12 +24,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewAnswersCommandVali
             
             interview.Apply(Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, supervisorId: responsibleId.FormatGuid()).Payload);
             commandValidator = Create.Service.InterviewAnswersCommandValidator(mockOfInterviewSummaryViewFactory.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => commandValidations.ForEach(validate => exceptions.Add(Catch.Only<InterviewException>(validate)));
+        public void BecauseOf() => commandValidations.ForEach(validate =>
+        {
+            try
+            {
+                validate();
+            }
+            catch (InterviewException e)
+            {
+                exceptions.Add(e);
+            }
+        });
 
-        It should_not_any_interview_exceptions = () =>
-            exceptions.ShouldEachConformTo(x => x == null);
+        [NUnit.Framework.Test] public void should_not_any_interview_exceptions () =>
+            exceptions.Should().BeEmpty();
 
         static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         static readonly Guid responsibleId = Guid.Parse("22222222222222222222222222222222");

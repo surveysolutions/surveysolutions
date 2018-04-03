@@ -1,11 +1,10 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.UI.Designer.Code.Implementation;
 
 using it = Moq.It;
@@ -34,10 +33,10 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             commandInflater.PrepareDeserializedCommandForExecution(command);
 
         [NUnit.Framework.Test] public void should_not_be_null () =>
-           command.SourceDocument.ShouldNotBeNull();
+           command.SourceDocument.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_questionnarie_id_as_provided () =>
-            command.SourceDocument.PublicKey.ShouldEqual(questoinnaireId);
+            command.SourceDocument.PublicKey.Should().Be(questoinnaireId);
 
         private static CommandInflater commandInflater;
         private static PasteAfter command;

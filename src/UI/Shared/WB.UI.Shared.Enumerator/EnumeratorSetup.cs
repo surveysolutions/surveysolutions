@@ -14,12 +14,10 @@ using MvvmCross.Binding.Combiners;
 using MvvmCross.Core.Views;
 using MvvmCross.Droid.Platform;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Droid.Support.V7.AppCompat.Target;
-using MvvmCross.Droid.Support.V7.AppCompat.Widget;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platform;
 using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Exceptions;
+using MvvmCross.Platform.Logging;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -29,6 +27,7 @@ using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
 using WB.UI.Shared.Enumerator.ValueCombiners;
+using Xamarin.Controls;
 using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
@@ -47,7 +46,7 @@ namespace WB.UI.Shared.Enumerator
                 var exception = args.Exception;
 
                 // this is super dirty hack in order to get exception's stack trace which happend inside async method
-                FieldInfo stackTrace = typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
+                FieldInfo stackTrace = typeof(Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance);
                 stackTrace?.SetValue(exception, null);
                 this.ProcessException(Java.Lang.Throwable.FromException(exception));
 
@@ -57,8 +56,7 @@ namespace WB.UI.Shared.Enumerator
             {
                 object exceptionObject = args.ExceptionObject;
 
-                var typedException = exceptionObject as Exception;
-                if (typedException != null)
+                if (exceptionObject is Exception typedException)
                 {
                     ProcessException(typedException);
                 }
@@ -71,7 +69,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            Mvx.Error("UncaughtExceptionHandler with exception {0}", exception.ToLongString());
+            Mvx.Resolve<IMvxLogProvider>().GetLogFor<EnumeratorSetup>().Error(exception, "UncaughtExceptionHandler");
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
         }
 
@@ -114,6 +112,7 @@ namespace WB.UI.Shared.Enumerator
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<NumericEditText>("Value", (view) => new NumericValueBinding(view));
+            registry.RegisterCustomBindingFactory<NumericEditText>("Disabled", (view) => new NumericDisableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Watermark", (view) => new TextViewWatermarkBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Html", (view) => new TextViewHtmlBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextFormatted", (view) => new TextViewTextFormattedBinding(view));
@@ -143,6 +142,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
+            registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
+            registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);

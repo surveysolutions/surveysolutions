@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly HqUserManager userManager;
-
+        
         public TeamController(ICommandService commandService, ILogger logger, IAuthorizedUser authorizedUser, HqUserManager userManager)
             : base(commandService, logger)
         {
@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         [ValidateAntiForgeryToken]
         [ObserverNotAllowed]
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
-        public async Task<ActionResult> UpdatePassword(UserEditModel model)
+        public async Task<ActionResult> UpdatePassword([Bind(Prefix = "UpdatePassword")]UserEditModel model)
         {
             if (this.ModelState.IsValid)
             {
@@ -112,7 +112,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                     return RedirectToAction("Cancel", model);
                 }
                 else
-                    this.ModelState.AddModelError(nameof(UserEditModel.Password), string.Join(@", ", updateResult.Errors));
+                    this.ModelState.AddModelError("UpdatePassword." + nameof(UserEditModel.Password), string.Join(@", ", updateResult.Errors));
             }
 
             return View("Edit", model);

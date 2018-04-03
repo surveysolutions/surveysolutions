@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -37,25 +35,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0018 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0018");
+            verificationMessages.Single().Code.Should().Be("WB0018");
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.Single().References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_firts_message_reference_with_type_Question () =>
-            verificationMessages.Single().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_firts_message_reference_with_id_of_questionWithSubstitutionReferenceTomultiAnswerQuestionId () =>
-            verificationMessages.Single().References.First().Id.ShouldEqual(questionWithSubstitutionReferenceTomultiAnswerQuestionId);
+            verificationMessages.Single().References.First().Id.Should().Be(questionWithSubstitutionReferenceTomultiAnswerQuestionId);
 
         [NUnit.Framework.Test] public void should_return_last_message_reference_with_type_Question () =>
-            verificationMessages.Single().References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_last_message_reference_with_id_of_questionSubstitutionReferencerOfNotSupportedTypeId () =>
-            verificationMessages.Single().References.Last().Id.ShouldEqual(multiAnswerQuestionId);
+            verificationMessages.Single().References.Last().Id.Should().Be(multiAnswerQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

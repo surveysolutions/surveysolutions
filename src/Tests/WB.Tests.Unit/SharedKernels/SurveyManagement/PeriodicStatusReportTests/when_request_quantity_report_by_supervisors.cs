@@ -1,37 +1,37 @@
-﻿using System.Web.Mvc;
-using Machine.Specifications;
+using System.Web.Mvc;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.Controllers;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PeriodicStatusReportTests
 {
     internal class when_request_quantity_report_by_supervisors
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             reportController = Create.Controller.ReportsController();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = reportController.QuantityBySupervisors(PeriodiceReportType.NumberOfCompletedInterviews) as ViewResult;
 
-        It should_active_page_be_NumberOfCompletedInterviews = () =>
-            ((MenuItem)result.ViewBag.ActivePage).ShouldEqual(MenuItem.NumberOfCompletedInterviews);
+        [NUnit.Framework.Test] public void should_active_page_be_NumberOfCompletedInterviews () =>
+            ((MenuItem)result.ViewBag.ActivePage).Should().Be(MenuItem.NumberOfCompletedInterviews);
 
-        It should_responsible_name_be_a_link = () =>
-            ((PeriodicStatusReportModel)result.Model).CanNavigateToQuantityByTeamMember.ShouldEqual(true);
+        [NUnit.Framework.Test] public void should_responsible_name_be_a_link () =>
+            ((PeriodicStatusReportModel)result.Model).CanNavigateToQuantityByTeamMember.Should().Be(true);
 
-        It should_go_back_to_supervisor_button_be_invisible = () =>
-            ((PeriodicStatusReportModel)result.Model).CanNavigateToQuantityBySupervisors.ShouldEqual(false);
+        [NUnit.Framework.Test] public void should_go_back_to_supervisor_button_be_invisible () =>
+            ((PeriodicStatusReportModel)result.Model).CanNavigateToQuantityBySupervisors.Should().Be(false);
 
-        It should_WebApiActionName_be_BySupervisors = () =>
-           ((PeriodicStatusReportModel)result.Model).WebApiActionName.ShouldEqual(PeriodicStatusReportWebApiActionName.BySupervisors);
+        [NUnit.Framework.Test] public void should_WebApiActionName_be_BySupervisors () =>
+           ((PeriodicStatusReportModel)result.Model).WebApiActionName.Should().Be(PeriodicStatusReportWebApiActionName.BySupervisors);
 
-        It should_ReportName_be_Quantity = () =>
-           ((PeriodicStatusReportModel)result.Model).ReportName.ShouldEqual("Quantity");
+        [NUnit.Framework.Test] public void should_ReportName_be_Quantity () =>
+           ((PeriodicStatusReportModel)result.Model).ReportName.Should().Be("Quantity");
 
         private static ReportsController reportController;
         private static ViewResult result;

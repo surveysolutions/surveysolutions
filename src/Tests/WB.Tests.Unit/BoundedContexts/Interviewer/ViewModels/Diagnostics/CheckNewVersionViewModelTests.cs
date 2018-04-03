@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 {
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             var exceptionMessage = "message";
             var tabletDiagnosticServiceMock= Substitute.For<ITabletDiagnosticService>();
 
-            tabletDiagnosticServiceMock.UpdateTheApp(CancellationToken.None).ThrowsForAnyArgs(new Exception(exceptionMessage));
+            tabletDiagnosticServiceMock.UpdateTheApp(CancellationToken.None, true).ThrowsForAnyArgs(new Exception(exceptionMessage));
 
             var checkNewVersionViewModel = CreateCheckNewVersionViewModel(tabletDiagnosticService: tabletDiagnosticServiceMock);
 

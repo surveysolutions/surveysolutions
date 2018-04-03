@@ -1,13 +1,10 @@
-﻿using Machine.Specifications;
-using Moq;
-using MvvmCross.Plugins.Messenger;
+﻿using MvvmCross.Plugins.Messenger;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,7 +14,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboardItemViewModelTests
 {
-    [Subject(typeof(InterviewDashboardItemViewModel))]    
     [TestOf(typeof(InterviewDashboardItemViewModel))]
     public class InterviewDashboardItemViewModelTestsContext 
     {

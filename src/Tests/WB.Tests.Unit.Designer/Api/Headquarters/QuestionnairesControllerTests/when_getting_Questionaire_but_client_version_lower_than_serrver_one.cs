@@ -1,20 +1,20 @@
 using System;
 using System.Net;
 using System.Web.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.UI.Designer.Api.Headquarters;
 
-
 namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
 {
     internal class when_getting_Questionaire_but_client_version_lower_than_serrver_one : QuestionnairesControllerTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test] public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase () {
             var membershipUserService =
                 Mock.Of<IMembershipUserService>(
                     _ => _.WebUser == Mock.Of<IMembershipWebUser>(u => u.UserId == userId));
@@ -30,18 +30,15 @@ namespace WB.Tests.Unit.Designer.Api.Headquarters.QuestionnairesControllerTests
             questionnairesController = CreateQuestionnairesController(membershipUserService: membershipUserService,
                 questionnaireViewFactory: questionnaireViewFactory,
                 engineVersionService: expressionsEngineVersionService);
-            BecauseOf();
+
+            var exception = Assert.Throws<HttpResponseException>(() => questionnairesController.Get(questionnaireId, 12, null));
+
+            Assert.That(exception.Response.StatusCode, Is.EqualTo(HttpStatusCode.ExpectationFailed));
+
+            exception.Response.ReasonPhrase.ToLower().ToSeparateWords().Should().Contain("questionnaire", "contains",
+                "functionality", "not", "supported", "update",
+                $"\"{newQuestionnaireFeatureDescription}\"");
         }
-
-        private void BecauseOf() =>
-            exception = Catch.Only<HttpResponseException>(() => questionnairesController.Get(questionnaireId, 12, null));
-
-        [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_StatusCode_ExpectationFailed () =>
-            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.ExpectationFailed);
-
-        [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase () =>
-            exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "contains", "functionality", "not", "supported", "update",
-                    $"\"{newQuestionnaireFeatureDescription}\"");
 
         private static HQQuestionnairesController questionnairesController;
         private static HttpResponseException exception;

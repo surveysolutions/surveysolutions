@@ -53,8 +53,12 @@
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelRoster()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="add-comment-button" class="btn btn-lg btn-link" ng-click="toggleComments(activeQuestion)" unsaved-warning-clear>
+                <span ng-i18next ng-hide="isCommentsBlockVisible">EditorAddComment</span>
+                <span ng-i18next ng-show="isCommentsBlockVisible">EditorHideComment</span>
+            </button>
             <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="deleteRoster()" unsaved-warning-clear ng-i18next>Delete</button>
-            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
+            <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser"/>
         </div>
     </div>
 
@@ -179,7 +183,7 @@
         <div class="form-group">
             <label for="edit-fixed-roster-title" class="wb-label">{{'RosterSourceFixed' | i18next}} <help key="fixedTitles" /></label>
             <!--<textarea id="edit-fixed-roster-title" class="form-control" ng-model="activeRoster.fixedRosterTitles" msd-elastic split-array></textarea>-->
-            <div class="singleOption">
+            <div class="options-editor">
                 <div ng-if="activeRoster.useListAsRosterTitleEditor" class="form-group">
                     <div class="table-holder">
                         <div class="table-row fixed-roster-titles-editor" ng-repeat="title in activeRoster.fixedRosterTitles">

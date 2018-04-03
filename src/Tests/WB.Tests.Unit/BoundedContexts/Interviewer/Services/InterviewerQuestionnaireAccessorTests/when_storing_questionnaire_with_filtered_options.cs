@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -16,14 +15,12 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
 {
     internal class when_storing_questionnaire_with_filtered_options : InterviewerQuestionnaireAccessorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
 
             var questionnaireDocument = new QuestionnaireDocument()
             {
@@ -52,23 +49,24 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestion
                 questionnaireStorage: mockOfPlainQuestionnaireRepository.Object,
                 optionsRepository : mockOfOptionsRepositoryRepository.Object,
                 translationRepository: mockOfTranslationRepository.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interviewerQuestionnaireAccessor.StoreQuestionnaire(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire, new List<TranslationDto>());
+        public void BecauseOf() => interviewerQuestionnaireAccessor.StoreQuestionnaire(questionnaireIdentity, questionnaireDocumentAsString, isCensusQuestionnaire, new List<TranslationDto>());
 
-        It should_store_questionnaire_document_view_to_plain_storage = () =>
+        [NUnit.Framework.Test] public void should_store_questionnaire_document_view_to_plain_storage () =>
             mockOfPlainQuestionnaireRepository.Verify(x => x.StoreQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, Moq.It.IsAny<QuestionnaireDocument>()), Times.Once);
 
-        It should_store_questionnaire_view_to_plain_storage = () =>
+        [NUnit.Framework.Test] public void should_store_questionnaire_view_to_plain_storage () =>
             mockOfQuestionnaireViewRepository.Verify(x => x.Store(Moq.It.IsAny<QuestionnaireView>()), Times.Once);
 
-        It should_store_translations_to_storage = () =>
+        [NUnit.Framework.Test] public void should_store_translations_to_storage () =>
             mockOfTranslationRepository.Verify(x => x.Store(Moq.It.IsAny<List<TranslationInstance>>()), Times.Once);
 
-        It should_remove_options_to_storage = () =>
+        [NUnit.Framework.Test] public void should_remove_options_to_storage () =>
             mockOfOptionsRepositoryRepository.Verify(x => x.RemoveOptionsForQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>()), Times.Once);
 
-        It should_store_options_to_storage = () =>
+        [NUnit.Framework.Test] public void should_store_options_to_storage () =>
             mockOfOptionsRepositoryRepository.Verify(x => x.StoreOptionsForQuestion(Moq.It.IsAny<QuestionnaireIdentity>(), questionId, Moq.It.IsAny <List<Answer>>(), Moq.It.IsAny<List<TranslationDto>>()), Times.Once);
 
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);

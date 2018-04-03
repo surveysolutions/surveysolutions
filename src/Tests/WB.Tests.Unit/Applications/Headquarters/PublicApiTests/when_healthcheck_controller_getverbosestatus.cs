@@ -1,16 +1,15 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_healthcheck_controller_getverbosestatus : ApiTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             /*KP-4929    databaseHealthCheckMock = new Mock<IDatabaseHealthCheck>();
                 eventStoreHealthCheckMock = new Mock<IEventStoreHealthCheck>();
                 brokenSyncPackagesStorageMock = new Mock<IBrokenSyncPackagesStorage>();
@@ -27,30 +26,31 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                   brokenSyncPackagesStorageMock.Object,
                    chunkReaderMock.Object,
                 folderPermissionCheckerMock.Object*/);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             result = controller.GetVerboseStatus();
-        };
+        }
 
-        It should_return_HealthCheckResults = () =>
-            result.ShouldBeOfExactType<HealthCheckResults>();
+        [NUnit.Framework.Test] public void should_return_HealthCheckResults () =>
+            result.Should().BeOfType<HealthCheckResults>();
 
-        It should_return_Happy_status = () =>
-            result.Status.ShouldEqual(HealthCheckStatus.Happy);
+        [NUnit.Framework.Test] public void should_return_Happy_status () =>
+            result.Status.Should().Be(HealthCheckStatus.Happy);
 
-        /*KP-4929    It should_call_IHealthCheckService_Check_once = () =>
+        /*KP-4929    [NUnit.Framework.Test] public void should_call_IHealthCheckService_Check_once () =>
              serviceMock.Verify(x => x.Check(), Times.Once());
 
 
-         It should_call_IBrokenSyncPackagesStorage_Check_once = () =>
+         [NUnit.Framework.Test] public void should_call_IBrokenSyncPackagesStorage_Check_once () =>
              brokenSyncPackagesStorageMock.Verify(x => x.GetListOfUnhandledPackages(), Times.Once());
 
-          It should_call_IChunkReader_Check_once = () =>
+          [NUnit.Framework.Test] public void should_call_IChunkReader_Check_once () =>
                 chunkReaderMock.Verify(x => x.GetNumberOfSyncPackagesWithBigSize(), Times.Once());*/
 
-           It should_call_IFolderPermissionChecker_Check_once = () =>
+           [NUnit.Framework.Test] public void should_call_IFolderPermissionChecker_Check_once () =>
                healthCheckService.Verify(x => x.Check(), Times.Once());
 
 

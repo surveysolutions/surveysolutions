@@ -397,4 +397,12 @@
   <data name="ReloadQuestionnaire" xml:space="preserve">
     <value>Загрузить новый опросник</value>
   </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Ошибка: Это интервью не последней версии</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Внимание! Это интервью содержит поврежденные данные, &lt;br /&gt;
+поэтому доступна только предыдущая версия. &lt;br /&gt;
+Oбратитесь в тех. поддержку за помощью</value>
+  </data>
 </root>

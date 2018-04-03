@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_multiple_options_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1_and_options_are_X_Y_Z_and_selected_are_Z_and_X : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
@@ -53,38 +52,39 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, RosterVector.Empty, rosterInstanceId, sortIndex: null));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerMultipleOptionsQuestion(userId, questionId, rosterVector, DateTime.Now, new[] { optionZ, optionX });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_MultipleOptionsQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
 
-        It should_raise_1_RosterRowsTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_raise_1_RosterRowsTitleChanged_events () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
-        It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
-                .ShouldContainOnly(rosterAId, rosterBId);
+                .Should().BeEquivalentTo(rosterAId, rosterBId);
 
-        It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual((decimal[]) RosterVector.Empty)));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual((decimal[]) RosterVector.Empty)));
 
-        It should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
 
-        It should_set_title_to__Z_comma_space_X__in_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_title_to__Z_comma_space_X__in_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == "Z, X"));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.Title == "Z, X"));
 
         private static EventContext eventContext;
         private static Interview interview;

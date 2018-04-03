@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System;
 using AppDomainToolkit;
-using Machine.Specifications;
-using Main.Core.Documents;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.SharedKernels.DataCollection.V9;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
@@ -14,12 +10,12 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_models_with_variable_usage_in_nested_roster : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -62,14 +58,14 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 };
             });
 
-        It should_disable_2_roster_groups = () =>
-            results.CoundOfDisabledGroups.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_disable_2_roster_groups () =>
+            results.CoundOfDisabledGroups.Should().Be(2);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;

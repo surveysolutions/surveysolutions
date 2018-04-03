@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using AutoFixture;
-using AutoFixture.AutoMoq;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
 using Moq;
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.Designer.Api.WebTester
         [SetUp]
         public void Arrange()
         {
-            fixture = new Fixture().Customize(new AutoMoqCustomization());
+            fixture = Abc.Create.Other.AutoFixture();
             document = Create.QuestionnaireDocumentWithOneChapter(Id.gA, Create.NumericIntegerQuestion());
             questionnaireView = Create.QuestionnaireView(document);
 

@@ -7,7 +7,6 @@ using Microsoft.Owin.Security;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Code;
 using WB.Tests.Abc;
 

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -13,7 +13,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_creating_interview_from_snapshot_when_question_type_is_wrong : StatefulInterviewTestsContext
     {
-        private Establish context = () =>
+        [Test]
+        public void should_throw_exception()
         {
             Guid questionnaireId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid integerQuestionId = Guid.Parse("00000000000000000000000000000001");
@@ -39,18 +40,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 userId: userId, answers: answersDtos, rosterGroupInstances: rosterInstances);
 
             command = Create.Command.CreateInterviewFromSnapshot(userId, synchronizationDto);
-        };
 
-        Because of = () => exception = Catch.Exception(() => interview.CreateInterviewFromSnapshot(command));
-
-        It should_throw_exception = () =>
-            exception.ShouldNotBeNull();
+            Assert.That(() => interview.CreateInterviewFromSnapshot(command), Throws.Exception);
+        }
 
         static InterviewSynchronizationDto synchronizationDto;
         static StatefulInterview interview;
         static readonly Guid userId = Guid.Parse("99999999999999999999999999999999");
         static Identity questionIdentity;
-        static Exception exception;
         private static CreateInterviewFromSnapshotCommand command;
     }
 }

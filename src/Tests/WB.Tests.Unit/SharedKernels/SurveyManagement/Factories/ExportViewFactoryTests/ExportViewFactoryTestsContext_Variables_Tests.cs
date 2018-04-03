@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -42,9 +38,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1);
 
 
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[variableId].ShouldNotBeNull();
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster1Id }].HeaderItems[variableInRosterId].ShouldNotBeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.Should().BeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[variableId].Should().NotBeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster1Id }].HeaderItems[variableInRosterId].Should().NotBeNull();
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]
@@ -66,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1),
                 interviewData);
 
-            result.Levels[0].Records[0].Answers.First().ShouldEqual(new[] { exportResult });
+            result.Levels[0].Records[0].Answers.First().Should().BeEquivalentTo(new[] { exportResult });
         }
 
 

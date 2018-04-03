@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -33,13 +32,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0029");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.GetError("WB0029").References.Count().ShouldEqual(1);
+            verificationMessages.GetError("WB0029").References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
-            verificationMessages.GetError("WB0029").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0029").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
-            verificationMessages.GetError("WB0029").References.First().Id.ShouldEqual(questionId);
+            verificationMessages.GetError("WB0029").References.First().Id.Should().Be(questionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

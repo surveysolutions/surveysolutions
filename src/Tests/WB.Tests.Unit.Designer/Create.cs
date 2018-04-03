@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -8,7 +9,6 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs;
-using NSubstitute;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -25,7 +25,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V10.Templates;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.V5.Templates;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
@@ -33,6 +32,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
+using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -52,6 +52,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Questionnaire;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -377,7 +378,7 @@ namespace WB.Tests.Unit.Designer
 
         public static MultimediaQuestion MultimediaQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string variable = null, string validationMessage = null, string title = "test", QuestionScope scope = QuestionScope.Interviewer
-            , bool hideIfDisabled = false)
+            , bool hideIfDisabled = false, bool isSignature = false)
         {
             return new MultimediaQuestion("Question T")
             {
@@ -389,7 +390,8 @@ namespace WB.Tests.Unit.Designer
                 HideIfDisabled = hideIfDisabled,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-                QuestionText = title
+                QuestionText = title,
+                IsSignature = isSignature
             };
         }
 
@@ -445,7 +447,7 @@ namespace WB.Tests.Unit.Designer
         public static NumericQuestion NumericIntegerQuestion(Guid? id = null, string variable = null, string enablementCondition = null,
             string validationExpression = null, QuestionScope scope = QuestionScope.Interviewer, bool isPrefilled = false,
             bool hideIfDisabled = false, IEnumerable<ValidationCondition> validationConditions = null, Guid? linkedToRosterId = null,
-            string title = "test", string variableLabel = null)
+            string title = "test", string variableLabel = null, Option[] options = null)
         {
             var publicKey = id ?? Guid.NewGuid();
             var stataExportCaption = variable ?? "numeric_question"+publicKey;
@@ -463,7 +465,8 @@ namespace WB.Tests.Unit.Designer
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 LinkedToRosterId = linkedToRosterId,
                 QuestionText = title,
-                VariableLabel = variableLabel
+                VariableLabel = variableLabel,
+                Answers = options?.Select(x => new Answer{ AnswerValue = x.Value, AnswerText = x.Title}).ToList()
             };
         }
 
@@ -484,8 +487,17 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static Option[] Options(params Option[] options)
+        {
+            return options.ToArray();
+        }
 
-        public static Answer Option(int code, string text = null, string parentValue = null, Guid? id = null)
+        public static Option[] Options(params Answer[] options)
+        {
+            return options.Select(x => new Option(x.GetParsedValue().ToString(CultureInfo.InvariantCulture), x.AnswerText)).ToArray();
+        }
+
+        public static Answer Option(int code, string text = null, string parentValue = null)
         {
             return new Answer
             {
@@ -495,7 +507,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
+        public static Answer Option(string value = null, string text = null, string parentValue = null)
         {
             return new Answer
             {
@@ -510,7 +522,7 @@ namespace WB.Tests.Unit.Designer
             bool hideIfDisabled = false)
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            return new QRBarcodeQuestion()
+            return new QRBarcodeQuestion
             {
                 PublicKey = publicKey,
                 ConditionExpression = enablementCondition,
@@ -573,14 +585,8 @@ namespace WB.Tests.Unit.Designer
 
         public static Questionnaire Questionnaire(Guid responsible, QuestionnaireDocument document)
         {
-            var questionnaire = new Questionnaire(
-                Mock.Of<ILogger>(),
-                Mock.Of<IClock>(),
-                Mock.Of<ILookupTableService>(),
-                Mock.Of<IAttachmentService>(),
-                Mock.Of<ITranslationsService>(),
-                Mock.Of<IQuestionnireHistoryVersionsService>());
-            questionnaire.Initialize(Guid.NewGuid(), document, new List<SharedPerson> {Create.SharedPerson(responsible)});
+            var questionnaire = Questionnaire();
+            questionnaire.Initialize(document.PublicKey, document, new List<SharedPerson> {Create.SharedPerson(responsible)});
             return questionnaire;
         }
 
@@ -963,22 +969,22 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireNodeReference[] questionnaireNodeReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, IEnumerable<string> compilationErrorMessages, params QuestionnaireEntityReference[] questionnaireEntityReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireNodeReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, compilationErrorMessages, questionnaireEntityReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
+        public static QuestionnaireVerificationMessage VerificationError(string code, string message, params QuestionnaireEntityReference[] questionnaireEntityReferences)
         {
-            return QuestionnaireVerificationMessage.Error(code, message, questionnaireNodeReferences);
+            return QuestionnaireVerificationMessage.Error(code, message, questionnaireEntityReferences);
         }
 
-        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireNodeReference[] questionnaireNodeReferences)
+        public static QuestionnaireVerificationMessage VerificationWarning(string code, string message, params QuestionnaireEntityReference[] questionnaireEntityReferences)
         {
-            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireNodeReferences);
+            return QuestionnaireVerificationMessage.Warning(code, message, questionnaireEntityReferences);
         }
 
-        public static VerificationMessage VerificationMessage(string code, string message, params VerificationReferenceEnriched[] references)
+        public static VerificationMessage VerificationMessage(string code, string message, params QuestionnaireEntityExtendedReference[] extendedReferences)
         {
             return new VerificationMessage
             {
@@ -988,20 +994,20 @@ namespace WB.Tests.Unit.Designer
                 {
                     new VerificationMessageError()
                     {
-                        References = references.ToList()
+                        References = extendedReferences.ToList()
                     }
                 }
             };
         }
 
-        public static QuestionnaireNodeReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
+        public static QuestionnaireEntityReference VerificationReference(Guid? id = null, QuestionnaireVerificationReferenceType type = QuestionnaireVerificationReferenceType.Question)
         {
-            return new QuestionnaireNodeReference(type, id ?? Guid.NewGuid());
+            return new QuestionnaireEntityReference(type, id ?? Guid.NewGuid());
         }
 
-        public static VerificationReferenceEnriched VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
+        public static QuestionnaireEntityExtendedReference VerificationReferenceEnriched(QuestionnaireVerificationReferenceType type, Guid id, string title)
         {
-            return new VerificationReferenceEnriched
+            return new QuestionnaireEntityExtendedReference
             {
                 Type = type,
                 ItemId = id.FormatGuid(),
@@ -1139,10 +1145,11 @@ namespace WB.Tests.Unit.Designer
 
             public static UpdateNumericQuestion UpdateNumericQuestion(Guid questionnaireId, Guid questionId, Guid responsibleId, 
                 string title, bool isPreFilled = false, QuestionScope scope = QuestionScope.Interviewer, bool isInteger = false, 
-                bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null)
+                bool useFormatting = false, int? countOfDecimalPlaces = null, List<ValidationCondition> validationConditions = null,
+                Option[] options = null)
             {
                 return new UpdateNumericQuestion(questionnaireId, questionId, responsibleId, new CommonQuestionParameters {Title = title}, isPreFilled, scope, 
-                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: null);
+                    isInteger, useFormatting, countOfDecimalPlaces, validationConditions ?? new List<ValidationCondition>(), options: options);
             }
 
             public static AddVariable AddVariable(Guid questionnaireId, Guid entityId, Guid parentId, Guid responsibleId, string name = null, string expression = null, VariableType variableType = VariableType.String, string label = null, int? index =null)
@@ -1167,6 +1174,23 @@ namespace WB.Tests.Unit.Designer
             public static CreateQuestionnaire CreateQuestionnaire(Guid questionnaireId, string title, Guid? createdBy, bool isPublic)
             {
                 return new CreateQuestionnaire(questionnaireId, title, createdBy ?? Guid.NewGuid(), isPublic);
+            }
+
+            public static UpdateMultimediaQuestion UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string instructions, string enablementCondition, string variableLabel, bool hideIfDisabled, Guid responsibleId, QuestionScope scope, QuestionProperties properties, bool isSignature)
+            {
+                return new UpdateMultimediaQuestion(Guid.NewGuid(), questionId, responsibleId, new CommonQuestionParameters
+                {
+                    EnablementCondition = enablementCondition,
+                    HideIfDisabled = hideIfDisabled,
+                    Title = title,
+                    Instructions = instructions,
+                    VariableName = variableName,
+                    VariableLabel = variableLabel,
+                    HideInstructions = properties.HideInstructions
+                }, scope)
+                {
+                    IsSignature = isSignature
+                };
             }
         }
 
@@ -1257,7 +1281,9 @@ namespace WB.Tests.Unit.Designer
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage = null)
             => new TranslationsService(
                 traslationsStorage ?? new TestPlainStorage<TranslationInstance>(),
-                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()));
+                questionnaireStorage ?? Stub<IPlainKeyValueStorage<QuestionnaireDocument>>.Returning(Create.QuestionnaireDocument()),
+                new TranslationsExportService()
+            );
 
 
         public static DeskAuthenticationService DeskAuthenticationService(string multipassKey, string returnUrlFormat, string siteKey)

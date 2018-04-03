@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 .Select(r => new
                 {
                     Name = r.VariableName,
-                    Reference = QuestionnaireNodeReference.CreateForRoster(r.PublicKey)
+                    Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
                 })
                 .Union(questionnaire.Find<IQuestion>(q => true)
                     .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     .Select(r => new
                     {
                         Name = r.Value.TableName,
-                        Reference = QuestionnaireNodeReference.CreateForLookupTable(r.Key)
+                        Reference = QuestionnaireEntityReference.CreateForLookupTable(r.Key)
                     }))
                 .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
                     .Where(x => !string.IsNullOrEmpty(x.Name))
@@ -136,7 +136,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return (questionnaire) => questionnaire
                 .LookupTables
                 .Where(entity => hasError(entity.Key, entity.Value, questionnaire))
-                .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireNodeReference.CreateForLookupTable(entity.Key)));
+                .Select(entity => QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireEntityReference.CreateForLookupTable(entity.Key)));
         }
 
         private Func<MultiLanguageQuestionnaireDocument, IEnumerable<QuestionnaireVerificationMessage>> CriticalForLookupTable(
@@ -147,7 +147,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 let lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, lookupTable.Key)
                 where lookupTableContent != null
                 where hasError(lookupTable.Value, lookupTableContent, questionnaire)
-                select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireNodeReference.CreateForLookupTable(lookupTable.Key));
+                select QuestionnaireVerificationMessage.Critical(code, message, QuestionnaireEntityReference.CreateForLookupTable(lookupTable.Key));
         }
 
         public IEnumerable<QuestionnaireVerificationMessage> Verify(MultiLanguageQuestionnaireDocument multiLanguageQuestionnaireDocument)

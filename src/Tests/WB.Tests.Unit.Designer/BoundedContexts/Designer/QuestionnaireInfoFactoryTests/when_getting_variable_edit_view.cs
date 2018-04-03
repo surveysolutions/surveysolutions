@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -28,22 +28,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetVariableEditView(questionnaireId, entityId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_variable_with_Id_equals_variableId () =>
-            result.Id.ShouldEqual(entityId);
+            result.Id.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_return_variable_with_itemId_equals_formated_variableId () =>
-            result.ItemId.ShouldEqual(entityId.FormatGuid());
+            result.ItemId.Should().Be(entityId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_variable_name_equals () =>
-            result.VariableData.Name.ShouldEqual(GetVariable(entityId).Name);
+            result.VariableData.Name.Should().Be(GetVariable(entityId).Name);
 
         [NUnit.Framework.Test] public void should_return_variable_type_equals () =>
-            result.VariableData.Type.ShouldEqual(GetVariable(entityId).Type);
+            result.VariableData.Type.Should().Be(GetVariable(entityId).Type);
 
         [NUnit.Framework.Test] public void should_return_variable_expression_equals () =>
-            result.VariableData.Expression.ShouldEqual(GetVariable(entityId).Expression);
+            result.VariableData.Expression.Should().Be(GetVariable(entityId).Expression);
 
         private static IVariable GetVariable(Guid entityId)
         {

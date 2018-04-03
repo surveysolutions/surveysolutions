@@ -1,14 +1,13 @@
 using System;
 using System.Net;
 using System.Web.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.Infrastructure.ReadSide;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
-using WB.UI.Designer.Api;
 using WB.UI.Designer.Api.Headquarters;
 
 
@@ -36,17 +35,17 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         }
 
         private void BecauseOf() =>
-            exception = Catch.Only<HttpResponseException>(() =>
+            exception = Assert.Throws<HttpResponseException>(() =>
                 importController.Questionnaire(request));
 
         [NUnit.Framework.Test] public void should_throw_HttpResponseException () =>
-            exception.ShouldNotBeNull();
+            exception.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_StatusCode_UpgradeRequired () =>
-            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.UpgradeRequired);
+            exception.Response.StatusCode.Should().Be(HttpStatusCode.UpgradeRequired);
 
         [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase () =>
-            exception.Response.ReasonPhrase.ShouldContain("You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.");
+            exception.Response.ReasonPhrase.Should().Contain("You have an obsolete version of the Headquarters application. Please contact support@mysurvey.solutions to request an update.");
 
         private static ImportV2Controller importController;
         private static HttpResponseException exception;

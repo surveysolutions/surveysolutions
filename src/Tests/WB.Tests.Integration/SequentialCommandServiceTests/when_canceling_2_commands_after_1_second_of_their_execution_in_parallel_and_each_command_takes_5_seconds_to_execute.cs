@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
@@ -35,8 +34,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_execute_only_first_command () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .Handles<StoreNameFor5Seconds>(command => command.AggregateId, aggregate => aggregate.StoreNameFor5Seconds);
@@ -45,9 +43,13 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 => _.GetLatest(typeof(Aggregate), Moq.It.IsAny<Guid>()) == new Aggregate());
 
             commandService = IntegrationCreate.SequentialCommandService(repository: repository);
-        };
 
-        Because of = () =>
+            BecauseOf();
+
+            executedCommands.Should().BeEquivalentTo("first");
+        }
+
+        public void BecauseOf() 
         {
             try
             {
@@ -64,10 +66,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 Task.WaitAll(t1, t2);
             }
             catch (AggregateException) { }
-        };
-
-        It should_execute_only_first_command = () =>
-            executedCommands.ShouldContainOnly("first");
+        }
 
         private static List<string> executedCommands = new List<string>();
         private static SequentialCommandService commandService;

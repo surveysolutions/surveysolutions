@@ -1,8 +1,8 @@
 ﻿using System;
-using Machine.Specifications;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
@@ -12,14 +12,16 @@ using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 {
-    [Subject(typeof(TeamInterviewsFactory))]
     internal class TeamInterviewsFactoryTestContext : with_postgres_db
     {
         public static ITeamInterviewsFactory CreateTeamInterviewsFactory(
             out PostgreReadSideStorage<InterviewSummary> reader,
             out PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader)
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[]
+            {
+                typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap)
+            }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -71,7 +73,8 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
         }
 
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown () { pgSqlConnection.Close(); }
 
         protected static NpgsqlConnection pgSqlConnection;
         protected static CqrsPostgresTransactionManager postgresTransactionManager;

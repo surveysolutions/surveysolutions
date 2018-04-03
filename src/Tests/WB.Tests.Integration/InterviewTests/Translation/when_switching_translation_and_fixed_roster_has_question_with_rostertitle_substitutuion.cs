@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -13,14 +12,12 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Translation
 {
     internal class when_switching_translation_and_fixed_roster_has_question_with_rostertitle_substitutuion : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
@@ -54,19 +51,21 @@ namespace WB.Tests.Integration.InterviewTests.Translation
             interview = SetupStatefullInterview(questionnaire, questionnaireStorage: repo);
            
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.SwitchTranslation(new SwitchTranslation(interview.Id, "testTranslation", userId));
 
-        It should_raise_VariablesValuesChanged_event_for_the_variable = () =>
-            interview.GetTitleText(Create.Identity(t1Id, 1)).ShouldEqual("title with test");
+        [NUnit.Framework.Test] public void should_raise_VariablesValuesChanged_event_for_the_variable () =>
+            interview.GetTitleText(Create.Identity(t1Id, 1)).Should().Be("title with test");
 
         static EventContext eventContext;
         static StatefulInterview interview;

@@ -1,16 +1,13 @@
 using System;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuestionHandlerTests
 {
     internal class when_updating_multi_option_question_and_variable_name_is_empty : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_not_throw_exception () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -20,30 +17,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-            BecauseOf();
+            questionnaire.UpdateMultiOptionQuestion(
+                questionId: questionId,
+                title: title,
+                variableName: variableName,
+                variableLabel: null,
+                scope: scope,
+                enablementCondition: enablementCondition,
+                hideIfDisabled: false,
+                instructions: instructions,
+                responsibleId: responsibleId
+                , options: options,
+                linkedToEntityId: linkedToQuestionId,
+                areAnswersOrdered: areAnswersOrdered,
+                maxAllowedAnswers: maxAllowedAnswers,
+                yesNoView: yesNoView,
+                validationConditions: new System.Collections.Generic.List<
+                    WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
+                linkedFilterExpression: null, properties: Create.QuestionProperties());
         }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
-                questionnaire.UpdateMultiOptionQuestion(
-                    questionId: questionId,
-                    title: title,
-                    variableName: variableName,
-                    variableLabel: null,
-                    scope: scope,
-                    enablementCondition: enablementCondition,
-                    hideIfDisabled: false,
-                    instructions: instructions,
-                    responsibleId: responsibleId
-                    , options: options,
-                    linkedToEntityId: linkedToQuestionId,
-                    areAnswersOrdered: areAnswersOrdered,
-                    maxAllowedAnswers: maxAllowedAnswers,
-                    yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties()));
-
-        [NUnit.Framework.Test] public void should_not_throw_exception () => exception.ShouldBeNull();
-
 
         private static Questionnaire questionnaire;
         private static Exception exception;

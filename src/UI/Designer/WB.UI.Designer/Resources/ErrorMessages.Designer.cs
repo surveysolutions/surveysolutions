@@ -386,11 +386,11 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are not authorized to perform this action. Please contact support.
+        ///   Looks up a localized string similar to You are not authorized to perform this action. Please contact support. IP:{0}.
         /// </summary>
-        internal static string UserNeedToContactSupport {
+        internal static string UserNeedToContactSupportFormat {
             get {
-                return ResourceManager.GetString("UserNeedToContactSupport", resourceCulture);
+                return ResourceManager.GetString("UserNeedToContactSupportFormat", resourceCulture);
             }
         }
         

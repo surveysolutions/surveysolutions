@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_synchronizing_interview_events_for_interviews_created_before_version_5_15 : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventContext = new EventContext();
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(
                 Create.Entity.QuestionnaireIdentity(questionnaireId, 1), 
@@ -41,21 +40,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                            Create.Event.TextListQuestionAnswered(questionId, RosterVector.Empty, new []{ new Tuple<decimal, string>(1, "Hello"), new Tuple<decimal, string>(2, "World") })
                        },
                        createdOnClient: false);
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () => interview.SynchronizeInterviewEvents(command);
+        public void BecauseOf() => interview.SynchronizeInterviewEvents(command);
 
-        It should_set__Hello__as_first_roster_title = () =>
-            interview.GetRosterTitle(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1))).ShouldEqual("Hello");
+        [NUnit.Framework.Test] public void should_set__Hello__as_first_roster_title () =>
+            interview.GetRosterTitle(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(1))).Should().Be("Hello");
 
-        It should_set__World__as_second_roster_title = () =>
-            interview.GetRosterTitle(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))).ShouldEqual("World");
+        [NUnit.Framework.Test] public void should_set__World__as_second_roster_title () =>
+            interview.GetRosterTitle(Create.Entity.Identity(rosterId, Create.Entity.RosterVector(2))).Should().Be("World");
 
         static EventContext eventContext;
         static readonly Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");

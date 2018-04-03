@@ -1,21 +1,20 @@
-﻿using System;
+using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.SharedKernels.DataCollection;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_expression_state_processes_condition_expressions_on_scope_roster : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Guid questionnaireId = Guid.Parse("21111111111111111111111111111111");
@@ -47,27 +46,27 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                 };
             });
 
-        It should_disabled_question_count_equal_0 = () =>
-            results.QuestionsToBeDisabledCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_disabled_question_count_equal_0 () =>
+            results.QuestionsToBeDisabledCount.Should().Be(0);
 
-        It should_enabled_question_count_equal_0 = () =>
-            results.QuestionsToBeEnabledCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_enabled_question_count_equal_0 () =>
+            results.QuestionsToBeEnabledCount.Should().Be(0);
 
-        It should_disabled_group_count_equal_1 = () =>
-            results.GroupsToBeDisabledCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_disabled_group_count_equal_1 () =>
+            results.GroupsToBeDisabledCount.Should().Be(1);
 
-        It should_disabled_group_id_equal_group2id = () =>
-            results.DisabledGroupId.ShouldEqual(Guid.Parse("63232323232323232323232323232111"));
+        [NUnit.Framework.Test] public void should_disabled_group_id_equal_group2id () =>
+            results.DisabledGroupId.Should().Be(Guid.Parse("63232323232323232323232323232111"));
 
-        It should_enable_group_count_equal_0 = () =>
-            results.GroupsToBeEnabledCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_enable_group_count_equal_0 () =>
+            results.GroupsToBeEnabledCount.Should().Be(0);
 
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;

@@ -1,26 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.ValidityChangesTests
 {
-    [Subject(typeof(ValidityChanges))]
     internal class when_creating_with_single_invalid_question
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             invalidQuestions = new List<Identity> { Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty) };
-        };
+            BecauseOf();
+        }
 
-        Because of = () => validityChanges = new ValidityChanges(new List<Identity>(), invalidQuestions);
+        public void BecauseOf() => validityChanges = new ValidityChanges(new List<Identity>(), invalidQuestions);
 
-        It should_create_a_list_of_failed_conditions_with_single_item = () =>
+        [NUnit.Framework.Test] public void should_create_a_list_of_failed_conditions_with_single_item () 
         {
-            validityChanges.FailedValidationConditions.Count.ShouldEqual(1);
-            validityChanges.FailedValidationConditions[invalidQuestions[0]][0].FailedConditionIndex.ShouldEqual(0);
-        };
+            validityChanges.FailedValidationConditions.Count.Should().Be(1);
+            validityChanges.FailedValidationConditions[invalidQuestions[0]][0].FailedConditionIndex.Should().Be(0);
+        }
 
         static List<Identity> invalidQuestions;
         static ValidityChanges validityChanges;

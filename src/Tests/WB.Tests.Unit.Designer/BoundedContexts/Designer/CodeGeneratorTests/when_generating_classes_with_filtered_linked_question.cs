@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
         [NUnit.Framework.Test] public void should_generate_class_with_V7_namespace_included () =>
-             generatedClassContent.ShouldContain("WB.Core.SharedKernels.DataCollection.V7");
+             generatedClassContent.Should().Contain("WB.Core.SharedKernels.DataCollection.V7");
 
         private static int version = 16;
         private static CodeGenerator generator;

@@ -350,7 +350,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                         if (onDownloadProgressChanged == null) continue;
                         
                         if (contentLength != null)
-                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal) (100 * ms.Length) / contentLength.Value);
+                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal) (100 * ms.Length) / contentLength.Value, 2);
 
                         downloadProgressChangedEventArgs.BytesReceived = ms.Length;
                         onDownloadProgressChanged(downloadProgressChangedEventArgs);
@@ -385,8 +385,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         private RestContentCompressionType GetContentCompressionType(HttpContentHeaders headers)
         {
-            IEnumerable<string> acceptedEncodings;
-            headers.TryGetValues("Content-Encoding", out acceptedEncodings);
+            headers.TryGetValues("Content-Encoding", out var acceptedEncodings);
 
             if (acceptedEncodings == null) return RestContentCompressionType.None;
 

@@ -17,6 +17,9 @@
     <!-- css_markup:css -->
     <link rel='stylesheet' href='@Url.Content("~/Dependencies/build/markup.css")'>
     <!-- endinject -->
+    <!-- css_markupWebInterview:css -->
+    <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-web-interview.css")'>
+    <!-- endinject -->
     <title>@WebInterview.StartPageTitle</title>
     <script type="text/javascript">
         function onLogoError(source) {
@@ -24,7 +27,7 @@
         }
     </script>
 </head>
-<body>
+<body class="@(!Request.Browser.Cookies ? "no-cookies": "") dynamic-content">
     <header>
         <div class="container-fluid">
             <nav class="navbar navbar-fixed-top" role="navigation">
@@ -40,12 +43,12 @@
         <div class="no-cookies">@WebInterview.Error_CookiesTurnedOff</div>
     }
     <main class="start-web-interview">
-        <div class="container-fluid">
-            <div class="row two-columns-form">
-                <div class="col-md-6 col-sm-6 col-xs-12 left-column">
+        <div class="container-wrapper">
+            <div class="two-columns-form">
+                <div class="left-column">
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
-                            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" onerror="onLogoError(this)" id="placeholder" alt="survey management" />
+                            <img src="@Url.Content("~/api/CompanyLogo/Thumbnail")" onerror="onLogoError(this)" id="placeholder" alt="Logo" />
                             <div class="default-logo"></div>
                             <p class="additional-info-block">
                                 @WebInterview.PoweredBy <a href="http://support.mysurvey.solutions" target="_blank">Survey Solutions</a>
@@ -53,7 +56,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-12 right-column">
+                <div class="right-column">
                     <div class="centered-box-table">
                         <div class="centered-box-table-cell">
                             @RenderBody()
@@ -65,11 +68,9 @@
     </main>
     <footer class="footer">
         <div class="container-fluid">
-            <div class="text-center">© @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.</div>
+            <div class="text-center">&copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.</div>
             <div class="text-center">
                 @(ServiceLocator.Current.GetInstance<IProductVersion>())
-                <span>|</span>
-                <a href="@Url.Action("GetLatestVersion", "api/InterviewerSync", new {area = string.Empty})">@Common.GetInterviewerApp</a>
             </div>
         </div>
     </footer>

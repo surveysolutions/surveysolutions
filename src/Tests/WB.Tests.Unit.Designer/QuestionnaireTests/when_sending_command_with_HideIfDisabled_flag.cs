@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -51,9 +50,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 isPreFilled: false, scope: QuestionScope.Interviewer,   
                 validationConditions: new List<ValidationCondition>(),validationExpression:null, validationMessage:null));
 
-            questionnaire.UpdateMultimediaQuestion(questionId: questionMultimediaId, title: "title", variableName: "variableName4", 
+            questionnaire.UpdateMultimediaQuestion(
+                Create.Command.UpdateMultimediaQuestion(
+                questionId: questionMultimediaId, title: "title", variableName: "variableName4", 
                 variableLabel: "variableLabel4", enablementCondition: null, hideIfDisabled: true, instructions: null, responsibleId: responsibleId, 
-                scope: QuestionScope.Interviewer, properties: Create.QuestionProperties());
+                scope: QuestionScope.Interviewer, properties: Create.QuestionProperties(), isSignature: false));
 
             questionnaire.UpdateMultiOptionQuestion(questionId: questionMultyOptionId, title: "title", variableName: "variableName5", 
                 variableLabel: "variableLabel5", scope: QuestionScope.Interviewer, enablementCondition: null, hideIfDisabled: true, instructions: null, 
@@ -93,34 +94,34 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_Numeric_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionNumericId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionNumericId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_DateTime_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionDateTimeId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionDateTimeId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_Multimedia_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionMultimediaId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionMultimediaId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_GpsCoordinates_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionGpsCoordinatesId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionGpsCoordinatesId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_MultyOption_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionMultyOptionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionMultyOptionId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_QRBarcode_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionQRBarcodeId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionQRBarcodeId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_SingleOption_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionSingleOptionId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionSingleOptionId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_Text_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionTextId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionTextId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_TextList_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionTextListId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionTextListId).HideIfDisabled.Should().Be(true);
 
         [NUnit.Framework.Test] public void should_contains_question_with_hideIfDisabled_specified_for_group_or_roster () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).HideIfDisabled.ShouldEqual(true);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).HideIfDisabled.Should().Be(true);
 
 
         private static Questionnaire questionnaire;

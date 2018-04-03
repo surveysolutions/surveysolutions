@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
     internal class when_finding_referenced_answers_for_linked_question_on_roster_level_0 : StatefulInterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             IQuestionnaireStorage questionnaireRepository =
                 Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
                     Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]
@@ -44,20 +43,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     })));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() 
         {
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1, 1), DateTime.UtcNow, "1-1");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(1, 2), DateTime.UtcNow, "1-2");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(2, 1), DateTime.UtcNow, "2-1");
             interview.AnswerTextQuestion(interviewerId, sourceOfLinkedQuestionId, Create.Entity.RosterVector(2, 2), DateTime.UtcNow, "2-2");
-        };
+        }
 
-        It should_return_4_answers_from_2_roster_instances = () => interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity)
+        [NUnit.Framework.Test] public void should_return_4_answers_from_2_roster_instances () => interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity)
             .Options
             .Select(x => interview.GetAnswerAsString(Identity.Create(sourceOfLinkedQuestionId, x)))
-            .ShouldContainOnly("1-1", "1-2", "2-1", "2-2");
+            .Should().BeEquivalentTo("1-1", "1-2", "2-1", "2-2");
 
         private static StatefulInterview interview;
         private static Guid interviewerId = Guid.Parse("55555555555555555555555555555555");

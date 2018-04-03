@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_export_view_factory_from_containing_nested_group_inside_roster : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionInsideNestedGroupId = Guid.NewGuid();
             rosterId = Guid.NewGuid();
             nestedGroupId = Guid.NewGuid();
@@ -60,22 +59,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
+            BecauseOf();
 
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1));
 
-        It should_create_header_with_1_column_for_question_inside_nested_group = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_create_header_with_1_column_for_question_inside_nested_group () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders.Count.Should().Be(1);
 
-        It should_create_header_with_1_column_for_question_inside_nested_group_with_name_equal_to_questions_variable_name = () =>
+        [NUnit.Framework.Test] public void should_create_header_with_1_column_for_question_inside_nested_group_with_name_equal_to_questions_variable_name () =>
             questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders[0].Name
-                .ShouldEqual(questionInsideNestedGroupVariableName);
+                .Should().Be(questionInsideNestedGroupVariableName);
 
-        It should_create_header_with_1_column_for_question_inside_nested_group_with_title_equal_to_questions_title = () =>
+        [NUnit.Framework.Test] public void should_create_header_with_1_column_for_question_inside_nested_group_with_title_equal_to_questions_title () =>
            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideNestedGroupId].ColumnHeaders[0].Title
-               .ShouldEqual(questionInsideNestedGroupTitle);
+               .Should().Be(questionInsideNestedGroupTitle);
 
 
         private static QuestionnaireExportStructure questionnaireExportStructure;

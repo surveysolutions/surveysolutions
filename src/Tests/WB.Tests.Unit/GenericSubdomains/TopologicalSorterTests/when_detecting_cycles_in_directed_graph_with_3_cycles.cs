@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Machine.Specifications;
+using System.Collections.Generic;
+using FluentAssertions;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Tests.Abc;
 
@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
     /// <see cref="http://algs4.cs.princeton.edu/42digraph/"/>
     internal class when_detecting_cycles_in_directed_graph_with_3_cycles
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
             dependencies = new Dictionary<int, int[]>()
             {
@@ -26,22 +26,23 @@ namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
                 {12, new[] {9}}
             };
             sorter = Create.Service.TopologicalSorter<int>();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             cycles = sorter.DetectCycles(dependencies);
 
-        It should_find_3_cycles = () =>
-            cycles.Count.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_find_3_cycles () =>
+            cycles.Count.Should().Be(3);
 
-        It should_find_cycle_with_0_2_3_4_5 = () =>
-            cycles[0].ShouldContainOnly(0,2,3,4,5);
+        [NUnit.Framework.Test] public void should_find_cycle_with_0_2_3_4_5 () =>
+            cycles[0].Should().BeEquivalentTo(0,2,3,4,5);
 
-        It should_find_cycle_with_9_10_11_12 = () =>
-            cycles[1].ShouldContainOnly(9, 10, 11, 12);
+        [NUnit.Framework.Test] public void should_find_cycle_with_9_10_11_12 () =>
+            cycles[1].Should().BeEquivalentTo(9, 10, 11, 12);
 
-        It should_find_cycle_with_6_8 = () =>
-            cycles[2].ShouldContainOnly(6, 8);
+        [NUnit.Framework.Test] public void should_find_cycle_with_6_8 () =>
+            cycles[2].Should().BeEquivalentTo(6, 8);
 
         private static ITopologicalSorter<int> sorter;
         private static List<List<int>> cycles;

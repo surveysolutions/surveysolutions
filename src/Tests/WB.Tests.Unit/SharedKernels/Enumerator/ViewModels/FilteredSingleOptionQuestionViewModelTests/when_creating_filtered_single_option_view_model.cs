@@ -1,31 +1,31 @@
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
     internal class when_creating_filtered_single_option_view_model : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
             answeringViewModelMock = new Mock<AnsweringViewModel>() { DefaultValue = DefaultValue.Mock };
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             viewModel = CreateFilteredSingleOptionQuestionViewModel(
             questionStateViewModel: questionStateMock.Object,
             answering: answeringViewModelMock.Object);
 
-        It should_set_QuestionState_with_non_null_value = () =>
-            viewModel.QuestionState.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_set_QuestionState_with_non_null_value () =>
+            viewModel.QuestionState.Should().NotBeNull();
 
-        It should_set_Answering_with_non_null_value = () =>
-            viewModel.Answering.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_set_Answering_with_non_null_value () =>
+            viewModel.Answering.Should().NotBeNull();
 
 
         static FilteredSingleOptionQuestionViewModel viewModel;

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -11,10 +10,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -33,8 +29,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .Handles<Update>(_ => aggregateId, (command, aggregate) => aggregate.Update());
@@ -66,15 +61,16 @@ namespace WB.Tests.Integration.CommandServiceTests
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
             commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             commandService.Execute(new Update(), null);
 
-        It should_publish_result_aggregate_root_event_to_event_bus = () =>
-            publishedEvents.Single().Payload.ShouldBeOfExactType<Updated>();
+        [NUnit.Framework.Test] public void should_publish_result_aggregate_root_event_to_event_bus () =>
+            publishedEvents.Single().Payload.Should().BeOfType<Updated>();
 
-        It should_create_snapshot_of_aggregate_root_if_needed = () =>
+        [NUnit.Framework.Test] public void should_create_snapshot_of_aggregate_root_if_needed () =>
             snapshooterMock.Verify(
                 snapshooter => snapshooter.CreateSnapshotIfNeededAndPossible(aggregateFromRepository),
                 Times.Once());

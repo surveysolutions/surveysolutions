@@ -1,27 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
-using Main.DenormalizerStorage;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_intervews_controller_approving_interview : ApiTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewReferences = new InMemoryReadSideRepositoryAccessor<InterviewSummary>();
             interviewReferences.Store(Create.Entity.InterviewSummary(interviewId, Guid.NewGuid(), questionnaireVersion: 1), interviewId.FormatGuid());
 
@@ -34,17 +33,18 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             commandService = new Mock<ICommandService>();
 
             controller = CreateInterviewsController(interviewReferences: interviewReferences, commandService : commandService.Object, userViewFactory: userViewFactory);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             httpResponseMessage = controller.Approve(new StatusChangeApiModel() {Id = interviewId});
-        };
+        }
 
-        It should_return_OK_status_code = () =>
-            httpResponseMessage.StatusCode.ShouldEqual(HttpStatusCode.OK);
+        [NUnit.Framework.Test] public void should_return_OK_status_code () =>
+            httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        It should_execute_AssignInterviewerCommand_with_specified_UserId = () =>
+        [NUnit.Framework.Test] public void should_execute_AssignInterviewerCommand_with_specified_UserId () =>
             commandService.Verify(command => command.Execute(Moq.It.Is<ApproveInterviewCommand>(cp => cp.InterviewId == interviewId), Moq.It.IsAny<string>()));
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");

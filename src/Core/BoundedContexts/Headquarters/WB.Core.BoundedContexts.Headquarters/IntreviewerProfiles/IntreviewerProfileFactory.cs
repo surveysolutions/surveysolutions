@@ -49,8 +49,10 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
+            var registredDeviceCount = this.deviceSyncInfoRepository.GetRegistredDeviceCount(userId);
 
-            InterviewerProfileModel profile = this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
+            InterviewerProfileModel profile = 
+                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -65,6 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.WaitingInterviewsForApprovalCount = completedInterviewCount;
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;
             profile.SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId);
+            profile.RegistredDevicesCount = registredDeviceCount;
 
             return profile;
         }
@@ -253,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             {
                 SyncDate = lastSuccessDeviceInfo?.SyncDate,
                 HasStatistics = lastSuccessDeviceInfo != null,
-                MobileOperator = lastFailedDeviceInfo?.MobileOperator,
+                MobileOperator = lastSuccessDeviceInfo?.MobileOperator,
                 NetworkSubType = lastSuccessDeviceInfo?.NetworkSubType,
                 NetworkType = lastSuccessDeviceInfo?.NetworkType,
                 TotalSyncDuration = lastSuccessDeviceInfo?.Statistics?.TotalSyncDuration ?? TimeSpan.Zero,
@@ -263,15 +266,15 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             };
             profile.LastFailedSync = new InterviewerProfileSyncStatistics
             {
-                SyncDate = lastSuccessDeviceInfo?.SyncDate,
-                HasStatistics = lastSuccessDeviceInfo != null,
+                SyncDate = lastFailedDeviceInfo?.SyncDate,
+                HasStatistics = lastFailedDeviceInfo != null,
                 MobileOperator = lastFailedDeviceInfo?.MobileOperator,
-                NetworkSubType = lastSuccessDeviceInfo?.NetworkSubType,
-                NetworkType = lastSuccessDeviceInfo?.NetworkType,
-                TotalSyncDuration = lastSuccessDeviceInfo?.Statistics?.TotalSyncDuration ?? TimeSpan.Zero,
-                TotalConnectionSpeed = lastSuccessDeviceInfo?.Statistics?.TotalConnectionSpeed ?? 0,
-                TotalUploadedBytes = lastSuccessDeviceInfo?.Statistics?.TotalUploadedBytes ?? 0,
-                TotalDownloadedBytes = lastSuccessDeviceInfo?.Statistics?.TotalDownloadedBytes ?? 0,
+                NetworkSubType = lastFailedDeviceInfo?.NetworkSubType,
+                NetworkType = lastFailedDeviceInfo?.NetworkType,
+                TotalSyncDuration = lastFailedDeviceInfo?.Statistics?.TotalSyncDuration ?? TimeSpan.Zero,
+                TotalConnectionSpeed = lastFailedDeviceInfo?.Statistics?.TotalConnectionSpeed ?? 0,
+                TotalUploadedBytes = lastFailedDeviceInfo?.Statistics?.TotalUploadedBytes ?? 0,
+                TotalDownloadedBytes = lastFailedDeviceInfo?.Statistics?.TotalDownloadedBytes ?? 0,
             };
 
             profile.LastCommunicationDate = lastSyncronizationDate;
@@ -316,4 +319,3 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         }
     }
 }
- 

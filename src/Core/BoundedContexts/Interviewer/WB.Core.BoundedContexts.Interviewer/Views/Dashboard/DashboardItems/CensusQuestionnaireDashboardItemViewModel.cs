@@ -91,7 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interviewerIdentity.SupervisorId,
                 interviewerIdentity.UserId, keyGenerator.Get(), null);
             await this.commandService.ExecuteAsync(createInterviewCommand);
-            this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+            await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
         }
 
         private void RaiseStartingLongOperation() => this.messenger.Publish(new StartingLongOperationMessage(this));

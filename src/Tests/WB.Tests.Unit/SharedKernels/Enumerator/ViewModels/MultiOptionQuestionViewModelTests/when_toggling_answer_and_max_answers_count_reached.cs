@@ -1,20 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     internal class when_toggling_answer_and_max_answers_count_reached : MultiOptionQuestionViewModelTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -47,11 +47,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
             viewModel.Options.Second().Checked = true;
-        };
 
-        Because of = async () => await viewModel.ToggleAnswerAsync(viewModel.Options.Second());
+            await BecauseOf();
+        }
 
-        It should_undo_checked_property = () => viewModel.Options.Second().Checked.ShouldBeFalse();
+        public async Task BecauseOf() => await viewModel.ToggleAnswerAsync(viewModel.Options.Second());
+
+        [NUnit.Framework.Test] public void should_undo_checked_property () => viewModel.Options.Second().Checked.Should().BeFalse();
 
         private static MultiOptionQuestionViewModel viewModel;
         private static Identity questionId;

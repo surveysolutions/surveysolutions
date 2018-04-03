@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
 {
     internal class when_updating_static_text_and_user_dont_have_permissions : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "static text", responsibleId, chapterId));
@@ -23,18 +24,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateStaticTextHandle
                 responsibleId: notExistinigUserId,
                 enablementCondition: string.Empty);
             BecauseOf();
+
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "don't", "have", "permissions" });
         }
 
         private void BecauseOf() =>
-            exception = Catch.Exception(() => questionnaire.UpdateStaticText(command));
-
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__dont__have__permissions__ () =>
-             new[] { "don't", "have", "permissions" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
-
+            exception = Assert.Throws<QuestionnaireException>(() => questionnaire.UpdateStaticText(command));
         
         private static UpdateStaticText command;
         private static Questionnaire questionnaire;

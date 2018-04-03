@@ -1,8 +1,9 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
@@ -11,14 +12,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
 {
     internal class when_count_of_interviews_is_zero: with_postgres_db
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(CumulativeReportStatusChangeMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
@@ -28,14 +27,18 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             cumulativeReportStatusChangeStorage = new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>(), "EntryId");
 
             oldschoolChartStatisticsDataProvider = new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
-        };
+            BecauseOf();
+        }
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            pgSqlConnection.Close();
+        }
 
-        Because of = () => result= postgresTransactionManager.ExecuteInQueryTransaction(()=>oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(Guid.NewGuid(), 1));
+        public void BecauseOf() => result= postgresTransactionManager.ExecuteInQueryTransaction(()=>oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(Guid.NewGuid(), 1));
 
-        It should_return_null =
-            () => result.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_null () => result.Should().BeNull();
 
         private static OldschoolChartStatisticsDataProvider oldschoolChartStatisticsDataProvider;
         private static StatisticsGroupedByDateAndTemplate result;

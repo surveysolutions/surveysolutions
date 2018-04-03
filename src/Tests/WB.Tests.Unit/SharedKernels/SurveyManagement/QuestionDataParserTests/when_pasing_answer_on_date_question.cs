@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 {
     internal class when_pasing_answer_on_date_question : QuestionDataParserTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionDataParser = CreateQuestionDataParser();
             dateQuestion = new DateTimeQuestion()
             {
@@ -24,9 +23,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
                 StataExportCaption = questionVarName,
                 IsTimestamp = true,
             };
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             parsingResult1 = questionDataParser.TryParse("2016-01-14", questionVarName, dateQuestion, out parcedValue1, out parsedSingleColumnAnswer);
             parsingResult2 = questionDataParser.TryParse("06/26/15 12:01 AM", questionVarName, dateQuestion, out parcedValue2, out parsedSingleColumnAnswer);
@@ -36,49 +36,49 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionDataParserTests
 
             parsingResult6 = questionDataParser.TryParse("06/26/15 12:01 AM", questionVarName, currentTimeQuestion, out parcedValue6, out parsedSingleColumnAnswer);
             parsingResult7 = questionDataParser.TryParse("2016-02-02T17:04:41", questionVarName, currentTimeQuestion, out parcedValue7, out parsedSingleColumnAnswer);
-        };
+        }
 
-        It should_result1_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result1_be_parsed_successfully () 
         {
-            parsingResult1.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue1).ShouldEqual(new DateTime(2016, 1, 14));
-        };
+            parsingResult1.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue1).Should().Be(new DateTime(2016, 1, 14));
+        }
 
-        It should_result2_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result2_be_parsed_successfully () 
         {
-            parsingResult2.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue2).ShouldEqual(new DateTime(2015, 6, 26, 0, 1, 0));
-        };
+            parsingResult2.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue2).Should().Be(new DateTime(2015, 6, 26, 0, 1, 0));
+        }
 
-        It should_result3_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result3_be_parsed_successfully () 
         {
-            parsingResult3.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue3).ShouldEqual(new DateTime(2015, 6, 26));
-        };
+            parsingResult3.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue3).Should().Be(new DateTime(2015, 6, 26));
+        }
 
-        It should_result4_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result4_be_parsed_successfully () 
         {
-            parsingResult4.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue4).ShouldEqual(new DateTime(2016, 2, 2, 17, 04, 41));
-        };
+            parsingResult4.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue4).Should().Be(new DateTime(2016, 2, 2, 17, 04, 41));
+        }
 
-        It should_result5_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result5_be_parsed_successfully () 
         {
-            parsingResult5.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue5).ShouldEqual(new DateTime(2016, 2, 2));
-        };
+            parsingResult5.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue5).Should().Be(new DateTime(2016, 2, 2));
+        }
 
-        It should_result6_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result6_be_parsed_successfully () 
         {
-            parsingResult6.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue6).ShouldEqual(new DateTime(2015, 6, 26, 0, 1, 0));
-        };
+            parsingResult6.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue6).Should().Be(new DateTime(2015, 6, 26, 0, 1, 0));
+        }
 
-        It should_result7_be_parsed_successfully = () =>
+        [NUnit.Framework.Test] public void should_result7_be_parsed_successfully () 
         {
-            parsingResult7.ShouldEqual(ValueParsingResult.OK);
-            ((DateTime)parcedValue7).ShouldEqual(new DateTime(2016, 2, 2, 17, 04, 41));
-        };
+            parsingResult7.Should().Be(ValueParsingResult.OK);
+            ((DateTime)parcedValue7).Should().Be(new DateTime(2016, 2, 2, 17, 04, 41));
+        }
 
         protected static DateTimeQuestion dateQuestion;
         protected static DateTimeQuestion currentTimeQuestion;

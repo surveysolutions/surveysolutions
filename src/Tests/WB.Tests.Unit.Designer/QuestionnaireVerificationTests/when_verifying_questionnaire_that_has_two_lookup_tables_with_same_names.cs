@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -33,25 +32,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0026 () =>
-            verificationMessages.Single().Code.ShouldEqual("WB0026");
+            verificationMessages.Single().Code.Should().Be("WB0026");
 
         [NUnit.Framework.Test] public void should_return_message_with_Critical_level () =>
-            verificationMessages.Single().MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.Single().MessageLevel.Should().Be(VerificationMessageLevel.Critical);
 
         [NUnit.Framework.Test] public void should_return_message_with_1_reference () =>
-            verificationMessages.Single().References.Count().ShouldEqual(2);
+            verificationMessages.Single().References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_LookupTable () =>
-            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Type == QuestionnaireVerificationReferenceType.LookupTable);
+            verificationMessages.Single().References.Should().OnlyContain(reference => reference.Type == QuestionnaireVerificationReferenceType.LookupTable);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_table1 () =>
-            verificationMessages.Single().References.ElementAt(0).Id.ShouldEqual(table1Id);
+            verificationMessages.Single().References.ElementAt(0).Id.Should().Be(table1Id);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_table2 () =>
-            verificationMessages.Single().References.ElementAt(1).Id.ShouldEqual(table2Id);
+            verificationMessages.Single().References.ElementAt(1).Id.Should().Be(table2Id);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;

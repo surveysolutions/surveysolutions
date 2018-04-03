@@ -1,25 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_question_that_change_options_list_of_linked_that_is_different_from_source_question_scope : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -67,17 +64,17 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_return_2_options_for_linked_question_in_1_roster = () =>
-            results.OptionsCountForQuestion4InFixedRoster1.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_options_for_linked_question_in_1_roster () =>
+            results.OptionsCountForQuestion4InFixedRoster1.Should().Be(2);
 
-        It should_return_3_options_for_linked_question_in_2_roster = () =>
-            results.OptionsCountForQuestion4InFixedRoster2.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_return_3_options_for_linked_question_in_2_roster () =>
+            results.OptionsCountForQuestion4InFixedRoster2.Should().Be(3);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

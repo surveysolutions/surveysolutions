@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;

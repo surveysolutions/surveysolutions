@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -43,25 +43,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_create_model_with_2_questions () =>
-            model.AllQuestions.Count.ShouldEqual(2);
+            model.AllQuestions.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_create_questionnaire_level_with_2_questions () =>
-            model.QuestionnaireLevelModel.Questions.Count.ShouldEqual(2);
+            model.QuestionnaireLevelModel.Questions.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_reference_same_question_model_in_AllQuestions_and_questionnaire_level () =>
-            model.QuestionnaireLevelModel.Questions.Last().ShouldEqual(model.AllQuestions.Last());
+            model.QuestionnaireLevelModel.Questions.Last().Should().Be(model.AllQuestions.Last());
 
         [NUnit.Framework.Test] public void should_create_single_cascading_question_model () 
         {
             QuestionTemplateModel question = model.AllQuestions.Single(x => x.Id == Id.gB);
-            question.VariableName.ShouldEqual("singleCascading");
-            question.ValidationExpressions.FirstOrDefault().ValidationExpression.ShouldEqual("singleCascading validation");
-            question.Condition.ShouldEqual("!IsAnswerEmpty(single) && singleCascading condition");
-            question.IsMultiOptionYesNoQuestion.ShouldEqual(false);
-            question.AllMultioptionYesNoCodes.ShouldBeNull();
-            question.TypeName.ShouldEqual("decimal?");
-            question.RosterScopeName.ShouldEqual(CodeGenerator.QuestionnaireScope);
-            question.ParentScopeTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
+            question.VariableName.Should().Be("singleCascading");
+            question.ValidationExpressions.FirstOrDefault().ValidationExpression.Should().Be("singleCascading validation");
+            question.Condition.Should().Be("!IsAnswerEmpty(single) && singleCascading condition");
+            question.IsMultiOptionYesNoQuestion.Should().Be(false);
+            question.AllMultioptionYesNoCodes.Should().BeNull();
+            question.TypeName.Should().Be("decimal?");
+            question.RosterScopeName.Should().Be(CodeGenerator.QuestionnaireScope);
+            question.ParentScopeTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);
         }
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;

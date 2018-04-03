@@ -2,20 +2,20 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
-
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
-using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTests
 {
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         [Test]
         public void should_be_navigated_to_prefilled_questions_view_model() => mockOfViewModelNavigationService.Verify(
-            _ => _.NavigateTo<PrefilledQuestionsViewModel>(Moq.It.IsAny<object>()),
+            _ => _.NavigateToAsync<PrefilledQuestionsViewModel, InterviewViewModelArgs>(Moq.It.IsAny<InterviewViewModelArgs>()),
             Times.Never);
 
         private static DashboardViewModel viewModel;

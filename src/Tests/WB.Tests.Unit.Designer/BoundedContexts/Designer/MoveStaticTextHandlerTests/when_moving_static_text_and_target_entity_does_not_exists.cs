@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -10,24 +11,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MoveStaticTextHandlerT
 {
     internal class when_moving_static_text_and_target_entity_does_not_exists : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaire.Id, entityId, "title", responsibleId, chapterId));
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.MoveStaticText(entityId: entityId, responsibleId: responsibleId, targetEntityId: notExistingEntityId, targetIndex: 0));
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__group_cant_found__ () =>
-             new[] { "sub-section", "can't", "found" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
-
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "sub", "section", "can't", "found" });
+        }
         
         private static Questionnaire questionnaire;
         private static Exception exception;

@@ -1,23 +1,21 @@
 using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_question_that_change_options_list_of_linked_that_is_one_level_upper_than_source_question_that_is_in_nested_rosterss : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -78,23 +76,23 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_not_return_options_for_linked_question_in_1_1_roster = () =>
-            results.OptionsCountForQuestion3InRoster1_1.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_return_options_for_linked_question_in_1_1_roster () =>
+            results.OptionsCountForQuestion3InRoster1_1.Should().Be(0);
 
-        It should_return_2_options_for_linked_question_in_1_2_roster = () =>
-            results.OptionsCountForQuestion3InRoster1_2.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_options_for_linked_question_in_1_2_roster () =>
+            results.OptionsCountForQuestion3InRoster1_2.Should().Be(2);
 
-        It should_not_return_options_for_linked_question_in_2_1_roster = () =>
-            results.OptionsCountForQuestion3InRoster2_1.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_return_options_for_linked_question_in_2_1_roster () =>
+            results.OptionsCountForQuestion3InRoster2_1.Should().Be(0);
 
-        It should_not_return_options_for_linked_question_in_2_2_roster = () =>
-            results.OptionsCountForQuestion3InRoster2_2.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_not_return_options_for_linked_question_in_2_2_roster () =>
+            results.OptionsCountForQuestion3InRoster2_2.Should().Be(0);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

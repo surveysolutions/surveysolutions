@@ -1,12 +1,11 @@
 ﻿using System.IO;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
 {
-    [Subject(typeof(QuestionnaireAssemblyAccessor))]
+    [NUnit.Framework.TestOf(typeof(QuestionnaireAssemblyAccessor))]
     class QuestionnaireAssemblyFileAccessorTestsContext
     {
         protected static QuestionnaireAssemblyAccessor CreateQuestionnaireAssemblyFileAccessor(IAssemblyService assemblyService = null)

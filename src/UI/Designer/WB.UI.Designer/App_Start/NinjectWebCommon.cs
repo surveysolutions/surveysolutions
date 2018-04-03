@@ -7,25 +7,23 @@ using Ninject;
 using Ninject.Web.Common;
 using Ninject.Web.Common.WebHost;
 using WB.Core.BoundedContexts.Designer;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
+using WB.UI.Designer;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
-using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
-
 
 [assembly: PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
 [assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
@@ -86,28 +84,33 @@ namespace WB.UI.Designer.App_Start
             var membershipSection = settingsProvider.GetSection<MembershipSection>("system.web/membership");
             var membershipSettings = membershipSection?.Providers[membershipSection.DefaultProvider].Parameters;
 
-            var kernel = new StandardKernel(
-                new ServiceLocationModule(),
-                new EventFreeInfrastructureModule().AsNinject(),
-                new InfrastructureModule().AsNinject(),
-                new NcqrsModule().AsNinject(),
-                new WebConfigurationModule(membershipSettings).AsNinject(),
-                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")).AsNinject(),
-                new NLogLoggingModule().AsNinject(),
-                new PostgresKeyValueModule(cacheSettings).AsNinject(),
-                new PostgresPlainStorageModule(postgresPlainStorageSettings).AsNinject(),
-                new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)).AsWebNinject(),
-                new DesignerCommandDeserializationModule().AsNinject(),
-                new DesignerBoundedContextModule(dynamicCompilerSettings).AsNinject(),
-                new QuestionnaireVerificationModule().AsNinject(),
-                new MembershipModule().AsNinject(),
-                new DesignerWebModule().AsWebNinject(),
-                new FileInfrastructureModule().AsNinject(),
-                new ProductVersionModule(typeof(MvcApplication).Assembly).AsNinject(),
-                new NinjectWebCommonModule().AsWebNinject()
+            var kernel = new NinjectKernel();
+            kernel.Load(
+                new EventFreeInfrastructureModule(),
+                new InfrastructureModule(),
+                new NcqrsModule(),
+                new WebConfigurationModule(membershipSettings),
+                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
+                new NLogLoggingModule(),
+                new PostgresKeyValueModule(cacheSettings),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new DesignerCommandDeserializationModule(),
+                new DesignerBoundedContextModule(dynamicCompilerSettings),
+                new QuestionnaireVerificationModule(),
+                new MembershipModule(),
+                new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(MvcApplication).Assembly)
+                );
+            kernel.Load(
+                new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)),
+                new DesignerWebModule(),
+                new NinjectWebCommonModule()
                 );
 
-            return kernel;
+            // init
+            kernel.Init().Wait();
+
+            return kernel.Kernel;
         }
     }
 }

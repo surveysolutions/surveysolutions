@@ -1,9 +1,5 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 
@@ -11,14 +7,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
 {
     internal class when_requesting_list_of_packages_and_storage_is_empty : FileBasedTabletInformationServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileBasedTabletInformationService = CreateFileBasedTabletInformationService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => returnedPackages = fileBasedTabletInformationService.GetAllTabletInformationPackages();
+        public void BecauseOf() => returnedPackages = fileBasedTabletInformationService.GetAllTabletInformationPackages();
 
-        It should_return_empty_list = () => returnedPackages.Count.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_return_empty_list () => returnedPackages.Count.Should().Be(0);
 
         private static FileBasedTabletInformationService fileBasedTabletInformationService;
 

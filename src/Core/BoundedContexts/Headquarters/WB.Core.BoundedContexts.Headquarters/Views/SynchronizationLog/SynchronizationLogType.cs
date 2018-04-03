@@ -27,6 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetAssignmentsList,
         GetAssignment,
         GetMapList,
-        GetMap
+        GetMap,
+        GetApkPatch,
+        GetExtendedApkPatch,
+        GetExtendedApk,
+        GetApk
     }
 }

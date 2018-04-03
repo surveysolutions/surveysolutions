@@ -1,12 +1,11 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHistoryFactoryTests
@@ -52,19 +51,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireChangeHis
             result = questionnaireChangeHistoryFactory.Load(questionnaireId, 1, 20);
 
         [NUnit.Framework.Test] public void should_return_2_hostorical_records () =>
-            result.ChangeHistory.Count.ShouldEqual(2);
+            result.ChangeHistory.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_first_historical_record_be_clone () =>
-            result.ChangeHistory[0].ActionType.ShouldEqual(QuestionnaireActionType.Clone);
+            result.ChangeHistory[0].ActionType.Should().Be(QuestionnaireActionType.Clone);
 
         [NUnit.Framework.Test] public void should_first_historical_has_parent_id () =>
-           result.ChangeHistory[0].TargetParentId.ShouldNotBeNull();
+           result.ChangeHistory[0].TargetParentId.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_first_historical_has_one_reference () =>
-            result.ChangeHistory[0].HistoricalRecordReferences.Count.ShouldEqual(1);
+            result.ChangeHistory[0].HistoricalRecordReferences.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_second_historical_record_be_clone () =>
-           result.ChangeHistory[1].ActionType.ShouldEqual(QuestionnaireActionType.Update);
+           result.ChangeHistory[1].ActionType.Should().Be(QuestionnaireActionType.Update);
 
         private static QuestionnaireChangeHistoryFactory questionnaireChangeHistoryFactory;
         private static InMemoryPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeRecordStorage;

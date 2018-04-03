@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -11,8 +11,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 {
     internal class when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
@@ -26,19 +25,21 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.AnswerNumericIntegerQuestion(userId, n1Id, new decimal[0], DateTime.Now, 1);
             interview.AnswerNumericIntegerQuestion(userId, n2Id, new decimal[0], DateTime.Now, 2);
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.RemoveAnswer(n1Id, new decimal[0], userId, DateTime.Now);
 
-        It should_update_title_of_question_n3 = () =>
-            interview.GetTitleText(Create.Identity(n3Id)).ShouldEqual("title with [...]");
+        [NUnit.Framework.Test] public void should_update_title_of_question_n3 () =>
+            interview.GetTitleText(Create.Identity(n3Id)).Should().Be("title with [...]");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

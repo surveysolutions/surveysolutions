@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using MvvmCross.Test.Core;
+﻿using MvvmCross.Test.Core;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;

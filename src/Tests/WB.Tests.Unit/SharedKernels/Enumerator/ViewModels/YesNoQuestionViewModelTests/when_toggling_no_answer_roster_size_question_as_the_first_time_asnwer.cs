@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_toggling_no_answer_roster_size_question_as_the_first_time_asnwer : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewIdAsString = "hello";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
@@ -62,18 +61,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 
             viewModel.Init(interviewIdAsString, questionId, Create.Other.NavigationState());
             viewModel.Options.First().Selected = false;
-        };
 
-        Because of = () => viewModel.ToggleAnswerAsync(viewModel.Options.First()).Wait();
+            BecauseOf();
+        }
 
-        It should_send_answering_command = () =>
+        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.First()).Wait();
+
+        [NUnit.Framework.Test] public void should_send_answering_command () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()), Times.Once);
         
-        It should_send_command_with_toggled_first_option = () =>
-            ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().OptionValue.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_send_command_with_toggled_first_option () =>
+            ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().OptionValue.Should().Be(1);
 
-        It should_send_command_with_toggled_NO_answer = () =>
-            ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().Yes.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_send_command_with_toggled_NO_answer () =>
+            ((AnswerYesNoQuestion)answerCommand).AnsweredOptions.Single().Yes.Should().BeFalse();
 
         private static AnswerQuestionCommand answerCommand;
         private static YesNoQuestionViewModel viewModel;

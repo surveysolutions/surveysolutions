@@ -1,33 +1,32 @@
-using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_yesno_question_on_hard_deleted_interview
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             command = Create.Command.AnswerYesNoQuestion();
 
             interview = Create.AggregateRoot.Interview();
 
             interview.Apply(Create.Event.InterviewHardDeleted());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Only<InterviewException>(() =>
+        public void BecauseOf() =>
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() =>
                 interview.AnswerYesNoQuestion(command));
 
-        It should_throw_InterviewException = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_InterviewException () =>
+            exception.Should().NotBeNull();
 
-        It should_throw_InterviewException_with_type_InterviewHardDeleted = () =>
-            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.InterviewHardDeleted);
+        [NUnit.Framework.Test] public void should_throw_InterviewException_with_type_InterviewHardDeleted () =>
+            exception.ExceptionType.Should().Be(InterviewDomainExceptionType.InterviewHardDeleted);
 
         private static AnswerYesNoQuestion command;
         private static Interview interview;

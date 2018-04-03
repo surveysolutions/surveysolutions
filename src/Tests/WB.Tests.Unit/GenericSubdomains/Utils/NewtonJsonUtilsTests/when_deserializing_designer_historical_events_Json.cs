@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using System.Collections.Generic;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
@@ -18,11 +18,10 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
             public string Email { get; set; }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventTypeResolver = new EventTypeResolver();
             eventTypeResolver.RegisterEventDataType(typeof(AccountRegistered));
-            
+
             jsonSerializerSettings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Objects,
@@ -36,13 +35,14 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.NewtonJsonUtilsTests
                 "accountRegistered",
                 "{\r\n  \"userName\": \"tester\",\r\n  \"email\": \"v@example.com\",\r\n  \"confirmationToken\": \"XSB3u0UErLke9nm6JaQ6Kg2\",\r\n  \"createdDate\": \"2015-12-10T21:52:38.0888075Z\"\r\n}"
                 ));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             data.ForEach(x => result.Add(JsonConvert.DeserializeObject(x.Item2, eventTypeResolver.ResolveType(x.Item1.ToPascalCase()), jsonSerializerSettings)));
 
-        It should_return_not_null_result = () =>
-            result.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_return_not_null_result () =>
+            result.Count.Should().Be(1);
 
         private static JsonSerializerSettings jsonSerializerSettings;
 

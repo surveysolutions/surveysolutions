@@ -1,12 +1,12 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -27,8 +27,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .InitializesWith<InvalidEventSourcedCommand>(_ => Guid.Empty, aggregate => aggregate.Handle, config => config.ValidatedBy<Validator>());
@@ -38,13 +37,15 @@ namespace WB.Tests.Integration.CommandServiceTests
                 && _.GetInstance(typeof(Validator)) == new Validator());
 
             commandService = Create.Service.CommandService(serviceLocator: serviceLocator);
-        };
 
-        Because of = () =>
-            exception = Catch.Exception(() => commandService.Execute(new InvalidEventSourcedCommand(), null));
+            BecauseOf();
+        }
 
-        It should_rethrow_exception_thrown_by_aggregate = () =>
-            exception.ShouldEqual(validatorException);
+        private void BecauseOf() =>
+            exception = Assert.Throws<Exception>(() => commandService.Execute(new InvalidEventSourcedCommand(), null));
+
+        [NUnit.Framework.Test] public void should_rethrow_exception_thrown_by_aggregate () =>
+            exception.Should().Be(validatorException);
 
         private static Exception exception;
         private static Exception validatorException = new Exception("Validation failed.");

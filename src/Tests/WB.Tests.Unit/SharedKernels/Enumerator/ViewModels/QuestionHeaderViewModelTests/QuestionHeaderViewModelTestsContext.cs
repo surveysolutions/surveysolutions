@@ -1,14 +1,12 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
-    [Subject(typeof(QuestionHeaderViewModel))]
+    [NUnit.Framework.TestOf(typeof(QuestionHeaderViewModel))]
     internal class QuestionHeaderViewModelTestsContext
     {
         public static QuestionHeaderViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null, 

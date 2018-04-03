@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -11,14 +11,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
     internal class when_initializing : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkSourceQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
@@ -42,19 +41,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 questionState: questionStateMock.Object,
                 questionnaire: Create.Entity.PlainQuestionnaire(questionnaire),
                 interview: interview);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             viewModel.Init(interviewId, linkedQuestionId, navigationState);
 
-        It should_initialize_question_state = () =>
+        [NUnit.Framework.Test] public void should_initialize_question_state () =>
             questionStateMock.Verify(state => state.Init(interviewId, linkedQuestionId, navigationState), Times.Once);
 
-        It should_subsribe_self_to_event_registry = () =>
+        [NUnit.Framework.Test] public void should_subsribe_self_to_event_registry () =>
             eventRegistryMock.Verify(registry => registry.Subscribe(viewModel, Moq.It.IsAny<string>()), Times.Once);
 
-        It should_fill_options_with_answers_from_linked_to_question = () =>
-            viewModel.Options.Select(option => option.Title).ShouldContainOnly("answer1", "answer2");
+        [NUnit.Framework.Test] public void should_fill_options_with_answers_from_linked_to_question () =>
+            viewModel.Options.Select(option => option.Title).Should().BeEquivalentTo("answer1", "answer2");
 
         private static Mock<ILiteEventRegistry> eventRegistryMock = new Mock<ILiteEventRegistry>();
         private static SingleOptionLinkedQuestionViewModel viewModel;

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         }
 
         [Test]
-        public void should_return_true() => hasPackagesByInterviewId.ShouldEqual(true);
+        public void should_return_true() => hasPackagesByInterviewId.Should().Be(true);
 
         private static bool hasPackagesByInterviewId;
         private static readonly Guid interviewId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

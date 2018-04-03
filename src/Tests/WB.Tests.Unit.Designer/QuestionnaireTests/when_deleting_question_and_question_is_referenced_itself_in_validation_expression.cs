@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.DeleteQuestion(questionToBeDeleted, responsibleId);
 
         [NUnit.Framework.Test] public void should_doesnt_contain_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionToBeDeleted).ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionToBeDeleted).Should().BeNull();
 
 
         private static Questionnaire questionnaire;

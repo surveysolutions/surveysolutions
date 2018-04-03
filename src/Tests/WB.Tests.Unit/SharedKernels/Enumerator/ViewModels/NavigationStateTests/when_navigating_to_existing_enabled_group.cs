@@ -1,18 +1,18 @@
 using System;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
     internal class when_navigating_to_existing_enabled_group
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var interview = Mock.Of<IStatefulInterview>(_
                 => _.HasGroup(existingEnabledGroup) == true
                    && _.IsEnabled(existingEnabledGroup) == true);
@@ -21,13 +21,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                 interviewRepository: Setup.StatefulInterviewRepository(interview));
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs.TargetGroup;
-        };
+            await BecauseOf();
+        }
 
-        Because of = () =>
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(existingEnabledGroup));
+        public async Task BecauseOf() =>
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(existingEnabledGroup));
 
-        It should_navigate_to_that_group = () =>
-            navigatedTo.ShouldEqual(existingEnabledGroup);
+        [NUnit.Framework.Test] public void should_navigate_to_that_group () =>
+            navigatedTo.Should().Be(existingEnabledGroup);
 
         private static NavigationState navigationState;
         private static Identity existingEnabledGroup = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), Empty.RosterVector);

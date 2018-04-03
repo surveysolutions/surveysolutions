@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -34,24 +34,24 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_create_model_with_1_roster () =>
-            model.AllRosters.Count.ShouldEqual(1);
+            model.AllRosters.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_create_questionnaire_level_with_1_question () =>
-            model.QuestionnaireLevelModel.Rosters.Count.ShouldEqual(1);
+            model.QuestionnaireLevelModel.Rosters.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_create_fixed_roster_model () 
         {
             RosterTemplateModel roster = model.AllRosters.Single(x => x.Id == Id.gA);
-            roster.Conditions.ShouldEqual("roster condition");
-            roster.VariableName.ShouldEqual("numeric_roster");
-            roster.RosterScopeName.ShouldEqual("@__numeric_roster_scope");
-            roster.TypeName.ShouldStartWith("@__numeric_roster_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa_");
-            roster.ParentScopeTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
-            roster.ParentTypeName.ShouldEqual(CodeGenerator.QuestionnaireTypeName);
-            roster.Questions.Count.ShouldEqual(0);
-            roster.Groups.Count.ShouldEqual(0);
-            roster.Rosters.Count.ShouldEqual(0);
-            roster.RosterScope.Count.ShouldEqual(1);
+            roster.Conditions.Should().Be("roster condition");
+            roster.VariableName.Should().Be("numeric_roster");
+            roster.RosterScopeName.Should().Be("@__numeric_roster_scope");
+            roster.TypeName.Should().StartWith("@__numeric_roster_aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa_");
+            roster.ParentScopeTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);
+            roster.ParentTypeName.Should().Be(CodeGenerator.QuestionnaireTypeName);
+            roster.Questions.Count.Should().Be(0);
+            roster.Groups.Count.Should().Be(0);
+            roster.Rosters.Count.Should().Be(0);
+            roster.RosterScope.Count.Should().Be(1);
         }
 
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;

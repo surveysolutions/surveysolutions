@@ -10,6 +10,11 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 {
     public class ZipArchiveUtils : IArchiveUtils, IProtectedArchiveUtils
     {
+        public IZipArchive CreateArchive(Stream outputStream, string password)
+        {
+            return new IonicZipArchive(outputStream, password);
+        }
+
         public void ZipDirectory(string directory, string archiveFile, string password, IProgress<int> progress = null)
         {
             using (var zipFile = new ZipFile
@@ -114,7 +119,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                 }
             }
         }
-        
+
         public bool IsZipFile(string filePath)
         {
             return ZipFile.IsZipFile(filePath);
@@ -133,7 +138,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             {
                 foreach (var zip in zips)
                 {
-                    if(zip.IsDirectory)
+                    if (zip.IsDirectory)
                         continue;
                     result.Add(zip.FileName, zip.UncompressedSize);
                 }

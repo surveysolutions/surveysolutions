@@ -14,52 +14,52 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
     internal class when_verifying_preloaded_data_file_and_user_is_locked_by_HQ : PreloadedDataVerifierTestContext
     {
         [Test]
-        public void Should_return_1_error()
+        public void Should_return_1_PL0027_error()
         {
             var QuestionnaireCsvFileName = "questionnaire.csv";
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            var preloadedDataByFile = CreatePreloadedDataByFile(new[] {ServiceColumns.InterviewId, "_responsible"},
-                new string[][] {new string[] {"1", "fd"}},
+            var preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId, "_responsible" },
+                new[] { new[] { "1", "fd" } },
                 QuestionnaireCsvFileName);
 
             var preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName))
-                .Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId });
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.AssignmentsCountColumnName)).Returns(-1);
-            preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.ResponsibleColumnName)).Returns(1);
+                .Returns(new HeaderStructureForLevel { LevelIdColumnName = ServiceColumns.InterviewId });
+            preloadedDataServiceMock
+                .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.ResponsibleColumnName))
+                .Returns(1);
+            preloadedDataServiceMock
+                .Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, ServiceColumns.AssignmentsCountColumnName))
+                .Returns(-1);
+
             var userViewFactory = new Mock<IUserViewFactory>();
-
-            var user = new UserToVerify
+            var user = new UserView
             {
+                PublicKey = Guid.NewGuid(),
                 UserName = "fd",
-                IsLocked = true
+                IsLockedByHQ = true
             };
+            userViewFactory.Setup(x => x.GetUser(Moq.It.IsAny<UserViewInputModel>())).Returns(user);
 
-            userViewFactory.Setup(x => x.GetUsersByUserNames(Moq.It.IsAny<string[]>())).Returns(new[] {user});
-
-            var importDataVerifier =
-                CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory.Object);
+            var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object, userViewFactory.Object);
 
 
             //act
-            VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
+            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
-            Assert.AreEqual(VerificationErrors.Count(), 1);
+            // Assert
+            Assert.That(status.VerificationState.Errors, Has.Count.EqualTo(1));
 
-            Assert.AreEqual(VerificationErrors.First().Code,"PL0027");
+            var panelImportVerificationError = status.VerificationState.Errors.First();
+            Assert.That(panelImportVerificationError, Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0027"));
 
-            Assert.AreEqual(
-                VerificationErrors.First().References.First().Type,
-                    PreloadedDataVerificationReferenceType.Cell);
-
-            Assert.AreEqual(
-                VerificationErrors.First().References.First().PositionX,1);
-
-            Assert.AreEqual(
-                VerificationErrors.First().References.First().PositionY, 0);
-        
+            var interviewImportReference = panelImportVerificationError.References.First();
+            Assert.That(interviewImportReference.Type, Is.EqualTo(PreloadedDataVerificationReferenceType.Cell));
+            Assert.That(interviewImportReference.PositionX, Is.EqualTo(1));
+            Assert.That(interviewImportReference.PositionY, Is.EqualTo(0));
+        }
     }
-}
 }

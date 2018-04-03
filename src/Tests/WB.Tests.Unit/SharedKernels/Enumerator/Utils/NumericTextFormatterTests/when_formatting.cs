@@ -1,12 +1,11 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
 {
     public class when_formatting : NumericTextFormatterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var numericTextFormatterSettings = new NumericTextFormatterSettings
             {
                 IsDecimal = true,
@@ -19,12 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
             };
 
             formatter = CreateNumericTextFormatter(numericTextFormatterSettings);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => actualResult = formatter.Format("-1234567,89");
+        public void BecauseOf() => actualResult = formatter.Format("-1234567,89");
 
-        It should_return_formatted_decimal_with_groups_separator = () =>
-            actualResult.ShouldEqual("-1.234.567,89");
+        [NUnit.Framework.Test] public void should_return_formatted_decimal_with_groups_separator () =>
+            actualResult.Should().Be("-1.234.567,89");
         
         static NumericTextFormatter formatter;
 

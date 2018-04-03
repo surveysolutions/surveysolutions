@@ -1,7 +1,7 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using System.Web.Mvc;
+using FluentAssertions;
 using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiUserControllerTests
         private void BecauseOf() => actionResult = controller.Edit(inputModel).Result;
 
         [NUnit.Framework.Test] public void should_return_ViewResult () =>
-            actionResult.ShouldBeOfExactType<RedirectToRouteResult>();
+            actionResult.Should().BeOfType<RedirectToRouteResult>();
 
         [NUnit.Framework.Test] public void should_execute_CreateUserCommand_onece () =>
             identityManagerMock.Verify(x => x.UpdateAsync(Moq.It.IsAny<HqUser>()), Times.Once);

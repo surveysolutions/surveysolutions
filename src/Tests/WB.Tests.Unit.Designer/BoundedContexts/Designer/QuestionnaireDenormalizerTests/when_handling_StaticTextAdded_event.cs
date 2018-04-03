@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormalizerTests
@@ -28,19 +25,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
             questionnaire.AddStaticTextAndMoveIfNeeded(new AddStaticText(questionnaireView.PublicKey, entityId, text, creatorId, parentId));
 
         [NUnit.Framework.Test] public void should__static_text_be_in_questionnaire_document_view () =>
-            GetExpectedStaticText().ShouldNotBeNull();
+            GetExpectedStaticText().Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_PublicKey_be_equal_to_entityId () =>
-           GetExpectedStaticText().PublicKey.ShouldEqual(entityId);
+           GetExpectedStaticText().PublicKey.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_parent_group_exists_in_questionnaire () =>
-           questionnaireView.Find<IGroup>(parentId).ShouldNotBeNull();
+           questionnaireView.Find<IGroup>(parentId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_parent_group_contains_static_text () =>
-           questionnaireView.Find<IGroup>(parentId).Children[0].PublicKey.ShouldEqual(entityId);
+           questionnaireView.Find<IGroup>(parentId).Children[0].PublicKey.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_text_be_equal_specified_text () =>
-            GetExpectedStaticText().Text.ShouldEqual(text);
+            GetExpectedStaticText().Text.Should().Be(text);
 
         private static IStaticText GetExpectedStaticText()
         {

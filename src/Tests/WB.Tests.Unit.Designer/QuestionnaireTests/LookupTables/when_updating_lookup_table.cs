@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 
@@ -18,13 +19,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
         private void BecauseOf() => questionnaire.UpdateLookupTable(updateLookupTable);
 
         [NUnit.Framework.Test] public void should_contain_one_lookuptable () =>
-            questionnaire.QuestionnaireDocument.LookupTables.Count.ShouldEqual(1);
+            questionnaire.QuestionnaireDocument.LookupTables.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_contain_lookuptable_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.LookupTables.ShouldContain(t => t.Key == lookupTableId);
+            questionnaire.QuestionnaireDocument.LookupTables.Keys.Should().Contain(lookupTableId);
 
         [NUnit.Framework.Test] public void should_contain_lookuptable_with_tablename_specified () =>
-            questionnaire.QuestionnaireDocument.LookupTables.ShouldContain(t => t.Key == lookupTableId && t.Value.TableName == "newtable");
+            questionnaire.QuestionnaireDocument.LookupTables.ToEnumerable().Should().Contain(t => t.Key == lookupTableId && t.Value.TableName == "newtable");
 
         private static UpdateLookupTable updateLookupTable;
         private static Questionnaire questionnaire;

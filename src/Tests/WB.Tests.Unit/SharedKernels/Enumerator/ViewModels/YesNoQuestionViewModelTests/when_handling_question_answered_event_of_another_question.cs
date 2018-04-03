@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_handling_question_answered_event_of_another_question : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -55,18 +54,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
+            BecauseOf();
 
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf()
         {
             viewModel.Handle(new YesNoQuestionAnswered(Guid.NewGuid(), Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Empty.RosterVector, DateTime.Now, new[]
             {
                 new AnsweredYesNoOption(1, true),
             }));
-        };
+        }
 
-        It should_set_not_set_checked_order_to_options = () => viewModel.Options.First().YesAnswerCheckedOrder.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_set_not_set_checked_order_to_options () => viewModel.Options.First().YesAnswerCheckedOrder.Should().BeNull();
 
         static YesNoQuestionViewModel viewModel;
         static Identity questionId;

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -32,19 +31,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_error_with_code_WB0017 () =>
-            verificationMessages.GetError("WB0017").ShouldNotBeNull();
+            verificationMessages.GetError("WB0017").Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_error_WB0017_with_1_reference () =>
-            verificationMessages.GetError("WB0017").References.Count.ShouldEqual(1);
+            verificationMessages.GetError("WB0017").References.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_error_WB0017_with_reference_with_type_Question () =>
-            verificationMessages.GetError("WB0017").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0017").References.Single().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_error_WB0017_with_reference_with_id_of_question () =>
-            verificationMessages.GetError("WB0017").References.Single().Id.ShouldEqual(questionId);
+            verificationMessages.GetError("WB0017").References.Single().Id.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_return_error_WB0017_with_reference_with_validation_condition_index_equal_to_message_referencing_not_existing_variable_index () =>
-            verificationMessages.GetError("WB0017").References.Single().IndexOfEntityInProperty.ShouldEqual(2);
+            verificationMessages.GetError("WB0017").References.Single().IndexOfEntityInProperty.Should().Be(2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

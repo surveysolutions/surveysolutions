@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -54,19 +54,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_variable_r2n1_be_accesible_for_nested_roster () =>
-            GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);
+            GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").Should().Be(1);
 
         [NUnit.Framework.Test] public void should_variable_r1n1_be_accesible_for_nested_roster () =>
-           GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r1n1").ShouldEqual(1);
+           GetRosterScopeByRosterId(r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r1n1").Should().Be(1);
 
         [NUnit.Framework.Test] public void should_variable_r1n1_be_accesible_for_sibling_roster () =>
-           GetRosterScopeByRosterId(r2Id).Questions.Count(x => x.VariableName == "r1n1").ShouldEqual(1);
+           GetRosterScopeByRosterId(r2Id).Questions.Count(x => x.VariableName == "r1n1").Should().Be(1);
 
         [NUnit.Framework.Test] public void should_variable_r2n1_be_accesible_for_nested_nested_roster () =>
-           GetRosterScopeByRosterId(r1r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").ShouldEqual(1);
+           GetRosterScopeByRosterId(r1r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r2n1").Should().Be(1);
 
         [NUnit.Framework.Test] public void should_variable_r1n1_be_accesible_for_nested_nested_roster () =>
-           GetRosterScopeByRosterId(r1r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r1n1").ShouldEqual(1);
+           GetRosterScopeByRosterId(r1r1r1).AllParentsQuestionsToTop.Count(x => x.VariableName == "r1n1").Should().Be(1);
 
         private static RosterScopeTemplateModel GetRosterScopeByRosterId(Guid id)
         {

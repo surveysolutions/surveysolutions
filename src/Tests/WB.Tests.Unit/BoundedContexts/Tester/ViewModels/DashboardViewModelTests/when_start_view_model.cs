@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_start_view_model : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             var designerApiService = Mock.Of<IDesignerApiService>(
                 _ => _.GetQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(Questionnaires));
@@ -60,17 +60,17 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             viewModel = CreateDashboardViewModel(designerApiService: designerApiService,
                 questionnaireListStorage: storageAccessor);
 
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.Load();
+        public async Task Because() => await viewModel.Initialize();
 
-        [Test] public void should_set_ShowEmptyQuestionnaireListText_to_true() => viewModel.ShowEmptyQuestionnaireListText.ShouldBeTrue();
-        [Test] public void should_set_IsPublicShowed_to_false() => viewModel.IsPublicShowed.ShouldBeFalse();
-        [Test] public void should_Questionnaires_have_2_questionnaires() => viewModel.Questionnaires.Count.ShouldEqual(2);
-        [Test] public void should_contains_only_my_questionnares() => viewModel.Questionnaires.All(_ => !_.IsPublic).ShouldBeTrue();
-        [Test] public void should_set_MyQuestionnairesCount_to_2() => viewModel.MyQuestionnairesCount.ShouldEqual(2);
-        [Test] public void should_set_PublicQuestionnairesCount_to_3() => viewModel.PublicQuestionnairesCount.ShouldEqual(3);
+        [Test] public void should_set_ShowEmptyQuestionnaireListText_to_true() => viewModel.ShowEmptyQuestionnaireListText.Should().BeTrue();
+        [Test] public void should_set_IsPublicShowed_to_false() => viewModel.IsPublicShowed.Should().BeFalse();
+        [Test] public void should_Questionnaires_have_2_questionnaires() => viewModel.Questionnaires.Count.Should().Be(2);
+        [Test] public void should_contains_only_my_questionnares() => viewModel.Questionnaires.All(_ => !_.IsPublic).Should().BeTrue();
+        [Test] public void should_set_MyQuestionnairesCount_to_2() => viewModel.MyQuestionnairesCount.Should().Be(2);
+        [Test] public void should_set_PublicQuestionnairesCount_to_3() => viewModel.PublicQuestionnairesCount.Should().Be(3);
 
         private static DashboardViewModel viewModel;
 

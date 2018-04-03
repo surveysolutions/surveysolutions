@@ -248,11 +248,11 @@
     <comment>Сшенерировать pdf</comment>
   </data>
   <data name="ChooseLanguage" xml:space="preserve">
-    <value>Выберите язык</value>
+    <value>Выберите перевод</value>
     <comment>Выберите язык</comment>
   </data>
   <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>Выберите язык для использования его в pdf </value>
+    <value>Пожалуйста, выберите перевод</value>
     <comment>Выберите язык для использования его в pdf </comment>
   </data>
   <data name="QuestionnaireTreeFolders" xml:space="preserve">

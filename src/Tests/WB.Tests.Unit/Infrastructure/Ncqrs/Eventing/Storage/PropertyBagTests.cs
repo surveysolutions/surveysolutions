@@ -1,9 +1,7 @@
 ﻿using System;
 using FluentAssertions;
-using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {
@@ -79,7 +77,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             bag.AddPropertyValue(propertyName, firstValue);
             
             Action act = ()=>bag.AddPropertyValue(propertyName, secondValue);
-            act.ShouldThrow<ArgumentException>().WithMessage("An item with the same key has already been added.");
+            act.Should().Throw<ArgumentException>().WithMessage("An item with the same key has already been added.");
         }
     }
 }
