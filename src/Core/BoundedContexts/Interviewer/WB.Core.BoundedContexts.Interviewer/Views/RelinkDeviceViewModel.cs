@@ -49,9 +49,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
-        public IMvxCommand CancelCommand => new MvxAsyncCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
+        public IMvxAsyncCommand CancelCommand => new MvxAsyncCommand(this.NavigateToPreviousViewModel, () => !this.IsInProgress);
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand
             => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>,
                 () => !this.IsInProgress);
 
@@ -122,7 +122,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public Task NavigateToPreviousViewModel()
         {
             this.cancellationTokenSource.Cancel();
-            return this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel, FinishInstallationViewModelArg>(new FinishInstallationViewModelArg(this.userIdentityToRelink));
+            return this.viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel, FinishInstallationViewModelArg>(
+                new FinishInstallationViewModelArg(this.userIdentityToRelink.Name));
         }
     }
 }

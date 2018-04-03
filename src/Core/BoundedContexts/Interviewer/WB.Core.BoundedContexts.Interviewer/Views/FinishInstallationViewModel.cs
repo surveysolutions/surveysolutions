@@ -107,11 +107,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
-        private InterviewerIdentity userIdentity;
-
         public override void Prepare(FinishInstallationViewModelArg parameter)
         {
-            this.userIdentity = parameter.UserIdentity;
+            this.UserName = parameter.UserName;
         }
 
         public override Task Initialize()
@@ -119,7 +117,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.IsUserValid = true;
             this.IsEndpointValid = true;
             this.Endpoint =  this.interviewerSettings.Endpoint;
-            this.UserName = this.userIdentity.Name;
 
 #if DEBUG
             this.Endpoint = "http://192.168.88./headquarters";
