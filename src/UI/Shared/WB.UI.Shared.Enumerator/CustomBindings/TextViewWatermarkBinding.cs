@@ -52,6 +52,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
+            if (IsDisposed)
+                return;
+
             if (isDisposing)
             {
                 var editText = this.Target;
