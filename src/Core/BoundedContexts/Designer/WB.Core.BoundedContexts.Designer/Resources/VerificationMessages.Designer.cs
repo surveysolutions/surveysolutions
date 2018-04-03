@@ -1781,7 +1781,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty option title..
+        ///   Looks up a localized string similar to Question cannot have empty title..
         /// </summary>
         public static string WB0269_QuestionTitleIsEmpty {
             get {
@@ -1860,6 +1860,5 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
                 return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
             }
         }
-        
     }
 }
