@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using System.Diagnostics;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
@@ -26,8 +27,18 @@ namespace WB.UI.Interviewer.Activities
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
             this.BackwardCompatibility();
+            var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
+            var interviewersPlainStorage = Mvx.Resolve<IPlainStorage<InterviewerIdentity>>();
+            InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
 
-            Mvx.Resolve<IViewModelNavigationService>().NavigateToLoginAsync().WaitAndUnwrapException();
+            if (currentInterviewer == null)
+            {
+                viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>().WaitAndUnwrapException();
+            }
+            else
+            {
+                viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+            }
         }
 
         [Conditional("RELEASE")]

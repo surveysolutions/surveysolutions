@@ -2,11 +2,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class FinishInstallationViewModelArg
     {
-        public FinishInstallationViewModelArg(InterviewerIdentity userIdentity)
+        public FinishInstallationViewModelArg(string userName)
         {
-            this.UserIdentity = userIdentity;
+            this.UserName = userName;
         }
 
-        public InterviewerIdentity UserIdentity { get; set; }
+        public string UserName { get; set; }
     }
 }
