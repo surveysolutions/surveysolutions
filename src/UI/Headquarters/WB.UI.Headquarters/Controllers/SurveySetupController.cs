@@ -88,6 +88,11 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
+        public ActionResult MigrateAssinments(Guid id, long version)
+        {
+            return View();
+        }
+
         public ActionResult TemplateDownload(Guid id, long version)
         {
             var pathToFile = this.preloadingTemplateService.GetFilePathToPreloadingTemplate(id, version);
