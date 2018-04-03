@@ -276,7 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionOrVariableName = compositeColumnValues[0].ToLower();
 
             var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
-            if (rosterId.HasValue)
+            if (rosterId.HasValue && !questionnaire.IsFixedRoster(rosterId.Value))
             {
                 var rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId.Value);
 
@@ -327,9 +327,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (compositeColumn.Length < 2) return false;
 
             var question = questionnaire.GetQuestionByVariable(compositeColumn[0]);
+            var optionCode = compositeColumn[1].Replace("n", "-");
 
-            return question?.QuestionType == QuestionType.MultyOption &&
-                   question.Answers.All(x => x.AnswerValue != compositeColumn[1]);
+            return question?.QuestionType == QuestionType.MultyOption && 
+                   !question.LinkedToQuestionId.HasValue && !question.LinkedToRosterId.HasValue &&
+                   question.Answers.All(x => x.AnswerValue != optionCode);
         }
 
         private bool RosterInstanceCode_InvalidCode(AssignmentRosterInstanceCode answer, IQuestionnaire questionnaire)
