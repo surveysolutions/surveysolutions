@@ -13,7 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
     {
         private readonly IArchiveUtils archiveUtils;
         private readonly ICsvReader csvReader;
-        private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
         private readonly string importedFile;
 
         public FilebasedPreloadedDataRepository(string folderPath, IArchiveUtils archiveUtils, ICsvReader csvReader)
