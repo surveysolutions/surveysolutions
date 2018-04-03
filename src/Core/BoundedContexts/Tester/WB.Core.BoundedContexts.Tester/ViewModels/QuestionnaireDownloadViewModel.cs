@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -36,6 +37,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public QuestionnaireDownloadViewModel(
             IPrincipal principal,
@@ -46,7 +48,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage)
+            IAttachmentContentStorage attachmentContentStorage, 
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -57,17 +60,27 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionService = userInteractionService;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
-            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken).ConfigureAwait(false);
             if (questionnaireIdentity != null)
             {
-                var interviewId = await this.CreateInterview(questionnaireIdentity, progress);
-
-                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+                var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+                if (questionnaire.GetPrefilledQuestions().Count == 0)
+                {
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
+                        .ConfigureAwait(false);
+                }
+                else
+                {
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid())
+                        .ConfigureAwait(false);
+                }
             }
 
             return questionnaireIdentity != null;

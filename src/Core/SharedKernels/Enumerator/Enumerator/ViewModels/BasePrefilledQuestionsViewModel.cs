@@ -79,12 +79,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
-            if (questionnaire.GetPrefilledQuestions().Count == 0)
-            {
-                await this.viewModelNavigationService.NavigateToInterviewAsync(InterviewId, navigationIdentity: null).ConfigureAwait(false);
-                return;
-            }
-
             this.QuestionnaireTitle = questionnaire.Title;
             
             var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.InterviewId).ToList();
