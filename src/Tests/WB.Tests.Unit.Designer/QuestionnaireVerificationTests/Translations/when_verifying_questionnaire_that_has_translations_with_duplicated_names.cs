@@ -1,11 +1,5 @@
-using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;

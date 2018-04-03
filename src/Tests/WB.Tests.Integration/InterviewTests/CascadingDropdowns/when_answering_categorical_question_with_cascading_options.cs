@@ -1,25 +1,25 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
-    [Subject(typeof (Interview))]
     internal class when_answering_categorical_question_with_cascading_options : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
 
@@ -100,34 +100,34 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
             });
 
 
-        It should_not_enable_child_question_because_it_was_already_enabled = () =>
-           results.WasChildCascadingEnabled.ShouldBeFalse();
-
+        [NUnit.Framework.Test] public void should_not_enable_child_question_because_it_was_already_enabled () =>
+           results.WasChildCascadingEnabled.Should().BeFalse();
         
-        It should_disable_grandchild_question = () =>
-           results.WasGrandChildAnswerDiasbled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_grandchild_question () =>
+           results.WasGrandChildAnswerDiasbled.Should().BeTrue();
 
-        It should_not_enable_grandchild_question = () =>
-            results.WasGrandChildAnswerEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_grandchild_question () =>
+            results.WasGrandChildAnswerEnabled.Should().BeFalse();
 
-        It should_not_remove_answer_from_self = () =>
-           results.WasParentAnswerRemoved.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_remove_answer_from_self () =>
+           results.WasParentAnswerRemoved.Should().BeFalse();
 
-        It should_not_remove_answer_from_not_related_question = () =>
-           results.WasComboAnswerRemoved.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_remove_answer_from_not_related_question () =>
+           results.WasComboAnswerRemoved.Should().BeFalse();
 
-        It should_remove_child_answer = () =>
-            results.WasChildAnswerRemoved.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_child_answer () =>
+            results.WasChildAnswerRemoved.Should().BeTrue();
 
-        It should_remove_dependent_answers_on_second_level_of_cascades_if_it_is_answered = () =>
-            results.WasGrandChildAnswerRemoved.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_dependent_answers_on_second_level_of_cascades_if_it_is_answered () =>
+            results.WasGrandChildAnswerRemoved.Should().BeTrue();
 
        
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

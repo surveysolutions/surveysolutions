@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
 
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Infrastructure.Native.Storage;
 

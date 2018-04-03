@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -12,19 +13,23 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         [Test]
         public void Should_return_1_error()
         {
-            var  questionnaire = CreateQuestionnaireDocumentWithOneChapter();
+            var questionnaire = CreateQuestionnaireDocumentWithOneChapter();
+            var questionnaireId = Guid.Parse("11111111111111111111111111111111");
+
+
             var preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
-            VerificationErrors = importDataVerifier.VerifyPanelFiles(
-                Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv")),
-                preloadedDataServiceMock.Object).ToList();
+            importDataVerifier.VerifyPanelFiles(questionnaireId,
+                    1,
+                    Create.Entity.PreloadedDataByFile(CreatePreloadedDataByFile(fileName: questionnaire.Title + ".csv")),
+                    status);
 
-            Assert.AreEqual(VerificationErrors.Count(), 1);
-            Assert.AreEqual(VerificationErrors.First().Code,"PL0004");
-            Assert.AreEqual(VerificationErrors.First().References.First().Type, PreloadedDataVerificationReferenceType.File);
+            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
+            Assert.AreEqual(status.VerificationState.Errors.First().Code, "PL0004");
+            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Type, PreloadedDataVerificationReferenceType.File);
 
-     }
-}
+        }
+    }
 }

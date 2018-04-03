@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
 

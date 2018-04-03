@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Error("WB0119", QuestionnaireTitleTooLong, string.Format(VerificationMessages.WB0119_QuestionnaireTitleTooLong, MaxTitleLength)),
             Error("WB0098", QuestionnaireHasSizeMoreThan5Mb, size => VerificationMessages.WB0098_QuestionnaireHasSizeMoreThan5MB.FormatString(size, MaxQuestionnaireSizeInMb)),
             Error("WB0261", QuestionnaireHasRostersPropagationsExededLimit, VerificationMessages.WB0261_RosterStructureTooExplosive),
+            Error("WB0277", QuestionnaireTitleHasConsecutiveUnderscores, VerificationMessages.WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore),
             Error<IComposite, int>("WB0121", VariableNameTooLong, length => string.Format(VerificationMessages.WB0121_VariableNameTooLong, length)),
             Error<IComposite>("WB0124", VariableNameEndWithUnderscore, VerificationMessages.WB0124_VariableNameEndWithUnderscore),
             Error<IComposite>("WB0125", VariableNameHasConsecutiveUnderscores, VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores),
@@ -126,8 +127,16 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         {
             if (string.IsNullOrWhiteSpace(entity.VariableName))
                 return false;
-            var variable = entity.VariableName;
-            return variable.Contains("__");
+
+            return entity.VariableName.Contains("__");
+        }
+
+        private static bool QuestionnaireTitleHasConsecutiveUnderscores(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            if (string.IsNullOrWhiteSpace(questionnaire.Title))
+                return false;
+
+            return questionnaire.Title.Contains("__");
         }
 
         private bool VariableNameIsKeywords(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
@@ -246,7 +255,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             if (substitutionReference == this.substitutionService.RosterTitleSubstitutionReference)
             {
-                if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0)
+                if (vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 0 || 
+                   vectorOfRosterQuestionsByEntityWithSubstitutions.Length == 1 && vectorOfRosterQuestionsByEntityWithSubstitutions[0] == traslatedEntityWithSubstitution.Entity.PublicKey)
                 {
                     return QuestionnaireVerificationMessage.Error("WB0059",
                         VerificationMessages.WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster,
@@ -320,7 +330,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                     QuestionnaireVerificationMessage.Critical(
                         "WB0102",
                         VerificationMessages.WB0102_QuestionnaireEntitiesShareSameInternalId,
-                        group.Select(x => new QuestionnaireNodeReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
+                        group.Select(x => new QuestionnaireEntityReference(GetReferenceTypeByItemTypeAndId(questionnaire, x.Id, x.Type), x.Id)).ToArray()));
         }
 
 

@@ -39,7 +39,7 @@
                        class="form-control" maxlength="32">
             </div>
         </div>
-        <div class="form-group" ng-show="activeQuestion.type=='GpsCoordinates' && activeQuestion.questionScope.value == 'Identifying'">
+        <div class="form-group" ng-show="activeQuestion.type=='GpsCoordinates' && activeQuestion.questionScope == 'Identifying'">
             <span class="edit-question-note" ng-i18next="QuestionGpsNavigation">
             </span>
         </div>
@@ -59,7 +59,6 @@
                  ng-if="activeQuestion.type != undefined
                  && (activeQuestion.type != 'GpsCoordinates'
                  && activeQuestion.type != 'QRBarcode'
-                 && activeQuestion.type != 'Multimedia'
                  && activeQuestion.type != 'Area'
                  && activeQuestion.type != 'Audio')
                  ">
@@ -127,9 +126,10 @@
     <div class="form-group">
         <div class="form-group pull-right">
             <label for="Question-scope">{{'QuestionScope' | i18next }}&nbsp;</label>
+
             <div class="btn-group dropup " uib-dropdown>
                 <button class="btn dropdown-toggle" id="Question-scope" uib-dropdown-toggle type="button">
-                    {{ activeQuestion.questionScope.text }}
+                    {{ (getQuestionScopes(activeQuestion) | filter : {value : activeQuestion.questionScope})[0].text | i18next }}
                     <span class="dropdown-arrow"></span>
                 </button>
 
@@ -227,6 +227,10 @@
             <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" unsaved-warning-clear ng-click="cancelQuestion()" ng-i18next>Cancel</button>
         </div>
         <div class="pull-right">
+            <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="add-comment-button" class="btn btn-lg btn-link" ng-click="toggleComments(activeQuestion)" unsaved-warning-clear>
+                <span ng-i18next ng-hide="isCommentsBlockVisible">EditorAddComment</span>
+                <span ng-i18next ng-show="isCommentsBlockVisible">EditorHideComment</span>
+            </button>
             <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="edit-chapter-delete-button" class="btn btn-lg btn-link" ng-click="deleteQuestion(activeQuestion)" unsaved-warning-clear ng-i18next>Delete</button>
             <ng-include src="'moveToChapterSnippet'" ng-show="!questionnaire.isReadOnlyForUser" />
         </div>

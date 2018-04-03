@@ -3,8 +3,6 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Tests.Abc;
 

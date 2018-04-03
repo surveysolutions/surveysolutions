@@ -1,6 +1,6 @@
 using System.IO;
 using System.Web;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.UI.Designer.Controllers;
 using WB.UI.Shared.Web.Extensions;
@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
         private void BecauseOf() => controller.EditOptions(postedFile);
 
         [NUnit.Framework.Test] public void should_add_error_message_to_temp_data () =>
-            controller.TempData[Alerts.ERROR].ShouldEqual("Only tab-separated values files are accepted");
+            controller.TempData[Alerts.ERROR].Should().Be("Only tab-separated values files are accepted");
 
         [NUnit.Framework.OneTimeTearDown]
         public void stuff()

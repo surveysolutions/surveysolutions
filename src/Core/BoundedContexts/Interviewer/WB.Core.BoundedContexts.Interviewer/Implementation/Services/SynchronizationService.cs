@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
@@ -26,15 +24,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private const string apiVersion = "v2";
         private const string interviewerApiUrl = "api/interviewer/";
-         
+        private static readonly string applicationUrl = string.Concat(interviewerApiUrl, apiVersion);
+
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
-        private readonly string logoController = string.Concat(interviewerApiUrl, apiVersion, "/companyLogo");
+        
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
         private readonly string translationsController = string.Concat(interviewerApiUrl, apiVersion, "/translations");
         private readonly string attachmentContentController = string.Concat(interviewerApiUrl, apiVersion, "/attachments");
+
+        private readonly string logoUrl = string.Concat(applicationUrl, "/companyLogo");
+        private readonly string autoUpdateUrl = string.Concat(applicationUrl, "/autoupdate");
 
         private readonly string mapsController = string.Concat(interviewerApiUrl, apiVersion, "/maps"); 
 
@@ -106,6 +108,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     credentials: credentials ?? this.restCredentials, token: token));
         }
 
+        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
+            => this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<bool>(url: autoUpdateUrl, credentials: this.restCredentials, token: token));
 
         #endregion
 
@@ -605,7 +610,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
         {
             var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.DownloadFileAsync(
-                url: this.logoController,
+                url: this.logoUrl,
                 credentials: this.restCredentials,
                 customHeaders: !string.IsNullOrEmpty(storedClientEtag) ? new Dictionary<string, string> {{"If-None-Match", storedClientEtag }} : null,
                 token: cancellationToken)).ConfigureAwait(false);

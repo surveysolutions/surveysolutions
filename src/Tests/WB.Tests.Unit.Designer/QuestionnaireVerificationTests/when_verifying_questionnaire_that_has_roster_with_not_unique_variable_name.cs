@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -41,22 +39,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
            verificationMessages.ShouldContainCritical("WB0026");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_critical () =>
-            verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.GetCritical("WB0026").MessageLevel.Should().Be(VerificationMessageLevel.Critical);
 
         [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
-            verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
+            verificationMessages.GetCritical("WB0026").References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_message_with_first_references_with_Group_type () =>
-            verificationMessages.GetCritical("WB0026").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetCritical("WB0026").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_with_first_references_with_id_equals_rosterId1 () =>
-            verificationMessages.GetCritical("WB0026").References.First().Id.ShouldEqual(rosterId1);
+            verificationMessages.GetCritical("WB0026").References.First().Id.Should().Be(rosterId1);
 
         [NUnit.Framework.Test] public void should_return_message_with_second_references_with_Group_type () =>
-            verificationMessages.GetCritical("WB0026").References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetCritical("WB0026").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_with_second_references_with_id_equals_rosterId2 () =>
-            verificationMessages.GetCritical("WB0026").References.Last().Id.ShouldEqual(rosterId2);
+            verificationMessages.GetCritical("WB0026").References.Last().Id.Should().Be(rosterId2);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

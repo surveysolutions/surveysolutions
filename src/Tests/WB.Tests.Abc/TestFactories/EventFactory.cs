@@ -100,12 +100,14 @@ namespace WB.Tests.Abc.TestFactories
         public ImportFromDesigner ImportFromDesigner(Guid responsibleId, QuestionnaireDocument questionnaire, bool allowCensus, string assembly, long contentVersion)
             => new ImportFromDesigner(responsibleId, questionnaire, allowCensus, assembly, contentVersion, 1);
 
-        public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
+        public InterviewCreated InterviewCreated(Guid? questionnaireId = null, long? questionnaireVersion = null,
+            DateTime? creationTime = null)
             => new InterviewCreated(
                 userId: Guid.NewGuid(),
                 questionnaireId: questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion: questionnaireVersion ?? 7,
                 assignmentId: null,
+                creationTime: creationTime ?? DateTime.UtcNow,
                 usesExpressionStorage: true);
 
         public InterviewFromPreloadedDataCreated InterviewFromPreloadedDataCreated(Guid? questionnaireId = null, long? questionnaireVersion = null)
@@ -136,10 +138,10 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewSynchronized InterviewSynchronized(InterviewSynchronizationDto synchronizationDto)
             => new InterviewSynchronized(synchronizationDto);
 
-        public InterviewCompleted InteviewCompleted()
+        public InterviewCompleted InteviewCompleted(DateTime? completionDate = null)
             => new InterviewCompleted(
                 Guid.NewGuid(),
-                DateTime.UtcNow,
+                completionDate ?? DateTime.UtcNow,
                 "comment");
 
         public LinkedOptionsChanged LinkedOptionsChanged(ChangedLinkedOptions[] options = null)

@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -34,22 +33,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
            verificationMessages.ShouldContainCritical("WB0026");
 
         [NUnit.Framework.Test] public void should_return_message_with_Critical_level () =>
-            verificationMessages.GetCritical("WB0026").MessageLevel.ShouldEqual(VerificationMessageLevel.Critical);
+            verificationMessages.GetCritical("WB0026").MessageLevel.Should().Be(VerificationMessageLevel.Critical);
 
         [NUnit.Framework.Test] public void should_return_message_with_1_reference () =>
-            verificationMessages.GetCritical("WB0026").References.Count().ShouldEqual(2);
+            verificationMessages.GetCritical("WB0026").References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
-            verificationMessages.GetCritical("WB0026").References.ElementAt(0).Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(0).Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_second_message_reference_with_type_LookupTable () =>
-            verificationMessages.GetCritical("WB0026").References.ElementAt(1).Type.ShouldEqual(QuestionnaireVerificationReferenceType.LookupTable);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(1).Type.Should().Be(QuestionnaireVerificationReferenceType.LookupTable);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_question () =>
-            verificationMessages.GetCritical("WB0026").References.ElementAt(0).Id.ShouldEqual(questionId);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(0).Id.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_return_second_message_reference_with_id_of_table () =>
-            verificationMessages.GetCritical("WB0026").References.ElementAt(1).Id.ShouldEqual(table1Id);
+            verificationMessages.GetCritical("WB0026").References.ElementAt(1).Id.Should().Be(table1Id);
 
         private static QuestionnaireVerifier verifier;
         private static QuestionnaireDocument questionnaire;

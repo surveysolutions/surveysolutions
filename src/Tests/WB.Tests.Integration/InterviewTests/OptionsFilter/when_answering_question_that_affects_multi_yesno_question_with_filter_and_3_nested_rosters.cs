@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
     internal class when_answering_question_that_affects_multi_yesno_question_with_filter_and_3_nested_rosters : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -84,20 +84,20 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 return result;
             });
 
-        It should_disable_q4 = () =>
-            results.QuestionsQ4Disabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_q4 () =>
+            results.QuestionsQ4Disabled.Should().BeTrue();
 
-        It should_have_one_option_answer_q2 = () =>
-            results.QuestionqQ2HasEmptyAnswer.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_have_one_option_answer_q2 () =>
+            results.QuestionqQ2HasEmptyAnswer.Should().BeTrue();
 
-        It should_remove_rosters_8 = () =>
-            results.RosterInstancesRemovedCount.ShouldEqual(8);
+        [NUnit.Framework.Test] public void should_remove_rosters_8 () =>
+            results.RosterInstancesRemovedCount.Should().Be(8);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

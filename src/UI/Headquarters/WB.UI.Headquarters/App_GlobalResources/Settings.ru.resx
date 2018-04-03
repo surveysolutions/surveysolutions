@@ -181,4 +181,23 @@
   <data name="GlobalNoteClearingConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить глобальное сообщение?</value>
   </data>
+    <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+    <value>Автоматическое обновление андроид приложений включено</value>
+    <comment>Автоматические обновления для CAPI платформы включены</comment>
+  </data>
+    <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+    <value>Автоматическое обновление андроид приложений выключено</value>
+    <comment>Автоматические обновления для CAPI платформы выключены</comment>
+  </data>
+    <data name="InterviewerSettings_Title" xml:space="preserve">
+    <value>Настройки интервьюер приложения</value>
+    <comment>CAPI настройки</comment>
+  </data>
+    <data name="InterviewerAutoUpdate" xml:space="preserve">
+    <value>Включить автоматическое обновление</value>
+    <comment>Включить автоматическое обновление андроид приложений</comment>
+  </data>
+    <data name="InterviewerSettings_Description" xml:space="preserve">
+    <value>Расширенные настройки для андроид версии Interviewer приложения</value>
+  </data>
 </root>

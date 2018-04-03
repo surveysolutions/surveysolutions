@@ -1,8 +1,10 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -75,6 +77,11 @@ namespace WB.UI.Tester.Infrastructure
             registry.BindAsSingletonWithConstructorArgument<IAudioFileStorage, TesterAudioFileStorage>("rootDirectoryPath", basePath);
             registry.BindAsSingletonWithConstructorArgument<IImageFileStorage, TesterImageFileStorage>("rootDirectoryPath", basePath);
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

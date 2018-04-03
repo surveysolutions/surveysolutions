@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             {
                 Id = assignment.Id,
                 QuestionnaireId = assignment.QuestionnaireId,
-                Quantity = assignment.InterviewsNeeded + assignment.InterviewsProvided,
+                Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc
             };
 

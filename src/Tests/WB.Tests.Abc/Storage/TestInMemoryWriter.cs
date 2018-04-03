@@ -40,20 +40,6 @@ namespace WB.Tests.Abc.Storage
             this.storage.Remove(id);
         }
 
-        public void RemoveIfStartsWith(string beginingOfId)
-        {
-            var allKeyToRemove = this.storage.Keys.Where(k => k.StartsWith(beginingOfId)).ToArray();
-            foreach (var keyToRemove in allKeyToRemove)
-            {
-                this.storage.Remove(keyToRemove);
-            }
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            return this.storage.Keys.Where(k => k.StartsWith(beginingOfId)).ToList();
-        }
-
         public void Remove(T view)
         {
             var keyOfItemToRemove = this.storage.FirstOrDefault(item => item.Value == view).Key;
@@ -74,6 +60,11 @@ namespace WB.Tests.Abc.Storage
             {
                 this.Store(tuple.Item1, tuple.Item2);
             }
+        }
+
+        public void Flush()
+        {
+            
         }
 
         public Type ViewType

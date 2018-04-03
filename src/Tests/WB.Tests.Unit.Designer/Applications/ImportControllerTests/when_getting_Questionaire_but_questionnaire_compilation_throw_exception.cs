@@ -1,9 +1,10 @@
 using System;
 using System.Net;
 using System.Web.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -50,17 +51,17 @@ namespace WB.Tests.Unit.Designer.Applications.ImportControllerTests
         }
 
         private void BecauseOf() =>
-           exception = Catch.Only<HttpResponseException>(() =>
+           exception = Assert.Throws<HttpResponseException>(() =>
                importController.Questionnaire(request));
 
         [NUnit.Framework.Test] public void should_throw_HttpResponseException () =>
-            exception.ShouldNotBeNull();
+            exception.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_StatusCode_UpgradeRequired () =>
-            exception.Response.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
+            exception.Response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
 
         [NUnit.Framework.Test] public void should_throw_HttpResponseException_with_explanation_in_ReasonPhrase () =>
-             exception.Response.ReasonPhrase.ToLower().ToSeparateWords().ShouldContain("questionnaire", "contains", "functionality", "not", "supported", "update");
+             exception.Response.ReasonPhrase.ToLower().ToSeparateWords().Should().Contain("questionnaire", "contains", "functionality", "not", "supported", "update");
 
         private static ImportV2Controller importController;
         private static HttpResponseException exception;

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
@@ -75,6 +77,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<MapSynchronizationViewModel>();
             registry.Bind<RelinkDeviceViewModel>();
             registry.Bind<DashboardViewModel>();
+            registry.Bind<DashboardSearchViewModel>();
             registry.Bind<MapsViewModel>();
             registry.Bind<CompletedInterviewsViewModel>();
             registry.Bind<RejectedInterviewsViewModel>();
@@ -96,6 +99,11 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

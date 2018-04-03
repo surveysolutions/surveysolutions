@@ -55,6 +55,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 Create.Entity.NumericIntegerQuestion(variable: "q1")
             );
 
+            var plQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
+
             var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaire);
             var interviewIdsToExport = new List<InterviewToExport> { new InterviewToExport(interviewId, interviewKey, true, InterviewStatus.Completed) };
 
@@ -72,7 +74,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
                 transactionManagerProvider.Object,
                 errorsExporter.Object,
                 Mock.Of<IInterviewFactory>(),
-                exportViewFactory.Object);
+                exportViewFactory.Object,
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(plQuestionnaire.QuestionnaireId, plQuestionnaire));
 
             //act
             exporter.Export(questionnaireExportStructure, interviewIdsToExport, "", new Progress<int>(), CancellationToken.None);

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         }
 
         [Test]
-        public void should_be_specified_packages_length() => packagesLength.ShouldEqual(100);
+        public void should_be_specified_packages_length() => packagesLength.Should().Be(100);
 
         private static int packagesLength;
         private static InterviewPackagesService interviewPackagesService;

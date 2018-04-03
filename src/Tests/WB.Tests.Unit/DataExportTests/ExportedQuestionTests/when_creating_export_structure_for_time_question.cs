@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
@@ -7,18 +7,22 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_time_question : ExportedQuestionTestContext
     {
-        Establish context = () => { };
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             filledQuestion = CreateFilledExportedQuestion(QuestionType.DateTime, new DateTime(2016, 8, 15, 12, 5, 7), QuestionSubtype.DateTime_Timestamp);
             disabledQuestion = CreateDisabledExportedQuestion(QuestionType.DateTime, QuestionSubtype.DateTime_Timestamp);
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.DateTime, QuestionSubtype.DateTime_Timestamp);
-        };
+        }
 
-        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "2016-08-15T12:05:07" });
-        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableValue });
-        It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingStringQuestionValue });
+        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo(new []{ "2016-08-15T12:05:07" });
+        [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => disabledQuestion.Should().BeEquivalentTo(new []{ DisableValue });
+        [NUnit.Framework.Test] public void should_return_correct_missing_answer () => missingQuestion.Should().BeEquivalentTo(new []{ MissingStringQuestionValue });
 
 
         private static string[] filledQuestion;

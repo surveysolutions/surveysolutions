@@ -31,15 +31,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             get
             {
-                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxCommand(async () => await this.StartInterviewAsync()));
+                return this.startInterviewCommand ?? (this.startInterviewCommand = new MvxAsyncCommand(async () => await this.StartInterviewAsync()));
             }
         }
 
         private async Task StartInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
-
-            this.viewModelNavigationService.NavigateToInterview(interviewId, navigationIdentity: null);
+            await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId, navigationIdentity: null);
             this.OnInterviewStarted();
         }
 

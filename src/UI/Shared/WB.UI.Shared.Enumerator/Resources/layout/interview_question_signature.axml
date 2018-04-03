@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:local="http://schemas.android.com/apk/res-auto"
+  style="@style/Interview_QuestionWithDivider"
+  local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
+  <LinearLayout style="@style/Interview_Question_Answer"
+                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+
+    <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+      <TableLayout style="@style/FullWidthWrappingLayout"
+            android:stretchColumns="0">
+        <TableRow>
+            <xamarin.controls.SignaturePadView
+                android:layout_height="@dimen/Interview_Question_Answer_Media_height"
+                local:MvxBind="Signature Answer; 
+                               SignaturePadSettings .;
+                               Hidden QuestionState.IsAnswered" />
+        </TableRow>
+        <TableRow>
+            <ImageView 
+                       style="@style/Interview_Question_Multimedia_Picture"
+                       android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height"
+                       android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
+                       android:scaleType="fitCenter"
+                       android:adjustViewBounds="true"
+                       local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault; Visible QuestionState.IsAnswered"/>
+            <include layout="@layout/interview_question__remove_button_recorded" />
+        </TableRow>
+      </TableLayout>
+      <Button style="@style/Interview_Question_InputButton"
+              local:MvxBind="HideKeyboardOnClick .; 
+                                Click RequestAnswerCommand; 
+                                Text Localization('Interview_TakeSignature');
+                                BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));
+                                Tag Format('btnAnswer_{0}', Identity);
+                                Hidden QuestionState.IsAnswered" />
+    </LinearLayout>
+  </LinearLayout>
+</LinearLayout>

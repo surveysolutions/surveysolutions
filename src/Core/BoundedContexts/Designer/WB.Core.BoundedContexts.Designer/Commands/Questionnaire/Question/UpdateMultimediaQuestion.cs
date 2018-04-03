@@ -20,5 +20,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
         }
 
         public QuestionScope Scope { get; set; }
+        public bool IsSignature { get; set; }
     }
 }

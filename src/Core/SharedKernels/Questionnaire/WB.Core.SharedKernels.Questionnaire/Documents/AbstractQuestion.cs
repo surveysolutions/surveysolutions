@@ -119,7 +119,7 @@ namespace Main.Core.Entities.SubEntities
 
             // handle reference part
             question.Answers = new List<Answer>();
-            foreach (var answer in this.Answers)
+            foreach (var answer in this.Answers ?? new List<Answer>())
             {
                 question.Answers.Add(answer.Clone());
             }

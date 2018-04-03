@@ -1,18 +1,16 @@
-﻿using System;
-using Machine.Specifications;
+using System;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Implementation.StorageStrategy;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.SurveySolutions;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.InMemoryViewWriterTests
 {
     internal class when_disposing_inmemroywriter_after_view_was_updated_in_memory : InMemoryViewWriterTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             viewId = Guid.NewGuid();
             oldView = Mock.Of<IReadSideRepositoryEntity>();
             baseReadSideRepositoryWriterMock = new Mock<IReadSideRepositoryWriter<IReadSideRepositoryEntity>>();
@@ -22,11 +20,12 @@ namespace WB.Tests.Unit.Infrastructure.InMemoryViewWriterTests
             newView = Mock.Of<IReadSideRepositoryEntity>();
             inMemoryViewWriter = CreateInMemoryViewWriter(baseReadSideRepositoryWriterMock.Object, viewId);
             inMemoryViewWriter.Store(newView, viewId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => inMemoryViewWriter.Dispose();
+        public void BecauseOf() => inMemoryViewWriter.Dispose();
 
-        It should_call_store_method_with_updated_view_of_base_readSideRepositoryWriter = () =>
+        [NUnit.Framework.Test] public void should_call_store_method_with_updated_view_of_base_readSideRepositoryWriter () =>
             baseReadSideRepositoryWriterMock.Verify(x => x.Store(newView, viewId.FormatGuid()), Times.Once());
 
         private static InMemoryViewWriter<IReadSideRepositoryEntity> inMemoryViewWriter;

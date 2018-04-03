@@ -1,20 +1,18 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_on_integer_question_increases_roster_size_and_roster_has_roster_title_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(SectionId, QuestionnaireId,
                   Create.Entity.NumericIntegerQuestion(questionWhichIncreasesRosterSizeId, variable: "num"),
                   Create.Entity.Roster(rosterGroupId, variable: "r",
@@ -31,25 +29,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: QuestionnaireId, questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.AnswerNumericIntegerQuestion(userId, questionWhichIncreasesRosterSizeId, new decimal[] { }, DateTime.Now, 3);
 
-        It should_raise_RosterInstancesAdded_event_for_that_roster = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_for_that_roster () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.All(instance => instance.GroupId == rosterGroupId));
 
-        It should_not_raise_RosterInstancesTitleChanged_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesTitleChanged_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesTitleChanged>();
 
-        It should_not_raise_RosterInstancesRemoved_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesRemoved_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>();
 
         private static EventContext eventContext;

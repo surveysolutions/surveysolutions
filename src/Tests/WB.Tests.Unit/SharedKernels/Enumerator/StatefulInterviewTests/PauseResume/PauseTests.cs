@@ -4,7 +4,6 @@ using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
@@ -26,17 +25,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.PauseRes
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: interviewId);
             interview.Apply(new InterviewStatusChanged(status, null));
 
-            if (AllowedStatuses.Contains(status))
             {
                 using (var context = new EventContext())
                 {
                     interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow));
-                    context.ShouldContainEvent<InterviewPaused>();
+                    if (AllowedStatuses.Contains(status))
+                    {
+                        context.ShouldContainEvent<InterviewPaused>();
+                    }
+                    else
+                    {
+                        context.ShouldNotContainEvent<InterviewPaused>();
+                    }
                 }
-            }
-            else
-            {
-                Assert.Throws<InterviewException>(() => interview.Pause(new PauseInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow)));
             }
         }
     }

@@ -62,17 +62,17 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 .Setup(cs => cs.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
                 .Throws(commandServiceException);
 
-            var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(Moq.It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
+            var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
 
             var restServiceMock = new Mock<IRestService>();
-            restServiceMock.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
+            restServiceMock.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             var service = CreateIQuestionnaireImportService(commandService: commandService.Object,
                 supportedVersionProvider: versionProvider, zipUtils: zipUtilsMock, restService: restServiceMock.Object);
 
             // Act-assert
-            var exception = Assert.ThrowsAsync<Exception>(async() => await service.Import(Guid.NewGuid(), "null", false));
+            var exception = Assert.ThrowsAsync<Exception>(async () => await service.Import(Guid.NewGuid(), "null", false));
             Assert.That(exception, Is.SameAs(commandServiceException));
         }
 
@@ -92,8 +92,8 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
-                x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
-            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(), Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<object>(), Moq.It.IsAny<RestCredentials>(), Moq.It.IsAny<CancellationToken?>()))
+                x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
+            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             var mockOfAttachmentContentService = new Mock<IAttachmentContentService>();
@@ -108,10 +108,65 @@ namespace WB.Tests.Unit.Applications.Headquarters
             await service.Import(Guid.NewGuid(), "null", false);
 
             // Assert
-            mockOfRestService.Verify(x => x.DownloadFileAsync(Moq.It.IsAny<string>(), null, Moq.It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Never);
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Once);
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, Moq.It.IsAny<string>(), Moq.It.IsAny<byte[]>()), Times.Once);
+            mockOfRestService.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
+            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
+            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
+            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
+        }
+
+        [Test]
+        public async Task when_import_questionnaire_with_lookup_tables()
+        {
+            var versionProvider = Setup.SupportedVersionProvider(1);
+
+            (Guid id, string content) lookup1 = (Id.g1, "content of lookup1");
+            (Guid id, string content) lookup2 = (Id.g2, "content of lookup2");
+
+            var zipUtils = Setup.StringCompressor_Decompress(new QuestionnaireDocument()
+            {
+                PublicKey = Id.gA,
+                LookupTables = new Dictionary<Guid, LookupTable>
+                {
+                    { lookup1.id, new LookupTable()},
+                    { lookup2.id, new LookupTable()}
+                }
+            });
+
+            var lookupStorage = Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
+
+            var mockOfRestService = new Mock<IRestService>();
+            mockOfRestService.Setup(x =>
+                x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
+            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+                .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
+
+            void SetupLookupQuery((Guid id, string content) lookup)
+            {
+                mockOfRestService
+                    .Setup(x => x.GetAsync<QuestionnaireLookupTable>(
+                        It.Is<string>(s => s.EndsWith(lookup.id.ToString())), 
+                        It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+                    .Returns(Task.FromResult(new QuestionnaireLookupTable
+                    {
+                        Content = lookup.content,
+                        FileName = lookup.content
+                    }));
+            }
+
+            SetupLookupQuery(lookup1);
+            SetupLookupQuery(lookup2);
+            
+            var service = CreateIQuestionnaireImportService(
+                supportedVersionProvider: versionProvider, zipUtils: zipUtils, restService: mockOfRestService.Object, lookupStorage: lookupStorage);
+
+            // Act
+            await service.Import(Guid.NewGuid(), "null", false);
+
+            // Assert
+
+            Mock.Get(lookupStorage).Verify(ls => ls.Store(It.Is<QuestionnaireLookupTable>(lt => lt.Content == lookup1.content), It.IsAny<string>()), Times.Once);
+            Mock.Get(lookupStorage).Verify(ls => ls.Store(It.Is<QuestionnaireLookupTable>(lt => lt.Content == lookup2.content), It.IsAny<string>()), Times.Once);
+
         }
 
         [Test]
@@ -127,11 +182,11 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var service = new Mock<IRestService>();
 
             service
-                .Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(Moq.It.IsAny<string>(),
-                        Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
-                        Moq.It.IsAny<object>(),
-                        Moq.It.IsAny<RestCredentials>(),
-                        Moq.It.IsAny<CancellationToken?>()))
+                .Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(),
+                        It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
+                        It.IsAny<object>(),
+                        It.IsAny<RestCredentials>(),
+                        It.IsAny<CancellationToken?>()))
                 .Throws(new RestException(someFaultReason, HttpStatusCode.Unauthorized));
 
             var importService = CreateIQuestionnaireImportService(
@@ -156,7 +211,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
       IAttachmentContentService attachmentContentService = null,
       IPlainStorageAccessor<TranslationInstance> translationInstances = null,
       IQuestionnaireVersionProvider questionnaireVersionProvider = null,
-      DesignerUserCredentials designerUserCredentials = null)
+      DesignerUserCredentials designerUserCredentials = null,
+      IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null
+      )
         {
             var service = restService ?? Mock.Of<IRestService>();
             var globalInfoProvider = authorizedUser ?? new Mock<IAuthorizedUser> { DefaultValue = DefaultValue.Mock }.Object;
@@ -175,6 +232,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 attachmentContentService ?? Mock.Of<IAttachmentContentService>(),
                 questionnaireVersionProvider ?? Mock.Of<IQuestionnaireVersionProvider>(),
                 Mock.Of<ITranslationManagementService>(),
+                lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<IAuditLog>(),

@@ -8,13 +8,10 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views;
-using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {

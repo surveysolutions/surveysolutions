@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -63,21 +63,21 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
         [NUnit.Framework.Test] public void should_output_roster_title_translation () 
         {
             var questionTitleRow = 3;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.Title);
-            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldBeNull();
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.FormatGuid());
-            cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("non translated title");
-            cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldBeNull();
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).Should().Be(TranslationType.Title);
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().Should().BeNull();
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().Should().Be(rosterId.FormatGuid());
+            cells[questionTitleRow, originalTextColumn].Value?.ToString().Should().Be("non translated title");
+            cells[questionTitleRow, translactionColumn].Value?.ToString().Should().BeNull();
         }
 
         [NUnit.Framework.Test] public void should_output_roster_fixed_option_title_translation () 
         {
             var questionTitleRow = 4;
-            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).ShouldEqual(TranslationType.FixedRosterTitle);
-            cells[questionTitleRow, translationIndexColumn].Value?.ToString().ShouldEqual("42");
-            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().ShouldEqual(rosterId.FormatGuid());
-            cells[questionTitleRow, originalTextColumn].Value?.ToString().ShouldEqual("invariant option title");
-            cells[questionTitleRow, translactionColumn].Value?.ToString().ShouldEqual("fixed roster item 1");
+            ((TranslationType)Enum.Parse(typeof(TranslationType), cells[questionTitleRow, translationTypeColumn].Text)).Should().Be(TranslationType.FixedRosterTitle);
+            cells[questionTitleRow, translationIndexColumn].Value?.ToString().Should().Be("42");
+            cells[questionTitleRow, questionnaireEntityIdColumn].Value?.ToString().Should().Be(rosterId.FormatGuid());
+            cells[questionTitleRow, originalTextColumn].Value?.ToString().Should().Be("invariant option title");
+            cells[questionTitleRow, translactionColumn].Value?.ToString().Should().Be("fixed roster item 1");
         }
 
 

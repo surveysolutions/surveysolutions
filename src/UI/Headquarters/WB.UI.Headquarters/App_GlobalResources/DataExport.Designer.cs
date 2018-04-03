@@ -169,6 +169,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dropbox.
+        /// </summary>
+        internal static string Dropbox {
+            get {
+                return ResourceManager.GetString("Dropbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You can&apos;t change the export settings because the export process is already running..
         /// </summary>
         internal static string ErrorThereAreRunningProcesses {
@@ -183,6 +192,15 @@ namespace Resources {
         internal static string export {
             get {
                 return ResourceManager.GetString("export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        internal static string ExportBtn {
+            get {
+                return ResourceManager.GetString("ExportBtn", resourceCulture);
             }
         }
         
@@ -259,6 +277,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Google Drive.
+        /// </summary>
+        internal static string GoogleDrive {
+            get {
+                return ResourceManager.GetString("GoogleDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Items in export queue:.
         /// </summary>
         internal static string ItemsInQueue {
@@ -322,6 +349,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OneDrive.
+        /// </summary>
+        internal static string OneDrive {
+            get {
+                return ResourceManager.GetString("OneDrive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Paradata.
         /// </summary>
         internal static string ParaData {
@@ -354,6 +390,15 @@ namespace Resources {
         internal static string QueuedTitle {
             get {
                 return ResourceManager.GetString("QueuedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save binary data to:.
+        /// </summary>
+        internal static string SaveBinaryDataTo {
+            get {
+                return ResourceManager.GetString("SaveBinaryDataTo", resourceCulture);
             }
         }
         
@@ -417,6 +462,15 @@ namespace Resources {
         internal static string ZipArchiveDescription {
             get {
                 return ResourceManager.GetString("ZipArchiveDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zip file.
+        /// </summary>
+        internal static string ZipFile {
+            get {
+                return ResourceManager.GetString("ZipFile", resourceCulture);
             }
         }
     }

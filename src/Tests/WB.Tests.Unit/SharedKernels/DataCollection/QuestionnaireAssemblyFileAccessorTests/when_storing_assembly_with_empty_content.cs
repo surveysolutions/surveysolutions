@@ -1,32 +1,32 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.FileSystem;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
 {
     internal class when_storing_assembly_with_empty_content : QuestionnaireAssemblyFileAccessorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyServiceMock.Setup(x => x.GetAssemblyInfo(Moq.It.IsAny<string>())).Returns(new AssemblyInfo() {  });
             questionnaireAssemblyFileAccessor = CreateQuestionnaireAssemblyFileAccessor(assemblyService: AssemblyServiceMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Only<ArgumentException>(() => questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireId, version, data1));
+        public void BecauseOf() =>
+            exception = Assert.Throws<ArgumentException>(() => questionnaireAssemblyFileAccessor.StoreAssembly(questionnaireId, version, data1));
 
-        It should_not_exception_be_null = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_not_exception_be_null () =>
+            exception.Should().NotBeNull();
 
-        It should_throw_ArgumentException = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_ArgumentException () =>
+            exception.Should().NotBeNull();
 
-        It should_throw_exception_with_message_containting__dont_have_permissions__ = () =>
-            new[] { "assembly", "empty", version.ToString() }.ShouldEachConformTo(keyword => exception.Message.ToLower().Contains(keyword));
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__dont_have_permissions__ () =>
+            new[] { "assembly", "empty", version.ToString() }.Should().OnlyContain(keyword => exception.Message.ToLower().Contains(keyword));
 
 
         private static QuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;

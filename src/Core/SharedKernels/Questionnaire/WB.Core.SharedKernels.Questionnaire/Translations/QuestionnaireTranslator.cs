@@ -24,7 +24,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
                 if (entityAsQuestion != null)
                 {
                     TranslateInstruction(entityAsQuestion, translation);
-                    TranslateAnswerOptions(entityAsQuestion, translation);
+
+                    if (entityAsQuestion.QuestionType == QuestionType.Numeric)
+                        TranslateSpecialValues(entityAsQuestion, translation);
+                    else
+                        TranslateAnswerOptions(entityAsQuestion, translation);
                 }
 
                 if (entityAsValidatable != null)
@@ -68,6 +72,21 @@ namespace WB.Core.SharedKernels.Questionnaire.Translations
             answerOption.AnswerText = Translate(
                 original: answerOption.AnswerText,
                 translated: translation.GetAnswerOption(questionId, answerOption.AnswerValue));
+        }
+
+        private static void TranslateSpecialValues(IQuestion question, ITranslation translation)
+        {
+            foreach (var answerOption in question.Answers)
+            {
+                TranslateSpecialValue(question.PublicKey, answerOption, translation);
+            }
+        }
+
+        private static void TranslateSpecialValue(Guid questionId, Answer answerOption, ITranslation translation)
+        {
+            answerOption.AnswerText = Translate(
+                original: answerOption.AnswerText,
+                translated: translation.GetSpecialValue(questionId, answerOption.AnswerValue));
         }
 
         private static void TranslateValidationMessages(IValidatable validatableEntity, ITranslation translation)

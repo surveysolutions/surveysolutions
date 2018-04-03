@@ -147,9 +147,6 @@
   <data name="ChooseLanguage" xml:space="preserve">
     <value>选择语言</value>
   </data>
-  <data name="ChooseLanguageTitle" xml:space="preserve">
-    <value>请选择渲染PDF问卷模板的语言</value>
-  </data>
   <data name="Close" xml:space="preserve">
     <value>关闭</value>
   </data>

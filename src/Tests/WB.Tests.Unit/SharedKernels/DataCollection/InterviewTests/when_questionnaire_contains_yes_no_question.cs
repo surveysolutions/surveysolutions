@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_questionnaire_contains_yes_no_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
             {
@@ -23,14 +22,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             });
 
             interview = Setup.InterviewForQuestionnaireDocument(questionnaireDocument);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             coughtException = 
-             Catch.Only<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, new[] { 11}));
+              NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), questionId, RosterVector.Empty, DateTime.Now, new[] { 11}));
 
-        It should_not_allow_to_answer_on_yes_no_question_using_multiopions_question_method = () => 
-            coughtException.Message.ToLower().ToSeparateWords().ShouldContain("yes/no", "multiple", "options");
+        [NUnit.Framework.Test] public void should_not_allow_to_answer_on_yes_no_question_using_multiopions_question_method () => 
+            coughtException.Message.ToLower().ToSeparateWords().Should().Contain("yes/no", "multiple", "options");
 
         static Interview interview;
         static Guid questionId;

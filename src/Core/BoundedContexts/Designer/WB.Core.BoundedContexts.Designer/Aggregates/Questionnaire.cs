@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.Questionnaire.Translations;
 using Group = Main.Core.Entities.SubEntities.Group;
 
 
@@ -225,7 +226,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.innerDocument.IsDeleted = true;
         }
 
-        public IEnumerable<QuestionnaireNodeReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
+        public IEnumerable<QuestionnaireEntityReference> FindAllTexts(string searchFor, bool matchCase, bool matchWholeWord, bool useRegex)
         {
             Regex searchRegex = BuildSearchRegex(searchFor, matchCase, matchWholeWord, useRegex);
             IEnumerable<IComposite> allEntries = this.innerDocument.Children.TreeToEnumerableDepthFirst(x => x.Children);
@@ -234,13 +235,13 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var title = questionnaireItem.GetTitle();
                 var variable = questionnaireItem.GetVariable();
 
-                if (MatchesSearchTerm(variable, searchRegex))
+                if (MatchesSearchTerm(variable, searchRegex) || questionnaireItem.PublicKey.ToString().Equals(searchFor, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
+                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.VariableName);
                 }
                 if (MatchesSearchTerm(title, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
+                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Title);
                 }
                 
                 var question = questionnaireItem as IQuestion;
@@ -252,14 +253,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         {
                             if (MatchesSearchTerm(question.Answers[i].AnswerText, searchRegex))
                             {
-                                yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
+                                yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Option, i);
                             }
                         }
                     }
 
                     if (MatchesSearchTerm(question.Properties.OptionsFilterExpression, searchRegex) || MatchesSearchTerm(question.LinkedFilterExpression, searchRegex))
                     {
-                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
                 }
 
@@ -272,7 +273,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                         {
                             if (MatchesSearchTerm(group.FixedRosterTitles[i].Title, searchRegex))
                             {
-                                yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.FixedRosterItem, i);
+                                yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.FixedRosterItem, i);
                             }
                         }
                     }
@@ -281,7 +282,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 var conditional = questionnaireItem as IConditional;
                 if (MatchesSearchTerm(conditional?.ConditionExpression, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
+                    yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.EnablingCondition);
                 }
 
                 var validatable = questionnaireItem as IValidatable;
@@ -291,11 +292,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         if(MatchesSearchTerm(validatable.ValidationConditions[i].Expression, searchRegex))
                         {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
+                            yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationExpression, i);
                         }
                         if (MatchesSearchTerm(validatable.ValidationConditions[i].Message, searchRegex))
                         {
-                            yield return QuestionnaireNodeReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
+                            yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.ValidationMessage, i);
                         }
                     }
                 }
@@ -305,19 +306,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                 {
                     if (MatchesSearchTerm(questionnaireVariable.Label, searchRegex))
                     {
-                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableLabel);
                     }
 
                     if (MatchesSearchTerm(questionnaireVariable.Expression, searchRegex))
                     {
-                        yield return QuestionnaireNodeReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireVariable, QuestionnaireVerificationReferenceProperty.VariableContent);
                     }
                 }
 
                 var staticText = questionnaireItem as IStaticText;
                 if (staticText != null && MatchesSearchTerm(staticText.AttachmentName, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
+                    yield return QuestionnaireEntityReference.CreateFrom(staticText, QuestionnaireVerificationReferenceProperty.AttachmentName);
                 }
             }
 
@@ -325,7 +326,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 if (MatchesSearchTerm(macro.Value.Content, searchRegex))
                 {
-                    yield return QuestionnaireNodeReference.CreateForMacro(macro.Key);
+                    yield return QuestionnaireEntityReference.CreateForMacro(macro.Key);
                 }
             }
         }
@@ -1440,52 +1441,54 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             }
         }
 
-        public void UpdateMultimediaQuestion(Guid questionId, string title, string variableName, string variableLabel, string enablementCondition, bool hideIfDisabled, 
-            string instructions, Guid responsibleId, QuestionScope scope, QuestionProperties properties)
+        public void UpdateMultimediaQuestion(
+            UpdateMultimediaQuestion command)
         {
+            var title = command.Title;
+            var variableName = command.VariableName;
             PrepareGeneralProperties(ref title, ref variableName);
 
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
-            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(command.QuestionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(command.QuestionId);
+            this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            IGroup parentGroup = this.innerDocument.GetParentById(questionId);
+            IGroup parentGroup = this.innerDocument.GetParentById(command.QuestionId);
 
             if (parentGroup != null)
             {
                 this.ThrowIfChapterHasMoreThanAllowedLimit(parentGroup.PublicKey);
             }
 
-            var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-            IQuestion newQuestion = CreateQuestion(
-                    questionId,
-                    QuestionType.Multimedia,
-                    scope,
-                    title,
-                    variableName,
-                    variableLabel,
-                    enablementCondition,
-                    hideIfDisabled,
-                    Order.AZ,
-                    false,
-                    instructions,
-                    properties,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new List<ValidationCondition>(),
-                    null,
-                    false);
-
+            var question = this.innerDocument.Find<AbstractQuestion>(command.QuestionId);
+            MultimediaQuestion newQuestion = (MultimediaQuestion) CreateQuestion(
+                command.QuestionId,
+                QuestionType.Multimedia,
+                command.Scope,
+                title,
+                variableName,
+                command.VariableLabel,
+                command.EnablementCondition,
+                command.HideIfDisabled,
+                Order.AZ,
+                false,
+                command.Instructions,
+                command.Properties,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                new List<ValidationCondition>(),
+                null,
+                false);
+            newQuestion.IsSignature = command.IsSignature;
             if (question != null)
             {
                 this.innerDocument.ReplaceEntity(question, newQuestion);
@@ -2075,7 +2078,10 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         private static void ThrowIfOptionsCanNotBeParsed(Option[] options)
         {
-            if (options.Any(x => !int.TryParse(x.Value, NumberStyles.None, CultureInfo.InvariantCulture, out int _)))
+            var numberStyles = NumberStyles.None | NumberStyles.AllowLeadingSign | NumberStyles.AllowTrailingWhite | NumberStyles.AllowLeadingWhite;
+            if (options.Any(x => !int.TryParse(x.Value,
+                numberStyles,
+                CultureInfo.InvariantCulture, out int _)))
             {
                 throw new QuestionnaireException(DomainExceptionType.SelectorValueSpecialCharacters,
                     ExceptionMessages.OptionValuesShouldBeNumbers);

@@ -1,7 +1,10 @@
 using System;
+using System.Threading.Tasks;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -17,7 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ExportJob>();
 
-        public void Execute(IJobExecutionContext context)
+#pragma warning disable 1998
+        public async Task Execute(IJobExecutionContext context)
+#pragma warning restore 1998
         {
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
             ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
@@ -27,7 +32,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
             try
             {
-                this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
+                if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
+                    this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType).ExportData(exportToExternalStorageProcess);
+                else
+                    this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
 
                 this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
 
@@ -45,8 +53,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             }
         }
 
-        private AbstractDataExportHandler GetExportHandler(DataExportFormat format)
+        private AbstractExternalStorageDataExportHandler GetExternalStorageExportHandler(ExternalStorageType storageType)
         {
+            switch (storageType)
+            {
+                case ExternalStorageType.OneDrive:
+                    return ServiceLocator.Current.GetInstance<OnedriveBinaryDataExportHandler>();
+                case ExternalStorageType.Dropbox:
+                    return ServiceLocator.Current.GetInstance<DropboxBinaryDataExportHandler>();
+                case ExternalStorageType.GoogleDrive:
+                    return ServiceLocator.Current.GetInstance<GoogleDriveBinaryDataExportHandler>();
+                default:
+                    throw new NotSupportedException($"Export handler for '{Enum.GetName(typeof(ExternalStorageType), storageType)}' not found");
+            }
+        }
+        private BaseAbstractDataExportHandler GetExportHandler(DataExportFormat format)        {
             switch (format)
             {
                     case DataExportFormat.Binary:

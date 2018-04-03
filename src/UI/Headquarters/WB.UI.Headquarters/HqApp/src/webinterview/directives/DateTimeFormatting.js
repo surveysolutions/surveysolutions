@@ -3,21 +3,19 @@ import Vue from "vue"
 import { DateFormats } from "~/shared/helpers"
 import { forEach } from "lodash"
 
-Vue.directive("dateTimeFormatting", {
-    update: (el) => {
-        const timeElements = el.getElementsByTagName("time")
+Vue.directive("dateTimeFormatting", (el, binding) => {
+    const timeElements = el.getElementsByTagName("time")
 
-        forEach(timeElements, timeElement => {
-            const dateTimeAttr = timeElement.getAttribute("datetime")
-            
-            if (dateTimeAttr) {
-                const dateTime = new Date(dateTimeAttr)
-                timeElement.innerHTML = moment(dateTime).format(DateFormats.dateTime)
-            }
-            else {
-                const date = timeElement.getAttribute("date")
-                timeElement.innerHTML =  moment(date).format(DateFormats.date)
-            }
-        })
-    }
+    forEach(timeElements, timeElement => {
+        const dateTimeAttr = timeElement.getAttribute("datetime")
+
+        if (dateTimeAttr) {
+            const dateTime = new Date(dateTimeAttr)
+            timeElement.innerHTML = moment(dateTime).format(DateFormats.dateTime)
+        }
+        else {
+            const date = timeElement.getAttribute("date")
+            timeElement.innerHTML = moment(date).format(DateFormats.date)
+        }
+    })
 })

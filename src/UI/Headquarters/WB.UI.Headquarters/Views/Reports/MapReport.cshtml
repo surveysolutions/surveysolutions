@@ -1,87 +1,13 @@
-﻿@using System.Web.Optimization
-@using AppSettings = WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings
-@model WB.UI.Headquarters.Models.Reports.MapReportModel
+﻿@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@model object
 @{
     ViewBag.Title = MapReport.MapReportTitle;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
-
-@section scripts
-{
-    @Scripts.Render("~/js/list")
+@section Scripts{
     <script type="text/javascript"
-            src="https://maps.googleapis.com/maps/api/js?key=@(AppSettings.Instance.GoogleMapApiKey)&sensor=false">
+            src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
     </script>
-    @Scripts.Render("~/js/map-report")
-    <script type="text/javascript">
-        var commandExecutionUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "CommandApi", action = "ExecuteCommands" })';
-        var $questionnairesListUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "Questionnaires" })';
-        var $questionnaireQuestionstUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuestionInfo" })';
-        var $mapReportUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "MapReport" })';
-        var $interiewSummaryUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoint" })';
-        var $interviewDetailsUrl = '@Url.Action("Review", "Interview")';
-
-        $(function () {
-            window.model = new Supervisor.VM.MapReport(commandExecutionUrl, $questionnairesListUrl, $questionnaireQuestionstUrl, $mapReportUrl, $interiewSummaryUrl);
-            ko.applyBindings(model);
-            model.initializeMap();
-            model.load();
-
-            var windowHeight = $(window).height();
-            var navigationHeight = $('.navbar.navbar-fixed-top').height();
-            $('#map-canvas').css('min-height', (windowHeight - navigationHeight) + 'px');
-        });
-    </script>
+    @Html.RenderHqConfig(Model)
 }
-
-<main class="hold-transition">
-    <div class="container-fluid">
-        <div class="row">
-            <aside class="filters">
-                <div class="foldback-button" id="hide-filters">
-                    <span class="arrow"></span>
-                    <span class="arrow"></span>
-                    <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-                </div>
-                <div class="filters-container">
-                    <h4>@Pages.FilterTitle</h4>
-                    <div class="block-filter">
-                        <h5>@Reports.Questionnaire</h5>
-                        <select id="questionnaireSelector" data-bind="value: selectedQuestionnaire, selectPicker: {}" class="form-control">
-                            @foreach (var item in Model.Questionnaires.Options)
-                            {
-                                <option value='@item.Key'>@item.Value</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="block-filter">
-                        <h5>@Reports.Variables</h5>
-                        <select id="variable" data-bind="options: questionnaireVariables, value: selectedVariable,optionsValue: 'Key', optionsText: 'Value', optionsCaption : 'Select variable', selectPicker: {}"></select>
-                    </div>
-                    <div class="block-filter" data-bind="visible: markerlimitReached">
-                        <div class="alert-warning">
-                            <span>@MapReport.NotAllMarkers</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="preset-filters-container">
-                    <div class="center-block" style="margin-left: 0">
-                        <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" data-bind="click: reloadMarkersInBounds, visible: readyToUpdate">@MapReport.ReloadMarkers</button>
-                    </div>
-                </div>
-            </aside>
-            <div class="main-information">
-                <div id="map-canvas" class="google-maps"></div>
-            </div>
-        </div>
-    </div>
-</main>
-<script type="text/html" id="interview-tooltip-template">
-    <div>
-        <div class="row-fluid"><strong>@Users.Interviewer :</strong>&nbsp;<span data-bind="text: InterviewerName">[interviewer name]</span></div>
-        <div class="row-fluid"><strong>@Users.Supervisor :</strong>&nbsp;<span data-bind="text: SupervisorName">[supervisor name]</span> </div>
-        <div class="row-fluid"><strong>@Common.Status :</strong>&nbsp;<span data-bind="text: LastStatus">[status]</span> </div>
-        <div class="row-fluid"><strong>@Reports.CompletionDate :</strong>&nbsp;<span data-bind="text: LastUpdatedDate">[last updated date]</span></div>
-        <div class="row-fluid" style="white-space:nowrap;"><strong>@MapReport.ViewInterviewContent :</strong>&nbsp;<a target="_blank" data-bind="attr: { href: $interviewDetailsUrl + '/' + InterviewId }"> @MapReport.details </a></div>
-    </div>
-</script>
+<div id="vueApp"></div>

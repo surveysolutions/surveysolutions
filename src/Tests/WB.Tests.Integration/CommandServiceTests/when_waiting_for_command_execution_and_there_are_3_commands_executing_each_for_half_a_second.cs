@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
@@ -54,7 +54,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             log.Add("wait finished");
 
-            log.ShouldContainOnly("command executed", "command executed", "command executed", "wait finished");
+            log.Should().BeEquivalentTo("command executed", "command executed", "command executed", "wait finished");
         }
 
         private static readonly List<string> log = new List<string>();

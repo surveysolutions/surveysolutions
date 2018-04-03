@@ -1,37 +1,37 @@
-﻿using System.Web.Mvc;
-using Machine.Specifications;
+using System.Web.Mvc;
+using FluentAssertions;
 using WB.UI.Headquarters.Filters;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttributeTests
 {
     internal class when_action_executing_and_admin_user_does_not_exists_and_not_install_controller : InstallationAttributeTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             attribute = CreateInstallationAttribute();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             attribute.OnActionExecuting(actionExecutingContext);
 
-        It should_action_executing_result_be_type_of_RedirectToRouteResult = () =>
-            actionExecutingContext.Result.ShouldBeOfExactType<RedirectToRouteResult>();
+        [NUnit.Framework.Test] public void should_action_executing_result_be_type_of_RedirectToRouteResult () =>
+            actionExecutingContext.Result.Should().BeOfType<RedirectToRouteResult>();
 
-        It should_action_executing_result_route_values_contains_2_values = () =>
-            GetActionExecutingContextResult().RouteValues.Count.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_action_executing_result_route_values_contains_2_values () =>
+            GetActionExecutingContextResult().RouteValues.Count.Should().Be(2);
 
-        It should_action_executing_result_route_values_contains_controller_key = () =>
+        [NUnit.Framework.Test] public void should_action_executing_result_route_values_contains_controller_key () =>
             GetActionExecutingContextResult().RouteValues.ContainsKey("controller");
 
-        It should_action_executing_result_route_values_contains_action_key = () =>
+        [NUnit.Framework.Test] public void should_action_executing_result_route_values_contains_action_key () =>
             GetActionExecutingContextResult().RouteValues.ContainsKey("action");
 
-        It should_action_executing_result_controller_route_value_be_equal_to_install = () =>
-            GetActionExecutingContextResult().RouteValues["controller"].ShouldEqual("Install");
+        [NUnit.Framework.Test] public void should_action_executing_result_controller_route_value_be_equal_to_install () =>
+            GetActionExecutingContextResult().RouteValues["controller"].Should().Be("Install");
 
-        It should_action_executing_result_action_route_value_be_equal_to_finish = () =>
-            GetActionExecutingContextResult().RouteValues["action"].ShouldEqual("Finish");
+        [NUnit.Framework.Test] public void should_action_executing_result_action_route_value_be_equal_to_finish () =>
+            GetActionExecutingContextResult().RouteValues["action"].Should().Be("Finish");
 
         private static RedirectToRouteResult GetActionExecutingContextResult()
         {

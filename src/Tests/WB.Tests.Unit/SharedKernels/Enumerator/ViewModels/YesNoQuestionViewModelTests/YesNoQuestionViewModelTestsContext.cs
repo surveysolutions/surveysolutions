@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -17,7 +12,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
-    [Subject(typeof(YesNoQuestionViewModel))]
+    [NUnit.Framework.TestOf(typeof(YesNoQuestionViewModel))]
     public class YesNoQuestionViewModelTestsContext
     {
         protected static YesNoQuestionViewModel CreateViewModel(IUserInteractionService userInteractionService = null,

@@ -79,6 +79,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duration.
+        /// </summary>
+        public static string Duration {
+            get {
+                return ResourceManager.GetString("Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Flagged.
         /// </summary>
         public static string FlagTitleFlagged {
@@ -97,7 +106,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Updated {{ date }}.
+        ///   Looks up a localized string similar to Updated.
         /// </summary>
         public static string LastUpdated {
             get {
@@ -133,7 +142,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible .
+        ///   Looks up a localized string similar to Responsible.
         /// </summary>
         public static string Responsible {
             get {

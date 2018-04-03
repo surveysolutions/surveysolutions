@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -21,16 +21,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
             questionnaire.CloneQuestionnaire("Title", false, responsibleId, clonedQuestionnaireId, sourceQuestionnaire);
 
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_1_attachment () =>
-            questionnaire.QuestionnaireDocument.Attachments.Count.ShouldEqual(1);
+            questionnaire.QuestionnaireDocument.Attachments.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_set_new_AttachmentId () =>
-            questionnaire.QuestionnaireDocument.Attachments.First().AttachmentId.ShouldNotEqual(attachmentId);
+            questionnaire.QuestionnaireDocument.Attachments.First().AttachmentId.Should().NotBe(attachmentId);
 
         [NUnit.Framework.Test] public void should_set_original_Name () =>
-            questionnaire.QuestionnaireDocument.Attachments.First().Name.ShouldEqual(name);
+            questionnaire.QuestionnaireDocument.Attachments.First().Name.Should().Be(name);
 
         [NUnit.Framework.Test] public void should_set_Content_Id () =>
-            questionnaire.QuestionnaireDocument.Attachments.First().ContentId.ShouldEqual(contentId);
+            questionnaire.QuestionnaireDocument.Attachments.First().ContentId.Should().Be(contentId);
 
         private static Questionnaire questionnaire;
         private static QuestionnaireDocument sourceQuestionnaire;

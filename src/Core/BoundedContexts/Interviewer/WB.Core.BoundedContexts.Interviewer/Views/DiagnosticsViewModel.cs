@@ -1,4 +1,5 @@
-﻿using MvvmCross.Core.ViewModels;
+﻿using System.Threading.Tasks;
+using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -43,20 +44,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboard());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
-
-        private void NavigateToMaps()
-        {
-            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
-        }
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
         public IMvxCommand SignOutCommand
-            => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
+            => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
         public IMvxCommand NavigateToLoginCommand
-            => new MvxCommand(this.viewModelNavigationService.NavigateToLogin);
+            => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToLoginAsync);
 
         public bool IsAuthenticated => this.principal.IsAuthenticated;
 

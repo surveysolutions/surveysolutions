@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Machine.Specifications;
+using System.Collections.Generic;
+using FluentAssertions;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Tests.Abc;
 
@@ -7,7 +7,7 @@ namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
 {
     internal class when_detecting_cycles_in_directed_graph_with_no_cycles
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
             dependencies = new Dictionary<int, int[]>()
             {
@@ -16,13 +16,14 @@ namespace WB.Tests.Unit.GenericSubdomains.TopologicalSorterTests
                 {2, new[] {3}}
             };
             sorter = Create.Service.TopologicalSorter<int>();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             cycles = sorter.DetectCycles(dependencies);
 
-        It should_find_0_cycles = () =>
-            cycles.Count.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_find_0_cycles () =>
+            cycles.Count.Should().Be(0);
 
         private static ITopologicalSorter<int> sorter;
         private static List<List<int>> cycles;

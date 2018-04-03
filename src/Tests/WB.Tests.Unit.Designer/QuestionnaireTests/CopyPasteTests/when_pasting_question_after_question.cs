@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -44,15 +44,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             questionnaire.PasteAfter(command);
 
         [NUnit.Framework.Test] public void should_exists_question_in_document () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_exists_question_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId)
-                .PublicKey.ShouldEqual(targetId);
+                .PublicKey.Should().Be(targetId);
 
         [NUnit.Framework.Test] public void should_exists_question_with_stataExportCaption_specified () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(targetId)
-                .StataExportCaption.ShouldEqual(stataExportCaption);
+                .StataExportCaption.Should().Be(stataExportCaption);
 
         static Questionnaire questionnaire;
         static Guid questionToPastAfterId;

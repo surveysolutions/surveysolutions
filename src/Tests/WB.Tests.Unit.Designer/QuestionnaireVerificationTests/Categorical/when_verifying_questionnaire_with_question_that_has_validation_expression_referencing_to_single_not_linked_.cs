@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -47,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             resultErrors = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_have_no_errors () =>
-          resultErrors.ShouldBeEmpty();
+          resultErrors.Should().BeEmpty();
 
         private static IEnumerable<QuestionnaireVerificationMessage> resultErrors;
         private static QuestionnaireVerifier verifier;

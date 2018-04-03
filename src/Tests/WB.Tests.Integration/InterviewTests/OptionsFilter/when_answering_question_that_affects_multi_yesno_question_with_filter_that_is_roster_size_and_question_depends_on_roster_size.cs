@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
     internal class when_answering_question_that_affects_multi_yesno_question_with_filter_that_is_roster_size_and_question_depends_on_roster_size : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -63,14 +63,14 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 return result;
             });
 
-        It should_enable_q3 = () =>
-            results.QuestionsQ3Enabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_enable_q3 () =>
+            results.QuestionsQ3Enabled.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

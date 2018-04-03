@@ -1,8 +1,8 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -13,7 +13,7 @@ using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 {
-    [Subject(typeof(TeamsAndStatusesReport))]
+    [TestOf(typeof(TeamsAndStatusesReport))]
     internal class TeamsAndStatusesReportContext: with_postgres_db
     {
         protected static TeamsAndStatusesReport CreateHqTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
@@ -36,7 +36,13 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[]
+            {
+                typeof(InterviewSummaryMap),
+                typeof(TimeSpanBetweenStatusesMap),
+                typeof(QuestionAnswerMap),
+                typeof(InterviewCommentedStatusMap)
+            }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
@@ -62,7 +68,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             }
         }
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            pgSqlConnection.Close();
+        }
 
         protected static NpgsqlConnection pgSqlConnection;
         protected static CqrsPostgresTransactionManager postgresTransactionManager;

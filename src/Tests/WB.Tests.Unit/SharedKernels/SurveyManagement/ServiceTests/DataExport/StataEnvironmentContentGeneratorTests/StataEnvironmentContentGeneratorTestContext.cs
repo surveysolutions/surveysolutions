@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -12,10 +11,11 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
-    [Subject(typeof(StataEnvironmentContentService))]
+    [NUnit.Framework.TestOf(typeof(StataEnvironmentContentService))]
     internal class StataEnvironmentContentGeneratorTestContext
     {
-        protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(IFileSystemAccessor fileSystemAccessor)
+        protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(
+            IFileSystemAccessor fileSystemAccessor)
         {
             return new StataEnvironmentContentService(fileSystemAccessor, new QuestionnaireLabelFactory());
         }
@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>())).Returns<string>(s => s);
+            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>()))
+                .Returns<string>(s => s);
             fileSystemAccessorMock.Setup(x => x.WriteAllText(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Callback<string, string>((path, content) => returnContentAction(content));
 
@@ -41,10 +42,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             {
                 result.HeaderItems.Add(exportedHeaderItem.PublicKey, exportedHeaderItem);
             }
+
             return result;
         }
 
-        protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(string variableName = "item", string title = "some item",
+        protected static ExportedQuestionHeaderItem CreateExportedHeaderItem(string variableName = "item",
+            string title = "some item",
             params LabelItem[] labels)
         {
             return new ExportedQuestionHeaderItem()
@@ -52,19 +55,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 PublicKey = Guid.NewGuid(),
                 VariableName = variableName,
                 QuestionType = QuestionType.Numeric,
-                ColumnHeaders = GetHeaderColumns(variableName,title),
-                Labels = (labels ?? new LabelItem[0]).ToDictionary((l)=>Guid.NewGuid(),(l)=>l)
+                ColumnHeaders = GetHeaderColumns(variableName, title),
+                Labels = (labels ?? new LabelItem[0]).ToList()
             };
         }
 
-        protected static LabelItem CreateLabelItem(string caption="caption", string title="title")
+        protected static LabelItem CreateLabelItem(string caption = "caption", string title = "title")
         {
-            return new LabelItem { Caption = caption, Title = title };
+            return new LabelItem {Caption = caption, Title = title};
         }
 
         protected static List<HeaderColumn> GetHeaderColumns(string variableName, string title)
         {
-            return new List<HeaderColumn> {new HeaderColumn() {Name = variableName, Title = title}};
+            return new List<HeaderColumn> {new HeaderColumn {Name = variableName, Title = title}};
         }
     }
 }

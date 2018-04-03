@@ -62,43 +62,55 @@
 		self.itemId = id;
 		self.htmlDownloadUrl = htmlDownloadUrl;
 		self.getLanguagesUrl = getLanguagesUrl;
-		
-		$('#export-html-modal-questionnaire-id').val(self.itemId);
-		$('#export-html-modal-questionnaire-title').text(self.itemName);
-		
-		self.ExportDialogClosed = false;
-		self.selectedTransalationHtml = null;
-		var dropButton = $('#dropdownMenuButtonHtml');
-		dropButton.text(dropButton[0].title);
 
-		$.ajax({
-			url: getLanguagesUrl,
-			cache: false,
-			method: "POST"
-		}).done(function (result) {
+        $.ajax({
+	        url: getLanguagesUrl,
+	        cache: false,
+	        method: "POST",
+	        async: false
+	    }).done(function (result) {
+            if (result.length && result.length > 1){
 
-			var typeaheadCtrl = $(".languages-combobox-html");
-			typeaheadCtrl.empty();
+                $('#mExportHtml').modal("show");
 
-			for (var i = 0; i < result.length; i++) {
-				var translationItem = result[i];
-				typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' + translationItem.Value + '">' + translationItem.Name + '</a></li>');
-			}
+                $('#export-html-modal-questionnaire-id').val(self.itemId);
+                $('#export-html-modal-questionnaire-title').text(self.itemName);
 
-			typeaheadCtrl.unbind('click');
-			typeaheadCtrl.click(function (evn) {
-				var link = $(evn.target);
-				self.selectedTransalationHtml = link.attr('value');
-				$('#dropdownMenuButtonHtml').text(link.text());
-				$('#htmlGenerateButton').prop('disabled', false);
-			});
+                self.ExportDialogClosed = false;
+                self.selectedTransalationHtml = null;
+                var dropButton = $('#dropdownMenuButtonHtml');
+                dropButton.text(dropButton[0].title);
 
-			$('#htmlGenerateButton').prop('disabled', true);
-			$('#htmlGenerateButton').unbind('click');
-			$('#htmlGenerateButton').click(function (evn) {
-				window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
-				$('#htmlCancelButton').click();
-			});
+                var typeaheadCtrl = $(".languages-combobox-html");
+		        typeaheadCtrl.empty();
+
+		        for (var i = 0; i < result.length; i++) {
+		            var translationItem = result[i];
+		            typeaheadCtrl.append('<li><a href="javascript:void(0)" value="' +
+		                translationItem.Value +
+		                '">' +
+		                translationItem.Name +
+		                '</a></li>');
+		        }
+
+		        typeaheadCtrl.unbind('click');
+		        typeaheadCtrl.click(function(evn) {
+		            var link = $(evn.target);
+		            self.selectedTransalationHtml = link.attr('value');
+		            $('#dropdownMenuButtonHtml').text(link.text());
+		            $('#htmlGenerateButton').prop('disabled', false);
+		        });
+
+		        $('#htmlGenerateButton').prop('disabled', true);
+		        $('#htmlGenerateButton').unbind('click');
+		        $('#htmlGenerateButton').click(function(evn) {
+		            window.open(self.htmlDownloadUrl + '?translation=' + self.selectedTransalationHtml, '_blank');
+		            $('#mExportHtml').modal("hide");
+		        });
+            }
+            else {
+                window.open(self.htmlDownloadUrl, '_blank');
+            }
 		});
 	};
 

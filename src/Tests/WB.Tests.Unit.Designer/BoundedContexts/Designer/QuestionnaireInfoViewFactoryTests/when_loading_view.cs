@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
@@ -25,13 +25,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
             view = factory.Load(questionnaireId, userId);
 
         [NUnit.Framework.Test] public void should_find_questionnaire () =>
-            view.ShouldNotBeNull();
+            view.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_questionnaire_id_be_equal_questionnaireId () =>
-            view.QuestionnaireId.ShouldEqual(questionnaireId);
+            view.QuestionnaireId.Should().Be(questionnaireId);
 
         [NUnit.Framework.Test] public void should_questionnaire_title_be_equal_questionnaireTitle () =>
-            view.Title.ShouldEqual(questionnaireTitle);
+            view.Title.Should().Be(questionnaireTitle);
 
         private static QuestionnaireInfoView view;
         private static QuestionnaireInfoViewFactory factory;

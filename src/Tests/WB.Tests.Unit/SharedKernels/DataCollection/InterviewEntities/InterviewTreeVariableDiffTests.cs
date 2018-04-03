@@ -1,7 +1,5 @@
 ﻿using System;
-using Moq;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewEntities

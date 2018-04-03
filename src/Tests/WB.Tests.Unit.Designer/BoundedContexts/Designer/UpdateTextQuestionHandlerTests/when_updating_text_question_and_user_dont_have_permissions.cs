@@ -1,29 +1,30 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHandlerTests
 {
     internal class when_updating_text_question_and_user_dont_have_permissions : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(
                 questionId,chapterId,responsibleId,
                 title: "old title",variableName: "old_variable_name",instructions: "old instructions",enablementCondition: "old condition");
             BecauseOf();
+
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "don't", "have", "permissions" });
         }
 
         private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateTextQuestion(
                     new UpdateTextQuestion(
                         questionnaire.Id,
@@ -40,14 +41,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateTextQuestionHand
                         mask: null,
                         responsibleId: notExistinigUserId,
                         validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
-
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__dont__have__permissions__ () =>
-            new[] { "don't", "have", "permissions" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
 
         private static Questionnaire questionnaire;
         private static Exception exception;

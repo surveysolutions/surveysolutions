@@ -1,6 +1,7 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
 using WB.Core.BoundedContexts.Designer.Exceptions;
@@ -9,28 +10,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Macros
 {
     internal class when_deleting_macro_without_premission_to_edit : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_questionnaire_exception() {
             questionnaire = CreateQuestionnaire(questionnaireId: questionnaireId, responsibleId: ownerId);
             questionnaire.AddMacro(Create.Command.AddMacro(questionnaireId, macroId, ownerId));
             questionnaire.AddSharedPerson(sharedPersonId, "email@email.com", ShareType.View, ownerId);
 
             deleteMacro = Create.Command.DeleteMacro(questionnaireId, macroId, sharedPersonId);
-            BecauseOf();
+
+            var exception = Assert.Throws<QuestionnaireException>(() => questionnaire.DeleteMacro(deleteMacro));
+            exception.ErrorType.Should().Be(DomainExceptionType.DoesNotHavePermissionsForEdit);
         }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() => questionnaire.DeleteMacro(deleteMacro));
-
-        [NUnit.Framework.Test] public void should_throw_exception () =>
-            exception.ShouldNotBeNull();
-
-        [NUnit.Framework.Test] public void should_throw_questionnaire_exception () =>
-            exception.ShouldBeOfExactType(typeof(QuestionnaireException));
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_type_DoesNotHavePermissionsForEdit () =>
-            ((QuestionnaireException)exception).ErrorType.ShouldEqual(DomainExceptionType.DoesNotHavePermissionsForEdit);
-
-        private static Exception exception;
         private static DeleteMacro deleteMacro;
         private static Questionnaire questionnaire;
         private static readonly Guid ownerId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");

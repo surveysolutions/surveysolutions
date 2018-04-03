@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
-using Machine.Specifications;
 using Moq;
 using Ncqrs;
 using NUnit.Framework;
@@ -35,7 +34,7 @@ namespace WB.Tests.Unit
     }
 }
 
-public class AssemblyContext : IAssemblyContext
+public class AssemblyContext 
 {
     private class FakeFetchingProvider : IFetchingProvider
     {

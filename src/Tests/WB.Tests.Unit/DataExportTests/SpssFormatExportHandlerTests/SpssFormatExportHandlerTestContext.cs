@@ -1,7 +1,6 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
@@ -10,13 +9,14 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
 {
-    [Subject(typeof(SpssFormatExportHandler))]
-    internal class SpssFormatExportHandlerTestContext
+    [NUnit.Framework.TestOf(typeof(SpssFormatExportHandler))]
+    public class SpssFormatExportHandlerTestContext
     {
-        protected static SpssFormatExportHandler CreateSpssFormatExportHandler(
+        internal static SpssFormatExportHandler CreateSpssFormatExportHandler(
             IFileSystemAccessor fileSystemAccessor = null,
             IProtectedArchiveUtils archiveUtils = null,
             ITabularFormatExportService tabularFormatExportService = null,
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
             return new DataExportFileAccessor(Mock.Of<IExportSettings>(),
                 Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 archiveUtils ?? Mock.Of<IProtectedArchiveUtils>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(), Mock.Of<IExternalFileStorage>());
         }
     }
 }

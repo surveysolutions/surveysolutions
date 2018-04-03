@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Tests.Abc;
 
@@ -15,16 +15,16 @@ namespace WB.Tests.Unit.Applications.Shared.Web.Captcha
             var subject = Create.Service.WebCacheBasedCaptchaService(NumberOfAttempts);
             var userName = Guid.NewGuid().ToString();
 
-            subject.ShouldShowCaptcha(userName).ShouldBeFalse();
+            subject.ShouldShowCaptcha(userName).Should().BeFalse();
 
             for (int i = 0; i < NumberOfAttempts - 1; i++)
             {
                 subject.RegisterFailedLogin(userName);
-                subject.ShouldShowCaptcha(userName).ShouldBeFalse();
+                subject.ShouldShowCaptcha(userName).Should().BeFalse();
             }
 
             subject.RegisterFailedLogin(userName);
-            subject.ShouldShowCaptcha(userName).ShouldBeTrue();
+            subject.ShouldShowCaptcha(userName).Should().BeTrue();
         }
 
         [Test]
@@ -37,10 +37,10 @@ namespace WB.Tests.Unit.Applications.Shared.Web.Captcha
             {
                 subject.RegisterFailedLogin(userName);
             }
-            subject.ShouldShowCaptcha(userName).ShouldBeTrue();
+            subject.ShouldShowCaptcha(userName).Should().BeTrue();
             subject.ResetFailedLogin(userName);
 
-            subject.ShouldShowCaptcha(userName).ShouldBeFalse();
+            subject.ShouldShowCaptcha(userName).Should().BeFalse();
         }
     }
 }

@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -16,13 +17,12 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 {
     internal class when_remove_answer_from_parent_cascading_question : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
 
-        };
-
-        private Because of = () =>
+        private void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
 
@@ -65,26 +65,27 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_raise_AnswerRemoved_event_for_parent_question = () =>
-            result.WasAnswerOnParentQuestionRemoved.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswerRemoved_event_for_parent_question () =>
+            result.WasAnswerOnParentQuestionRemoved.Should().BeTrue();
 
-        It should_raise_QuestionsDisabled_event_for_child_question = () =>
-            result.WasAnswerOnChildCascadingQuestionDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_for_child_question () =>
+            result.WasAnswerOnChildCascadingQuestionDisabled.Should().BeTrue();
 
-        It should_raise_QuestionsDisabled_event_for_child_of_child_question = () =>
-           result.WasAnswerOnChildOfChildCascadingQuestionDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_for_child_of_child_question () =>
+           result.WasAnswerOnChildOfChildCascadingQuestionDisabled.Should().BeTrue();
 
-        It should_raise_AnswerRemoved_event_for_child_question = () =>
-            result.WasAnswerOnChildCascadingQuestionRemoved.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswerRemoved_event_for_child_question () =>
+            result.WasAnswerOnChildCascadingQuestionRemoved.Should().BeTrue();
 
-        It should_raise_AnswerRemoved_event_for_child_of_child_question = () =>
-            result.WasAnswerOnChildOfChildCascadingQuestionRemoved.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswerRemoved_event_for_child_of_child_question () =>
+            result.WasAnswerOnChildOfChildCascadingQuestionRemoved.Should().BeTrue();
 
         private static Interview interview;
         private static Guid userId;

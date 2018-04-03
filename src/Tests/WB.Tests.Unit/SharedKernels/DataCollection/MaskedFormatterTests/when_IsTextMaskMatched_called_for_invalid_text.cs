@@ -1,21 +1,20 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.MaskedFormatterTests
 {
-    [Subject(typeof(MaskedFormatter))]
     internal class when_IsTextMaskMatched_called_for_invalid_text
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             maskedFormatter = new MaskedFormatter(mask);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = maskedFormatter.IsTextMaskMatched(value);
 
-        It should_result_be_false = () =>
-            result.ShouldEqual(false);
+        [NUnit.Framework.Test] public void should_result_be_false () =>
+            result.Should().Be(false);
 
         private static MaskedFormatter maskedFormatter;
         private static bool result;

@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -12,12 +11,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     internal class when_answering_list_question_that_is_roster_size_and_roster_has_condition_should_turn_it_off : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -55,17 +54,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_raise_GroupsEnabled_event_for_nested_roster_groupd = () =>
-            results.WasRosterEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_raise_GroupsEnabled_event_for_nested_roster_groupd () =>
+            results.WasRosterEnabled.Should().BeFalse();
 
-        It should_not_raise_GroupsDisabled_event_for_nested_roster_groupd = () =>
-            results.WasRosterDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_not_raise_GroupsDisabled_event_for_nested_roster_groupd () =>
+            results.WasRosterDisabled.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

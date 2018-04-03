@@ -1,23 +1,18 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
-using Moq;
+using FluentAssertions;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_unapprove_by_headquarters : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("AAAA0000AAAA00000000AAAA0000AAAA");
             supervisorId = Guid.Parse("BBAA0000AAAA00000000AAAA0000AAAA");
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
@@ -32,28 +27,29 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.HqApprove(userId, string.Empty);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.UnapproveByHeadquarters(userId, string.Empty);
 
-        It should_raise_two_events = () =>
-            eventContext.Events.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_raise_two_events () =>
+            eventContext.Events.Count().Should().Be(2);
 
-        It should_raise_InterviewUnapprovedByHQ_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewUnapprovedByHQ_event () =>
             eventContext.ShouldContainEvent<UnapprovedByHeadquarters>(@event => @event.UserId == userId);
 
-        It should_raise_InterviewUnapprovedByHQ_with_comment = () =>
-            eventContext.GetEvent<UnapprovedByHeadquarters>().Comment.ShouldContain("[Approved by Headquarters was revoked]");
+        [NUnit.Framework.Test] public void should_raise_InterviewUnapprovedByHQ_with_comment () =>
+            eventContext.GetEvent<UnapprovedByHeadquarters>().Comment.Should().Contain("[Approved by Headquarters was revoked]");
 
-        It should_raise_InterviewStatusChanged_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewStatusChanged_event () =>
             eventContext.ShouldContainEvent<InterviewStatusChanged>(@event => @event.Status == InterviewStatus.ApprovedBySupervisor);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static Guid userId;
         private static Guid supervisorId;

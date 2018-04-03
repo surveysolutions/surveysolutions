@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -10,43 +10,48 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
     internal class when_verifying_preloaded_data_file_has_empty_id_cell : PreloadedDataVerifierTestContext
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
         {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
             questionnaire = CreateQuestionnaireDocumentWithOneChapter();
             questionnaire.Title = "questionnaire";
-            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId}, new string[][] { new string[] { "" } },
+            preloadedDataByFile = CreatePreloadedDataByFile(new[] { ServiceColumns.InterviewId }, new string[][] { new string[] { "" } },
                 QuestionnaireCsvFileName);
 
             preloadedDataServiceMock = new Mock<IPreloadedDataService>();
 
             preloadedDataServiceMock.Setup(x => x.GetIdColumnIndex(preloadedDataByFile)).Returns(0);
-            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFile)).Returns(new []{1});
-            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel(){LevelIdColumnName = ServiceColumns.InterviewId });
+            preloadedDataServiceMock.Setup(x => x.GetParentIdColumnIndexes(preloadedDataByFile)).Returns(new[] { 1 });
+            preloadedDataServiceMock.Setup(x => x.FindLevelInPreloadedData(QuestionnaireCsvFileName)).Returns(new HeaderStructureForLevel() { LevelIdColumnName = ServiceColumns.InterviewId });
             preloadedDataServiceMock.Setup(x => x.GetColumnIndexByHeaderName(preloadedDataByFile, Moq.It.IsAny<string>())).Returns(-1);
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
-        };
 
-        Because of =
-            () => VerificationErrors = importDataVerifier.VerifyPanelFiles(Create.Entity.PreloadedDataByFile(preloadedDataByFile), preloadedDataServiceMock.Object).ToList();
+            BecauseOf();
+        }
 
-        It should_result_has_1_error = () =>
-            VerificationErrors.Count().ShouldEqual(1);
+        private void BecauseOf() => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
-        It should_return_single_PL0006_error = () =>
-            VerificationErrors.First().Code.ShouldEqual("PL0006");
+        [NUnit.Framework.Test]
+        public void should_result_has_2_errors() =>
+            status.VerificationState.Errors.Count.Should().Be(2);
 
-        It should_return_reference_with_Cell_type = () =>
-            VerificationErrors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+        [NUnit.Framework.Test]
+        public void should_return_single_PL0006_error() =>
+            status.VerificationState.Errors.First().Code.Should().Be("PL0006");
 
-        It should_error_has_content_empty_string = () =>
-            VerificationErrors.First().References.First().Content.ShouldEqual("");
+        [NUnit.Framework.Test]
+        public void should_return_reference_with_Cell_type() =>
+            status.VerificationState.Errors.First().References.First().Type.Should().Be(PreloadedDataVerificationReferenceType.Cell);
+
+        [NUnit.Framework.Test]
+        public void should_error_has_content_empty_string() =>
+            status.VerificationState.Errors.First().References.First().Content.Should().Be("");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

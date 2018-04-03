@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -26,13 +26,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, false, false);
 
-        [NUnit.Framework.Test] public void should_find_ignoring_casing () => matches.ShouldContain(x => x.Id == staticTextId);
+        [NUnit.Framework.Test] public void should_find_ignoring_casing () => matches.Should().Contain(x => x.Id == staticTextId);
 
         static Questionnaire questionnaire;
 
         static Guid chapterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         static Guid staticTextId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static string searchFor = "With Casing";
-        static IEnumerable<QuestionnaireNodeReference> matches;
+        static IEnumerable<QuestionnaireEntityReference> matches;
     }
 }

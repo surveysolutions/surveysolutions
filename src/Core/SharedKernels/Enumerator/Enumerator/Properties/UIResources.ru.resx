@@ -590,4 +590,13 @@
     <value>Предупреждения</value>
     <comment>Предупреждения</comment>
   </data>
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Подпись</value>
+  </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Сохранить подпись</value>
+  </data>
 </root>

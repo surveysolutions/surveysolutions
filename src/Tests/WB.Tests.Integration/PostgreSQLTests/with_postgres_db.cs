@@ -1,13 +1,14 @@
 using System;
 using System.Configuration;
-using Machine.Specifications;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Integration.PostgreSQLTests
 {
     public class with_postgres_db
     {
+        [OneTimeSetUp]
         protected static void Context()
         {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
@@ -30,10 +31,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             }
         }
 
-        Establish context = () => Context();
-
-        Cleanup things = () => Cleanup();
-
+        [OneTimeTearDown]
         protected static void Cleanup()
         {
             using (var connection = new NpgsqlConnection(TestConnectionString))

@@ -1,17 +1,16 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuestionHandlerTests
 {
     internal class when_updating_multi_option_question_and_it_does_not_exists_in_questionnaire : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException  () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
@@ -21,16 +20,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-            BecauseOf();
-        }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: notExistingQuestionId,
                     title: title,
                     variableName: variableName,
-                variableLabel: null,
+                    variableLabel: null,
                     scope: scope,
                     enablementCondition: enablementCondition,
                     hideIfDisabled: false,
@@ -41,14 +37,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     areAnswersOrdered: areAnswersOrdered,
                     maxAllowedAnswers: maxAllowedAnswers,
                     yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties()));
+                    linkedFilterExpression: null, properties: Create.QuestionProperties()));
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__question__cant__found__ () =>
-            new[] { "question", "can't", "found" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "question", "can't", "found" });
+        }
 
 
         private static Questionnaire questionnaire;

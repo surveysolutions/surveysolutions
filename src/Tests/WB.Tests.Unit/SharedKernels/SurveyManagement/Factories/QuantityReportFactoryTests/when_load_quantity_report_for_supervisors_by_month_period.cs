@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using Machine.Specifications;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;

@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -10,14 +9,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
     internal class when_selecting_first_option : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.SingleOptionQuestion(questionId, linkedToQuestionId: linkedToQuestionId),
                 Create.Entity.FixedRoster(fixedTitles: new[] { Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(2), Create.Entity.FixedTitle(3) }, children: new IComposite[]
@@ -37,12 +35,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                 answering: answeringMock.Object);
 
             viewModel.Init(interviewId, questionIdentity, navigationState);
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        public void BecauseOf() =>
             viewModel.OptionSelectedAsync(viewModel.Options.First()).WaitAndUnwrapException();
 
-        It should_execute_AnswerSingleOptionLinkedQuestionCommand_command = () =>
+        [NUnit.Framework.Test] public void should_execute_AnswerSingleOptionLinkedQuestionCommand_command () =>
             answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
 
         private static SingleOptionLinkedQuestionViewModel viewModel;

@@ -1,4 +1,4 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -9,14 +9,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     internal class when_empty_data_base : SurveysAndStatusesReportTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             reportFactory = CreateSurveysAndStatusesReport(Stub.ReadSideRepository<InterviewSummary>());
-        };
+            BecauseOf();
+        }
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel());
+        public void BecauseOf() => report = reportFactory.Load(new SurveysAndStatusesReportInputModel());
 
-        It should_return_0_in_counters = () => report.TotalCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_return_0_in_counters () => report.TotalCount.Should().Be(0);
 
         static SurveysAndStatusesReport reportFactory;
         static SurveysAndStatusesReportView report;

@@ -1,11 +1,9 @@
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
@@ -19,10 +17,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private void BecauseOf() => result = controller.ProcessDetails("invalid questionnaire identity", DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_bad_request_response () =>
-            ((NegotiatedContentResult<string>)result).StatusCode.ShouldEqual(HttpStatusCode.BadRequest);
+            ((NegotiatedContentResult<string>)result).StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
         [NUnit.Framework.Test] public void should_response_has_specified_message () =>
-            ((NegotiatedContentResult<string>)result).Content.ShouldEqual("Invalid questionnaire identity");
+            ((NegotiatedContentResult<string>)result).Content.Should().Be("Invalid questionnaire identity");
 
         private static ExportController controller;
 

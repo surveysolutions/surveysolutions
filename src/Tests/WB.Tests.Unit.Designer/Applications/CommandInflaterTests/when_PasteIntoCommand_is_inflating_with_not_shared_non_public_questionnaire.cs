@@ -1,7 +1,7 @@
 using System;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
@@ -14,7 +14,9 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 {
     internal class when_PasteIntoCommand_is_inflating_with_not_shared_non_public_questionnaire : CommandInflaterTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test]
+        public void should_throw_interview_exception()
+        {
             var membershipUserService = Mock.Of<IMembershipUserService>(
                 _ => _.WebUser == Mock.Of<IMembershipWebUser>(
                     u => u.UserId == actionUserId && u.MembershipUser.Email == actionUserEmail));
@@ -31,16 +33,11 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             command = new PasteInto(questoinnaireId, entityId, pasteAfterId, questoinnaireId, entityId, actionUserId);
 
             commandInflater = CreateCommandInflater(membershipUserService, documentStorage, sharedPersons);
-            BecauseOf();
+
+
+            Assert.Throws<CommandInflaitingException>(() => commandInflater.PrepareDeserializedCommandForExecution(command));
         }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() => commandInflater.PrepareDeserializedCommandForExecution(command));
-
-        [NUnit.Framework.Test] public void should_throw_interview_exception () =>
-            exception.ShouldBeOfExactType<CommandInflaitingException>();
-
-        private static Exception exception;
 
         private static CommandInflater commandInflater;
         private static PasteInto command;
@@ -48,7 +45,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
 
         private static Guid entityId = Guid.Parse("23333333333333333333333333333333");
         private static Guid pasteAfterId = Guid.Parse("43333333333333333333333333333333");
-        
+
         private static string questionnaiteTitle = "questionnaire title";
 
         private static Guid actionUserId = Guid.Parse("33333333333333333333333333333333");

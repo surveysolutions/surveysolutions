@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
@@ -12,14 +12,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_synchronizing_interview_events_but_interview_was_reassigned_to_supervisor_in_other_team : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventContext = new EventContext();
             var questionnaire = Mock.Of<IQuestionnaire>(_ => _.Version == questionnaireVersion);
 
@@ -36,22 +35,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                questionnaireVersion: questionnaireVersion,
                synchronizedEvents: eventsToPublish,
                createdOnClient: false);
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
-            exception = Catch.Only<InterviewException>(() => interview.SynchronizeInterviewEvents(command));
+        public void BecauseOf() =>
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.SynchronizeInterviewEvents(command));
 
-        It should_raise_InterviewException = () =>
-           exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_raise_InterviewException () =>
+           exception.Should().NotBeNull();
 
-        It should_raise_InterviewException_with_type_OtherUserIsResponsible = () =>
-            exception.ExceptionType.ShouldEqual(InterviewDomainExceptionType.OtherUserIsResponsible);
+        [NUnit.Framework.Test] public void should_raise_InterviewException_with_type_OtherUserIsResponsible () =>
+            exception.ExceptionType.Should().Be(InterviewDomainExceptionType.OtherUserIsResponsible);
 
         static EventContext eventContext;
         static Guid questionnaireId = Guid.Parse("10000000000000000000000000000000");

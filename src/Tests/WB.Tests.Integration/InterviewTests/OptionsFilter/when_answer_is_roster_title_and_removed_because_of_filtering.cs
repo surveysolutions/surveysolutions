@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -16,12 +16,12 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
     internal class when_answer_is_roster_title_and_removed_because_of_filtering : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -79,15 +79,13 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 return result;
             });
 
-        It should_raise_roster_titles_changed_for_roster = () => results.RosterTitleHasChanged.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_roster_titles_changed_for_roster () => results.RosterTitleHasChanged.Should().BeTrue();
 
-        It should_calculate_new_roster_title_as_empty_string = () => results.RosterTitleBecomesEmpty.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_calculate_new_roster_title_as_empty_string () => results.RosterTitleBecomesEmpty.Should().BeTrue();
 
-        It should_trigger_roster_title_changed_for_roster_with_multioptions_roster_title_question =
-            () => results.MultioptionRosterTriggeredTitleChanged.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_trigger_roster_title_changed_for_roster_with_multioptions_roster_title_question () => results.MultioptionRosterTriggeredTitleChanged.Should().BeTrue();
 
-        It should_trigger_roster_title_changed_for_roster_with_yesno_roster_title_question =
-            () => results.YesNoRosterTriggeredRosterTitleChanged.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_trigger_roster_title_changed_for_roster_with_yesno_roster_title_question () => results.YesNoRosterTriggeredRosterTitleChanged.Should().BeTrue();
 
         static readonly Guid userId = Guid.NewGuid();
 

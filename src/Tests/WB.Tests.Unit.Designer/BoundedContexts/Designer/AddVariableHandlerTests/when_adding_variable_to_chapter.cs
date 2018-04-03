@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 
@@ -22,22 +22,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddVariableHandlerTest
 
 
         [NUnit.Framework.Test] public void should_contains_Variable_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).PublicKey.ShouldEqual(entityId);
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).PublicKey.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_contains_Variable_with_ParentId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).GetParent().PublicKey.ShouldEqual(chapterId);
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).GetParent().PublicKey.Should().Be(chapterId);
 
         [NUnit.Framework.Test] public void should_contains_Variable_with_name_specified () =>
-            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Name.ShouldEqual(variableName);
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Name.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_contains_Variable_with_expression_specified () =>
-            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Expression.ShouldEqual(variableExpression);
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Expression.Should().Be(variableExpression);
 
         [NUnit.Framework.Test] public void should_contains_Variable_with_type_specified () =>
-            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Type.ShouldEqual(variableType);
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Type.Should().Be(variableType);
 
         [NUnit.Framework.Test] public void should_change_variable_description () =>
-          questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Label.ShouldEqual(description);
+          questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Label.Should().Be(description);
 
         private static Questionnaire questionnaire;
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

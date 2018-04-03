@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
     internal class when_answering_integer_question_on_1st_level_of_roster_with_multiple_conditions : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
            {
                Setup.MockedServiceLocator();
@@ -72,17 +72,17 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                }
            });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_invalid_question_count_equal_1 = () =>
-            result.CountInvalidQuestions.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_invalid_question_count_equal_1 () =>
+            result.CountInvalidQuestions.Should().Be(1);
 
-        It should_invalid_validation_count_equal_2 = () =>
-            result.CountInvalidValidations.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_invalid_validation_count_equal_2 () =>
+            result.CountInvalidValidations.Should().Be(2);
 
         static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         static InvokeResult result;

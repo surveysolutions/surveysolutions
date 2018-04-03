@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -29,8 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
         [Test]
         public void should_contains_specified_package_ids()
         {
-            actualPackageIds.Count.ShouldEqual(expectedPackageIds.Length);
-            actualPackageIds.ShouldEachConformTo(sPackageId => expectedPackageIds.Contains(int.Parse(sPackageId)));
+            actualPackageIds.Count.Should().Be(expectedPackageIds.Length);
+            actualPackageIds.Should().OnlyContain(sPackageId => expectedPackageIds.Contains(int.Parse(sPackageId)));
         }
 
         private static IReadOnlyCollection<string> actualPackageIds;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -111,61 +111,61 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         private void BecauseOf() => foundReferences = questionnaire.FindAllTexts(searchFor, true, false, false);
 
         [NUnit.Framework.Test] public void should_find_text_in_static_text () =>
-            foundReferences.ShouldContain(x => x.Id == staticTextId &&
+            foundReferences.Should().Contain(x => x.Id == staticTextId &&
                                                x.Type == QuestionnaireVerificationReferenceType.StaticText &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
         [NUnit.Framework.Test] public void should_find_text_in_question_title () =>
-            foundReferences.ShouldContain(x => x.Id == questionId &&
+            foundReferences.Should().Contain(x => x.Id == questionId &&
                                                x.Type == QuestionnaireVerificationReferenceType.Question &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
         [NUnit.Framework.Test] public void should_find_text_in_question_validation_expression () =>
-          foundReferences.ShouldContain(x => x.Id == questionId &&
+          foundReferences.Should().Contain(x => x.Id == questionId &&
                                              x.Type == QuestionnaireVerificationReferenceType.Question &&
                                              x.Property == QuestionnaireVerificationReferenceProperty.ValidationExpression);
 
         [NUnit.Framework.Test] public void should_find_text_in_question_validation_message () =>
-         foundReferences.ShouldContain(x => x.Id == questionId &&
+         foundReferences.Should().Contain(x => x.Id == questionId &&
                                             x.Type == QuestionnaireVerificationReferenceType.Question &&
                                             x.Property == QuestionnaireVerificationReferenceProperty.ValidationMessage);
 
         [NUnit.Framework.Test] public void should_find_text_in_question_enablement_condition () =>
-        foundReferences.ShouldContain(x => x.Id == questionId &&
+        foundReferences.Should().Contain(x => x.Id == questionId &&
                                            x.Type == QuestionnaireVerificationReferenceType.Question &&
                                            x.Property == QuestionnaireVerificationReferenceProperty.EnablingCondition);
 
         [NUnit.Framework.Test] public void should_find_text_in_group () =>
-            foundReferences.ShouldContain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group &&
+            foundReferences.Should().Contain(x => x.Id == groupId && x.Type == QuestionnaireVerificationReferenceType.Group &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Title);
 
         [NUnit.Framework.Test] public void should_find_text_in_variable_name () =>
-            foundReferences.ShouldContain(x => x.Id == questionId1 &&
+            foundReferences.Should().Contain(x => x.Id == questionId1 &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.VariableName);
 
         [NUnit.Framework.Test] public void should_find_text_in_variable_label () =>
-           foundReferences.ShouldContain(x => x.Id == variableId &&
+           foundReferences.Should().Contain(x => x.Id == variableId &&
                                               x.Property == QuestionnaireVerificationReferenceProperty.VariableLabel);
 
         [NUnit.Framework.Test] public void should_find_variables_by_content () =>
-            foundReferences.ShouldContain(x => x.Id == variableId &&
+            foundReferences.Should().Contain(x => x.Id == variableId &&
                                                x.Type == QuestionnaireVerificationReferenceType.Variable &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.VariableContent);
 
         [NUnit.Framework.Test] public void should_find_question_by_option_text () =>
-            foundReferences.ShouldContain(x => x.Id == questionId2 &&
+            foundReferences.Should().Contain(x => x.Id == questionId2 &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.Option &&
                                                x.IndexOfEntityInProperty == 1);
 
         [NUnit.Framework.Test] public void should_find_attachment_name_in_static_text () =>
-            foundReferences.ShouldContain(x => x.Id == staticTextWithAttachmentId &&
+            foundReferences.Should().Contain(x => x.Id == staticTextWithAttachmentId &&
                                                x.Property == QuestionnaireVerificationReferenceProperty.AttachmentName);
 
         [NUnit.Framework.Test] public void should_not_include_references_to_filtered_combobox_options () =>
-            foundReferences.ShouldNotContain(x => x.Id == filteredQuestionId);
+            foundReferences.Should().NotContain(x => x.Id == filteredQuestionId);
 
         [NUnit.Framework.Test] public void should_not_include_references_to_cascading_combobox_options () =>
-            foundReferences.ShouldNotContain(x => x.Id == cascadingQuestionId);
+            foundReferences.Should().NotContain(x => x.Id == cascadingQuestionId);
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;
@@ -183,6 +183,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         const string searchFor = "to_replace";
 
-        private static IEnumerable<QuestionnaireNodeReference> foundReferences;
+        private static IEnumerable<QuestionnaireEntityReference> foundReferences;
     }
 }

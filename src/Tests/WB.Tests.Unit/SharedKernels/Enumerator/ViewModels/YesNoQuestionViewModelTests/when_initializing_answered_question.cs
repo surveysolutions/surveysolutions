@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,14 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_initializing_answered_question : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewId = "interview";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
@@ -59,22 +58,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 interviewRepository: interviewRepository.Object,
                 eventRegistry: eventRegistry.Object,
                 filteredOptionsViewModel: filteredOptionsViewModel);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Init(interviewId, questionId, navigationState);
+        public void BecauseOf() => viewModel.Init(interviewId, questionId, navigationState);
 
-        It should_build_options = () => viewModel.Options.Count.ShouldEqual(5);
+        [NUnit.Framework.Test] public void should_build_options () => viewModel.Options.Count.Should().Be(5);
 
-        It should_mark_answered_options_as_checked = () =>
+        [NUnit.Framework.Test] public void should_mark_answered_options_as_checked () 
         {
             var lastOption = viewModel.Options.Last();
-            lastOption.YesSelected.ShouldBeTrue();
-            lastOption.Title.ShouldEqual("item5");
-            lastOption.YesAnswerCheckedOrder.ShouldEqual(1);
-            lastOption.Value.ShouldEqual(5m);
-        };
+            lastOption.YesSelected.Should().BeTrue();
+            lastOption.Title.Should().Be("item5");
+            lastOption.YesAnswerCheckedOrder.Should().Be(1);
+            lastOption.Value.Should().Be(5m);
+        }
 
-        It should_subscribe_model_in_events_registry = () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
+        [NUnit.Framework.Test] public void should_subscribe_model_in_events_registry () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
 
         static YesNoQuestionViewModel viewModel;
         static string interviewId;

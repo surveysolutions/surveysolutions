@@ -4,6 +4,7 @@ using HockeyApp.Android;
 using MvvmCross.Droid.Views;
 using MvvmCross.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -34,11 +35,11 @@ namespace WB.UI.Tester.Activities
 
             if (principal.IsAuthenticated)
             {
-                viewModelNavigationService.NavigateTo<DashboardViewModel>();
+                viewModelNavigationService.NavigateToAsync<DashboardViewModel>().WaitAndUnwrapException();
             }
             else
             {
-                viewModelNavigationService.NavigateTo<LoginViewModel>();
+                viewModelNavigationService.NavigateToAsync<LoginViewModel>().WaitAndUnwrapException();
             }
         }
 

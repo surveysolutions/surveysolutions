@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.RosterStructureServiceTests
 {
     internal class when_getting_roster_structures_for_questionnaire_with_multi_option_roster_title : RosterStructureServiceTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var rosterTitleQuestion = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var triggerId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
             Guid rosterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -31,11 +30,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.RosterStructureServiceTests
                                 Create.Entity.Answer("one", 1)
                             })
                     }));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => rosterStructures = GetService().GetRosterScopes(questionnaire);
+        public void BecauseOf() => rosterStructures = GetService().GetRosterScopes(questionnaire);
 
-        It should_build_some_roster_scopes = () => rosterStructures.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_build_some_roster_scopes () => rosterStructures.Count.Should().Be(1);
 
         static Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterStructures;
         static QuestionnaireDocument questionnaire;

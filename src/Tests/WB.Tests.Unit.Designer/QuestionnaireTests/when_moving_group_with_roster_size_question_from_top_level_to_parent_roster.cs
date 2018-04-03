@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId);
 
         [NUnit.Framework.Test] public void should_contains_group_with_parentRosterId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId).GetParent().PublicKey.ShouldEqual(parentRosterId);
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupToMoveId).GetParent().PublicKey.Should().Be(parentRosterId);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

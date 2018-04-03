@@ -49,6 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public virtual void Init(string interviewId,
             NavigationState navigationState)
         {
+            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             this.interviewId = Guid.Parse(interviewId);
 
             this.InterviewState.Init(interviewId, null);
@@ -112,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected virtual async Task CloseInterview()
         {
-            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId.ToString());
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [Test]
         public void should_raise_two_events()
         {
-            eventContext.Events.Count().ShouldEqual(2);
+            eventContext.Events.Count().Should().Be(2);
         }
 
         [Test]

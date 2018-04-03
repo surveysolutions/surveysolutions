@@ -1,6 +1,4 @@
-﻿using System;
-using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -15,7 +13,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
 {
-    [Subject(typeof(DeleteQuestionnaireService))]
+    [NUnit.Framework.TestOf(typeof(DeleteQuestionnaireService))]
     internal class DeleteQuestionnaireServiceTestContext
     {
         protected static DeleteQuestionnaireService CreateDeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory = null,
@@ -24,11 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
            IQuestionnaireStorage questionnaireStorage = null,
            IInterviewImportService interviewImportService = null)
         {
-            Func<IInterviewsToDeleteFactory> factory = () => (interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>());
+            IInterviewsToDeleteFactory Factory() => interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>();
+
             Setup.InstanceToMockedServiceLocator(questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
             return
                 new DeleteQuestionnaireService(
-                    factory,
+                    Factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     Mock.Of<ITranslationManagementService>(),
                     interviewImportService ?? Mock.Of<IInterviewImportService>(_ => _.Status == new AssignmentImportStatus()),

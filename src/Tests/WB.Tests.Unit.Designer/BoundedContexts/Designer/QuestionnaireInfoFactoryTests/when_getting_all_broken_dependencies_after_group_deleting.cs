@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -49,9 +46,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetAllBrokenGroupDependencies(questionnaireId, groupId);
 
         [NUnit.Framework.Test] public void should_return_not_null_view () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
-        [NUnit.Framework.Test] public void should_return_not_null_view1 () => result.Select(x => x.Id).ShouldContainOnly(new string[] { q2Id.FormatGuid(), q4Id.FormatGuid() });
+        [NUnit.Framework.Test] public void should_return_not_null_view1 () => result.Select(x => x.Id).Should().BeEquivalentTo(q2Id.FormatGuid(), q4Id.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;
         private static List<QuestionnaireItemLink> result;

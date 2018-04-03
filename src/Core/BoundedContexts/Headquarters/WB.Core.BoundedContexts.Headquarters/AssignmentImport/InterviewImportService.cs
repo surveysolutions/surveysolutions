@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -60,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             ITransactionManagerProvider transactionManagerProvider,
             IPlainStorageAccessor<Assignment> assignmentPlainStorageAccessor,
             IUserViewFactory userViewFactory, 
-            IInterviewTreeBuilder interviewTreeBuilder,
+            IInterviewTreeBuilder interviewTreeBuilder, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
         {
             this.commandService = commandService;
@@ -106,10 +108,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 RunImportProcess(assignmentImportData, questionnaireIdentity, VerifyAssignmentAction);
             }
+            catch (InterviewImportException ex)
+            {
+                this.logger.Error("Fail validation preloading", ex);
+                this.Status.State.Errors.Add(new InterviewImportError(ex.Code, ex.Message, ex.References));
+                FinishImportProcess();
+            }
             catch (Exception ex)
             {
                 this.logger.Error("Fail validation preloading", ex);
-                this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile });
+                this.Status.State.Errors.Add(new InterviewImportError("PL0011", Interviews.ImportInterviews_IncorrectDatafile));
                 FinishImportProcess();
             }
         }
@@ -161,10 +169,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 if (!responsibleId.HasValue && !assignmentRecord.SupervisorId.HasValue)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(assignmentRecord))
-                    });
+                    this.Status.State.Errors.Add(new InterviewImportError("PL0025",string.Format(Interviews.ImportInterviews_FailedToImportInterview_NoSupervisor, this.FormatInterviewImportData(assignmentRecord))));
                     return;
                 }
 
@@ -203,10 +208,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (isQuestionnaireRemoved)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = Interviews.ImportInterviews_QuestionaireNotFound
-                    });
+                    this.Status.State.Errors.Add(new InterviewImportError("PL0001", Interviews.ImportInterviews_QuestionaireNotFound));
 
                     return;
                 }
@@ -215,10 +217,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (records == null)
                 {
-                    this.Status.State.Errors.Add(new InterviewImportError
-                    {
-                        ErrorMessage = Interviews.ImportInterviews_IncorrectDatafile
-                    });
+                    this.Status.State.Errors.Add(new InterviewImportError("PL0011", Interviews.ImportInterviews_IncorrectDatafile));
 
                     return;
                 }
@@ -244,7 +243,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                             this.logger.Error(errorMessage, ex);
 
-                            this.Status.State.Errors.Add(new InterviewImportError { ErrorMessage = errorMessage });
+                            this.Status.State.Errors.Add(new InterviewImportError("PL0011", errorMessage));
                         }
                         finally
                         {
@@ -265,7 +264,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
         }
 
-        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle,
+        private bool StartImportProcess(QuestionnaireIdentity questionnaireIdentity, string questionnaireTitle , 
             AssignmentImportType assignmentImportType)
         {
             lock (lockStart)
@@ -281,7 +280,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     ProcessedCount = 0,
                     ElapsedTime = 0,
                     EstimatedTime = 0,
-                    VerificationState = new ImportDataVerificationState(),
                     State = {Columns = new string[0], Errors = new List<InterviewImportError>()},
                     IsInProgress = true,
                     AssignmentImportType = assignmentImportType

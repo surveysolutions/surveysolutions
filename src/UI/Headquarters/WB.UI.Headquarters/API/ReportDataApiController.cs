@@ -25,14 +25,16 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Models.Api;
 using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Shared.Web.Filters;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api  
 {
     [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
+    [ApiNoCache]
     public partial class ReportDataApiController : BaseApiController
     {
-        const int MaxPageSize = 1024;
+        const int MaxPageSize = 50000;
 
         private readonly ITeamsAndStatusesReport teamsAndStatusesReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -141,11 +143,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         }
 
         [HttpGet]
-        public ComboboxModel QuestionInfo(string questionnaireId)
+        [CamelCase]
+        public ComboboxOptionModel[] QuestionInfo(string id)
         {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
-            var variables = this.mapReport.GetVariablesForQuestionnaire(questionnaireIdentity);
-            return new ComboboxModel(variables.Select(x => new ComboboxOptionModel(x, x)).ToArray(), variables.Count);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+
+            var variables = this.mapReport.GetGpsQuestionsByQuestionnaire(questionnaireIdentity);
+            return variables.Select(x => new ComboboxOptionModel(x, x)).ToArray();
         }
 
         [HttpGet]

@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -48,13 +47,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_output_WB0084_verification_error () => verificationErrors.ShouldContainError("WB0084");
 
         [NUnit.Framework.Test] public void should_reference_parent_question () => 
-            verificationErrors.GetError("WB0084").References.ShouldContain(@ref => @ref.ItemId == parentSingleOptionQuestionId.FormatGuid());
+            verificationErrors.GetError("WB0084").References.Should().Contain(@ref => @ref.ItemId == parentSingleOptionQuestionId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_reference_question () =>
-            verificationErrors.GetError("WB0084").References.ShouldContain(@ref => @ref.ItemId == childCascadedComboboxId.FormatGuid());
+            verificationErrors.GetError("WB0084").References.Should().Contain(@ref => @ref.ItemId == childCascadedComboboxId.FormatGuid());
 
         [NUnit.Framework.Test] public void should_return_error_with_referece_to_question () => 
-            verificationErrors.GetError("WB0084").References.ShouldEachConformTo(x => x.Type == QuestionnaireVerificationReferenceType.Question);
+            verificationErrors.GetError("WB0084").References.Should().OnlyContain(x => x.Type == QuestionnaireVerificationReferenceType.Question);
 
         static Guid parentSingleOptionQuestionId;
         static Guid childCascadedComboboxId;

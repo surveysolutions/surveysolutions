@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;

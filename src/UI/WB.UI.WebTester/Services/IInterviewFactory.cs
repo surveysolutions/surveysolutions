@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.WebTester.Resources;
-using WB.UI.WebTester.Services.Implementation;
 
 namespace WB.UI.WebTester.Services
 {
@@ -32,19 +28,19 @@ namespace WB.UI.WebTester.Services
     {
         private readonly ICacheStorage<List<ICommand>, Guid> executedCommandsStorage;
         private readonly ICommandService commandService;
-        private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
+        private readonly IImageFileStorage imageFileStorage;
         private readonly IEvictionNotifier evictionService;
         private readonly IQuestionnaireImportService questionnaireImportService;
 
         public InterviewFactory(ICacheStorage<List<ICommand>, Guid> executedCommandsStorage,
-            ICommandService commandService, 
-            IAppdomainsPerInterviewManager appdomainsPerInterviewManager, 
+            ICommandService commandService,
+            IImageFileStorage imageFileStorage,
             IEvictionNotifier evictionService,
             IQuestionnaireImportService questionnaireImportService)
         {
             this.executedCommandsStorage = executedCommandsStorage ?? throw new ArgumentNullException(nameof(executedCommandsStorage));
             this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
-            this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
+            this.imageFileStorage = imageFileStorage;
             this.evictionService = evictionService ?? throw new ArgumentNullException(nameof(evictionService));
             this.questionnaireImportService = questionnaireImportService;
         }
@@ -82,6 +78,16 @@ namespace WB.UI.WebTester.Services
                     }
                     existingInterviewCommand.InterviewId = designerToken;
                     this.commandService.Execute(existingInterviewCommand);
+                }
+
+                foreach (var image in this.imageFileStorage.GetBinaryFilesForInterview(originalInterviewId))
+                {
+                    var imageBytes = this.imageFileStorage.GetInterviewBinaryData(image.InterviewId, image.FileName);
+
+                    this.imageFileStorage.StoreInterviewBinaryData(designerToken, image.FileName, imageBytes,
+                        image.ContentType);
+
+                    this.imageFileStorage.RemoveInterviewBinaryData(originalInterviewId, image.FileName);
                 }
 
                 return CreationResult.DataRestored;

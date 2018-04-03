@@ -1,27 +1,25 @@
 using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_answering_numeric_question_inside_roster_with_lookup_table_in_validation : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -80,23 +78,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_raise_AnswersDeclaredValid_event_for_questiona_a = () =>
-            result.IsQuestionAInValid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredValid_event_for_questiona_a () =>
+            result.IsQuestionAInValid.Should().BeTrue();
 
-        It should_raise_AnswersDeclaredInvalid_event_for_questiona_b_1 = () =>
-            result.IsQuestionB1InValid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_for_questiona_b_1 () =>
+            result.IsQuestionB1InValid.Should().BeTrue();
 
-        It should_raise_AnswersDeclaredInvalid_event_for_questiona_b_2 = () =>
-            result.IsQuestionB2InValid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_for_questiona_b_2 () =>
+            result.IsQuestionB2InValid.Should().BeTrue();
 
-        It should_raise_AnswersDeclaredInvalid_event_for_questiona_b_3 = () =>
-            result.IsQuestionB3InValid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event_for_questiona_b_3 () =>
+            result.IsQuestionB3InValid.Should().BeTrue();
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;

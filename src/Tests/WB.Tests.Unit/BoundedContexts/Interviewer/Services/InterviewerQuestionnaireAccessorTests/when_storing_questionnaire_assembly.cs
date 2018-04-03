@@ -1,30 +1,29 @@
-﻿using System;
-using Machine.Specifications;
+using System.Threading.Tasks;
 using Moq;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using It = Machine.Specifications.It;
+using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerQuestionnaireAccessorTests
 {
     internal class when_storing_questionnaire_assembly : InterviewerQuestionnaireAccessorTestsContext
     {
-        Establish context = () =>
+        [Test]
+        public async Task should_store_questionnaire_assembly_to_plain_storage()
         {
-            interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
-                questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object);
-        };
+            byte[] bytesOfQuestionnaireAssembly = new byte[0];
+            QuestionnaireIdentity questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
+            Mock<IQuestionnaireAssemblyAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyAccessor>();
 
-        Because of = async () =>
+            var interviewerQuestionnaireAccessor = CreateInterviewerQuestionnaireAccessor(
+                questionnaireAssemblyFileAccessor: mockOfQuestionnaireAssemblyFileAccessor.Object);
+
+            // Act
             await interviewerQuestionnaireAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, bytesOfQuestionnaireAssembly);
 
-        It should_store_questionnaire_assembly_to_plain_storage = () =>
+            // Assert
             mockOfQuestionnaireAssemblyFileAccessor.Verify(x => x.StoreAssemblyAsync(questionnaireIdentity, bytesOfQuestionnaireAssembly), Times.Once);
-
-        private static readonly byte[] bytesOfQuestionnaireAssembly = new byte[0];
-        private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1);
-        private static readonly Mock<IQuestionnaireAssemblyAccessor> mockOfQuestionnaireAssemblyFileAccessor = new Mock<IQuestionnaireAssemblyAccessor>();
-        private static InterviewerQuestionnaireAccessor interviewerQuestionnaireAccessor;
+        }
     }
 }

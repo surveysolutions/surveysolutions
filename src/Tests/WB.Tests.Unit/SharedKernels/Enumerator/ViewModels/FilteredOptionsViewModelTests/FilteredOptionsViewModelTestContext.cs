@@ -1,17 +1,12 @@
-﻿using System;
-using Machine.Specifications;
-using Moq;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
+﻿using Moq;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredOptionsViewModelTests
 {
-    [Subject(typeof(FilteredOptionsViewModel))]
+    [NUnit.Framework.TestOf(typeof(FilteredOptionsViewModel))]
     public class FilteredOptionsViewModelTestContext
     {
         protected static FilteredOptionsViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,

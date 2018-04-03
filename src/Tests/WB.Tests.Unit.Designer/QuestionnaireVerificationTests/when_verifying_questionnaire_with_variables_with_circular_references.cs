@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -37,13 +34,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0056");
 
         [NUnit.Framework.Test] public void should_return_message_with_level_general () =>
-            verificationMessages.GetError("WB0056").MessageLevel.ShouldEqual(VerificationMessageLevel.General);
+            verificationMessages.GetError("WB0056").MessageLevel.Should().Be(VerificationMessageLevel.General);
 
         [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
-            verificationMessages.GetError("WB0056").References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0056").References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_message_with_references_on_veriable1_and_2 () =>
-            verificationMessages.GetError("WB0056").References.Select(x => x.Id).ShouldContainOnly(variable1Id, variable2Id);
+            verificationMessages.GetError("WB0056").References.Select(x => x.Id).Should().Contain(new []{variable1Id, variable2Id});
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

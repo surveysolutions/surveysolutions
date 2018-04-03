@@ -1,16 +1,15 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 {
     internal class when_healthcheck_service_check_when_there_are_any_warnings : HealthCheckTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var eventStoreHealthCheck = Mock.Of<IAtomicHealthCheck<EventStoreHealthCheckResult>>(m => m.Check() == EventStoreHealthCheckResult.Happy());
             var numberOfUnhandledPackagesChecker = Mock.Of<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>>(m => m.Check() == NumberOfUnhandledPackagesHealthCheckResult.Warning(numberOfunhandledPackages, numberOfUnhandledPackagesErrorMessage));
             var folderPermissionChecker = Mock.Of<IAtomicHealthCheck<FolderPermissionCheckResult>>(m => m.Check() == new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null));
@@ -21,36 +20,37 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
                 numberOfUnhandledPackagesChecker,
                 folderPermissionChecker,
                 readSideHealthChecker);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             result = service.Check();
-        };
+        }
 
-        It should_return_HealthCheckStatus = () =>
-            result.ShouldBeOfExactType<HealthCheckResults>();
+        [NUnit.Framework.Test] public void should_return_HealthCheckStatus () =>
+            result.Should().BeOfType<HealthCheckResults>();
 
-        It should_return_Down_status = () =>
-            result.Status.ShouldEqual(HealthCheckStatus.Warning);
+        [NUnit.Framework.Test] public void should_return_Down_status () =>
+            result.Status.Should().Be(HealthCheckStatus.Warning);
 
-        It should_return_Down_status_for_EventStore_check = () =>
-            result.EventstoreConnectionStatus.Status.ShouldEqual(HealthCheckStatus.Happy);
+        [NUnit.Framework.Test] public void should_return_Down_status_for_EventStore_check () =>
+            result.EventstoreConnectionStatus.Status.Should().Be(HealthCheckStatus.Happy);
 
-        It should_return_empty_error_message_for_EventStore_check = () =>
-            result.EventstoreConnectionStatus.ErrorMessage.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_return_empty_error_message_for_EventStore_check () =>
+            result.EventstoreConnectionStatus.ErrorMessage.Should().BeNull();
 
-        It should_return_Warning_status_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.Status.ShouldEqual(HealthCheckStatus.Warning);
+        [NUnit.Framework.Test] public void should_return_Warning_status_for_NumberOfUnhandledPackages_check () =>
+            result.NumberOfUnhandledPackages.Status.Should().Be(HealthCheckStatus.Warning);
 
-        It should_return_error_message_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.ErrorMessage.ShouldEqual(numberOfUnhandledPackagesErrorMessage);
+        [NUnit.Framework.Test] public void should_return_error_message_for_NumberOfUnhandledPackages_check () =>
+            result.NumberOfUnhandledPackages.ErrorMessage.Should().Be(numberOfUnhandledPackagesErrorMessage);
 
-        It should_return_4_packages_for_NumberOfUnhandledPackages_check = () =>
-            result.NumberOfUnhandledPackages.Value.ShouldEqual(numberOfunhandledPackages);
+        [NUnit.Framework.Test] public void should_return_4_packages_for_NumberOfUnhandledPackages_check () =>
+            result.NumberOfUnhandledPackages.Value.Should().Be(numberOfunhandledPackages);
 
-        It should_return_Down_status_for_FolderPermissionCheckResult_check = () =>
-            result.FolderPermissionCheckResult.Status.ShouldEqual(HealthCheckStatus.Happy);
+        [NUnit.Framework.Test] public void should_return_Down_status_for_FolderPermissionCheckResult_check () =>
+            result.FolderPermissionCheckResult.Status.Should().Be(HealthCheckStatus.Happy);
 
 
         private static string numberOfUnhandledPackagesErrorMessage = "numberOfUnhandledPackagesErrorMessage error message";

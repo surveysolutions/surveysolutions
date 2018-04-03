@@ -1,22 +1,21 @@
 using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_text_question_that_is_source_for_linked_question_and_in_numeric_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        private Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -47,14 +46,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 return result;
             });
 
-        It should_return_1_option_for_linked_question = () =>
-            results.OptionsCountForQuestion3.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_return_1_option_for_linked_question () =>
+            results.OptionsCountForQuestion3.Should().Be(1);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

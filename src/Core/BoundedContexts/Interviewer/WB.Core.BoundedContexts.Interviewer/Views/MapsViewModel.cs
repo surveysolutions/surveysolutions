@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -17,7 +16,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class MapsViewModel : BaseViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly ILogger logger;
         private readonly IMapService mapService;
         private readonly IPermissionsService permissions;
         private readonly IUserInteractionService userInteractionService;
@@ -30,18 +28,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             MapSynchronizationViewModel synchronization,
             IMapService mapService,
             IPermissionsService permissions,
-            IUserInteractionService userInteractionService,
-            ILogger logger)
+            IUserInteractionService userInteractionService)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.logger = logger;
             this.Synchronization = synchronization;
             this.Synchronization.SyncCompleted += this.Refresh;
             this.mapService = mapService;
             this.permissions = permissions;
             this.userInteractionService = userInteractionService;
 
+            this.Synchronization.Init();
         }
 
         public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
@@ -49,10 +46,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboard());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
 
         private MvxObservableCollection<MapItem> uiItems = new MvxObservableCollection<MapItem>();
         public MvxObservableCollection<MapItem> Maps
@@ -136,12 +133,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand =>
-            new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
+            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
-        public override void Load()
+        public override async Task Initialize()
         {
-            this.Synchronization.Init();
+            await base.Initialize();
+           
             UpdateUiItems();
         }
+        
+
     }
 }
