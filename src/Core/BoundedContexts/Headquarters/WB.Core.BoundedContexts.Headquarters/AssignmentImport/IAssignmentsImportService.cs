@@ -11,6 +11,5 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         IEnumerable<AssignmentRow> GetAssignmentRows(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file);
         PreloadedFile ParseText(Stream inputStream, string fileName);
         IEnumerable<PreloadedFile> ParseZip(Stream inputStream);
-        IEnumerable<PreloadedFileMetaData> ParseZipMetadata(Stream inputStream);
     }
 }
