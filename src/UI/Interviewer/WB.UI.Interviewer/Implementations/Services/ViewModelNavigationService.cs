@@ -17,7 +17,7 @@ using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
 {
-    internal class ViewModelNavigationService : BaseViewModelNavigationService, IViewModelNavigationService
+    internal class ViewModelNavigationService : BaseViewModelNavigationService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IMvxNavigationService navigationService;
@@ -35,7 +35,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             this.navigationService = navigationService;
         }
 
-        public Task NavigateToDashboardAsync(string interviewId = null)
+        public override Task NavigateToDashboardAsync(string interviewId = null)
         {
             if (interviewId == null)
             {
@@ -48,18 +48,18 @@ namespace WB.UI.Interviewer.Implementations.Services
             });
         }
 
-        public Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
+        public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
             this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId
             });
 
-        public void NavigateToSplashScreen()
+        public override void NavigateToSplashScreen()
         {
             base.RestartApp(typeof(SplashActivity));
         }
 
-        public Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,

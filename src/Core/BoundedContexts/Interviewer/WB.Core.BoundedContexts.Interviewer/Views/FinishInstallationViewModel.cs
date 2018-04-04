@@ -126,6 +126,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             return Task.CompletedTask;
         }
 
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            if (this.UserName != null)
+            {
+                bundle.Data[StateKey] = this.userName;
+            }
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            base.ReloadFromBundle(state);
+            if (state.Data.ContainsKey(StateKey))
+            {
+                this.UserName = state.Data[StateKey];
+            }
+        }
+
         public async Task RefreshEndpoint()
         {
             var settingsEndpoint = this.interviewerSettings.Endpoint;
