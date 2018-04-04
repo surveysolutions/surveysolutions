@@ -246,7 +246,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        public IMvxCommand ShowSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>());
+        public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>);
     }
 
     public class DashboardViewModelArgs

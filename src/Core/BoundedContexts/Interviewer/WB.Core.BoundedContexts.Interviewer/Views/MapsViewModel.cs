@@ -41,12 +41,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.Synchronization.Init();
         }
 
-        public IMvxCommand SignOutCommand => new MvxCommand(this.SignOut);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOutAsync);
 
-        private void SignOut()
+        private async Task SignOutAsync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
