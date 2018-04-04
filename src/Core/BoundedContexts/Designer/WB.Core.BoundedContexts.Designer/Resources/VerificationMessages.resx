@@ -637,7 +637,7 @@
     <value>You try to use substitution for unsupported entity.</value>
   </data>
   <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>Question cannot have empty option title.</value>
+    <value>Question cannot have empty title.</value>
   </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>Section should not contain more than {0} questions.</value>

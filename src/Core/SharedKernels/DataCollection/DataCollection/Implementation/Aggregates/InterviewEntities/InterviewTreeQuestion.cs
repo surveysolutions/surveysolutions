@@ -424,7 +424,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return options;
         }
 
-        public void CalculateLinkedToListOptions(bool resetAnswerOnOptionChange = true)
+        public void CalculateLinkedToListOptions(bool updateAnswerOnOptionChange = true)
         {
             if (!this.IsLinkedToListQuestion) return;
             var linkedToListQuestion = this.AsLinkedToList;
@@ -438,12 +438,31 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var previousOptions = this.AsLinkedToList.Options;
             this.AsLinkedToList.SetOptions(options);
 
-            if (resetAnswerOnOptionChange)
-            {
-                var optionsAreIdentical = previousOptions.SequenceEqual(options);
+            if (!this.AsLinkedToList.IsAnswered()) return;
+
+            if (!updateAnswerOnOptionChange) return;
+
+            var optionsAreIdentical = previousOptions.SequenceEqual(options);
                 if (optionsAreIdentical) return;
 
-                this.InterviewQuestion.RemoveAnswer();
+            if (this.IsSingleLinkedToList)
+            {
+                if (!options.Contains(this.GetAsInterviewTreeSingleOptionLinkedToListQuestion().GetAnswer().SelectedValue))
+                    this.InterviewQuestion.RemoveAnswer();
+            }
+            else
+            {
+                var previousAnswer = this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().GetAnswer().CheckedValues;
+                var exsitingAnswerOptions = previousAnswer.Where(x => options.Contains(x)).ToList();
+
+                if (exsitingAnswerOptions.Count == 0)
+                {
+                    this.InterviewQuestion.RemoveAnswer();
+                    return;
+                }
+
+                if (exsitingAnswerOptions.Count < previousAnswer.Count)
+                    this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(exsitingAnswerOptions));
             }
         }
 
@@ -588,19 +607,39 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return null;
         }
 
-        public void UpdateLinkedOptionsAndResetAnswerIfNeeded(RosterVector[] options, bool removeAnswer = true)
+        public void UpdateLinkedOptionsAndUpdateAnswerIfNeeded(RosterVector[] options, bool updateAnswer = true)
         {
             if (!this.IsLinked) return;
             var previousOptions = this.AsLinked.Options;
             var orderedOptions = this.GetOptionsInCorrectOrder(options);
             this.AsLinked.SetOptions(orderedOptions);
 
-            if (!removeAnswer) return;
+            if (!updateAnswer) return;
+
+            if (!this.AsLinked.IsAnswered()) return;
 
             var optionsAreIdentical = previousOptions.SequenceEqual(orderedOptions);
             if (optionsAreIdentical) return;
 
-            this.InterviewQuestion.RemoveAnswer();
+            if (this.IsSingleLinkedOption)
+            {
+                if(!orderedOptions.Contains(this.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer().SelectedValue))
+                    this.InterviewQuestion.RemoveAnswer();
+            }
+            else
+            {
+                var previousAnswer = this.GetAsInterviewTreeMultiLinkedToRosterQuestion().GetAnswer().CheckedValues;
+                var exsitingAnswerOptions = previousAnswer.Where(x => orderedOptions.Contains(x)).ToList();
+
+                if (exsitingAnswerOptions.Count == 0)
+                {
+                        this.InterviewQuestion.RemoveAnswer();
+                        return;
+                }
+
+                if(exsitingAnswerOptions.Count < previousAnswer.Count)
+                    this.GetAsInterviewTreeMultiLinkedToRosterQuestion().SetAnswer(CategoricalLinkedMultiOptionAnswer.FromRosterVectors(exsitingAnswerOptions));
+            }
         }
 
         private RosterVector[] GetOptionsInCorrectOrder(RosterVector[] options)

@@ -68,7 +68,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                                         variable: "linked_roster",
                                         children: new IComposite[]
                                         {
-                                            Abc.Create.Entity.MultyOptionsQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
+                                            Abc.Create.Entity.SingleOptionQuestion(linkedId, variable: "linked", linkedToQuestionId: sourceQuestionId)
                                         }),
                                     Abc.Create.Entity.MultyOptionsQuestion(linkedOutsideId, variable: "linkedOutside", linkedToQuestionId: sourceQuestionId)
                                 })
@@ -83,8 +83,8 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4, 5 }, DateTime.Now, 66);
                 interview.AnswerNumericIntegerQuestion(userId, sourceQuestionId, new decimal[] { 1, 4, 6 }, DateTime.Now, 66);
 
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1, 7 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3, 5 } });
-                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedId, new decimal[] { 1, 7, 9 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3, 5 }, new decimal[] { 1, 3, 5 }, new decimal[] { 1, 4, 5 }, new decimal[] { 1, 4, 6 } });
+                interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedOutsideId, new decimal[] { 1, 7 }, DateTime.Now, new RosterVector[] { new decimal[] { 1, 3, 5 } , new decimal[] { 1, 3, 5 } });
+                interview.AnswerSingleOptionLinkedQuestion (userId, linkedId, new decimal[] { 1, 7, 9 }, DateTime.Now, new decimal[] { 1, 3, 5 });
 
                 using (var eventContext = new EventContext())
                 {

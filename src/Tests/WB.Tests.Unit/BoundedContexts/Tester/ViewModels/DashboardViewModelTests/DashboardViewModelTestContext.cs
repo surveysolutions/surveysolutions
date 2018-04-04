@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Main.Core.Documents;
 using MvvmCross.Test.Core;
 
 using Moq;
@@ -72,7 +73,8 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
                     friendlyErrorMessageService: friendlyErrorMessageService,
                     userInteractionService: userInteractionService,
                     logger: logger ?? Mock.Of<ILogger>(),
-                    attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>()
+                    attachmentContentStorage: attachmentContentStorage ?? Mock.Of<IAttachmentContentStorage>(),
+                    questionnaireRepository: Create.Fake.QuestionnaireRepository(new KeyValuePair<string, QuestionnaireDocument>[]{})
                 ));
         }
 
