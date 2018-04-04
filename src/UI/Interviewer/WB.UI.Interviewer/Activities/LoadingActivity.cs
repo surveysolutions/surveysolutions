@@ -13,6 +13,7 @@ namespace WB.UI.Interviewer.Activities
     [Activity(Label = "",
         Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
+        NoHistory = true,
         ConfigurationChanges =
             Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class LoadingActivity : BaseActivity<LoadingViewModel>
@@ -24,12 +25,6 @@ namespace WB.UI.Interviewer.Activities
             base.OnCreate(savedInstanceState);
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             this.SetSupportActionBar(toolbar);
-
-            Task.Run(async () =>
-            {
-                await this.ViewModel.RestoreInterviewAndNavigateThereAsync();
-                this.Finish();
-            });
         }
         
         public override void OnBackPressed()

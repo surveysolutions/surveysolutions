@@ -2638,7 +2638,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        protected void UpdateLinkedQuestions(InterviewTree interviewTree, ILatestInterviewExpressionState interviewExpressionState, bool removeAnswersIfOptionsSetChanged = true)
+        protected void UpdateLinkedQuestions(InterviewTree interviewTree, ILatestInterviewExpressionState interviewExpressionState, bool updateAnswersIfOptionsSetChanged = true)
         {
             bool expressionStateSupportLinkedOptionsCalculation = interviewExpressionState.AreLinkedQuestionsSupported();
             if (expressionStateSupportLinkedOptionsCalculation)
@@ -2648,7 +2648,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 foreach (KeyValuePair<Identity, RosterVector[]> linkedQuestionWithOptions in processLinkedQuestionFilters.LinkedQuestionOptionsSet)
                 {
                     InterviewTreeQuestion linkedQuestion = interviewTree.GetQuestion(linkedQuestionWithOptions.Key);
-                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(linkedQuestionWithOptions.Value, removeAnswersIfOptionsSetChanged);
+                    linkedQuestion.UpdateLinkedOptionsAndUpdateAnswerIfNeeded(linkedQuestionWithOptions.Value, updateAnswersIfOptionsSetChanged);
                 }
 
                 // backward compatibility with old assemblies
@@ -2680,7 +2680,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 var options = linkedQuestion.GetCalculatedLinkedOptions();
                 if (options != null)
-                    linkedQuestion.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.Select(x => x.Option).ToArray());
+                    linkedQuestion.UpdateLinkedOptionsAndUpdateAnswerIfNeeded(options.Select(x => x.Option).ToArray());
             }
         }
 

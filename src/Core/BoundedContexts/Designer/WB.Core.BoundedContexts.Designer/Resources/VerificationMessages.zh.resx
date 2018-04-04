@@ -669,9 +669,6 @@
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
     <value>您试图为不支持的条目使用替换。</value>
   </data>
-  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>问卷不能有空的选项名称。</value>
-  </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>问卷模块不应该包含超过{0}个问题。</value>
   </data>
