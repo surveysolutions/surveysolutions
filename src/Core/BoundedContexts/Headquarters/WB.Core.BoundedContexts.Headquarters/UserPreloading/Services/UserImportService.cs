@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
         {
-            if (this.usersImportTask.IsJobRunning().Result)
+            if (this.usersImportTask.IsJobRunning())
                 throw new UserPreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
 
             var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
@@ -72,7 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var columns = this.csvReader.ReadHeader(new MemoryStream(data), csvDelimiter)
                 .Select(x => x.ToLower()).ToArray();
 
-            var missingColumns = requiredColumns.Where(x => !columns.Contains(x)).ToArray();
+            var missingColumns = requiredColumns.Where(x => !columns.Contains(x));
 
             if (missingColumns.Any())
                 throw new UserPreloadingException(string.Format(UserPreloadingServiceMessages.FileColumnsMissingFormat,
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             if (!hasErrors) this.Save(fileName, usersToImport);
 
-            usersImportTask.Run().Wait();
+            usersImportTask.Run();
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();
