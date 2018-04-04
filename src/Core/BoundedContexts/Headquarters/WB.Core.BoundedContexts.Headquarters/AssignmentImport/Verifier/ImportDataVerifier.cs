@@ -74,11 +74,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 foreach (var error in this.ColumnVerifiers.Select(x => x.Invoke(file, columnName, questionnaire)))
                     if (error != null) yield return error;
 
-                var lowercaseColumnNames = file.Columns.Select(x => x.ToLower());
-                foreach (var expectedServiceColumn in this.GetRequiredServiceColumns(file, questionnaire))
+                var columnNames = file.Columns.Select(x => x.ToLower());
+                foreach (var rosterColumnNames in this.GetRosterInstanceIdColumns(file, questionnaire))
                 {
-                    if (!lowercaseColumnNames.Contains(expectedServiceColumn.ToLower()))
-                        yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, expectedServiceColumn);
+                    if (!columnNames.Any(columnName => rosterColumnNames.oldName == columnName || rosterColumnNames.newName == columnName))
+                        yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, rosterColumnNames.newName);
                 }
             }
         }
@@ -100,8 +100,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error(UnknownColumn, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
             Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Error(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
-            Error(DuplicatedColumn, "PL0031", messages.PL0031_ColumnNameDuplicatesFound),
-            Error(UnsupportedAreaQuestion, "PL0038", messages.PL0038_UnsupportedAreaQuestion),
+            Error(DuplicatedColumn, "PL0031", messages.PL0031_ColumnNameDuplicatesFound)
         };
 
         private IEnumerable<Func<AssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError>> AnswerVerifiers => new[]
@@ -130,20 +129,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
             Error<AssignmentCategoricalMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
         };
-
-        private IEnumerable<string> GetRequiredServiceColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        
+        private IEnumerable<(string oldName, string newName)> GetRosterInstanceIdColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {
             if (IsQuestionnaireFile(file, questionnaire))
                 yield break;
 
-            yield return ServiceColumns.InterviewId;
-
             var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
 
-            var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value);
+            var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value).ToArray();
 
-            foreach (var parentRosterId in parentRosterIds)
-                yield return string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterId));
+            for (int i = 0; i < parentRosterIds.Length; i++)
+            {
+                var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterIds[i]).ToLower());
+                var oldName = $"{ServiceColumns.ParentId}{i + 1}".ToLower();
+                yield return (oldName, newName);
+            }
         }
 
         private bool IdIsEmpty(PreloadedFileInfo file, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
@@ -268,7 +269,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             if (string.IsNullOrWhiteSpace(columnName)) return true;
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
-            if (GetRequiredServiceColumns(file, questionnaire).Select(x => x.ToLower()).Contains(columnName)) return false;
+            if (GetRosterInstanceIdColumns(file, questionnaire).Any(x => x.newName == columnName || x.oldName == columnName)) return false;
 
             var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
                 StringSplitOptions.RemoveEmptyEntries);
@@ -315,10 +316,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private bool DuplicatedColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
             => !string.IsNullOrWhiteSpace(columnName) && file.Columns.Select(x => x.ToLower()).Count(x => x == columnName) > 1;
-
-        private bool UnsupportedAreaQuestion(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire) 
-            => questionnaire.GetQuestionByVariable(columnName)?.QuestionType == QuestionType.Area;
-
+        
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
             var compositeColumn = columnName.Split(new[] {QuestionDataParser.ColumnDelimiter},

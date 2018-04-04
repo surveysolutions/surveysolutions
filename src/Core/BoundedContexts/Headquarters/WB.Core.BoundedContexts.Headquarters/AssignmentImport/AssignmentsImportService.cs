@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -106,7 +107,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         return ToAssignmentGpsAnswer(compositeValue);
                     case AnswerType.OptionCodeArray:
                     case AnswerType.YesNoArray:
+                    {
+                        compositeValue.Values.ForEach(x => x.VariableOrCodeOrPropertyName = x.VariableOrCodeOrPropertyName.Replace("n", "-"));
                         return ToAssignmentCategoricalMultiAnswer(compositeValue);
+                    }
                 }
             }
 
@@ -329,7 +333,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     cells[variableName] = new List<PreloadingValue>();
 
                 var isRosterInstanceIdValue = string.Format(ServiceColumns.IdSuffixFormat, variableName) == columnName;
-                if (isRosterInstanceIdValue)
+                var isOldRosterInstanceIdValue = columnName.StartsWith(ServiceColumns.ParentId.ToLower());
+                if (isRosterInstanceIdValue || isOldRosterInstanceIdValue)
                 {
                     cells[variableName].Add(new PreloadingRosterInstanceIdValue
                     {
