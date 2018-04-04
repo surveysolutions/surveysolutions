@@ -147,10 +147,7 @@
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
     <value>Для GPS вопроса обязательно наличие значений и широты и долготы</value>
   </data>
-  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>Ответ на вопрос не может содержать более чем {0} отвеченных опций.</value>
-  </data>
-  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
     <comment>[PL0002] N/A</comment>
   </data>
@@ -282,5 +279,8 @@
   </data>
   <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
     <value>Вопрос со списком {0} содержит неуникальные коды: {1}. Код интервью: {2}</value>
+  </data>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Количество отвеченных опций не может быть больше чем максимально разрешенное количство отвеченных опций</value>
   </data>
 </root>

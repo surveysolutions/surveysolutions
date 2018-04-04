@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer to multiple choice question cannot contain more than {0} answers..
+        ///   Looks up a localized string similar to Answered options count to multiple choice question can&apos;t be more than max allowed answers count.
         /// </summary>
         public static string PL0041_AnswerExceedsMaxAnswersCount {
             get {

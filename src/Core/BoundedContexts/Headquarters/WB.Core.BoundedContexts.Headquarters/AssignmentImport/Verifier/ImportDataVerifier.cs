@@ -31,16 +31,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public IEnumerable<PanelImportVerificationError> VerifyAnswers(QuestionnaireIdentity questionnaireIdentity, AssignmentRow assignmentRow)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-
+            
             foreach (var assignmentValue in assignmentRow.Answers)
             {
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentValue, questionnaire)))
+                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, assignmentValue, questionnaire)))
                     if (error != null) yield return error;
 
                 if (!(assignmentValue is AssignmentAnswers compositeValue)) continue;
 
                 foreach (var value in compositeValue.Values)
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(value, questionnaire)))
+                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, value, questionnaire)))
                     if (error != null) yield return error;
             }
         }
@@ -104,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error(UnsupportedAreaQuestion, "PL0038", messages.PL0038_UnsupportedAreaQuestion),
         };
 
-        private IEnumerable<Func<AssignmentValue, IQuestionnaire, PanelImportVerificationError>> AnswerVerifiers => new[]
+        private IEnumerable<Func<AssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError>> AnswerVerifiers => new[]
         {
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_NoParsed, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_InvalidCode, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
@@ -403,7 +403,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var maxAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(questionId.Value);
 
             return maxAnswersCount.HasValue &&
-                   answer.Values.OfType<AssignmentIntegerAnswer>().Count(x => x.Answer.HasValue) > maxAnswersCount;
+                   answer.Values.OfType<AssignmentDoubleAnswer>().Count(x => x.Answer >= 1) > maxAnswersCount;
         }
 
         private bool Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
@@ -519,21 +519,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Func<PreloadedFileInfo, string, IQuestionnaire, bool> hasError, string code, string message) => (file, columnName, questionnaire) =>
             hasError(file, columnName?.ToLower(), questionnaire) ? ToColumnError(code, message, file.FileName, columnName) : null;
 
-        private static Func<AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
-            Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (value, questionnaire) =>
-            value is TValue && hasError((TValue)value) ? ToCellError(code, message, value) : null;
+        private static Func<AssignmentRow, PanelImportVerificationError> Error(
+            Func<AssignmentRow, bool> hasError, string code, string message) => value =>
+            hasError(value) ? ToCellError(code, message, value) : null;
 
-        private static Func<AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
-            Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentValue => (value, questionnaire) =>
-            value is TValue && hasError((TValue)value, questionnaire) ? ToCellError(code, message, value) : null;
+        private static Func<AssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
+            Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
+            cell is TValue && hasError((TValue)cell) ? ToCellError(code, message, row, cell) : null;
+
+        private static Func<AssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
+            Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
+            cell is TValue && hasError((TValue)cell, questionnaire) ? ToCellError(code, message, row, cell) : null;
 
         private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, fileInfo.FileName));
         private static PanelImportVerificationError ToColumnError(string code, string message, string fileName, string columnName)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.Column, columnName, fileName));
 
-        private static PanelImportVerificationError ToCellError(string code, string message, AssignmentValue assignmentValue)
-            => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Column, assignmentValue.Row, PreloadedDataVerificationReferenceType.Cell,
-                assignmentValue.Value, assignmentValue.FileName));
+        private static PanelImportVerificationError ToCellError(string code, string message, AssignmentRow row, AssignmentValue assignmentValue)
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Column, row.Row, PreloadedDataVerificationReferenceType.Cell,
+                assignmentValue.Value, row.FileName));
+
+        private static PanelImportVerificationError ToCellError(string code, string message, AssignmentRow assignmentRow)
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(ServiceColumns.InterviewId, assignmentRow.Row, PreloadedDataVerificationReferenceType.Cell,
+                assignmentRow.InterviewId, assignmentRow.FileName));
     }
 }

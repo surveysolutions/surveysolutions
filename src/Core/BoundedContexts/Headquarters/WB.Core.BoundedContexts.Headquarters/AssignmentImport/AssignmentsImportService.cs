@@ -44,41 +44,45 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-            foreach (var preloadingRow in file.Rows)
+            for (int i = 0; i < file.Rows.Length; i++)
             {
-                var assignmentAnswers = this.ToAssignmentAnswers(file.FileInfo.FileName,
-                    preloadingRow, questionnaire);
+                var preloadingRow = file.Rows[i];
+
+                var assignmentAnswers = this.ToAssignmentAnswers(preloadingRow, questionnaire);
 
                 yield return new AssignmentRow
                 {
+                    FileName = file.FileInfo.FileName,
+                    InterviewId = preloadingRow.InterviewId,
+                    Row = i,
                     Answers = assignmentAnswers.ToArray()
                 };
             }
         }
 
-        private IEnumerable<AssignmentValue> ToAssignmentAnswers(string fileName, PreloadingRow row, IQuestionnaire questionnaire)
+        private IEnumerable<AssignmentValue> ToAssignmentAnswers(PreloadingRow row, IQuestionnaire questionnaire)
         {
             foreach (var answer in row.Cells)
             {
                 switch (answer)
                 {
                     case PreloadingCompositeValue compositeCell:
-                        yield return ToAssignmentAnswers(fileName, row, compositeCell, questionnaire);
+                        yield return ToAssignmentAnswers(compositeCell, questionnaire);
                         break;
                     case PreloadingRosterInstanceIdValue rosterInstanceIdCell:
-                        yield return this.ToAssignmentRosterInstanceId(fileName, row, rosterInstanceIdCell, questionnaire);
+                        yield return this.ToAssignmentRosterInstanceId(rosterInstanceIdCell);
                         break;
                     case PreloadingValue regularCell:
                         switch (answer.VariableOrCodeOrPropertyName)
                         {
                             case ServiceColumns.ResponsibleColumnName:
-                                yield return this.ToAssignmentResponsible(fileName, row.InterviewId, regularCell);
+                                yield return this.ToAssignmentResponsible(regularCell);
                                 break;
                             case ServiceColumns.AssignmentsCountColumnName:
-                                yield return ToAssignmentQuantity(fileName, row.InterviewId, regularCell);
+                                yield return ToAssignmentQuantity(regularCell);
                                 break;
                             default:
-                                yield return ToAssignmentAnswer(fileName, row, regularCell, questionnaire);
+                                yield return ToAssignmentAnswer(regularCell, questionnaire);
                                 break;
                         }
                         break;
@@ -87,8 +91,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         }
 
-        private static AssignmentAnswers ToAssignmentAnswers(string fileName, PreloadingRow row,
-            PreloadingCompositeValue compositeValue, IQuestionnaire questionnaire)
+        private static AssignmentAnswers ToAssignmentAnswers(PreloadingCompositeValue compositeValue, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(compositeValue.VariableOrCodeOrPropertyName);
 
@@ -98,23 +101,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 switch (answerType)
                 {
                     case AnswerType.DecimalAndStringArray:
-                        return ToAssignmentTextListAnswer(fileName, row, compositeValue);
+                        return ToAssignmentTextListAnswer(compositeValue);
                     case AnswerType.GpsData:
-                        return ToAssignmentGpsAnswer(fileName, row, compositeValue);
+                        return ToAssignmentGpsAnswer(compositeValue);
                     case AnswerType.OptionCodeArray:
                     case AnswerType.YesNoArray:
-                        return ToAssignmentCategoricalMultiAnswer(fileName, row, compositeValue);
+                        return ToAssignmentCategoricalMultiAnswer(compositeValue);
                 }
             }
 
             return new AssignmentAnswers
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(x => ToAssignmentAnswer(fileName, row, x)).ToArray(),
+                Values = compositeValue.Values.Select(ToAssignmentAnswer).ToArray(),
             };
         }
 
-        private static AssignmentAnswer ToGpsPropertyAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToGpsPropertyAnswer(PreloadingValue answer)
         {
             var doublePropertyNames = new[]
             {
@@ -125,18 +128,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             };
 
             if (doublePropertyNames.Contains(answer.VariableOrCodeOrPropertyName))
-                return ToAssignmentDoubleAnswer(fileName, row, answer);
+                return ToAssignmentDoubleAnswer(answer);
 
             if (answer.VariableOrCodeOrPropertyName == nameof(GeoPosition.Timestamp).ToLower())
-                return ToAssignmentDateTimeAnswer(fileName, row, answer);
+                return ToAssignmentDateTimeAnswer(answer);
 
             throw new NotSupportedException(
                 $"Gps property {answer.Value} not supported. " +
                 $"Supported properties: {string.Join(", ", GeoPosition.PropertyNames)}");
         }
 
-        private AssignmentValue ToAssignmentRosterInstanceId(string fileName, PreloadingRow row,
-            PreloadingRosterInstanceIdValue answer, IQuestionnaire questionnaire)
+        private AssignmentValue ToAssignmentRosterInstanceId(PreloadingRosterInstanceIdValue answer)
         {
             decimal? intValue = null;
             if (decimal.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
@@ -146,17 +148,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return new AssignmentRosterInstanceCode
             {
                 Code = intValue,
-                InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value,
             };
         }
 
-        private static AssignmentAnswer ToAssignmentAnswer(string fileName, PreloadingRow row,
-            PreloadingValue answer, IQuestionnaire questionnaire)
+        private static AssignmentAnswer ToAssignmentAnswer(PreloadingValue answer, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableOrCodeOrPropertyName);
 
@@ -167,74 +165,70 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 switch (answerType)
                 {
                     case AnswerType.Integer:
-                        return ToAssignmentIntegerAnswer(fileName, row, answer);
+                        return ToAssignmentIntegerAnswer(answer);
                     case AnswerType.OptionCode:
                     case AnswerType.Decimal:
-                        return ToAssignmentDoubleAnswer(fileName, row, answer);
+                        return ToAssignmentDoubleAnswer(answer);
                     case AnswerType.DateTime:
-                        return ToAssignmentDateTimeAnswer(fileName, row, answer);
+                        return ToAssignmentDateTimeAnswer(answer);
                     case AnswerType.String:
                     case AnswerType.DecimalAndStringArray:
-                        return ToAssignmentTextAnswer(fileName, row, answer);
+                        return ToAssignmentTextAnswer(answer);
                 }
             }
 
-            return ToAssignmentAnswer(fileName, row, answer);
+            return ToAssignmentAnswer(answer);
         }
 
-        private static AssignmentAnswer ToAssignmentAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentAnswer(PreloadingValue answer)
             => new AssignmentAnswer
             {
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value,
-                InterviewId = row.InterviewId,
                 VariableName = answer.Column
             };
 
-        private static AssignmentGpsAnswer ToAssignmentGpsAnswer(string fileName, PreloadingRow row, PreloadingCompositeValue compositeValue)
-        {
-            return new AssignmentGpsAnswer
+        private static AssignmentGpsAnswer ToAssignmentGpsAnswer(PreloadingCompositeValue compositeValue)
+            => new AssignmentGpsAnswer
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(x => ToGpsPropertyAnswer(fileName, row, x)).ToArray()
+                Column = compositeValue.VariableOrCodeOrPropertyName,
+                Values = compositeValue.Values.Select(ToGpsPropertyAnswer).ToArray()
             };
-        }
 
-        private static AssignmentCategoricalMultiAnswer ToAssignmentTextListAnswer(string fileName,
-            PreloadingRow row, PreloadingCompositeValue compositeValue) => new AssignmentCategoricalMultiAnswer
-        {
-            VariableName = compositeValue.VariableOrCodeOrPropertyName,
-            Values = compositeValue.Values.Select(x => ToAssignmentTextAnswer(fileName, row, x)).ToArray()
-        };
+        private static AssignmentCategoricalMultiAnswer ToAssignmentTextListAnswer(PreloadingCompositeValue compositeValue)
+            => new AssignmentCategoricalMultiAnswer
+            {
+                VariableName = compositeValue.VariableOrCodeOrPropertyName,
+                Column = compositeValue.VariableOrCodeOrPropertyName,
+                Values = compositeValue.Values.Select(ToAssignmentTextAnswer).ToArray()
+            };
 
-        private static AssignmentCategoricalMultiAnswer ToAssignmentCategoricalMultiAnswer(string fileName,
-            PreloadingRow row, PreloadingCompositeValue compositeValue) => new AssignmentCategoricalMultiAnswer
-        {
-            VariableName = compositeValue.VariableOrCodeOrPropertyName,
-            Values = compositeValue.Values.Select(x => ToAssignmentDoubleAnswer(fileName, row, x)).ToArray()
-        };
+        private static AssignmentCategoricalMultiAnswer ToAssignmentCategoricalMultiAnswer(PreloadingCompositeValue compositeValue)
+            => new AssignmentCategoricalMultiAnswer
+            {
+                VariableName = compositeValue.VariableOrCodeOrPropertyName,
+                Column = compositeValue.VariableOrCodeOrPropertyName,
+                Values = compositeValue.Values.Select(ToAssignmentDoubleAnswer).ToArray()
+            };
 
-        private static AssignmentAnswer ToAssignmentDoubleAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentDoubleAnswer(PreloadingValue answer)
         {
             double? doubleValue = null;
-            if (double.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out var doubleNumericValue))
+            if (double.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
+                out var doubleNumericValue))
                 doubleValue = doubleNumericValue;
 
             return new AssignmentDoubleAnswer
             {
                 Answer = doubleValue,
-                InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value,
-        };
+            };
         }
 
-        private static AssignmentAnswer ToAssignmentDateTimeAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentDateTimeAnswer(PreloadingValue answer)
         {
             DateTime? dataTimeValue = null;
             if (DateTime.TryParse(answer.Value, out var date))
@@ -243,27 +237,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return new AssignmentDateTimeAnswer
             {
                 Answer = dataTimeValue,
-                InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value,
             };
         }
 
-        private static AssignmentAnswer ToAssignmentTextAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentTextAnswer(PreloadingValue answer)
             => new AssignmentTextAnswer
             {
-                InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value,
             };
 
-        private static AssignmentAnswer ToAssignmentIntegerAnswer(string fileName, PreloadingRow row, PreloadingValue answer)
+        private static AssignmentAnswer ToAssignmentIntegerAnswer(PreloadingValue answer)
         {
             int? intValue = null;
             if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
@@ -273,16 +261,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return new AssignmentIntegerAnswer
             {
                 Answer = intValue,
-                InterviewId = row.InterviewId,
                 VariableName = answer.VariableOrCodeOrPropertyName,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value,
             };
         }
 
-        private static AssignmentQuantity ToAssignmentQuantity(string fileName, string interviewId, PreloadingValue answer)
+        private static AssignmentQuantity ToAssignmentQuantity(PreloadingValue answer)
         {
             int? quantityValue = null;
 
@@ -291,24 +276,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             return new AssignmentQuantity
             {
-                InterviewId = interviewId,
                 Quantity = quantityValue,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value
             };
         }
 
         private readonly Dictionary<string, UserToVerify> users = new Dictionary<string, UserToVerify>();
-        private AssignmentResponsible ToAssignmentResponsible(string fileName, string interviewId, PreloadingValue answer)
+        private AssignmentResponsible ToAssignmentResponsible(PreloadingValue answer)
         {
             var responsible = new AssignmentResponsible
             {
-                InterviewId = interviewId,
-                FileName = fileName,
                 Column = answer.Column,
-                Row = answer.Row,
                 Value = answer.Value
             };
 
