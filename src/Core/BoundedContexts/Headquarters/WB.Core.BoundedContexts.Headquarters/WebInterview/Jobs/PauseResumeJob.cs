@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -25,9 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
 
         public ICommandService CommandService => ServiceLocator.Current.GetInstance<ICommandService>();
 
-#pragma warning disable 1998
-        public async Task Execute(IJobExecutionContext context)
-#pragma warning restore 1998
+        public void Execute(IJobExecutionContext context)
         {
             var allCommands = Queue.DeQueueForPublish();
 

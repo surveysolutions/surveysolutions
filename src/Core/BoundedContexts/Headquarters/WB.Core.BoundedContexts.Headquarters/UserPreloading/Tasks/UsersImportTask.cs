@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs;
 
@@ -20,16 +19,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
         }
 
-        public async Task Run()
+        public void Run()
         {
-            if (!await this.scheduler.CheckExists(jobKey))
+            if (!this.scheduler.CheckExists(jobKey))
             {
                 IJobDetail job = JobBuilder.Create<UsersImportJob>()
                     .WithIdentity(jobKey)
                     .StoreDurably()
                     .Build();
 
-                await this.scheduler.AddJob(job, true);
+                this.scheduler.AddJob(job, true);
             }
             
             ITrigger trigger = TriggerBuilder.Create()
@@ -38,10 +37,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
                 .StartAt(DateBuilder.FutureDate(1, IntervalUnit.Second))
                 .Build();
 
-            await this.scheduler.ScheduleJob(trigger);
+            this.scheduler.ScheduleJob(trigger);
         }
 
-        public virtual async Task<bool> IsJobRunning() =>
-            (await this.scheduler.GetCurrentlyExecutingJobs()).FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
+        public virtual bool IsJobRunning() =>
+            this.scheduler.GetCurrentlyExecutingJobs().FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
     }
 }
