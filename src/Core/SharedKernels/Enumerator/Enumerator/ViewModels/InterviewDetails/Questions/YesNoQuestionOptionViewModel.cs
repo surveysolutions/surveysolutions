@@ -90,6 +90,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? AnswerCheckedOrder { get; set; }
 
+        private bool isAllowYesCheck = true;
+        public bool IsAllowYesCheck 
+        {
+            get => isAllowYesCheck;
+            set
+            {
+                if (value == isAllowYesCheck) return;
+                isAllowYesCheck = value;
+                RaisePropertyChanged(() => IsAllowYesCheck);
+            }
+        }
+
         public async void RaiseToggleAnswer()
         {
             await this.QuestionViewModel.ToggleAnswerAsync(this).ConfigureAwait(false); 

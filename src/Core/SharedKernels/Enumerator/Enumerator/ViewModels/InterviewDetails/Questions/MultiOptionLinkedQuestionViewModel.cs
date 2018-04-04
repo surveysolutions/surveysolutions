@@ -140,6 +140,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || selectedValues.Length < this.maxAllowedAnswers;
+                this.Options.Where(o => !o.Checked && o.IsAllowCheck != isAllowCheckNewOptions).ForEach(o => o.IsAllowCheck = isAllowCheckNewOptions);
             }
             catch (InterviewException ex)
             {
@@ -150,6 +153,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
         {
+            var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || @event.SelectedRosterVectors.Length < this.maxAllowedAnswers;
+
             foreach (var option in this.Options)
             {
                 var foundIndex = @event.SelectedRosterVectors
@@ -167,6 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.IsAllowCheck = isAllowCheckNewOptions;
                 }
             }
         }
@@ -187,6 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.IsAllowCheck = true;
                 }
             }
         }
