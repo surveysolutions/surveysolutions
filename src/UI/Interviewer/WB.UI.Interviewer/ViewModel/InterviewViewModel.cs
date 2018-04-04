@@ -57,12 +57,7 @@ namespace WB.UI.Interviewer.ViewModel
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
-
-        private void NavigateToMaps()
-        {
-            this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
-        }
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
         public override async Task NavigateBack()
         {
