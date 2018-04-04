@@ -6,15 +6,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     public class AssignmentRow
     {
         public AssignmentValue[] Answers { get; set; }
+        public int Row { get; set; }
+        public string InterviewId { get; set; }
+        public string FileName { get; set; }
     }
 
     public abstract class AssignmentValue
     {
-        public string FileName { get; set; }
-        public int Row { get; set; }
         public string Column { get; set; }
         public string Value { get; set; }
-        public string InterviewId { get; set; }
     }
 
     public class AssignmentTextAnswer : AssignmentAnswer { }
