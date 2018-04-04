@@ -153,6 +153,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || selectedValues.Length < this.maxAllowedAnswers;
+                this.Options.Where(o => !o.Checked && o.IsAllowCheck != isAllowCheckNewOptions).ForEach(o => o.IsAllowCheck = isAllowCheckNewOptions);
             }
             catch (InterviewException ex)
             {
@@ -228,6 +231,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateOptionSelection(MultiOptionQuestionOptionViewModel option, List<decimal> selectedOptionValues)
         {
             option.Checked = selectedOptionValues.Contains(option.Value);
+            option.IsAllowCheck = !this.maxAllowedAnswers.HasValue || selectedOptionValues.Count < this.maxAllowedAnswers;
 
             if (!this.areAnswersOrdered) return;
 

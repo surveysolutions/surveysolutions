@@ -214,6 +214,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || selectedValuesWithJustChanged.Count(o => o.Yes) < this.maxAllowedAnswers;
+                this.Options.Where(o => !o.YesSelected && o.IsAllowYesCheck != isAllowCheckNewOptions).ForEach(o => o.IsAllowYesCheck = isAllowCheckNewOptions);
             }
             catch (InterviewException ex)
             {
@@ -238,6 +241,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Selected = null;
                     option.YesAnswerCheckedOrder = null;
+                    option.IsAllowYesCheck = true;
                 }
             }
         }
@@ -266,6 +270,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToList();
             var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
+            var isAllowYesCheckNewOptions = !this.maxAllowedAnswers.HasValue || orderedYesOptions.Count < this.maxAllowedAnswers;
 
             foreach (var option in this.Options.ToList())
             {
@@ -279,12 +284,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         : (int?)null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;
                     option.Selected = answeredYesNoOption.Yes;
+                    option.IsAllowYesCheck = answeredYesNoOption.Yes || isAllowYesCheckNewOptions;
                 }
                 else
                 {
                     option.YesAnswerCheckedOrder = null;
                     option.AnswerCheckedOrder = null;
                     option.Selected = null;
+                    option.IsAllowYesCheck = isAllowYesCheckNewOptions;
                 }
             }
         }
