@@ -199,6 +199,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || selectedValues.Length < this.maxAllowedAnswers;
+                this.Options.Where(o => !o.Checked && o.IsAllowCheck != isAllowCheckNewOptions).ForEach(o => o.IsAllowCheck = isAllowCheckNewOptions);
             }
             catch (InterviewException ex)
             {
@@ -215,6 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.IsAllowCheck = true;
                 }
             }
         }
@@ -229,6 +233,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void PutOrderOnOptions(MultipleOptionsQuestionAnswered @event)
         {
+            var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || @event.SelectedValues.Length < this.maxAllowedAnswers;
+
             foreach (var option in this.Options)
             {
                 var selectedOptionIndex = Array.IndexOf(@event.SelectedValues, option.Value);
@@ -242,6 +248,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.IsAllowCheck = isAllowCheckNewOptions;
                 }
             }
         }
