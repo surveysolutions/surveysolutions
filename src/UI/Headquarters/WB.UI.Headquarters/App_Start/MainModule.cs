@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using AutoMapper;
 using Newtonsoft.Json;
 using Quartz;
@@ -114,14 +113,14 @@ namespace WB.UI.Headquarters
         }
 
 
-        public async Task Init(IServiceLocator serviceLocator)
+        public void Init(IServiceLocator serviceLocator)
         {
-            await serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().ConfigureAsync();
-            await serviceLocator.GetInstance<UsersImportTask>().RunAsync();
-            await serviceLocator.GetInstance<ExportJobScheduler>().ConfigureAsync();
-            await serviceLocator.GetInstance<PauseResumeJobScheduler>().ConfigureAsync();
+            serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            serviceLocator.GetInstance<UsersImportTask>().Run();
+            serviceLocator.GetInstance<ExportJobScheduler>().Configure();
+            serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
 
-            await serviceLocator.GetInstance<IScheduler>().Start();
+            serviceLocator.GetInstance<IScheduler>().Start();
         }
     }
 }

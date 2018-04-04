@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
         }
 
-        public async Task RunAsync()
+        public async Task Run()
         {
             if (!await this.scheduler.CheckExists(jobKey))
             {

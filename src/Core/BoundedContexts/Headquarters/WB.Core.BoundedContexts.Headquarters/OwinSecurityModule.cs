@@ -1,7 +1,6 @@
 using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
@@ -41,12 +40,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuthorizedUser, AuthorizedUser>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public void Init(IServiceLocator serviceLocator)
         {
             serviceLocator.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
             serviceLocator.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();
-
-            return Task.CompletedTask;
         }
     }
 }
