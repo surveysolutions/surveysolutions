@@ -11,13 +11,13 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+        HardwareAccelerated = true,
+        Theme = "@style/GrayAppTheme", 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public class FinishInstallationActivity : BaseActivity<FinishInstallationViewModel>
     {
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.finish_installation; }
-        }
+        protected override int ViewResourceId => Resource.Layout.finish_installation;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -25,7 +25,6 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-            
         }
 
         public override void OnBackPressed()

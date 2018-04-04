@@ -49,12 +49,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 })
             }));
 
-            interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "A") });
-            interview.AnswerSingleOptionQuestion(userId, singleOptionQuestionId, Create.RosterVector(1), DateTime.Now, 1);
+            interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "A"), Tuple.Create(2m, "B") });
+            interview.AnswerSingleOptionQuestion(userId, singleOptionQuestionId, Create.RosterVector(1), DateTime.Now, 2);
 
             using (var eventContext = new EventContext())
             {
-                interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "A"), Tuple.Create(2m, "B") });
+                interview.AnswerTextListQuestion(userId, answeredQuestionId, RosterVector.Empty, DateTime.Now, new[] { Tuple.Create(1m, "A") });
 
                 return new InvokeResults
                 {
@@ -63,7 +63,9 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             }
         });
 
-        [NUnit.Framework.Test] public void should_raise_question_enabled_event_if_related_question_has_answer_removed_and_variable_changed () => result.QuestionEnabledEventRaised.Should().BeTrue();
+        [NUnit.Framework.Test]
+        public void should_raise_question_enabled_event_if_related_question_has_answer_removed_and_variable_changed () 
+            => result.QuestionEnabledEventRaised.Should().BeTrue();
 
         private static InvokeResults result;
 

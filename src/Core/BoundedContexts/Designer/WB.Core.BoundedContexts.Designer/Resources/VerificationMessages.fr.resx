@@ -663,9 +663,6 @@
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
     <value>Vous essayez d'utiliser la substitution pour l'entité non prise en charge.</value>
   </data>
-  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>La question ne peut pas avoir de texte vide.</value>
-  </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>La section ne doit pas contenir plus de {0} questions.</value>
   </data>

@@ -44,20 +44,26 @@ namespace WB.UI.Shared.Enumerator.Services
 
         protected abstract void NavigateToSettingsImpl();
 
-        public async Task NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>
+        public Task NavigateToAsync<TViewModel, TParam>(TParam param) where TViewModel : IMvxViewModel<TParam>
         {
             if (this.HasPendingOperations)
+            {
                 this.ShowWaitMessage();
+                return Task.CompletedTask;
+            }
             else
-                await this.navigationService.Navigate<TViewModel, TParam>(param);
+                return this.navigationService.Navigate<TViewModel, TParam>(param);
         }
 
-        public async Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
+        public Task NavigateToAsync<TViewModel>() where TViewModel : IMvxViewModel
         {
             if (this.HasPendingOperations)
+            {
                 this.ShowWaitMessage();
-            else
-                await this.navigationService.Navigate<TViewModel>();
+                return Task.CompletedTask;
+            }
+
+            return this.navigationService.Navigate<TViewModel>();
         }
 
         public async Task SignOutAndNavigateToLoginAsync()
@@ -67,7 +73,7 @@ namespace WB.UI.Shared.Enumerator.Services
             else
             {
                 this.principal.SignOut();
-                await this.NavigateToLoginAsync();
+                await this.NavigateToLoginAsync().ConfigureAwait(false);
                 this.FinishActivity();
             }
         }
