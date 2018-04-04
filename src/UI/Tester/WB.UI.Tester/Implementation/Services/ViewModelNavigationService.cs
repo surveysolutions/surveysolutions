@@ -15,7 +15,7 @@ using WB.UI.Tester.Activities;
 
 namespace WB.UI.Tester.Implementation.Services
 {
-    public class ViewModelNavigationService : BaseViewModelNavigationService, IViewModelNavigationService
+    public class ViewModelNavigationService : BaseViewModelNavigationService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
         private readonly IMvxNavigationService navigationService;
@@ -33,23 +33,23 @@ namespace WB.UI.Tester.Implementation.Services
             this.navigationService = navigationService;
         }
 
-        public Task NavigateToDashboardAsync(string interviewId = null)
+        public override Task NavigateToDashboardAsync(string interviewId = null)
         {
             return this.navigationService.Navigate<DashboardViewModel>();
         }
 
-        public void NavigateToSplashScreen()
+        public override void NavigateToSplashScreen()
         {
             base.RestartApp(typeof(SplashActivity));
         }
 
-        public Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
+        public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
             this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId
             });
 
-        public Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
                 InterviewId = interviewId,
