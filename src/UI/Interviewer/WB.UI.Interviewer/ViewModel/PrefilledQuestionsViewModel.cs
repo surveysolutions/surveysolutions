@@ -42,17 +42,12 @@ namespace WB.UI.Interviewer.ViewModel
         });
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
-        public IMvxCommand SignOutCommand => new MvxCommand(() =>
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
-
-        private void NavigateToMaps()
-        {
-            this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
-        }
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
     }
 }
