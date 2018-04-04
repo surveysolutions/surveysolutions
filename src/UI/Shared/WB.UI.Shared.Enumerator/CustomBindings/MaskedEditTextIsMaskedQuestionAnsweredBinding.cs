@@ -44,10 +44,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (isDisposing)
             {
-                var target = this.Target as MaskedEditText;
-                if (target != null)
+                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
                 {
-                    target.IsMaskedFormAnsweredChanged -= this.IsMaskedFormAnsweredChangedHandler;
+                    this.Target.IsMaskedFormAnsweredChanged -= this.IsMaskedFormAnsweredChangedHandler;
                 }
             }
             base.Dispose(isDisposing);
