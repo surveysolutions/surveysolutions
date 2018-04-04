@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Prometheus.Advanced;
 
 namespace WB.Infrastructure.Native.Monitoring
 {
@@ -26,8 +25,8 @@ namespace WB.Infrastructure.Native.Monitoring
             {
                 this.collector = collector;
             }
-            
-            public void RegisterMetrics(ICollectorRegistry registry)
+
+            public void RegisterMetrics()
             {
                 collector.RegisterMetrics();
             }
