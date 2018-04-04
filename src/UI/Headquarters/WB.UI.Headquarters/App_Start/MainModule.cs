@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AutoMapper;
 using Newtonsoft.Json;
 using Quartz;
@@ -112,8 +113,7 @@ namespace WB.UI.Headquarters
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
 
-
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             serviceLocator.GetInstance<UsersImportTask>().Run();
@@ -121,6 +121,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
 
             serviceLocator.GetInstance<IScheduler>().Start();
+            return Task.CompletedTask;
         }
     }
 }
