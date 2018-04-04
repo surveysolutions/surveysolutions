@@ -8,10 +8,11 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
-    public abstract class BaseViewModelNavigationService
+    public abstract class BaseViewModelNavigationService : IViewModelNavigationService
     {
         private readonly ICommandService commandService;
         private readonly IUserInteractionService userInteractionService;
@@ -40,6 +41,10 @@ namespace WB.UI.Shared.Enumerator.Services
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
         public abstract Task NavigateToLoginAsync();
+        public abstract Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
+        public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
+        public abstract void NavigateToSplashScreen();
+
         protected abstract void FinishActivity();
 
         protected abstract void NavigateToSettingsImpl();
@@ -65,6 +70,8 @@ namespace WB.UI.Shared.Enumerator.Services
 
             return this.navigationService.Navigate<TViewModel>();
         }
+
+        public abstract Task NavigateToDashboardAsync(string interviewId = null);
 
         public async Task SignOutAndNavigateToLoginAsync()
         {
