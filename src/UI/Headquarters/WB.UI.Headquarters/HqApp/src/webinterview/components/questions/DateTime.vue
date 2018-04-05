@@ -7,7 +7,7 @@
                      class="form-group">
                     <div class="field" :class="{answered: $me.isAnswered}">
                         <flat-pickr :config="pickerOpts"
-                                    :value="answer"
+                                    :value="$me.answer"
                                     :disabled="!$me.acceptAnswer"
                                     class="field-to-fill"
                                     :placeholder="noAnswerWatermark"
@@ -75,12 +75,12 @@
             }
         },
         methods: {
-            answerDate(answer) {
+            answerDate(selectedDate) {
                 this.sendAnswer(() => {
-                    if(answer) {
+                    if(selectedDate) {
                         if (!this.$me.isTimestamp) {
-                            if (!moment(this.$me.answer).isSame(answer)) {
-                                const dateAnswer = parseUTC(answer)
+                            if (!moment(this.$me.answer).isSame(selectedDate)) {
+                                const dateAnswer = moment(selectedDate).format(DateFormats.date)
 
                                 this.$store.dispatch('answerDateQuestion', { identity: this.$me.id, date: dateAnswer })
                             }
