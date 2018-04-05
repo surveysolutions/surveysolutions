@@ -27,18 +27,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IArchiveUtils archiveUtils;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IUserViewFactory userViewFactory;
+        private readonly IFileSystemAccessor fileSystem;
         private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
 
         private static readonly string[] ignoredPreloadingColumns =
             ServiceColumns.SystemVariables.Values.Select(x => x.VariableExportColumnName).ToArray();
 
         public AssignmentsImportService(ICsvReader csvReader, IArchiveUtils archiveUtils, 
-            IQuestionnaireStorage questionnaireStorage, IUserViewFactory userViewFactory)
+            IQuestionnaireStorage questionnaireStorage, IUserViewFactory userViewFactory, 
+            IFileSystemAccessor fileSystem)
         {
             this.csvReader = csvReader;
             this.archiveUtils = archiveUtils;
             this.questionnaireStorage = questionnaireStorage;
             this.userViewFactory = userViewFactory;
+            this.fileSystem = fileSystem;
         }
 
         public IEnumerable<AssignmentRow> GetAssignmentRows(QuestionnaireIdentity questionnaireIdentity, PreloadedFile file)
@@ -49,32 +52,71 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 var preloadingRow = file.Rows[i];
 
-                var assignmentAnswers = this.ToAssignmentAnswers(preloadingRow, questionnaire);
+                var preloadingRosterInstanceCodes = preloadingRow.Cells.OfType<PreloadingRosterInstanceIdValue>().ToArray();
+                var preloadingInterviewIdValue = preloadingRow.Cells.OfType<PreloadingInterviewIdValue>().FirstOrDefault();
 
+                var preloadingAnswers = preloadingRow.Cells
+                    .Except(preloadingRosterInstanceCodes.OfType<PreloadingValue>().Union(new[] {preloadingInterviewIdValue})).ToArray();
+                
                 yield return new AssignmentRow
                 {
-                    FileName = file.FileInfo.FileName,
-                    InterviewId = preloadingRow.InterviewId,
                     Row = i,
-                    Answers = assignmentAnswers.ToArray()
+                    FileName = file.FileInfo.FileName,
+                    QuestionnaireOrRosterName = file.FileInfo.QuestionnaireOrRosterName,
+                    InterviewIdValue = this.ToAssignmentInterviewId(preloadingInterviewIdValue),
+                    Answers = this.ToAssignmentAnswers(preloadingAnswers, questionnaire).ToArray(),
+                    RosterInstanceCodes = this.ToAssignmentRosterInstanceCodes(preloadingRosterInstanceCodes, questionnaire, file.FileInfo.QuestionnaireOrRosterName).ToArray()
                 };
             }
         }
 
-        private IEnumerable<AssignmentValue> ToAssignmentAnswers(PreloadingRow row, IQuestionnaire questionnaire)
-        {
-            foreach (var answer in row.Cells)
+        private AssignmentValue ToAssignmentInterviewId(PreloadingInterviewIdValue value)
+            => new AssignmentInterviewId
             {
-                switch (answer)
+                Column = value.Column,
+                Value = value.Value
+            };
+
+        private IEnumerable<AssignmentRosterInstanceCode> ToAssignmentRosterInstanceCodes(
+            PreloadingRosterInstanceIdValue[] preloadingRosterInstanceCodes, IQuestionnaire questionnaire,
+            string questionnaireOrRosterName)
+        {
+            if (!IsQuestionnaireFile(questionnaireOrRosterName, questionnaire))
+            {
+                var rosterId = questionnaire.GetRosterIdByVariableName(questionnaireOrRosterName, true);
+                if (rosterId.HasValue)
+                {
+                    var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value).ToArray();
+
+                    for (int i = 0; i < parentRosterIds.Length; i++)
+                    {
+                        var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterIds[i]).ToLower());
+                        var oldName = $"{ServiceColumns.ParentId}{i + 1}".ToLower();
+
+                        var code = preloadingRosterInstanceCodes.FirstOrDefault(x =>
+                            x.VariableOrCodeOrPropertyName == newName || x.VariableOrCodeOrPropertyName == oldName);
+
+                        if (code != null)
+                            yield return ToAssignmentRosterInstanceCode(code);
+                    }
+                }
+            }
+        }
+        private bool IsQuestionnaireFile(string questionnaireOrRosterName, IQuestionnaire questionnaire)
+            => string.Equals(this.fileSystem.MakeStataCompatibleFileName(questionnaireOrRosterName),
+                this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title), StringComparison.InvariantCultureIgnoreCase);
+
+        private IEnumerable<AssignmentValue> ToAssignmentAnswers(PreloadingCell[] cells, IQuestionnaire questionnaire)
+        {
+            foreach (var cell in cells)
+            {
+                switch (cell)
                 {
                     case PreloadingCompositeValue compositeCell:
                         yield return ToAssignmentAnswers(compositeCell, questionnaire);
                         break;
-                    case PreloadingRosterInstanceIdValue rosterInstanceIdCell:
-                        yield return this.ToAssignmentRosterInstanceId(rosterInstanceIdCell);
-                        break;
                     case PreloadingValue regularCell:
-                        switch (answer.VariableOrCodeOrPropertyName)
+                        switch (cell.VariableOrCodeOrPropertyName)
                         {
                             case ServiceColumns.ResponsibleColumnName:
                                 yield return this.ToAssignmentResponsible(regularCell);
@@ -142,10 +184,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 $"Supported properties: {string.Join(", ", GeoPosition.PropertyNames)}");
         }
 
-        private AssignmentValue ToAssignmentRosterInstanceId(PreloadingRosterInstanceIdValue answer)
+        private AssignmentRosterInstanceCode ToAssignmentRosterInstanceCode(PreloadingRosterInstanceIdValue answer)
         {
-            decimal? intValue = null;
-            if (decimal.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
+            int? intValue = null;
+            if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
                 out var intNumericValue))
                 intValue = intNumericValue;
 
@@ -310,7 +352,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
         {
             var cells = new Dictionary<string, List<PreloadingValue>>();
-            string interviewId = null;
             
             foreach (var kv in record)
             {
@@ -318,11 +359,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var value = (string) kv.Value;
 
                 if (ignoredPreloadingColumns.Contains(columnName)) continue;
-                if (columnName == ServiceColumns.InterviewId)
-                {
-                    interviewId = value;
-                    continue;
-                }
 
                 var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
                     StringSplitOptions.RemoveEmptyEntries);
@@ -331,6 +367,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (!cells.ContainsKey(variableName))
                     cells[variableName] = new List<PreloadingValue>();
+
+                if (columnName == ServiceColumns.InterviewId)
+                {
+                    cells[variableName].Add(new PreloadingInterviewIdValue
+                    {
+                        VariableOrCodeOrPropertyName = variableName,
+                        Row = rowIndex,
+                        Column = kv.Key,
+                        Value = value
+                    });
+                    continue;
+                }
 
                 var isRosterInstanceIdValue = string.Format(ServiceColumns.IdSuffixFormat, variableName) == columnName;
                 var isOldRosterInstanceIdValue = columnName.StartsWith(ServiceColumns.ParentId.ToLower());
@@ -360,7 +408,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             return new PreloadingRow
             {
-                InterviewId = interviewId,
                 Cells = cells.Select(x => x.Value.Count == 1
                     ? x.Value[0]
                     : (PreloadingCell) new PreloadingCompositeValue

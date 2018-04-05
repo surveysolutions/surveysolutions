@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
-    [DebuggerDisplay("{FileName} [{Columns.Length} rows]")]
+    [DebuggerDisplay("{FileName} [{Columns.Length} columns]")]
     public class PreloadedFileInfo
     {
         public string FileName { get; set; }
@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
     [DebuggerDisplay("{FileInfo.FileName} [{Rows.Length} rows]")]
     public class PreloadedFile
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public PreloadingRow[] Rows { get; set; }
 
         public PreloadedFileInfo FileInfo { get; set; }
@@ -23,7 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
     [DebuggerDisplay("[{Cells.Length} cells]")]
     public class PreloadingRow
     {
-        public string InterviewId { get; set; }
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public PreloadingCell[] Cells { get; set; }
     }
@@ -54,4 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 
     [DebuggerDisplay("roster instance id[{Column}]={Value}")]
     public class PreloadingRosterInstanceIdValue : PreloadingValue { }
+
+    [DebuggerDisplay("interview id={Value}")]
+    public class PreloadingInterviewIdValue : PreloadingValue { }
 }
