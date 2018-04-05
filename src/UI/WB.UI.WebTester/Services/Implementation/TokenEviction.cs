@@ -11,7 +11,7 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             this.subject = new Subject<Guid>();
         }
-
+        
         public void Evict(Guid token)
         {
             subject.OnNext(token);
