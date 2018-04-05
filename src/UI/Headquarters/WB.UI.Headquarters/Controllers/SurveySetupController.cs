@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers
             {
 
                 this.interviewImportService.Status.VerificationState.Errors =
-                    this.GetErrors(allImportedFiles, questionnaireIdentity).Take(10).ToList();
+                    this.preloadedDataVerifier.VerifyPanel(allImportedFiles, questionnaireIdentity).Take(10).ToList();
 
                 if (this.interviewImportService.Status.VerificationState.Errors.Any())
                 {
@@ -341,7 +341,7 @@ namespace WB.UI.Headquarters.Controllers
             
             try
             {
-                var verificationStatus = this.GetErrors(preloadedSample, questionnaireIdentity).Take(10).ToArray();
+                var verificationStatus = this.preloadedDataVerifier.VerifySimple(preloadedSample, questionnaireIdentity).Take(10).ToArray();
 
                 if (verificationStatus.Any())
                 {
@@ -623,57 +623,6 @@ namespace WB.UI.Headquarters.Controllers
                 Version = questionnaireInfo.Version,
                 QuestionnaireTitle = questionnaireInfo.Title,
             });
-        }
-
-        private IEnumerable<PanelImportVerificationError> GetErrors(PreloadedFile file, QuestionnaireIdentity questionnaireIdentity)
-        {
-            bool hasErrorsByColumns = false;
-
-            foreach (var columnError in this.preloadedDataVerifier.VerifyColumns(questionnaireIdentity, new[] { file.FileInfo }))
-            {
-                hasErrorsByColumns = true;
-                yield return columnError;
-            }
-
-            if (hasErrorsByColumns) yield break;
-
-            foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, file))
-                foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(questionnaireIdentity, assignmentRow))
-                    yield return answerError;
-        }
-
-
-        private IEnumerable<PanelImportVerificationError> GetErrors(PreloadedFile[] allImportedFiles,
-            QuestionnaireIdentity questionnaireIdentity)
-        {
-            bool hasErrorsByFilesOrColumns = false;
-
-            var preloadedFileInfos = allImportedFiles.Select(x => x.FileInfo).ToArray();
-
-            foreach (var fileInfo in preloadedFileInfos)
-                foreach (var fileError in this.preloadedDataVerifier.VerifyFile(questionnaireIdentity, fileInfo))
-                {
-                    hasErrorsByFilesOrColumns = true;
-                    yield return fileError;
-                }
-
-            if (hasErrorsByFilesOrColumns) yield break;
-
-            foreach (var columnError in this.preloadedDataVerifier.VerifyColumns(questionnaireIdentity, preloadedFileInfos))
-            {
-                hasErrorsByFilesOrColumns = true;
-                yield return columnError;
-            }
-
-            if (hasErrorsByFilesOrColumns) yield break;
-
-            foreach (var importedFile in allImportedFiles)
-                foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, importedFile))
-                    foreach (var answerError in this.preloadedDataVerifier.VerifyAnswers(questionnaireIdentity, assignmentRow))
-                        yield return answerError;
-
-            foreach (var rosterError in this.preloadedDataVerifier.VerifyRosters(questionnaireIdentity, preloadedFileInfos))
-                yield return rosterError;
         }
     }
 }
