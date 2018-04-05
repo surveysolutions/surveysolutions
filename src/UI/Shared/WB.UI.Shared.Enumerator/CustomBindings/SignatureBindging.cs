@@ -57,7 +57,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (IsDisposed)
                 return;
 
-            if (Target?.SignaturePadCanvas != null)
+            if (Target?.SignaturePadCanvas != null && Target?.SignaturePadCanvas.Handle != IntPtr.Zero)
             {
                 Target.SignaturePadCanvas.StrokeCompleted -= SignaturePadCanvasOnStrokeCompleted;
                 Target.SignaturePadCanvas.Cleared -= SignaturePadCanvasOnStrokeCompleted;
