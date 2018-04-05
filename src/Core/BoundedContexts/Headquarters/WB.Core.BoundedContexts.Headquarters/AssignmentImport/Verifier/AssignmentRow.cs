@@ -6,9 +6,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     public class AssignmentRow
     {
         public AssignmentValue[] Answers { get; set; }
+        public AssignmentRosterInstanceCode[] RosterInstanceCodes { get; set; }
         public int Row { get; set; }
-        public string InterviewId { get; set; }
+        public AssignmentValue InterviewIdValue { get; set; }
         public string FileName { get; set; }
+        public string QuestionnaireOrRosterName { get; set; }
     }
 
     public abstract class AssignmentValue
@@ -45,8 +47,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentRosterInstanceCode : AssignmentAnswer
     {
-        public decimal? Code { get; set; }
+        public int? Code { get; set; }
     }
+
+    public class AssignmentInterviewId : AssignmentValue { }
 
     public class AssignmentAnswers: AssignmentValue
     {
