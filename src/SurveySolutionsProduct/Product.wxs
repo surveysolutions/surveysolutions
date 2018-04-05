@@ -367,7 +367,7 @@
                               Action="setValue"
                               ElementPath="//configuration/appSettings/add[\[]@key='DesignerAddress'[\]]"
                               Name="value"
-                              Value="https://solutions.worldbank.org"
+                              Value="https://designer.mysurvey.solutions"
                               Sequence='14'/>
                 <!--<add key="WebInterviewEnabled" value="true" />-->
                 <util:XmlFile Id="CreateElementWebInterviewEnabled"
