@@ -1,4 +1,5 @@
-﻿using MvvmCross.Binding;
+﻿using System;
+using MvvmCross.Binding;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -39,7 +40,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (isDisposing)
             {
                 var editText = this.Target;
-                if (editText != null && this.subscribed)
+                if (editText != null && this.subscribed && editText.Handle != IntPtr.Zero)
                 {
                     editText.NumericValueChanged -= this.Target_NumericValueChanged;
                     this.subscribed = false;

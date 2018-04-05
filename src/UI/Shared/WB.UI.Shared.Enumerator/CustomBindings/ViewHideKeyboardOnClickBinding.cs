@@ -34,7 +34,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (IsDisposed)
                 return;
 
-            if (isDisposing && this.Target != null)
+            if (isDisposing && this.Target != null && this.Target.Handle != IntPtr.Zero)
             {
                 this.Target.Click -= this.HandleClick;
             }
