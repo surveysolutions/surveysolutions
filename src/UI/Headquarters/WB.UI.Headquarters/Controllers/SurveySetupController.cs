@@ -197,7 +197,7 @@ namespace WB.UI.Headquarters.Controllers
             {
 
                 this.interviewImportService.Status.VerificationState.Errors =
-                    this.preloadedDataVerifier.VerifyPanel(allImportedFiles, questionnaireIdentity).Take(10).ToList();
+                    this.assignmentsImportService.VerifyPanel(model.File.FileName, allImportedFiles, questionnaireIdentity).Take(10).ToList();
 
                 if (this.interviewImportService.Status.VerificationState.Errors.Any())
                 {
@@ -341,7 +341,7 @@ namespace WB.UI.Headquarters.Controllers
             
             try
             {
-                var verificationStatus = this.preloadedDataVerifier.VerifySimple(preloadedSample, questionnaireIdentity).Take(10).ToArray();
+                var verificationStatus = this.assignmentsImportService.VerifySimple(preloadedSample, questionnaireIdentity).Take(10).ToArray();
 
                 if (verificationStatus.Any())
                 {
@@ -427,10 +427,11 @@ namespace WB.UI.Headquarters.Controllers
 
             var verificationState = status.VerificationState;
 
-            //clean up for security reasons
             if (verificationState.Errors.Any() || status.State.Errors.Any())
             {
+                //clean up for security reasons
                 this.preloadedDataRepository.DeletePreloadedData();
+
                 return this.View("InterviewImportVerificationErrors", new ImportDataParsingErrorsView(
                     questionnaireId,
                     version,

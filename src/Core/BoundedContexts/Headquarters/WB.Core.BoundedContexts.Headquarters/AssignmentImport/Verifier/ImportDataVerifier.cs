@@ -8,9 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using messages = WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerificationMessages;
 
@@ -19,92 +17,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     
     internal class ImportDataVerifier : IPreloadedDataVerifier
     {
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IFileSystemAccessor fileSystem;
-        private readonly AssignmentsImportService assignmentsImportService;
 
-        public ImportDataVerifier(IQuestionnaireStorage questionnaireStorage, IFileSystemAccessor fileSystem,
-            AssignmentsImportService assignmentsImportService)
+        public ImportDataVerifier(IFileSystemAccessor fileSystem)
         {
-            this.questionnaireStorage = questionnaireStorage;
             this.fileSystem = fileSystem;
-            this.assignmentsImportService = assignmentsImportService;
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifySimple(PreloadedFile file, QuestionnaireIdentity questionnaireIdentity)
-        {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-
-            bool hasErrors = false;
-
-            foreach (var columnError in this.VerifyColumns(new[] { file.FileInfo }, questionnaire))
-            {
-                hasErrors = true;
-                yield return columnError;
-            }
-
-            if (hasErrors) yield break;
-
-            var assignmentRows = new List<AssignmentRow>();
-
-            foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, file))
-            {
-                foreach (var answerError in this.VerifyAnswers(assignmentRow, questionnaire))
-                    yield return answerError;
-
-                assignmentRows.Add(assignmentRow);
-            }
-
-            if (hasErrors) yield break;
-        }
-
-        public IEnumerable<PanelImportVerificationError> VerifyPanel(PreloadedFile[] allImportedFiles,
-            QuestionnaireIdentity questionnaireIdentity)
-        {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
-
-            bool hasErrors = false;
-
-            var preloadedFileInfos = allImportedFiles.Select(x => x.FileInfo).ToArray();
-
-            foreach (var fileInfo in preloadedFileInfos)
-                foreach (var fileError in this.VerifyFile(fileInfo, questionnaire))
-                {
-                    hasErrors = true;
-                    yield return fileError;
-                }
-
-            if (hasErrors) yield break;
-
-            foreach (var columnError in this.VerifyColumns(preloadedFileInfos, questionnaire))
-            {
-                hasErrors = true;
-                yield return columnError;
-            }
-
-            if (hasErrors) yield break;
-
-            var assignmentRows = new List<AssignmentRow>();
-
-            foreach (var importedFile in allImportedFiles)
-            foreach (var assignmentRow in this.assignmentsImportService.GetAssignmentRows(questionnaireIdentity, importedFile))
-            {
-                foreach (var answerError in this.VerifyAnswers(assignmentRow, questionnaire))
-                    yield return answerError;
-
-                assignmentRows.Add(assignmentRow);
-            }
-
-            foreach (var rosterError in this.VerifyRosters(assignmentRows, questionnaire))
-            {
-                hasErrors = true;
-                yield return rosterError;
-            }
-
-            if (hasErrors) yield break;
-        }
-
-        private IEnumerable<PanelImportVerificationError> VerifyAnswers(AssignmentRow assignmentRow, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyAnswers(AssignmentRow assignmentRow, IQuestionnaire questionnaire)
         {
             foreach (var assignmentValue in assignmentRow.Answers)
             {
@@ -127,19 +47,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private IEnumerable<PanelImportVerificationError> VerifyFile(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyFile(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {
             foreach (var error in this.FileVerifiers.Select(x => x.Invoke(file, questionnaire)))
                 if (error != null) yield return error;
         }
 
-        private IEnumerable<PanelImportVerificationError> VerifyRosters(List<AssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyRosters(List<AssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
             foreach (var error in this.RosterVerifiers.Select(x => x.Invoke(allRowsByAllFiles, questionnaire)))
                 if (error != null) yield return error;
         }
 
-        private IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
             foreach (var file in files)
             {
@@ -213,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private (AssignmentRow row, AssignmentValue cell)[] OrphanRoster(List<AssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
-            return null;
+            return Array.Empty<(AssignmentRow row, AssignmentValue cell)>();
             //var parentDataFile = preloadedDataService.GetParentDataFile(levelData.FileName, allLevels);
 
             //if (parentDataFile == null)
@@ -262,7 +182,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private (AssignmentRow row, AssignmentValue cell)[] DuplicatedRosterInstances(List<AssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
-            return null;
+            return Array.Empty<(AssignmentRow row, AssignmentValue cell)>();
             //this.Verifier(this.IdDuplication, "PL0006", messages.PL0006_IdDublication),   
             //private IEnumerable<PreloadedDataVerificationReference> IdDuplication(PreloadedDataByFile levelData, PreloadedDataByFile[] allLevels,
             //    IPreloadedDataService preloadedDataService)
