@@ -18,8 +18,8 @@ namespace WB.UI.Headquarters.Filters
 
             if (viewResult != null)
             {
-                var globalNotice = this.AppSettingsStorage.GetById(GlobalNotice.GlobalNoticeKey);
-                viewResult.ViewBag.GlobalNotice = string.IsNullOrEmpty(globalNotice?.Message) ? null : globalNotice.Message;
+                //var globalNotice = this.AppSettingsStorage.GetById(GlobalNotice.GlobalNoticeKey);
+                //viewResult.ViewBag.GlobalNotice = string.IsNullOrEmpty(globalNotice?.Message) ? null : globalNotice.Message;
             }
         }
     }
