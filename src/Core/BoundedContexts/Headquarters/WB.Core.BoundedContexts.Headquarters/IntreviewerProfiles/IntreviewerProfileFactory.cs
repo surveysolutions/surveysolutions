@@ -10,7 +10,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
@@ -20,6 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid interviewerId);
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
+
+        void GetInterviewerCheckinPoints(Guid interviewerId);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -28,17 +32,27 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IInterviewFactory interviewFactory;
 
         public InterviewerProfileFactory(
             HqUserManager userManager,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
-            IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader)
+            IDeviceSyncInfoRepository deviceSyncInfoRepository, 
+            IInterviewerVersionReader interviewerVersionReader, 
+            IInterviewFactory interviewFactory)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.interviewFactory = interviewFactory;
         }
+
+        public void GetInterviewerCheckinPoints(Guid interviewerId)
+        {
+            var gpsAnswers = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
+        }
+
 
         public async Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid userId)
         {
@@ -56,6 +70,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
             if (profile == null) return null;
 
+            var TransactionManagerProvider = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
+            TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
             var completedInterviewCount = this.interviewRepository
                 .Query(interviews => interviews.Count(interview =>
                     interview.ResponsibleId == userId && interview.Status == InterviewStatus.Completed));
@@ -63,6 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             var approvedByHqCount = this.interviewRepository
                 .Query(interviews => interviews.Count(interview =>
                     interview.ResponsibleId == userId && interview.Status == InterviewStatus.ApprovedByHeadquarters));
+            TransactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
 
             profile.WaitingInterviewsForApprovalCount = completedInterviewCount;
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;

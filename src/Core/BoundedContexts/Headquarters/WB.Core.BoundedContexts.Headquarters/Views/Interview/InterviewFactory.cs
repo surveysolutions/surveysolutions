@@ -207,6 +207,39 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result;
         }
 
+        public InterviewGpsAnswer[] GetGpsAnswersForInterviewer(Guid interviewerId)
+        {
+            var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
+                $@"with interviews as(
+                    select entityid, interviewid, latitude, longitude, timestamp
+                    from
+                        (
+                            select
+                                i.entityid,
+                                s.interviewid,
+                                (i.asgps ->> 'Latitude')::float8 as latitude,
+                                (i.asgps ->> 'Longitude')::float8 as longitude,
+                                (i.asgps ->> 'Timestamp') as timestamp
+                            from
+                                readside.interviews_view i
+                            join readside.interviewsummaries s on
+                                s.interviewid = i.interviewid
+                            where
+                                i.asgps is not null
+                                and s.responsibleid = @interviewerId
+                                and i.isenabled = true
+                        ) as q
+                ) 
+                select entityid, interviewid, latitude, longitude, timestamp
+                from   interviews;",
+                new
+                {
+                    interviewerId
+                })
+            .ToArray();
+            return result;
+        }
+
         public void Save(InterviewState state)
         {
             var rows = GetInterviewEntities(state.Id);

@@ -5,6 +5,7 @@
 @using WB.Core.BoundedContexts.Headquarters.Views.Device
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @model WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles.InterviewerProfileModel
 
 @{
@@ -67,9 +68,12 @@
             }
         </script>
         <script async defer
-                src="@string.Format("https://maps.googleapis.com/maps/api/js?key={0}&callback=getAddress", ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
+                src="@string.Format("{0}/maps/api/js?key={1}", ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
         </script>
     }
+    <script type="text/javascript"
+            src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
+    </script>
 }
 <main class="enumerators">
 <div class="container">
@@ -241,7 +245,7 @@
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6 connection-statistics">
                     <h3>@Pages.InterviewerProfile_DeviceAndConnectionStatistics</h3>
@@ -267,7 +271,7 @@
                                     {
                                         <span style="color: red;">(Relinked)</span>
                                     }</b>
-                                </li>
+                            </li>
                         }
                     </ul>
                     <ul class="list-unstyled">
@@ -292,6 +296,9 @@
                             <li>@Pages.InterviewerProfile_LastSyncronizationDate: @Model.LastCommunicationDate.Value.ToString(@"MMM dd, hh:mm") (@Model.LastCommunicationDate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
                         </ul>
                     }
+                </div>
+                <div class="col-sm-6 map">
+                    <div id="vueApp"></div>
                 </div>
             </div>
 
