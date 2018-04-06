@@ -223,4 +223,10 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Выберите опросник который следует обновить</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
 </root>

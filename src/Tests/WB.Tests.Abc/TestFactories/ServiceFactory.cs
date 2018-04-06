@@ -684,11 +684,13 @@ namespace WB.Tests.Abc.TestFactories
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IInterviewImportService importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorageAccessor<Assignment> assignments = null)
+            IPlainStorageAccessor<Assignment> assignments = null,
+            IAssignmentsUpgradeService upgradeService = null)
         {
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
                 importService ?? Mock.Of<IInterviewImportService>(s => s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) == AssignmentVerificationResult.Ok()),
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>());
         }
     }
 }

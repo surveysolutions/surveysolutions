@@ -225,4 +225,16 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>The Size field must be -1 or more.</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Select existing questionnaire to upgrade assignments from</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Existing not completed assignments are going to be upgraded from selected questionnaire and archived. </value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Select questionnaire to upgrade from</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
 </root>

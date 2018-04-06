@@ -2,6 +2,7 @@
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -57,6 +58,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
@@ -294,6 +296,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
+
+            registry.BindAsSingleton<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
+            registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
         }
 
         public Task Init(IServiceLocator serviceLocator)

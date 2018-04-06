@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -21,6 +22,8 @@ using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -34,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ISampleUploadViewFactory sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
         private readonly IInterviewImportService interviewImportService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAuthorizedUser authorizedUser;
@@ -47,6 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IAllUsersAndQuestionnairesFactory questionnairesFactory,
             IInterviewImportService interviewImportService,
             IFileSystemAccessor fileSystemAccessor,
             IAuthorizedUser authorizedUser)
@@ -57,6 +62,7 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionnairesFactory = questionnairesFactory;
             this.interviewImportService = interviewImportService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.authorizedUser = authorizedUser;
@@ -88,9 +94,18 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
-        public ActionResult MigrateAssinments(Guid id, long version)
+        public ActionResult UpgradeAssignments(Guid id, long version)
         {
-            return View();
+            var model = new UpgradeAssignmentsModel();
+            model.QuestionnaireIdentity = new QuestionnaireIdentity(id, version);
+            model.SurveySetupUrl = Url.Action("Index");
+            model.Questionnaires = 
+                this.questionnairesFactory.GetOlderQuestionnairesWithPendingAssignments(id, version)
+                .Select(x => 
+                    new ComboboxOptionModel(new QuestionnaireIdentity(x.TemplateId, x.TemplateVersion).ToString(), 
+                                            string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
+                .ToList();
+            return View(model);
         }
 
         public ActionResult TemplateDownload(Guid id, long version)
