@@ -1670,7 +1670,7 @@
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
-    <Content Include="Views\SurveySetup\MigrateAssinments.cshtml" />
+    <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1928,6 +1928,7 @@
     <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
+    <Compile Include="Models\UpgradeAssignmentsModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />
     <Compile Include="Controllers\SurveyController.cs" />

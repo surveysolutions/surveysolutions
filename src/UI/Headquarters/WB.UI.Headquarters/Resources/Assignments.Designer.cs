@@ -232,6 +232,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select existing questionnaire to upgrade assignments from.
+        /// </summary>
+        public static string SelectQuestionnaire {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire to upgrade from.
+        /// </summary>
+        public static string SelectQuestionnaireToUpgradeFrom {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaireToUpgradeFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select responsible.
         /// </summary>
         public static string SelectResponsible {
@@ -381,6 +399,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string UpdatedAt {
             get {
                 return ResourceManager.GetString("UpdatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade.
+        /// </summary>
+        public static string UpgradeBtn {
+            get {
+                return ResourceManager.GetString("UpgradeBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing not completed assignments are going to be upgraded from selected questionnaire and archived. .
+        /// </summary>
+        public static string UpgradeDescription {
+            get {
+                return ResourceManager.GetString("UpgradeDescription", resourceCulture);
             }
         }
     }
