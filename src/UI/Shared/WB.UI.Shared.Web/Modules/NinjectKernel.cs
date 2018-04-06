@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Web.Modules
 
             foreach (var module in initModules)
             {
-                await module.Init(ServiceLocator.Current); 
+                await module.Init(ServiceLocator.Current);
             }
         }
     }
