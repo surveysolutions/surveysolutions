@@ -1,9 +1,9 @@
-﻿@model WB.UI.Headquarters.Models.UpgradeAssignmentsModel
+﻿@model dynamic
 @{
     ViewBag.Title = Pages.UpgradeAssignmentsTitle;
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
 @section Scripts{
-    @Html.RenderHqConfig(Model)
+    @Html.RenderHqConfig((object)Model)
 }
 <div id="vueApp"></div>

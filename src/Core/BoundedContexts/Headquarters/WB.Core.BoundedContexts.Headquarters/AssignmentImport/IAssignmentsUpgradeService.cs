@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -7,11 +8,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public interface IAssignmentsUpgradeService
     {
-        void EnqueueUpgrade(QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
+        void EnqueueUpgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
 
-        void ReportProgress(QuestionnaireIdentity targetQuestionnaire, AssignmentUpgradeProgressDetails progressDetails);
+        void ReportProgress(Guid processId, AssignmentUpgradeProgressDetails progressDetails);
 
         QueuedUpgrade DequeueUpgrade();
+
+        AssignmentUpgradeProgressDetails Status(Guid processId);
     }
 
     public class AssignmentUpgradeProgressDetails
@@ -20,13 +23,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             QuestionnaireIdentity migrateTo, 
             int totalAssignmentsToMigrate, 
             int assignmentsMigratedSuccessfuly,
-            List<AssignmentUpgradeError> assignmentsMigratedWithError)
+            List<AssignmentUpgradeError> assignmentsMigratedWithError,
+            AssignmentUpgradeStatus status)
         {
             MigrateFrom = migrateFrom;
             MigrateTo = migrateTo;
             TotalAssignmentsToMigrate = totalAssignmentsToMigrate;
             AssignmentsMigratedSuccessfuly = assignmentsMigratedSuccessfuly;
             AssignmentsMigratedWithError = assignmentsMigratedWithError;
+            Status = status;
         }
 
         public QuestionnaireIdentity MigrateFrom { get; }
@@ -35,6 +40,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public int TotalAssignmentsToMigrate { get; }
         public int AssignmentsMigratedSuccessfuly { get; }
         public List<AssignmentUpgradeError> AssignmentsMigratedWithError { get; }
+        public AssignmentUpgradeStatus Status { get; }
+    }
+
+    public enum AssignmentUpgradeStatus
+    {
+        Queued = 1,
+        InProgress = 2,
+        Done = 3
     }
 
     public class AssignmentUpgradeError

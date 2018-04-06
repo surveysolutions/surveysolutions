@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using NUnit.Framework;
@@ -37,7 +38,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage);
 
             // Act
-            service.Upgrade(migrateFrom, migrateTo);
+            service.Upgrade(new Guid(), migrateFrom, migrateTo);
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(migratedAssignmentId);
@@ -76,7 +77,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage);
 
             // Act
-            service.Upgrade(migrateFrom, migrateTo);
+            service.Upgrade(new Guid(), migrateFrom, migrateTo);
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(migratedAssignmentId);
@@ -105,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage);
 
             // Act
-            service.Upgrade(migrateFrom, migrateTo);
+            service.Upgrade(new Guid(), migrateFrom, migrateTo);
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(assignmentId);
