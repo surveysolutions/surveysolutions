@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -10,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         void ReportProgress(QuestionnaireIdentity targetQuestionnaire, AssignmentUpgradeProgressDetails progressDetails);
 
-        AssignmentUpgradeProgressDetails GetProcessToRun();
+        QueuedUpgrade DequeueUpgrade();
     }
 
     public class AssignmentUpgradeProgressDetails
@@ -18,7 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public AssignmentUpgradeProgressDetails(QuestionnaireIdentity migrateFrom, 
             QuestionnaireIdentity migrateTo, 
             int totalAssignmentsToMigrate, 
-            int assignmentsMigratedSuccessfuly, List<AssignmentUpgradeError> assignmentsMigratedWithError)
+            int assignmentsMigratedSuccessfuly,
+            List<AssignmentUpgradeError> assignmentsMigratedWithError)
         {
             MigrateFrom = migrateFrom;
             MigrateTo = migrateTo;

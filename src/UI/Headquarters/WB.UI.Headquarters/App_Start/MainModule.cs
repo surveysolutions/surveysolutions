@@ -120,6 +120,7 @@ namespace WB.UI.Headquarters
             await serviceLocator.GetInstance<UsersImportTask>().RunAsync();
             await serviceLocator.GetInstance<ExportJobScheduler>().ConfigureAsync();
             await serviceLocator.GetInstance<PauseResumeJobScheduler>().ConfigureAsync();
+            await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().ConfigureAsync();
 
             await serviceLocator.GetInstance<IScheduler>().Start();
         }

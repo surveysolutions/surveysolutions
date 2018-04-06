@@ -3,6 +3,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,7 +13,8 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 {
-    public class UpgradeTests
+    [TestOf(typeof(AssignmentsUpgrader))]
+    public class AssignmentsUpgraderTests
     {
         [Test]
         public void when_questionnaire_is_not_compatible_with_new_questionnaire_Should_not_migrate_it_and_report_an_error()

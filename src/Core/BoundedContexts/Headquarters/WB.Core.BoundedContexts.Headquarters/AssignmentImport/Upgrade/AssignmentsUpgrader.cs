@@ -9,7 +9,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
-    public class AssignmentsUpgrader : IAssignmentsUpgrader
+    public interface IAssignmentsUpgrader
+    {
+        void Upgrade(QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
+    }
+
+    internal class AssignmentsUpgrader : IAssignmentsUpgrader
     {
         private readonly IPlainStorageAccessor<Assignment> assignments;
         private readonly IInterviewImportService importService;
@@ -67,9 +72,4 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             }
         }
     }
-}
-
-public interface IAssignmentsUpgrader
-{
-    void Upgrade(QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
 }

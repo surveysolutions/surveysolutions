@@ -1,0 +1,10 @@
+﻿@model WB.UI.Headquarters.Models.UpgradeAssignmentsModel
+@{
+    ViewBag.ActivePage = MenuItem.Assignments;
+    ViewBag.Title = Pages.UpgradeAssignmentsTitle;
+    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
+}
+@section Scripts{
+    @Html.RenderHqConfig(Model)
+}
+<div id="vueApp"></div>
