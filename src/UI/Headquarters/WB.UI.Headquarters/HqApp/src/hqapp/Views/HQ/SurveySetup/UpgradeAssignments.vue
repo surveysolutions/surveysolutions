@@ -24,7 +24,7 @@
             </div>
         </div>
         <form method="post">
-            <input type="hidden" :value="questionnaireId"/>
+            <input type="hidden" :value="questionnaireId ? questionnaireId.key : ''" name="sourceQuestionnaireId"/>
             <div class="col-sm-7 col-xs-12 action-buttons">
                  <button type="submit" class="btn btn-success" :disabled="!questionnaireId">
                     {{$t('Assignments.UpgradeBtn')}}
