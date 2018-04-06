@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 return Task.Run(() =>
                 {
-                    ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.From, processToRun.To);
+                    ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To);
                 });
             }
 

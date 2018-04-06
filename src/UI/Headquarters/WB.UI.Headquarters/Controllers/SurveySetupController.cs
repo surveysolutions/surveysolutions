@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -15,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -40,6 +42,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
         private readonly IInterviewImportService interviewImportService;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IAuthorizedUser authorizedUser;
 
         public SurveySetupController(
@@ -54,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
             IAllUsersAndQuestionnairesFactory questionnairesFactory,
             IInterviewImportService interviewImportService,
             IFileSystemAccessor fileSystemAccessor,
+            IAssignmentsUpgradeService upgradeService,
             IAuthorizedUser authorizedUser)
             : base(commandService, logger)
         {
@@ -65,6 +69,7 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnairesFactory = questionnairesFactory;
             this.interviewImportService = interviewImportService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.upgradeService = upgradeService;
             this.authorizedUser = authorizedUser;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
         }
@@ -94,6 +99,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(viewModel);
         }
 
+        [ActivePage(MenuItem.Questionnaires)]
         public ActionResult UpgradeAssignments(Guid id, long version)
         {
             var model = new UpgradeAssignmentsModel();
@@ -106,6 +112,27 @@ namespace WB.UI.Headquarters.Controllers
                                             string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
                 .ToList();
             return View(model);
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        [HttpPost]
+        [ActionName("UpgradeAssignments")]
+        public ActionResult UpgradeAssignmentsPost(Guid id, long version)
+        {
+            var processId = Guid.NewGuid();
+            var sourceQuestionnaireId = QuestionnaireIdentity.Parse(Request["sourceQuestionnaireId"]);
+            this.upgradeService.EnqueueUpgrade(processId, sourceQuestionnaireId, new QuestionnaireIdentity(id, version));
+            return RedirectToAction("UpgradeProgress", new {id = processId});
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult UpgradeProgress(Guid id)
+        {
+            return View(new
+            {
+                ProgressUrl = Url.RouteUrl("DefaultApiWithAction",
+                    new {httproute = "", controller = "AssignmentsUpgradeApiContoller", action = "Status"})
+            });
         }
 
         public ActionResult TemplateDownload(Guid id, long version)

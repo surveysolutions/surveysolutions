@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
     public interface IAssignmentsUpgrader
     {
-        void Upgrade(QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
+        void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
     }
 
     internal class AssignmentsUpgrader : IAssignmentsUpgrader
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.upgradeService = upgradeService;
         }
 
-        public void Upgrade(QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
+        public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
         {
             var idsToMigrate = assignments.Query(_ =>
                 _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version).Select(x => x.Id).ToList());
@@ -68,8 +68,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                     migratedSuccessfully++;
                 }
 
-                this.upgradeService.ReportProgress(migrateTo, new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count, migratedSuccessfully, upgradeErrors));
+                this.upgradeService.ReportProgress(processId, new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count, migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
             }
+
+            this.upgradeService.ReportProgress(processId, new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count, migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.Done));
         }
     }
 }
