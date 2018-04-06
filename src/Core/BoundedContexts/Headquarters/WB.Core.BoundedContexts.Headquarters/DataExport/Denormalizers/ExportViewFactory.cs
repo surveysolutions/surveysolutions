@@ -213,9 +213,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 
                 InterviewTextListAnswer item = null;
                 if (questionToCheck.Answer is InterviewTextListAnswers interviewTextListAnswers)
-                    item = interviewTextListAnswers.Answers.SingleOrDefault(a => a.Value == itemToSearch);
+                    item = interviewTextListAnswers.Answers.FirstOrDefault(a => a.Value == itemToSearch);
                 if (questionToCheck.Answer is InterviewTextListAnswer[] interviewTextListAnswer)
-                    item = interviewTextListAnswer.SingleOrDefault(a => a.Value == itemToSearch);
+                    item = interviewTextListAnswer.FirstOrDefault(a => a.Value == itemToSearch);
 
                 return item != null ? item.Answer : string.Empty;
             }
