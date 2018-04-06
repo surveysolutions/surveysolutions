@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Quartz;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
 {
@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
             this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
         }
 
-        public async Task ConfigureAsync()
+        public void Configure()
         {
             IJobDetail job = JobBuilder.Create<PauseResumeJob>()
                 .WithIdentity("pause resume job", "WebInterview")
@@ -28,9 +28,9 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
                     .RepeatForever())
                 .Build();
 
-            await this.scheduler.ScheduleJob(job, trigger);
+            this.scheduler.ScheduleJob(job, trigger);
 
-            await this.scheduler.AddJob(job, true);
+            this.scheduler.AddJob(job, true);
         }
     }
 }
