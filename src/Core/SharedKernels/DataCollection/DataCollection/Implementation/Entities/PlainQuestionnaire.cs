@@ -285,6 +285,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
                 case QuestionType.Multimedia:
                     return AnswerType.FileName;
+                case QuestionType.Area:
+                    return AnswerType.String;
+                case QuestionType.Audio:
+                    return AnswerType.FileName;
             }
 
             throw new ArgumentException($"Question of unknown type was found. Question id: {questionId}");

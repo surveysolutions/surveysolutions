@@ -250,4 +250,7 @@
   <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
     <value>Text list question {0} has non-unique item codes: {1}. Interview id: {2}</value>
   </data>
+    <data name="HasAssignmentsToImport" xml:space="preserve">
+    <value>Please, wait until previous import of assignments is completed</value>
+  </data>
 </root>

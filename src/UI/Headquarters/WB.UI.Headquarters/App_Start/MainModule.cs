@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
@@ -117,6 +118,7 @@ namespace WB.UI.Headquarters
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             serviceLocator.GetInstance<UsersImportTask>().Run();
+            serviceLocator.GetInstance<AssignmentsImportTask>().Run();
             serviceLocator.GetInstance<ExportJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
 

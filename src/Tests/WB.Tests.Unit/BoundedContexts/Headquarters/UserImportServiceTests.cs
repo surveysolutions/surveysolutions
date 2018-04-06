@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userImportService = CreateUserImportService(null, usersToImport);
 
             //act
-            var exception = Assert.Catch<UserPreloadingException>(() => userImportService
+            var exception = Assert.Catch<PreloadingException>(() => userImportService
                 .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
 
             //assert
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userImportService = Create.Service.UserImportService(csvReader: csvReader);
 
             //act
-            var exception = Assert.Catch<UserPreloadingException>(() => userImportService
+            var exception = Assert.Catch<PreloadingException>(() => userImportService
                 .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
 
             //assert
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userImportService = CreateUserImportServiceWithRepositories(usersImportTask: usersImportTask);
 
             //act
-            var exception = Assert.Catch<UserPreloadingException>(() => userImportService
+            var exception = Assert.Catch<PreloadingException>(() => userImportService
                 .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
 
             //assert
@@ -423,7 +423,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             // Assert
             var excpectedError = string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile, 2);
-            Assert.That(act, Throws.Exception.TypeOf<UserPreloadingException>().With.Message.EqualTo(excpectedError)); 
+            Assert.That(act, Throws.Exception.TypeOf<PreloadingException>().With.Message.EqualTo(excpectedError)); 
         }
 
         private UserImportService CreateUserImportService(HqUser[] dbUsers = null, params UserToImport[] usersToImport)

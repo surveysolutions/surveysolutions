@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please, wait until previous import of assignments is completed.
+        /// </summary>
+        public static string HasAssignmentsToImport {
+            get {
+                return ResourceManager.GetString("HasAssignmentsToImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to [PL0002] N/A.
         /// </summary>
         public static string PL0002_MoreThenOneLevel {
