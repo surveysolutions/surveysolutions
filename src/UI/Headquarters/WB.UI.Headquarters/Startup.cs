@@ -59,8 +59,8 @@ namespace WB.UI.Headquarters
             SetupNConfig();
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
-            // NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
-            // NpgsqlLogManager.IsParameterLoggingEnabled = true;
+             NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
+             NpgsqlLogManager.IsParameterLoggingEnabled = true;
             
         }
 
