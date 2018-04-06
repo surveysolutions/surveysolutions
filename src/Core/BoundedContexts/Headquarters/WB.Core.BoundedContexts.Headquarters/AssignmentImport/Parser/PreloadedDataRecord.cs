@@ -1,5 +1,5 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
