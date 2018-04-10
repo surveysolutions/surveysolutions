@@ -53,5 +53,12 @@ namespace WB.UI.Headquarters.API
 
             throw new HttpResponseException(HttpStatusCode.NotFound);
         }
+
+        [HttpPost]
+        public HttpResponseMessage Stop(string id)
+        {
+            this.upgradeService.StopProcess(Guid.Parse(id));
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

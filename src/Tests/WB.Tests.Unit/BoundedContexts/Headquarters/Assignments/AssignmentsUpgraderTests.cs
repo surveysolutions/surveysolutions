@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -31,14 +33,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 questionnaireIdentity: migrateFrom);
 
             assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
-            Mock.Of<IInterviewImportService>(s =>
+            var importService = Mock.Of<IInterviewImportService>(s =>
                 s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) ==
                 AssignmentVerificationResult.Error("Generic error"));
 
-            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage);
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage,
+                importService: importService);
 
             // Act
-            service.Upgrade(new Guid(), migrateFrom, migrateTo);
+            service.Upgrade(new Guid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(migratedAssignmentId);
@@ -62,22 +65,34 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
                 quantity: migratedAssignmentQuantity,
                 questionnaireIdentity: migrateFrom);
+            var interviewAnswerId = Create.Identity();
             assignmentToMigrate.SetAnswers(new List<InterviewAnswer>
             {
-                Create.Entity.InterviewAnswer(Create.Identity(), Create.Entity.TextQuestionAnswer("blabla"))
+                Create.Entity.InterviewAnswer(interviewAnswerId, Create.Entity.TextQuestionAnswer("blabla"))
             });
 
+            var prefilledInterviewAnswerId = Create.Identity();
             assignmentToMigrate.SetIdentifyingData(new List<IdentifyingAnswer>
             {
-                Create.Entity.IdentifyingAnswer(identity: Create.Identity(), answer: "identifying")
+                Create.Entity.IdentifyingAnswer(identity: prefilledInterviewAnswerId, answer: "identifying")
             });
 
             assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
 
-            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage);
+            var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
+                questionnaireVersion: migrateTo.Version,
+                questionnaire: Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocument(
+                    children: new IComposite[]
+                    {
+                        Create.Entity.TextQuestion(questionId: interviewAnswerId.Id),
+                        Create.Entity.TextQuestion(questionId: prefilledInterviewAnswerId.Id, preFilled: true)
+                    }
+                )));
+
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage, questionnaireStorage: questionnaires);
 
             // Act
-            service.Upgrade(new Guid(), migrateFrom, migrateTo);
+            service.Upgrade(new Guid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(migratedAssignmentId);
@@ -89,7 +104,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(newAssignment, Has.Property(nameof(newAssignment.Quantity)).EqualTo(migratedAssignmentQuantity));
             Assert.That(newAssignment, Has.Property(nameof(newAssignment.QuestionnaireId)).EqualTo(migrateTo));
             Assert.That(newAssignment.Answers, Is.EquivalentTo(assignmentToMigrate.Answers));
-            Assert.That(newAssignment.IdentifyingData, Is.EquivalentTo(assignmentToMigrate.IdentifyingData));
+            Assert.That(newAssignment.IdentifyingData, Has.Count.EqualTo(1));
         }
 
         [Test]
@@ -106,7 +121,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage);
 
             // Act
-            service.Upgrade(new Guid(), migrateFrom, migrateTo);
+            service.Upgrade(new Guid(), migrateFrom, migrateTo, CancellationToken.None);
 
             // Assert
             Assignment oldAssignment = assignmentsStorage.GetById(assignmentId);
@@ -114,6 +129,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var newAssignment = assignmentsStorage.Query(_ => _.FirstOrDefault(x => x.Id != assignmentId));
             Assert.That(newAssignment, Is.Null);
+        }
+
+        [Test]
+        public void should_mark_cancelled_process_as_cancelled()
+        {
+            var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+
+            var assignmentId = 45;
+            var assignmentsStorage = new TestPlainStorage<Assignment>();
+            assignmentsStorage.Store(Create.Entity.Assignment(id: assignmentId, quantity: 0, questionnaireIdentity: migrateFrom),
+                assignmentId);
+
+            var upgradeServiceMock = new Mock<IAssignmentsUpgradeService>();
+
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage, upgradeService: upgradeServiceMock.Object);
+            var processId = Id.g1;
+            var cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = cancellationTokenSource.Token;
+            cancellationTokenSource.Cancel();
+
+            // Act
+
+            service.Upgrade(processId, migrateFrom, migrateTo, cancellationToken);
+
+            // Assert
+            upgradeServiceMock.Verify(x => x.ReportProgress(processId, It.Is<AssignmentUpgradeProgressDetails>(
+                p => p.Status == AssignmentUpgradeStatus.Cancelled
+                )));
         }
     }
 }

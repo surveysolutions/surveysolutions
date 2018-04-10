@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Quartz.Util;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -15,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
 {
     public interface IAssignmentsUpgrader
     {
-        void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo);
+        void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellationToken);
     }
 
     internal class AssignmentsUpgrader : IAssignmentsUpgrader
@@ -40,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             this.transactionManager = transactionManager;
         }
 
-        public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
+        public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
         {
             var idsToMigrate = this.transactionManager.ExecuteInPlainTransaction(() => assignments.Query(_ =>
                 _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version).Select(x => x.Id).ToList()));
@@ -49,50 +47,63 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             int migratedSuccessfully = 0;
             List<AssignmentUpgradeError> upgradeErrors = new List<AssignmentUpgradeError>();
 
-            foreach (var assignmentId in idsToMigrate)
+            try
             {
-                this.transactionManager.ExecuteInPlainTransaction(() =>
+                foreach (var assignmentId in idsToMigrate)
                 {
-                    var oldAssignment = assignments.GetById(assignmentId);
-                    if (!oldAssignment.IsCompleted)
+                    cancellation.ThrowIfCancellationRequested();
+
+                    this.transactionManager.ExecuteInPlainTransaction(() =>
                     {
-                        var assignmentVerification = this.importService.VerifyAssignment(oldAssignment.Answers.GroupedByLevels(), targetQuestionnaire);
-                        if (assignmentVerification.Status)
+                        var oldAssignment = assignments.GetById(assignmentId);
+                        if (!oldAssignment.IsCompleted)
                         {
-                            oldAssignment.Archive();
-
-                            var newAssignment = new Assignment(migrateTo, oldAssignment.ResponsibleId, oldAssignment.Quantity);
-
-                            newAssignment.SetAnswers(oldAssignment.Answers.ToList());
-                            var newIdentifyingData = new List<IdentifyingAnswer>();
-                            foreach (var oldIdentifyingQuestion in oldAssignment.IdentifyingData)
+                            var assignmentVerification = this.importService.VerifyAssignment(oldAssignment.Answers.GroupedByLevels(), targetQuestionnaire);
+                            if (assignmentVerification.Status)
                             {
-                                newIdentifyingData.Add(IdentifyingAnswer.Create(newAssignment, 
-                                    targetQuestionnaire, 
-                                    oldIdentifyingQuestion.Answer, 
-                                    oldIdentifyingQuestion.Identity,
-                                    oldIdentifyingQuestion.VariableName));
-                            }
+                                oldAssignment.Archive();
 
-                            newAssignment.SetIdentifyingData(newIdentifyingData);
-                            assignments.Store(newAssignment, null);
-                            migratedSuccessfully++;
+                                var newAssignment = new Assignment(migrateTo, oldAssignment.ResponsibleId, oldAssignment.Quantity);
+
+                                newAssignment.SetAnswers(oldAssignment.Answers.ToList());
+                                var newIdentifyingData = new List<IdentifyingAnswer>();
+                                foreach (var oldIdentifyingQuestion in oldAssignment.IdentifyingData)
+                                {
+                                    newIdentifyingData.Add(IdentifyingAnswer.Create(newAssignment, 
+                                        targetQuestionnaire, 
+                                        oldIdentifyingQuestion.Answer, 
+                                        oldIdentifyingQuestion.Identity,
+                                        oldIdentifyingQuestion.VariableName));
+                                }
+
+                                newAssignment.SetIdentifyingData(newIdentifyingData);
+                                assignments.Store(newAssignment, null);
+                                migratedSuccessfully++;
+                            }
+                            else
+                            {
+                                upgradeErrors.Add(new AssignmentUpgradeError(assignmentId, assignmentVerification.ErrorMessage));
+                            }
                         }
                         else
                         {
-                            upgradeErrors.Add(new AssignmentUpgradeError(assignmentId, assignmentVerification.ErrorMessage));
+                            migratedSuccessfully++;
                         }
-                    }
-                    else
-                    {
-                        migratedSuccessfully++;
-                    }
-                });
+                    });
 
-                this.upgradeService.ReportProgress(processId, new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count, migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
+                    this.upgradeService.ReportProgress(processId, new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count, migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.InProgress));
+                }
+
+                this.upgradeService.ReportProgress(processId,
+                    new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count,
+                        migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.Done));
             }
-
-            this.upgradeService.ReportProgress(processId, new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count, migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.Done));
+            catch (OperationCanceledException)
+            {
+                this.upgradeService.ReportProgress(processId,
+                    new AssignmentUpgradeProgressDetails(migrateFrom, migrateTo, idsToMigrate.Count,
+                        migratedSuccessfully, upgradeErrors, AssignmentUpgradeStatus.Cancelled));
+            }
         }
     }
 }

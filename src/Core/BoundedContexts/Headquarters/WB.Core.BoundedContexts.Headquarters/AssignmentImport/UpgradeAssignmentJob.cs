@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var processToRun = upgradeService.DequeueUpgrade();
             if (processToRun != null)
             {
-                ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To);
+                ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To, upgradeService.GetCancellationToken(processToRun.ProcessId));
             }
         }
     }

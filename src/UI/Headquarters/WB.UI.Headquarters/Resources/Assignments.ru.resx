@@ -238,4 +238,7 @@
   <data name="UpgradeProgressTitle" xml:space="preserve">
     <value>Обновление заданий из {{from}} в {{to}}</value>
   </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
 </root>
