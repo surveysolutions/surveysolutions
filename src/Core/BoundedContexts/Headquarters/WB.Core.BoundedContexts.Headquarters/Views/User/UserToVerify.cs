@@ -1,11 +1,12 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.User
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class UserToVerify
     {
-        public string UserName { get; set; }
         public bool IsLocked { get; set; }
-        public bool IsSupervisorOrInterviewer => IsInterviewer || IsSupervisor;
-        public bool IsSupervisor { get; set; }
-        public bool IsInterviewer { get; set; }
+        public bool IsSupervisorOrInterviewer => InterviewerId.HasValue || SupervisorId.HasValue;
+        public Guid? InterviewerId { get; set; } 
+        public Guid? SupervisorId { get; set; }
     }
 }
