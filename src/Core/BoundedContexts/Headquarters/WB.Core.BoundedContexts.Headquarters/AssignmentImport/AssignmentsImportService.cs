@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dapper;
+using Main.Core.Entities.SubEntities;
 using Npgsql;
 using NpgsqlTypes;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -18,6 +19,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -37,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IPreloadedDataVerifier verifier;
         private readonly IAuthorizedUser authorizedUser;
         private readonly ISessionProvider sessionProvider;
-        private readonly AssignmentsImportTask assignemtsImportTask;
+        private readonly AssignmentsImportTask assignmentsImportTask;
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentImportData> importAssignmentsRepository;
         private readonly ISerializer serializer;
@@ -48,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IPreloadedDataVerifier verifier,
             IAuthorizedUser authorizedUser,
             ISessionProvider sessionProvider,
-            AssignmentsImportTask assignemtsImportTask,
+            AssignmentsImportTask assignmentsImportTask,
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentImportData> importAssignmentsRepository,
             ISerializer serializer)
@@ -61,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.verifier = verifier;
             this.authorizedUser = authorizedUser;
             this.sessionProvider = sessionProvider;
-            this.assignemtsImportTask = assignemtsImportTask;
+            this.assignmentsImportTask = assignmentsImportTask;
             this.importAssignmentsProcessRepository = importAssignmentsProcessRepository;
             this.importAssignmentsRepository = importAssignmentsRepository;
             this.serializer = serializer;
@@ -69,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public IEnumerable<PanelImportVerificationError> VerifySimple(PreloadedFile file, QuestionnaireIdentity questionnaireIdentity)
         {
-            if (this.assignemtsImportTask.IsJobRunning())
+            if (this.assignmentsImportTask.IsJobRunning())
                 throw new PreloadingException(PreloadingVerificationMessages.HasAssignmentsToImport);
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
@@ -96,20 +103,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             if (hasErrors) yield break;
 
-            this.Save(file.FileInfo.FileName, assignmentRows.Select(ToAssignmentToImport).ToArray());
-            assignemtsImportTask.Run();
-        }
+            this.Save(file.FileInfo.FileName, assignmentRows.Select(row =>
+            {
+                var responsible = row.Answers.OfType<AssignmentResponsible>().FirstOrDefault();
+                var quantity = row.Answers.OfType<AssignmentQuantity>().FirstOrDefault();
+                var answers = row.Answers.OfType<AssignmentAnswer>().ToArray();
 
-        private AssignmentImportData ToAssignmentToImport(AssignmentRow row)
-        {
-            throw new NotImplementedException();
+                return ToAssignmentToImport(answers, responsible, quantity, RosterVector.Empty, questionnaire);
+            }).ToArray());
+            assignmentsImportTask.Run();
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
             PreloadedFile[] allImportedFiles,
             QuestionnaireIdentity questionnaireIdentity)
         {
-            if (this.assignemtsImportTask.IsJobRunning())
+            if (this.assignmentsImportTask.IsJobRunning())
                 throw new PreloadingException(PreloadingVerificationMessages.HasAssignmentsToImport);
 
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
@@ -159,8 +168,30 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             if (hasErrors) yield break;
 
-            this.Save(originalFileName, assignmentRows.Select(ToAssignmentToImport).ToArray());
-            assignemtsImportTask.Run();
+            this.Save(originalFileName, ConcatRosters(assignmentRows, questionnaire));
+            assignmentsImportTask.Run();
+        }
+
+        private IList<AssignmentImportData> ConcatRosters(List<AssignmentRow> assignmentRows,
+            IQuestionnaire questionnaire)
+        {
+            var answersGroupedByRosters = assignmentRows.GroupBy(assignmentRow => assignmentRow.InterviewIdValue.Value)
+                .Select(g => new
+                {
+                    quantity = g.Select(x => x.Answers.OfType<AssignmentQuantity>()).FirstOrDefault(),
+                    responsible = g.Select(x => x.Answers.OfType<AssignmentResponsible>()).FirstOrDefault(),
+                    rows = g.Select(x => new
+                    {
+                        rosterVector = new RosterVector(x.RosterInstanceCodes.Select(y => y.Code.Value).ToArray()),
+                        answers = x.Answers.OfType<AssignmentAnswer>().ToArray()
+                    })
+                });
+
+            return answersGroupedByRosters.SelectMany(x =>
+                x.rows.GroupBy(y => y.rosterVector).Select(z =>
+                    ToAssignmentToImport(z.SelectMany(i => i.answers).ToArray(), x.responsible.FirstOrDefault(),
+                        x.quantity.FirstOrDefault(), z.Key, questionnaire))).ToList();
+
         }
 
         public AssignmentImportData GetAssignmentToImport()
@@ -216,7 +247,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             var npgsqlConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
 
-            using (var writer = npgsqlConnection.BeginBinaryImport($"COPY  {AssignmentsToImportTableName} (responsible, quantity, answers) " +
+            using (var writer = npgsqlConnection.BeginBinaryImport($"COPY  {AssignmentsToImportTableName} (interviewer, supervisor, quantity, answers) " +
                                                                    "FROM STDIN BINARY;"))
             {
                 foreach (var assignmentToImport in assignments)
@@ -228,6 +259,131 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     writer.Write(this.serializer.Serialize(assignmentToImport.PreloadedData.Answers), NpgsqlDbType.Jsonb);
                 }
             }
+        }
+
+        private AssignmentImportData ToAssignmentToImport(AssignmentAnswer[] answers, AssignmentResponsible responsible,
+            AssignmentQuantity quantity, RosterVector rosterVector, IQuestionnaire questionnaire) =>
+            new AssignmentImportData
+            {
+                InterviewerId = responsible?.Responsible?.InterviewerId,
+                SupervisorId = responsible?.Responsible?.SupervisorId,
+                Quantity = quantity?.Quantity,
+                PreloadedData = new PreloadedDataDto(
+                    answers.Select(x => ToInterviewAnswer(x, rosterVector, questionnaire)).Where(x => x != null).ToList())
+            };
+
+        private InterviewAnswer ToInterviewAnswer(AssignmentAnswer value, RosterVector rosterVector, IQuestionnaire questionnaire)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(value.VariableName);
+            if (!questionId.HasValue) return null;
+
+
+            var answer = new InterviewAnswer { Identity = Identity.Create(questionId.Value, rosterVector) };
+
+            var questionType = questionnaire.GetQuestionType(questionId.Value);
+
+            var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId.Value);
+            var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId.Value);
+
+            switch (questionType)
+            {
+                case QuestionType.SingleOption:
+                    if (!isLinkedToQuestion && !isLinkedToRoster)
+                    {
+                        var assignmentInt = ((AssignmentDoubleAnswer) value).Answer;
+                        if (assignmentInt.HasValue)
+                            answer.Answer = CategoricalFixedSingleOptionAnswer.FromDecimal(Convert.ToDecimal(assignmentInt.Value));
+                    }
+                    break;
+                case QuestionType.MultyOption:
+                {
+                    var assignmentCategoricalMulti = ((AssignmentCategoricalMultiAnswer) value)?.Values
+                        ?.OfType<AssignmentDoubleAnswer>()
+                        .Where(x => x.Answer.HasValue)
+                        ?.Select(x => new {code = Convert.ToDecimal(x.VariableName), answer = Convert.ToInt32(x.Answer)})
+                        .ToArray();
+
+                        if (assignmentCategoricalMulti.Any())
+                        {
+                            if (questionnaire.ShouldQuestionRecordAnswersOrder(questionId.Value))
+                            {
+                                if (questionnaire.IsQuestionYesNo(questionId.Value))
+                                {
+                                    answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(assignmentCategoricalMulti
+                                        .OrderBy(x => x.answer)
+                                        .Select(x => new AnsweredYesNoOption(x.code, true)));
+                                }
+
+                                if (!isLinkedToQuestion && !isLinkedToRoster)
+                                {
+                                    answer.Answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(
+                                        assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => x.code)
+                                            .ToArray());
+                                }
+                            }
+                            else
+                            {
+                                if (questionnaire.IsQuestionYesNo(questionId.Value))
+                                {
+                                    answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(
+                                        assignmentCategoricalMulti.Select(x => new AnsweredYesNoOption(x.code, x.answer > 0)));
+                                }
+
+                                if (!isLinkedToQuestion && !isLinkedToRoster)
+                                {
+                                    answer.Answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(
+                                        assignmentCategoricalMulti.Select(x => x.code).ToArray());
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case QuestionType.DateTime:
+                    var assignmentDateTime = ((AssignmentDateTimeAnswer) value).Answer;
+                    if (assignmentDateTime.HasValue)
+                        answer.Answer = DateTimeAnswer.FromDateTime(assignmentDateTime.Value);
+                    break;
+                case QuestionType.GpsCoordinates:
+                    var assignmentGpsValues = ((AssignmentGpsAnswer)value)?.Values;
+                    if (assignmentGpsValues != null)
+                    {
+                        var doubleAnswers = assignmentGpsValues.OfType<AssignmentDoubleAnswer>();
+                        var longitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
+                        var latitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
+                        var altitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Altitude).ToLower())?.Answer;
+                        var accuracy = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Accuracy).ToLower())?.Answer;
+                        var timestamp = assignmentGpsValues.OfType<AssignmentDateTimeAnswer>().FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Timestamp).ToLower())?.Answer;
+
+                        answer.Answer = GpsAnswer.FromGeoPosition(new GeoPosition(latitude ?? 0, longitude ?? 0,
+                            accuracy ?? 0, altitude ?? 0, timestamp ?? DateTimeOffset.MinValue));
+                    }
+                    break;
+                case QuestionType.Numeric:
+                    if (questionnaire.IsQuestionInteger(questionId.Value))
+                    {
+                        var assignmentInt = ((AssignmentIntegerAnswer)value).Answer;
+                        if (assignmentInt.HasValue)
+                            answer.Answer = NumericIntegerAnswer.FromInt(assignmentInt.Value);
+                    }
+                    else
+                    {
+                        var assignmentDouble = ((AssignmentDoubleAnswer)value).Answer;
+                        if (assignmentDouble.HasValue)
+                            answer.Answer = NumericRealAnswer.FromDouble(assignmentDouble.Value);
+                    }
+                    break;
+                case QuestionType.QRBarcode:
+                    answer.Answer = QRBarcodeAnswer.FromString(((AssignmentTextAnswer) value)?.Value);
+                    break;
+                case QuestionType.Text:
+                    answer.Answer = TextAnswer.FromString(((AssignmentTextAnswer) value)?.Value);
+                    break;
+                case QuestionType.TextList:
+                    //answer.Answer = TextListAnswer.FromTupleArray();
+                    break;
+            }
+
+            return answer;
         }
     }
 }

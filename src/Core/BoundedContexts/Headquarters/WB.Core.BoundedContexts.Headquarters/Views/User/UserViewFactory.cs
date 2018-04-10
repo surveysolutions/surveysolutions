@@ -95,10 +95,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .Where(x => userNames.Contains(x.UserName) && !x.IsArchived)
                 .Select(x => new UserToVerify
                 {
-                    UserName = x.UserName,
                     IsLocked = x.IsLockedByHeadquaters || x.IsLockedBySupervisor,
-                    IsInterviewer = x.Roles.Any(role => role.RoleId == interviewerRoleId),
-                    IsSupervisor = x.Roles.Any(role => role.RoleId == supervisorRoleId)
+                    SupervisorId = x.Roles.Any(role => role.RoleId == supervisorRoleId) ? x.Id : x.Profile.SupervisorId,
+                    InterviewerId = x.Roles.Any(role => role.RoleId == interviewerRoleId) ? x.Id : (Guid?)null
                 }).ToArray();
         }
 

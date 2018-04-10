@@ -236,9 +236,9 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewImportService.Status.QuestionnaireId = questionnaireIdentity;
             this.interviewImportService.Status.QuestionnaireTitle = questionnaireInfo.Title;
             this.interviewImportService.Status.VerificationState.SupervisorsCount = mainImportedFile.Rows.Sum(x =>
-                x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsSupervisor));
+                x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.SupervisorId.HasValue));
             this.interviewImportService.Status.VerificationState.EnumeratorsCount = mainImportedFile.Rows.Sum(x =>
-                x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsInterviewer));
+                x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.InterviewerId.HasValue));
             this.interviewImportService.Status.VerificationState.EntitiesCount = mainImportedFile.Rows.Length;
             this.interviewImportService.Status.VerificationState.WasResponsibleProvided = mainImportedFile.FileInfo.Columns.Select(x => x.ToLower())
                 .Contains(ServiceColumns.ResponsibleColumnName);
@@ -380,8 +380,8 @@ namespace WB.UI.Headquarters.Controllers
                 WasResponsibleProvided = hasResponsibleNames,
                 AssignmentImportType = AssignmentImportType.Assignments,
                 FileName = preloadedSample.FileInfo.FileName,
-                EnumeratorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsInterviewer)),
-                SupervisorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.IsSupervisor)),
+                EnumeratorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.InterviewerId.HasValue)),
+                SupervisorsCount = preloadedSample.Rows.Sum(x => x.Cells.OfType<AssignmentResponsible>().Count(y => y.Responsible.SupervisorId.HasValue)),
                 EntitiesCount = preloadedSample.Rows.Length
             };
 
