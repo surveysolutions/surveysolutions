@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class PhotoViewViewModel : BaseViewModel<PhotoViewViewModelArgs>
     {
         private readonly ILogger logger;
-        private readonly IInterviewFileStorage imageFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
         private byte[] answer;
 
         private Guid interviewId;
@@ -18,8 +18,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private const string StateKey = "interviewPhotoPreview";
 
-        public PhotoViewViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService,
-            ILogger logger, IInterviewFileStorage imageFileStorage) 
+        public PhotoViewViewModel(IPrincipal principal, 
+            IViewModelNavigationService viewModelNavigationService,
+            ILogger logger, IImageFileStorage imageFileStorage) 
             : base(principal, viewModelNavigationService)
         {
             this.logger = logger;
