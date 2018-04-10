@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
@@ -146,8 +147,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         MaxScale = 1
                     };
                 }
-            }
+                case ".tif":
+                {
+                    Raster raster = new Raster(pathToMapFile);
+                    RasterLayer newRasterLayer = new RasterLayer(raster);
+                    await newRasterLayer.LoadAsync();
 
+                    //add error display
+                    if (newRasterLayer.SpatialReference.IsProjected)
+                        return new Map(new Basemap(newRasterLayer));
+                    break;
+                }
+            }
             return null;
         }
 
