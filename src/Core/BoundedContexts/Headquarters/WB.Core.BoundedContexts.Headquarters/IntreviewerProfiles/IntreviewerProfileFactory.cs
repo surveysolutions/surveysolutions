@@ -10,9 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
@@ -23,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
 
-        void GetInterviewerCheckinPoints(Guid interviewerId);
+        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -48,9 +46,21 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             this.interviewFactory = interviewFactory;
         }
 
-        public void GetInterviewerCheckinPoints(Guid interviewerId)
+        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
         {
-            var gpsAnswers = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
+            InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
+            for (var index = 0; index < points.Length; index++)
+            {
+                var point = points[index];
+                yield return new InterviewerPoint
+                {
+                    InterviewId = point.InterviewId,
+                    Index = point.Timestamp.HasValue? index + 1 : -1,
+                    Latitude = point.Latitude,
+                    Longitude = point.Longitude,
+                    Timestamp = point.Timestamp
+                };
+            }
         }
 
 
@@ -70,8 +80,6 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
             if (profile == null) return null;
 
-            var TransactionManagerProvider = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
-            TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
             var completedInterviewCount = this.interviewRepository
                 .Query(interviews => interviews.Count(interview =>
                     interview.ResponsibleId == userId && interview.Status == InterviewStatus.Completed));
@@ -79,7 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             var approvedByHqCount = this.interviewRepository
                 .Query(interviews => interviews.Count(interview =>
                     interview.ResponsibleId == userId && interview.Status == InterviewStatus.ApprovedByHeadquarters));
-            TransactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
 
             profile.WaitingInterviewsForApprovalCount = completedInterviewCount;
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;
