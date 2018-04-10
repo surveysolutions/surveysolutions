@@ -643,6 +643,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly ConcurrentDictionary<Guid, Guid[]> _getRosterSizeSourcesCache = new ConcurrentDictionary<Guid, Guid[]>();
 
+        public Guid[] GetAllRosterSizeQuestions() =>
+            _getRosterSizeSourcesCache.SelectMany(x => x.Value).Distinct().Where(x => !IsRosterGroup(x)).ToArray();
+
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
             return _getRosterSizeSourcesCache.GetOrAdd(entityId, id =>

@@ -119,6 +119,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
+        Guid[] GetAllRosterSizeQuestions();
+
         int GetRosterLevelForQuestion(Guid questionId);
 
         int GetRosterLevelForGroup(Guid groupId);
