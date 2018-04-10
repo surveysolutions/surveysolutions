@@ -1692,7 +1692,7 @@
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
-    <Compile Include="API\AssignmentsUpgradeApiContoller.cs" />
+    <Compile Include="API\AssignmentsUpgradeApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />

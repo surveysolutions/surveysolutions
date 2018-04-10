@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public void Configure()
         {
-            IJobDetail job = JobBuilder.Create<ExportJob>()
+            IJobDetail job = JobBuilder.Create<UpgradeAssignmentJob>()
                 .WithIdentity("assignment upgrade job", "Import")
                 .StoreDurably(true)
                 .Build();

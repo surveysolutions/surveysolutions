@@ -229,4 +229,13 @@
   <data name="UpgradeBtn" xml:space="preserve">
     <value>Обновить</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Выберите опросник задания которого следует обновить</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Обновление {{processed}} из {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Обновление заданий из {{from}} в {{to}}</value>
+  </data>
 </root>

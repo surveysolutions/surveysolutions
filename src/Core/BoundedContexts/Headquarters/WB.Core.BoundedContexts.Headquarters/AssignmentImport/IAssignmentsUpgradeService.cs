@@ -22,15 +22,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public AssignmentUpgradeProgressDetails(QuestionnaireIdentity migrateFrom, 
             QuestionnaireIdentity migrateTo, 
             int totalAssignmentsToMigrate, 
-            int assignmentsMigratedSuccessfuly,
+            int assignmentsMigratedSuccessfully,
             List<AssignmentUpgradeError> assignmentsMigratedWithError,
             AssignmentUpgradeStatus status)
         {
             MigrateFrom = migrateFrom;
             MigrateTo = migrateTo;
             TotalAssignmentsToMigrate = totalAssignmentsToMigrate;
-            AssignmentsMigratedSuccessfuly = assignmentsMigratedSuccessfuly;
-            AssignmentsMigratedWithError = assignmentsMigratedWithError;
+            AssignmentsMigratedSuccessfully = assignmentsMigratedSuccessfully;
+            AssignmentsMigratedWithError = assignmentsMigratedWithError ?? new List<AssignmentUpgradeError>();
             Status = status;
         }
 
@@ -38,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public QuestionnaireIdentity MigrateTo { get; }
 
         public int TotalAssignmentsToMigrate { get; }
-        public int AssignmentsMigratedSuccessfuly { get; }
+        public int AssignmentsMigratedSuccessfully { get; }
         public List<AssignmentUpgradeError> AssignmentsMigratedWithError { get; }
         public AssignmentUpgradeStatus Status { get; }
     }
