@@ -246,4 +246,19 @@
   <data name="Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Waiting for other upgrades to finish </value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Upgrade stopped</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Upgraded successfully: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Not upgraded: {{count}}</value>
+  </data>
 </root>
