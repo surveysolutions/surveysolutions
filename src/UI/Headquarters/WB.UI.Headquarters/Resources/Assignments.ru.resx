@@ -244,4 +244,19 @@
   <data name="UpgradeDescription" xml:space="preserve">
     <value>Существующие незавершенные задания будут обновлены и перемещены в архив.</value>
   </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Обновление остановлено</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Ожидание завершения других процессов обновления </value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Обновлено успешно: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Не обновлено: {{count}}</value>
+  </data>
 </root>

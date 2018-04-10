@@ -41,7 +41,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
         public void Upgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo, CancellationToken cancellation)
         {
             var idsToMigrate = this.transactionManager.ExecuteInPlainTransaction(() => assignments.Query(_ =>
-                _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version).Select(x => x.Id).ToList()));
+                _.Where(x => x.QuestionnaireId.Id == migrateFrom.Id && x.QuestionnaireId.Version == migrateFrom.Version && !x.Archived)
+                    .Select(x => x.Id).ToList()));
 
             var targetQuestionnaire = this.transactionManager.ExecuteInPlainTransaction(() =>this.questionnaireStorage.GetQuestionnaire(migrateTo, null));
             int migratedSuccessfully = 0;
