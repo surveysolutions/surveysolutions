@@ -4,6 +4,7 @@ import Review from "./Interview"
 import Users from "./Users"
 import Maps from "./Maps"
 import WebInterviewSetup from "./WebInterviewSetup"
+import Profile from "./Profile"
 
 export default [
     Assignments,
@@ -11,5 +12,6 @@ export default [
     Review,
     Users,
     Maps,
-    WebInterviewSetup
+    WebInterviewSetup,
+    Profile
 ]
