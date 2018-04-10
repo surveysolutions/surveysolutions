@@ -421,11 +421,56 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upgrade stopped.
+        /// </summary>
+        public static string UpgradeCancelled {
+            get {
+                return ResourceManager.GetString("UpgradeCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Existing not completed assignments are going to be upgraded from selected questionnaire and archived. .
         /// </summary>
         public static string UpgradeDescription {
             get {
                 return ResourceManager.GetString("UpgradeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for other upgrades to finish .
+        /// </summary>
+        public static string UpgradePreparation {
+            get {
+                return ResourceManager.GetString("UpgradePreparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string UpgradeProgressDone {
+            get {
+                return ResourceManager.GetString("UpgradeProgressDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgraded successfully: {{processed}}.
+        /// </summary>
+        public static string UpgradeProgressDoneCount {
+            get {
+                return ResourceManager.GetString("UpgradeProgressDoneCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not upgraded: {{count}}.
+        /// </summary>
+        public static string UpgradeProgressErrorCount {
+            get {
+                return ResourceManager.GetString("UpgradeProgressErrorCount", resourceCulture);
             }
         }
         

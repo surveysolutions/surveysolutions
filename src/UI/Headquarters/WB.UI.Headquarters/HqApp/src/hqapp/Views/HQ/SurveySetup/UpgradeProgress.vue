@@ -10,7 +10,12 @@
                 {{$t('Assignments.UpgradeProgressTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}
             </h1>
         </div>
-        <div class="row-fluid">
+        <div class="row-fluid" v-if="progress.progressDetails.status === 'Queued'">
+            <div class="col-sm-12 prefilled-data-info info-block">
+                {{$t('Assignments.UpgradePreparation')}}
+            </div>
+        </div>
+        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'InProgress'">
             <div class="col-sm-7 col-xs-12 action-block uploading-verifying active-preloading">
                 <div class="import-progress">
                     <p>
@@ -23,11 +28,32 @@
                             <span class="sr-only">{{overallProgressPercent}}%</span>
                         </div>
                     </div>
-                    <button class="btn  btn-link" type="button" @click="stop">{{$t('UploadUsers.Cancel')}}</button>
+                    <button class="btn  btn-link" type="button" @click="stop">{{$t('Assignments.Stop')}}</button>
                 </div>
             </div>
         </div>
+        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Cancelled'">
+            <div class="col-sm-12 prefilled-data-info info-block">
+                {{$t('Assignments.UpgradeCancelled')}}
+            </div>
+        </div>
+        <div class="row-fluid" v-else-if="progress.progressDetails.status === 'Done'">
+            <div class="col-sm-12 prefilled-data-info info-block">
+                {{$t('Assignments.UpgradeProgressDone')}}
 
+                <p>
+                    <ul class="list-unstyled">
+                        <li>
+                            {{$t('Assignments.UpgradeProgressDoneCount', {processed: progress.progressDetails.assignmentsMigratedSuccessfully})}} 
+                        </li>
+                        <li v-if="errorsCount">
+                            {{$t('Assignments.UpgradeProgressErrorCount', {count: errorsCount})}}
+                        </li>
+                    </ul>
+                    
+                </p>
+            </div>
+        </div>
     </HqLayout>
 
 </template>
@@ -38,6 +64,7 @@ export default {
     return {
       progress: {
         progressDetails: {
+          status: "Queued",
           assignmentsMigratedWithError: []
         }
       }
@@ -53,6 +80,9 @@ export default {
     processId() {
       return this.$route.params.processId;
     },
+    errorsCount() {
+        return this.progress.progressDetails.assignmentsMigratedWithError.length
+    },
     totalProcessedCount() {
       return (
         this.progress.progressDetails.assignmentsMigratedSuccessfully +
@@ -63,9 +93,9 @@ export default {
       return (
         Math.round(
           this.totalProcessedCount /
-            this.progress.progressDetails.totalAssignmentsToMigrate
-        ) * 100
-      );
+            this.progress.progressDetails.sw
+         * 100
+      ));
     }
   },
   methods: {
@@ -88,7 +118,7 @@ export default {
         });
     },
     stop() {
-        this.$http.post(`${this.$config.model.stopUrl}/${this.processId}`)
+      this.$http.post(`${this.$config.model.stopUrl}/${this.processId}`);
     }
   }
 };

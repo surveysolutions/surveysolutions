@@ -20,6 +20,40 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
     public class AssignmentsUpgraderTests
     {
         [Test]
+        public void should_not_upgrade_archived_assignments()
+        {
+            var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+            var migratedAssignmentId = 45;
+            var migratedAssignmentQuantity = 2;
+
+            var assignmentsStorage = new TestPlainStorage<Assignment>();
+            var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
+                quantity: migratedAssignmentQuantity,
+                questionnaireIdentity: migrateFrom);
+            assignmentToMigrate.Archive();
+
+            assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
+            var importService = Mock.Of<IInterviewImportService>(s =>
+                s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) ==
+                AssignmentVerificationResult.Error("Generic error"));
+
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage,
+                importService: importService);
+
+            // Act
+            service.Upgrade(new Guid(), migrateFrom, migrateTo, CancellationToken.None);
+
+            // Assert
+            Assignment oldAssignment = assignmentsStorage.GetById(migratedAssignmentId);
+            Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(true));
+            Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
+
+            var newAssignment = assignmentsStorage.Query(_ => _.FirstOrDefault(x => x.Id != migratedAssignmentId));
+            Assert.That(newAssignment, Is.Null);
+        }
+
+        [Test]
         public void when_questionnaire_is_not_compatible_with_new_questionnaire_Should_not_migrate_it_and_report_an_error()
         {
             var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
