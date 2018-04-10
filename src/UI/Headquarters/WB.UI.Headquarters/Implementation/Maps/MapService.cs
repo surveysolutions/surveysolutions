@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Rasters;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -73,6 +74,31 @@ namespace WB.UI.Headquarters.Implementation.Maps
                         return properties;
                     }
                     return null;
+                }
+                case ".tif":
+                {
+                    Raster raster = new Raster(pathToMap);
+                    RasterLayer newRasterLayer = new RasterLayer(raster);
+                    await newRasterLayer.LoadAsync();
+
+                        //add error display
+                    if (!newRasterLayer.SpatialReference.IsProjected)
+                            return null;
+
+                    var properties = new MapProperties()
+                    {
+                        Wkid = newRasterLayer.SpatialReference.Wkid,
+                        XMax = newRasterLayer.FullExtent.XMax,
+                        XMin = newRasterLayer.FullExtent.XMin,
+
+                        YMax = newRasterLayer.FullExtent.YMax,
+                        YMin = newRasterLayer.FullExtent.YMin,
+
+                        MaxScale = newRasterLayer.MaxScale,
+                        MinScale = newRasterLayer.MinScale
+                    };
+                        
+                    return properties;
                 }
 
                 default:
