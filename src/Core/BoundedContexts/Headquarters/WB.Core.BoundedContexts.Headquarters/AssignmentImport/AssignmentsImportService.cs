@@ -187,11 +187,41 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     })
                 });
 
-            return answersGroupedByRosters.SelectMany(x =>
-                x.rows.GroupBy(y => y.rosterVector).Select(z =>
-                    ToAssignmentToImport(z.SelectMany(i => i.answers).ToArray(), x.responsible.FirstOrDefault(),
-                        x.quantity.FirstOrDefault(), z.Key, questionnaire))).ToList();
+            var data = answersGroupedByRosters.SelectMany(x => x.rows.GroupBy(y => y.rosterVector)
+                .Select(z => ToAssignmentToImport(
+                    z.SelectMany(i => i.answers).ToArray(),
+                    x.responsible.FirstOrDefault(),
+                    x.quantity.FirstOrDefault(), z.Key, questionnaire))).ToList();
 
+            return AddRosterSizeAnswersByRosterInstances(data, questionnaire);
+        }
+
+        private List<AssignmentImportData> AddRosterSizeAnswersByRosterInstances(
+            List<AssignmentImportData> assignmentImportData, IQuestionnaire questionnaire)
+        {
+            var allAnsweredIdenities = assignmentImportData
+                .SelectMany(x => x.PreloadedData.Answers.Select(y => y.Identity)).ToArray();
+
+            var rosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions();
+
+            foreach (var rosterSizeQuestion in rosterSizeQuestions)
+            {
+                var questionType = questionnaire.GetQuestionType(rosterSizeQuestion);
+
+                switch (questionType)
+                {
+                    case QuestionType.MultyOption:
+                        break;
+                    case QuestionType.Numeric:
+                        break;
+                    case QuestionType.TextList:
+                        var allTextListIdentities = allAnsweredIdenities.Where(x => x.Id == rosterSizeQuestion);
+
+                        break;
+                }
+            }
+            
+            return assignmentImportData;
         }
 
         public AssignmentImportData GetAssignmentToImport()
@@ -277,10 +307,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var questionId = questionnaire.GetQuestionIdByVariable(value.VariableName);
             if (!questionId.HasValue) return null;
 
+            var questionType = questionnaire.GetQuestionType(questionId.Value);
+
+            var isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(questionId.Value);
+
+            if (isRosterSizeQuestion && questionType == QuestionType.Numeric ||
+                questionType == QuestionType.MultyOption) return null;
 
             var answer = new InterviewAnswer { Identity = Identity.Create(questionId.Value, rosterVector) };
-
-            var questionType = questionnaire.GetQuestionType(questionId.Value);
 
             var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId.Value);
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId.Value);
@@ -297,7 +331,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     break;
                 case QuestionType.MultyOption:
                 {
-                    var assignmentCategoricalMulti = ((AssignmentCategoricalMultiAnswer) value)?.Values
+                    var assignmentCategoricalMulti = ((AssignmentMultiAnswer) value)?.Values
                         ?.OfType<AssignmentDoubleAnswer>()
                         .Where(x => x.Answer.HasValue)
                         ?.Select(x => new {code = Convert.ToDecimal(x.VariableName), answer = Convert.ToInt32(x.Answer)})
@@ -379,7 +413,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     answer.Answer = TextAnswer.FromString(((AssignmentTextAnswer) value)?.Value);
                     break;
                 case QuestionType.TextList:
-                    //answer.Answer = TextListAnswer.FromTupleArray();
+                {
+                    // magic for text list question only
+                    if(isRosterSizeQuestion)
+                        answer.Answer = TextAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
+                    // ------------------------------------------------------------------------------
+                    else
+                    {
+                        var textListAnswers = ((AssignmentMultiAnswer) value)?.Values
+                            ?.OfType<AssignmentTextAnswer>()
+                            ?.Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                            ?.Select(x => new Tuple<decimal, string>(Convert.ToDecimal(x.VariableName), x.Value))
+                            ?.OrderBy(x => x.Item1)
+                            ?.ToArray();
+
+                        answer.Answer = TextListAnswer.FromTupleArray(textListAnswers);
+                    }
+                }
                     break;
             }
 

@@ -210,16 +210,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Values = compositeValue.Values.Select(ToGpsPropertyAnswer).ToArray()
             };
 
-        private static AssignmentCategoricalMultiAnswer ToAssignmentTextListAnswer(PreloadingCompositeValue compositeValue)
-            => new AssignmentCategoricalMultiAnswer
+        private static AssignmentMultiAnswer ToAssignmentTextListAnswer(PreloadingCompositeValue compositeValue)
+            => new AssignmentMultiAnswer
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
                 Column = compositeValue.VariableOrCodeOrPropertyName,
                 Values = compositeValue.Values.Select(ToAssignmentTextAnswer).ToArray()
             };
 
-        private static AssignmentCategoricalMultiAnswer ToAssignmentCategoricalMultiAnswer(PreloadingCompositeValue compositeValue)
-            => new AssignmentCategoricalMultiAnswer
+        private static AssignmentMultiAnswer ToAssignmentCategoricalMultiAnswer(PreloadingCompositeValue compositeValue)
+            => new AssignmentMultiAnswer
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
                 Column = compositeValue.VariableOrCodeOrPropertyName,

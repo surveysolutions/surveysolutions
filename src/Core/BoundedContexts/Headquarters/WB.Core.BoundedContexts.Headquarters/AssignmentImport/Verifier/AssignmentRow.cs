@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public double? Answer { get; set; }
     }
 
-    public class AssignmentCategoricalMultiAnswer : AssignmentAnswers
+    public class AssignmentMultiAnswer : AssignmentAnswers
     {
     }
 
