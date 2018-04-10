@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 {
                     Mock.Of<IJobExecutionContext>(y =>
                         y.JobDetail ==
-                        Mock.Of<IJobDetail>(z => z.Key == new JobKey("import users job", "Import users")))
+                        Mock.Of<IJobDetail>(z => z.Key == new JobKey("Import users job", "Import users")))
                 });
 
             var usersImportTask = new UsersImportTask(scheduler);
