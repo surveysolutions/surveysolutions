@@ -419,5 +419,23 @@ namespace WB.UI.Headquarters.Resources {
                 return ResourceManager.GetString("UpgradeDescription", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrading {{processed}} of {{totalCount}}.
+        /// </summary>
+        public static string UpgradeProgressNumbers {
+            get {
+                return ResourceManager.GetString("UpgradeProgressNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrading assignments from {{from}} to {{to}}.
+        /// </summary>
+        public static string UpgradeProgressTitle {
+            get {
+                return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
+            }
+        }
     }
 }

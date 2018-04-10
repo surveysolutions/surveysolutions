@@ -130,8 +130,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             return View(new
             {
-                ProgressUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Status" }),
-                ProgressUrl1 = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ReportDataApi", action = "QuestionInfo" })
+                ProgressUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Status" })
             });
         }
 

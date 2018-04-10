@@ -237,4 +237,10 @@
   <data name="UpgradeBtn" xml:space="preserve">
     <value>Upgrade</value>
   </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Upgrading assignments from {{from}} to {{to}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Upgrading {{processed}} of {{totalCount}}</value>
+  </data>
 </root>
