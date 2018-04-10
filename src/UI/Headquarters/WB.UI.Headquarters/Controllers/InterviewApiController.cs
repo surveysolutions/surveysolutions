@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web.Http;
-using NHibernate.Util;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -59,7 +58,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
 
-            allInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
+            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
 
             return allInterviews;
         }
@@ -90,7 +89,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);
 
-            allInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
+            foreach (var x in allInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
 
             var response = new InterviewsDataTableResponse
             {
@@ -122,7 +121,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var teamInterviews =  this.teamInterviewViewFactory.Load(input);
 
-            teamInterviews.Items.ForEach(x => x.FeaturedQuestions.ForEach(y => y.Question = y.Question.RemoveHtmlTags()));
+            foreach (var x in teamInterviews.Items) foreach (var y in x.FeaturedQuestions) y.Question = y.Question.RemoveHtmlTags();
 
             return teamInterviews;
         }

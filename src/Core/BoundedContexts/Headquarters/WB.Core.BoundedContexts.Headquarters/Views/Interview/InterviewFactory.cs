@@ -207,9 +207,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result;
         }
 
-        public InterviewGpsAnswer[] GetGpsAnswersForInterviewer(Guid interviewerId)
+        public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId)
         {
-            var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
+            var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswerWithTimeStamp>(
                 $@"with interviews as(
                     select entityid, interviewid, latitude, longitude, timestamp
                     from
@@ -231,7 +231,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         ) as q
                 ) 
                 select entityid, interviewid, latitude, longitude, timestamp
-                from   interviews;",
+                from   interviews
+                order by timestamp asc;",
                 new
                 {
                     interviewerId
