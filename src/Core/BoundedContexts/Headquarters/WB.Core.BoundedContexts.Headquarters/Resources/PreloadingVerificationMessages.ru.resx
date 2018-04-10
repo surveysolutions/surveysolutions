@@ -283,4 +283,8 @@
     <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Количество отвеченных опций не может быть больше чем максимально разрешенное количство отвеченных опций</value>
   </data>
+    <data name="HasAssignmentsToImport" xml:space="preserve">
+    <value>Пожалуйста подождите пока завершится текущий процесс импорта назначений</value>
+    <comment>Пожалуйста подождите пока завершится текущий процесс импорта назначений</comment>
+  </data>
 </root>
