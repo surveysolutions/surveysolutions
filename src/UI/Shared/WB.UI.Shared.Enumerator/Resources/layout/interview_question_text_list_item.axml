@@ -10,5 +10,7 @@
             local:MvxBind="Text Title; FocusValueChanged ValueChangeCommand; Tag ItemTag" />
 
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer"
-               local:MvxBind="HideKeyboardOnClick .;Click DeleteListItemCommand;"/>
+               local:MvxBind="HideKeyboardOnClick .;Click DeleteListItemCommand;"
+               local:srcCompat="@drawable/delete_button"
+               />
 </LinearLayout>
