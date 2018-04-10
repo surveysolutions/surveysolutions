@@ -3,26 +3,33 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Controllers;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
 {
-    [CamelCase]
-    [RoutePrefix("api/AssignmentsUpgrade")]
     [Authorize(Roles = "Administrator, Headquarter")]
-    public class AssignmentsUpgradeApiContoller : ApiController
+    [ApiNoCache]
+    public class AssignmentsUpgradeApiContoller : BaseApiController
     {
         private readonly IAssignmentsUpgradeService upgradeService;
 
-        public AssignmentsUpgradeApiContoller(IAssignmentsUpgradeService upgradeService)
+        public AssignmentsUpgradeApiContoller(ICommandService commandService, 
+            ILogger logger, 
+            IAssignmentsUpgradeService upgradeService) : base(commandService, logger)
         {
-            this.upgradeService = upgradeService ?? throw new ArgumentNullException(nameof(upgradeService));
+            this.upgradeService = upgradeService;
         }
 
+        
         [HttpGet]
-        public HttpResponseMessage Status(Guid id)
+        [CamelCase]
+        public HttpResponseMessage Status(string id)
         {
-            var assignmentUpgradeProgressDetails = this.upgradeService.Status(id);
+            AssignmentUpgradeProgressDetails assignmentUpgradeProgressDetails = this.upgradeService.Status(Guid.Parse(id));
             if (assignmentUpgradeProgressDetails != null)
             {
                 return Request.CreateResponse(HttpStatusCode.OK, assignmentUpgradeProgressDetails);
