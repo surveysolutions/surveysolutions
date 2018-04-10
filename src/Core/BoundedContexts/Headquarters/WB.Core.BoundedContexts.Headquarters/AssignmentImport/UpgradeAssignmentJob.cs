@@ -14,18 +14,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IAssignmentsUpgradeService upgradeService =
             ServiceLocator.Current.GetInstance<IAssignmentsUpgradeService>();
 
-        public Task Execute(IJobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
         {
             var processToRun = upgradeService.DequeueUpgrade();
             if (processToRun != null)
             {
-                return Task.Run(() =>
-                {
-                    ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To);
-                });
+                ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To);
             }
-
-            return Task.CompletedTask;
         }
     }
 
@@ -41,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public async Task ConfigureAsync()
+        public void Configure()
         {
             IJobDetail job = JobBuilder.Create<ExportJob>()
                 .WithIdentity("assignment upgrade job", "Import")
@@ -56,9 +51,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     .RepeatForever())
                 .Build();
 
-            await this.scheduler.ScheduleJob(job, trigger);
+            this.scheduler.ScheduleJob(job, trigger);
 
-            await this.scheduler.AddJob(job, true);
+            this.scheduler.AddJob(job, true);
         }
     }
 }
