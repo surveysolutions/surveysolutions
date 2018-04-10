@@ -52,9 +52,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentInterviewId : AssignmentValue { }
 
-    public class AssignmentAnswers: AssignmentValue
+    public class AssignmentAnswers: AssignmentAnswer
     {
-        public string VariableName { get; set; }
         public AssignmentAnswer[] Values { get; set; }
     }
 

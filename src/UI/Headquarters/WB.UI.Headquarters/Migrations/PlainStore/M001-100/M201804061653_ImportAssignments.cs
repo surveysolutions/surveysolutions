@@ -14,7 +14,8 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("interviewer").AsGuid().Nullable()
                 .WithColumn("supervisor").AsGuid().Nullable()
                 .WithColumn("quantity").AsInt32().Nullable()
-                .WithColumn("answers").AsCustom("jsonb");
+                .WithColumn("answers").AsCustom("jsonb").Nullable()
+                .WithColumn("error").AsString().Nullable();
 
             Create.Table("assignmentsimportprocess")
                 .WithColumn("id").AsInt32().PrimaryKey().Identity()
