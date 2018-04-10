@@ -687,7 +687,8 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
                 importService ?? Mock.Of<IInterviewImportService>(s => s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) == AssignmentVerificationResult.Ok()),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>());
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
+                Create.Service.PlainPostgresTransactionManager());
         }
     }
 }

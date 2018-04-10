@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Media.Animation;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
@@ -23,6 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
     {
         private readonly Dictionary<Guid, AssignmentUpgradeProgressDetails> progressReporting = new Dictionary<Guid, AssignmentUpgradeProgressDetails>();
         private readonly ConcurrentQueue<QueuedUpgrade> upgradeQueue = new ConcurrentQueue<QueuedUpgrade>();
+        private readonly Dictionary<Guid, CancellationTokenSource> cancellationTokens = new Dictionary<Guid, CancellationTokenSource>();
 
         public void EnqueueUpgrade(Guid processId, QuestionnaireIdentity migrateFrom, QuestionnaireIdentity migrateTo)
         {
@@ -56,6 +59,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
             }
 
             return null;
+        }
+
+        public CancellationToken GetCancellationToken(Guid processId)
+        {
+            var cancellationTokenSource = this.cancellationTokens.GetOrAdd(processId, () => new CancellationTokenSource());
+            return cancellationTokenSource.Token;
+        }
+
+        public void StopProcess(Guid processId)
+        {
+            if (this.cancellationTokens.ContainsKey(processId))
+            {
+                this.cancellationTokens[processId].Cancel();
+            }
         }
     }
 }
