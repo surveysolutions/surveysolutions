@@ -1693,7 +1693,6 @@ namespace WB.Tests.Abc.TestFactories
 
             if(interviewSummary != null)
                 asDynamic.InterviewSummaries = interviewSummary;
-            asDynamic.Answers = null;
 
             return result;
         }
