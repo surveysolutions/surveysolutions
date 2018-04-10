@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -15,7 +13,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -64,12 +61,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         {
             //arrange
             var scheduler = Mock.Of<IScheduler>(x =>
-                x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()) == Task.FromResult(new []
+                x.GetCurrentlyExecutingJobs() == new[]
                 {
                     Mock.Of<IJobExecutionContext>(y =>
                         y.JobDetail ==
                         Mock.Of<IJobDetail>(z => z.Key == new JobKey("import users job", "Import users")))
-                }.ToIReadOnlyCollection()));
+                });
 
             var usersImportTask = new UsersImportTask(scheduler);
 
