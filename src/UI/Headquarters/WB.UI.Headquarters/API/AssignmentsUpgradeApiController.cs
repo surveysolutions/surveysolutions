@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -84,7 +85,7 @@ namespace WB.UI.Headquarters.API
             using (var csvWriter = new CsvWriter(streamWriter))
             {
                 csvWriter.WriteHeader<AssignmentUpgradeError>();
-                csvWriter.WriteRecords(assignmentUpgradeProgressDetails.AssignmentsMigratedWithError);
+                csvWriter.WriteRecords(assignmentUpgradeProgressDetails.AssignmentsMigratedWithError.Take(1000));
                 csvWriter.Flush();
 
                 var response = this.Request.CreateResponse(HttpStatusCode.OK);
