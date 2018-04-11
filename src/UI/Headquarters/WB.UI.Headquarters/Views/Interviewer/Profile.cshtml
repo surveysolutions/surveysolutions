@@ -123,29 +123,46 @@
     </div>
 </div>
 <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="interviews-information clearfix">
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.NewInterviewsOnDevice</div>
-                        <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
-                    </div>
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.RejectedInterviewsOnDevice</div>
-                        <div class="description">@Pages.InterviewerProfile_Rejected</div>
-                    </div>
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
-                        <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
-                    </div>
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
-                        <div class="description">@Pages.InterviewerProfile_Approved</div>
-                    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="interviews-information clearfix">
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.NewInterviewsOnDevice</div>
+                    <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.RejectedInterviewsOnDevice</div>
+                    <div class="description">@Pages.InterviewerProfile_Rejected</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
+                    <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
+                    <div class="description">@Pages.InterviewerProfile_Approved</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-9 map">
+            @Html.RenderHqConfig(new
+       {
+           InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
+           Api = new
+           {
+               InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
+               InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints" }),
+               InterviewDetailsUrl = Url.Action("Review", "Interview")
+           }
+       })
+            <div id="vueApp"></div>
+        </div>
+    </div>
+</div>
     @if (Model.HasDeviceInfo)
     {
         <div class="container-fluid">
@@ -294,20 +311,6 @@
                             <li>@Pages.InterviewerProfile_LastSyncronizationDate: @Model.LastCommunicationDate.Value.ToString(@"MMM dd, hh:mm") (@Model.LastCommunicationDate.Value.Humanize(dateToCompareAgainst: DateTime.UtcNow))</li>
                         </ul>
                     }
-                </div>
-                <div class="col-sm-6 map">
-                    <h3>@Pages.InterviewerProfile_DeviceAndConnectionStatistics</h3>
-                    @Html.RenderHqConfig(new
-                    {
-                        InitialLocation = new { lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0 },
-                        Api = new
-                        {
-                            InterviewerPoints = Url.RouteUrl("Default", new { httproute = "", controller = "Interviewer", action = "InterviewerPoints" }),
-                            InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoint" }),
-                            InterviewDetailsUrl = Url.Action("Review", "Interview")
-                        }
-                    })
-                    <div id="vueApp" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
 
