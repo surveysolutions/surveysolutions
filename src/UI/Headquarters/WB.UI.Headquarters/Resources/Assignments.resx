@@ -261,4 +261,7 @@
   <data name="UpgradeProgressErrorCount" xml:space="preserve">
     <value>Not upgraded: {{count}}</value>
   </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Download list</value>
+  </data>
 </root>
