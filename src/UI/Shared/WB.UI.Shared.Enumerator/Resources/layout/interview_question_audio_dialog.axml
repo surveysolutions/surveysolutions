@@ -27,7 +27,8 @@
       <ImageButton style="@style/Interview_Question_RemoveAnswer"
                    android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
                    android:duplicateParentState="true"
-                   local:MvxBind="Click CancelCommand;" />
+                   local:MvxBind="Click CancelCommand;" 
+                   local:srcCompat="@drawable/delete_button"/>
     </TableRow>
     <TableRow>
       <RelativeLayout
