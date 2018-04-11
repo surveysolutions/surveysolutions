@@ -156,7 +156,7 @@
            {
                InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
                InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints" }),
-               InterviewDetailsUrl = Url.Action("Review", "Interview")
+               InterviewDetailsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Interview", action = "Review" })
            }
        })
             <div id="vueApp"></div>

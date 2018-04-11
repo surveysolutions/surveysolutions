@@ -50,6 +50,14 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         {
             InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
 
+            var statusMap = new Dictionary<Guid, InterviewStatus>();
+            foreach (var point in points)
+            {
+                if (statusMap.ContainsKey(point.InterviewId))
+                    continue;
+                statusMap[point.InterviewId] = point.Status;
+            }
+
             var checkinPoints = points
                 .GroupBy(x => new { x.Latitude, x.Longitude })
                 .Select(x => new InterviewerPoint
@@ -57,7 +65,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                     Latitude = x.Key.Latitude,
                     Longitude = x.Key.Longitude,
                     Timestamp = x.Min(p => p.Timestamp),
-                    InterviewId = x.Select(p => p.InterviewId).Distinct().ToList()
+                    InterviewIds = x.Select(point => point.InterviewId).Distinct().ToList(),
+                    Colors = x.Select(point => point.Status).Select(StatusToColor).Distinct().OrderBy(c => c).ToArray()
                 })
                 .OrderBy(x => x.Timestamp)
                 .ToArray();
@@ -69,6 +78,23 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             }
 
             return checkinPoints;
+        }
+
+        private string StatusToColor(InterviewStatus status)
+        {
+            switch (status)
+            {
+                case InterviewStatus.RejectedByHeadquarters:
+                case InterviewStatus.RejectedBySupervisor:
+                    return "red";
+
+                case InterviewStatus.Completed:
+                case InterviewStatus.ApprovedBySupervisor:
+                case InterviewStatus.ApprovedByHeadquarters:
+                    return "green";
+                default:
+                    return "blue";
+            }
         }
 
 

@@ -162,7 +162,8 @@ namespace WB.UI.Headquarters.Controllers
                 InterviewKey = interviewSummaryView.Key,
                 AssignmentId = interviewSummaryView.AssignmentId,
                 LastStatus = interviewSummaryView.Status.ToLocalizeString(),
-                LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate)
+                LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate),
+                InterviewId = interviewSummaryView.InterviewId
             };
             return interviewSummaryForMapPointView;
         }
