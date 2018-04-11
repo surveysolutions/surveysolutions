@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public double Longitude { get; set; }
         public Guid EntityId { get; set; }
         public DateTime? Timestamp { get; set; }
+        public InterviewStatus Status { get; set; }
 
         public override bool Equals(object obj)
         {
