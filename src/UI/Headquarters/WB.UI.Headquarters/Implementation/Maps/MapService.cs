@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
+using Esri.ArcGISRuntime.UI.Controls;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -79,26 +81,45 @@ namespace WB.UI.Headquarters.Implementation.Maps
                 {
                     Raster raster = new Raster(pathToMap);
                     RasterLayer newRasterLayer = new RasterLayer(raster);
-                    await newRasterLayer.LoadAsync();
+                    try
+                    {
+                        await newRasterLayer.LoadAsync();
 
                         //add error display
-                    if (!newRasterLayer.SpatialReference.IsProjected)
+                        if (!newRasterLayer.SpatialReference.IsProjected)
                             return null;
 
-                    var properties = new MapProperties()
+                        var properties = new MapProperties()
+                        {
+                            Wkid = newRasterLayer.SpatialReference.Wkid,
+                            XMax = newRasterLayer.FullExtent.XMax,
+                            XMin = newRasterLayer.FullExtent.XMin,
+
+                            YMax = newRasterLayer.FullExtent.YMax,
+                            YMin = newRasterLayer.FullExtent.YMin,
+
+                            MaxScale = newRasterLayer.MaxScale,
+                            MinScale = newRasterLayer.MinScale
+                        };
+
+                        return properties;
+                    }
+                    finally
                     {
-                        Wkid = newRasterLayer.SpatialReference.Wkid,
-                        XMax = newRasterLayer.FullExtent.XMax,
-                        XMin = newRasterLayer.FullExtent.XMin,
+                        //temporary soulution
+                        //waiting for fix
 
-                        YMax = newRasterLayer.FullExtent.YMax,
-                        YMin = newRasterLayer.FullExtent.YMin,
+                        FieldInfo fieldInfo =
+                            raster.GetType().GetField("_coreReference", BindingFlags.NonPublic | BindingFlags.Instance);
 
-                        MaxScale = newRasterLayer.MaxScale,
-                        MinScale = newRasterLayer.MinScale
-                    };
-                        
-                    return properties;
+                        (fieldInfo.GetValue(raster) as IDisposable ).Dispose();
+
+
+                        FieldInfo fieldInfoNewRasterLayer =
+                            newRasterLayer.GetType().GetField("_coreReference", BindingFlags.NonPublic | BindingFlags.Instance);
+
+                        (fieldInfoNewRasterLayer.GetValue(newRasterLayer) as IDisposable).Dispose();
+                    }
                 }
 
                 default:
