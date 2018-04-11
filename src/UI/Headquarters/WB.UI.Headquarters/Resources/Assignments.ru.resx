@@ -259,4 +259,7 @@
   <data name="UpgradeProgressErrorCount" xml:space="preserve">
     <value>Не обновлено: {{count}}</value>
   </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Скачать список</value>
+  </data>
 </root>
