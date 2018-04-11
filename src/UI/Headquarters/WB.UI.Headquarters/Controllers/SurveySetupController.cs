@@ -128,10 +128,17 @@ namespace WB.UI.Headquarters.Controllers
         [ActivePage(MenuItem.Questionnaires)]
         public ActionResult UpgradeProgress(Guid id)
         {
+            var progress = this.upgradeService.Status(id);
+            if (progress == null)
+            {
+                return HttpNotFound();
+            }
+
             return View(new
             {
                 ProgressUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Status" }),
                 StopUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Stop" }),
+                ExportErrorsUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "ExportErrors" }),
             });
         }
 

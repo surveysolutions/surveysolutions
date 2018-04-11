@@ -439,6 +439,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download list.
+        /// </summary>
+        public static string UpgradeDownloadFailed {
+            get {
+                return ResourceManager.GetString("UpgradeDownloadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Waiting for other upgrades to finish .
         /// </summary>
         public static string UpgradePreparation {
