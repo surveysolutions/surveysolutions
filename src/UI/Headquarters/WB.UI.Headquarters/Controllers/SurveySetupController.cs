@@ -139,6 +139,7 @@ namespace WB.UI.Headquarters.Controllers
                 ProgressUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Status" }),
                 StopUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Stop" }),
                 ExportErrorsUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "ExportErrors" }),
+                SurveySetupUrl = Url.Action("Index")
             });
         }
 
