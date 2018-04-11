@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using CsvHelper;
+using CsvHelper.Configuration;
 using Ionic.Zip;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -82,9 +83,10 @@ namespace WB.UI.Headquarters.API
 
             using (MemoryStream resultStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(resultStream))
-            using (var csvWriter = new CsvWriter(streamWriter))
+            using (var csvWriter = new CsvWriter(streamWriter, new Configuration{Delimiter = "\t"}))
             {
                 csvWriter.WriteHeader<AssignmentUpgradeError>();
+                csvWriter.NextRecord();
                 csvWriter.WriteRecords(assignmentUpgradeProgressDetails.AssignmentsMigratedWithError.Take(1000));
                 csvWriter.Flush();
 
