@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -138,22 +140,30 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter, Supervisor")]
         public InterviewSummaryForMapPointView InterviewSummaryForMapPoint(InterviewSummaryForMapPointViewModel data)
         {
-            if (data == null)
-                return null;
+            return data == null ? null : GetInterviewSummaryForMapPointView(data.InterviewId);
+        }
 
-            var interviewSummaryView = this.interviewSummaryViewFactory.Load(data.InterviewId);
+        [Authorize(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
+        public InterviewSummaryForMapPointView[] InterviewSummaryForMapPoints(InterviewSummaryForMapPointsViewModel data)
+        {
+            return data?.InterviewIds?.Select(GetInterviewSummaryForMapPointView).ToArray();
+        }
+
+        private InterviewSummaryForMapPointView GetInterviewSummaryForMapPointView(Guid interviewId)
+        {
+            var interviewSummaryView = this.interviewSummaryViewFactory.Load(interviewId);
             if (interviewSummaryView == null)
                 return null;
 
-            var interviewSummaryForMapPointView = new InterviewSummaryForMapPointView()
+            var interviewSummaryForMapPointView = new InterviewSummaryForMapPointView
             {
                 InterviewerName = interviewSummaryView.ResponsibleName,
-                SupervisorName = interviewSummaryView.TeamLeadName
+                SupervisorName = interviewSummaryView.TeamLeadName,
+                InterviewKey = interviewSummaryView.Key,
+                AssignmentId = interviewSummaryView.AssignmentId,
+                LastStatus = interviewSummaryView.Status.ToLocalizeString(),
+                LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate)
             };
-
-            interviewSummaryForMapPointView.LastStatus = interviewSummaryView.Status.ToLocalizeString();
-            interviewSummaryForMapPointView.LastUpdatedDate = AnswerUtils.AnswerToString(interviewSummaryView.UpdateDate);
-
             return interviewSummaryForMapPointView;
         }
     }

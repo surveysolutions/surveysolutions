@@ -49,18 +49,26 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
         {
             InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
-            for (var index = 0; index < points.Length; index++)
-            {
-                var point = points[index];
-                yield return new InterviewerPoint
+
+            var checkinPoints = points
+                .GroupBy(x => new { x.Latitude, x.Longitude })
+                .Select(x => new InterviewerPoint
                 {
-                    InterviewId = point.InterviewId,
-                    Index = point.Timestamp.HasValue? index + 1 : -1,
-                    Latitude = point.Latitude,
-                    Longitude = point.Longitude,
-                    Timestamp = point.Timestamp
-                };
+                    Latitude = x.Key.Latitude,
+                    Longitude = x.Key.Longitude,
+                    Timestamp = x.Min(p => p.Timestamp),
+                    InterviewId = x.Select(p => p.InterviewId).Distinct().ToList()
+                })
+                .OrderBy(x => x.Timestamp)
+                .ToArray();
+
+
+            for (var index = 0; index < checkinPoints.Length; index++)
+            {
+                checkinPoints[index].Index = index + 1;
             }
+
+            return checkinPoints;
         }
 
 

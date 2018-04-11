@@ -224,10 +224,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                 readside.interviews_view i
                             join readside.interviewsummaries s on
                                 s.interviewid = i.interviewid
+                            join readside.questionnaire_entities e on
+                                e.entityid = i.entityid
                             where
                                 i.asgps is not null
                                 and s.responsibleid = @interviewerId
                                 and i.isenabled = true
+                                and e.question_scope = 0
                         ) as q
                 ) 
                 select entityid, interviewid, latitude, longitude, timestamp
