@@ -22,7 +22,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
                     for (int columnIndex = 0; columnIndex < rowData.Length; columnIndex++)
                     {
-                        worksheet.Cells[rowIndex + 2, columnIndex + 1].Value = rowData[columnIndex]?.ToString() ?? "";
+                        var cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
+                        var value = rowData[columnIndex];
+
+                        switch (value)
+                        {
+                            case long longValue:
+                                cell.Value = longValue;
+                                break;
+                            case int intValue:
+                                cell.Value = intValue;
+                                break;
+                            case double doubleValue:
+                                cell.Value = doubleValue;
+                                break;
+                            case float floatValue:
+                                cell.Value = floatValue;
+                                break;
+                            case decimal decimalValue:
+                                cell.Value = decimalValue;
+                                break;
+                            default:
+                                cell.Value = value?.ToString() ?? "";
+                                break;
+                        }
                     }
                 }
 
