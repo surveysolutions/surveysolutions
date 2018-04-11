@@ -87,7 +87,7 @@ namespace WB.UI.Headquarters.Implementation.Maps
 
                         //add error display
                         if (!newRasterLayer.SpatialReference.IsProjected)
-                            return null;
+                            throw new ArgumentException($"Geotif is not projected. {pathToMap}");
 
                         var properties = new MapProperties()
                         {
@@ -107,17 +107,14 @@ namespace WB.UI.Headquarters.Implementation.Maps
                     finally
                     {
                         //temporary soulution
-                        //waiting for fix
-
+                        //waiting for fix from Esri
                         FieldInfo fieldInfo =
                             raster.GetType().GetField("_coreReference", BindingFlags.NonPublic | BindingFlags.Instance);
-
                         (fieldInfo.GetValue(raster) as IDisposable ).Dispose();
 
 
                         FieldInfo fieldInfoNewRasterLayer =
                             newRasterLayer.GetType().GetField("_coreReference", BindingFlags.NonPublic | BindingFlags.Instance);
-
                         (fieldInfoNewRasterLayer.GetValue(newRasterLayer) as IDisposable).Dispose();
                     }
                 }
