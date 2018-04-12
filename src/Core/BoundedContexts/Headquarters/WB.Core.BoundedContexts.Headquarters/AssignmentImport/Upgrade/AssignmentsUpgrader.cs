@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                             {
                                 oldAssignment.Archive();
 
-                                var newAssignment = new Assignment(migrateTo, oldAssignment.ResponsibleId, oldAssignment.Quantity);
+                                var newAssignment = new Assignment(migrateTo, oldAssignment.ResponsibleId, oldAssignment.InterviewsNeeded);
 
                                 newAssignment.SetAnswers(oldAssignment.Answers.ToList());
                                 var newIdentifyingData = new List<IdentifyingAnswer>();
