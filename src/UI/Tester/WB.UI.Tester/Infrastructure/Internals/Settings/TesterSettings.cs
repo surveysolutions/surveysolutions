@@ -9,7 +9,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
     internal class TesterSettings : IEnumeratorSettings
     {
-        internal const string DesignerEndpointParameterName = "DesignerEndpoint";
+        //settings could be backed up by OS to Google drive automaticaly
+        internal const string DesignerEndpointParameterName = "DesignerEndpointGen1";
         private const string HttpResponseTimeoutParameterName = "HttpResponseTimeout";
         private const string BufferSizeParameterName = "BufferSize";
         private const string AcceptUnsignedSslCertificateParameterName = "AcceptUnsignedSslCertificate";
