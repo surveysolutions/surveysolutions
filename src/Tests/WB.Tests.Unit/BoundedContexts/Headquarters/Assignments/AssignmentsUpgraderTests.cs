@@ -86,6 +86,42 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(newAssignment, Is.Null);
         }
 
+        [Test]
+        public void when_some_interviews_are_already_collected_Should_create_assignment_with_reduced_quantity()
+        {
+                var migrateFrom = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var migrateTo = Create.Entity.QuestionnaireIdentity(Id.g2, 2);
+            var migratedAssignmentId = 45;
+            var migratedAssignmentQuantity = 3;
+
+            var assignmentsStorage = new TestPlainStorage<Assignment>();
+            var assignmentToMigrate = Create.Entity.Assignment(id: migratedAssignmentId,
+                quantity: migratedAssignmentQuantity,
+                questionnaireIdentity: migrateFrom);
+            assignmentToMigrate.InterviewSummaries.Add(Create.Entity.InterviewSummary());
+
+            assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
+
+            var questionnaires = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(migrateTo.QuestionnaireId,
+                questionnaireVersion: migrateTo.Version
+                );
+
+            var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage, questionnaireStorage: questionnaires);
+
+            // Act
+            service.Upgrade(new Guid(), migrateFrom, migrateTo, CancellationToken.None);
+
+            // Assert
+            Assignment oldAssignment = assignmentsStorage.GetById(migratedAssignmentId);
+            Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.Archived)).EqualTo(true), "Existing assignment on old questionnaire should be archived");
+            Assert.That(oldAssignment, Has.Property(nameof(oldAssignment.QuestionnaireId)).EqualTo(migrateFrom));
+
+            var newAssignment = assignmentsStorage.Query(_ => _.FirstOrDefault(x => x.Id != migratedAssignmentId));
+            Assert.That(newAssignment, Is.Not.Null);
+            Assert.That(newAssignment, Has.Property(nameof(newAssignment.Quantity)).EqualTo(migratedAssignmentQuantity - 1));
+            Assert.That(newAssignment, Has.Property(nameof(newAssignment.QuestionnaireId)).EqualTo(migrateTo));
+        }
+
         [TestCase(4)]
         [TestCase(null)]
         public void when_assignment_exists_on_questionnaire_Should_migrate_it_to_new_questionnaire(int? quantity)
