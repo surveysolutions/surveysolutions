@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.API
                 });
             }
 
-            throw new HttpResponseException(HttpStatusCode.NotFound);
+            return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Not found");
         }
 
         [HttpPost]
@@ -89,9 +89,9 @@ namespace WB.UI.Headquarters.API
                 csvWriter.NextRecord();
                 csvWriter.WriteRecords(assignmentUpgradeProgressDetails.AssignmentsMigratedWithError.Take(1000));
                 csvWriter.Flush();
+                streamWriter.Flush();
 
                 var response = this.Request.CreateResponse(HttpStatusCode.OK);
-
                 resultStream.Seek(0, SeekOrigin.Begin);
                 response.Content = new ByteArrayContent(Compress(resultStream));
 
