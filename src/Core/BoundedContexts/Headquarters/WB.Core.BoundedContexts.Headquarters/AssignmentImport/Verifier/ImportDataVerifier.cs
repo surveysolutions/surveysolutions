@@ -40,9 +40,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             if(!IsQuestionnaireFile(assignmentRow.FileName, questionnaire)) yield break;
 
-            foreach (var rosterInstanceCodeOrInterviewId in assignmentRow.RosterInstanceCodes.Union(new[]{assignmentRow.InterviewIdValue}))
+            foreach (var serviceValue in assignmentRow.RosterInstanceCodes.Union(new[]
+                {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity}))
             {
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, rosterInstanceCodeOrInterviewId, questionnaire)))
+                if(serviceValue == null) continue;
+
+                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
             }
         }

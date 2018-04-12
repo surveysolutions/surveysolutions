@@ -9,6 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentRosterInstanceCode[] RosterInstanceCodes { get; set; }
         public int Row { get; set; }
         public AssignmentValue InterviewIdValue { get; set; }
+        public AssignmentQuantity Quantity { get; set; }
+        public AssignmentResponsible Responsible { get; set; }
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
     }

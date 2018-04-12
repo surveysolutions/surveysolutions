@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Models
 
         public bool WasResponsibleProvided { get; set; }
 
-        public int EntitiesCount { get; set; }
+        public long EntitiesCount { get; set; }
         public int EnumeratorsCount { get; set; }
         public int SupervisorsCount { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

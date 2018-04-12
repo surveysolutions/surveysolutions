@@ -49,10 +49,4 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
             $"[{Values.FirstOrDefault().Row}, {VariableOrCodeOrPropertyName}] " +
             $"values= {string.Join(", ", Values.Select(x => $"[{x.VariableOrCodeOrPropertyName}={x.Value}]"))}";
     }
-
-    [DebuggerDisplay("roster instance id[{Column}]={Value}")]
-    public class PreloadingRosterInstanceIdValue : PreloadingValue { }
-
-    [DebuggerDisplay("interview id={Value}")]
-    public class PreloadingInterviewIdValue : PreloadingValue { }
 }
