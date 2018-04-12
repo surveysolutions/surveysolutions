@@ -20,9 +20,9 @@
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
-                verifiedCount: ko.observable(@Model.Status.ProcessedCount),
-                totalCount: ko.observable(@Model.Status.TotalCount),
-                failedVerifications: ko.observable(@Model.Status.State.Errors.Count),
+                verifiedCount: ko.observable(@Model.Status.VerifiedAssignments),
+                totalCount: ko.observable(@Model.Status.TotalAssignments),
+                failedVerifications: ko.observable(@Model.Status.AssingmentsWithErrors),
                 elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
                 estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
                 hasErrors: ko.observable(false),
@@ -55,7 +55,7 @@
                     true,
                     function(data) {
                         self.status.isInProgress(data.isInProgress);
-                        self.status.verifiedCount(data.createdInterviewsCount);
+                        self.status.verifiedCount(data.verifiedInterviewsCount);
                         self.status.totalCount(data.totalInterviewsCount);
                         self.status.failedVerifications(data.interviewsWithError);
 
@@ -70,7 +70,7 @@
                         }
 
 
-                        if (self.status.isInProgress() === false)
+                        if (self.status.verifiedCount() === self.status.totalCount())
                         {
                             var verificationFinishedUrl =
                                 '@Url.Action("InterviewImportVerificationCompleted", "SurveySetup")';
@@ -148,7 +148,7 @@
                 </div>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalAssignments">
                             <span class="sr-only"></span>
                         </div>
                     </div>

@@ -15,6 +15,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("supervisor").AsGuid().Nullable()
                 .WithColumn("quantity").AsInt32().Nullable()
                 .WithColumn("answers").AsCustom("jsonb").Nullable()
+                .WithColumn("verified").AsBoolean().NotNullable().WithDefaultValue(false)
                 .WithColumn("error").AsString().Nullable();
 
             Create.Table("assignmentsimportprocess")
@@ -23,6 +24,7 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("filename").AsString().NotNullable()
                 .WithColumn("assignedtosupervisorscount").AsInt32().NotNullable()
                 .WithColumn("assignedtointerviewerscount").AsInt32().NotNullable()
+                .WithColumn("totalcount").AsInt32().NotNullable()
                 .WithColumn("responsible").AsString().NotNullable()
                 .WithColumn("starteddate").AsDateTime().NotNullable();
         }

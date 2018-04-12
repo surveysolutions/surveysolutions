@@ -20,26 +20,28 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             for (int i = 0; i < file.Rows.Length; i++)
             {
                 var preloadingRow = file.Rows[i];
+                
+                var preloadingValues = preloadingRow.Cells.OfType<PreloadingValue>().ToArray();
 
-                var preloadingRosterInstanceCodes = preloadingRow.Cells.OfType<PreloadingRosterInstanceIdValue>().ToArray();
-                var preloadingInterviewIdValue = preloadingRow.Cells.OfType<PreloadingInterviewIdValue>().FirstOrDefault();
-
-                var preloadingAnswers = preloadingRow.Cells
-                    .Except(preloadingRosterInstanceCodes.OfType<PreloadingValue>().Union(new[] { preloadingInterviewIdValue })).ToArray();
+                var preloadingInterviewId = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.InterviewId);
+                var preloadingResponsible = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.ResponsibleColumnName);
+                var preloadingQuantity = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.AssignmentsCountColumnName);
 
                 yield return new AssignmentRow
                 {
                     Row = i,
                     FileName = file.FileInfo.FileName,
                     QuestionnaireOrRosterName = file.FileInfo.QuestionnaireOrRosterName,
-                    InterviewIdValue = this.ToAssignmentInterviewId(preloadingInterviewIdValue),
-                    Answers = this.ToAssignmentAnswers(preloadingAnswers, questionnaire).ToArray(),
-                    RosterInstanceCodes = this.ToAssignmentRosterInstanceCodes(preloadingRosterInstanceCodes, questionnaire, file.FileInfo.QuestionnaireOrRosterName).ToArray()
+                    Answers = this.ToAssignmentAnswers(preloadingRow.Cells, questionnaire).Where(x=>/*not supported question types*/ x != null).ToArray(),
+                    RosterInstanceCodes = this.ToAssignmentRosterInstanceCodes(preloadingValues, questionnaire, file.FileInfo.QuestionnaireOrRosterName).ToArray(),
+                    Responsible = preloadingResponsible == null ? null : ToAssignmentResponsible(preloadingResponsible),
+                    Quantity = preloadingQuantity == null ? null : ToAssignmentQuantity(preloadingQuantity),
+                    InterviewIdValue = preloadingInterviewId == null ? null : this.ToAssignmentInterviewId(preloadingInterviewId),
                 };
             }
         }
 
-        private AssignmentValue ToAssignmentInterviewId(PreloadingInterviewIdValue value)
+        private AssignmentInterviewId ToAssignmentInterviewId(PreloadingValue value)
             => new AssignmentInterviewId
             {
                 Column = value.Column,
@@ -47,8 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             };
 
         private IEnumerable<AssignmentRosterInstanceCode> ToAssignmentRosterInstanceCodes(
-            PreloadingRosterInstanceIdValue[] preloadingRosterInstanceCodes, IQuestionnaire questionnaire,
-            string questionnaireOrRosterName)
+            PreloadingValue[] preloadingValues, IQuestionnaire questionnaire, string questionnaireOrRosterName)
         {
             if (IsQuestionnaireFile(questionnaireOrRosterName, questionnaire)) yield break;
 
@@ -63,8 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterIds[i]).ToLower());
                 var oldName = $"{ServiceColumns.ParentId}{i + 1}".ToLower();
 
-                var code = preloadingRosterInstanceCodes.FirstOrDefault(x =>
-                    x.VariableOrCodeOrPropertyName == newName || x.VariableOrCodeOrPropertyName == oldName);
+                var code = preloadingValues.FirstOrDefault(x =>
+                    new[] {newName, oldName}.Contains(x.Column.ToLower()));
 
                 if (code != null)
                     yield return ToAssignmentRosterInstanceCode(code);
@@ -84,18 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         yield return ToAssignmentAnswers(compositeCell, questionnaire);
                         break;
                     case PreloadingValue regularCell:
-                        switch (cell.VariableOrCodeOrPropertyName)
-                        {
-                            case ServiceColumns.ResponsibleColumnName:
-                                yield return this.ToAssignmentResponsible(regularCell);
-                                break;
-                            case ServiceColumns.AssignmentsCountColumnName:
-                                yield return ToAssignmentQuantity(regularCell);
-                                break;
-                            default:
-                                yield return ToAssignmentAnswer(regularCell, questionnaire);
-                                break;
-                        }
+                        yield return ToAssignmentAnswer(regularCell, questionnaire);
                         break;
                 }
             }
@@ -124,11 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            return new AssignmentAnswers
-            {
-                VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToAssignmentAnswer).ToArray(),
-            };
+            return null;
         }
 
         private static AssignmentAnswer ToGpsPropertyAnswer(PreloadingValue answer)
@@ -152,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 $"Supported properties: {string.Join(", ", GeoPosition.PropertyNames)}");
         }
 
-        private AssignmentRosterInstanceCode ToAssignmentRosterInstanceCode(PreloadingRosterInstanceIdValue answer)
+        private AssignmentRosterInstanceCode ToAssignmentRosterInstanceCode(PreloadingValue answer)
         {
             int? intValue = null;
             if (int.TryParse(answer.Value, NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat,
@@ -191,16 +177,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 }
             }
 
-            return ToAssignmentAnswer(answer);
+            return null;
         }
-
-        private static AssignmentAnswer ToAssignmentAnswer(PreloadingValue answer)
-            => new AssignmentAnswer
-            {
-                Column = answer.Column,
-                Value = answer.Value,
-                VariableName = answer.Column
-            };
 
         private static AssignmentGpsAnswer ToAssignmentGpsAnswer(PreloadingCompositeValue compositeValue)
             => new AssignmentGpsAnswer

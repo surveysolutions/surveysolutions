@@ -1,46 +1,32 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.GenericSubdomains.Portable;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
     internal class AssignmentsImportJob : IJob
     {
+        private IPlainTransactionManager transactionManager =>
+            ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>()
             .GetFor<AssignmentsImportJob>();
         
         private IAssignmentsImportService importAssignmentsService => ServiceLocator.Current
             .GetInstance<IAssignmentsImportService>();
-
-        private IInterviewImportService interviewImportService => ServiceLocator.Current
-            .GetInstance<IInterviewImportService>();
-
-        private IPlainStorageAccessor<Assignment> assignmentsStorage => ServiceLocator.Current
-            .GetInstance<IPlainStorageAccessor<Assignment>>();
-
-        private IInterviewCreatorFromAssignment interviewCreatorFromAssignment => ServiceLocator.Current
-            .GetInstance<IInterviewCreatorFromAssignment>();
-
-        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current
-            .GetInstance<IQuestionnaireStorage>();
-
+        
         private T PlainTransaction<T>(Func<T> func) 
-            => ServiceLocator.Current.GetInstance<IPlainTransactionManager>().ExecuteInPlainTransaction(func);
-
+            => transactionManager.ExecuteInPlainTransaction(func);
+        
         private void PlainTransaction(Action action)
-            => ServiceLocator.Current.GetInstance<IPlainTransactionManager>().ExecuteInPlainTransaction(action);
+            => transactionManager.ExecuteInPlainTransaction(action);
 
         private void QueryTransaction(Action action)
             => ServiceLocator.Current.GetInstance<ITransactionManager>().ExecuteInQueryTransaction(action);
@@ -56,48 +42,29 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 var importProcess = this.PlainTransaction(() => this.importAssignmentsService.GetImportStatus());
 
-                if (importProcess.IsInProgress && importProcess.TotalAssignmentsWithResponsible == 0)
+                if (importProcess == null ||
+                    importProcess.AssignedToInterviewersCount + importProcess.AssignedToSupervisorsCount == 0)
                     return;
 
-                var questionnaire = this.PlainTransaction(() => questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null));
-
-                AssignmentImportData assignmentToImport = null;
+                if (importProcess.VerifiedAssignments != importProcess.TotalAssignments)
+                    return;
+                
+                AssignmentToImport assignmentToImport = null;
                 do
                 {
-                    assignmentToImport = this.PlainTransaction(() => this.importAssignmentsService.GetAssignmentToImport());
+                    this.transactionManager.BeginTransaction();
 
-                    if (assignmentToImport == null) break;
+                    assignmentToImport = this.importAssignmentsService.GetAssignmentToImport();
+                    if (assignmentToImport == null) return;
 
-                    var responsibleId = assignmentToImport.InterviewerId ?? assignmentToImport.SupervisorId.Value;
-                    var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
+                    this.QueryTransaction(() => this.importAssignmentsService.ImportAssignment(assignmentToImport,
+                        importProcess.QuestionnaireIdentity));
 
-                    var verificationResult = interviewImportService.VerifyAssignment(
-                        assignmentToImport.PreloadedData.Answers.GroupedByLevels(), questionnaire);
-
-                    if (!verificationResult.Status)
-                    {
-                        //return Content(HttpStatusCode.Forbidden, verificationResult.ErrorMessage);
-                        continue;
-                    }
-
-                    var assignment = new Assignment(importProcess.QuestionnaireIdentity, responsibleId, assignmentToImport.Quantity);
-                    var identifyingAnswers = assignmentToImport.PreloadedData.Answers
-                        .Where(x => identifyingQuestionIds.Contains(x.Identity.Id)).Select(a =>
-                            IdentifyingAnswer.Create(assignment, questionnaire, a.Answer.ToString(), a.Identity))
-                        .ToList();
-
-                    assignment.SetIdentifyingData(identifyingAnswers);
-                    assignment.SetAnswers(assignment.Answers);
-
-                    this.PlainTransaction(() => this.assignmentsStorage.Store(assignment, Guid.NewGuid()));
-
-                    this.PlainTransaction(() => this.QueryTransaction(() =>
-                    this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsibleId,
-                        importProcess.QuestionnaireIdentity, assignment.Id, assignmentToImport.PreloadedData.Answers)));
-
-                    this.PlainTransaction(() => this.importAssignmentsService.RemoveImportedAssignment(assignmentToImport));
-
+                    this.transactionManager.CommitTransaction();
+                    
                 } while (assignmentToImport != null);
+
+                this.PlainTransaction(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
             }
             catch (Exception ex)
             {
