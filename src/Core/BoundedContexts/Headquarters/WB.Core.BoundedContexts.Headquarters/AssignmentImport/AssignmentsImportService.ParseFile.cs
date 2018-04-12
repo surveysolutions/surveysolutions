@@ -36,36 +36,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 if (!cells.ContainsKey(variableName))
                     cells[variableName] = new List<PreloadingValue>();
 
-                if (columnName == ServiceColumns.InterviewId)
-                {
-                    cells[variableName].Add(new PreloadingInterviewIdValue
-                    {
-                        VariableOrCodeOrPropertyName = variableName,
-                        Row = rowIndex,
-                        Column = kv.Key,
-                        Value = value
-                    });
-                    continue;
-                }
-
-                var isRosterInstanceIdValue = string.Format(ServiceColumns.IdSuffixFormat, variableName) == columnName;
-                var isOldRosterInstanceIdValue = columnName.StartsWith(ServiceColumns.ParentId.ToLower());
-                if (isRosterInstanceIdValue || isOldRosterInstanceIdValue)
-                {
-                    cells[variableName].Add(new PreloadingRosterInstanceIdValue
-                    {
-                        VariableOrCodeOrPropertyName = variableName,
-                        Row = rowIndex,
-                        Column = kv.Key,
-                        Value = value
-                    });
-                    continue;
-                }
-
                 cells[variableName].Add(new PreloadingValue
                 {
-                    VariableOrCodeOrPropertyName =
-                        compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName,
+                    VariableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName,
                     Row = rowIndex,
                     Column = kv.Key,
                     Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)

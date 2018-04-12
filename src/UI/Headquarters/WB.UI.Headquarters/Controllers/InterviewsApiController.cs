@@ -1,18 +1,18 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.Controllers
@@ -21,52 +21,74 @@ namespace WB.UI.Headquarters.Controllers
     [ApiNoCache]
     public class InterviewsApiController : BaseApiController
     {
-        private readonly IInterviewImportService interviewImportService;
         private readonly IArchiveUtils archiver;
+        private readonly IAssignmentsImportService assignmentsImportService;
+        private readonly AssignmentsImportTask assignmentsImportTask;
+        private readonly AssignmentsVerificationTask assignmentsVerificationTask;
+        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public InterviewsApiController(
             ICommandService commandService, 
-            ILogger logger, 
-            IInterviewImportService interviewImportService,
-            IArchiveUtils archiver)
+            ILogger logger,
+            IArchiveUtils archiver,
+            IAssignmentsImportService assignmentsImportService,
+            AssignmentsImportTask assignmentsImportTask,
+            AssignmentsVerificationTask assignmentsVerificationTask,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
             : base(commandService, logger)
         {
-            this.interviewImportService = interviewImportService;
             this.archiver = archiver;
+            this.assignmentsImportService = assignmentsImportService;
+            this.assignmentsImportTask = assignmentsImportTask;
+            this.assignmentsVerificationTask = assignmentsVerificationTask;
+            this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
         [HttpGet]
         [CamelCase]
         public InterviewImportStatusApiView GetImportInterviewsStatus()
         {
-            var status = this.interviewImportService.Status;
+            var status = this.assignmentsImportService.GetImportStatus();
+            if (status == null) return null;
+
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
+
             return new InterviewImportStatusApiView
             {
-                Stage = status.Stage.ToString(),
-                QuestionnaireId = status.QuestionnaireId.QuestionnaireId,
-                QuestionnaireVersion = status.QuestionnaireId.Version,
-                QuestionnaireTitle = status.QuestionnaireTitle,
+                Stage = GetStage(),
+                QuestionnaireId = status.QuestionnaireIdentity.QuestionnaireId,
+                QuestionnaireVersion = status.QuestionnaireIdentity.Version,
+                QuestionnaireTitle = questionnaireInfo?.Title,
                 IsInProgress = status.IsInProgress,
-                TotalInterviewsCount = status.TotalCount,
-                CreatedInterviewsCount = status.ProcessedCount,
-                EstimatedTime = TimeSpan.FromMilliseconds(status.EstimatedTime).ToString(@"dd\.hh\:mm\:ss"),
-                ElapsedTime = TimeSpan.FromMilliseconds(status.ElapsedTime).ToString(@"dd\.hh\:mm\:ss"),
-                HasErrors = status.State.Errors.Any() || status.VerificationState.Errors.Any(),
-                InterviewsWithError = status.State.Errors.Count + status.VerificationState.Errors.Count
+                TotalInterviewsCount = status.TotalAssignments,
+                CreatedInterviewsCount = status.TotalAssignments - status.AssignmentsInQueue,
+                VerifiedInterviewsCount = status.VerifiedAssignments,
+                EstimatedTime = status.EstimatedTime,
+                ElapsedTime = status.ElapsedTime,
+                HasErrors = status.AssingmentsWithErrors > 0,
+                InterviewsWithError = status.AssingmentsWithErrors
             };
         }
-        
+
+        private string GetStage()
+        {
+            if (this.assignmentsVerificationTask.IsJobRunning())
+                return AssignmentImportStage.AssignmentDataVerification.ToString();
+            if (this.assignmentsImportTask.IsJobRunning())
+                return AssignmentImportStage.AssignmentCreation.ToString();
+
+            return string.Empty;
+        }
+
         [HttpGet]
         [ObserverNotAllowedApi]
         public HttpResponseMessage GetInvalidInterviewsByLastImport()
         {
-            var interviewImportState = this.interviewImportService.Status.State;
-
             var sb = new StringBuilder();
             
-            foreach (var interviewImportError in interviewImportState.Errors)
+            foreach (var interviewImportError in this.assignmentsImportService.GetImportAssignmentsErrors())
             {
-                sb.AppendLine(interviewImportError.ErrorMessage);
+                sb.AppendLine(interviewImportError);
             }
 
             var invalidInterviewsFileName = "invalid-interviews";
@@ -91,9 +113,10 @@ namespace WB.UI.Headquarters.Controllers
             public long QuestionnaireVersion { get; set; }
             public string QuestionnaireTitle { get; set; }
             public bool IsInProgress { get; set; }
-            public int TotalInterviewsCount { get; set; }
-            public int CreatedInterviewsCount { get; set; }
-            public int InterviewsWithError { get; set; }
+            public long TotalInterviewsCount { get; set; }
+            public long CreatedInterviewsCount { get; set; }
+            public long VerifiedInterviewsCount { get; set; }
+            public long InterviewsWithError { get; set; }
             public string ElapsedTime { get; set; }
             public string EstimatedTime { get; set; }
             public bool HasErrors { get; set; }
