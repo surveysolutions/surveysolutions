@@ -28,17 +28,14 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                     })
             });
 
-            interview = SetupInterview(questionnaireDocument: questionnaireDocument);
+            var interview = SetupInterview(questionnaireDocument: questionnaireDocument);
 
-            exception = Assert.Throws<InterviewException>(() => interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
+            var exception = Assert.Throws<InterviewException>(() => interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
                 answerTime: DateTime.Now, rosterVector: new decimal[0], selectedRosterVector: answer));
 
-            new[] { "answer", "linked", "options" }.Should().OnlyContain(
-                keyword => exception.Message.ToLower().TrimEnd('.').Contains(keyword));
+            Assert.That(exception, Has.Property(nameof(exception.Message)).EqualTo("Answer on linked categorical question cannot be saved. Specified option is absent"));
         }
 
-        private static Exception exception;
-        private static Interview interview;
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid linkedToQuestionId = Guid.Parse("11111111111111111111111111111111");
         private static decimal[] answer = {1};
