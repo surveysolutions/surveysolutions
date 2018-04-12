@@ -43,7 +43,7 @@ namespace WB.UI.Interviewer.Infrastructure
             var fileTarget = new FileTarget("logFile")
             {
                 FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=tostring,Data}|${stacktrace}}]"
+                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
             };
 
             var config = new LoggingConfiguration();
