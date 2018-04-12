@@ -618,9 +618,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.QuestionId, this.QuestionId.ToString()},
                         {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinked.Options)},
-                        {ExceptionKeys.ProvidedAnswerValue, option}
+                        {ExceptionKeys.ProvidedAnswerValue, option.ToString()}
                     }
                 };
 
