@@ -13,8 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             this.Table("assignmentsimportprocess");
             this.Id(x => x.Id, Idmap => Idmap.Generator(Generators.Identity));
             this.Property(x => x.FileName);
-            this.Property(x => x.AssignedToInterviewersCount);
-            this.Property(x => x.AssignedToSupervisorsCount);
             this.Property(x => x.TotalCount);
             this.Property(x => x.Responsible);
             this.Property(x => x.StartedDate);

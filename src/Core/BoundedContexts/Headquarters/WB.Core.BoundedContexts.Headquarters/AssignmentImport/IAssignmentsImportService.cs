@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
-using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -24,7 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         AssignmentToImport GetAssignmentToImport();
         AssignmentToImport GetAssignmentToVerify();
-        void RemoveImportedAssignment(int assignmentId);
         AssignmentsImportStatus GetImportStatus();
         void RemoveAllAssignmentsToImport();
         void SetResponsibleToAllImportedAssignments(Guid responsibleId);

@@ -119,7 +119,7 @@
                         <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasResponsibleProvided) { <text>enable: isResponsibleSelected</text> }">
                              @BatchUpload.CreateAssignments
                         </button>
-                        <a href="@Url.Action("BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
+                        <a href="@Url.Action("CancelImportAssignments", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
                             @BatchUpload.BackToImport
                         </a>
                     </div>

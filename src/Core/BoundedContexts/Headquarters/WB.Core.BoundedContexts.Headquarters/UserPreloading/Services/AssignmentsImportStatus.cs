@@ -5,7 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     public class AssignmentsImportStatus
     {
-        public bool IsInProgress { get; set; }
         public long AssignmentsInQueue { get; set; }
         public long VerifiedAssignments { get; set; }
         public long AssingmentsWithErrors { get; set; }
@@ -17,8 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public DateTime StartedDate { get; set; }
         public int AssignedToInterviewersCount { get; set; }
         public int AssignedToSupervisorsCount { get; set; }
-        public string ElapsedTime { get; set; }
-        public string EstimatedTime { get; set; }
         public long ProcessedCount { get; set; }
     }
 }

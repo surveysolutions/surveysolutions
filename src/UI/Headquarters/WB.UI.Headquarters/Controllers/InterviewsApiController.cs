@@ -55,29 +55,14 @@ namespace WB.UI.Headquarters.Controllers
 
             return new InterviewImportStatusApiView
             {
-                Stage = GetStage(),
                 QuestionnaireId = status.QuestionnaireIdentity.QuestionnaireId,
                 QuestionnaireVersion = status.QuestionnaireIdentity.Version,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                IsInProgress = status.IsInProgress,
                 TotalInterviewsCount = status.TotalAssignments,
                 CreatedInterviewsCount = status.TotalAssignments - status.AssignmentsInQueue,
                 VerifiedInterviewsCount = status.VerifiedAssignments,
-                EstimatedTime = status.EstimatedTime,
-                ElapsedTime = status.ElapsedTime,
-                HasErrors = status.AssingmentsWithErrors > 0,
                 InterviewsWithError = status.AssingmentsWithErrors
             };
-        }
-
-        private string GetStage()
-        {
-            if (this.assignmentsVerificationTask.IsJobRunning())
-                return AssignmentImportStage.AssignmentDataVerification.ToString();
-            if (this.assignmentsImportTask.IsJobRunning())
-                return AssignmentImportStage.AssignmentCreation.ToString();
-
-            return string.Empty;
         }
 
         [HttpGet]
@@ -117,10 +102,6 @@ namespace WB.UI.Headquarters.Controllers
             public long CreatedInterviewsCount { get; set; }
             public long VerifiedInterviewsCount { get; set; }
             public long InterviewsWithError { get; set; }
-            public string ElapsedTime { get; set; }
-            public string EstimatedTime { get; set; }
-            public bool HasErrors { get; set; }
-            public string Stage { get; set; }
         }
     }
 }
