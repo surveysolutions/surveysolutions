@@ -87,15 +87,16 @@
                             </div>
                             
                         </div>
-                        <div class="col-sm-8">
-                            <div class="form-group">
-                                <input class="checkbox-filter single-checkbox" id="ckbUpgradeAssignments" type="checkbox" value="True" name="ShouldMigrateAssignments">
-                                <label for="ckbUpgradeAssignments">
-                                    <span class="tick"></span> @QuestionnaireImport.UpgradeAssignments
-                                </label>
-                            </div>
-                        </div>
                         @if (Model.QuestionnairesToUpgradeFrom.Count > 0) {
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <input class="checkbox-filter single-checkbox" id="ckbUpgradeAssignments" type="checkbox" value="True" name="ShouldMigrateAssignments">
+                                    <label for="ckbUpgradeAssignments">
+                                        <span class="tick"></span> @QuestionnaireImport.UpgradeAssignments
+                                    </label>
+                                </div>
+                            </div>
+                       
                             <div class="col-sm-8" id="templateSelectorBlock" style="display: none">
                                 <div class="form-group">
                                     <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker" name="migrateFrom">
