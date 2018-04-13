@@ -78,6 +78,8 @@
                 $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
                 $scope.activeQuestion.validationConditions = question.validationConditions;
                 $scope.activeQuestion.isTimestamp = question.isTimestamp;
+                $scope.activeQuestion.geometryTypeOptions = question.geometryTypeOptions;
+                $scope.activeQuestion.geometryType = question.geometryType;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -429,6 +431,13 @@
                 }
                 markFormAsChanged();
             };
+
+            $scope.changeGeometryType = function (geometry) {
+                $scope.activeQuestion.geometryType = geometry.value;
+                
+                markFormAsChanged();
+            };
+
 
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
