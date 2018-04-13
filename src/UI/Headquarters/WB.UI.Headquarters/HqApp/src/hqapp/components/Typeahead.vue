@@ -23,7 +23,10 @@
                     @keyup.down="onSearchBoxDownKey" 
                     v-model="searchTerm" />
                 </li>
-                <li v-for="option in options"
+                <li v-if="forceLoadingState">
+                    <a>{{ $t("Common.Loading") }}</a>
+                </li>
+                <li v-if="!forceLoadingState" v-for="option in options"
                     :key="option.item.key">
                     <a 
                        :class="[option.item.iconClass]"
@@ -40,7 +43,7 @@
                 </li>
             </ul>
         </div>
-        <button v-if="value != null"
+        <button v-if="value != null && !noClear"
                 class="btn btn-link btn-clear"
                 @click="clear">
             <span></span>
@@ -60,8 +63,13 @@ export default {
     value: Object,
     placeholder: String,
     ajaxParams: Object,
+    forceLoadingState: {
+        type: Boolean,
+        default: false
+    },
     values: Array,
     noSearch: Boolean,
+    noClear: Boolean,
     fuzzy: {
         type: Boolean,
         default: false
@@ -70,9 +78,9 @@ export default {
 
   data() {
     return {
-      options: [],
-      isLoading: false,
-            searchTerm: ''
+        options: [],
+        isLoading: false,
+        searchTerm: ''
     };
   },
 
@@ -86,26 +94,26 @@ export default {
   },
 
   mounted() {
-        const jqEl = $(this.$el)
-        const focusTo = jqEl.find(`#${this.inputId}`)
+    const jqEl = $(this.$el)
+    const focusTo = jqEl.find(`#${this.inputId}`)
 
-        jqEl.on('shown.bs.dropdown', () => {
-            focusTo.focus()
-            this.fetchOptions(this.searchTerm)
-        })
+    jqEl.on('shown.bs.dropdown', () => {
+        focusTo.focus()
+        this.fetchOptions(this.searchTerm)
+    })
 
-        jqEl.on('hidden.bs.dropdown', () => {
-            this.searchTerm = ""
-        })
+    jqEl.on('hidden.bs.dropdown', () => {
+        this.searchTerm = ""
+    })
 
-        this.fuseOptions = {
-            shouldSort: true,
-            includeMatches: true,
-            threshold: this.fuzzy ? 0.35 : 0,
-            location: 0, distance: 100,
-            maxPatternLength: 32, minMatchCharLength: 1,
-            keys: ["value"]        
-        };
+    this.fuseOptions = {
+        shouldSort: true,
+        includeMatches: true,
+        threshold: this.fuzzy ? 0.35 : 0,
+        location: 0, distance: 100,
+        maxPatternLength: 32, minMatchCharLength: 1,
+        keys: ["value"]        
+    };
   },
 
   methods: {
@@ -157,8 +165,8 @@ export default {
     },
 
     clear() {
-            this.$emit('selected', null, this.controlId);
-      this.searchTerm = "";
+        this.$emit('selected', null, this.controlId);
+        this.searchTerm = "";
     },
     selectOption(value) {
             this.$emit('selected', value, this.controlId);

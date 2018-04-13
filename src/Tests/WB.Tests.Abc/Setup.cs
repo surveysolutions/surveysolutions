@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using AutoFixture;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -279,6 +280,11 @@ namespace WB.Tests.Abc
             var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
 
             return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+        }
+
+        public static Mock<T> GetMock<T>(this IFixture fixture) where T : class
+        {
+            return fixture.Freeze<Mock<T>>();
         }
     }
 }

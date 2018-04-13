@@ -6,6 +6,8 @@ namespace WB.UI.Headquarters.Models.Api
 {
     public class DataTableRequest
     {
+        public bool EmptyOnError { get; set; } = false;
+
         public class SortOrder
         {
             public int Column { get; set; }
