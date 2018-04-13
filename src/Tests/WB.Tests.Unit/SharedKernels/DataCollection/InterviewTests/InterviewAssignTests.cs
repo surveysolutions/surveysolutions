@@ -319,7 +319,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null, assignTime: DateTime.UtcNow));
 
             // assert
-            Assert.Throws(Is.TypeOf<InterviewException>().And.Message.EqualTo($"Interview has assigned on this supervisor already. InterviewId: {interview.EventSourceId.FormatGuid()}, SupervisorId: {supervisorId}"), AssignResponsible);
+            Assert.Throws(Is.TypeOf<InterviewException>().And.Message.EqualTo($"Interview has assigned on this supervisor already"), AssignResponsible);
         }
 
         [Test]
