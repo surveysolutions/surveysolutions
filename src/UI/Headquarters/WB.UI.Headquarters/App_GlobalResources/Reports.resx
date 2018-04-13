@@ -255,4 +255,82 @@
   <data name="LastUpdatedDate" xml:space="preserve">
     <value>Updated on</value>
   </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Updated {0}</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Update in progress</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Update now</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Select question</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Condition Question</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>By Teams</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>By Team Members</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Pivot table</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Question text</value>
+  </data>
+  <data name="AreNotRealtime" xml:space="preserve">
+    <value>Reports are not realtime</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Filter by numeric value</value>
+  </data>
+  <data name="CannotPivotOverThisVariable" xml:space="preserve">
+    <value>Cannot build pivot table over this question</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Percentile 05</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Percentile 50</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Percentile 95</value>
+  </data>
+  <data name="SelectConditionalQuestionToPivot" xml:space="preserve">
+    <value>Select conditional question to enable pivot table</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Select condition question</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Sum</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>View options</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Question Label</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Median</value>
+  </data>
 </root>

@@ -138,6 +138,10 @@ namespace WB.Tests.Abc.Storage
 
         public void Store(T view, TKey id)
         {
+            if (this.incrementFunc != null)
+            {
+                this.storage[this.incrementFunc(id)] = view;
+            } else 
             this.storage[id] = view;
         }
 

@@ -556,7 +556,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no any information about geolocation points..
+        ///   Looks up a localized string similar to This questionnaire contains no GPS coordinates to show on the map for selected variable..
         /// </summary>
         public static string GlobalSettings_NotifyNoMarkersDialogText {
             get {

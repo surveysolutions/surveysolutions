@@ -36,6 +36,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                     }
                 }
 
+                // setting table totals if exists
+                if (report.Totals != null)
+                {
+                    var rowIndex = 1 /* header */ + data.Length /* data rows count*/ + 1 /* total row */; 
+                    for (int columnIndex = 0; columnIndex < report.Totals.Length; columnIndex++)
+                    {
+                        var cell = worksheet.Cells[rowIndex, columnIndex + 1];
+                        cell.Style.Font.Bold = true;
+                        var value = report.Totals[columnIndex];
+
+                        SetCellValue(value, cell);
+                    }
+                }
+
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
                 for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)

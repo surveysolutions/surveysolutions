@@ -1,6 +1,5 @@
 ﻿using Ncqrs.Eventing.Storage;
 using System;
-using System.Configuration;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -38,7 +37,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Providers;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -49,7 +47,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
@@ -72,6 +69,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.BoundedContexts.Headquarters.Views.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -175,6 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISpeedReportFactory, SpeedReportFactory>();
             registry.Bind<IDeviceInterviewersReport, DeviceInterviewersReport>();
             registry.Bind<ISampleUploadViewFactory, SampleUploadViewFactory>();
+            registry.Bind<ISurveyStatisticsReport, SurveyStatisticsReport>();
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
@@ -186,7 +186,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireBrowseViewFactory, QuestionnaireBrowseViewFactory>();
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
-            
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
@@ -216,6 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
+            registry.RegisterDenormalizer<ReportTableDataDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -291,6 +291,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindAsSingleton<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
+            registry.BindAsSingleton<IRefreshReportsTask, BackgroundRefreshReportsTask>();
+            registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
         }
 
         public Task Init(IServiceLocator serviceLocator)

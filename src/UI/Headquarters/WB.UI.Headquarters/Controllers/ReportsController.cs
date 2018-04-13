@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Resources;
-using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
@@ -14,7 +12,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -23,8 +20,6 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.ComponentModels;
 using WB.UI.Headquarters.Models.Reports;
 using WB.UI.Headquarters.Resources;
-using WB.UI.Headquarters.Utils;
-using CommonRes = Resources.Common;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -147,6 +142,13 @@ namespace WB.UI.Headquarters.Controllers
                 AssignmentsBaseUrl = Url.Action("Index", "Assignments"),
                 Questionnaires = this.GetAllQuestionnaires()
             });
+        }
+
+        [ActivePage(MenuItem.SurveyStatistics)]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
+        public ActionResult SurveyStatistics()
+        {
+            return this.View("SurveyStatistics");
         }
 
         private ComboboxOptionModel[] GetAllQuestionnaires()
