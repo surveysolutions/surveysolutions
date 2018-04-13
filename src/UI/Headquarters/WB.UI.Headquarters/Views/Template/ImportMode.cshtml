@@ -99,8 +99,7 @@
                             <div class="col-sm-8" id="templateSelectorBlock" style="display: none">
                                 <div class="form-group">
                                     <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker" name="migrateFrom">
-                                        @foreach (var item in Model.QuestionnairesToUpgradeFrom)
-                                        {
+                                        @foreach (var item in Model.QuestionnairesToUpgradeFrom) {
                                             <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>
                                                 @Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)
                                             </option>
