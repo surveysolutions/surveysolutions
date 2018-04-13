@@ -38,7 +38,8 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
 <# 
 			} 
 #>
-			<#=Model.ReturnType#> __result = <#=Model.Expression#>;
+			<#=Model.ReturnType#> __result = <#=Model.Expression#>
+			;
 			return __result <#=Model.UseObjectBoxing ? "as object": ""#>;
 		}
 	}
