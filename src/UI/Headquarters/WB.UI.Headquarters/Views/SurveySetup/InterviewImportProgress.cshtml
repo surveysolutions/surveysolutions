@@ -22,8 +22,6 @@
                 createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
                 totalInterviewsCount: ko.observable(@Model.Status.TotalAssignments),
                 interviewsWithError: ko.observable(@Model.Status.AssingmentsWithErrors),
-                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
-                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
                 isInProgress: ko.observable(true),
                 hasErrors: ko.observable(false)
             };
@@ -46,20 +44,26 @@
             }
 
             self.updateStatusByInterviewsImport = function() {
-                ajax.sendRequest($importInterviewsStatusUrl, 'get', {}, true,
+                ajax.sendRequest($importInterviewsStatusUrl,
+                    'get',
+                    {},
+                    true,
                     function(data) {
-                        self.status.isInProgress(data.isInProgress);
-                        self.status.createdInterviewsCount(data.createdInterviewsCount);
-                        self.status.totalInterviewsCount(data.totalInterviewsCount);
-                        self.status.interviewsWithError(data.interviewsWithError);
+                        if (data == null) {
+                            self.status.isInProgress(false);
+                            self.status.createdInterviewsCount(self.status.totalInterviewsCount());
+                        } else {
+                            self.status.isInProgress(data.createdInterviewsCount !== data.totalInterviewsCount);
+                            self.status.createdInterviewsCount(data.createdInterviewsCount);
+                            self.status.totalInterviewsCount(data.totalInterviewsCount);
+                            self.status.interviewsWithError(data.interviewsWithError);
 
-                        self.status.elapsedTime(data.elapsedTime);
-                        self.status.estimatedTime(data.estimatedTime);
-                        self.status.hasErrors(data.hasErrors);
-                        self.isStatusLoaded(true);
+                            self.status.hasErrors(data.interviewsWithError > 0);
+                            self.isStatusLoaded(true);
 
-                        if (shouldStopRequestUpdates(data) === false) {
-                            _.delay(self.updateStatusByInterviewsImport, 3000);
+                            if (shouldStopRequestUpdates(data) === false) {
+                                _.delay(self.updateStatusByInterviewsImport, 3000);
+                            }
                         }
                     });
             };

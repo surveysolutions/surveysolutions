@@ -22,8 +22,6 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 .WithColumn("id").AsInt32().PrimaryKey().Identity()
                 .WithColumn("questionnaireid").AsString().NotNullable()
                 .WithColumn("filename").AsString().NotNullable()
-                .WithColumn("assignedtosupervisorscount").AsInt32().NotNullable()
-                .WithColumn("assignedtointerviewerscount").AsInt32().NotNullable()
                 .WithColumn("totalcount").AsInt32().NotNullable()
                 .WithColumn("responsible").AsString().NotNullable()
                 .WithColumn("starteddate").AsDateTime().NotNullable();

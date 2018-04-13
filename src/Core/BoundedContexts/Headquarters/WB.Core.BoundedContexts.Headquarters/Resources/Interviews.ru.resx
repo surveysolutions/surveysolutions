@@ -120,10 +120,7 @@
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
     <value>Ошибка во время импорта задания с идентифицируемым вопросами {0}. Отсутствует ответственный супервизор</value>
   </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Ошибка во время импорта задания с идентифицируемым вопросами {0}. Интревью {1}, Опросник {2}, Ошибка {3}</value>
-  </data>
-  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+    <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>Ошибочный файл с данными</value>
   </data>
   <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">

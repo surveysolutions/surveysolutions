@@ -23,11 +23,8 @@
                 verifiedCount: ko.observable(@Model.Status.VerifiedAssignments),
                 totalCount: ko.observable(@Model.Status.TotalAssignments),
                 failedVerifications: ko.observable(@Model.Status.AssingmentsWithErrors),
-                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
-                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
                 hasErrors: ko.observable(false),
-                isInProgress: ko.observable(true),
-                stage: ko.observable("@AssignmentImportStage.FileVerification.ToString()"),
+                isInProgress: ko.observable(true)
             };
 
             self.isStatusLoaded = ko.observable(false);
@@ -54,15 +51,12 @@
                     {},
                     true,
                     function(data) {
-                        self.status.isInProgress(data.isInProgress);
+                        self.status.isInProgress(data.verifiedInterviewsCount !== data.totalInterviewsCount);
                         self.status.verifiedCount(data.verifiedInterviewsCount);
                         self.status.totalCount(data.totalInterviewsCount);
                         self.status.failedVerifications(data.interviewsWithError);
 
-                        self.status.elapsedTime(data.elapsedTime);
-                        self.status.estimatedTime(data.estimatedTime);
-                        self.status.hasErrors(data.hasErrors);
-                        self.status.stage(data.stage);
+                        self.status.hasErrors(data.interviewsWithError > 0);
                         self.isStatusLoaded(true);
 
                         if (shouldStopRequestUpdates(data) === false) {
@@ -70,10 +64,10 @@
                         }
 
 
-                        if (self.status.verifiedCount() === self.status.totalCount())
+                        if (!self.status.isInProgress())
                         {
                             var verificationFinishedUrl =
-                                '@Url.Action("InterviewImportVerificationCompleted", "SurveySetup")';
+                                '@Url.Action("InterviewImportProgress", "SurveySetup")';
 
                             window.location.href = verificationFinishedUrl;
                         }
@@ -110,25 +104,19 @@
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
-                <div class="import-progress" data-bind="if: status.stage() === '@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                <div class="import-progress">
                     <p class="success-text">
                         @BatchUpload.Import_VerificationOfDataFile_Succeeded
                     </p>
                 </div>
                 <div class="import-progress" >
-                    <p data-bind="if: status.stage()=='@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                    <p>
                         @BatchUpload.Import_VerificationOfAssignmentData
                         <span data-bind="if: status.isInProgress">
                             (@Html.Raw(string.Format(BatchUpload.Import_VerificationOfDataFile_Progress, "<span data-bind='text: status.verifiedCount'></span>", "<span data-bind='text: status.totalCount'></span>")))
                         </span>
                     </p>
-                    <p  data-bind="if: status.stage()=='@AssignmentImportStage.FileVerification.ToString()'">
-                        @BatchUpload.Import_VerificationOfDataFile
-                        <span data-bind="if: status.isInProgress">
-                            (@Html.Raw(string.Format(BatchUpload.Import_VerificationOfDataFile_Progress, "<span data-bind='text: status.verifiedCount'></span>", "<span data-bind='text: status.totalCount'></span>")))
-                        </span>
-                    </p>
-                    <p class="success-text" data-bind="if: status.verifiedCount() > 0 && status.stage()=='@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                    <p class="success-text" data-bind="if: status.verifiedCount() > 0">
                         <!-- ko if: (status.verifiedCount() - status.failedVerifications()) == 1 -->
                         @BatchUpload.Import_Verification_1_AssignmentVerified
                         <!-- /ko -->

@@ -102,7 +102,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             foreach (var assignmentRow in this.GetAssignmentRows(file, questionnaire))
             {
                 foreach (var answerError in this.verifier.VerifyAnswers(assignmentRow, questionnaire))
+                {
+                    hasErrors = true;
                     yield return answerError;
+                }
 
                 assignmentRows.Add(assignmentRow);
             }
@@ -111,7 +114,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             this.Save(file.FileInfo.FileName, questionnaireIdentity,
                 assignmentRows.Select(row =>
-                        ToAssignmentToImport(row.Answers.OfType<AssignmentAnswer>(), row.Responsible, row.Quantity, RosterVector.Empty, questionnaire))
+                        ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<AssignmentAnswer>())},
+                            row.Responsible, row.Quantity, questionnaire))
                     .ToArray());
 
             this.SetVerifiedToAllImportedAssignments();
@@ -236,6 +240,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var rowsGroupedByInterviews = assignmentRows.GroupBy(assignmentRow => assignmentRow.InterviewIdValue.Value)
                 .Select(g => new
                 {
+                    assignmentId = g.Key,
                     quantity = g.Select(_ => _.Quantity).FirstOrDefault(_ => _ != null),
                     responsible = g.Select(_ => _.Responsible).FirstOrDefault(_ => _ != null),
                     rosters = g.Select(x => new
@@ -245,8 +250,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     })
                 });
             
-            return rowsGroupedByInterviews.SelectMany(z => z.rosters.GroupBy(x=>x.rosterVector).Select(_=> ToAssignmentToImport(
-                    _.SelectMany(i=>i.answers), z.responsible, z.quantity, _.Key, questionnaire))).ToList();
+            return rowsGroupedByInterviews.Select(_=> ToAssignmentToImport(
+                    _.rosters.Select(x=> (x.rosterVector, x.answers)), _.responsible, _.quantity, questionnaire)).ToList();
 
             //return AddRosterSizeAnswersByRosterInstances(data, questionnaire);
         }
@@ -284,11 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public AssignmentToImport GetAssignmentToVerify()
             => this.importAssignmentsRepository.Query(x => x.FirstOrDefault(_ => !_.Verified));
-
-        public void RemoveImportedAssignment(int assignmentId)
-            => this.sessionProvider.GetSession().Connection
-                .Execute($"DELETE FROM {AssignmentsToImportTableName} where id=@id", assignmentId);
-
+        
         public AssignmentsImportStatus GetImportStatus()
         {
             var process = this.importAssignmentsProcessRepository.Query(x => x.FirstOrDefault());
@@ -296,17 +297,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var assignmentsInQueue = this.importAssignmentsRepository.Query(x => x.Count(_ => _.Verified && _.Error == null));
             var assignmentsWithErrors = this.importAssignmentsRepository.Query(x => x.Count(_ => _.Verified && _.Error != null));
-
-            var elapsedTimeInMilliseconds = (DateTime.UtcNow - process.StartedDate).Milliseconds;
-            var processedInterviews = process.TotalCount - assignmentsInQueue;
-            var perInterviewMilliseconds = elapsedTimeInMilliseconds / processedInterviews;
+            var verifiedAssignments = this.importAssignmentsRepository.Query(x => x.Count(_ => _.Verified));
+            var assignedToInterviewers = this.importAssignmentsRepository.Query(x => x.Count(_ => _.Interviewer != null));
+            var assignedToSupervisors = this.importAssignmentsRepository.Query(x => x.Count(_ => _.Interviewer == null && _.Supervisor != null));
 
             return new AssignmentsImportStatus
             {
                 IsOwnerOfRunningProcess = process.Responsible == this.authorizedUser.UserName,
-                IsInProgress = assignmentsInQueue > 0,
-                AssignedToInterviewersCount = process.AssignedToInterviewersCount,
-                AssignedToSupervisorsCount = process.AssignedToSupervisorsCount,
+                AssignedToInterviewersCount = assignedToInterviewers,
+                AssignedToSupervisorsCount = assignedToSupervisors,
                 TotalAssignments = process.TotalCount,
                 AssignmentsInQueue = assignmentsInQueue,
                 ProcessedCount = process.TotalCount - assignmentsInQueue,
@@ -315,8 +314,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 ResponsibleName = process.Responsible,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(process.QuestionnaireId),
                 AssingmentsWithErrors = assignmentsWithErrors,
-                EstimatedTime = TimeSpan.FromMilliseconds(perInterviewMilliseconds * assignmentsInQueue).ToString(@"dd\.hh\:mm\:ss"),
-                ElapsedTime = TimeSpan.FromMilliseconds(elapsedTimeInMilliseconds).ToString(@"dd\.hh\:mm\:ss"),
+                VerifiedAssignments = verifiedAssignments
             };
         }
 
@@ -334,7 +332,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     new
                     {
                         interviewer = responsible.IsInterviewer() ? responsible.PublicKey : (Guid?) null,
-                        supervisor = responsible.IsSupervisor() ? responsible.PublicKey : (Guid?) null
+                        supervisor = responsible.Supervisor?.Id
                     });
         }
 
@@ -375,9 +373,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
             catch (Exception ex)
             {
-                var allAnswersInString = string.Join(", ", answersGroupedByLevels.Where(x => x != null));
+                var allAnswersInString = string.Join(", ",
+                    answersGroupedByLevels.SelectMany(x => x.Select(_ => _.Answer)).Where(x => x != null)
+                        .Select(x => x.ToString()));
+
+                var responsibleId = assignment.Interviewer ?? assignment.Supervisor;
+
+                var responsible = responsibleId.HasValue
+                    ? this.userViewFactory.GetUser(new UserViewInputModel(responsibleId.Value))
+                    : null;
+
                 var errorMessage = string.Format(Interviews.ImportInterviews_GenericError, allAnswersInString,
-                    assignment.Interviewer, questionnaireIdentity, ex.Message);
+                    responsible?.UserName, ex.Message);
 
                 this.SetVerifiedToAssignment(assignment.Id, errorMessage);
             }
@@ -404,7 +411,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.interviewCreatorFromAssignment.CreateInterviewIfQuestionnaireIsOld(responsibleId,
                 questionnaireIdentity, assignment.Id, assignmentToImport.Answers);
 
-            this.RemoveImportedAssignment(assignment.Id);
+            this.importAssignmentsRepository.Remove(assignment.Id);
         }
 
         private void SetVerifiedToAssignment(int assignmentId, string errorMessage = null)
@@ -427,8 +434,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                           new AssignmentsImportProcess();
 
             process.FileName = fileName;
-            process.AssignedToInterviewersCount = assignments.Count(x => x.Interviewer.HasValue);
-            process.AssignedToSupervisorsCount = assignments.Count(x => x.Supervisor.HasValue);
             process.TotalCount = assignments.Count;
             process.Responsible = this.authorizedUser.UserName;
             process.StartedDate = DateTime.UtcNow;
@@ -439,6 +444,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
+            this.RemoveAllAssignmentsToImport();
+
             var npgsqlConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
 
             using (var writer = npgsqlConnection.BeginBinaryImport($"COPY  {AssignmentsToImportTableName} (interviewer, supervisor, quantity, answers) " +
@@ -455,14 +462,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
         }
 
-        private AssignmentToImport ToAssignmentToImport(IEnumerable<AssignmentAnswer> answers, AssignmentResponsible responsible,
-            AssignmentQuantity quantity, RosterVector rosterVector, IQuestionnaire questionnaire) =>
+        private AssignmentToImport ToAssignmentToImport(
+            IEnumerable<(RosterVector rosterVector, IEnumerable<AssignmentAnswer> answers)> answers,
+            AssignmentResponsible responsible, AssignmentQuantity quantity, IQuestionnaire questionnaire) =>
             new AssignmentToImport
             {
                 Interviewer = responsible?.Responsible?.InterviewerId,
                 Supervisor = responsible?.Responsible?.SupervisorId,
                 Quantity = quantity?.Quantity,
-                Answers = answers.Select(x => ToInterviewAnswer(x, rosterVector, questionnaire)).Where(x => x != null).ToList()
+                Answers = answers
+                    .SelectMany(x => x.answers.Select(y => ToInterviewAnswer(y, x.rosterVector, questionnaire)))
+                    .Where(y => y?.Answer != null)
+                    .ToList()
             };
 
         private InterviewAnswer ToInterviewAnswer(AssignmentAnswer value, RosterVector rosterVector, IQuestionnaire questionnaire)
@@ -506,14 +517,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         {
                             if (questionnaire.ShouldQuestionRecordAnswersOrder(questionId.Value))
                             {
+                                assignmentCategoricalMulti = assignmentCategoricalMulti.Where(x => x.answer > 0).ToArray();
+
                                 if (questionnaire.IsQuestionYesNo(questionId.Value))
                                 {
                                     answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(assignmentCategoricalMulti
                                         .OrderBy(x => x.answer)
                                         .Select(x => new AnsweredYesNoOption(x.code, true)));
                                 }
-
-                                if (!isLinkedToQuestion && !isLinkedToRoster)
+                                else if (!isLinkedToQuestion && !isLinkedToRoster)
                                 {
                                     answer.Answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(
                                         assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => x.code)
@@ -527,11 +539,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                                     answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(
                                         assignmentCategoricalMulti.Select(x => new AnsweredYesNoOption(x.code, x.answer > 0)));
                                 }
-
-                                if (!isLinkedToQuestion && !isLinkedToRoster)
+                                else if (!isLinkedToQuestion && !isLinkedToRoster)
                                 {
                                     answer.Answer = CategoricalFixedMultiOptionAnswer.FromDecimalArray(
-                                        assignmentCategoricalMulti.Select(x => x.code).ToArray());
+                                        assignmentCategoricalMulti.Where(x => x.answer == 1).Select(x => x.code).ToArray());
                                 }
                             }
                         }

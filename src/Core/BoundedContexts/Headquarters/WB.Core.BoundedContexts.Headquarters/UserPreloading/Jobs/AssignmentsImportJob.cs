@@ -13,23 +13,17 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     [DisallowConcurrentExecution]
     internal class AssignmentsImportJob : IJob
     {
-        private IPlainTransactionManager transactionManager =>
-            ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>()
             .GetFor<AssignmentsImportJob>();
         
         private IAssignmentsImportService importAssignmentsService => ServiceLocator.Current
             .GetInstance<IAssignmentsImportService>();
-        
-        private T PlainTransaction<T>(Func<T> func) 
-            => transactionManager.ExecuteInPlainTransaction(func);
-        
-        private void PlainTransaction(Action action)
-            => transactionManager.ExecuteInPlainTransaction(action);
 
-        private void QueryTransaction(Action action)
-            => ServiceLocator.Current.GetInstance<ITransactionManager>().ExecuteInQueryTransaction(action);
+        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current
+            .GetInstance<IPlainTransactionManager>();
+
+        private ITransactionManager transactionManager => ServiceLocator.Current
+            .GetInstance<ITransactionManager>();
 
         public void Execute(IJobExecutionContext context)
         {
@@ -40,31 +34,32 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
             try
             {
-                var importProcess = this.PlainTransaction(() => this.importAssignmentsService.GetImportStatus());
+                var importProcess = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                    this.importAssignmentsService.GetImportStatus());
 
-                if (importProcess == null ||
-                    importProcess.AssignedToInterviewersCount + importProcess.AssignedToSupervisorsCount == 0)
+                if (importProcess == null) return;
+
+                if (importProcess.AssignedToInterviewersCount + importProcess.AssignedToSupervisorsCount == 0)
                     return;
 
                 if (importProcess.VerifiedAssignments != importProcess.TotalAssignments)
                     return;
-                
+
                 AssignmentToImport assignmentToImport = null;
                 do
                 {
-                    this.transactionManager.BeginTransaction();
-
-                    assignmentToImport = this.importAssignmentsService.GetAssignmentToImport();
+                    assignmentToImport = this.plainTransactionManager.ExecuteInPlainTransaction(()=>this.importAssignmentsService.GetAssignmentToImport());
                     if (assignmentToImport == null) return;
 
-                    this.QueryTransaction(() => this.importAssignmentsService.ImportAssignment(assignmentToImport,
-                        importProcess.QuestionnaireIdentity));
+                    this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                        this.transactionManager.ExecuteInQueryTransaction(
+                            () =>
+                            {
+                                this.importAssignmentsService.ImportAssignment(assignmentToImport,
+                                    importProcess.QuestionnaireIdentity);
+                            }));
 
-                    this.transactionManager.CommitTransaction();
-                    
                 } while (assignmentToImport != null);
-
-                this.PlainTransaction(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
             }
             catch (Exception ex)
             {
