@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.QuestionnaireEntities;
+﻿using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
 {
@@ -12,5 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
         public string Instructions { get; set; }
         public bool HideInstructions { get; set; }
         public string OptionsFilterExpression { get; set; }
+        public GeometryType GeometryType { get; set; }
     }
 }
