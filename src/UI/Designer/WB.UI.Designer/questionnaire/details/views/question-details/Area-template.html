@@ -8,7 +8,7 @@
 
         <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu1">
             <li role="presentation" ng-repeat="type in activeQuestion.geometryTypeOptions">
-                <a role="menuitem" tabindex="-1" ng-click="changeGeometryType(type)">
+                <a role="menuitem" tabindex="-1" ng-click="changeGeometryType(type.value)">
                     {{type.text}}
                 </a>
             </li>

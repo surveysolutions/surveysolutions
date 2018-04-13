@@ -282,6 +282,13 @@
                     $scope.activeQuestion.linkedFilterExpression = '';
                 }
 
+                if (type === "Area") {
+                    if($scope.activeQuestion.geometryType === null)
+                        $scope.activeQuestion.geometryType = $scope.activeQuestion.geometryTypeOptions[0].value;
+                }
+                else
+                    $scope.activeQuestion.geometryType = null;
+
                 markFormAsChanged();
             };
 
@@ -433,7 +440,7 @@
             };
 
             $scope.changeGeometryType = function (geometry) {
-                $scope.activeQuestion.geometryType = geometry.value;
+                $scope.activeQuestion.geometryType = geometry;
                 
                 markFormAsChanged();
             };
