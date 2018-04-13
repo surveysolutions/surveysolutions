@@ -163,7 +163,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     {
                         var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
                         if (interviewTreeQuestion == null)
-                            continue;
+                        {
+                            new InterviewQuestionInvariants(answer.Identity, questionnaire, tree).RequireQuestionExists();
+                        }
 
                         interviewTreeQuestion.SetAnswer(answer.Answer);
 
