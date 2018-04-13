@@ -1,6 +1,7 @@
 import InterviewersAndDevices from "./InterviewersAndDevices";
 import StatusDuration from "./StatusDuration";
 import MapReport from "./MapReport";
+import SurveyStatistics from "./SurveyStatistics";
 
 const store = {
     state: {
@@ -31,6 +32,18 @@ export default class ReportComponent {
             {
                 path: "/Reports/MapReport",
                 component: MapReport
+            },
+            {
+                name: "surveyStatistics",
+                path: "/Reports/surveyStatistics",
+                component: SurveyStatistics,
+                props: (route) => ({ 
+                    questionnaireId: route.query.questionnaire,
+                    min: parseInt(route.query.min),
+                    max: parseInt(route.query.max),
+                    questionId: route.query.question,
+                    detailedView: String(route.query.detailedView).toLowerCase() === 'true'
+                 })
             }
         ];
     }

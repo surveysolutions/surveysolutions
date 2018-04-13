@@ -589,8 +589,8 @@
     </Content>
     <Content Include="App_GlobalResources\Reports.resx">
       <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Reports.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Reports.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Reports.ru.resx">
       <SubType>Designer</SubType>
@@ -1668,6 +1668,7 @@
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
+    <Content Include="Views\Reports\SurveyStatistics.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
@@ -1688,10 +1689,15 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
+    <Compile Include="API\Helpers.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
+    <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
+    <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
+    <Compile Include="API\PublicApi\SurveyStatisticsReportDataApiController.cs" />
+    <Compile Include="API\PublicApi\Models\SurveyStatisticsInput.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
     <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
@@ -1722,6 +1728,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Reports.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -1798,11 +1809,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\QuestionnaireImport.Designer.cs">
       <DependentUpon>QuestionnaireImport.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Reports.Designer.cs">
-      <DependentUpon>Reports.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -1920,9 +1926,13 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201802121510_AddIdToInterviewSummaryId.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802121640_AddSlimdownInterviewsTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201802131620_AddIndexesAndViewsToSlimInterviewTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201804161300_Add_categorical_report_function.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201804161242_Add_materialized_view_report_tabulate_data_view.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201804171241_ChangeHasErrorsToNumberOfErrors.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201804151700_AddRepotRelatedMetadataToQuestionnaireEntities.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201804201634_RemoveHasErrorsPropery.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201805071800_Add_get_numerical_report_function.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201805121700_Add_categorical_pivot.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
