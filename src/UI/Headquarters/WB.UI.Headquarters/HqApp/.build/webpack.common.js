@@ -161,7 +161,7 @@ module.exports = function (appConfig) {
             devMode ? null : new webpack.optimize.ModuleConcatenationPlugin(),
 
             // minizing js files
-            new UglifyJsPlugin({
+            devMode ? null : new UglifyJsPlugin({
                 sourceMap: true,
                 cache: true,
 				parallel:true,
