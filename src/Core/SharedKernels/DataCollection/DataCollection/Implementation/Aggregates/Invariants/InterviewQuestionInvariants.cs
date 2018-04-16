@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -17,6 +16,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 {
     public class InterviewQuestionInvariants
     {
+        public class ExceptionKeys
+        {
+            public static readonly string InterviewId = "Interview ID";
+            public static readonly string QuestionId = "Question ID";
+            public static readonly string Variable = "Variable";
+            public static readonly string ProvidedAnswerValue= "ProvidedAnswer";
+            public static readonly string AvailableAnswersList = "AvailableAnswers";
+            public static readonly string MaxAnswersCount = "MaxAnswersCount";
+            public static readonly string AnswersCount = "AnswersCount";
+            public static readonly string DecimalPlacesAllowed = "DecimalPlacesAllowed";
+            public static readonly string MaxRosterRowCount = "MaxRosterRowCount";
+            public static readonly string AvailableRosterVectors = "AvailableRosterVectors";
+            public static readonly string ParentValue = "ParentValue";
+        }
+
         private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
 
         public InterviewQuestionInvariants(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree interviewTree)
@@ -30,11 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         private IQuestionnaire Questionnaire { get; }
         private InterviewTree InterviewTree { get; }
 
-        private string InterviewId => this.InterviewTree.InterviewId;
         private Guid QuestionId => this.QuestionIdentity.Id;
-
-        private string InfoForException => $"Question ID: {this.QuestionId.FormatGuid()}. Interview ID: {this.InterviewId}.";
-
 
         public InterviewQuestionInvariants RequireQuestionExists(QuestionType? questionType = null)
             => this
@@ -46,10 +56,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (question.IsDisabled())
-                throw new InterviewException(
-                    $"Question {question.FormatForException()} (or it's parent) is disabled " +
-                    $"and question's answer cannot be changed. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+                throw new InterviewException("Question (or it's parent) is disabled and question's answer cannot be changed.")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, question.Identity },
+                        {ExceptionKeys.QuestionId, question.VariableName }
+                    }
+                };
 
             return this;
         }
@@ -243,7 +258,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (!this.Questionnaire.HasQuestion(this.QuestionId))
                 throw new InterviewException(
-                    $"Question is missing. {this.InfoForException}");
+                    $"Question is missing")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
 
             return this;
         }
@@ -266,9 +288,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (expectedQuestionType != actualQuestionType)
                 throw new AnswerNotAcceptedException(
-                    $"Question {this.FormatQuestionForException()} has type {actualQuestionType}. " +
-                    $"But following type was expected: {expectedQuestionType}. " +
-                    this.InfoForException);
+                    $"Question has type {actualQuestionType:G}. " +
+                    $"But following type was expected: {expectedQuestionType:G}")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
 
             return this;
         }
@@ -277,7 +305,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (this.Questionnaire.IsQuestionInteger(this.QuestionId))
                 throw new AnswerNotAcceptedException(
-                    $"Question {this.FormatQuestionForException()} doesn't support answer of type real. {this.InfoForException}");
+                    $"Question doesn't support answer of type real")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId }
+                    }
+                };
 
             return this;
         }
@@ -286,7 +321,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (!this.Questionnaire.IsQuestionInteger(this.QuestionId))
                 throw new AnswerNotAcceptedException(
-                    $"Question {this.FormatQuestionForException()} doesn't support answer of type integer. {this.InfoForException}");
+                    $"Question doesn't support answer of type integer")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
 
             return this;
         }
@@ -295,7 +337,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (answers.Any(x => string.IsNullOrWhiteSpace(x.Item2)))
                 throw new InterviewException(
-                    $"String values should be not empty or whitespaces for question {this.FormatQuestionForException()}. {this.InfoForException}");
+                    $"String values should be not empty or whitespaces for question"){
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
 
             return this;
         }
@@ -306,7 +354,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (answers.Length > decimals.Length)
                 throw new InterviewException(
-                    $"Decimal values should be unique for question {this.FormatQuestionForException()}. {this.InfoForException}");
+                    $"Decimal values should be unique for question")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
 
             return this;
         }
@@ -317,7 +372,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (availableValues == null)
                 throw new AnswerNotAcceptedException(
-                    $"For question {this.FormatQuestionForException()} was provided selected value {value} as answer. {this.InfoForException}");
+                    $"Provided answer is not in the list part of predefined answers")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.ProvidedAnswerValue, value}
+                    }
+                };
 
             return this;
         }
@@ -326,11 +389,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (answer.Latitude < -90 || answer.Latitude > 90)
                 throw new AnswerNotAcceptedException(
-                    $"For question {this.FormatQuestionForException()} was provided answer with Latitude {answer.Latitude} should be in range (-90, 90) . {this.InfoForException}");
+                    $"Latitude should be in range (-90, 90)")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.ProvidedAnswerValue, answer}
+
+                    }
+                };
 
             if (answer.Longitude < -180 || answer.Longitude > 180)
                 throw new AnswerNotAcceptedException(
-                    $"For question {this.FormatQuestionForException()} was provided answer with Longitude {answer.Longitude} should be in range (-180, 180) . {this.InfoForException}");
+                    $"Longitude should be in range (-180, 180)")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.ProvidedAnswerValue, answer}
+
+                    }
+                };
 
             return this;
         }
@@ -344,7 +425,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             bool someValueIsNotOneOfAvailable = values.Any(value => !availableValues.Contains(value));
             if (someValueIsNotOneOfAvailable)
                 throw new AnswerNotAcceptedException(
-                    $"For question {this.FormatQuestionForException()} were provided selected values {JoinUsingCommas(values)} as answer. But only following values are allowed: {JoinUsingCommas(availableValues)}. {this.InfoForException}");
+                    $"Provided selected values as answer are not listed in the allowed answers list")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.ProvidedAnswerValue, JoinUsingCommas(values)},
+                        {ExceptionKeys.AvailableAnswersList, JoinUsingCommas(availableValues)}
+
+                    }
+                };
 
             return this;
         }
@@ -353,7 +444,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (this.Questionnaire.IsQuestionYesNo(this.QuestionIdentity.Id))
                 throw new InterviewException(
-                    $"Question {this.FormatQuestionForException()} has Yes/No type, but answer is given for Multiple Options type. {this.InfoForException}");
+                    $"Question has Yes/No type, but answer is given for Multiple Options type")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId}
+                    }
+                };
 
             return this;
         }
@@ -364,7 +462,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (maxAnswersCountLimit.HasValue && answers.Length > maxAnswersCountLimit.Value)
                 throw new InterviewException(
-                    $"Answers exceed MaxAnswerCount limit {maxAnswersCountLimit.Value} for question {this.FormatQuestionForException()}. {this.InfoForException}");
+                    $"Answers exceed MaxAnswerCount limit") {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.MaxAnswersCount, maxAnswersCountLimit},
+                        {ExceptionKeys.AnswersCount, answers.Length}
+                    }
+                };
 
             return this;
         }
@@ -375,7 +481,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (maxSelectedOptions.HasValue && maxSelectedOptions > 0 && answersCount > maxSelectedOptions)
                 throw new AnswerNotAcceptedException(
-                    $"For question {this.FormatQuestionForException()} number of answers {answersCount} is greater than the maximum number of selected answers {maxSelectedOptions}. {this.InfoForException}");
+                    $"Number of answers is greater than the maximum number of selected answers")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.MaxAnswersCount, maxSelectedOptions},
+                        {ExceptionKeys.AnswersCount, answersCount}
+                    }
+                };
 
             return this;
         }
@@ -389,7 +504,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var roundedAnswer = Math.Round(answer, countOfDecimalPlacesAllowed.Value);
             if (roundedAnswer != answer)
                 throw new AnswerNotAcceptedException(
-                    $"Answer '{answer}' for question {this.FormatQuestionForException()}  is incorrect because has more decimal places than allowed by questionnaire. Allowed amount of decimal places is {countOfDecimalPlacesAllowed.Value}. {this.InfoForException}");
+                    $"Answer is incorrect because has more decimal places than allowed by questionnaire")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.DecimalPlacesAllowed, countOfDecimalPlacesAllowed},
+                        {ExceptionKeys.ProvidedAnswerValue, answer}
+                    }
+                };
 
             return this;
         }
@@ -404,7 +528,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 if (this.Questionnaire.GetOptionForQuestionByOptionValue(this.QuestionId, answer) == null)
                 {
                     throw new AnswerNotAcceptedException(
-                        $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is negative. {this.InfoForException}");
+                        $"Answer is incorrect because question is used as size of roster and specified answer is negative")
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer}
+                        }
+                    };
                 }
             }
 
@@ -422,7 +554,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (answer > maxRosterRowCount)
                 throw new AnswerNotAcceptedException(
-                    $"Answer '{answer}' for question {this.FormatQuestionForException()} is incorrect because question is used as size of roster and specified answer is greater than {maxRosterRowCount}. {this.InfoForException}");
+                    $"Answer is incorrect because question is used as size of roster and specified answer is greater than allowed rows count")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                        {ExceptionKeys.MaxRosterRowCount, maxRosterRowCount},
+                        {ExceptionKeys.ProvidedAnswerValue, answer}
+                    }
+                };
 
             return this;
         }
@@ -430,22 +571,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         private InterviewQuestionInvariants RequireQuestionInstanceExists()
         {
             if (this.QuestionIdentity.RosterVector == null)
-                throw new InterviewException(
-                    $"Roster information for question is missing. " +
-                    $"Roster vector cannot be null. " +
-                    $"Question ID: {this.QuestionIdentity.Id.FormatGuid()}. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+                throw new InterviewException("Roster information for question is missing. Roster vector cannot be null")
+                      {
+                          Data =
+                          {
+                              {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                              {ExceptionKeys.QuestionId, this.QuestionIdentity.Id}
+                          }
+                      };
 
             var questions = this.InterviewTree.FindQuestions(this.QuestionIdentity.Id);
             var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
 
             if (!rosterVectors.Contains(this.QuestionIdentity.RosterVector))
-                throw new InterviewException(
-                    $"Roster information for question is incorrect. " +
-                    $"No questions found for roster vector {this.QuestionIdentity.RosterVector}. " +
-                    $"Available roster vectors: {string.Join(", ", rosterVectors)}. " +
-                    $"Question ID: {this.QuestionIdentity.Id.FormatGuid()}. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+                throw new InterviewException("Roster information for question is incorrect. No questions found for roster vector")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                        {ExceptionKeys.AvailableRosterVectors, string.Join(", ", rosterVectors)}
+                    }
+                };
 
             return this;
         }
@@ -466,10 +613,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (!question.AsLinked.Options.Contains(option))
                 throw new InterviewException(
-                    $"Answer on linked categorical question {question.FormatForException()} cannot be saved. " +
-                    $"Specified option {option} is absent. " +
-                    $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+                    $"Answer on linked categorical question cannot be saved. Specified option is absent")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId.ToString()},
+                        {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinked.Options)},
+                        {ExceptionKeys.ProvidedAnswerValue, option.ToString()}
+                    }
+                };
+
         }
 
         private InterviewQuestionInvariants RequireLinkedToListOptionsAreAvailable(IEnumerable<int> options)
@@ -488,12 +642,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.AsLinkedToList.Options.Contains(option))
-                throw new InterviewException(
-                    $"Answer on linked to list question {question.FormatForException()} cannot be saved. " +
-                    $"Specified option {option} is absent. " +
-                    $"Available options: {string.Join(", ", question.AsLinked.Options)}. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}.");
-
+                throw new InterviewException("Answer on linked to list question cannot be saved. Specified option is absent")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionId},
+                        {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinked.Options)},
+                        {ExceptionKeys.ProvidedAnswerValue, option}
+                    }
+                };
             return this;
         }
 
@@ -509,7 +667,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (!answerOption.ParentValue.HasValue)
                 throw new QuestionnaireException(
-                    $"Answer option has no parent value. Option value: {answer}, Question id: '{this.QuestionIdentity.Id}'.");
+                    $"Answer option has no parent value"
+                )
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                        {ExceptionKeys.ProvidedAnswerValue, answer}
+                    }
+                };
 
             int answerParentValue = answerOption.ParentValue.Value;
             var parentQuestion = (question.GetAsInterviewTreeCascadingQuestion()).GetCascadingParentQuestion();
@@ -521,10 +688,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
             if (answerParentValue != actualParentValue)
                 throw new AnswerNotAcceptedException(
-                    $"For question {question.FormatForException()} was provided " +
-                    $"selected value {answer} as answer with parent value {answerParentValue}, " +
-                    $"but this do not correspond to the parent answer selected value {actualParentValue}. " +
-                    $"Interview ID: {this.InterviewTree.InterviewId}.");
+                    $"Selected value do not correspond to the parent answer selected value")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                        {ExceptionKeys.ProvidedAnswerValue, answer},
+                        {ExceptionKeys.ParentValue, answerParentValue}
+                    }
+                };
 
             return this;
         }
