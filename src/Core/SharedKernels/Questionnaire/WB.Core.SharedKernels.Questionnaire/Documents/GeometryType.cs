@@ -5,6 +5,7 @@
         Polygon = 0,
         Polyline = 1,
         Point = 2,
-        Multipoint = 3
+        Multipoint = 3,
+        Arrow = 4
     }
 }
