@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireForGeneration(id);
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,CreateQuestionnaireVersion(), out resultAssembly);
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,LatestQuestionnaireVersion(), out resultAssembly);
 
                 return new InvokeResults
                 {
