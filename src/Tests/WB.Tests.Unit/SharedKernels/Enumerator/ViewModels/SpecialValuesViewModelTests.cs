@@ -124,6 +124,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
         }
 
         [Test]
+        public void Init_non_special_value_selected_Should_not_show_special_options()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(Id.g2, specialValues: Create.Entity.Options(1, 2)));
+
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            interview.AnswerNumericIntegerQuestion(Id.gF, entityIdentity.Id, entityIdentity.RosterVector, DateTime.Now, 10);
+
+            var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+
+
+            // Act
+            model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
+
+            //Assert
+            Assert.That(model.SpecialValues, Is.Empty);
+        }
+
+        [Test]
         public void Set_not_special_values_answer_for_unanswered_integer_question()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
