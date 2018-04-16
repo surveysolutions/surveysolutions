@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -8,6 +7,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 {
     internal class InterviewPropertiesInvariants
     {
+        static class ExceptionKeys
+        {
+            public static readonly string UserId = "UserId";
+            public static readonly string InterviewId = "InterviewId";
+            public static readonly string SupervisorId = "SupervisorId";
+            public static readonly string InterviewerId = "InterviewerId";
+        }
+
         public InterviewPropertiesInvariants(InterviewEntities.InterviewProperties interviewProperties)
         {
             this.InterviewProperties = interviewProperties;
@@ -26,60 +33,114 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             if (userId != this.InterviewProperties.InterviewerId)
                 throw new InterviewException(
-                    $"Interviewer with id {userId.FormatGuid()} is not responsible for the interview anymore, interviewer with id {this.InterviewProperties.InterviewerId} is.",
-                    InterviewDomainExceptionType.OtherUserIsResponsible);
+                    $"Interviewer is not responsible for the interview anymore",
+                    InterviewDomainExceptionType.OtherUserIsResponsible) 
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                        {ExceptionKeys.UserId, userId},
+                        {ExceptionKeys.InterviewerId, this.InterviewProperties.InterviewerId}
+                    }
+                };
         }
 
         public void ThrowIfInterviewApprovedByHQ()
         {
             if (this.InterviewProperties.Status == InterviewStatus.ApprovedByHeadquarters)
                 throw new InterviewException(
-                    $"Interview was approved by Headquarters and cannot be edited. InterviewId: {this.InterviewProperties.Id}");
+                    $"Interview was approved by Headquarters and cannot be edited")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                    }
+                };
         }
 
         public void ThrowIfInterviewWasCompleted()
         {
             if (this.InterviewProperties.WasCompleted)
                 throw new InterviewException(
-                    $"Interview was completed by interviewer and cannot be deleted. InterviewId: {this.InterviewProperties.Id}");
+                    $"Interview was completed by interviewer and cannot be deleted")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                    }
+                };
         }
 
         public void ThrowIfInterviewStatusIsNotOneOfExpected(params InterviewStatus[] expectedStatuses)
         {
             if (!expectedStatuses.Contains(this.InterviewProperties.Status))
                 throw new InterviewException(
-                    $"Interview status is {this.InterviewProperties.Status}. But one of the following statuses was expected: {string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString()))}. InterviewId: {this.InterviewProperties.Id}", InterviewDomainExceptionType.StatusIsNotOneOfExpected);
+                    $"Interview status is {this.InterviewProperties.Status}. But one of the following statuses was expected: {string.Join(", ", expectedStatuses.Select(expectedStatus => expectedStatus.ToString()))}", InterviewDomainExceptionType.StatusIsNotOneOfExpected)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                    }
+                };
         }
 
         public void ThrowIfTryAssignToSameInterviewer(Guid interviewerIdToAssign)
         {
             if (this.InterviewProperties.Status == InterviewStatus.InterviewerAssigned && this.InterviewProperties.InterviewerId == interviewerIdToAssign)
                 throw new InterviewException(
-                    $"Interview has assigned on this interviewer already. InterviewId: {this.InterviewProperties.Id}, InterviewerId: {this.InterviewProperties.InterviewerId}");
+                    $"Interview has assigned on this interviewer already")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                        {ExceptionKeys.InterviewerId, this.InterviewProperties.InterviewerId}
+                    }
+                };
         }
 
         public void ThrowIfTryAssignToSameSupervisor(Guid supervisorIdToAssign)
         {
-            if ((this.InterviewProperties.Status == InterviewStatus.SupervisorAssigned || this.InterviewProperties.Status == InterviewStatus.RejectedBySupervisor)
+            if ((this.InterviewProperties.Status == InterviewStatus.SupervisorAssigned ||
+                 this.InterviewProperties.Status == InterviewStatus.RejectedBySupervisor)
                 && this.InterviewProperties.SupervisorId == supervisorIdToAssign)
                 throw new InterviewException(
-                    $"Interview has assigned on this supervisor already. InterviewId: {this.InterviewProperties.Id}, SupervisorId: {this.InterviewProperties.SupervisorId}");
+                    $"Interview has assigned on this supervisor already")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                        {
+                            ExceptionKeys.SupervisorId, this.InterviewProperties.SupervisorId
+                        }
+                    }
+                };
         }
 
         public void ThrowIfInterviewHardDeleted()
         {
             if (this.InterviewProperties.IsHardDeleted)
                 throw new InterviewException(
-                    $"Interview {this.InterviewProperties.Id} status is hard deleted.",
-                    InterviewDomainExceptionType.InterviewHardDeleted);
+                    $"Interview status is hard deleted",
+                    InterviewDomainExceptionType.InterviewHardDeleted)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id}
+                    }
+                };
         }
 
         public void ThrowIfInterviewReceivedByInterviewer()
         {
             if (this.InterviewProperties.IsReceivedByInterviewer)
                 throw new InterviewException(
-                    $"Can't modify Interview {this.InterviewProperties.Id} on server, because it received by interviewer.",
-                    InterviewDomainExceptionType.InterviewRecievedByDevice);
+                    $"Can't modify Interview on server, because it received by interviewer",
+                    InterviewDomainExceptionType.InterviewRecievedByDevice){
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                    }
+                };
         }
 
         public void ThrowIfStatusNotAllowedToBeChangedWithMetadata(InterviewStatus interviewStatus)
@@ -119,8 +180,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     return;
                 default:
                     throw new InterviewException(
-                        $"Status {interviewStatus} not allowed to be changed with ApplySynchronizationMetadata command. InterviewId: {this.InterviewProperties.Id}",
-                        InterviewDomainExceptionType.StatusIsNotOneOfExpected);
+                        $"Status {interviewStatus} not allowed to be changed with ApplySynchronizationMetadata command",
+                        InterviewDomainExceptionType.StatusIsNotOneOfExpected){
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
+                        }
+                    };
             }
         }
     }
