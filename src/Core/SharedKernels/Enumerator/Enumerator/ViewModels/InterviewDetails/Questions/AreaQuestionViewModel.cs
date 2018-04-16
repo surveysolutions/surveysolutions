@@ -14,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -42,9 +43,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Area answer;
         public Area Answer
         {
-            get { return this.answer; }
+            get => this.answer;
             set { this.answer = value; this.RaisePropertyChanged(); }
         }
+
+
+        private GeometryType? requestedGeomGeometryType;
 
         private IMvxAsyncCommand saveAnswerCommand;
         public IMvxAsyncCommand SaveAnswerCommand
@@ -56,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAreaEditService areaEditService;
         private readonly ILiteEventRegistry eventRegistry;
-
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private Identity questionIdentity;
         private string interviewId;
         private readonly QuestionStateViewModel<AreaQuestionAnswered> questionState;
@@ -68,6 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IAreaEditService areaEditService,
             ILiteEventRegistry eventRegistry,
             IUserInteractionService userInteractionService,
+            IQuestionnaireStorage questionnaireRepository,
             QuestionStateViewModel<AreaQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -81,6 +86,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.userInteractionService = userInteractionService;
+
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public Identity Identity => this.questionIdentity;
@@ -92,6 +99,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.questionIdentity = entityIdentity;
             this.interviewId = interviewId;
+
+            var interview = this.interviewRepository.Get(interviewId);
+
+            var questionnaire =
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            this.requestedGeomGeometryType = questionnaire.GetQuestionByVariable(questionnaire.GetQuestionVariableName(entityIdentity.Id)).Properties
+                .GeometryType;
 
             this.questionState.Init(interviewId, entityIdentity, navigationState);
             this.InstructionViewModel.Init(interviewId, entityIdentity);
@@ -105,7 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.IsInProgress = true;
             try
             {
-                var answerArea = await this.areaEditService.EditAreaAsync(this.Answer);
+                var answerArea = await this.areaEditService.EditAreaAsync(this.Answer, requestedGeomGeometryType);
 
                 if (answerArea != null)
                 {

@@ -17,6 +17,8 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Questionnaire.Documents;
+using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
@@ -24,6 +26,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
     {
         public string Geometry { get; set; }
         public string MapName { get; set; }
+        public WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? RequestedGeometryType { set; get; }
     }
 
     public class AreaEditorViewModel : BaseViewModel<AreaEditorViewModelArgs>
@@ -166,6 +169,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public override void Prepare(AreaEditorViewModelArgs parameter)
         {
             this.MapName = parameter.MapName;
+            this.requestedGeometryType = parameter.RequestedGeometryType;
 
             if (!string.IsNullOrEmpty(parameter.Geometry))
             {
@@ -178,6 +182,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         private Geometry Geometry { set; get; }
         public string MapName { set; get; }
+
+        private WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? requestedGeometryType;
 
         private Map map;
         public Map Map
@@ -265,7 +271,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
             catch (ArgumentException exc)
             {
-                logger.Error("Error occured on map location switch.", exc);
+                logger.Error("Error occurred on map location switch.", exc);
             }
             finally
             {
@@ -303,17 +309,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
-                    bool isCanCalculateAreaDimensions = IsCanCalculateAreaDimensions(geometry);
+                    bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportDimensionsCalculation(geometry);
                     try
                     {
-                        this.GeometryArea = (isCanCalculateAreaDimensions ? GeometryEngine.AreaGeodetic(geometry) : 0).ToString("#.##");
-                        this.GeometryLength = (isCanCalculateAreaDimensions ? GeometryEngine.LengthGeodetic(geometry) : 0).ToString("#.##");
+                        this.GeometryArea = (doesGeometrySupportDimensionsCalculation ? GeometryEngine.AreaGeodetic(geometry) : 0).ToString("#.##");
+                        this.GeometryLength = (doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0).ToString("#.##");
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("LOG MESSAGE EXCEPTION");
+                        /*Console.WriteLine("LOG MESSAGE EXCEPTION");
                         Console.WriteLine(e);
-                        Console.WriteLine(geometry.ToJson());
+                        Console.WriteLine(geometry.ToJson());*/
                         throw;
                     }
 
@@ -327,12 +333,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 if (this.Geometry == null)
                 {
                     await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared.
-                    result = await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon, true).ConfigureAwait(false);
+                    result = await this.MapView.SketchEditor.StartAsync(GetSketchMode(), true).ConfigureAwait(false);
                 }
                 else
                 {
                     await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
-                    result = await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polygon)
+                    result = await this.MapView.SketchEditor.StartAsync(this.Geometry)
                         .ConfigureAwait(false);
                 }
 
@@ -376,12 +382,12 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         });
 
-        private bool IsCanCalculateAreaDimensions(Geometry geometry)
+        private bool DoesGeometrySupportDimensionsCalculation(Geometry geometry)
         {
             if (geometry == null)
                 return false;
 
-            if (geometry.GeometryType != GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
+            if (geometry.GeometryType != Esri.ArcGISRuntime.Geometry.GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
                 return false;
 
             var polygon = geometry as Polygon;
@@ -478,6 +484,23 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             get => this.isLocationServiceSwitchEnabled;
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
+        }
+
+        private SketchCreationMode GetSketchMode()
+        {
+            switch (requestedGeometryType)
+            {
+                case GeometryType.Polyline:
+                    return SketchCreationMode.Polyline;
+                case GeometryType.Point:
+                    return SketchCreationMode.Point;
+                case GeometryType.Multipoint:
+                    return SketchCreationMode.Point;
+                case GeometryType.Arrow:
+                    return SketchCreationMode.Arrow;
+                default:
+                    return SketchCreationMode.Polygon;
+            }
         }
     }
 }
