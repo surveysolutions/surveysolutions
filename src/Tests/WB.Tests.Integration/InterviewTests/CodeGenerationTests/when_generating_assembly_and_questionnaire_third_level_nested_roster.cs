@@ -60,7 +60,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                                 })
                         }));
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, CreateQuestionnaireVersion(), out resultAssembly);
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, LatestQuestionnaireVersion(), out resultAssembly);
 
                 return new InvokeResults
                 {
