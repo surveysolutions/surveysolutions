@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
         public static IntegerQuestionViewModel CreateIntegerQuestionViewModel(
             IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
-            IUserInteractionService userInteractionService = null)
+            IUserInteractionService userInteractionService = null,
+            SpecialValuesViewModel specialValuesViewModel = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
             var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
@@ -43,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 Mock.Of<ILiteEventRegistry>(),
-                Mock.Of<SpecialValuesViewModel>());
+                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>());
         }
 
         protected static void SetUp()
