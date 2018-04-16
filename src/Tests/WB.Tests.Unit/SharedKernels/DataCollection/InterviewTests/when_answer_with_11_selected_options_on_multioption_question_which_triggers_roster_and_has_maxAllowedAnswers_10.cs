@@ -3,20 +3,19 @@ using System.Linq;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_with_11_selected_options_on_multioption_question_which_triggers_roster_and_has_maxAllowedAnswers_10 : InterviewTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_InterviewException_with_explanation () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
-            userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+            var userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
-            rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
+            var rosterSizeQuestionId = Guid.Parse("33333333333333333333333333333333");
 
-            answers = Enumerable.Range(1, 11).ToArray();
+            var answers = Enumerable.Range(1, 11).ToArray();
 
             var questionnaire = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.MultipleOptionsQuestion(questionId: rosterSizeQuestionId, answers: answers, maxAllowedAnswers: 10),
@@ -26,24 +25,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId,
                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
-            interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            BecauseOf();
-        }
+            var interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-        public void BecauseOf() =>
-            exception =  NUnit.Framework.Assert.Throws<AnswerNotAcceptedException>(() => interview.AnswerMultipleOptionsQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, answers));
+            // Act
+            var exception =  NUnit.Framework.Assert.Throws<AnswerNotAcceptedException>(() => interview.AnswerMultipleOptionsQuestion(userId, rosterSizeQuestionId, new decimal[0], DateTime.Now, answers));
 
-        [NUnit.Framework.Test] public void should_throw_InterviewException () =>
+            // Assert
             exception.Should().NotBeNull();
-
-        [NUnit.Framework.Test] public void should_throw_InterviewException_with_explanation () =>
-            exception.Message.ToLower().ToSeparateWords().Should().Contain("11", "answers", "greater", "maximum", "10");
-
-        private static Interview interview;
-        private static Guid userId;
-        private static Guid rosterSizeQuestionId;
-        private static int[] answers;
-        private static InterviewException exception;
-
+            exception.Message.Should().Be("Number of answers is greater than the maximum number of selected answers");
+        }
     }
 }
