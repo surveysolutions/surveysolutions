@@ -8,6 +8,9 @@ Vue.use(Vuex)
 import config from "~/shared/config"
 Vue.use(config)
 
+import VueTextareaAutosize from 'vue-textarea-autosize'
+ Vue.use(VueTextareaAutosize);
+
 import Vuei18n from "~/shared/plugins/locale"
 import { browserLanguage } from "~/shared/helpers"
 const i18n = Vuei18n.initialize(browserLanguage);
