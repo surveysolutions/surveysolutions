@@ -13,14 +13,14 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     public class InterviewApiItem
     {
         public InterviewApiItem(Guid interviewId, Guid questionnaireId, long questionnaireVersion, Guid responsibleId,
-            string responsibleName, bool hasErrors, InterviewStatus status, DateTime lastEntryDate, IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
+            string responsibleName, int errorsCount, InterviewStatus status, DateTime lastEntryDate, IEnumerable<InterviewFeaturedQuestion> featuredQuestions)
         {
             this.InterviewId = interviewId;
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
             this.ResponsibleId = responsibleId;
             this.ResponsibleName = responsibleName;
-            this.HasErrors = hasErrors;
+            this.ErrorsCount = errorsCount;
             this.Status = status;
             this.LastEntryDate = lastEntryDate;
             this.FeaturedQuestions = featuredQuestions.Select(q => q);
@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         [DataMember]
         [Required]
-        public bool HasErrors { get; set; }
+        public int ErrorsCount { get; set; }
 
         [DataMember]
         [Required]
