@@ -80,12 +80,6 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             },
             new SelectOption
             {
-                Value = GeometryType.Arrow.ToString(),
-                Text = "Arrow"
-            },
-
-            new SelectOption
-            {
                 Value = GeometryType.Polyline.ToString(),
                 Text = "Polyline"
             },
