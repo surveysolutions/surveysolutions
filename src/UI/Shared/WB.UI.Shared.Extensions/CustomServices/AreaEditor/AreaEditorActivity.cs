@@ -55,11 +55,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             var container = this.FindViewById<LinearLayout>(Resource.Id.area_map_view_container);
             container.AddView(map);
-
-            var scaleLine = FindViewById<Esri.ArcGISRuntime.UI.Controls.ScaleLine>(Resource.Id.scaleLine);
-            scaleLine.MapView = this.ViewModel.MapView;
-            var compass = FindViewById<Esri.ArcGISRuntime.UI.Controls.Compass>(Resource.Id.compass);
-            compass.GeoView = this.ViewModel.MapView;
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
