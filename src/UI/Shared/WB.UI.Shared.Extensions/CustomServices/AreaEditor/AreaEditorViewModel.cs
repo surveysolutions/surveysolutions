@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.Views;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
@@ -329,18 +330,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         this.MapView.SketchEditor.CompleteCommand.CanExecute(this.MapView.SketchEditor.CompleteCommand);
                 };
 
-                Geometry result;
                 if (this.Geometry == null)
                 {
                     await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared.
-                    result = await this.MapView.SketchEditor.StartAsync(GetSketchMode(), true).ConfigureAwait(false);
                 }
                 else
                 {
                     await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
-                    result = await this.MapView.SketchEditor.StartAsync(this.Geometry)
-                        .ConfigureAwait(false);
                 }
+
+                var result = await GetGeometry().ConfigureAwait(false);
 
                 var position = this.MapView.LocationDisplay.Location.Position;
                 double? dist = null;
@@ -366,8 +365,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
                     Coordinates = coordinates,
-                    Area = GeometryEngine.AreaGeodetic(result),
-                    Length = GeometryEngine.LengthGeodetic(result),
+                    Area = DoesGeometrySupportDimensionsCalculation(result) ? GeometryEngine.AreaGeodetic(result) : 0,
+                    Length = DoesGeometrySupportDimensionsCalculation(result) ? GeometryEngine.LengthGeodetic(result) : 0,
                     DistanceToEditor = dist
                 };
 
@@ -385,6 +384,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private bool DoesGeometrySupportDimensionsCalculation(Geometry geometry)
         {
             if (geometry == null)
+                return false;
+
+            if (requestedGeometryType == GeometryType.Multipoint)
                 return false;
 
             if (geometry.GeometryType != Esri.ArcGISRuntime.Geometry.GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
@@ -486,20 +488,31 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
 
-        private SketchCreationMode GetSketchMode()
+        private async Task<Geometry> GetGeometry()
         {
             switch (requestedGeometryType)
             {
                 case GeometryType.Polyline:
-                    return SketchCreationMode.Polyline;
+                    return this.Geometry == null ?
+                        await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false):
+                        await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polyline).ConfigureAwait(false);
                 case GeometryType.Point:
-                    return SketchCreationMode.Point;
+                    return this.Geometry == null ?
+                     await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Point).ConfigureAwait(false):
+                     await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Point).ConfigureAwait(false);
                 case GeometryType.Multipoint:
-                    return SketchCreationMode.Point;
-                case GeometryType.Arrow:
-                    return SketchCreationMode.Arrow;
+                {
+                    this.MapView.SketchEditor.Style.MidVertexSymbol = null;
+                    this.MapView.SketchEditor.Style.LineSymbol = null;
+
+                    return this.Geometry == null ?
+                        await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false):
+                        await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polyline).ConfigureAwait(false);
+                }
                 default:
-                    return SketchCreationMode.Polygon;
+                    return this.Geometry == null ?
+                        await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon).ConfigureAwait(false):
+                        await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
             }
         }
     }
