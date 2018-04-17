@@ -232,7 +232,7 @@
                                             <!-- /ko -->
                                             <th title="@Interviews.Tooltip_Table_Responsible" data-bind='sortby: "ResponsibleName"'>@Pages.Survey_ResponsibleTitle</th>
                                             <th title="@Interviews.Tooltip_Table_LastUpdate" class="date last-update" data-bind='sortby: "UpdateDate"'>@Pages.Survey_LastUpdateTitle</th>
-                                            <th title="@Interviews.Tooltip_Table_HasErrors" class="errors" data-bind='sortby: "HasErrors"'>@Pages.Survey_HasErrorsTitle</th>
+                                            <th title="@Interviews.Tooltip_Table_ErrorsCount" data-bind='sortby: "ErrorsCount"'>@Interviews.Errors</th>
                                             <th title="@Interviews.Tooltip_Table_Status" class="status" data-bind='sortby: "Status"'>@Pages.Survey_StatusTitle</th>
                                             <th title="@Interviews.Tooltip_Table_ReceivedByInterviewer" class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Pages.Survey_ReceivedByInterviewerTitle</th>
                                             <th title="@Interviews.Tooltip_Table_Assignment" data-bind='sortby: "AssignmentId"'>@Common.Assignment</th>
@@ -246,12 +246,12 @@
                                         <!-- ko foreach:Items -->
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
-                                            {
-                                                <td class="checkbox-cell" data-bind="click: function() { IsSelected(!IsSelected()) }">
-                                                    <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
-                                                    <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
-                                                </td>
-                                            }
+    {
+                                        <td class="checkbox-cell" data-bind="click: function() { IsSelected(!IsSelected()) }">
+                                            <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
+                                            <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
+                                        </td>
+}
                                             <td class="interview-id title-row">
                                                 <a data-bind="attr: { href: $detailsUrl + '/' + InterviewId() }">
                                                     <!-- ko text:Key --><!--/ko-->
@@ -277,12 +277,12 @@
                                                 <!-- /ko -->
                                             </td>
                                             <td class="date last-update" data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></td>
-                                            <td class="errors">
-                                                <!-- ko if:HasErrors -->
-                                                @Common.Yes
+                                            <td class="type-numeric" data-bind="css: {'errors': ErrorsCount()}">
+                                                <!-- ko if:ErrorsCount() === 0 -->
+                                                <span>0</span>
                                                 <!-- /ko -->
-                                                <!-- ko ifnot:HasErrors -->
-                                                <span class="empty"></span>
+                                                <!-- ko if:ErrorsCount() > 0 -->
+                                                <ko data-bind="text: ErrorsCount()"></ko>
                                                 <!-- /ko -->
                                             </td>
                                             <td class="status" data-bind="text: GetInterviewStatusString(Status())"></td>
@@ -291,7 +291,7 @@
                                             </td>
                                             <td>
                                                 <span data-bind="text: AssignmentId() ? AssignmentId() : ''"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                         <!-- /ko -->
                                     </tbody>
@@ -314,7 +314,7 @@
                                 </label>
                             </div>
                             <ul class="list-unstyled">
-                                <li>@Pages.Survey_HasErrorsTitle:  <span data-bind="text: HasErrors() ? '@Common.Yes' : '@Common.No'"></span></li>
+                                <li>@Interviews.Errors:  <span data-bind="text: ErrorsCount()"></span></li>
                                 <li>@Pages.Survey_LastUpdateTitle: <span data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></span></li>
                                 <li>@Pages.Survey_ReceivedByInterviewerTitle: <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Pages.Survey_ResponsibleTitle: <a class="interviewer" data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a></li>
