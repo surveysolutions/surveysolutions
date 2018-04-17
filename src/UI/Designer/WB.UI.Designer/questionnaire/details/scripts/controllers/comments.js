@@ -19,7 +19,7 @@
                             }
 
                             _.forEach(commentThread.comments, function(comment) {
-                                comment.date = moment.utc(comment.date).local().format("LLL");
+                                comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
                                 comment.isResolved = !_.isNull(comment.resolveDate || null);
                             });
 
