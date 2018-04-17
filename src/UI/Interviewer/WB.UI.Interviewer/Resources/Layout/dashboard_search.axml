@@ -7,7 +7,8 @@
 
   <LinearLayout style="@style/Dashboard_SearchView_Container" local:MvxBind="Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation);">
     <ImageView style="@style/Dashboard_SearchView_SearchIcon" 
-               local:MvxBind="Click ExitSearchCommand" />
+               local:MvxBind="Click ExitSearchCommand"
+               local:srcCompat="@drawable/back_arrow"/>
     <EditText style="@style/Dashboard_SearchView_FilterInput"
               local:MvxBind="SetFocus Not(Or(IsInProgressLongOperation, IsInProgressLongOperation)); 
                                      Watermark EmptySearchText; 
