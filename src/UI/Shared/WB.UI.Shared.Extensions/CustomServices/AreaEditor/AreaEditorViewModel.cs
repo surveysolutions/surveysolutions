@@ -315,7 +315,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         this.GeometryArea = (doesGeometrySupportDimensionsCalculation ? GeometryEngine.AreaGeodetic(geometry) : 0).ToString("#.##");
                         this.GeometryLength = (doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0).ToString("#.##");
                     }
-                    catch (Exception e)
+                    catch
                     {
                         /*Console.WriteLine("LOG MESSAGE EXCEPTION");
                         Console.WriteLine(e);
