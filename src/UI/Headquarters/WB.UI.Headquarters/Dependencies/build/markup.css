@@ -7118,6 +7118,8 @@ a.disabled {
 
 .field {
   position: relative; }
+  .field .field-to-fill {
+    display: block; }
 
 ::-webkit-input-placeholder {
   font-weight: normal !important;
