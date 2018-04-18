@@ -35,7 +35,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var isExistAnyUser = await this.userManager.IsExistAnyUser();
             if (isExistAnyUser)
-                return new HttpForbiddenResult("Installation is finished");
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
 
             return View(new FinishIntallationModel());
         }
@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var isExistAnyUser = await this.userManager.IsExistAnyUser();
             if (isExistAnyUser)
-                return new HttpForbiddenResult("Installation is finished");
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden); 
 
             if (ModelState.IsValid)
             {
