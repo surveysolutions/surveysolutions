@@ -46,7 +46,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected Guid interviewId;
 
-        public virtual void Init(string interviewId,
+        public virtual void Configure(string interviewId,
             NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
