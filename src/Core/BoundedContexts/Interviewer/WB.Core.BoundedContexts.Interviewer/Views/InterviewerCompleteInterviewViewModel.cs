@@ -30,10 +30,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewRepository = interviewRepository;
         }
 
-        public override void Init(string interviewId, NavigationState navigationState)
+        public override void Configure(string interviewId, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            base.Init(interviewId, navigationState);
+            base.Configure(interviewId, navigationState);
 
             var interview = this.interviewRepository.Get(interviewId);
             var interviewKey = interview.GetInterviewKey()?.ToString();

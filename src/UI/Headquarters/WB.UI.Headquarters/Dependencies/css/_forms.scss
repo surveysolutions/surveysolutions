@@ -34,6 +34,7 @@
 	position: relative;
 	.field-to-fill{
 		@extend %field-to-fill;
+		display: block;
 	}
 	&.answered, &.has-error{
 		.btn-clear{
