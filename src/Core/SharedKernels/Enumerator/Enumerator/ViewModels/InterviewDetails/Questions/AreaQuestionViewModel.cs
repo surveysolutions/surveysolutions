@@ -135,11 +135,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         area: answerArea.Area,
                         coordinates:answerArea.Coordinates,
                         length: answerArea.Length,
-                        distanceToEditor: answerArea.DistanceToEditor);
+                        distanceToEditor: answerArea.DistanceToEditor,
+                        numberOfPoints: answerArea.NumberOfPoints);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
                     this.QuestionState.Validity.ExecutedWithoutExceptions();
-                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.Area, answerArea.Length,
+                    this.Answer = new Area(answerArea.Geometry, answerArea.MapName, answerArea.NumberOfPoints, answerArea.Area, answerArea.Length,
                         answerArea.DistanceToEditor);
                 }
             }
@@ -223,7 +224,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (areaQuestion.IsAnswered())
             {
                 var questionAnswer = areaQuestion.GetAnswer().Value;
-                this.Answer = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);
+                this.Answer = new Area(questionAnswer.Geometry, questionAnswer.MapName, questionAnswer.NumberOfPoints, 
+                    questionAnswer.AreaSize, questionAnswer.Length, questionAnswer.DistanceToEditor);
             }
         }
     }

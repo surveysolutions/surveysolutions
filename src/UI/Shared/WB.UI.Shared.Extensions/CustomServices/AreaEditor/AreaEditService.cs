@@ -77,7 +77,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             Length = editResult.Length,
                             Coordinates = editResult.Coordinates,
                             DistanceToEditor = editResult.DistanceToEditor,
-                            Preview = editResult.Preview
+                            Preview = editResult.Preview,
+                            NumberOfPoints = editResult.NumberOfPoints
                         });
             });
 
