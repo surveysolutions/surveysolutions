@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -29,15 +31,23 @@ namespace WB.UI.Headquarters.Controllers
             this.signInManager = identityManager;
         }
 
-        public ActionResult Finish()
+        public async Task<ActionResult> Finish()
         {
+            var isExistAnyUser = await this.userManager.IsExistAnyUser();
+            if (isExistAnyUser)
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+
             return View(new FinishIntallationModel());
         }
 
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Finish(FinishIntallationModel model)
         {
+            var isExistAnyUser = await this.userManager.IsExistAnyUser();
+            if (isExistAnyUser)
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+
             if (ModelState.IsValid)
             {
                 var creationResult = await this.userManager.CreateUserAsync(new HqUser
