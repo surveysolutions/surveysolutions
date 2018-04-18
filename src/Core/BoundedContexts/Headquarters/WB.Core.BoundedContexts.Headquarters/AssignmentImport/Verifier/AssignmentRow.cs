@@ -3,7 +3,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
-    public class AssignmentRow
+    public class PreloadingAssignmentRow
     {
         public AssignmentValue[] Answers { get; set; }
         public AssignmentRosterInstanceCode[] RosterInstanceCodes { get; set; }

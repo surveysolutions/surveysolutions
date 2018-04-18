@@ -89,9 +89,9 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
                         {
                             zipEntry.Extract(memoryStream);
                         }
-                        catch (BadPasswordException)
+                        catch (BadPasswordException ex)
                         {
-                            throw new Core.Infrastructure.FileSystem.ZipException("Password required");
+                            throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
                         }
 
                         yield return new ExtractedFile

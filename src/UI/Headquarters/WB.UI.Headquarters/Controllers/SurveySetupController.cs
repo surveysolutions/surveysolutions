@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -33,11 +32,9 @@ namespace WB.UI.Headquarters.Controllers
     public class SurveySetupController : BaseController
     {
         private readonly IPreloadingTemplateService preloadingTemplateService;
-        private readonly IPreloadedDataRepository preloadedDataRepository;
         private readonly ISampleUploadViewFactory sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IInterviewImportService interviewImportService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
@@ -46,6 +43,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAssignmentsImportService assignmentsImportService;
         private readonly AssignmentsImportTask assignmentsImportTask;
         private readonly AssignmentsVerificationTask assignmentsVerificationTask;
+        private readonly IAssignmentsImportReader assignmentsImportReader;
 
         public SurveySetupController(
             ICommandService commandService,
@@ -63,14 +61,13 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsImportService assignmentsImportService,
             AssignmentsImportTask assignmentsImportTask,
-            AssignmentsVerificationTask assignmentsVerificationTask)
+            AssignmentsVerificationTask assignmentsVerificationTask,
+            IAssignmentsImportReader assignmentsImportReader)
             : base(commandService, logger)
         {
             this.preloadingTemplateService = preloadingTemplateService;
-            this.preloadedDataRepository = preloadedDataRepository;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.interviewImportService = interviewImportService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.preloadedDataServiceFactory = preloadedDataServiceFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
@@ -79,6 +76,7 @@ namespace WB.UI.Headquarters.Controllers
             this.assignmentsImportService = assignmentsImportService;
             this.assignmentsImportTask = assignmentsImportTask;
             this.assignmentsVerificationTask = assignmentsVerificationTask;
+            this.assignmentsImportReader = assignmentsImportReader;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
         }
 
@@ -174,7 +172,7 @@ namespace WB.UI.Headquarters.Controllers
             PreloadedFile[] allImportedFiles = null;
             try
             {
-                allImportedFiles = this.assignmentsImportService.ParseZip(model.File.InputStream).ToArray();
+                allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream).ToArray();
             }
             catch (ZipException)
             {
@@ -183,7 +181,7 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireId,
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
-                        @"Archive with password is not supported",
+                        PreloadingVerificationMessages.ArchiveWithPasswordNotSupported,
                         AssignmentImportType.Panel,
                         model.File.FileName));
             }
@@ -202,8 +200,9 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
+                var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
                 var errors = this.assignmentsImportService
-                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaireIdentity).Take(10).ToArray();
+                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire).Take(10).ToArray();
 
                 if (errors.Any())
                 {
@@ -219,7 +218,7 @@ namespace WB.UI.Headquarters.Controllers
                             model.File.FileName));
                 }
 
-                this.assignmentsVerificationTask.Run();
+                this.assignmentsVerificationTask.Run(5);
             }
             catch (Exception e)
             {
@@ -283,7 +282,7 @@ namespace WB.UI.Headquarters.Controllers
             PreloadedFile preloadedSample = null;
             
             if (new[] { @".tab", @".txt" }.Contains(extension))
-                preloadedSample = this.assignmentsImportService.ParseText(model.File.InputStream, model.File.FileName);
+                preloadedSample = this.assignmentsImportReader.ReadTextFile(model.File.InputStream, model.File.FileName);
 
             if (@".zip" == extension)
             {
@@ -291,7 +290,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 try
                 {
-                    var preloadedFiles = this.assignmentsImportService.ParseZip(model.File.InputStream);
+                    var preloadedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream);
 
                     preloadedSample =
                         preloadedFiles.FirstOrDefault(x => x.FileInfo.QuestionnaireOrRosterName == questionnaireFileName) ??
@@ -304,7 +303,7 @@ namespace WB.UI.Headquarters.Controllers
                             model.QuestionnaireId,
                             model.QuestionnaireVersion,
                             questionnaireInfo?.Title,
-                            @"Archive with password is not supported",
+                            PreloadingVerificationMessages.ArchiveWithPasswordNotSupported,
                             AssignmentImportType.Assignments,
                             model.File.FileName));
                 }
@@ -324,7 +323,8 @@ namespace WB.UI.Headquarters.Controllers
             
             try
             {
-                var errors = this.assignmentsImportService.VerifySimple(preloadedSample, questionnaireIdentity).Take(10).ToArray();
+                var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+                var errors = this.assignmentsImportService.VerifySimple(preloadedSample, questionnaire).Take(10).ToArray();
                 if (errors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
