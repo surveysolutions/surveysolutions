@@ -61,6 +61,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password-protected archives are not supported.
+        /// </summary>
+        public static string ArchiveWithPasswordNotSupported {
+            get {
+                return ResourceManager.GetString("ArchiveWithPasswordNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please, wait until previous import of assignments is completed.
         /// </summary>
         public static string HasAssignmentsToImport {

@@ -253,4 +253,7 @@
     <data name="HasAssignmentsToImport" xml:space="preserve">
     <value>Please, wait until previous import of assignments is completed</value>
   </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Password-protected archives are not supported</value>
+  </data>
 </root>
