@@ -249,9 +249,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return await this.UpdateUserAsync(userToArchive, null);
         }
 
-        public async Task<bool> IsExistAnyUser()
+        public Task<bool> IsExistAnyUser()
         {
-            return await this.Users.AnyAsync();
+            return this.Users.AnyAsync();
         }
     }
 }
