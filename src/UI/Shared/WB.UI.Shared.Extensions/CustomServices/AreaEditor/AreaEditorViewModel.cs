@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.Views;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
@@ -18,7 +17,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Questionnaire.Documents;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
@@ -57,11 +55,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         public override async Task Initialize()
         {
             await base.Initialize();
-            var localmaps = this.mapService.GetAvailableMaps();
-            localmaps.Add(this.mapService.PrepareAndGetDefaultMap());
+            var localMaps = this.mapService.GetAvailableMaps();
+            localMaps.Add(this.mapService.PrepareAndGetDefaultMap());
 
-
-            this.AvailableMaps = new MvxObservableCollection<MapDescription>(localmaps);
+            this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
 
             if (this.AvailableMaps.Count == 0)
@@ -286,12 +283,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         });
 
-        public IMvxCommand HidePanelComand => new MvxCommand(() =>
-        {
-            IsPanelVisible = false;
-        });
-
-        public IMvxCommand ShowPanelCommand => new MvxCommand(() =>
+        public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
         {
             IsPanelVisible = !IsPanelVisible;
         });
@@ -453,6 +445,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.isEditing, value);
         }
 
+        private bool isGeometryAreaVisible;
+        public bool IsGeometryAreaVisible
+        {
+            get => this.isEditing;
+            set => this.RaiseAndSetIfChanged(ref this.isGeometryAreaVisible, value);
+        }
+
+        private bool isGeometryLengthVisible;
+        public bool IsGeometryLengthVisible
+        {
+            get => this.isEditing;
+            set => this.RaiseAndSetIfChanged(ref this.isGeometryLengthVisible, value);
+        }
+
         private bool canUndo;
         public bool CanUndo
         {
@@ -493,15 +499,30 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             switch (requestedGeometryType)
             {
                 case GeometryType.Polyline:
-                    return this.Geometry == null ?
-                        await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false):
-                        await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polyline).ConfigureAwait(false);
+                {
+                    IsGeometryLengthVisible = true;
+                    IsGeometryAreaVisible = false;
+
+                    return this.Geometry == null
+                        ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polyline).ConfigureAwait(false)
+                        : await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polyline)
+                            .ConfigureAwait(false);
+                }
                 case GeometryType.Point:
-                    return this.Geometry == null ?
-                     await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Point).ConfigureAwait(false):
-                     await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Point).ConfigureAwait(false);
+                {
+                    IsGeometryLengthVisible = false;
+                    IsGeometryAreaVisible = false;
+
+                    return this.Geometry == null
+                        ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Point).ConfigureAwait(false)
+                        : await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Point)
+                            .ConfigureAwait(false);
+                }
                 case GeometryType.Multipoint:
                 {
+                    IsGeometryLengthVisible = false;
+                    IsGeometryAreaVisible = false;
+
                     this.MapView.SketchEditor.Style.MidVertexSymbol = null;
                     this.MapView.SketchEditor.Style.LineSymbol = null;
 
@@ -510,9 +531,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polyline).ConfigureAwait(false);
                 }
                 default:
-                    return this.Geometry == null ?
-                        await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon).ConfigureAwait(false):
-                        await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polygon).ConfigureAwait(false);
+                {
+                    IsGeometryLengthVisible = false;
+                    IsGeometryAreaVisible = false;
+
+                    return this.Geometry == null
+                        ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon).ConfigureAwait(false)
+                        : await this.MapView.SketchEditor.StartAsync(this.Geometry, SketchCreationMode.Polygon)
+                            .ConfigureAwait(false);
+                }
             }
         }
     }
