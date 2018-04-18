@@ -8,14 +8,25 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
-    public partial class AssignmentsImportService
+    public class AssignmentsImportFileConverter : IAssignmentsImportFileConverter
     {
-        private IEnumerable<AssignmentRow> GetAssignmentRows(PreloadedFile file, IQuestionnaire questionnaire)
+        private readonly IFileSystemAccessor fileSystem;
+        private readonly IUserViewFactory userViewFactory;
+
+        public AssignmentsImportFileConverter(IFileSystemAccessor fileSystem,
+            IUserViewFactory userViewFactory)
+        {
+            this.fileSystem = fileSystem;
+            this.userViewFactory = userViewFactory;
+        }
+
+        public IEnumerable<PreloadingAssignmentRow> GetAssignmentRows(PreloadedFile file, IQuestionnaire questionnaire)
         {
             for (int i = 0; i < file.Rows.Length; i++)
             {
@@ -27,7 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var preloadingResponsible = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.ResponsibleColumnName);
                 var preloadingQuantity = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.AssignmentsCountColumnName);
 
-                yield return new AssignmentRow
+                yield return new PreloadingAssignmentRow
                 {
                     Row = i,
                     FileName = file.FileInfo.FileName,
@@ -201,7 +212,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
                 Column = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToAssignmentDoubleAnswer).ToArray()
+                Values = compositeValue.Values.Select(ToAssignmentIntegerAnswer).ToArray()
             };
 
         private static AssignmentAnswer ToAssignmentDoubleAnswer(PreloadingValue answer)

@@ -287,4 +287,8 @@
     <value>Пожалуйста подождите пока завершится текущий процесс импорта назначений</value>
     <comment>Пожалуйста подождите пока завершится текущий процесс импорта назначений</comment>
   </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Архивы защищенные паролем не поддерживаются</value>
+    <comment>Архивы защищенные паролем не поддерживаются</comment>
+  </data>
 </root>

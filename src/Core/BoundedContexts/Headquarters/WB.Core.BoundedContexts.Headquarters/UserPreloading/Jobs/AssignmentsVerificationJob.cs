@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
@@ -18,50 +23,93 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         
         private IAssignmentsImportService importAssignmentsService => ServiceLocator.Current
             .GetInstance<IAssignmentsImportService>();
-        
+
+        private IPreloadedDataVerifier importAssignmentsVerifier => ServiceLocator.Current
+            .GetInstance<IPreloadedDataVerifier>();
+
+        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current
+            .GetInstance<IQuestionnaireStorage>();
+
         private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current
             .GetInstance<IPlainTransactionManager>();
+        
+        private SampleImportSettings sampleImportSettings => ServiceLocator.Current
+            .GetInstance<SampleImportSettings>();
 
-        private ITransactionManager transactionManager => ServiceLocator.Current
-            .GetInstance<ITransactionManager>();
+        private T ExecuteInPlain<T>(Func<T> func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
+        private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
+
 
         public void Execute(IJobExecutionContext context)
         {
-            this.logger.Info("Assignments verification job: Started");
-
-            var sw = new Stopwatch();
-            sw.Start();
-
             try
             {
-                var importProcess = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-                        this.importAssignmentsService.GetImportStatus());
+                var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
                 if (importProcess == null) return;
 
-                AssignmentToImport assignmentToVerify = null;
-                do
-                {
-                    plainTransactionManager.BeginTransaction();
-                    transactionManager.BeginCommandTransaction();
+                var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToVerify());
+                if (allAssignmentIds.Length == 0) return;
 
-                    assignmentToVerify = this.importAssignmentsService.GetAssignmentToVerify();
-                    if (assignmentToVerify == null) break;
+                this.logger.Debug("Assignments verification job: Started");
 
-                    this.importAssignmentsService.VerifyAssignment(assignmentToVerify,
-                        importProcess.QuestionnaireIdentity);
+                var sw = new Stopwatch();
+                sw.Start();
 
-                    plainTransactionManager.CommitTransaction();
-                    transactionManager.CommitCommandTransaction();
+                Parallel.ForEach(allAssignmentIds,
+                    new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
+                    assignmentId =>
+                    {
+                        try
+                        {
+                            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
 
-                } while (assignmentToVerify != null);
+                            var assignmentToVerify = this.ExecuteInPlain(() => this.importAssignmentsService.GetAssignmentById(assignmentId));
+                            if (assignmentToVerify == null) return;
+
+                            var questionnaire = this.ExecuteInPlain(() => this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null));
+                            if (questionnaire == null)
+                            {
+                                this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentToVerify.Id));
+                                return;
+                            }
+
+                            var error = this.ExecuteInPlain(() =>
+                                this.importAssignmentsVerifier.VerifyWithInterviewTree(
+                                    assignmentToVerify.Answers,
+                                    assignmentToVerify.Interviewer ?? assignmentToVerify.Supervisor,
+                                    questionnaire));
+
+                            this.SaveVerificationStatus(assignmentToVerify, error);
+                        }
+                        finally
+                        {
+                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                        }
+                    });
+
+                sw.Stop();
+                this.logger.Debug($"Assignments verfication job: Finished. Elapsed time: {sw.Elapsed}");
             }
             catch (Exception ex)
             {
                 this.logger.Error($"Assignments verification job: FAILED. Reason: {ex.Message} ", ex);
             }
+        }
 
-            sw.Stop();
-            this.logger.Info($"Assignments verfication job: Finished. Elapsed time: {sw.Elapsed}");
+        private void SaveVerificationStatus(AssignmentToImport assignmentToVerify, InterviewImportError error)
+        {
+            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
+
+            try
+            {
+                transactionManager.BeginCommandTransaction();
+                this.importAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage);
+                transactionManager.CommitCommandTransaction();
+            }
+            catch
+            {
+                transactionManager.RollbackCommandTransaction();
+            }
         }
     }
 }

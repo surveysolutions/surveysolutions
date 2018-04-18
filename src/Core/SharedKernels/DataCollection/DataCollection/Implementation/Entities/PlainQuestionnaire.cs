@@ -44,6 +44,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly QuestionnaireDocument innerDocument;
 
+        private IReadOnlyCollection<Guid> allRosterSizeQuestionsCache;
         private Dictionary<Guid, IVariable> variablesCache = null;
         private Dictionary<Guid, IStaticText> staticTextsCache = null;
         private Dictionary<Guid, IQuestion> questionsCache = null;
@@ -641,14 +642,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        private readonly ConcurrentDictionary<Guid, Guid[]> _getRosterSizeSourcesCache = new ConcurrentDictionary<Guid, Guid[]>();
+        public IReadOnlyCollection<Guid> GetAllRosterSizeQuestions()
+            => this.allRosterSizeQuestionsCache ?? (this.allRosterSizeQuestionsCache = this.innerDocument
+                   .Find<IQuestion>(x => this.IsRosterSizeQuestion(x.PublicKey)).Select(x => x.PublicKey)
+                   .ToReadOnlyCollection());
 
-        public Guid[] GetAllRosterSizeQuestions() =>
-            _getRosterSizeSourcesCache.SelectMany(x => x.Value).Distinct().Where(x => !IsRosterGroup(x)).ToArray();
-
+        private readonly ConcurrentDictionary<Guid, Guid[]> getRosterSizeSourcesCache = new ConcurrentDictionary<Guid, Guid[]>();
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            return _getRosterSizeSourcesCache.GetOrAdd(entityId, id =>
+            return getRosterSizeSourcesCache.GetOrAdd(entityId, id =>
             {
                 var entity = GetEntityOrThrow(entityId);
                 var rosterSizes = new List<Guid>();

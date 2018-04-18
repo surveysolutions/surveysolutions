@@ -44,6 +44,8 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
+            registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
+            registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
             registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
             registry.Bind<IInterviewImportService, InterviewImportService>();
             registry.Bind<IFormDataConverterLogger, FormDataConverterLogger>();

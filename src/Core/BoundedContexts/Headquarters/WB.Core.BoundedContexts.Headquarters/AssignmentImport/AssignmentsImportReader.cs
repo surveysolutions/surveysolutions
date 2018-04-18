@@ -4,14 +4,25 @@ using System.Dynamic;
 using System.IO;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
-    public partial class AssignmentsImportService
+    public class AssignmentsImportReader : IAssignmentsImportReader
     {
+        private readonly ICsvReader csvReader;
+        private readonly IArchiveUtils archiveUtils;
+
+        public AssignmentsImportReader(ICsvReader csvReader, IArchiveUtils archiveUtils)
+        {
+            this.csvReader = csvReader;
+            this.archiveUtils = archiveUtils;
+        }
+
         private static readonly string[] ignoredPreloadingColumns =
             ServiceColumns.SystemVariables.Values.Select(x => x.VariableExportColumnName).ToArray();
 
@@ -59,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             };
         }
 
-        public PreloadedFile ParseText(Stream inputStream, string fileName) => new PreloadedFile
+        public PreloadedFile ReadTextFile(Stream inputStream, string fileName) => new PreloadedFile
         {
             FileInfo = new PreloadedFileInfo
             {
@@ -71,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 .Select((record, rowIndex) => (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
         };
 
-        public IEnumerable<PreloadedFile> ParseZip(Stream inputStream)
+        public IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream)
         {
             if(!this.archiveUtils.IsZipStream(inputStream))
                 yield break;
@@ -82,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
 
                 if (allowedExtension && !isSystemFile)
-                    yield return this.ParseText(new MemoryStream(file.Bytes), file.Name);
+                    yield return this.ReadTextFile(new MemoryStream(file.Bytes), file.Name);
             }
         }
     }

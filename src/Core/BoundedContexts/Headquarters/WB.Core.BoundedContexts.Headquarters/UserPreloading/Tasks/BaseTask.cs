@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public virtual bool IsJobRunning() =>
             this.scheduler.GetCurrentlyExecutingJobs().FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
 
-        public virtual void Run()
+        public virtual void Run(int intervalInSeconds = 1)
         {
             if (!this.scheduler.CheckExists(jobKey))
             {
@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
                 .ForJob(jobKey)
-                .StartAt(DateBuilder.FutureDate(1, IntervalUnit.Second))
+                .StartAt(DateBuilder.FutureDate(intervalInSeconds, IntervalUnit.Second))
                 .Build();
 
             this.scheduler.ScheduleJob(trigger);
