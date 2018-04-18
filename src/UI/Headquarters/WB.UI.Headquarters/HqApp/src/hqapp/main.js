@@ -13,6 +13,9 @@ import './components'
 import './compatibility.js'
 import "~/webinterview/componentsRegistry"
 
+import VueTextareaAutosize from 'vue-textarea-autosize'
+ Vue.use(VueTextareaAutosize);
+
 import box from "~/webinterview/components/modal"
 import 'flatpickr/dist/flatpickr.css'
 import "toastr/build/toastr.css"

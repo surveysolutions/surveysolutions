@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected Guid interviewId;
         protected NavigationState navigationState;
 
-        public virtual void Init(string interviewId, NavigationState navigationState)
+        public virtual void Configure(string interviewId, NavigationState navigationState)
         {
             this.navigationState = navigationState;
             this.interviewId = Guid.Parse(interviewId);
