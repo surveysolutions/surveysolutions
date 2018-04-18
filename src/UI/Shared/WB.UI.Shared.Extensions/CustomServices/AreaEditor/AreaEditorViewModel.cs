@@ -359,7 +359,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Coordinates = coordinates,
                     Area = DoesGeometrySupportDimensionsCalculation(result) ? GeometryEngine.AreaGeodetic(result) : 0,
                     Length = DoesGeometrySupportDimensionsCalculation(result) ? GeometryEngine.LengthGeodetic(result) : 0,
-                    DistanceToEditor = dist
+                    DistanceToEditor = dist,
+                    NumberOfPoints = GetGeometryPointsCount(result)
                 };
 
                 //save
@@ -372,6 +373,26 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Close(this);
             }
         });
+
+        private int GetGeometryPointsCount(Geometry geometry)
+        {
+            switch (geometry.GeometryType)
+            {
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
+                    return 1;
+
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
+                    return(geometry as Polyline).Parts[0].PointCount;
+
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
+                    return (geometry as Polygon).Parts[0].PointCount;
+
+                case Esri.ArcGISRuntime.Geometry.GeometryType.Multipoint:
+                    return (geometry as Multipoint).Points.Count();
+                default:
+                    return 0;
+            }
+        }
 
         private bool DoesGeometrySupportDimensionsCalculation(Geometry geometry)
         {
