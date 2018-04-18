@@ -132,7 +132,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 return Empty;
             }
 
-            return new RosterVector(value.Split('-').Where(val => !string.IsNullOrEmpty(val)).Select(decimal.Parse));
+            return new RosterVector(value.ParseMinusDelimitedIntArray());
         }
 
         public int Last()
