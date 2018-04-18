@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.navigationState = navigationState;
+            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
             this.interviewState = interviewState;
