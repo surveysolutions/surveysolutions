@@ -177,9 +177,6 @@
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
     <value>Identificador de la tarea a la que pertenece esta entrevista. Haga clic en el icono de ordenar para ordenar por número de tarea</value>
   </data>
-  <data name="Tooltip_Table_HasErrors" xml:space="preserve">
-    <value>Indicador si la entrevista tiene al menos un error de validación. "Sí" indica al menos un error; "-" indica que no hay error. Haga clic en el icono de ordenar para ordenar por la presencia de errores.</value>
-  </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
     <value>Haga clic aquí para ocultar o mostrar las preguntas de identificación. Ocultar preguntas de identificación puede proporcionar más espacio para otra información. Mostrar preguntas de identificación puede proporcionar detalles para diferenciar entre entrevistas.</value>
   </data>
