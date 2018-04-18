@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="#AA575757"
-                local:MvxBind="Click ShowPanelCommand;">
+                local:MvxBind="Click SwitchPanelCommand;">
                 <LinearLayout
                     android:id="@+id/area_map_view_title"
                     android:layout_marginLeft="@dimen/area_editor_toolbar_margin_left"
@@ -121,7 +121,7 @@
             style="@style/Area_Screen_Button_Bordered"
             android:id="@+id/areaEditor_Close_Panel"
             android:layout_marginLeft="@dimen/area_editor_common_margin_right"
-            local:MvxBind="Click HidePanelComand;Text Localization('AreaMap_Close');" />
+            local:MvxBind="Click SwitchPanelCommand;Text Localization('AreaMap_Close');" />
       </LinearLayout>
       <LinearLayout
           android:layout_gravity="left"
@@ -186,9 +186,9 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="left"
-                    android:duplicateParentState="true"
+                android:duplicateParentState="true"
                 android:id="@+id/areaEditor_GeometryArea"
-                local:MvxBind="Text Format('{0} {1} m2', Localization('AreaMap_AreaFormat'), GeometryArea) ; Visibility Visibility(IsEditing);" />
+                local:MvxBind="Text Format('{0} {1} m2', Localization('AreaMap_AreaFormat'), GeometryArea) ; Visibility Visibility(IsGeometryAreaVisible);" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
                 android:gravity="left"
                     android:duplicateParentState="true"
                 android:id="@+id/areaEditor_GeometryLength"
-                local:MvxBind="Text Format('{0} {1} m', Localization('AreaMap_LengthFormat'), GeometryLength) ; Visibility Visibility(IsEditing);" />
+                local:MvxBind="Text Format('{0} {1} m', Localization('AreaMap_LengthFormat'), GeometryLength) ; Visibility Visibility(IsGeometryLengthVisible);" />
         </LinearLayout>
         <LinearLayout
             android:layout_gravity="left"
