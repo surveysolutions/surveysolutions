@@ -5,7 +5,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     public class AssignmentsImportStatus
     {
-        public long AssignmentsInQueue { get; set; }
+        public long InQueueCount { get; set; }
+        public long VerifiedWithoutError { get; set; }
         public long VerifiedAssignments { get; set; }
         public long AssingmentsWithErrors { get; set; }
         public long TotalAssignments { get; set; }

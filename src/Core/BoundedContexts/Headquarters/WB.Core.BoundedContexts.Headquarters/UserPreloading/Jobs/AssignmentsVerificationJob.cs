@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                                     assignmentToVerify.Interviewer ?? assignmentToVerify.Supervisor,
                                     questionnaire));
 
-                            this.SaveVerificationStatus(assignmentToVerify, error);
+                            this.ExecuteInPlain(() => this.importAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage));
                         }
                         finally
                         {
@@ -93,22 +93,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             catch (Exception ex)
             {
                 this.logger.Error($"Assignments verification job: FAILED. Reason: {ex.Message} ", ex);
-            }
-        }
-
-        private void SaveVerificationStatus(AssignmentToImport assignmentToVerify, InterviewImportError error)
-        {
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
-
-            try
-            {
-                transactionManager.BeginCommandTransaction();
-                this.importAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage);
-                transactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                transactionManager.RollbackCommandTransaction();
             }
         }
     }

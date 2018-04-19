@@ -48,6 +48,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 if (importProcess.VerifiedAssignments != importProcess.TotalAssignments)
                     return;
 
+                if (importProcess.AssingmentsWithErrors == 0 && importProcess.TotalAssignments == 0)
+                    this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
+
                 var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());
                 if (allAssignmentIds.Length == 0) return;
 

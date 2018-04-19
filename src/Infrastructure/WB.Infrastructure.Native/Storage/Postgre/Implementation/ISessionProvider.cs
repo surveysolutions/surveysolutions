@@ -8,5 +8,5 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         ISession GetSession();
     }
 
-    internal interface IPlainSessionProvider : ISessionProvider { }
+    public interface IPlainSessionProvider : ISessionProvider { }
 }
