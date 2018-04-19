@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<TestHqUserManager> userManager;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
-        protected Mock<IInterviewImportService> interviewImportService;
+        protected Mock<IPreloadedDataVerifier> interviewImportService;
 
         [SetUp]
         public virtual void Setup()
@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.assignmentViewFactory = new Mock<IAssignmentViewFactory>();
             this.mapper = new Mock<IMapper>();
             this.userManager = new Mock<TestHqUserManager>();
-            this.interviewImportService = new Mock<IInterviewImportService>();
+            this.interviewImportService = new Mock<IPreloadedDataVerifier>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
         }

@@ -70,10 +70,7 @@ namespace WB.UI.Headquarters
 
             registry.BindHttpFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
                 FilterScope.Controller, new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
-
-            registry.Unbind<IInterviewImportService>();
-            registry.BindAsSingleton<IInterviewImportService, InterviewImportService>();
-
+            
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());

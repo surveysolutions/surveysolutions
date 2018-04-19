@@ -45,10 +45,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 if (importProcess.AssignedToInterviewersCount + importProcess.AssignedToSupervisorsCount == 0)
                     return;
 
-                if (importProcess.VerifiedAssignments != importProcess.TotalAssignments)
+                if (importProcess.VerifiedCount != importProcess.TotalCount)
                     return;
 
-                if (importProcess.AssingmentsWithErrors == 0 && importProcess.TotalAssignments == 0)
+                if (importProcess.WithErrorsCount == 0 && importProcess.TotalCount == 0)
                     this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
 
                 var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());

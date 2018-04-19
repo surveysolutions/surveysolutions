@@ -22,8 +22,6 @@ namespace WB.UI.Headquarters.Models
 
     public class PreloadedDataConfirmationModel : IValidatableObject
     {
-        public AssignmentImportType AssignmentImportType { get; set; }
-
         public Guid QuestionnaireId { get; set; }
 
         public long Version { get; set; }

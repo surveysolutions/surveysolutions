@@ -195,7 +195,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     .Select(_ => new
                     {
                         Total = _.Sum(y => y.Total),
-                        VerifiedWithoutError = _.Sum(y => y.VerifiedWithoutError),
                         WithErrors = _.Sum(y => y.HasError),
                         Verified = _.Sum(y => y.Verified),
                         AssignedToInterviewers = _.Sum(y => y.AssignedToInterviewer),
@@ -208,16 +207,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 IsOwnerOfRunningProcess = process.Responsible == this.authorizedUser.UserName,
                 AssignedToInterviewersCount = statistics.AssignedToInterviewers,
                 AssignedToSupervisorsCount = statistics.AssignedToSupervisors,
-                TotalAssignments = process.TotalCount,
-                VerifiedWithoutError = statistics.VerifiedWithoutError,
+                TotalCount = process.TotalCount,
                 InQueueCount = statistics.Total,
                 ProcessedCount = process.TotalCount - statistics.Total,
                 FileName = process.FileName,
                 StartedDate = process.StartedDate,
                 ResponsibleName = process.Responsible,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(process.QuestionnaireId),
-                AssingmentsWithErrors = statistics.WithErrors,
-                VerifiedAssignments = statistics.Verified
+                WithErrorsCount = statistics.WithErrors,
+                VerifiedCount = statistics.Verified
             };
         }
 

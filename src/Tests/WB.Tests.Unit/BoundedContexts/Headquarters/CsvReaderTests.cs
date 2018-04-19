@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters
 {
-    [TestOf(typeof(CsvRecordsAccessor))]
-    internal class CsvRecordAccessorTests
+    [TestOf(typeof(CsvReader))]
+    internal class CsvReaderTests
     {
         [Test]
         public void when_read_records()
@@ -16,9 +16,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var sb = new StringBuilder();
             sb.AppendLine("head1,head2,head3");
             sb.AppendLine("aaa,1");
-            var csvRecordAccessor = new CsvRecordsAccessor(new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString())), ",");
             //act
-            var records = csvRecordAccessor.Records.ToArray();
+            var records = new CsvReader().ReadRowsWithHeader(new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString())), ",").ToArray();
             //assert
             Assert.That(records, Is.EquivalentTo(new[] {new[] {"head1", "head2", "head3"}, new[] {"aaa", "1", null}}));
         }
@@ -29,9 +28,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             //arrange
             var sb = new StringBuilder();
             sb.AppendLine("\"1");
-            var csvRecordAccessor = new CsvRecordsAccessor(new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString())), ",");
             //act
-            var records = csvRecordAccessor.Records.ToArray();
+            var records = new CsvReader().ReadRowsWithHeader(new MemoryStream(Encoding.UTF8.GetBytes(sb.ToString())), ",").ToArray();
             //assert
             Assert.That(records, Is.EquivalentTo(new[] {new[] {"\"1"}}));
         }

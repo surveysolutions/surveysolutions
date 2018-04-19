@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Maps;
@@ -17,7 +18,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IMapStorageService mapStorageService;
         private readonly IExportFactory exportFactory;
         private readonly IMapService mapPropertiesProvider;
-        private readonly IRecordsAccessorFactory recordsAccessorFactory;
+        private readonly ICsvReader recordsAccessorFactory;
         private readonly IArchiveUtils archiveUtils;
 
         public MapsApiController(ICommandService commandService,
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.Controllers
             IMapStorageService mapStorageService, IExportFactory exportFactory,
             IMapService mapPropertiesProvider,
             IFileSystemAccessor fileSystemAccessor,
-            IRecordsAccessorFactory recordsAccessorFactory,
+            ICsvReader recordsAccessorFactory,
             IArchiveUtils archiveUtils) : base(commandService, logger)
         {
             this.mapBrowseViewFactory = mapBrowseViewFactory;
@@ -396,8 +396,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 using (MemoryStream stream = new MemoryStream(file))
                 {
-                    var recordsAccessor = this.recordsAccessorFactory.CreateRecordsAccessor(stream, "\t");
-                    records = recordsAccessor.Records.ToList();
+                    records = this.recordsAccessorFactory.ReadRowsWithHeader(stream, "\t").ToList();
                 }
             }
             catch (Exception e)

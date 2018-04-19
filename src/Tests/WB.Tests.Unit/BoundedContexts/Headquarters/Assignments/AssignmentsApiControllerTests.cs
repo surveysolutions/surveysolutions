@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 Mock.Of<IAuditLog>(),
-                Mock.Of<IInterviewImportService>()
+                Mock.Of<IPreloadedDataVerifier>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest

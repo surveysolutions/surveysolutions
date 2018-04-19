@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using System.Collections.Generic;
+using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -78,8 +81,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Returns(assignment);
 
             this.interviewImportService
-                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
-                .Returns(AssignmentVerificationResult.Error("error"));
+                .Setup(x => x.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()))
+                .Returns(new InterviewImportError("PL0011", "error"));
 
             try
             {
@@ -113,8 +116,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Returns(assignment);
 
             this.interviewImportService
-                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
-                .Returns(AssignmentVerificationResult.Ok());
+                .Setup(x => x.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()))
+                .Returns((InterviewImportError)null);
 
             this.controller.Create(new CreateAssignmentApiRequest
             {
@@ -140,8 +143,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
                 .Returns(assignment);
 
             this.interviewImportService
-                .Setup(x => x.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()))
-                .Returns(AssignmentVerificationResult.Ok());
+                .Setup(x => x.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()))
+                .Returns((InterviewImportError)null);
 
             this.controller.Create(new CreateAssignmentApiRequest
             {
