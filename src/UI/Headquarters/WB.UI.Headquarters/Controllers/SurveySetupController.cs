@@ -218,7 +218,7 @@ namespace WB.UI.Headquarters.Controllers
                             model.File.FileName));
                 }
 
-                this.assignmentsVerificationTask.Run(5);
+                this.assignmentsVerificationTask.Run(3);
             }
             catch (Exception e)
             {
@@ -486,11 +486,13 @@ namespace WB.UI.Headquarters.Controllers
         [Localizable(false)]
         private ActionResult GetImportAssignmentsPageToRedirect(AssignmentsImportStatus status, string actionName)
         {
+            if (status == null) return null;
+
             var importAssignmentsPages = new (string actionName, Func<bool> shouldRedirect)[]
             {
-                (nameof(InterviewImportProgress), () => this.assignmentsImportTask.IsJobRunning()),
-                (nameof(InterviewVerificationProgress), () => this.assignmentsVerificationTask.IsJobRunning()),
-                (nameof(InterviewImportConfirmation), () => status != null && status.AssignmentsInQueue > 0 && status.VerifiedAssignments == status.TotalAssignments && status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount == 0)
+                (nameof(InterviewImportProgress), () => IsAssignmentsImportIsInProgress(status)),
+                (nameof(InterviewVerificationProgress), () => IsAssignmentsVerifying(status)),
+                (nameof(InterviewImportConfirmation), () => NoResponsibleForVerifiedAssignments(status)),
             };
 
             foreach (var importAssignmentsPage in importAssignmentsPages)
@@ -501,5 +503,16 @@ namespace WB.UI.Headquarters.Controllers
 
             return null;
         }
+
+        private static bool NoResponsibleForVerifiedAssignments(AssignmentsImportStatus status)
+            => status.InQueueCount == status.TotalAssignments &&
+               status.VerifiedAssignments == status.TotalAssignments &&
+               status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount == 0;
+
+        private static bool IsAssignmentsVerifying(AssignmentsImportStatus status)
+            => status.InQueueCount == status.TotalAssignments && status.VerifiedAssignments < status.TotalAssignments;
+
+        private static bool IsAssignmentsImportIsInProgress(AssignmentsImportStatus status)
+            => status.InQueueCount < status.TotalAssignments && status.InQueueCount > status.AssingmentsWithErrors;
     }
 }
