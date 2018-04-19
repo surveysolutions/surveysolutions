@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Claims;
@@ -19,7 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         private readonly IAuditLog auditLog;
         private IUserPasswordStore<HqUser, Guid> PasswordStore => this.Store as IUserPasswordStore<HqUser, Guid>;
 
-        public HqUserManager(IUserStore<HqUser, Guid> store, IHashCompatibilityProvider hashCompatibilityProvider, 
+        public HqUserManager(IUserStore<HqUser, Guid> store, 
+            IHashCompatibilityProvider hashCompatibilityProvider, 
             IPasswordHasher passwordHasher, 
             IIdentityValidator<string> identityValidator, 
             IAuditLog auditLog)
@@ -245,6 +247,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
         {
             userToArchive.IsArchived = true;
             return await this.UpdateUserAsync(userToArchive, null);
+        }
+
+        public Task<bool> IsExistAnyUser()
+        {
+            return this.Users.AnyAsync();
         }
     }
 }
