@@ -27,6 +27,8 @@ import 'jquery-contextmenu'
 import 'jquery-highlight'
 import './datatable.plugins'
 
+$.fn.dataTable.ext.errMode = 'throw';
+
 var checkBox =
     _.template(
         '<input class="checkbox-filter" type="checkbox" value="<%= id %>"' +
@@ -40,6 +42,9 @@ export default {
             type: Function,
             default(d) { return d; }
         },
+        multiorder: {
+            type: Boolean, default: false
+        },
         wrapperClass: Object,
         responseProcessor: {
             type: Function,
@@ -48,6 +53,9 @@ export default {
         tableOptions: {
             type: Object,
             default() { return {}; }
+        },
+        hasTotalRow: {
+            type: Boolean, default: false
         },
         contextMenuItems: {
             type: Function
@@ -68,12 +76,162 @@ export default {
         }
     },
 
+    watch: {
+        tableOptions() {
+            this.init(true)
+        }
+    },
+
     methods: {
         reload: _.debounce(function(data) {
             this.table.ajax.data = this.addParamsToRequest(data || {});
             this.table.rows().deselect();
             this.table.ajax.reload();
         }, this.reloadDebounce),
+
+        init(shouldDestroy = false) {
+
+            var self = this;
+            var options = $.extend({
+                processing: true,
+                destroy: shouldDestroy,
+                select: true,
+                serverSide: true,
+                language:
+                {
+                    emptyTable: this.$t("DataTables.EmptyTable"),
+                    info: this.$t("DataTables.Info"),
+                    infoEmpty: this.$t("DataTables.InfoEmpty"),
+                    infoFiltered: this.$t("DataTables.InfoFiltered"),
+                    infoPostFix: this.$t("DataTables.InfoPostFix"),
+                    thousands: this.$t("DataTables.InfoThousands"),
+                    lengthMenu: this.$t("DataTables.LengthMenu"),
+                    loadingRecords: "<div>" + this.$t("DataTables.LoadingRecords") + "</div>",
+                    processing: "<div>" + this.$t("DataTables.Processing") + "</div>",
+                    search: this.$t("DataTables.Search"),
+                    searchPlaceholder: this.$t("DataTables.SearchPlaceholder"),
+                    zeroRecords: this.$t("DataTables.ZeroRecords"),
+                    paginate:
+                    {
+                        first: this.$t("DataTables.Paginate_First"),
+                        last: this.$t("DataTables.Paginate_Last"),
+                        next: this.$t("DataTables.Paginate_Next"),
+                        previous: this.$t("DataTables.Paginate_Previous")
+                    },
+                    aria:
+                    {
+                        sortAscending: this.$t("DataTables.Aria_SortAscending"),
+                        sortDescending:this.$t("DataTables.Aria_SortDescending")
+                    }
+                },
+                orderMulti: this.multiorder,
+                searchHighlight: true,
+                pagingType: "full_numbers",
+                lengthChange: false, // do not show page size selector
+                pageLength: 20, // page size
+                dom: "frtp",
+                conditionalPaging: true,
+                paging: !this.noPaging,
+                searching: !this.noSearch
+            }, this.tableOptions);
+
+            if(this.hasTotalRow){
+                options.createdRow = function(row, data, dataIndex){
+                    if (dataIndex === 0){
+                          $(row).addClass('total-row');
+                    }
+                }
+            }
+
+            if (this.selectable) {
+                options.columns.unshift({
+                    orderable: false,
+                    className: 'checkbox-cell',
+                    render(data, type, row) {
+                        const id = row[self.selectableId];
+                        const checkboxId = 'check-' + id;
+                        return checkBox({ id, checkboxId });
+                    },
+                    responsivePriority: 1
+                })
+            }
+
+            if(options.ajax != null) {
+                options.ajax.dataSrc = (json) => {
+                    if(json.data) {
+                        if (json.data.length > 0 && json.totalRow) {
+                            var totalRow = json.totalRow;
+                            totalRow.DT_RowClass = "total-row";
+                            json.data.unshift(totalRow);
+                        }
+                        return json.data
+                    } else {
+                        return json
+                    }
+                };
+                        
+                options.ajax.data = (d) => {
+                    this.addParamsToRequest(d);
+
+                    d.columns.forEach((column) => {
+                        delete (column.orderable);
+                        delete (column.search);
+                        delete (column.searchable);
+                    });
+
+                    var requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
+
+                    if(this.exportable) {
+                        this.$store.dispatch('setExportUrls', {
+                            excel: requestUrl + "&exportType=excel",
+                            csv: requestUrl + "&exportType=csv",
+                            tab: requestUrl + "&exportType=tab"
+                        });
+                    }
+                };
+
+                options.ajax.complete = (response) => {
+                    self.$emit("totalRows", response.responseJSON.recordsTotal)
+                    self.$emit("ajaxComplete");
+                };
+            }
+
+            if(shouldDestroy) {
+                this.table.destroy();
+                $(this.$refs.table).empty();
+            }
+
+            this.table = $(this.$refs.table).DataTable(options);
+            this.onTableInitComplete();
+
+            this.table.on('select', (e, dt, type, indexes) => {
+                self.rowsSelected(e, dt, type, indexes)
+            });
+
+            this.table.on('deselect', (e, dt, type, indexes) => {
+                self.rowsDeselected(e, dt, type, indexes)
+            });
+
+            this.table.on('click', 'tbody td', ($el) => {
+                const cell = self.table.cell($el.target);
+
+                if (cell != null) {
+                    const index = cell.index();
+
+                    if (index != null && index.column > 0) {
+                        var rowId = self.table.row($el.target).id();
+                        var columns = self.table.settings().init().columns;
+
+                        self.$emit('cell-clicked', columns[$el.target.cellIndex].name, rowId, cell.data());
+                    }
+                }
+            });
+
+            this.table.on('page', () => {
+                self.$emit('page');
+            });
+            this.$emit('DataTableRef', this.table);
+        },
 
         disableRow(rowIndex) {
             $(this.table.row(rowIndex).node()).addClass("disabled")
@@ -172,126 +330,7 @@ export default {
     },
 
     mounted() {
-        var self = this;
-        var options = $.extend({
-            processing: true,
-            select: true,
-            serverSide: true,
-            language:
-            {
-                emptyTable: this.$t("DataTables.EmptyTable"),
-                info: this.$t("DataTables.Info"),
-                infoEmpty: this.$t("DataTables.InfoEmpty"),
-                infoFiltered: this.$t("DataTables.InfoFiltered"),
-                infoPostFix: this.$t("DataTables.InfoPostFix"),
-                thousands: this.$t("DataTables.InfoThousands"),
-                lengthMenu: this.$t("DataTables.LengthMenu"),
-                loadingRecords: "<div>" + this.$t("DataTables.LoadingRecords") + "</div>",
-                processing: "<div>" + this.$t("DataTables.Processing") + "</div>",
-                search: this.$t("DataTables.Search"),
-                searchPlaceholder: this.$t("DataTables.SearchPlaceholder"),
-                zeroRecords: this.$t("DataTables.ZeroRecords"),
-                paginate:
-                {
-                    first: this.$t("DataTables.Paginate_First"),
-                    last: this.$t("DataTables.Paginate_Last"),
-                    next: this.$t("DataTables.Paginate_Next"),
-                    previous: this.$t("DataTables.Paginate_Previous")
-                },
-                aria:
-                {
-                    sortAscending: this.$t("DataTables.Aria_SortAscending"),
-                    sortDescending:this.$t("DataTables.Aria_SortDescending")
-                }
-            },
-            searchHighlight: true,
-            pagingType: "full_numbers",
-            lengthChange: false, // do not show page size selector
-            pageLength: 20, // page size
-            dom: "frtp",
-            conditionalPaging: true,
-            paging: !this.noPaging,
-            searching: !this.noSearch
-        }, this.tableOptions);
-
-        options.ajax.dataSrc = (json) => {
-            if (json.data.length > 0 && json.totalRow) {
-                var totalRow = json.totalRow;
-                totalRow.DT_RowClass = "total-row";
-                json.data.unshift(totalRow);
-            }
-            return json.data;
-        };
-        
-        if (this.selectable) {
-            options.columns.unshift({
-                orderable: false,
-                className: 'checkbox-cell',
-                render(data, type, row) {
-                    const id = row[self.selectableId];
-                    const checkboxId = 'check-' + id;
-                    return checkBox({ id, checkboxId });
-                },
-                responsivePriority: 1
-            })
-        }
-
-        options.ajax.data = (d) => {
-            this.addParamsToRequest(d);
-
-            d.columns.forEach((column) => {
-                delete (column.orderable);
-                delete (column.search);
-                delete (column.searchable);
-            });
-
-            var requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
-
-            if(this.exportable) {
-                this.$store.dispatch('setExportUrls', {
-                    excel: requestUrl + "&exportType=excel",
-                    csv: requestUrl + "&exportType=csv",
-                    tab: requestUrl + "&exportType=tab"
-                });
-            }
-        };
-
-        options.ajax.complete = (response) => {
-            self.$emit("totalRows", response.responseJSON.recordsTotal)
-            self.$emit("ajaxComplete");
-        };
-
-        this.table = $(this.$refs.table).DataTable(options);
-        this.onTableInitComplete();
-
-        this.table.on('select', (e, dt, type, indexes) => {
-            self.rowsSelected(e, dt, type, indexes)
-        });
-
-        this.table.on('deselect', (e, dt, type, indexes) => {
-            self.rowsDeselected(e, dt, type, indexes)
-        });
-
-        this.table.on('click', 'tbody td', ($el) => {
-            const cell = self.table.cell($el.target);
-
-            if (cell != null) {
-                const index = cell.index();
-
-                if (index != null && index.column > 0) {
-                    var rowId = self.table.row($el.target).id();
-                    var columns = self.table.settings().init().columns;
-
-                    self.$emit('cell-clicked', columns[$el.target.cellIndex].name, rowId, cell.data());
-                }
-            }
-        });
-
-        this.table.on('page', () => {
-            self.$emit('page');
-        });
-        this.$emit('DataTableRef', this.table);
+       this.init()
     }
-
 }
 </script>
