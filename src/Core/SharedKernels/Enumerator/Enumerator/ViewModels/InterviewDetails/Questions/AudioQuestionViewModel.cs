@@ -69,6 +69,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioDialog = audioDialog;
             this.audioFileStorage = audioFileStorage;
             this.audioService = audioService;
+
+            this.audioService.OnPlaybackCompleted += (sender, args) =>
+            {
+                if (args.QuestionIdentity.Equals(this.questionIdentity))
+                    this.IsPlaying = false;
+            };
+        }
+
+        public bool IsPlaying
+        {
+            get => isPlaying;
+            set
+            {
+                if (value == isPlaying) return;
+                isPlaying = value;
+                RaisePropertyChanged(() => IsPlaying);
+            }
         }
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -78,6 +95,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public Identity Identity => this.questionIdentity;
 
         private string answer;
+        private bool isPlaying;
+
         public string Answer
         {
             get => this.answer;
@@ -88,6 +107,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
+        public IMvxCommand Play => new MvxCommand(() =>
+        {
+            this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
+            this.IsPlaying = true;
+        });
+        public IMvxCommand Stop => new MvxCommand(() =>
+        {
+            this.audioService.Stop();
+            this.IsPlaying = false;
+        });
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
