@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -32,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
-        private readonly IInterviewImportService importService;
+        private readonly IAssignmentsImportService importService;
         private readonly IAuditLog auditLog;
 
         private static readonly object DeleteInProcessLockObject = new object();
@@ -42,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             ICommandService commandService,
             ILogger logger, 
             ITranslationManagementService translations,
-            IInterviewImportService importService,
+            IAssignmentsImportService importService,
             IAuditLog auditLog)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
@@ -103,8 +102,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity);
 
-                var isAssignmentImportIsGoing = importService.Status.IsInProgress &&
-                                                importService.Status.QuestionnaireId.Equals(questionnaireIdentity);
+                var assignmentsImportStatus = this.importService.GetImportStatus();
+
+                var isAssignmentImportIsGoing = assignmentsImportStatus != null && 
+                                                assignmentsImportStatus.InQueueCount > assignmentsImportStatus.WithErrorsCount &&
+                                                assignmentsImportStatus.QuestionnaireIdentity.Equals(questionnaireIdentity);
 
                 if (!isAssignmentImportIsGoing)
                 {

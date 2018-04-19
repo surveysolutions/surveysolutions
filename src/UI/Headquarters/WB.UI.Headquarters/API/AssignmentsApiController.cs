@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.API
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IAuditLog auditLog;
-        private readonly IInterviewImportService interviewImportService;
+        private readonly IPreloadedDataVerifier verifier;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireStorage questionnaireStorage,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IAuditLog auditLog,
-            IInterviewImportService interviewImportService)
+            IPreloadedDataVerifier verifier)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.API
             this.questionnaireStorage = questionnaireStorage;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.auditLog = auditLog;
-            this.interviewImportService = interviewImportService;
+            this.verifier = verifier;
         }
         
         [Route("")]
@@ -217,9 +217,9 @@ namespace WB.UI.Headquarters.API
                 });
             }
 
-            var verificationResult = interviewImportService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
-            if (!verificationResult.Status)
-                return Content(HttpStatusCode.Forbidden, verificationResult.ErrorMessage);
+            var error = verifier.VerifyWithInterviewTree(answers, null, questionnaire);
+            if (error != null)
+                return Content(HttpStatusCode.Forbidden, error.ErrorMessage);
 
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);

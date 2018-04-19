@@ -51,10 +51,10 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = status.QuestionnaireIdentity.QuestionnaireId,
                 QuestionnaireVersion = status.QuestionnaireIdentity.Version,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                TotalInterviewsCount = status.TotalAssignments,
+                TotalInterviewsCount = status.TotalCount,
                 CreatedInterviewsCount = status.ProcessedCount,
-                VerifiedInterviewsCount = status.VerifiedAssignments,
-                InterviewsWithError = status.AssingmentsWithErrors
+                VerifiedInterviewsCount = status.VerifiedCount,
+                InterviewsWithError = status.WithErrorsCount
             };
         }
 

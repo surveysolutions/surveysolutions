@@ -20,11 +20,14 @@
 
             self.status = {
                 createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
-                totalInterviewsCount: ko.observable(@Model.Status.TotalAssignments),
-                interviewsWithError: ko.observable(@Model.Status.AssingmentsWithErrors),
-                isInProgress: ko.observable(true),
-                hasErrors: ko.observable(false)
+                totalInterviewsCount: ko.observable(@Model.Status.TotalCount),
+                interviewsWithError: ko.observable(@Model.Status.WithErrorsCount),
+                isInProgress: ko.observable(true)
             };
+            self.status.hasErrors = ko.computed(function() {
+                    return this.interviewsWithError() > 0;
+            }, self.status);
+
             self.isStatusLoaded = ko.observable(false);
 
             var countOfRequestsToStopImport = 0;
@@ -49,7 +52,7 @@
                     {},
                     true,
                     function(data) {
-                        if (data == null) {
+                        if (data == null || (data.createdInterviewsCount + data.interviewsWithError === data.totalInterviewsCount)) {
                             self.status.isInProgress(false);
                             self.status.createdInterviewsCount(self.status.totalInterviewsCount());
                         } else {
@@ -58,7 +61,6 @@
                             self.status.totalInterviewsCount(data.totalInterviewsCount);
                             self.status.interviewsWithError(data.interviewsWithError);
 
-                            self.status.hasErrors(data.interviewsWithError > 0);
                             self.isStatusLoaded(true);
 
                             if (shouldStopRequestUpdates(data) === false) {
@@ -125,7 +127,7 @@
                 </a>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalAssignments">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.createdInterviewsCount()/status.totalInterviewsCount()) + '%' }, attr: {'aria-valuemax': status.totalInterviewsCount, 'aria-valuenow': status.createdInterviewsCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
                             <span class="sr-only"></span>
                         </div>
                     </div>

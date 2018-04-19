@@ -5,11 +5,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 {
     public class AssignmentsImportStatus
     {
-        public long InQueueCount { get; set; }
-        public long VerifiedWithoutError { get; set; }
-        public long VerifiedAssignments { get; set; }
-        public long AssingmentsWithErrors { get; set; }
-        public long TotalAssignments { get; set; }
         public string FileName { get; set; }
         public bool IsOwnerOfRunningProcess { get; set; }
         public string ResponsibleName { get; set; }
@@ -18,5 +13,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public int AssignedToInterviewersCount { get; set; }
         public int AssignedToSupervisorsCount { get; set; }
         public long ProcessedCount { get; set; }
+        public long InQueueCount { get; set; }
+        public long VerifiedCount { get; set; }
+        public long WithErrorsCount { get; set; }
+        public long TotalCount { get; set; }
     }
 }

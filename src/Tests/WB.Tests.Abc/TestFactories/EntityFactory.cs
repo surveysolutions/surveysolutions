@@ -1847,15 +1847,6 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewTreeVariableDiff(sourceVariable, targetVariable);
         }
 
-        public PreloadedDataByFile PreloadedDataByFile(string id = null, string fileName = null, string[] header = null, string[][] content = null)
-        {
-            var randomstring = Guid.NewGuid().ToString();
-            return new PreloadedDataByFile(
-                fileName: fileName ?? "file-" + randomstring,
-                header: header,
-                content: content);
-        }
-
         public DeviceSyncInfo DeviceSyncInfo(Guid interviewerId, string deviceId)
         {
             return new DeviceSyncInfo
@@ -1910,9 +1901,5 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
-        public PreloadedDataByFile[] PreloadedDataByFile(params PreloadedDataByFile[] preloadedDataByFiles)
-        {
-            return preloadedDataByFiles.ToArray();
-        }
     }
 }
