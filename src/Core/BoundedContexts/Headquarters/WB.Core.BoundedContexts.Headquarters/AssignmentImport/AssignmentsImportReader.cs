@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (ignoredPreloadingColumns.Contains(columnName)) continue;
 
-                var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
+                var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
                     StringSplitOptions.RemoveEmptyEntries);
 
                 var variableName = compositeColumnValues[0].ToLower();

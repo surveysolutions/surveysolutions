@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuditLog auditLog;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IInterviewImportService importService;
+        private readonly IPreloadedDataVerifier verifier;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -52,7 +52,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             IAuditLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IInterviewImportService importService) : base(logger)
+            IPreloadedDataVerifier verifier) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireStorage = questionnaireStorage;
             this.auditLog = auditLog;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
-            this.importService = importService;
+            this.verifier = verifier;
         }
 
         /// <summary>
@@ -243,9 +243,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
 
-            var result = importService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
+            var result = verifier.VerifyWithInterviewTree(answers, responsible.Id, questionnaire);
 
-            if (!result.Status)
+            if (result != null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
                 {

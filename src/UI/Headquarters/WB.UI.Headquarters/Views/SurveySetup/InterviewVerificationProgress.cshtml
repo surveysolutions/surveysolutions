@@ -20,9 +20,9 @@
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
-                verifiedCount: ko.observable(@Model.Status.VerifiedAssignments),
-                totalCount: ko.observable(@Model.Status.TotalAssignments),
-                failedVerifications: ko.observable(@Model.Status.AssingmentsWithErrors),
+                verifiedCount: ko.observable(@Model.Status.VerifiedCount),
+                totalCount: ko.observable(@Model.Status.TotalCount),
+                failedVerifications: ko.observable(@Model.Status.WithErrorsCount),
                 hasErrors: ko.observable(false),
                 isInProgress: ko.observable(true)
             };
@@ -136,7 +136,7 @@
                 </div>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.VerifiedAssignments" aria-valuemin="0" aria-valuemax="@Model.Status.TotalAssignments">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.VerifiedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
                             <span class="sr-only"></span>
                         </div>
                     </div>

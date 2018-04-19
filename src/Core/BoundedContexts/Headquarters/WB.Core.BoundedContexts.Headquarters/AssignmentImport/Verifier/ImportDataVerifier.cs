@@ -215,7 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
             if (GetRosterInstanceIdColumns(file, questionnaire).Any(x => x.newName == columnName || x.oldName == columnName)) return false;
 
-            var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
+            var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
                 StringSplitOptions.RemoveEmptyEntries);
 
             var questionOrVariableName = compositeColumnValues[0].ToLower();
@@ -240,7 +240,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private bool OptionalGpsPropertyAndMissingLatitudeAndLongitude(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
-            var compositeColumnValues = columnName.Split(new[] { QuestionDataParser.ColumnDelimiter },
+            var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
                 StringSplitOptions.RemoveEmptyEntries);
 
             if (compositeColumnValues.Length < 2) return false;
@@ -254,8 +254,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var lowercaseColumnNames = file.Columns.Select(x => x.ToLower());
 
-            return !lowercaseColumnNames.Contains($"{questionVariableName}{QuestionDataParser.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") || 
-                   !lowercaseColumnNames.Contains($"{questionVariableName}{QuestionDataParser.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}");
+            return !lowercaseColumnNames.Contains($"{questionVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") || 
+                   !lowercaseColumnNames.Contains($"{questionVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}");
         }
 
         private bool DuplicatedColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -263,7 +263,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
-            var compositeColumn = columnName.Split(new[] {QuestionDataParser.ColumnDelimiter},
+            var compositeColumn = columnName.Split(new[] { ServiceColumns.ColumnDelimiter},
                 StringSplitOptions.RemoveEmptyEntries);
 
             if (compositeColumn.Length < 2) return false;

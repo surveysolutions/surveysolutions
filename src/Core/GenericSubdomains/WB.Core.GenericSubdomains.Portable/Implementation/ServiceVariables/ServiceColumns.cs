@@ -15,14 +15,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 
     public static class ServiceColumns
     {
+        public const string ColumnDelimiter = "__";
         //Id of the row
         public static readonly string InterviewRandom = "ssSys_IRnd";
-        public static readonly string HasAnyError = "has__errors";
-        public static readonly string Key = "interview__key";
-        public static readonly string InterviewId = "interview__id";
-        public static readonly string InterviewStatus = "interview__status";
+        public static readonly string HasAnyError = $"has{ColumnDelimiter}errors";
+        public static readonly string Key = $"interview{ColumnDelimiter}key";
+        public static readonly string InterviewId = $"interview{ColumnDelimiter}id";
+        public static readonly string InterviewStatus = $"interview{ColumnDelimiter}status";
 
-        public static readonly string IdSuffixFormat = "{0}__id";
+        public static readonly string IdSuffixFormat = $"{{0}}{ColumnDelimiter}id";
 
         //prefix to identify parent record
         public const string ParentId = "ParentId";

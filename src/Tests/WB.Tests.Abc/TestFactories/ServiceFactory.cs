@@ -232,23 +232,7 @@ namespace WB.Tests.Abc.TestFactories
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
-
-        public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
-            => new ImportDataParsingService(
-                new ExportViewFactory(new FileSystemIOAccessor(),
-                        new ExportQuestionService(),
-                        Mock.Of<IQuestionnaireStorage>(_ =>
-                            _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire &&
-                            _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
-                            Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
-                        new RosterStructureService(),
-                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
-                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                new RosterStructureService().GetRosterScopes(questionnaire),
-                questionnaire,
-                new QuestionDataParser(),
-                new UserViewFactory(Mock.Of<IUserRepository>(), Mock.Of<IInterviewerProfileFactory>()));
-
+        
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(

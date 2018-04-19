@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 {
-    internal class CsvReader : ICsvReader
+    public class CsvReader : ICsvReader
     {
         public IEnumerable<T> ReadAll<T>(Stream csvFileStream, string delimiter, bool hasHeaderRow = true)
         {
@@ -22,16 +23,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
 
         public IEnumerable<string[]> ReadRowsWithHeader(Stream csvFileStream, string delimiter)
         {
-            using (var parser = new CsvHelper.CsvParser(new StreamReader(csvFileStream),
-                GetConfiguration(delimiter, true), true))
+            using (var csvReader = new CsvHelper.CsvReader(new StreamReader(csvFileStream)))
             {
-                while (true)
+                csvReader.Configuration.Delimiter = delimiter;
+                csvReader.Configuration.IgnoreQuotes = true;
+                csvReader.Read();
+                csvReader.ReadHeader();
+
+                if (csvReader.Context.HeaderRecord != null && csvReader.Context.HeaderRecord.Length > 0)
                 {
-                    var row = parser.Read();
-                    if (row == null)
-                        break;
-                    yield return row;
+                    yield return csvReader.Context.HeaderRecord;
                 }
+
+                while (csvReader.Read())
+                    yield return csvReader.Context.HeaderRecord.Select((x, index) =>
+                        index < csvReader.Context.Record.Length ? csvReader.GetField(x) : null).ToArray();
             }
         }
 
@@ -51,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         {
             csvFileStream.Seek(0, SeekOrigin.Begin);
 
-            using (var parser = new CsvHelper.CsvParser(new StreamReader(csvFileStream),
+            using (var parser = new CsvParser(new StreamReader(csvFileStream),
                 GetConfiguration(delimiter, true), true))
             {
                 return parser.Read() ?? new string[] { };

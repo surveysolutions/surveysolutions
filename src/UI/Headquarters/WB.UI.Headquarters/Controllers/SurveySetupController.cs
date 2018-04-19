@@ -5,9 +5,7 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
@@ -36,9 +34,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IPreloadedDataServiceFactory preloadedDataServiceFactory;
-        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IRosterStructureService rosterStructureService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsImportService assignmentsImportService;
         private readonly AssignmentsImportTask assignmentsImportTask;
@@ -49,15 +44,10 @@ namespace WB.UI.Headquarters.Controllers
             ICommandService commandService,
             ILogger logger,
             IPreloadingTemplateService preloadingTemplateService,
-            IPreloadedDataRepository preloadedDataRepository,
             ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IInterviewImportService interviewImportService,
             IFileSystemAccessor fileSystemAccessor,
-            IPreloadedDataServiceFactory preloadedDataServiceFactory,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IRosterStructureService rosterStructureService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsImportService assignmentsImportService,
             AssignmentsImportTask assignmentsImportTask,
@@ -69,9 +59,6 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.preloadedDataServiceFactory = preloadedDataServiceFactory;
-            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.rosterStructureService = rosterStructureService;
             this.questionnaireStorage = questionnaireStorage;
             this.assignmentsImportService = assignmentsImportService;
             this.assignmentsImportTask = assignmentsImportTask;
@@ -153,7 +140,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         global::Resources.BatchUpload.Prerequisite_Questionnaire,
-                        AssignmentImportType.Panel,
                         model.File.FileName));
             }
 
@@ -165,7 +151,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         global::Resources.BatchUpload.Prerequisite_ZipFile,
-                        AssignmentImportType.Panel,
                         model.File.FileName));
             }
 
@@ -182,7 +167,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         PreloadingVerificationMessages.ArchiveWithPasswordNotSupported,
-                        AssignmentImportType.Panel,
                         model.File.FileName));
             }
 
@@ -194,7 +178,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         PreloadingVerificationMessages.PL0024_DataWasNotFound,
-                        AssignmentImportType.Panel,
                         model.File.FileName));
             }
 
@@ -214,7 +197,6 @@ namespace WB.UI.Headquarters.Controllers
                             errors,
                             new InterviewImportError[0],
                             false,
-                            AssignmentImportType.Panel,
                             model.File.FileName));
                 }
 
@@ -230,7 +212,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         Pages.GlobalSettings_UnhandledExceptionMessage,
-                        AssignmentImportType.Panel,
                         model.File.FileName));
             }
 
@@ -262,7 +243,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         global::Resources.BatchUpload.Prerequisite_Questionnaire,
-                        AssignmentImportType.Assignments,
                         model.File.FileName));
             }
 
@@ -275,7 +255,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         global::Resources.BatchUpload.Prerequisite_TabOrTxtFile,
-                        AssignmentImportType.Assignments,
                         model.File.FileName));
             }
             
@@ -304,7 +283,6 @@ namespace WB.UI.Headquarters.Controllers
                             model.QuestionnaireVersion,
                             questionnaireInfo?.Title,
                             PreloadingVerificationMessages.ArchiveWithPasswordNotSupported,
-                            AssignmentImportType.Assignments,
                             model.File.FileName));
                 }
             }
@@ -317,7 +295,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         PreloadingVerificationMessages.PL0024_DataWasNotFound,
-                        AssignmentImportType.Assignments,
                         model.File.FileName));
             }
             
@@ -335,7 +312,6 @@ namespace WB.UI.Headquarters.Controllers
                             errors,
                             new InterviewImportError[0],
                             false,
-                            AssignmentImportType.Panel,
                             model.File.FileName));
                 }
             }
@@ -349,22 +325,10 @@ namespace WB.UI.Headquarters.Controllers
                         model.QuestionnaireVersion,
                         questionnaireInfo?.Title,
                         Pages.GlobalSettings_UnhandledExceptionMessage,
-                        AssignmentImportType.Assignments,
                         model.File.FileName));
             }
 
             return this.RedirectToAction("InterviewImportConfirmation");
-        }
-
-        private IPreloadedDataService CreatePreloadedDataService(QuestionnaireIdentity questionnaireIdentity)
-        {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireIdentity);
-            var questionnaireRosterStructure = this.rosterStructureService.GetRosterScopes(questionnaire);
-
-            return questionnaireExportStructure == null || questionnaireRosterStructure == null || questionnaire == null
-                ? null
-                : this.preloadedDataServiceFactory.CreatePreloadedDataService(questionnaireExportStructure, questionnaireRosterStructure, questionnaire);
         }
 
         [HttpGet]
@@ -376,6 +340,9 @@ namespace WB.UI.Headquarters.Controllers
             var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportConfirmation));
             if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
 
+            if (status.InQueueCount == status.WithErrorsCount)
+                return RedirectToAction(nameof(InterviewImportProgress));
+
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
 
             return this.View(new PreloadedDataConfirmationModel
@@ -384,8 +351,7 @@ namespace WB.UI.Headquarters.Controllers
                 Version = status.QuestionnaireIdentity.Version,
                 QuestionnaireTitle = questionnaireInfo?.Title,
                 FileName = status.FileName,
-                EntitiesCount = status.TotalAssignments,
-                AssignmentImportType = AssignmentImportType.Assignments,
+                EntitiesCount = status.TotalCount,
                 WasResponsibleProvided = status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount > 0,
                 EnumeratorsCount = status.AssignedToInterviewersCount,
                 SupervisorsCount = status.AssignedToSupervisorsCount
@@ -405,6 +371,9 @@ namespace WB.UI.Headquarters.Controllers
             var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportConfirmation));
             if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
 
+            if (status.InQueueCount == status.WithErrorsCount)
+                return RedirectToAction(nameof(InterviewImportProgress));
+
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
             if (questionnaireInfo.IsDeleted)
             {
@@ -414,7 +383,6 @@ namespace WB.UI.Headquarters.Controllers
                         model.Version,
                         questionnaireInfo?.Title,
                         global::Resources.BatchUpload.Prerequisite_Questionnaire,
-                        model.AssignmentImportType,
                         null));
             }
 
@@ -442,6 +410,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewVerificationProgress));
             if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+
+            if(status.InQueueCount == status.WithErrorsCount)
+                return RedirectToAction(nameof(InterviewImportProgress));
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
 
@@ -505,14 +476,14 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         private static bool NoResponsibleForVerifiedAssignments(AssignmentsImportStatus status)
-            => status.InQueueCount == status.TotalAssignments &&
-               status.VerifiedAssignments == status.TotalAssignments &&
+            => status.InQueueCount == status.TotalCount &&
+               status.VerifiedCount == status.TotalCount &&
                status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount == 0;
 
         private static bool IsAssignmentsVerifying(AssignmentsImportStatus status)
-            => status.InQueueCount == status.TotalAssignments && status.VerifiedAssignments < status.TotalAssignments;
+            => status.InQueueCount == status.TotalCount && status.VerifiedCount < status.TotalCount;
 
         private static bool IsAssignmentsImportIsInProgress(AssignmentsImportStatus status)
-            => status.InQueueCount < status.TotalAssignments && status.InQueueCount > status.AssingmentsWithErrors;
+            => status.InQueueCount < status.TotalCount && status.InQueueCount > status.WithErrorsCount;
     }
 }
