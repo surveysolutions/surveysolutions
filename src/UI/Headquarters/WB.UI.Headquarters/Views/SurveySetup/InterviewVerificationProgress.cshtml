@@ -136,7 +136,7 @@
                 </div>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalAssignments">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.VerifiedAssignments" aria-valuemin="0" aria-valuemax="@Model.Status.TotalAssignments">
                             <span class="sr-only"></span>
                         </div>
                     </div>

@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
@@ -29,19 +28,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly ISessionProvider sessionProvider;
+        private readonly IPlainSessionProvider sessionProvider;
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
         private readonly IAssignmentsImportFileConverter assignmentsImportFileConverter;
 
-        public AssignmentsImportService(
-            IQuestionnaireStorage questionnaireStorage, 
-            IUserViewFactory userViewFactory,
+        public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
             IAuthorizedUser authorizedUser,
-            ISessionProvider sessionProvider,
+            IPlainSessionProvider sessionProvider,
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
@@ -89,10 +86,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.Save(file.FileInfo.FileName, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), 
                 assignmentRows.Select(row =>
                         ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<AssignmentAnswer>())},
-                            row.Responsible, row.Quantity, questionnaire))
+                            row.Responsible, row.Quantity, questionnaire, true))
                     .ToArray());
-
-            this.SetVerifiedToAllImportedAssignments();
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
@@ -166,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 });
             
             return rowsGroupedByInterviews.Select(_=> ToAssignmentToImport(
-                    _.rosters.Select(x=> (x.rosterVector, x.answers)), _.responsible, _.quantity, questionnaire)).ToList();
+                    _.rosters.Select(x=> (x.rosterVector, x.answers)), _.responsible, _.quantity, questionnaire, false)).ToList();
         }
 
         public AssignmentToImport GetAssignmentById(int assignmentId)
@@ -176,17 +171,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             => this.importAssignmentsRepository.Query(x => x.Where(_ => !_.Verified).Select(_ => _.Id).ToArray());
 
         public int[] GetAllAssignmentIdsToImport()
-            => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Verified).Select(_ => _.Id).ToArray());
+            => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Verified && _.Error == null).Select(_ => _.Id).ToArray());
 
         public AssignmentsImportStatus GetImportStatus()
         {
             var process = this.importAssignmentsProcessRepository.Query(x => x.FirstOrDefault());
             if (process == null) return null;
 
+            if (!this.importAssignmentsRepository.Query(x => x.Any())) return null;
+
             var statistics = this.importAssignmentsRepository.Query(x =>
                 x.Select(_ =>
                         new
                         {
+                            Total = 1,
                             Verified = _.Verified ? 1 : 0,
                             VerifiedWithoutError = _.Verified && _.Error == null ? 1 : 0,
                             HasError = _.Error != null ? 1 : 0,
@@ -196,7 +194,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     .GroupBy(_ => 1)
                     .Select(_ => new
                     {
-                        InQueue = _.Sum(y => y.VerifiedWithoutError),
+                        Total = _.Sum(y => y.Total),
+                        VerifiedWithoutError = _.Sum(y => y.VerifiedWithoutError),
                         WithErrors = _.Sum(y => y.HasError),
                         Verified = _.Sum(y => y.Verified),
                         AssignedToInterviewers = _.Sum(y => y.AssignedToInterviewer),
@@ -210,8 +209,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 AssignedToInterviewersCount = statistics.AssignedToInterviewers,
                 AssignedToSupervisorsCount = statistics.AssignedToSupervisors,
                 TotalAssignments = process.TotalCount,
-                AssignmentsInQueue = statistics.InQueue,
-                ProcessedCount = process.TotalCount - statistics.InQueue,
+                VerifiedWithoutError = statistics.VerifiedWithoutError,
+                InQueueCount = statistics.Total,
+                ProcessedCount = process.TotalCount - statistics.Total,
                 FileName = process.FileName,
                 StartedDate = process.StartedDate,
                 ResponsibleName = process.Responsible,
@@ -275,14 +275,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public void RemoveAssignmentToImport(int assignmentId)
             => this.importAssignmentsRepository.Remove(assignmentId);
 
-        private void SetVerifiedToAllImportedAssignments()
-            => this.sessionProvider.GetSession().Query<AssignmentToImport>()
-                .UpdateBuilder()
-                .Set(c => c.Verified, c => true)
-                .Update();
-
         private void Save(string fileName, QuestionnaireIdentity questionnaireIdentity, IList<AssignmentToImport> assignments)
         {
+            this.RemoveAllAssignmentsToImport();
+
             this.SaveProcess(fileName, questionnaireIdentity, assignments);
             this.SaveAssignments(assignments);
         }
@@ -303,20 +299,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
-            this.RemoveAllAssignmentsToImport();
-
             this.importAssignmentsRepository.Store(assignments.Select(x =>
                 new Tuple<AssignmentToImport, object>(x, x.Id)));
         }
 
         private AssignmentToImport ToAssignmentToImport(
             IEnumerable<(RosterVector rosterVector, IEnumerable<AssignmentAnswer> answers)> answers,
-            AssignmentResponsible responsible, AssignmentQuantity quantity, IQuestionnaire questionnaire) =>
+            AssignmentResponsible responsible, AssignmentQuantity quantity, IQuestionnaire questionnaire, bool verified) =>
             new AssignmentToImport
             {
                 Interviewer = responsible?.Responsible?.InterviewerId,
                 Supervisor = responsible?.Responsible?.SupervisorId,
                 Quantity = quantity?.Quantity,
+                Verified = verified,
                 Answers = answers
                     .SelectMany(x => x.answers.Select(y => ToInterviewAnswer(y, x.rosterVector, questionnaire)))
                     .Where(y => y?.Answer != null)

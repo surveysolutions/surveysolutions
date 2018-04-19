@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public virtual bool IsJobRunning() =>
             this.scheduler.GetCurrentlyExecutingJobs().FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
 
-        public virtual void Run(int intervalInSeconds = 1)
+        public virtual void Run(int startAtInSeconds = 1, int? repeatIntervalInSeconds = null)
         {
             if (!this.scheduler.CheckExists(jobKey))
             {
@@ -38,13 +38,18 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
                 this.scheduler.AddJob(job, true);
             }
 
-            ITrigger trigger = TriggerBuilder.Create()
+            var triggerBuilder = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
                 .ForJob(jobKey)
-                .StartAt(DateBuilder.FutureDate(intervalInSeconds, IntervalUnit.Second))
-                .Build();
+                .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second));
 
-            this.scheduler.ScheduleJob(trigger);
+            if (repeatIntervalInSeconds.HasValue)
+            {
+                triggerBuilder = triggerBuilder.WithSimpleSchedule(x => x
+                    .WithIntervalInSeconds(repeatIntervalInSeconds.Value));
+            }
+
+            this.scheduler.ScheduleJob(triggerBuilder.Build());
         }
     }
 }

@@ -7,7 +7,6 @@ using System.Text;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -23,8 +22,6 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IArchiveUtils archiver;
         private readonly IAssignmentsImportService assignmentsImportService;
-        private readonly AssignmentsImportTask assignmentsImportTask;
-        private readonly AssignmentsVerificationTask assignmentsVerificationTask;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
 
         public InterviewsApiController(
@@ -32,15 +29,11 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger,
             IArchiveUtils archiver,
             IAssignmentsImportService assignmentsImportService,
-            AssignmentsImportTask assignmentsImportTask,
-            AssignmentsVerificationTask assignmentsVerificationTask,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
             : base(commandService, logger)
         {
             this.archiver = archiver;
             this.assignmentsImportService = assignmentsImportService;
-            this.assignmentsImportTask = assignmentsImportTask;
-            this.assignmentsVerificationTask = assignmentsVerificationTask;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
@@ -59,7 +52,7 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireVersion = status.QuestionnaireIdentity.Version,
                 QuestionnaireTitle = questionnaireInfo?.Title,
                 TotalInterviewsCount = status.TotalAssignments,
-                CreatedInterviewsCount = status.TotalAssignments - status.AssignmentsInQueue,
+                CreatedInterviewsCount = status.ProcessedCount,
                 VerifiedInterviewsCount = status.VerifiedAssignments,
                 InterviewsWithError = status.AssingmentsWithErrors
             };
@@ -97,7 +90,6 @@ namespace WB.UI.Headquarters.Controllers
             public Guid QuestionnaireId { get; set; }
             public long QuestionnaireVersion { get; set; }
             public string QuestionnaireTitle { get; set; }
-            public bool IsInProgress { get; set; }
             public long TotalInterviewsCount { get; set; }
             public long CreatedInterviewsCount { get; set; }
             public long VerifiedInterviewsCount { get; set; }
