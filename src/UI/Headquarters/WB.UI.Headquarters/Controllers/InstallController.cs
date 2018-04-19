@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
@@ -7,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 
 namespace WB.UI.Headquarters.Controllers
@@ -29,8 +31,12 @@ namespace WB.UI.Headquarters.Controllers
             this.signInManager = identityManager;
         }
 
-        public ActionResult Finish()
+        public async Task<ActionResult> Finish()
         {
+            var isExistAnyUser = await this.userManager.IsExistAnyUser();
+            if (isExistAnyUser)
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
             return View(new FinishIntallationModel());
         }
 
@@ -38,6 +44,10 @@ namespace WB.UI.Headquarters.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Finish(FinishIntallationModel model)
         {
+            var isExistAnyUser = await this.userManager.IsExistAnyUser();
+            if (isExistAnyUser)
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden); 
+
             if (ModelState.IsValid)
             {
                 var creationResult = await this.userManager.CreateUserAsync(new HqUser
