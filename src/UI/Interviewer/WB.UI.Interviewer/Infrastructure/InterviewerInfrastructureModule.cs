@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -86,6 +87,8 @@ namespace WB.UI.Interviewer.Infrastructure
 
             registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+
+            registry.BindAsSingleton<IAuditLogService, AuditLogService>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
