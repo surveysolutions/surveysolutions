@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -657,5 +658,12 @@ namespace WB.Tests.Abc.TestFactories
                 transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
                 userRepository: userRepository ?? userRepositoryMock.Object);
         }
+
+        public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
+            IInterviewTreeBuilder interviewTreeBuilder = null,
+            IUserViewFactory userViewFactory = null)
+            => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
+                interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>());
     }
 }
