@@ -48,9 +48,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 if (importProcess.VerifiedCount != importProcess.TotalCount)
                     return;
 
-                if (importProcess.WithErrorsCount == 0 && importProcess.TotalCount == 0)
-                    this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
-
                 var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());
                 if (allAssignmentIds.Length == 0) return;
 
@@ -82,6 +79,10 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
                     });
+
+                importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
+                if(importProcess.WithErrorsCount == 0)
+                    this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
