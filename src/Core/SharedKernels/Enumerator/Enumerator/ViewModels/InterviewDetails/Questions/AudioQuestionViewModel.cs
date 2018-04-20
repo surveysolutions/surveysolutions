@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioService audioService;
-        public AnsweringViewModel Answering { get; private set; }
+        public AnsweringViewModel Answering { get; }
 
         public AudioQuestionViewModel(
             IPrincipal principal,
@@ -72,8 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.audioService.OnPlaybackCompleted += (sender, args) =>
             {
-                if (args.QuestionIdentity.Equals(this.questionIdentity))
-                    this.IsPlaying = false;
+                this.IsPlaying = false;
             };
         }
 
@@ -107,17 +106,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
-        public IMvxCommand Play => new MvxCommand(() =>
+        public IMvxCommand TogglePlayback => new MvxCommand(() =>
         {
-            this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
-            this.IsPlaying = true;
+            if (this.IsPlaying)
+            {
+                this.audioService.Stop();
+                this.IsPlaying = false;
+            }
+            else
+            {
+                this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
+                this.IsPlaying = true;
+            }
         });
-        public IMvxCommand Stop => new MvxCommand(() =>
-        {
-            this.audioService.Stop();
-            this.IsPlaying = false;
-        });
-
+        
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.questionState.Init(interviewId, entityIdentity, navigationState);
@@ -227,6 +229,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
+                if(this.IsPlaying) this.TogglePlayback.Execute();
+
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,

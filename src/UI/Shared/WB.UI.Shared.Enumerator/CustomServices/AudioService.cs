@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
-        private bool disposed;
+        private bool disposed = false;
         private object lockObject = new object();
 
         private readonly IAudioFileStorage audioFileStorage;
@@ -83,7 +83,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 }
                 
                 this.mediaPlayer.Reset();
-                
                 this.fileSystemAccessor.DeleteFile(this.tempFileName);
 
                 var interviewBinaryData = this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
@@ -256,6 +255,8 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             
             this.ReleaseAudioRecorder();
             this.mediaPlayer.Dispose();
+
+            this.disposed = true;
         }
 
         protected virtual void OnOnPlaybackCompleted(PlaybackCompletedEventArgs e)
