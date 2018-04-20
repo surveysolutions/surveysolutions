@@ -9,7 +9,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
-    internal class when_questionnaire_document_has_question_with_multiple_validations
+    /*internal class when_questionnaire_document_has_question_with_multiple_validations
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaire = Create.QuestionnaireDocument(questionnaireId,
@@ -39,5 +39,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         private static readonly Guid rosterId = Id.g2;
         private static readonly Guid groupId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static readonly Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-    }
+    }*/
 }
