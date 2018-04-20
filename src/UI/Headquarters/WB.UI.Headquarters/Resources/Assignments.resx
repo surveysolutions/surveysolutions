@@ -264,4 +264,7 @@
   <data name="UpgradeDownloadFailed" xml:space="preserve">
     <value>Download list</value>
   </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Done upgrade assignments from {{from}} to {{to}}</value>
+  </data>
 </root>

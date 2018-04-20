@@ -6,8 +6,12 @@
                     <a :href="$config.model.surveySetupUrl">{{$t('MainMenu.SurveySetup')}}</a>
                 </li>
             </ol>
-            <h1>
+            <h1 v-if="isDone">
+                {{$t('Assignments.UpgradeProgressDoneTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}                    
+            </h1>
+            <h1 v-else>
                 {{$t('Assignments.UpgradeProgressTitle', {to: progress.migrateToTitle, from: progress.migrateFromTitle})}}
+                
             </h1>
         </div>
         <div class="row-fluid" v-if="progress.progressDetails.status === 'Queued'">
@@ -97,6 +101,10 @@ export default {
           this.progress.progressDetails.totalAssignmentsToMigrate *
           100
       );
+    },
+    isDone() {
+        return this.progress.progressDetails.status === "Cancelled" ||
+              this.progress.progressDetails.status === "Done";
     }
   },
   methods: {
@@ -107,10 +115,7 @@ export default {
         .then(
           response => {
             self.progress = response.data;
-            if (
-              self.progress.status === "Cancelled" ||
-              self.progress.status === "Done"
-            ) {
+            if (self.isDone) {
               window.clearInterval(self.timerId);
             }
           },
