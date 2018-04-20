@@ -10100,6 +10100,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   padding: 8px 12px;
   padding-right: 34px;
   text-overflow: ellipsis;
+  display: block;
 }
 .metadata-panel .field .field-to-fill:hover,
 .metadata-panel .field .field-to-fill:focus,
