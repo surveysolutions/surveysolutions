@@ -72,7 +72,9 @@ export default {
 
     data() {
         return {
-            selectedRows: []
+            selectedRows: [],
+            table: null,
+            processing: null
         }
     },
 
@@ -93,7 +95,7 @@ export default {
 
             var self = this;
             var options = $.extend({
-                processing: true,
+                processing: false,
                 destroy: shouldDestroy,
                 select: true,
                 serverSide: true,
@@ -203,7 +205,7 @@ export default {
 
             this.table = $(this.$refs.table).DataTable(options);
             this.onTableInitComplete();
-
+           
             this.table.on('select', (e, dt, type, indexes) => {
                 self.rowsSelected(e, dt, type, indexes)
             });
@@ -230,6 +232,7 @@ export default {
             this.table.on('page', () => {
                 self.$emit('page');
             });
+
             this.$emit('DataTableRef', this.table);
         },
 
@@ -264,8 +267,17 @@ export default {
                 }
             });
 
-            this.initContextMenu();
-            this.initHeaderCheckBox();
+            this.initContextMenu()
+            this.initHeaderCheckBox()
+            this.initProcessingBox()            
+        },
+
+        initProcessingBox() {
+            this.table.on('processing', _.debounce(function(evnt, dt, show) {
+                $(this).find(".dataTables_processing").css( 'display', show ? 'block' : 'none' );
+            }, 250))
+
+            $(this.$refs.table).prepend("<div class='dataTables_processing'><div>Processing...</div></div>");
         },
 
         initHeaderCheckBox() {
