@@ -535,7 +535,7 @@
                 }
             };
 
-            var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio", "Area"];
+            var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio"];
             
             $scope.doesQuestionSupportValidations = function () {
                 return $scope.activeQuestion &&
