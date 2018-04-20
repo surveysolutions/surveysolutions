@@ -7,6 +7,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public interface IDeviceInformationService : IDisposable
     {
         Task<DeviceInfo> GetDeviceInfoAsync();
-        int TryGetApplicationVersionCode();
     }
 }
