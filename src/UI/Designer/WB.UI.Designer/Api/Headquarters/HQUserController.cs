@@ -18,12 +18,12 @@ namespace WB.UI.Designer.Api.Headquarters
         [HttpGet]
         [ApiBasicAuth(onlyAllowedAddresses: false)]
         [Route("userdetails")]
-        public DeploymentUserModel UserDetails()
+        public PortalUserModel UserDetails()
         {
             var membershipService = ServiceLocator.Current.GetInstance<IMembershipUserService>();
             var user = membershipService.WebUser;
             var roles = Roles.GetRolesForUser(user.UserName);
-            return new DeploymentUserModel
+            return new PortalUserModel
             {
                 Id = user.UserId,
                 Login = user.UserName,

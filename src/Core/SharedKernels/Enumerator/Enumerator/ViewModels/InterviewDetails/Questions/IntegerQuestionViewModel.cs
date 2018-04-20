@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -150,21 +151,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetIntegerQuestion(entityIdentity);
             if (answerModel.IsAnswered())
             {
-                this.Answer = answerModel.GetAnswer().Value;
+                var answerValue = answerModel.GetAnswer().Value;
+                this.Answer = answerValue;
                 this.previousAnswer = this.Answer;
             }
 
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
             var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);
 
-            if (isRosterSizeOfLongRoster)
-                this.answerMaxValue = Constants.MaxLongRosterRowCount;
-            else
-                this.answerMaxValue = Constants.MaxRosterRowCount;
+            this.answerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
 
+            InitSpecialValues(interviewId, entityIdentity);
+        }
+
+        private void InitSpecialValues(string interviewId, Identity entityIdentity)
+        {
             specialValues.Init(interviewId, entityIdentity, this.questionState);
             this.specialValues.SpecialValueChanged += SpecialValueChanged;
             this.specialValues.SpecialValueRemoved += SpecialValueRemoved;
+
+            if (specialValues.SpecialValues.Any(x => x.Selected))
+            {
+                this.Answer = null;
+            }
         }
 
         private async void SpecialValueChanged(object sender, EventArgs eventArgs)
