@@ -386,33 +386,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag, entity_type as EntityType " +
                 $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})", commandTimeout: 0, buffered: false);
 
-            int[] ParseIntArray(string array, char delimeter = '-')
-            {
-                if (string.IsNullOrWhiteSpace(array) || string.IsNullOrWhiteSpace(array.Trim('_'))) return null;
-
-                var items = array.Split(delimeter);
-
-                var result = new int[items.Length];
-
-                for (int i = 0; i < items.Length; i++)
-                {
-                    result[i] = int.Parse(items[i]);
-                }
-
-                return result;
-            }
-
             foreach (var result in queryResult)
             {
                 var entity = new InterviewEntity();
 
                 entity.InterviewId = result.InterviewId;
-                entity.Identity = new Identity(result.EntityId, ParseIntArray(result.RosterVector) ?? RosterVector.Empty);
+                entity.Identity = new Identity(result.EntityId, result.RosterVector.ParseMinusDelimitedIntArray() ?? RosterVector.Empty);
 
                 entity.IsEnabled = result.IsEnabled;
                 entity.IsReadonly = result.IsReadonly;
-                entity.InvalidValidations = ParseIntArray(result.InvalidValidations);
-                entity.WarningValidations = ParseIntArray(result.Warnings);
+                entity.InvalidValidations = result.InvalidValidations.ParseMinusDelimitedIntArray();
+                entity.WarningValidations = result.Warnings.ParseMinusDelimitedIntArray();
                 entity.AsString = result.AsString;
                 entity.AsInt = result.AsInt;
                 entity.AsLong = result.AsLong;

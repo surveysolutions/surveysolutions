@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.InterviewDurationLong, ptp => ptp.Column("interviewduration"));
             Property(x => x.LastResumeEventUtcTimestamp);
             Property(x => x.ClientKey);
-            Property(x => x.HasErrors);
+            Property(x => x.ErrorsCount);
             Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {
