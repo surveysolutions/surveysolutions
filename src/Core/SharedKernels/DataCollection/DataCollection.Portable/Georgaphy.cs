@@ -11,6 +11,6 @@
 
         public double Area { get; set; }
         public double Length { get; set; }
-        public double PointsCount { get; set; }
+        public int PointsCount { get; set; }
     }
 }
