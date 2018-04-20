@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
             this.TotalCount = questionnaireBrowseView.TotalCount;
             this.Interviews = questionnaireBrowseView.Items.Select(
                 item => new InterviewApiItem(item.InterviewId, item.QuestionnaireId, item.QuestionnaireVersion,
-                    item.ResponsibleId, item.ResponsibleName, item.HasErrors, (InterviewStatus)Enum.Parse(typeof(InterviewStatus), item.Status), item.LastEntryDateUtc, 
+                    item.ResponsibleId, item.ResponsibleName, item.ErrorsCount, (InterviewStatus)Enum.Parse(typeof(InterviewStatus), item.Status), item.LastEntryDateUtc, 
                     item.FeaturedQuestions));
 
 
