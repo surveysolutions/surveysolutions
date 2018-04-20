@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,6 +22,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
+        private readonly IAuditLogService auditLogService;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -39,18 +41,21 @@ namespace WB.UI.Interviewer.ViewModel
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
-            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage,
+            IAuditLogService auditLogService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
+            this.auditLogService = auditLogService;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => {
+            auditLogService.Write(new CloseInterviewAuditLogEntity(this.InterviewId, this.InterviewKey));
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
@@ -67,6 +72,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
             else
             {
+                auditLogService.Write(new CloseInterviewAuditLogEntity(this.InterviewId, this.InterviewKey));
                 await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             }
         }

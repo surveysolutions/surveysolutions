@@ -4,7 +4,9 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -20,6 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
     public class InterviewDashboardItemViewModel : ExpandableQuestionsDashboardItemViewModel, IDashboardViewItem
     {
         private readonly IServiceLocator serviceLocator;
+        private readonly IAuditLogService auditLogService;
 
         private IViewModelNavigationService ViewModelNavigationService =>
             serviceLocator.GetInstance<IViewModelNavigationService>();
@@ -41,9 +44,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private InterviewView interview;
         private string assignmentIdLabel;
 
-        public InterviewDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
+        public InterviewDashboardItemViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService) : base(serviceLocator)
         {
             this.serviceLocator = serviceLocator;
+            this.auditLogService = auditLogService;
         }
 
         public void Init(InterviewView interviewView, List<PrefilledQuestion> details)
@@ -233,6 +237,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
             Logger.Warn($"Remove Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
             this.InterviewerInterviewFactory.RemoveInterview(this.interview.InterviewId);
+            auditLogService.Write(new DeleteInterviewAuditLogEntity(this.interview.InterviewId, this.interview.InterviewKey, this.interview.Assignment));
             this.OnItemRemoved.Invoke(this, EventArgs.Empty);
         }
 
@@ -254,7 +259,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                     }
                 }
 
-                Logger.Info($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
+                Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
+                auditLogService.Write(new OpenInterviewAuditLogEntity(this.interview.InterviewId, this.interview.InterviewKey, this.interview.Assignment));
                 await this.ViewModelNavigationService.NavigateToAsync<LoadingViewModel, LoaginViewModelArg>(new LoaginViewModelArg{ InterviewId = this.interview.InterviewId });
             }
             finally

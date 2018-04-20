@@ -1,5 +1,7 @@
 using System;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -12,6 +14,8 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class PrefilledQuestionsViewModel : BasePrefilledQuestionsViewModel
     {
+        private readonly IAuditLogService auditLogService;
+
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IQuestionnaireStorage questionnaireRepository,
@@ -21,7 +25,8 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            VibrationViewModel vibrationViewModel)
+            VibrationViewModel vibrationViewModel,
+            IAuditLogService auditLogService)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -31,12 +36,16 @@ namespace WB.UI.Interviewer.ViewModel
                 principal,
                 commandService,
                 compositeCollectionInflationService,
-                vibrationViewModel) {}
+                vibrationViewModel)
+        {
+            this.auditLogService = auditLogService;
+        }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
+            auditLogService.Write(new CloseInterviewAuditLogEntity(InterviewId, null));
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });

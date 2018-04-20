@@ -1,5 +1,8 @@
 using System;
+using System.Threading.Tasks;
 using MvvmCross.Plugins.Messenger;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -15,7 +18,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class InterviewerCompleteInterviewViewModel : CompleteInterviewViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-           
+        private readonly IAuditLogService auditLogService;
+
         public InterviewerCompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
             ICommandService commandService,
@@ -24,10 +28,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IStatefulInterviewRepository interviewRepository,
             InterviewStateViewModel interviewState,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
-            DynamicTextViewModel dynamicTextViewModel)
+            DynamicTextViewModel dynamicTextViewModel,
+            IAuditLogService auditLogService)
             : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, interviewState, dynamicTextViewModel)
         {
             this.interviewRepository = interviewRepository;
+            this.auditLogService = auditLogService;
         }
 
         public override void Configure(string interviewId, NavigationState navigationState)
@@ -44,6 +50,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
             this.CompleteComment = statefulInterview.InterviewerCompleteComment;
+        }
+
+        protected override Task CloseInterviewAfterComplete()
+        {
+            auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId));
+            return base.CloseInterviewAfterComplete();
         }
     }
 }

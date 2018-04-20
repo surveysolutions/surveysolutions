@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -19,6 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
+        private readonly IAuditLogService auditLogService;
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPlainStorage<CompanyLogo> logoStorage;
@@ -31,7 +33,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
             ISynchronizationService synchronizationService,
-            ILogger logger)
+            ILogger logger,
+            IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -40,6 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.logoStorage = logoStorage;
             this.synchronizationService = synchronizationService;
             this.logger = logger;
+            this.auditLogService = auditLogService;
         }
 
         public override bool IsAuthenticationRequired => false;
@@ -118,6 +122,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.IncreaseCountOfFailedLoginAttempts();
                 return;
+            }
+            else
+            {
+                auditLogService.Write(new LoginAuditLogEntity());
             }
 
             await this.viewModelNavigationService.NavigateToDashboardAsync();
