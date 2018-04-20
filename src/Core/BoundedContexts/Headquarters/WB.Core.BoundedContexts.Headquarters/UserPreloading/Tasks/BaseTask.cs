@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
             }
 
             var trigger = TriggerBuilder.Create()
-                .WithIdentity(new TriggerKey($"{triggerKey.Name}{this.scheduler.GetTriggersOfJob(jobKey).Count + 1}", triggerKey.Group))
+                .WithIdentity(new TriggerKey($"{triggerKey.Name}{this.scheduler.GetTriggersOfJob(jobKey)?.Count + 1}", triggerKey.Group))
                 .ForJob(jobKey)
                 .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second))
                 .Build();
