@@ -22,19 +22,25 @@
                 
             </TableLayout>
 
-            <ImageButton style="@style/Interview_Button" 
-                         local:srcCompat="@drawable/play_icon" 
-                         local:MvxBind="Click Play; Visible Not(IsPlaying)"/>
-            <ImageButton style="@style/Interview_Button" 
-                         local:srcCompat="@drawable/stop_icon"
-                         local:MvxBind="Click Stop; Visible IsPlaying"/>
-
-            <Button style="@style/Interview_Question_InputButton"
-                    local:MvxBind="HideKeyboardOnClick .; 
+            
+            <LinearLayout
+                style="@style/FullWidthWrappingLayout">
+                <Button style="@style/Interview_Question_InputButton"
+                        local:MvxBind="HideKeyboardOnClick .; 
                           Click RecordAudioCommand; 
                           Tag Format('btnAnswer_{0}', Identity);
                           Text If(QuestionState.IsAnswered, Localization('Interview_Questions_Audio_RecordNew'), Localization('Interview_Questions_Audio_SaveAnswer'));
                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));" />
+                
+                <ImageButton style="@style/Interview_Button"
+                             local:MvxBind="Visible QuestionState.IsAnswered; Click TogglePlayback; Playback IsPlaying"
+                             local:srcCompat="@drawable/play_to_stop_animation"/>
+                
+                <ImageView style="@style/Interview_Button"
+                    local:MvxBind="PlaybackIndicator IsPlaying"
+                    local:srcCompat="@drawable/avd_playing_identifier">
+                </ImageView>
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
