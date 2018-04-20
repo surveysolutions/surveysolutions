@@ -260,7 +260,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             }
         }
 
-        private int TryGetApplicationVersionCode()
+        public int TryGetApplicationVersionCode()
         {
             try
             {
