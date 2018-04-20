@@ -97,15 +97,25 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (error != null) yield return error;
             }
 
-            if(IsQuestionnaireFile(assignmentRow.FileName, questionnaire)) yield break;
-
-            foreach (var serviceValue in assignmentRow.RosterInstanceCodes.Union(new[]
-                {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity}))
+            if (IsQuestionnaireFile(assignmentRow.FileName, questionnaire))
             {
-                if(serviceValue == null) continue;
+                foreach (var serviceValue in new AssignmentValue[] { assignmentRow.Responsible, assignmentRow.Quantity })
+                {
+                    if (serviceValue == null) continue;
 
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
-                    if (error != null) yield return error;
+                    foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
+                        if (error != null) yield return error;
+                }
+            }
+            else
+            {
+                foreach (var serviceValue in assignmentRow.RosterInstanceCodes.Union(new[] {assignmentRow.InterviewIdValue}))
+                {
+                    if (serviceValue == null) continue;
+
+                    foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
+                        if (error != null) yield return error;
+                }
             }
         }
 
