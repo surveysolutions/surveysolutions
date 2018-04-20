@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views
         public Guid ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
         public UserRoles ResponsibleRole { get; set; }
-        public bool HasErrors { get; set; }
+        public int ErrorsCount { get; set; }
         public string Status { get; set; }
         public DateTime LastEntryDateUtc { get; set; }
         public int? AssignmentId { get; set; }
