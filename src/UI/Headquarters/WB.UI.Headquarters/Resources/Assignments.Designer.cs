@@ -475,6 +475,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Done upgrade assignments from {{from}} to {{to}}.
+        /// </summary>
+        public static string UpgradeProgressDoneTitle {
+            get {
+                return ResourceManager.GetString("UpgradeProgressDoneTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not upgraded: {{count}}.
         /// </summary>
         public static string UpgradeProgressErrorCount {

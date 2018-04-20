@@ -262,4 +262,7 @@
   <data name="UpgradeDownloadFailed" xml:space="preserve">
     <value>Скачать список</value>
   </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Обновление заданий из {{from}} в {{to}} завершено</value>
+  </data>
 </root>
