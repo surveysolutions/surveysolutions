@@ -6,9 +6,11 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using System.Diagnostics;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 
@@ -25,6 +27,8 @@ namespace WB.UI.Interviewer.Activities
         {
             var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SplashActivity>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
+            auditLogService.Write(new OpenApplicationAuditLogEntity());
 
             this.BackwardCompatibility();
             var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
