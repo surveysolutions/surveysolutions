@@ -782,6 +782,31 @@ namespace WB.Tests.Abc.TestFactories
                 Featured = preFilled
             };
 
+
+        public AreaQuestion GeographyQuestion(Guid? id = null,
+            string variable = "georgaphy_question",
+            string enablementCondition = null,
+            string validationExpression = null,
+            QuestionScope scope = QuestionScope.Interviewer,
+            bool isPrefilled = false,
+            bool hideIfDisabled = false,
+            bool useFormatting = false,
+            string questionText = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+            => new AreaQuestion
+            {
+                QuestionText = questionText ?? "text",
+                QuestionType = QuestionType.Area,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
+                ValidationExpression = validationExpression,
+                QuestionScope = scope,
+                Featured = isPrefilled,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
+            };
+
         public IQuestion Question(
             Guid? questionId = null,
             string variable = "question",
