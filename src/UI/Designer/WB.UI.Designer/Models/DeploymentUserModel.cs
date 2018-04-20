@@ -2,7 +2,7 @@
 
 namespace WB.UI.Designer.Models
 {
-    public class DeploymentUserModel
+    public class PortalUserModel
     {
         public Guid Id { get; set; }
         public string[] Roles { get; set; }
