@@ -30,7 +30,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.InterviewDurationLong, ptp => ptp.Column("interviewduration"));
             Property(x => x.LastResumeEventUtcTimestamp);
             Property(x => x.ClientKey);
-            Property(x => x.ErrorsCount);
+            Property(x => x.ErrorsCount, clm => 
+                clm.Formula(@"(SELECT COUNT(i.entityid) FROM readside.interviews_view i 
+                               WHERE i.interviewid = interviewid AND i.invalidvalidations IS NOT NULL
+                                                                 AND i.isenabled)"));
             Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {
