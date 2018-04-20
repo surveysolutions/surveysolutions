@@ -109,7 +109,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 case InterviewQuestionType.Area:
                     var areaAnswer = question.GetAsInterviewTreeAreaQuestion().GetAnswer();
                     if(areaAnswer == null) return default(T);
-                    return areaAnswer.Value.To<T>(); //Area
+                    return areaAnswer.ToGeorgaphy().To<T>(); //Area
                 default:
                     return default(T);
             }

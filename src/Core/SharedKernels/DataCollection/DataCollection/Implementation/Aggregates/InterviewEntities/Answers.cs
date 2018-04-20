@@ -343,6 +343,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
         public override string ToString() => Value.ToString();
+
+        public Georgaphy ToGeorgaphy()
+        {
+            return new Georgaphy
+            {
+                Area = Value.AreaSize ?? 0,
+                Length = Value.Length ?? 0,
+                PointsCount = Value.NumberOfPoints ?? 0
+            };
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
