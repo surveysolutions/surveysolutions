@@ -740,6 +740,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 AnswerText = text ?? $"Option {value}",
                 AnswerCode = value,
+                AnswerValue = value.ToString(),
                 ParentValue = parentValue
             };
 
@@ -1900,6 +1901,13 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
+
+        public PreloadedFileInfo PreloadedFileInfo(string[] columns = null, string fileName = null, string questionnaireOrRosterName = null) => new PreloadedFileInfo
+        {
+            Columns = columns,
+            FileName = fileName,
+            QuestionnaireOrRosterName = questionnaireOrRosterName ?? "Questionnaire"
+        };
 
     }
 }

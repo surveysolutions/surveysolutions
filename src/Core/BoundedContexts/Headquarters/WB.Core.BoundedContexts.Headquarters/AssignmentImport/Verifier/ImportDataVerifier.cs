@@ -465,10 +465,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<(string oldName, string newName)> GetRosterInstanceIdColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {
-            if (IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire))
-                yield break;
-
             var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
+            if(!rosterId.HasValue) yield break;
 
             var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value).ToArray();
 

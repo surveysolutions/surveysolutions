@@ -1042,10 +1042,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionVariableNamesCache.Contains(variableName);
         }
 
-        public bool HasRoster(string variableName)
-        {
-            return this.RosterVariableNamesCache.Contains(variableName);
-        }
+        public bool HasRoster(string variableName) => this.RosterVariableNamesCache.Contains(variableName?.ToLower());
 
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
         public bool IsSupportFilteringForOptions(Guid questionId)
@@ -1060,7 +1057,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         }
 
         public decimal[] GetFixedRosterCodes(Guid rosterId) =>
-            this.GetGroup(rosterId)?.FixedRosterTitles?.Select(x => x.Value).ToArray() ?? Array.Empty<decimal>();
+            this.GetGroup(rosterId)?.FixedRosterTitles?.Select(x => x.Value)?.ToArray() ?? Array.Empty<decimal>();
 
         public bool IsNumericRoster(Guid id)
         {
@@ -1330,10 +1327,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.AllVariables.Select(x => x.Name).ToHashSet();
         }
 
-        private HashSet<string> GetRosterNamesCache()
-        {
-            return this.AllGroups.Where(x => x.IsRoster).Select(x => x.VariableName).ToHashSet();
-        }
+        private HashSet<string> GetRosterNamesCache() =>
+            this.AllGroups.Where(x => x.IsRoster).Select(x => x.VariableName.ToLower()).ToHashSet();
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedEntities(IEnumerable<IComposite> entities)
         {
