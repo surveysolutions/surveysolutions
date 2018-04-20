@@ -122,9 +122,9 @@ using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
             
             #line default
             #line hidden
-            this.Write(";\r\n\t\t\treturn __result");
+            this.Write("\r\n            ;\r\n\t\t\treturn __result");
             
-            #line 42 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
+            #line 43 "C:\Work\surveysolutions\src\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Model.UseObjectBoxing ? " as object": ""));
             
             #line default
