@@ -58,7 +58,7 @@
                         } else {
                             self.status.isInProgress(data.createdInterviewsCount !== data.totalInterviewsCount);
                             self.status.createdInterviewsCount(data.createdInterviewsCount);
-                            self.status.totalInterviewsCount(data.totalInterviewsCount);
+                            self.status.totalInterviewsCount(data.totalInterviewsCount - data.interviewsWithError);
                             self.status.interviewsWithError(data.interviewsWithError);
 
                             self.isStatusLoaded(true);

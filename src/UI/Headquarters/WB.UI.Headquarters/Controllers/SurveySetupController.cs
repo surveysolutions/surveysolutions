@@ -80,8 +80,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(BatchUpload));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            var prevImportFinishedWithErrors = status != null && status.InQueueCount == status.WithErrorsCount;
+            if (!prevImportFinishedWithErrors)
+            {
+                var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(BatchUpload));
+                if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            }
 
             var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
@@ -126,8 +130,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(PanelBatchUploadAndVerify));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            var prevImportFinishedWithErrors = status != null && status.InQueueCount == status.WithErrorsCount;
+            if (!prevImportFinishedWithErrors)
+            {
+                var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(PanelBatchUploadAndVerify));
+                if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -230,8 +238,12 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(AssignmentsBatchUploadAndVerify));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            var prevImportFinishedWithErrors = status != null && status.InQueueCount == status.WithErrorsCount;
+            if (!prevImportFinishedWithErrors)
+            {
+                var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(AssignmentsBatchUploadAndVerify));
+                if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -340,9 +352,6 @@ namespace WB.UI.Headquarters.Controllers
             var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportConfirmation));
             if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
 
-            if (status.InQueueCount == status.WithErrorsCount)
-                return RedirectToAction(nameof(InterviewImportProgress));
-
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
 
             return this.View(new PreloadedDataConfirmationModel
@@ -370,9 +379,6 @@ namespace WB.UI.Headquarters.Controllers
 
             var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportConfirmation));
             if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-
-            if (status.InQueueCount == status.WithErrorsCount)
-                return RedirectToAction(nameof(InterviewImportProgress));
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
             if (questionnaireInfo.IsDeleted)
@@ -410,9 +416,6 @@ namespace WB.UI.Headquarters.Controllers
 
             var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewVerificationProgress));
             if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-
-            if(status.InQueueCount == status.WithErrorsCount)
-                return RedirectToAction(nameof(InterviewImportProgress));
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
 
@@ -476,14 +479,15 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         private static bool NoResponsibleForVerifiedAssignments(AssignmentsImportStatus status)
-            => status.InQueueCount == status.TotalCount &&
-               status.VerifiedCount == status.TotalCount &&
+            => status.VerifiedCount == status.TotalCount &&
+               status.InQueueCount > status.WithErrorsCount &&
                status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount == 0;
 
         private static bool IsAssignmentsVerifying(AssignmentsImportStatus status)
             => status.InQueueCount == status.TotalCount && status.VerifiedCount < status.TotalCount;
 
         private static bool IsAssignmentsImportIsInProgress(AssignmentsImportStatus status)
-            => status.InQueueCount < status.TotalCount && status.InQueueCount > status.WithErrorsCount;
+            => status.InQueueCount < status.TotalCount && status.InQueueCount > status.WithErrorsCount ||
+               status.InQueueCount == status.WithErrorsCount;
     }
 }
