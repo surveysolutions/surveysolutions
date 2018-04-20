@@ -14,7 +14,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         private readonly IPlainStorage<AutoincrementKeyValue, int> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
         private readonly IUserIdentity userIdentity;
-        private readonly IDeviceInformationService deviceInformationService;
         private readonly IJsonAllTypesSerializer serializer;
 
         private const string AuditLogSettingsKey = "settings";
@@ -22,13 +21,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         public AuditLogService(IPlainStorage<AutoincrementKeyValue, int> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             IUserIdentity userIdentity,
-            IDeviceInformationService deviceInformationService,
             IJsonAllTypesSerializer serializer)
         {
             this.auditLogStorage = auditLogStorage;
             this.auditLogSettingsStorage = auditLogSettingsStorage;
             this.userIdentity = userIdentity;
-            this.deviceInformationService = deviceInformationService;
             this.serializer = serializer;
         }
 
@@ -42,12 +39,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         public void Write(IAuditLogEntity entity)
         {
             var userId = userIdentity.UserId;
-            var versionCode = deviceInformationService.TryGetApplicationVersionCode();
 
             var auditLogEntityView = new AuditLogEntityView()
             {
                 ResponsibleId = userId,
-                VersionCode = versionCode,
                 Time = DateTime.Now,
                 TimeUtc = DateTime.UtcNow,
                 Type = entity.Type,

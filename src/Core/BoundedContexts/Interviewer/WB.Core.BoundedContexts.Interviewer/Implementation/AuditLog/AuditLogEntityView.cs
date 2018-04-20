@@ -14,8 +14,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         public DateTime Time { get; set; }
         public DateTime TimeUtc { get; set; }
 
-        public int VersionCode { get; set; }
-
         public Guid ResponsibleId { get; set; }
 
         public IAuditLogEntity Payload { get; set; }
