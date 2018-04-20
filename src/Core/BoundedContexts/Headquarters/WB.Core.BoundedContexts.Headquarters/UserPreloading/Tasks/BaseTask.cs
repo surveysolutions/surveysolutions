@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
         public virtual bool IsJobRunning() =>
             this.scheduler.GetCurrentlyExecutingJobs().FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
 
-        public virtual void Run(int startAtInSeconds = 1, int? repeatIntervalInSeconds = null)
+        public virtual void Schedule(int repeatIntervalInSeconds)
         {
             if (!this.scheduler.CheckExists(jobKey))
             {
@@ -38,18 +38,36 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
                 this.scheduler.AddJob(job, true);
             }
 
-            var triggerBuilder = TriggerBuilder.Create()
+            var trigger = TriggerBuilder.Create()
                 .WithIdentity(triggerKey)
                 .ForJob(jobKey)
-                .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second));
+                .StartAt(DateBuilder.FutureDate(2, IntervalUnit.Second))
+                .WithSimpleSchedule(x => x.WithIntervalInSeconds(repeatIntervalInSeconds).RepeatForever())
+                .Build();
 
-            if (repeatIntervalInSeconds.HasValue)
+            if (!this.scheduler.CheckExists(triggerKey))
+                this.scheduler.ScheduleJob(trigger);
+        }
+
+        public virtual void Run(int startAtInSeconds = 1)
+        {
+            if (!this.scheduler.CheckExists(jobKey))
             {
-                triggerBuilder = triggerBuilder.WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(repeatIntervalInSeconds.Value));
+                IJobDetail job = JobBuilder.Create(jobType)
+                    .WithIdentity(jobKey)
+                    .StoreDurably()
+                    .Build();
+
+                this.scheduler.AddJob(job, true);
             }
 
-            this.scheduler.ScheduleJob(triggerBuilder.Build());
+            var trigger = TriggerBuilder.Create()
+                .WithIdentity(new TriggerKey($"{triggerKey.Name}{this.scheduler.GetTriggersOfJob(jobKey).Count + 1}", triggerKey.Group))
+                .ForJob(jobKey)
+                .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second))
+                .Build();
+
+            this.scheduler.ScheduleJob(trigger);
         }
     }
 }
