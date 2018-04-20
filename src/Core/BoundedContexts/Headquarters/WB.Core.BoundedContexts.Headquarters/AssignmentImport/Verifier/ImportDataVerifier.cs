@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (error != null) yield return error;
             }
 
-            if(!IsQuestionnaireFile(assignmentRow.FileName, questionnaire)) yield break;
+            if(IsQuestionnaireFile(assignmentRow.FileName, questionnaire)) yield break;
 
             foreach (var serviceValue in assignmentRow.RosterInstanceCodes.Union(new[]
                 {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity}))
