@@ -475,7 +475,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Done upgrade assignments from {{from}} to {{to}}.
+        ///   Looks up a localized string similar to Upgrade from {{from}} to {{to}} is finished.
         /// </summary>
         public static string UpgradeProgressDoneTitle {
             get {
