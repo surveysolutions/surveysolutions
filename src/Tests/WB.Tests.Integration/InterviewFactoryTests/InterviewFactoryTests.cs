@@ -87,10 +87,12 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 }));
 
             //act
-
-
             var interviewSummary = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-                interviewSummaryRepository.Query(_ => _.First(x => x.InterviewId == interviewId)));
+            {
+                var summary = interviewSummaryRepository.Query(_ => _.First(x => x.InterviewId == interviewId));
+                var summaryErrorsCount = summary.ErrorsCount; // to trigger lazy load
+                return summary;
+            });
 
             //assert
             Assert.That(interviewSummary, Has.Property(nameof(interviewSummary.ErrorsCount)).EqualTo(2));
