@@ -38,7 +38,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                     .Fetch(x => x.AnswersToFeaturedQuestions)
                     .ToList();
 
-                return summaries;
+                return summaries
+                    .Select(x => new TeamInterviewsViewItem {
+                        FeaturedQuestions = 
+                            x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
+                            {
+                                Id = a.Questionid,
+                                Answer = a.Answer,
+                                Question = a.Title,
+                                Type = a.Type
+                            }).ToList(),
+                        InterviewId = x.InterviewId,
+                        Key = x.Key,
+                        ClientKey = x.ClientKey,
+                        LastEntryDateUtc = x.UpdateDate,
+                        ResponsibleId = x.ResponsibleId,
+                        ResponsibleName = x.ResponsibleName,
+                        ResponsibleRole = x.ResponsibleRole,
+                        Status = x.Status.ToString(),
+                        ErrorsCount = x.ErrorsCount,
+                        CanBeReassigned = x.Status == InterviewStatus.Created
+                                          || x.Status == InterviewStatus.SupervisorAssigned
+                                          || x.Status == InterviewStatus.InterviewerAssigned
+                                          || x.Status == InterviewStatus.RejectedBySupervisor,
+                        CanApprove = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
+                        CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
+                        IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
+                        AssignmentId = x.AssignmentId,
+                        ReceivedByInterviewer = x.ReceivedByInterviewer
+                    }).ToList();;
             });
 
 
@@ -48,39 +76,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviews
                 return counter.Count();
             });
 
-            var teamInterviewsViewItems = interviewsPage
-                .Select(x => new TeamInterviewsViewItem {
-                    FeaturedQuestions = 
-                        x.AnswersToFeaturedQuestions.Select(a => new InterviewFeaturedQuestion
-                        {
-                            Id = a.Questionid,
-                            Answer = a.Answer,
-                            Question = a.Title,
-                            Type = a.Type
-                        }).ToList(),
-                    InterviewId = x.InterviewId,
-                    Key = x.Key,
-                    ClientKey = x.ClientKey,
-                    LastEntryDateUtc = x.UpdateDate,
-                    ResponsibleId = x.ResponsibleId,
-                    ResponsibleName = x.ResponsibleName,
-                    ResponsibleRole = x.ResponsibleRole,
-                    Status = x.Status.ToString(),
-                    ErrorsCount = x.ErrorsCount,
-                    CanBeReassigned = x.Status == InterviewStatus.Created
-                        || x.Status == InterviewStatus.SupervisorAssigned
-                        || x.Status == InterviewStatus.InterviewerAssigned
-                        || x.Status == InterviewStatus.RejectedBySupervisor,
-                    CanApprove = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
-                    CanReject = x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters,
-                    IsNeedInterviewerAssign = !x.IsAssignedToInterviewer,
-                    AssignmentId = x.AssignmentId,
-                    ReceivedByInterviewer = x.ReceivedByInterviewer
-                }).ToList();
+            
             return new TeamInterviewsView
             {
                 TotalCount = totalCount,
-                Items = teamInterviewsViewItems
+                Items = interviewsPage
             };   
         }
 
