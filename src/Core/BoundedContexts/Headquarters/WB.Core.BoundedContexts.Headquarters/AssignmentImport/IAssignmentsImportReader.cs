@@ -7,6 +7,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     public interface IAssignmentsImportReader
     {
         PreloadedFile ReadTextFile(Stream inputStream, string fileName);
+        PreloadedFileInfo ReadTextFileInfo(Stream inputStream, string fileName);
         IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream);
+        PreloadedFile ReadFileFromZip(Stream inputStream, string fileName);
+        IEnumerable<PreloadedFileInfo> ReadZipFileInfo(Stream inputStream);
     }
 }

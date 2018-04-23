@@ -147,9 +147,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                         yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, rosterColumnNames.newName);
                 }
 
-                if (IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire) &&
-                    files.Any(x => x.QuestionnaireOrRosterName != file.QuestionnaireOrRosterName) &&
-                    !columnNames.Contains(ServiceColumns.InterviewId))
+                var isQuestionnaireFile = IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire);
+                var hasRosterFiles = files.Any(x => x.QuestionnaireOrRosterName != file.QuestionnaireOrRosterName);
+
+                if ((isQuestionnaireFile && hasRosterFiles || !isQuestionnaireFile) && !columnNames.Contains(ServiceColumns.InterviewId))
                 {
                     yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, ServiceColumns.InterviewId);
                 }
@@ -222,7 +223,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool UnknownColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
             if (string.IsNullOrWhiteSpace(columnName)) return true;
+
+            if (columnName == ServiceColumns.InterviewId) return false;
+
+            if ((columnName == ServiceColumns.ResponsibleColumnName || columnName == ServiceColumns.AssignmentsCountColumnName) && 
+                IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire)) return false;
+
             if (ServiceColumns.AllSystemVariables.Contains(columnName)) return false;
+
             if (GetRosterInstanceIdColumns(file, questionnaire).Any(x => x.newName == columnName || x.oldName == columnName)) return false;
 
             var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
@@ -470,9 +478,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value).ToArray();
 
-            for (int i = 0; i < parentRosterIds.Length; i++)
+            var rosterSizeQuestionsByRosterIds = parentRosterIds.ToDictionary(x => x,
+                x => questionnaire.IsFixedRoster(x) ? x : questionnaire.GetRosterSizeQuestion(x));
+
+            var trimmedRostersByRosterSizeQuestionIds = rosterSizeQuestionsByRosterIds
+                .GroupBy(x => /*by roster size question id*/x.Value)
+                .Select(x => /*each first roster by roster size question*/x.First().Key)
+                .ToArray();
+
+            for (int i = 0; i < trimmedRostersByRosterSizeQuestionIds.Length; i++)
             {
-                var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterIds[i]).ToLower());
+                var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(trimmedRostersByRosterSizeQuestionIds[i]).ToLower());
                 var oldName = $"{ServiceColumns.ParentId}{i + 1}".ToLower();
                 yield return (oldName, newName);
             }
