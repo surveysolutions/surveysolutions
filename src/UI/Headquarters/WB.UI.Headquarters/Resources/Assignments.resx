@@ -265,6 +265,6 @@
     <value>Download list</value>
   </data>
   <data name="UpgradeProgressDoneTitle" xml:space="preserve">
-    <value>Done upgrade assignments from {{from}} to {{to}}</value>
+    <value>Upgrade from {{from}} to {{to}} is finished</value>
   </data>
 </root>
