@@ -1,4 +1,4 @@
-﻿using MvvmCross.Plugins.Messenger;
+﻿using MvvmCross.Plugin.Messenger;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages
 {

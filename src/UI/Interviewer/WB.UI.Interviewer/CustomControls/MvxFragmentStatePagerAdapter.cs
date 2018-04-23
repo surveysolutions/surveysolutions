@@ -5,10 +5,10 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
-using Android.Support.V4.View;
 using Java.Lang;
-using MvvmCross.Core.ViewModels;
+
 using MvvmCross.Droid.Support.V4;
+using MvvmCross.ViewModels;
 using Object = Java.Lang.Object;
 
 namespace WB.UI.Interviewer.CustomControls

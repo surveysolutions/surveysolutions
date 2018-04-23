@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Android.Content;
+using MvvmCross;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.IoC;
+using MvvmCross.Converters;
+using MvvmCross.IoC;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -23,10 +23,6 @@ namespace WB.UI.Tester
 {
     public class Setup : EnumeratorSetup
     {
-        public Setup(Context applicationContext) : base(applicationContext)
-        {
-        }
-
         protected override IMvxApplication CreateApp()
         {
             return new App();
@@ -34,7 +30,6 @@ namespace WB.UI.Tester
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-
             return IoCAdapterSetup.CreateIocProvider();
         }
 
@@ -65,7 +60,7 @@ namespace WB.UI.Tester
             registry.AddOrOverwrite("PublicBackground", new QuestionnairePublicityBackgroundConverter());
         }
 
-        protected override IEnumerable<Assembly> GetViewModelAssemblies()
+        public override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return base.GetViewModelAssemblies().Union(new[]
             {

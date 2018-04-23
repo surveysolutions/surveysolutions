@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
 using NUnit.Framework;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;

@@ -31,8 +31,8 @@ using Autofac;
 using Autofac.Core;
 using Autofac.Core.Lifetime;
 using Autofac.Core.Registration;
-using MvvmCross.Platform.Core;
-using MvvmCross.Platform.IoC;
+using MvvmCross.Base;
+using MvvmCross.IoC;
 
 namespace WB.UI.Shared.Enumerator.Autofac
 {
@@ -102,6 +102,11 @@ namespace WB.UI.Shared.Enumerator.Autofac
                 if (args.ComponentRegistration.Services.OfType<TypedService>().Any(x => x.ServiceType == type))
                     action();
             };
+        }
+
+        public IMvxIoCProvider CreateChildContainer()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

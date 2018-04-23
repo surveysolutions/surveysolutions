@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Binding.Bindings.SourceSteps;
-using MvvmCross.Binding.Combiners;
-using MvvmCross.Binding.ExtensionMethods;
-using MvvmCross.Platform.Converters;
+using MvvmCross.Binding.Extensions;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {

@@ -1,5 +1,4 @@
-using System;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
