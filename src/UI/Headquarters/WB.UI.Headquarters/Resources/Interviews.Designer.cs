@@ -183,6 +183,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        public static string Errors {
+            get {
+                return ResourceManager.GetString("Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;
         ///&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;..
         /// </summary>
@@ -248,11 +257,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Indicator for whether the interview has at least one validation error. “Yes” indicates at least one error; “-” indicates no error. Click on the sort icon to sort by the presence of errors..
+        ///   Looks up a localized string similar to Shows total number of invalid questions and static texts in the interview. Multiple failed validation conditions on same entity are counted as 1..
         /// </summary>
-        public static string Tooltip_Table_HasErrors {
+        public static string Tooltip_Table_ErrorsCount {
             get {
-                return ResourceManager.GetString("Tooltip_Table_HasErrors", resourceCulture);
+                return ResourceManager.GetString("Tooltip_Table_ErrorsCount", resourceCulture);
             }
         }
         

@@ -6,7 +6,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
     {
         //Id of the row
         
-        public static readonly string HasAnyError = "has__errors";
+        public static readonly string HasAnyError = "errors__count";
         public static readonly string Key = "interview__key";
         public static readonly string InterviewId = "interview__id";
         public static readonly string InterviewStatus = "interview__status";
