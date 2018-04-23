@@ -32,6 +32,145 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         }
 
         [Test]
+        public void KP_11208_should_count_errors()
+        {
+             //arrange
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                interviewSummaryRepository.Store(new InterviewSummary
+                {
+                    SummaryId = interviewId.FormatGuid(),
+                    InterviewId = interviewId,
+                    Status = InterviewStatus.Completed,
+                    QuestionnaireIdentity = questionnaireId.ToString(),
+                    ReceivedByInterviewer = false
+                }, interviewId.FormatGuid()));
+
+            var factory = CreateInterviewFactory();
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                id: questionnaireId.QuestionnaireId,
+
+                children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(Id.g1),
+                    Create.Entity.StaticText(Id.g2)
+                });
+
+            PrepareQuestionnaire(questionnaire, questionnaireId.Version);
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                factory.Save(new InterviewState
+                {
+                    Id = interviewId,
+                    Validity = new Dictionary<InterviewStateIdentity, InterviewStateValidation>
+                    {
+                        {
+                            InterviewStateIdentity.Create(Create.Identity(Id.g1)), new InterviewStateValidation
+                            {
+                                Id = Id.g1,
+                                RosterVector = RosterVector.Empty,
+                                Validations = new[] {1}
+                            }
+                        },
+                        {
+                            InterviewStateIdentity.Create(Create.Identity(Id.g2)), new InterviewStateValidation
+                            {
+                                Id = Id.g2,
+                                RosterVector = RosterVector.Empty,
+                                Validations = new[] {1}
+                            }
+                        }
+                    }
+                }));
+
+            //act
+            var interviewSummary = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                var summary = interviewSummaryRepository.Query(_ => _.First(x => x.InterviewId == interviewId));
+                var summaryErrorsCount = summary.ErrorsCount; // to trigger lazy load
+                return summary;
+            });
+
+            //assert
+            Assert.That(interviewSummary, Has.Property(nameof(interviewSummary.ErrorsCount)).EqualTo(2));
+        }
+
+        [Test]
+        public void KP_11251_when_there_is_roster_with_negative_value()
+        {
+            //arrange
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+            var rosterSource = Id.g1;
+            var roster = Id.g2;
+            var rosterItem = Id.g3;
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                interviewSummaryRepository.Store(new InterviewSummary
+                {
+                    SummaryId = interviewId.FormatGuid(),
+                    InterviewId = interviewId,
+                    Status = InterviewStatus.Completed,
+                    QuestionnaireIdentity = questionnaireId.ToString(),
+                    ReceivedByInterviewer = false
+                }, interviewId.FormatGuid()));
+
+            var factory = CreateInterviewFactory();
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                id: questionnaireId.QuestionnaireId,
+
+                children: new IComposite[]
+                {
+                    Create.Entity.MultyOptionsQuestion(rosterSource, new List<Answer> {
+                        Create.Entity.Answer("Yep", 1),
+                        Create.Entity.Answer("Idontknow!", -99)
+                    }),
+                    Create.Entity.Roster(roster, rosterSizeSourceType: RosterSizeSourceType.Question, rosterSizeQuestionId: rosterSource,
+                        children: new IComposite[]
+                        {
+                            Create.Entity.TextQuestion(rosterItem)
+                        })
+                });
+
+            PrepareQuestionnaire(questionnaire, questionnaireId.Version);
+
+            var entityNegative = Create.Identity(rosterItem, Create.RosterVector(-99));
+            var entityNegative2 = Create.Identity(rosterItem, Create.RosterVector(1, -99));
+            var entityNegativeMixed = Create.Identity(rosterItem, Create.RosterVector(1, -99, 3));
+            var entityNegativeConsecutive = Create.Identity(rosterItem, Create.RosterVector(1, -99, 3, -99, -44));
+
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            factory.Save(new InterviewState
+            {
+                Id = interviewId,
+                Enablement = new Dictionary<InterviewStateIdentity, bool>
+                {
+                    {InterviewStateIdentity.Create(entityNegative), true},
+                    {InterviewStateIdentity.Create(entityNegative2), true},
+                    {InterviewStateIdentity.Create(entityNegativeMixed), true},
+                    {InterviewStateIdentity.Create(entityNegativeConsecutive), true}
+                }
+            }));
+
+            //act
+            var entities = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                factory.GetInterviewEntities(interviewId));
+
+            //assert
+            Assert.That(entities, Has.Count.EqualTo(4));
+
+            Assert.That(entities, Has.One.Property(nameof(InterviewEntity.Identity)).EqualTo(entityNegative));
+            Assert.That(entities, Has.One.Property(nameof(InterviewEntity.Identity)).EqualTo(entityNegative2));
+            Assert.That(entities, Has.One.Property(nameof(InterviewEntity.Identity)).EqualTo(entityNegativeMixed));
+            Assert.That(entities, Has.One.Property(nameof(InterviewEntity.Identity)).EqualTo(entityNegativeConsecutive));
+        }
+
+        [Test]
         public void when_getting_flagged_question_ids()
         {
             //arrange
@@ -133,7 +272,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             //assert
             Assert.AreEqual(1, flaggedIdentites.Length);
-            Assert.That(flaggedIdentites, Is.EquivalentTo(new[] {questionIdentities[1]}));
+            Assert.That(flaggedIdentites, Is.EquivalentTo(new[] { questionIdentities[1] }));
         }
 
         [Test]

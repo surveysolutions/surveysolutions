@@ -37,8 +37,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
-        IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
-        IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
@@ -303,14 +301,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             });
         }
 
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeclaredInvalid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.HasErrors = true;
-            });
-        }
-
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewKeyAssigned> @event)
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
@@ -321,14 +311,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
 
                 interview.Key = @event.Payload.Key.ToString();
-            });
-        }
-
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeclaredValid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.HasErrors = false;
             });
         }
 
