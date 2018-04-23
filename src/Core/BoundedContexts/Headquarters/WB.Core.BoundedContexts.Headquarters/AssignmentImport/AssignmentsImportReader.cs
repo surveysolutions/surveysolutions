@@ -70,6 +70,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             };
         }
 
+        public PreloadedFileInfo ReadTextFileInfo(Stream inputStream, string fileName) => new PreloadedFileInfo
+        {
+            FileName = fileName,
+            QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
+            Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+        };
+
         public PreloadedFile ReadTextFile(Stream inputStream, string fileName) => new PreloadedFile
         {
             FileInfo = new PreloadedFileInfo
@@ -79,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
             },
             Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                .Select((record, rowIndex) => (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
+                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
         };
 
         public IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream)
@@ -94,6 +101,37 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 if (allowedExtension && !isSystemFile)
                     yield return this.ReadTextFile(new MemoryStream(file.Bytes), file.Name);
+            }
+        }
+
+        public PreloadedFile ReadFileFromZip(Stream inputStream, string fileName)
+        {
+            if (!this.archiveUtils.IsZipStream(inputStream)) return null;
+
+            foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
+            {
+                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+
+                if (allowedExtension && !isSystemFile && string.Equals(fileName, file.Name, StringComparison.CurrentCultureIgnoreCase))
+                    return this.ReadTextFile(new MemoryStream(file.Bytes), file.Name);
+            }
+
+            return null;
+        }
+
+        public IEnumerable<PreloadedFileInfo> ReadZipFileInfo(Stream inputStream)
+        {
+            if (!this.archiveUtils.IsZipStream(inputStream))
+                yield break;
+
+            foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
+            {
+                var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+
+                if (allowedExtension && !isSystemFile)
+                    yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
         }
     }

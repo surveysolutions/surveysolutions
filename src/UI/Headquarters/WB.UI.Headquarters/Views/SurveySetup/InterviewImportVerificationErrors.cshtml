@@ -15,7 +15,7 @@
             <div class="page-header">
                 <ol class="breadcrumb">
                     <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
-                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { })</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.Identity.QuestionnaireId, version = Model.Identity.Version }, new { })</li>
                 </ol>
                 <h1>@BatchUpload.ImportAssignments_PageTitle</h1>
             </div>
@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col-sm-7">
                 <h3>
-                    @string.Format(BatchUpload.ImportFrom, Model.FileName, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Version))
+                    @string.Format(BatchUpload.ImportFrom, Model.FileName, Html.QuestionnaireName(Model.QuestionnaireTitle, Model.Identity.Version))
                 </h3>
             </div>
         </div>
@@ -34,13 +34,13 @@
                     <p>@BatchUpload.AssignmentsAreNotCreated</p>
                 </div>
                 <h3 class="error-text">
-                    @if (Model.Errors.Length + Model.ImportErrors.Length == 1)
+                    @if (Model.Errors.Length == 1)
                     {
                         @:@BatchUpload.SingleErrorFound
                     }
                     else
                     {
-                        @:@string.Format(BatchUpload.MultipleErrorsWereFound, Model.Errors.Length + Model.ImportErrors.Length)
+                        @:@string.Format(BatchUpload.MultipleErrorsWereFound, Model.Errors.Length)
                     }
                 </h3>
                 @foreach (var error in Model.Errors)
@@ -75,18 +75,8 @@
                         }
                     </div>
                 }
-                @foreach (InterviewImportError error in Model.ImportErrors)
-                {
-                    <div class="error-block">
-                        <h5 class="error-text"><span>@error.ErrorCode</span>: @error.ErrorMessage</h5>
-                        @foreach (var reference in error.References)
-                        {
-                            <p>@BatchUpload.FileName: @reference.DataFile</p>
-                        }
-                    </div>
-                }
                 <div class="action-buttons">
-                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new { id = Model.QuestionnaireId, version = Model.Version }, new { @class = "back-link" })
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new { id = Model.Identity.QuestionnaireId, version = Model.Identity.Version }, new { @class = "back-link" })
                 </div>
             </div>
         </div>

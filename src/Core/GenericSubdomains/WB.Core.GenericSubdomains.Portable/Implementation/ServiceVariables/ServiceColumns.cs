@@ -41,11 +41,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         };
 
         public static readonly string[] AllSystemVariables = SystemVariables.Values
-            .Select(x => x.VariableExportColumnName).Union(new[]
-            {
-                InterviewId,
-                ResponsibleColumnName,
-                AssignmentsCountColumnName
-            }).Select(x => x.ToLower()).ToArray();
+            .Select(x => x.VariableExportColumnName).Select(x => x.ToLower()).ToArray();
     }
 }
