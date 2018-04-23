@@ -71,7 +71,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}")]
-        public AssignmentDetails Details(int id)
+        public FullAssignmentDetails Details(int id)
         {
             Assignment assignment = assignmentsStorage.GetById(id)
                 ?? throw new HttpResponseException(HttpStatusCode.NotFound);
