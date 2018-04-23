@@ -60,14 +60,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             bool hasErrors = false;
 
-            foreach (var columnError in this.verifier.VerifyColumns(new[] { file.FileInfo }, questionnaire))
-            {
-                hasErrors = true;
-                yield return columnError;
-            }
-
-            if (hasErrors) yield break;
-
             var assignmentRows = new List<PreloadingAssignmentRow>();
 
             foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(file, questionnaire))
@@ -95,25 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
-
-            var preloadedFileInfos = allImportedFiles.Select(x => x.FileInfo).ToArray();
-
-            foreach (var fileInfo in preloadedFileInfos)
-                foreach (var fileError in this.verifier.VerifyFile(fileInfo, questionnaire))
-                {
-                    hasErrors = true;
-                    yield return fileError;
-                }
-
-            if (hasErrors) yield break;
-
-            foreach (var columnError in this.verifier.VerifyColumns(preloadedFileInfos, questionnaire))
-            {
-                hasErrors = true;
-                yield return columnError;
-            }
-
-            if (hasErrors) yield break;
 
             var assignmentRows = new List<PreloadingAssignmentRow>();
 
