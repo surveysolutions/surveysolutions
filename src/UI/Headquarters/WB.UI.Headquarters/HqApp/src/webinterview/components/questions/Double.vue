@@ -79,7 +79,7 @@
                     return 0;
                 
                 return this.$me.countOfDecimalPlaces    
-            }
+            },
             specialValue: {
                 get() {
                     return this.$me.answer
