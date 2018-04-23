@@ -74,5 +74,26 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
 
         public static bool ContainsOnly(this int[] multichoice, params int[] valuesList) => 
             multichoice?.Length == valuesList.Length && valuesList.All(multichoice.Contains);
+
+        #region March 2016 functions
+        public static bool ContainsAnyOtherThan(this decimal[] multichoice, params decimal[] valuesList)
+        {
+            if (multichoice == null) return false;
+            if (multichoice.Length == 0) return false;
+
+            if (valuesList == null) return true;
+            if (valuesList.Length == 0) return true;
+
+            for (var j = 0; j < multichoice.Length; j++)
+            {
+                var other = true;
+                for (var i = 0; i < valuesList.Length; i++)
+                    if (multichoice[j] == valuesList[i]) other = false;
+                if (other) return true;
+            }
+
+            return false;
+        }
+        #endregion
     }
 }

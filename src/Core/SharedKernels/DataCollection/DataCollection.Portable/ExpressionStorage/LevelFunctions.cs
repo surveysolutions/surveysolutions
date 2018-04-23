@@ -331,5 +331,349 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         {
             return weight / (height * height);
         }
+
+        #region March 2016 functions
+
+        /// <summary>
+        /// Verifies that a certain combination of year, month and day is a valid date.
+        /// </summary>
+        /// <param name="year">Year</param>
+        /// <param name="month">Month</param>
+        /// <param name="day">Day</param>
+        /// <returns>True if the three parameters define a valid date. False otherwise.</returns>
+        public bool IsDate(long? year, long? month, long? day)
+        {
+            if (!year.HasValue) return false;
+            if (!month.HasValue) return false;
+            if (!day.HasValue) return false;
+
+            if (year < 0) return false;
+            if (month < 0) return false;
+            if (day < 0) return false;
+
+            try
+            {
+                new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Verifies that a certain combination of year, month and day is a valid date.
+        /// </summary>
+        /// <param name="year">Year</param>
+        /// <param name="month">Month</param>
+        /// <param name="day">Day</param>
+        /// <returns>True if the three parameters define a valid date. False otherwise.</returns>
+        public bool IsDate(int? year, int? month, int? day)
+        {
+            if (!year.HasValue) return false;
+            if (!month.HasValue) return false;
+            if (!day.HasValue) return false;
+
+            if (year < 0) return false;
+            if (month < 0) return false;
+            if (day < 0) return false;
+
+            try
+            {
+                new DateTime(year.Value, month.Value, day.Value);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Number of calendar days between a date and a later date
+        /// </summary>
+        /// <param name="date1">Earlier date</param>
+        /// <param name="date2">Later date</param>
+        /// <returns>Number of complete years.</returns>
+        /// 
+        /// The second date is required to be later than or same as the first one.
+        /// The function returns special value -9998 is returned if the second date is 
+        /// prior to the first one; and special value -9999 is returned if any of the 
+        /// two dates are missing.
+        public int DaysBetweenDates(DateTime? date1, DateTime? date2)
+        {
+            if (date1.HasValue == false) return -9999;
+            if (date2.HasValue == false) return -9999;
+
+            if (date1 > date2) return -9998;
+            return (int)Math.Floor((date2.Value - date1.Value).TotalDays);
+        }
+
+        /// <summary>
+        /// Number of days in a particular month
+        /// </summary>
+        /// <param name="year">Year</param>
+        /// <param name="month">Month</param>
+        /// <returns>Number of days in the specified month; a special 
+        /// value -9999 is returned for an invalid combination of 
+        /// arguments.</returns>
+        public int DaysInMonth(int year, int month)
+        {
+            try
+            {
+                var d = new DateTime(year, month, 1);
+
+            }
+            catch
+            {
+                return -9999;
+            }
+
+            try
+            {
+                var d = new DateTime(year, month, 31);
+                return 31;
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                var d = new DateTime(year, month, 30);
+                return 30;
+            }
+            catch
+            {
+            }
+
+            try
+            {
+                var d = new DateTime(year, month, 29);
+                return 29;
+            }
+            catch
+            {
+            }
+
+            return 28;
+        }
+
+        /// <summary>
+        /// Number of days in a particular month
+        /// </summary>
+        /// <param name="date1">A date</param>
+        /// <returns>Number of days in the month, which contains 
+        /// the given date or a special value -9999 if the date 
+        /// argument is missing.</returns>
+        public int DaysInMonth(DateTime? date1)
+        {
+            if (date1.HasValue == false) return -9999;
+
+            return DaysInMonth(date1.Value.Year, date1.Value.Month);
+        }
+
+        /// <summary>
+        /// Number of days in a particular month
+        /// </summary>
+        /// <param name="cmc">Century month code for the month</param>
+        /// <returns>Number of days in the specified month; a special 
+        /// value -9999 is returned for an invalid negative cmc 
+        /// argument.</returns>
+        public int DaysInMonth(int cmc)
+        {
+            if (cmc < 0) return -9999;
+            var year = YearOfCmc(cmc);
+            var month = MonthOfCmc(cmc);
+            return DaysInMonth(year, month);
+        }
+
+        /// <summary>
+        /// Number of days in a particular month
+        /// </summary>
+        /// <param name="cmc">Century month code for the month</param>
+        /// <returns>Number of days in the specified month; a special 
+        /// value -9999 is returned for an invalid negative cmc 
+        /// argument.</returns>
+        public int DaysInMonth(long cmc)
+        {
+            return DaysInMonth((int)cmc);
+        }
+
+        /// <summary>
+        /// Determines the calendar year for a given century month code
+        /// </summary>
+        /// <param name="cmc">Century month code</param>
+        /// <returns>Calendar year or a special value -9999 for invalid 
+        /// negative century month codes.</returns>
+        public int YearOfCmc(int cmc)
+        {
+            if (cmc < 0) return -9999;
+            const int baseYear = 1900;
+            var year = (int)Math.Floor((cmc - 1) / 12.0) + baseYear;
+            return year;
+        }
+
+        /// <summary>
+        /// Determines the calendar month corresponding to a given century month code
+        /// </summary>
+        /// <param name="cmc">Century month code</param>
+        /// <returns>Calendar month number 1..12 or a special value -9999 for 
+        /// invalid negative century month codes.</returns>
+        public int MonthOfCmc(int cmc)
+        {
+            if (cmc < 0) return -9999;
+            const int baseYear = 1900;
+            var month = cmc - (YearOfCmc(cmc) - baseYear) * 12;
+            return month;
+        }
+
+        /// <summary>
+        /// Determines the calendar year for a given century month code
+        /// </summary>
+        /// <param name="cmc">Century month code</param>
+        /// <returns>Calendar year or a special value -9999 for invalid 
+        /// negative century month codes.</returns>
+        public int YearOfCmc(long cmc)
+        {
+            return YearOfCmc((int)cmc);
+        }
+
+        /// <summary>
+        /// Determines the calendar month corresponding to a given century month code
+        /// </summary>
+        /// <param name="cmc">Century month code</param>
+        /// <returns>Calendar month number 1..12 or a special value -9999 for 
+        /// invalid negative century month codes.</returns>
+        public int MonthOfCmc(long cmc)
+        {
+            return MonthOfCmc((int)cmc);
+        }
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the left intervals.
+        public int BracketIndexLeft(decimal x, params decimal?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x > cuts[c]) c++;
+            return c;
+        }
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the left intervals.
+        public int BracketIndexLeft(double x, params double?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x > cuts[c]) c++;
+            return c;
+        }
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the left intervals.
+        public int BracketIndexLeft(long x, params long?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x > cuts[c]) c++;
+            return c;
+        }
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the left intervals.
+        public int BracketIndexLeft(int x, params int?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x > cuts[c]) c++;
+            return c;
+        }
+
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the right intervals.
+        public int BracketIndexRight(decimal x, params decimal?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x >= cuts[c]) c++;
+            return c;
+        }
+
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the right intervals.
+        public int BracketIndexRight(double x, params double?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x >= cuts[c]) c++;
+            return c;
+        }
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the right intervals.
+        public int BracketIndexRight(long x, params long?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x >= cuts[c]) c++;
+            return c;
+        }
+
+        /// <summary>
+        /// Determines bracket index where a value belongs.
+        /// </summary>
+        /// <param name="x">value</param>
+        /// <param name="cuts">one or more cut-off points</param>
+        /// <returns>A zero-based index of an interval </returns>
+        /// 
+        /// Breaking the ties: exact values fall to the right intervals.
+        public int BracketIndexRight(int x, params int?[] cuts)
+        {
+            var c = 0;
+            while (c < cuts.Length && x >= cuts[c]) c++;
+            return c;
+        }
+
+        #endregion
+
     }
 }
