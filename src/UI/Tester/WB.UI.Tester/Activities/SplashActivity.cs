@@ -18,11 +18,11 @@ namespace WB.UI.Tester.Activities
 
         public override void InitializationComplete()
         {
-            base.InitializationComplete();
             ClearAttachmentStorage();
             ClearPlainInterviewStorage();
 
             Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
+            base.InitializationComplete();
         }
 
         private void ClearAttachmentStorage()

@@ -248,7 +248,6 @@
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\BasePrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SingleInterviewActivity.cs" />
-    <Compile Include="Activities\AppStart.cs" />
     <Compile Include="Converters\AudioNoiseTypeToShapeConverter.cs" />
     <Compile Include="Converters\InMemoryImageValueWithDefaultConverter.cs" />
     <Compile Include="Converters\IsStringNotEmptyConverter.cs" />
