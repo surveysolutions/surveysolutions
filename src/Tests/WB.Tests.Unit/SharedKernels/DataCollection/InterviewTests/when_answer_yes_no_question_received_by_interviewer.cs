@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;

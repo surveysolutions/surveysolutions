@@ -1,14 +1,14 @@
 ﻿using Main.Core.Entities.Composite;
 using Moq;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
-using MvvmCross.Test.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using MvvmCross.Base;
+using MvvmCross.Tests;
+using MvvmCross.Views;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;

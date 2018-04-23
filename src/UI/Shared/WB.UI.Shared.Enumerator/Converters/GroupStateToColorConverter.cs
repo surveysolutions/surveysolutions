@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Converters;
+using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 

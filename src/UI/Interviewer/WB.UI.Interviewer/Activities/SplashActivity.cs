@@ -1,11 +1,11 @@
 using Android.App;
 using Android.Content.PM;
-using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using System.Diagnostics;
+using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -21,7 +21,7 @@ namespace WB.UI.Interviewer.Activities
         {
         }
 
-        protected override void TriggerFirstNavigate()
+        public override void InitializationComplete()
         {
             var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SplashActivity>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");

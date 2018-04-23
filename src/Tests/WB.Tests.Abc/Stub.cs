@@ -1,7 +1,7 @@
 using System;
 using Moq;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -9,7 +9,6 @@ using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Abc.TestFactories;
 using WB.Core.Infrastructure.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Tests.Abc

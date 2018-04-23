@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -107,22 +108,31 @@ namespace WB.Tests.Abc.TestFactories
             public readonly List<MvxViewModelRequest> Requests = new List<MvxViewModelRequest>();
             public readonly List<MvxPresentationHint> Hints = new List<MvxPresentationHint>();
 
-            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
-            {
-                action();
-                return true;
-            }
-
-            public bool ShowViewModel(MvxViewModelRequest request)
+            public Task<bool> ShowViewModel(MvxViewModelRequest request)
             {
                 this.Requests.Add(request);
-                return true;
+                return Task.FromResult(true);
             }
 
-            public bool ChangePresentation(MvxPresentationHint hint)
+            public Task<bool> ChangePresentation(MvxPresentationHint hint)
             {
                 this.Hints.Add(hint);
-                return true;
+                return Task.FromResult(true);
+            }
+
+            public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
+            {
+                throw new NotImplementedException();
             }
         }
 

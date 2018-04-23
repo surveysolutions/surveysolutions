@@ -1,5 +1,3 @@
-using Java.Lang;
-
 namespace WB.UI.Interviewer.SharedPreferences
 {
     public class SettingsNames

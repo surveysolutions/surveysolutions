@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.OS;
-using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
 
 namespace WB.UI.Interviewer.Services

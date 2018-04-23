@@ -1,4 +1,4 @@
-﻿using MvvmCross.Plugins.Messenger;
+﻿using MvvmCross.Plugin.Messenger;
 using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;

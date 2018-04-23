@@ -31,5 +31,7 @@ namespace WB.UI.Interviewer.CustomControls
         {
             return fromViewType;
         }
+
+        public int ItemTemplateId { get; set; }
     }
 }

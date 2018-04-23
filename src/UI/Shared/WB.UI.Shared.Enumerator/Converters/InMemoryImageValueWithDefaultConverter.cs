@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Globalization;
 using Android.Graphics;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Converters;
+using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Enumerator.Converters

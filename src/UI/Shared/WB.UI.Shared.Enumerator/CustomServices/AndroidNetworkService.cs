@@ -3,7 +3,7 @@ using Android.Content;
 using Android.Net;
 using Android.Net.Wifi;
 using Android.Telephony;
-using MvvmCross.Plugins.Network.Reachability;
+using MvvmCross.Plugin.Network.Reachability;
 using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices

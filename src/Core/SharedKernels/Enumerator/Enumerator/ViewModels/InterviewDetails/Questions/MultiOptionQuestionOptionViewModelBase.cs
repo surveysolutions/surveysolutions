@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
-using MvvmCross.Core.ViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {

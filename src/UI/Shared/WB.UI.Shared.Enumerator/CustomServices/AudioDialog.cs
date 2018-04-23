@@ -3,10 +3,10 @@ using System.Threading;
 using Android.App;
 using Android.Support.V7.App;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
-using MvvmCross.Droid.Views;
-using MvvmCross.Platform.Core;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Base;
+using MvvmCross.Platforms.Android;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
+using MvvmCross.Platforms.Android.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 

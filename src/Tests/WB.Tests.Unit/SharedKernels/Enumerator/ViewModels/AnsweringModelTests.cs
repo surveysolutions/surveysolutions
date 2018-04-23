@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Exceptions;

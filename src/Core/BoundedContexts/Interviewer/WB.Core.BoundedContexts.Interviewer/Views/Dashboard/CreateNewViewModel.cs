@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
