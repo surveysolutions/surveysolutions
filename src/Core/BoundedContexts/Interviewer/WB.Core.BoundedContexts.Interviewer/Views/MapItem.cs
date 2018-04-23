@@ -1,5 +1,5 @@
 using System;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {

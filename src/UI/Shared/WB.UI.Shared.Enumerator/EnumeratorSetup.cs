@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Android.Content;
 using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
-using MvvmCross.Core.Views;
-using MvvmCross.Droid.Platform;
+using MvvmCross.Converters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Logging;
+using MvvmCross.Logging;
+using MvvmCross.Platforms.Android.Core;
+using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -34,7 +33,7 @@ namespace WB.UI.Shared.Enumerator
 {
     public abstract class EnumeratorSetup : MvxAndroidSetup
     {
-        protected EnumeratorSetup(Context applicationContext) : base(applicationContext)
+        protected EnumeratorSetup()
         {
             //restart the app to avoid incorrect state
             TaskScheduler.UnobservedTaskException += (sender, args) =>
@@ -174,7 +173,7 @@ namespace WB.UI.Shared.Enumerator
                 typeof (SwitchCompat).Assembly
             });
 
-        protected override IEnumerable<Assembly> GetViewModelAssemblies()
+        public override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return new[]
             {

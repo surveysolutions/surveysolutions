@@ -83,14 +83,6 @@
     <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.0.0\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Platform">
-      <HintPath>..\..\..\..\packages\MvvmCross.Platform.5.7.0\lib\MonoAndroid\MvvmCross.Platform.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="MvvmCross.Platform.Droid">
-      <HintPath>..\..\..\..\packages\MvvmCross.Platform.5.7.0\lib\MonoAndroid\MvvmCross.Platform.Droid.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="MvvmCross.Plugin.File, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Plugin.File.6.0.0\lib\monoandroid81\MvvmCross.Plugin.File.dll</HintPath>
     </Reference>
@@ -256,6 +248,7 @@
     <Compile Include="Activities\MenuLocalizationHelper.cs" />
     <Compile Include="Activities\BasePrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\SingleInterviewActivity.cs" />
+    <Compile Include="Activities\AppStart.cs" />
     <Compile Include="Converters\AudioNoiseTypeToShapeConverter.cs" />
     <Compile Include="Converters\InMemoryImageValueWithDefaultConverter.cs" />
     <Compile Include="Converters\IsStringNotEmptyConverter.cs" />

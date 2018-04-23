@@ -1,9 +1,8 @@
 ﻿using System;
 using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.Util;
 using Android.Widget;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

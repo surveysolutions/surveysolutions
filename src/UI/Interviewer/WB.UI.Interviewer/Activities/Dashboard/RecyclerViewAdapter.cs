@@ -1,7 +1,7 @@
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {

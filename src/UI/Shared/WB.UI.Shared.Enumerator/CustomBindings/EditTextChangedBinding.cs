@@ -1,7 +1,8 @@
 ﻿using System;
 using Android.Widget;
-using MvvmCross.Binding.Droid.Target;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Platforms.Android.Binding.Target;
+
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

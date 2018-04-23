@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using WB.Core.SharedKernels.Enumerator.Repositories;
+﻿using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;

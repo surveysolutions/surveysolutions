@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;

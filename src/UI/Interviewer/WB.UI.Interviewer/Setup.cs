@@ -2,17 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Widget;
 using Autofac;
+using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.IoC;
-using NLog;
+using MvvmCross.Converters;
+using MvvmCross.IoC;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -25,7 +23,6 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.Converters;
@@ -36,20 +33,15 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Autofac;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
+using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Interviewer
 {
     public class Setup : EnumeratorSetup
     {
-        public Setup(Context applicationContext) : base(applicationContext)
-        {
-        }
-
         protected override void InitializeViewLookup()
         {
             base.InitializeViewLookup();
@@ -165,7 +157,7 @@ namespace WB.UI.Interviewer
             }
         }
 
-        protected override IEnumerable<Assembly> GetViewModelAssemblies()
+        public override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return base.GetViewModelAssemblies().Union(new[]
             {

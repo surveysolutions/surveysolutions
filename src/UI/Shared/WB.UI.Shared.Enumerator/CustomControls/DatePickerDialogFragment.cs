@@ -1,6 +1,5 @@
 ﻿using System;
 using Android.App;
-using Android.Content;
 using Android.OS;
 
 namespace WB.UI.Shared.Enumerator.CustomControls

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Interviewer.Views;

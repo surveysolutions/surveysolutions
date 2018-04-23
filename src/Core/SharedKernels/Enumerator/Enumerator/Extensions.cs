@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
-using MvvmCross.Core.ViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator
 {

@@ -1,6 +1,6 @@
 using Android.Content;
 using Android.OS;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.CustomServices

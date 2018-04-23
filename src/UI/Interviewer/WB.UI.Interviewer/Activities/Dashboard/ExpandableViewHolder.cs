@@ -3,11 +3,9 @@ using System.Linq;
 using Android.Support.Transitions;
 using Android.Views;
 using Android.Widget;
-using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using PopupMenu = Android.Support.V7.Widget.PopupMenu;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
@@ -37,7 +35,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             if (disposing)
             {
-                Mvx.TaggedTrace("WBDEBUG", "Disposing ExpandableViewHolder");
                 DashboardItem.Click -= CardClick;
                 MenuHandle.Click -= MenuClick;
             }
@@ -75,7 +72,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     action.Command.Execute();
                 };
 
-                popup.Gravity = (int) GravityFlags.Left;
+                popup.Gravity = GravityFlags.Left;
                 popup.Show();
             }
         }

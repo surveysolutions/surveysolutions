@@ -1,5 +1,5 @@
-﻿using MvvmCross.Test.Core;
-using Moq;
+﻿using Moq;
+using MvvmCross.Tests;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;

@@ -1,6 +1,4 @@
-﻿using HockeyApp.Android;
-using MvvmCross.Droid.Views;
-using WB.UI.Shared.Enumerator.Services;
+﻿using MvvmCross.Platforms.Android.Views;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Shared.Enumerator.Activities

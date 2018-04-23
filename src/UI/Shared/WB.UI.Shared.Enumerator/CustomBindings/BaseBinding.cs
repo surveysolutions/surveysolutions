@@ -1,5 +1,5 @@
 using System;
-using MvvmCross.Binding.Droid.Target;
+using MvvmCross.Platforms.Android.Binding.Target;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

@@ -1,5 +1,5 @@
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
+using MvvmCross;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 
 namespace WB.UI.Interviewer
