@@ -72,8 +72,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public virtual bool WasCompleted { get; set; }
 
-
-
         public virtual TimeSpan? InterviewDuration
         {
             get => InterviewDurationLong != null ? new TimeSpan(this.InterviewDurationLong.Value) : (TimeSpan?)null;
