@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 .ToList();
 
             assignment.SetIdentifyingData(identifyingAnswers);
-            assignment.SetAnswers(assignment.Answers);
+            assignment.SetAnswers(assignmentToImport.Answers);
 
             this.assignmentsStorage.Store(assignment, null);
 
