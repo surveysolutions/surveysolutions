@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
 
             this.Property(x => x.RecordId);
             this.Property(x => x.ResponsibleId);
+            this.Property(x => x.ResponsibleName);
             this.Property(x => x.Time);
             this.Property(x => x.TimeUtc);
             this.Property(x => x.Type);
