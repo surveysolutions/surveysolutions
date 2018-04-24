@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Controllers;
@@ -30,6 +31,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         private readonly IInterviewHistoryFactory interviewHistoryViewFactory;
         private readonly IInterviewSummaryViewFactory interviewSummaryViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IPauseResumeQueue pauseResumeQueue;
 
         public InterviewController(
@@ -39,7 +41,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             IInterviewSummaryViewFactory interviewSummaryViewFactory,
             IInterviewHistoryFactory interviewHistoryViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IPauseResumeQueue pauseResumeQueue)
+            IPauseResumeQueue pauseResumeQueue, IQuestionnaireStorage questionnaireRepository)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -47,6 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.pauseResumeQueue = pauseResumeQueue;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         private bool CurrentUserCanAccessInterview(InterviewSummary interviewSummary)
@@ -151,9 +154,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var interview = this.statefulInterviewRepository.Get(id.FormatGuid());
             var area = interview.GetAreaQuestion(identity)?.GetAnswer()?.Value;
 
-            return this.View(area);
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+            var geometryType = questionnaire.GetQuestionByVariable(questionnaire.GetQuestionVariableName(identity.Id)).Properties
+                .GeometryType;
+
+            return this.View(new GeographyPreview(){AreaAnswer = area, Geometry = geometryType ?? GeometryType.Polygon});
         }
     }
+
+    public class GeographyPreview
+    {
+        public Area AreaAnswer { set; get; }
+        public GeometryType Geometry { set; get; }
+    }
+
 
     public class InterviewReviewModel
     {
