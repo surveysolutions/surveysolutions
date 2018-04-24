@@ -1,7 +1,9 @@
 ﻿using Android.Graphics.Drawables;
+using Android.OS;
 using Android.Support.Graphics.Drawable;
 using Android.Widget;
 using MvvmCross.Binding;
+using MvvmCross.Platform;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -15,43 +17,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void SetValueToView(ImageButton control, bool value)
         {
-            var controlDrawable = control.Drawable;
-
-            switch (controlDrawable)
-            {
-                case AnimatedVectorDrawableCompat drawableCompat:
-                    drawableCompat.RegisterAnimationCallback(new AnimationCallbackCompat(Target, value));
-                    drawableCompat.Start();
-                    break;
-                case AnimatedVectorDrawable animatedDrawable:
-                    animatedDrawable.RegisterAnimationCallback(new AnimationCallback(Target, value));
-                    animatedDrawable.Start();
-                    break;
-            }
-        }
-
-        class AnimationCallback : Animatable2AnimationCallback
-        {
-            private readonly ImageButton btn;
-            private readonly bool isPlaying;
-
-            public AnimationCallback(ImageButton btn, bool isPlaying)
-            {
-                this.btn = btn;
-                this.isPlaying = isPlaying;
-            }
-
-            public override void OnAnimationEnd(Drawable drawable)
-            {
-                if (isPlaying)
-                {
-                    btn.SetImageDrawable(btn.Context.GetDrawable(Resource.Drawable.stop_to_play_animation));
-                }
-                else
-                {
-                    btn.SetImageDrawable(btn.Context.GetDrawable(Resource.Drawable.play_to_stop_animation));
-                }
-            }
+            AnimatedVectorDrawableCompat.RegisterAnimationCallback(control.Drawable, new AnimationCallbackCompat(Target, value));
+            var animatable = control.Drawable as IAnimatable;
+            animatable.Start();
         }
 
         class AnimationCallbackCompat : Animatable2CompatAnimationCallback
@@ -67,14 +35,9 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             public override void OnAnimationEnd(Drawable drawable)
             {
-                if (isPlaying)
-                {
-                    btn.SetImageDrawable(btn.Context.GetDrawable(Resource.Drawable.stop_to_play_animation));
-                }
-                else
-                {
-                    btn.SetImageDrawable(btn.Context.GetDrawable(Resource.Drawable.play_to_stop_animation));
-                }
+                btn.SetImageResource(isPlaying
+                    ? Resource.Drawable.stop_to_play_animation
+                    : Resource.Drawable.play_to_stop_animation);
             }
         }
     }
