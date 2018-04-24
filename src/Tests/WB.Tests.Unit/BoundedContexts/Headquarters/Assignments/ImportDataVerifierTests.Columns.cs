@@ -448,6 +448,32 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_columns_by_advanced_preloading_and_main_file_dont_have_interview_id_column_should_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            string textQuestion = "txt";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(variable: textQuestion),
+                    Create.Entity.Roster(variable: roster, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: Create.Entity.FixedTitles(10, 20),
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion()
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] {textQuestion});
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
         public void when_verify_columns_in_zip_file_with_roster_and_nested_roster_files_which_triggered_by_1_roster_size_question_and_nested_roster_file_dont_have_roster_id_column_should_not_return_empty_errors()
         {
             // arrange
