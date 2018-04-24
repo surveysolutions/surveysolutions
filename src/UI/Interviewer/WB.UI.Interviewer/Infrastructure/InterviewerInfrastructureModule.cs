@@ -74,6 +74,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.BindAsSingleton<IAuditLogService, AuditLogService>();
 
             registry.BindAsSingleton<IInterviewerEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IInterviewerEventStorage>();
@@ -87,8 +88,6 @@ namespace WB.UI.Interviewer.Infrastructure
 
             registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
-
-            registry.BindAsSingleton<IAuditLogService, AuditLogService>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
