@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
+﻿namespace WB.Core.SharedKernels.DataCollection.Views.AuditLog
 {
     public enum AuditLogEntityType
     {

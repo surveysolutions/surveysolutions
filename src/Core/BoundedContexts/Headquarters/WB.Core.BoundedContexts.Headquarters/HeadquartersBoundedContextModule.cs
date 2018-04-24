@@ -290,7 +290,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAssignmentViewFactory, AssignmentViewFactory>();
             registry.Bind<IAssignmentsService, AssignmentsService>();
             registry.Bind<IAssignmetnsDeletionService, AssignmetnsDeletionService>();
-            registry.Bind<IAuditLog, AuditLog>();
+            registry.Bind<IAuditLog, Services.Internal.AuditLog>();
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();

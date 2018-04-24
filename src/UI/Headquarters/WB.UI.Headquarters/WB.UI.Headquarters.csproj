@@ -1687,6 +1687,7 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
+    <Compile Include="API\Interviewer\v2\AuditLogApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
@@ -1875,6 +1876,7 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />

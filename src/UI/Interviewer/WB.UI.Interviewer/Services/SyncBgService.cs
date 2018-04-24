@@ -4,11 +4,11 @@ using Android.OS;
 using Android.App;
 using Android.Content;
 using MvvmCross.Platform;
-using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.DataCollection.Views.AuditLog.Entities;
 
 namespace WB.UI.Interviewer.Services
 {
