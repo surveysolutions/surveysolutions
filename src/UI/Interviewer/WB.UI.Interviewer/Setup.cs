@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Views.AuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Interviewer.Activities;
@@ -148,6 +149,9 @@ namespace WB.UI.Interviewer
 
             // need remove in release this line and setting option
             Interview.TestingConditions = false;
+
+            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
+            auditLogService.Write(new OpenApplicationAuditLogEntity());
 
             return container;
         }
