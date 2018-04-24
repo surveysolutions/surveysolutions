@@ -483,7 +483,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var trimmedRostersByRosterSizeQuestionIds = rosterSizeQuestionsByRosterIds
                 .GroupBy(x => /*by roster size question id*/x.Value)
-                .Select(x => /*each first roster by roster size question*/x.First().Key)
+                .Select(x => /*each root parent roster by roster size question*/x.First().Key)
                 .ToArray();
 
             for (int i = 0; i < trimmedRostersByRosterSizeQuestionIds.Length; i++)

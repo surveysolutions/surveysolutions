@@ -447,46 +447,46 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Content, Is.EqualTo($"{roster}__id"));
         }
 
-        //[Test]
-        //public void when_verify_columns_in_zip_file_with_roster_and_nested_roster_files_which_triggered_by_1_roster_size_question_and_nested_roster_file_dont_have_parent_roster_id_column_should_not_return_empty_errors()
-        //{
-        //    // arrange
-        //    var roster = "myroster";
-        //    var nestedRoster = "nestedroster";
-        //    Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
-        //    var questionnaire = Create.Entity.PlainQuestionnaire(
-        //        Create.Entity.QuestionnaireDocumentWithOneChapter(
-        //            Create.Entity.NumericIntegerQuestion(rosterSizeId),
-        //            Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
-        //                children: new IComposite[]
-        //                {
-        //                    Create.Entity.Roster(variable: nestedRoster, rosterSizeQuestionId: rosterSizeId,
-        //                        children: new[]
-        //                        {
-        //                            Create.Entity.TextQuestion()
-        //                        })
-        //                })));
+        [Test]
+        public void when_verify_columns_in_zip_file_with_roster_and_nested_roster_files_which_triggered_by_1_roster_size_question_and_nested_roster_file_dont_have_roster_id_column_should_not_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            var nestedRoster = "nestedroster";
+            Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeId),
+                    Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
+                        children: new IComposite[]
+                        {
+                            Create.Entity.Roster(variable: nestedRoster, rosterSizeQuestionId: rosterSizeId,
+                                children: new[]
+                                {
+                                    Create.Entity.TextQuestion()
+                                })
+                        })));
 
-        //    var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
-        //    var rosterFile = Create.Entity.PreloadedFileInfo(
-        //        new[]
-        //        {
-        //            ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster)
-        //        }, fileName: roster, questionnaireOrRosterName: roster);
-        //    var nestedRosterFile = Create.Entity.PreloadedFileInfo(
-        //        new[]
-        //        {
-        //            ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, nestedRoster)
-        //        }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster)
+                }, fileName: roster, questionnaireOrRosterName: roster);
+            var nestedRosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster)
+                }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
 
-        //    var verifier = Create.Service.ImportDataVerifier();
+            var verifier = Create.Service.ImportDataVerifier();
 
-        //    // act
-        //    var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
 
-        //    // assert
-        //    Assert.That(errors, Is.Empty);
-        //}
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
 
         [Test]
         public void when_verify_columns_and_roster_file_has_roster_instance_id_column_in_old_format_should_return_empty_errors()
@@ -517,41 +517,43 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors, Is.Empty);
         }
 
-        //[Test]
-        //public void when_verify_columns_and_nested_roster_file_has_roster_instance_id_columns_in_new_and_old_format_should_return_empty_errors()
-        //{
-        //    // arrange
-        //    var roster = "myroster";
-        //    var nestedRoster = "nestedroster";
-        //    Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
-        //    var questionnaire = Create.Entity.PlainQuestionnaire(
-        //        Create.Entity.QuestionnaireDocumentWithOneChapter(
-        //            Create.Entity.NumericIntegerQuestion(rosterSizeId),
-        //            Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
-        //                children: new IComposite[]
-        //                {
-        //                    Create.Entity.Roster(variable: nestedRoster, rosterSizeQuestionId: rosterSizeId,
-        //                        children: new[]
-        //                        {
-        //                            Create.Entity.TextQuestion()
-        //                        })
-        //                })));
+        [Test]
+        public void when_verify_columns_and_nested_roster_file_has_roster_instance_id_columns_in_new_and_old_format_should_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            var nestedRoster = "nestedroster";
+            Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
+            Guid nestedRosterSizeId = Guid.Parse("22222222222222222222222222222222");
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeId),
+                    Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
+                        children: new IComposite[]
+                        {
+                            Create.Entity.NumericIntegerQuestion(nestedRosterSizeId),
+                            Create.Entity.Roster(variable: nestedRoster, rosterSizeQuestionId: nestedRosterSizeId,
+                                children: new[]
+                                {
+                                    Create.Entity.TextQuestion()
+                                })
+                        })));
 
-        //    var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
-        //    var nestedRosterFile = Create.Entity.PreloadedFileInfo(
-        //        new[]
-        //        {
-        //            ServiceColumns.InterviewId, "ParentId1", string.Format(ServiceColumns.IdSuffixFormat, nestedRoster)
-        //        }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var nestedRosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, "ParentId1", string.Format(ServiceColumns.IdSuffixFormat, nestedRoster)
+                }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
 
-        //    var verifier = Create.Service.ImportDataVerifier();
+            var verifier = Create.Service.ImportDataVerifier();
 
-        //    // act
-        //    var errors = verifier.VerifyColumns(new[] { mainFile, nestedRosterFile }, questionnaire).ToArray();
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, nestedRosterFile }, questionnaire).ToArray();
 
-        //    // assert
-        //    Assert.That(errors, Is.Empty);
-        //}
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
 
         [Test]
         public void when_verify_columns_and_1_column_is_empty_should_return_PL0003_error()
@@ -572,6 +574,314 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(""));
+        }
+
+        [Test]
+        public void when_verify_columns_with_unknown_column_should_return_PL0003_error()
+        {
+            // arrange
+            var txtVariable = "txt";
+            var unknownColumn = "unknownColumn";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(variable: txtVariable)));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { txtVariable, unknownColumn });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(unknownColumn));
+        }
+
+        [Test]
+        public void when_verify_columns_and_interview_id_column_in_list_should_return_empty_errors()
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion()));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { "interview__id" });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_and_main_file_has_responsible_column_should_return_empty_errors()
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion()));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { "_responsible" });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_and_roster_file_has_responsible_column_should_return_PL0003_error()
+        {
+            // arrange
+            var responsibleColumn = "_responsible";
+            var roster = "myroster";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Roster(variable: roster, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: Create.Entity.FixedTitles(10, 20),
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion()
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster), responsibleColumn
+                }, fileName: roster, questionnaireOrRosterName: roster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(responsibleColumn));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
+        }
+
+        [Test]
+        public void when_verify_columns_and_main_file_has_quantity_column_should_return_empty_errors()
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion()));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { "_quantity" });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_and_roster_file_has_quantity_column_should_return_PL0003_error()
+        {
+            // arrange
+            var quantityColumn = "_quantity";
+            var roster = "myroster";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Roster(variable: roster, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: Create.Entity.FixedTitles(10, 20),
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion()
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster), quantityColumn
+                }, fileName: roster, questionnaireOrRosterName: roster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(quantityColumn));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
+        }
+
+        [TestCase("ssSys_IRnd")]
+        [TestCase("interview__key")]
+        [TestCase("has__errors")]
+        [TestCase("interview__status")]
+        public void when_verify_columns_and_file_has_system_variable_column_should_return_empty_errors(string systemVariable)
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion()));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { systemVariable });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_and_roster_file_textlist_roster_size_question_column_should_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            var textListQuestionVariable = "txtlist";
+            Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextListQuestion(rosterSizeId, variable: textListQuestionVariable),
+                    Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion()
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster), textListQuestionVariable
+                }, fileName: roster, questionnaireOrRosterName: roster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_with_variable_column_should_return_empty_errors()
+        {
+            // arrange
+            string variable = "myvar";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Variable(variableName: variable)));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { variable });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_with_question_column_should_return_empty_errors()
+        {
+            // arrange
+            string variable = "myvar";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(variable: variable)));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { variable });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_columns_and_roster_file_has_question_column_from_outside_of_roster_should_return_PL0003_error()
+        {
+            // arrange
+            var questionVarOutsideOfRoster = "txtoutsideofroster";
+            var roster = "myroster";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextQuestion(variable: questionVarOutsideOfRoster),
+                    Create.Entity.Roster(variable: roster, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: Create.Entity.FixedTitles(10, 20),
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion()
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster), questionVarOutsideOfRoster 
+                }, fileName: roster, questionnaireOrRosterName: roster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(questionVarOutsideOfRoster));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
+        }
+
+        [Test]
+        public void when_verify_columns_and_question_column_from_roster_should_return_PL0003_error()
+        {
+            // arrange
+            var questionInsideOfRoster = "txtinsideofroster";
+            var mainFileName = "questionniare";
+            var roster = "myroster";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.Roster(variable: roster, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, fixedRosterTitles: Create.Entity.FixedTitles(10, 20),
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion(variable: questionInsideOfRoster)
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId, questionInsideOfRoster },
+                fileName: mainFileName, questionnaireOrRosterName: mainFileName);
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[] { ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster) },
+                fileName: roster, questionnaireOrRosterName: roster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(questionInsideOfRoster));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(mainFileName));
         }
     }
 }
