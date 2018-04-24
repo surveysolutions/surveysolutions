@@ -145,7 +145,6 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
-            registry.RegisterCustomBindingFactory<ImageView>("PlaybackIndicator", (view) => new ImageViewPlaybackIndicatorBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);

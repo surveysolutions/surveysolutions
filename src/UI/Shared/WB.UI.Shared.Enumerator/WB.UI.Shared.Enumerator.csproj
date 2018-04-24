@@ -319,7 +319,6 @@
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
     <Compile Include="CustomBindings\ImageButtonPlaybackToggleBinding.cs" />
-    <Compile Include="CustomBindings\ImageViewPlaybackIndicatorBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusOutBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
@@ -1377,55 +1376,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\play_to_stop_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\stop_icon.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\stop_to_play_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\bottom_play_to_stop_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\bottom_stop_to_play_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\rotate_90_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\rotate_minus_90_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\upper_play_to_stop_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\upper_stop_to_play_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\avd_playing_identifier.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\wave_1_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\wave_2_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\wave_3_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\animator\wave_4_animation.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\integers.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\playing_identifier.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
