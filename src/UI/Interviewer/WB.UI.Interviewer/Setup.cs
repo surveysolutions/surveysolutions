@@ -150,8 +150,8 @@ namespace WB.UI.Interviewer
             // need remove in release this line and setting option
             Interview.TestingConditions = false;
 
-            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
-            auditLogService.Write(new OpenApplicationAuditLogEntity());
+//            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
+//            auditLogService.Write(new OpenApplicationAuditLogEntity());
 
             return container;
         }

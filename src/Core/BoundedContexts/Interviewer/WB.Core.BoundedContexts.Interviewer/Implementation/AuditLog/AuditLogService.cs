@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Platform;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.AuditLog;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -14,14 +16,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
     {
         private readonly IPlainStorage<AutoincrementKeyValue, int> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
-        private readonly IUserIdentity userIdentity;
+        private readonly IPlainStorage<InterviewerIdentity> userIdentity;
         private readonly IJsonAllTypesSerializer serializer;
 
         private const string AuditLogSettingsKey = "settings";
 
         public AuditLogService(IPlainStorage<AutoincrementKeyValue, int> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
-            IUserIdentity userIdentity,
+            IPlainStorage<InterviewerIdentity> userIdentity,
             IJsonAllTypesSerializer serializer)
         {
             this.auditLogStorage = auditLogStorage;
@@ -39,11 +41,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 
         public void Write(IAuditLogEntity entity)
         {
-            var userId = userIdentity.UserId;
+            var interviewerIdentity = userIdentity.FirstOrDefault();
 
             var auditLogEntityView = new AuditLogEntityView()
             {
-                ResponsibleId = userId,
+                ResponsibleId = interviewerIdentity.UserId,
+                ResponsibleName = interviewerIdentity.Name,
                 Time = DateTime.Now,
                 TimeUtc = DateTime.UtcNow,
                 Type = entity.Type,
