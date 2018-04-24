@@ -1933,6 +1933,19 @@ namespace WB.Tests.Abc.TestFactories
             Responsible = userInfo
         };
 
+        public AssignmentQuantity AssignmentQuantity(string quantity = null, int? parsedQuantity = null) => new AssignmentQuantity
+        {
+            Value = string.IsNullOrEmpty(quantity) ? parsedQuantity?.ToString() ?? "" : quantity,
+            Column = ServiceColumns.AssignmentsCountColumnName,
+            Quantity = parsedQuantity
+        };
+
+        public AssignmentInterviewId AssignmentInterviewId(string interviewId) => new AssignmentInterviewId
+        {
+            Value = interviewId,
+            Column = ServiceColumns.InterviewId
+        };
+
         public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null) => new UserToVerify
         {
             IsLocked = isLocked,

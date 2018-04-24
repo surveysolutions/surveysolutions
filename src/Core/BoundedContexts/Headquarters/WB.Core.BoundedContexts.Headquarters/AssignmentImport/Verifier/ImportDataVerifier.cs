@@ -97,25 +97,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (error != null) yield return error;
             }
 
-            if (IsQuestionnaireFile(assignmentRow.QuestionnaireOrRosterName, questionnaire))
+            foreach (var serviceValue in (assignmentRow.RosterInstanceCodes ?? Array.Empty<AssignmentValue>()).Union(
+                new[] {assignmentRow.InterviewIdValue, assignmentRow.Responsible, assignmentRow.Quantity}))
             {
-                foreach (var serviceValue in new AssignmentValue[] { assignmentRow.Responsible, assignmentRow.Quantity })
-                {
-                    if (serviceValue == null) continue;
+                if (serviceValue == null) continue;
 
-                    foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
-                        if (error != null) yield return error;
-                }
-            }
-            else
-            {
-                foreach (var serviceValue in assignmentRow.RosterInstanceCodes?.Union(new[] {assignmentRow.InterviewIdValue}) ?? Array.Empty<AssignmentValue>())
-                {
-                    if (serviceValue == null) continue;
-
-                    foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
-                        if (error != null) yield return error;
-                }
+                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
+                    if (error != null) yield return error;
             }
         }
 
@@ -463,7 +451,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             => string.IsNullOrWhiteSpace(responsible.Value);
         
         private bool Quantity_IsNegative(AssignmentQuantity quantity)
-            => !Quantity_IsNotInteger(quantity) && quantity.Quantity != -1 && quantity.Quantity < 1;
+            => quantity.Quantity.HasValue && quantity.Quantity < -1;
 
         private bool Quantity_IsNotInteger(AssignmentQuantity quantity)
             => !string.IsNullOrWhiteSpace(quantity.Value) && !quantity.Quantity.HasValue;
