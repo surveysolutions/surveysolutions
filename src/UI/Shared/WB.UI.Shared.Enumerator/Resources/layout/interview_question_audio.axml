@@ -34,12 +34,9 @@
                 
                 <ImageButton style="@style/Interview_Button"
                              local:MvxBind="Visible QuestionState.IsAnswered; Click TogglePlayback; Playback IsPlaying"
-                             local:srcCompat="@drawable/play_to_stop_animation"/>
+                             local:srcCompat="@drawable/play_icon"/>
                 
-                <ImageView style="@style/Interview_Button"
-                    local:MvxBind="PlaybackIndicator IsPlaying"
-                    local:srcCompat="@drawable/avd_playing_identifier">
-                </ImageView>
+                
             </LinearLayout>
         </LinearLayout>
 
