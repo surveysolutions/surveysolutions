@@ -4,6 +4,7 @@ using System.Linq;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.AuditLog;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -55,7 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
             });
         }
 
-        public void UpdateSyncIndex(int id)
+        public void UpdateLastSyncIndex(int id)
         {
             var settingsView = auditLogSettingsStorage.GetById(AuditLogSettingsKey);
             settingsView.LastSyncedEntityId = id;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Events;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Views.AuditLog;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
@@ -54,5 +55,19 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public string JsonAnswer { get; set; }
         public string LastSupervisorOrInterviewerComment { get; set; }
+    }
+
+    public class AuditLogEntityApiView
+    {
+        public int Id { get; set; }
+
+        public AuditLogEntityType Type { get; set; }
+
+        public DateTime Time { get; set; }
+        public DateTime TimeUtc { get; set; }
+
+        public Guid ResponsibleId { get; set; }
+
+        public IAuditLogEntity Payload { get; set; }
     }
 }
