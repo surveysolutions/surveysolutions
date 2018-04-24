@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using WB.Tests.Abc;
 
@@ -63,7 +64,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.TextQuestion()}));
 
-            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, Create.Entity.AssignmentResponsible(responsibleName, Create.Entity.UserToVerify(true)));
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, Create.Entity.AssignmentResponsible(responsibleName, Create.Entity.UserToVerify(true, Guid.NewGuid())));
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
