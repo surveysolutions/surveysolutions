@@ -452,8 +452,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool Responsible_HasInvalidRole(AssignmentResponsible responsible) 
             => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null && !responsible.Responsible.IsSupervisorOrInterviewer;
 
-        private bool Responsible_IsLocked(AssignmentResponsible responsible) 
-            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null && responsible.Responsible.IsLocked;
+        private bool Responsible_IsLocked(AssignmentResponsible responsible)
+            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null &&
+               responsible.Responsible.IsSupervisorOrInterviewer && responsible.Responsible.IsLocked;
 
         private bool Responsible_NotFound(AssignmentResponsible responsible) 
             => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible == null;
