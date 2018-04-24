@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Views.AuditLog.Entities
+﻿namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities
 {
     public class SynchronizationCanceledAuditLogEntity : BaseAuditLogEntity
     {

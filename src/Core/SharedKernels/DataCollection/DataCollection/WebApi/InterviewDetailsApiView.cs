@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Events;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
-using WB.Core.SharedKernels.DataCollection.Views.AuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
