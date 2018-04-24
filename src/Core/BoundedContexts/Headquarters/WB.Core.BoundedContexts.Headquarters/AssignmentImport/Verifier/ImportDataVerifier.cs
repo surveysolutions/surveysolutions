@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (error != null) yield return error;
             }
 
-            if (IsQuestionnaireFile(assignmentRow.FileName, questionnaire))
+            if (IsQuestionnaireFile(assignmentRow.QuestionnaireOrRosterName, questionnaire))
             {
                 foreach (var serviceValue in new AssignmentValue[] { assignmentRow.Responsible, assignmentRow.Quantity })
                 {
@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
             else
             {
-                foreach (var serviceValue in assignmentRow.RosterInstanceCodes.Union(new[] {assignmentRow.InterviewIdValue}))
+                foreach (var serviceValue in assignmentRow.RosterInstanceCodes?.Union(new[] {assignmentRow.InterviewIdValue}) ?? Array.Empty<AssignmentValue>())
                 {
                     if (serviceValue == null) continue;
 
@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 var isQuestionnaireFile = IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire);
                 var hasRosterFiles = files.Any(x => x.QuestionnaireOrRosterName != file.QuestionnaireOrRosterName);
 
-                if ((isQuestionnaireFile && hasRosterFiles || !isQuestionnaireFile) && !columnNames.Contains(ServiceColumns.InterviewId))
+                if ((isQuestionnaireFile && hasRosterFiles || (!isQuestionnaireFile && /*advanced preloading*/files.Length > 1)) && !columnNames.Contains(ServiceColumns.InterviewId))
                 {
                     yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, ServiceColumns.InterviewId);
                 }
@@ -449,14 +449,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return questionnaire.IsRosterSizeQuestion(questionId.Value) && answer.Answer.HasValue && answer.Answer < 0;
         }
 
-        private bool Responsible_HasInvalidRole(AssignmentResponsible responsible)
-            => !this.Responsible_NotFound(responsible) && responsible.Responsible.IsSupervisorOrInterviewer;
+        private bool Responsible_HasInvalidRole(AssignmentResponsible responsible) 
+            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null && !responsible.Responsible.IsSupervisorOrInterviewer;
 
         private bool Responsible_IsLocked(AssignmentResponsible responsible) 
-            => !this.Responsible_NotFound(responsible) && responsible.Responsible.IsLocked;
+            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible != null && responsible.Responsible.IsLocked;
 
         private bool Responsible_NotFound(AssignmentResponsible responsible) 
-            => !this.Responsible_IsEmpty(responsible) && responsible.Responsible == null;
+            => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible == null;
 
         private bool Responsible_IsEmpty(AssignmentResponsible responsible) 
             => string.IsNullOrWhiteSpace(responsible.Value);
