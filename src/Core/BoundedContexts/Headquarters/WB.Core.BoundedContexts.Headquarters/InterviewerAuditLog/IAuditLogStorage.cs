@@ -1,6 +1,6 @@
 ﻿using WB.Core.Infrastructure.PlainStorage;
 
-namespace WB.Core.BoundedContexts.Headquarters.AuditLog
+namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {
     public interface IAuditLogStorage
     {

@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Views.AuditLog
+﻿namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog
 {
     public enum AuditLogEntityType
     {
