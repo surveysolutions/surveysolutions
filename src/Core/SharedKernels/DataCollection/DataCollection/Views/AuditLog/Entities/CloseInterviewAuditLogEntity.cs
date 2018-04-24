@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities
+﻿namespace WB.Core.SharedKernels.DataCollection.Views.AuditLog.Entities
 {
     public class CloseInterviewAuditLogEntity : BaseAuditLogEntity
     {

@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.Entities;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -9,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.AuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
