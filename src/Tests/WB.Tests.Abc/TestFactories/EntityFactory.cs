@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -39,6 +40,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -1908,5 +1910,34 @@ namespace WB.Tests.Abc.TestFactories
             QuestionnaireOrRosterName = questionnaireOrRosterName ?? "Questionnaire"
         };
 
+        public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName,
+            AssignmentResponsible responsible = null, AssignmentQuantity quantity = null,
+            AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
+            AssignmentInterviewId interviewId = null,
+            string questionnaireOrRosterName = null,
+            params AssignmentValue[] answers) => new PreloadingAssignmentRow
+        {
+            FileName = fileName,
+            QuestionnaireOrRosterName = questionnaireOrRosterName ?? "Questionnaire",
+            Responsible = responsible,
+            Quantity = quantity,
+            RosterInstanceCodes = rosterInstanceCodes,
+            InterviewIdValue = interviewId,
+            Answers = answers
+        };
+
+        public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
+        {
+            Value = responsibleName,
+            Column = ServiceColumns.ResponsibleColumnName,
+            Responsible = userInfo
+        };
+
+        public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null) => new UserToVerify
+        {
+            IsLocked = isLocked,
+            InterviewerId = interviewerId,
+            SupervisorId = supervisorId
+        };
     }
 }
