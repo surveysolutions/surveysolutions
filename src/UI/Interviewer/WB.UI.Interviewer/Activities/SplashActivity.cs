@@ -27,6 +27,8 @@ namespace WB.UI.Interviewer.Activities
         {
             var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SplashActivity>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
+            auditLogService.Write(new OpenApplicationAuditLogEntity());
 
             this.BackwardCompatibility();
             var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();

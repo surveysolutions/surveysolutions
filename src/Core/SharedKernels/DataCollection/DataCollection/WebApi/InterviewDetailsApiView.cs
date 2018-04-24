@@ -67,6 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public DateTime TimeUtc { get; set; }
 
         public Guid ResponsibleId { get; set; }
+        public string ResponsibleName { get; set; }
 
         public IAuditLogEntity Payload { get; set; }
     }
