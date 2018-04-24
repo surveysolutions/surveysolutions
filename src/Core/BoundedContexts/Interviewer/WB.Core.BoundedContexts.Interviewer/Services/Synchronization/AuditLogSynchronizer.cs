@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 {
                     Id = auditLogEntity.Id,
                     ResponsibleId = auditLogEntity.ResponsibleId,
+                    ResponsibleName = auditLogEntity.ResponsibleName,
                     Time = auditLogEntity.Time,
                     TimeUtc = auditLogEntity.TimeUtc,
                     Payload = auditLogEntity.Payload,

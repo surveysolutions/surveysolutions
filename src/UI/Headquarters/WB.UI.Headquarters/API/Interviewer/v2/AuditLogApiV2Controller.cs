@@ -28,6 +28,7 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
             {
                 RecordId = auditLogEntity.Id,
                 ResponsibleId = auditLogEntity.ResponsibleId,
+                ResponsibleName = auditLogEntity.ResponsibleName,
                 Time = auditLogEntity.Time,
                 TimeUtc = auditLogEntity.TimeUtc,
                 Type = auditLogEntity.Type,
