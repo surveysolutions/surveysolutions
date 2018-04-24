@@ -1,8 +1,11 @@
-﻿using Android.Graphics.Drawables;
+﻿using System.Threading.Tasks;
+using Android.Graphics.Drawables;
 using Android.Support.Graphics.Drawable;
 using Android.Views;
 using Android.Widget;
 using MvvmCross.Binding;
+using MvvmCross.Platform;
+using MvvmCross.Platform.Core;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
@@ -20,26 +23,21 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (isPlaying)
             {
-                var controlDrawable = control.Drawable;
-                switch (controlDrawable)
-                {
-                    case AnimatedVectorDrawableCompat drawableCompat:
-                        drawableCompat.RegisterAnimationCallback(new AnimationCallbackCompat(this));
-                        drawableCompat.Start();
-                        break;
-                    case AnimatedVectorDrawable animatedDrawable:
-                        animatedDrawable.RegisterAnimationCallback(new AnimationCallback(this));
-                        animatedDrawable.Start();
-                        break;
-                }
+                AnimatedVectorDrawableCompat.RegisterAnimationCallback(Target.Drawable, new AnimationCallbackCompat(this));
+                var animatable = Target.Drawable as IAnimatable;
+                animatable.Start();
+            }
+            else
+            {
+                AnimatedVectorDrawableCompat.ClearAnimationCallbacks(Target.Drawable);
             }
         }
 
-        class AnimationCallback : Animatable2AnimationCallback
+        class AnimationCallbackCompat : Animatable2CompatAnimationCallback
         {
             private readonly ImageViewPlaybackIndicatorBinding binding;
 
-            public AnimationCallback(ImageViewPlaybackIndicatorBinding binding)
+            public AnimationCallbackCompat(ImageViewPlaybackIndicatorBinding binding)
             {
                 this.binding = binding;
             }
@@ -48,28 +46,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             {
                 if (this.binding.Target.Visibility == ViewStates.Visible)
                 {
-                    var animatedVectorDrawable = drawable as AnimatedVectorDrawable;
-                    animatedVectorDrawable.RegisterAnimationCallback(this);
-                    animatedVectorDrawable.Start();
-                }
-            }
-        }
-
-        class AnimationCallbackCompat : Animatable2CompatAnimationCallback
-        {
-            private readonly ImageViewPlaybackIndicatorBinding inding;
-
-            public AnimationCallbackCompat(ImageViewPlaybackIndicatorBinding inding)
-            {
-                this.inding = inding;
-            }
-
-            public override void OnAnimationEnd(Drawable drawable)
-            {
-                if (this.inding.Target.Visibility == ViewStates.Visible)
-                {
-                    var animatedVectorDrawable = drawable as AnimatedVectorDrawableCompat;
-                    animatedVectorDrawable.RegisterAnimationCallback(this);
+                    var animatedVectorDrawable = drawable as IAnimatable;
                     animatedVectorDrawable.Start();
                 }
             }

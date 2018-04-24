@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="play_button_animation_duration">300</integer>
     <integer name="animation_wave_1_part_1">500</integer>
     <integer name="animation_wave_1_part_2">500</integer>
 
