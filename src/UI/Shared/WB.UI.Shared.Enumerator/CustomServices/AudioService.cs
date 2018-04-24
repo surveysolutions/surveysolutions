@@ -65,7 +65,6 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private void MediaPlayerOnCompletion(object sender, EventArgs eventArgs)
         {
-            this.mediaPlayer.Reset();
             this.OnOnPlaybackCompleted(new PlaybackCompletedEventArgs(this.playingIdentity));
         }
 
