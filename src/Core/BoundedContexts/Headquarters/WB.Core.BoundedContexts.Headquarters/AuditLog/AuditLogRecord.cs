@@ -5,17 +5,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AuditLog
 {
     public class AuditLogRecord
     {
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
-        public int RecordId { get; set; }
-        public Guid ResponsibleId { get; set; }
+        public virtual int RecordId { get; set; }
+        public virtual Guid? ResponsibleId { get; set; }
+        public virtual string ResponsibleName { get; set; }
 
-        public AuditLogEntityType Type { get; set; }
+        public virtual AuditLogEntityType Type { get; set; }
 
-        public DateTime Time { get; set; }
+        public virtual DateTime Time { get; set; }
 
-        public DateTime TimeUtc { get; set; }
+        public virtual DateTime TimeUtc { get; set; }
 
-        public IAuditLogEntity Payload { get; set; }
+        public virtual IAuditLogEntity Payload { get; set; }
     }
 }

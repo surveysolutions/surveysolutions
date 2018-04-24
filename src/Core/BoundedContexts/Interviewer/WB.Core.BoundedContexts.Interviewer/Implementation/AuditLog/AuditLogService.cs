@@ -45,8 +45,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 
             var auditLogEntityView = new AuditLogEntityView()
             {
-                ResponsibleId = interviewerIdentity.UserId,
-                ResponsibleName = interviewerIdentity.Name,
+                ResponsibleId = interviewerIdentity?.UserId,
+                ResponsibleName = interviewerIdentity?.Name,
                 Time = DateTime.Now,
                 TimeUtc = DateTime.UtcNow,
                 Type = entity.Type,
