@@ -1,6 +1,6 @@
 ﻿using System;
 using SQLite;
-using WB.Core.SharedKernels.DataCollection.Views.AuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 {

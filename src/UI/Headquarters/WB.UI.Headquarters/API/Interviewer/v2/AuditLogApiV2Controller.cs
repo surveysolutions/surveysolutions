@@ -1,6 +1,6 @@
 ﻿using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.AuditLog;
+using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;

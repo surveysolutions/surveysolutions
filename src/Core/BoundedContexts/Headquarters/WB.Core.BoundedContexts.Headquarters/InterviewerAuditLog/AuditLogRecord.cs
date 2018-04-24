@@ -1,7 +1,7 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection.Views.AuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
-namespace WB.Core.BoundedContexts.Headquarters.AuditLog
+namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 {
     public class AuditLogRecord
     {
