@@ -65,15 +65,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         }
 
         private static Configuration GetConfiguration(string delimiter, bool hasHeaderRow)
-        {
-            return new Configuration
+            => new Configuration
             {
                 MissingFieldFound = null,
                 Delimiter = delimiter,
                 HasHeaderRecord = hasHeaderRow,
-                PrepareHeaderForMatch = s => s.ToLower(),
-                BadDataFound = null
+                PrepareHeaderForMatch = s => s.ToLower()
             };
-        }
     }
 }
