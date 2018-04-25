@@ -151,7 +151,8 @@
                         };
                         items["export"] = {
                             name: "@Html.ToSafeJavascriptMessage(Dashboard.ExportQuestionnaire)",
-                            callback: model.exportQuestionnaire
+                            callback: model.exportQuestionnaire,
+                            disabled: selectedRow.isDisabled
                         }
                         </text>
                     }
