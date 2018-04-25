@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
-namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
 {
     public class PreloadedLevelDto
     {
