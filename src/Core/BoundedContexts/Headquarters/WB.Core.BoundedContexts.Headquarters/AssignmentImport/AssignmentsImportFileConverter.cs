@@ -105,6 +105,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private static AssignmentAnswers ToAssignmentAnswers(PreloadingCompositeValue compositeValue, IQuestionnaire questionnaire)
         {
+            if (compositeValue.Values.All(x => string.IsNullOrWhiteSpace(x.Value)))
+                return null;
+
             var questionId = questionnaire.GetQuestionIdByVariable(compositeValue.VariableOrCodeOrPropertyName);
 
             if (questionId.HasValue)
@@ -167,6 +170,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private static AssignmentAnswer ToAssignmentAnswer(PreloadingValue answer, IQuestionnaire questionnaire)
         {
+            if (string.IsNullOrWhiteSpace(answer.Value)) return null;
+
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableOrCodeOrPropertyName);
 
             if (questionId.HasValue)
@@ -196,7 +201,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
                 Column = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToGpsPropertyAnswer).ToArray()
+                Values = compositeValue.Values.Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                    .Select(ToGpsPropertyAnswer).ToArray()
             };
 
         private static AssignmentMultiAnswer ToAssignmentTextListAnswer(PreloadingCompositeValue compositeValue)
@@ -204,7 +210,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
                 Column = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToAssignmentTextAnswer).ToArray()
+                Values = compositeValue.Values.Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                    .Select(ToAssignmentTextAnswer).ToArray()
             };
 
         private static AssignmentMultiAnswer ToAssignmentCategoricalMultiAnswer(PreloadingCompositeValue compositeValue)
@@ -212,7 +219,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
                 Column = compositeValue.VariableOrCodeOrPropertyName,
-                Values = compositeValue.Values.Select(ToAssignmentIntegerAnswer).ToArray()
+                Values = compositeValue.Values.Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                    .Select(ToAssignmentIntegerAnswer).ToArray()
             };
 
         private static AssignmentAnswer ToAssignmentDoubleAnswer(PreloadingValue answer)
