@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 
         public class AutoincrementKeyValue : IPlainStorageEntity<int>
         {
-            [PrimaryKey, AutoIncrement]
+            [PrimaryKey, Unique, AutoIncrement]
             public int Id { get; set; }
             public string Json { get; set; }
         }
@@ -69,10 +69,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         public IEnumerable<AuditLogEntityView> GetAuditLogEntitiesForSync()
         {
             var settingsView = auditLogSettingsStorage.GetById(AuditLogSettingsKey);
-            var lastSyncedEntityId = settingsView.LastSyncedEntityId;
-            return auditLogStorage.Where(kv => kv.Id > lastSyncedEntityId)
-                .Select(kv => serializer.Deserialize<AuditLogEntityView>(kv.Json))
-                .ToList();
+            int lastSyncedEntityId = settingsView?.LastSyncedEntityId ?? -1;
+            var list = auditLogStorage.Where(kv => kv.Id > lastSyncedEntityId).Select(kv =>
+                new {
+                    Id = kv.Id,
+                    Entity = serializer.Deserialize<AuditLogEntityView>(kv.Json)
+                }).ToList();
+            // fix id
+            list.ForEach(kv => kv.Entity.Id = kv.Id);
+            return list.Select(kv => kv.Entity).ToList();
         }
     }
 }
