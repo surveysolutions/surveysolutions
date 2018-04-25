@@ -33,12 +33,13 @@
             "esri/Graphic",
             "esri/geometry/Polygon",
             "esri/geometry/Point",
+            "esri/geometry/Multipoint",
             "esri/geometry/Polyline",
             "esri/symbols/SimpleLineSymbol",
             "esri/symbols/SimpleFillSymbol",
             "dojo/domReady!"
         ],
-            function (Map, MapView, Graphic, Polygon, Point, Polyline, SimpleLineSymbol, SimpleFillSymbol) {
+            function (Map, MapView, Graphic, Polygon, Point, Multipoint, Polyline, SimpleLineSymbol, SimpleFillSymbol) {
                 var map = new Map({
                     basemap: "hybrid"
                 });
@@ -50,54 +51,52 @@
                 {
                     case GeometryType.Multipoint:
                         @Html.Raw("var polyline = Polyline.fromJSON(geometryJson); " +
-                                  "var polyGeometry = [];" +
-                                  "for (var i = 1; i < polyline.paths[0].length; i++) {" +
-                                  "polyGeometry.push(polyline.getPoint(0, i))" +
-                                  "};"+
+                                  "var polyGeometry = new Multipoint();" +
+                                  "for (var i = 0; i < polyline.paths[0].length; i++) {" +
+                                  "polyGeometry.addPoint(polyline.getPoint(0, i));" +
+                                  "};" +
+                                  "polyGeometry.spatialReference = polyline.spatialReference;" +
                                   "var markerType = 'simple-marker';");
                         break;
                     case GeometryType.Polyline:
-                        @Html.Raw("var polyGeometry = [Polyline.fromJSON(geometryJson)]; var markerType = 'simple-line';");
+                        @Html.Raw("var polyGeometry = Polyline.fromJSON(geometryJson); var markerType = 'simple-line';");
                         break;
                     case GeometryType.Point:
-                        @Html.Raw("var polyGeometry = [Point.fromJSON(geometryJson)]; var markerType = 'simple-marker';");
+                        @Html.Raw("var polyGeometry = Point.fromJSON(geometryJson); var markerType = 'simple-marker';");
                         break;
                     default:
-                        @Html.Raw("var polyGeometry = [Polygon.fromJSON(geometryJson)]; var markerType = 'simple-line';");
-
+                        @Html.Raw("var polyGeometry = Polygon.fromJSON(geometryJson); var markerType = 'simple-line';");
                         break;
                 }
 
                 var fillSymbol = {
                     type: markerType,
                     color: [255, 255, 255],
-                    cap: "round",
                     width: 1
                 };
 
-                var polyGraphic = [];
-                for (let i = 0; i < polyGeometry.length; i++) {
-                    polyGraphic.push(new Graphic({
-                        geometry: polyGeometry[i],
+                var polyGraphic = new Graphic({
+                        geometry: polyGeometry,
                         symbol: fillSymbol
-                    }));
-                };
+                    });
+                
 
                 var view = new MapView({
                     container: "viewDiv",
                     map: map,
-                    spatialReference: polyGeometry[0].spatialReference
+                    spatialReference: polyGeometry.spatialReference
                 });
 
-                view.graphics.addMany(polyGraphic);
+                view.graphics.addMany([polyGraphic]);
 
                 var taxLotExtent = view.graphics.items[0].geometry;
 
-                if (taxLotExtent.extent === null)
-                    view.center = taxLotExtent;
-                else
+                if (taxLotExtent.extent !== null && taxLotExtent.extent !== undefined)
                     view.extent = taxLotExtent.extent;
-
+                else {
+                    view.center = taxLotExtent;
+                    view.scale = 24000;
+                };
             });
     </script>
     }
