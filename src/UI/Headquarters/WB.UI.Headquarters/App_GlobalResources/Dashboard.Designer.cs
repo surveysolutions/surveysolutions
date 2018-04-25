@@ -286,6 +286,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upgrade assignments.
+        /// </summary>
+        internal static string UpgradeAssignments {
+            get {
+                return ResourceManager.GetString("UpgradeAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload assignments.
         /// </summary>
         internal static string UploadAssignments {
