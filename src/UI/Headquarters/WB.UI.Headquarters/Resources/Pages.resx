@@ -1199,4 +1199,7 @@
   <data name="MapList_UserMapsTitle" xml:space="preserve">
     <value>User Maps</value>
   </data>
+  <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+    <value>Upgrade assignments</value>
+  </data>
 </root>
