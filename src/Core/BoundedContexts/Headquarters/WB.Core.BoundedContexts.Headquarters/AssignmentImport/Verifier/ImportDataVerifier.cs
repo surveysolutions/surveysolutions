@@ -139,6 +139,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             foreach (var file in files)
             {
+                foreach (var duplicatedColumn in file.Columns.GroupBy(x => x.ToLower()).Where(x => x.Count() > 1))
+                {
+                    yield return ToColumnError("PL0031", messages.PL0031_ColumnNameDuplicatesFound,
+                        file.FileName, duplicatedColumn.Key);
+                }
+            }
+
+            foreach (var file in files)
+            {
                 foreach (var columnName in file.Columns)
                 foreach (var error in this.ColumnVerifiers.Select(x => x.Invoke(file, columnName, questionnaire)))
                     if (error != null) yield return error;
@@ -176,8 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             Error(UnknownColumn, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
             Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
-            Error(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
-            Error(DuplicatedColumn, "PL0031", messages.PL0031_ColumnNameDuplicatesFound)
+            Error(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired)
         };
 
         private IEnumerable<Func<PreloadingAssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError>> AnswerVerifiers => new[]
@@ -279,9 +287,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return !lowercaseColumnNames.Contains($"{questionVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") || 
                    !lowercaseColumnNames.Contains($"{questionVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}");
         }
-
-        private bool DuplicatedColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
-            => !string.IsNullOrWhiteSpace(columnName) && file.Columns.Select(x => x.ToLower()).Count(x => x == columnName) > 1;
         
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
