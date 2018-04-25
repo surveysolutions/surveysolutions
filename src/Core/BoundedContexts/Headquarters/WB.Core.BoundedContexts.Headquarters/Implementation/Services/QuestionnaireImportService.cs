@@ -151,7 +151,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
                 this.auditLog.QuestionnaireImported(questionnaire.Title, questionnaireIdentity);
 
-                return new QuestionnaireImportResult();
+                return new QuestionnaireImportResult()
+                {
+                    Identity = questionnaireIdentity
+                };
             }
             catch (RestException ex)
             {

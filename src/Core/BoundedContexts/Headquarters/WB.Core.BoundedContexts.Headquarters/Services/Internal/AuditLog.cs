@@ -30,6 +30,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Internal
             this.Append($"(ver. {questionnaire.Version}) {title}", "imported");
         }
 
+        public void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion)
+        {
+            this.Append("Assignments", "Upgrade", $"From (ver. {fromVersion}) to (ver. {toVersion}) {title}");
+        }
+
         public void UserCreated(UserRoles role, string userName)
         {
             this.Append($"{role} user '{userName}'", "created");
