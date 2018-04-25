@@ -3167,6 +3167,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upgrade assignments.
+        /// </summary>
+        public static string UpgradeAssignmentsTitle {
+            get {
+                return ResourceManager.GetString("UpgradeAssignmentsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upload.
         /// </summary>
         public static string Upload_Upload {

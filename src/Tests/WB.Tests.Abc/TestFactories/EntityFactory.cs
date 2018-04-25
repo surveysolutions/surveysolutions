@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -46,7 +47,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -480,7 +480,6 @@ namespace WB.Tests.Abc.TestFactories
                 AssignmentId = assignmentId,
                 QuestionnaireIdentity = new QuestionnaireIdentity(qId, qVersion).ToString(),
                 WasCompleted = wasCompleted,
-                ErrorsCount = errorsCount ?? 0,
                 InterviewDuration = interviewingTotalTime,
                 InterviewCommentedStatuses = statuses?.ToList() ?? new List<InterviewCommentedStatus>(),
                 TimeSpansBetweenStatuses = timeSpans?.ToHashSet() ?? new HashSet<TimeSpanBetweenStatuses>()
@@ -1693,7 +1692,6 @@ namespace WB.Tests.Abc.TestFactories
 
             if(interviewSummary != null)
                 asDynamic.InterviewSummaries = interviewSummary;
-            asDynamic.Answers = null;
 
             return result;
         }

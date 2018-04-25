@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.ModelBinding;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -11,9 +12,11 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -21,6 +24,8 @@ using WB.Infrastructure.Native.Threading;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models;
+using WB.UI.Headquarters.Models.ComponentModels;
+using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
@@ -34,8 +39,10 @@ namespace WB.UI.Headquarters.Controllers
         private readonly ISampleUploadViewFactory sampleUploadViewFactory;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
         private readonly IInterviewImportService interviewImportService;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IAuthorizedUser authorizedUser;
 
         public SurveySetupController(
@@ -47,8 +54,10 @@ namespace WB.UI.Headquarters.Controllers
             ISampleUploadViewFactory sampleUploadViewFactory,
             InterviewDataExportSettings interviewDataExportSettings,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IAllUsersAndQuestionnairesFactory questionnairesFactory,
             IInterviewImportService interviewImportService,
             IFileSystemAccessor fileSystemAccessor,
+            IAssignmentsUpgradeService upgradeService,
             IAuthorizedUser authorizedUser)
             : base(commandService, logger)
         {
@@ -57,8 +66,10 @@ namespace WB.UI.Headquarters.Controllers
             this.preloadedDataVerifier = preloadedDataVerifier;
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.questionnairesFactory = questionnairesFactory;
             this.interviewImportService = interviewImportService;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.upgradeService = upgradeService;
             this.authorizedUser = authorizedUser;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
         }
@@ -86,6 +97,50 @@ namespace WB.UI.Headquarters.Controllers
             };
 
             return this.View(viewModel);
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult UpgradeAssignments(Guid id, long version)
+        {
+            var model = new UpgradeAssignmentsModel();
+            model.QuestionnaireIdentity = new QuestionnaireIdentity(id, version);
+            model.SurveySetupUrl = Url.Action("Index");
+            model.Questionnaires = 
+                this.questionnairesFactory.GetOlderQuestionnairesWithPendingAssignments(id, version)
+                .Select(x => 
+                    new ComboboxOptionModel(new QuestionnaireIdentity(x.TemplateId, x.TemplateVersion).ToString(), 
+                                            string.Format(Pages.QuestionnaireNameVersionFirst, x.TemplateName, x.TemplateVersion)))
+                .ToList();
+            return View(model);
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        [HttpPost]
+        [ActionName("UpgradeAssignments")]
+        public ActionResult UpgradeAssignmentsPost(Guid id, long version)
+        {
+            var processId = Guid.NewGuid();
+            var sourceQuestionnaireId = QuestionnaireIdentity.Parse(Request["sourceQuestionnaireId"]);
+            this.upgradeService.EnqueueUpgrade(processId, sourceQuestionnaireId, new QuestionnaireIdentity(id, version));
+            return RedirectToAction("UpgradeProgress", new {id = processId});
+        }
+
+        [ActivePage(MenuItem.Questionnaires)]
+        public ActionResult UpgradeProgress(Guid id)
+        {
+            var progress = this.upgradeService.Status(id);
+            if (progress == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(new
+            {
+                ProgressUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Status" }),
+                StopUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "Stop" }),
+                ExportErrorsUrl = Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "AssignmentsUpgradeApi", action = "ExportErrors" }),
+                SurveySetupUrl = Url.Action("Index")
+            });
         }
 
         public ActionResult TemplateDownload(Guid id, long version)

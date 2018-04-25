@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
-namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading
+namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading
 {
     public class PreloadedDataDto
     {
@@ -30,7 +31,7 @@ namespace WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading
 
     public static class InterviewAnswerExtensions
     {
-        public static List<InterviewAnswer>[] GroupedByLevels(this List<InterviewAnswer> answers) => answers
+        public static List<InterviewAnswer>[] GroupedByLevels(this IEnumerable<InterviewAnswer> answers) => answers
             .GroupBy(x => x.Identity.RosterVector.Length)
             .Select(x => new { Depth = x.Key, Answers = x.ToList() })
             .OrderBy(x => x.Depth)
