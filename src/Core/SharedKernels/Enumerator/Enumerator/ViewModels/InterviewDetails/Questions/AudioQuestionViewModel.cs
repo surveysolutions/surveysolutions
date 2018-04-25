@@ -87,7 +87,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public bool CanBePlayed { get; private set; }
+        public bool CanBePlayed
+        {
+            get => canBePlayed;
+            private set
+            {
+                if (value == canBePlayed) return;
+                canBePlayed = value;
+                RaisePropertyChanged(() => CanBePlayed);
+            }
+        }
 
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -97,6 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private string answer;
         private bool isPlaying;
+        private bool canBePlayed;
 
         public string Answer
         {
@@ -138,7 +148,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (answerModel.IsAnswered())
             {
                 this.SetAnswer(answerModel.GetAnswer().Length);
-                this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, GetAudioFileName()) != null;
             }
 
             this.liteEventRegistry.Subscribe(this, interviewId);
@@ -174,8 +183,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private void SetAnswer(TimeSpan duration)
-            => this.Answer = string.Format(UIResources.AudioQuestion_DurationFormat,
+        {
+            this.Answer = string.Format(UIResources.AudioQuestion_DurationFormat,
                 duration.Humanize(maxUnit: TimeUnit.Minute, minUnit: TimeUnit.Second));
+            
+            this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, GetAudioFileName()) != null;
+        }
 
         private async Task RecordAudioAsync()
         {
