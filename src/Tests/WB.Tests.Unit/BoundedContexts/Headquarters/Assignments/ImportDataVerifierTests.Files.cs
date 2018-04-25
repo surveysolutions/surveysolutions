@@ -17,12 +17,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     {Create.Entity.Roster(variable: "someRoster")}));
 
             var actualRosterName = "nonrosterfile";
-            var preloadedFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: actualRosterName, fileName: actualRosterName);
+            var mainFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "questionnaire");
+            var rosterFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: actualRosterName, fileName: actualRosterName);
 
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFile(preloadedFile, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(new[] {mainFile, rosterFile}, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -40,12 +41,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.Roster(variable: expectedRosterName)}));
 
-            var preloadedFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: expectedRosterName);
+            var mainFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "questionnaire");
+            var rosterFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: expectedRosterName);
 
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFile(preloadedFile, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -59,12 +61,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.Roster(variable: "someRoster")}));
 
-            var preloadedFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "someroster");
+            var mainFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "questionnaire");
+            var rosterFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "someroster");
 
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFile(preloadedFile, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -83,7 +86,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFile(preloadedFile, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -98,10 +101,30 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFile(preloadedFile, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_files_and_dont_have_main_file_should_return_empty_errors()
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.Roster(variable: "someRoster")}));
+
+            var preloadedFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "someroster");
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles(new[] { preloadedFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0040"));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo("Questionnaire.tab"));
         }
     }
 }
