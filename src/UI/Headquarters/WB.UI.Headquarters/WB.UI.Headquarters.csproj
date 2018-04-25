@@ -2009,11 +2009,9 @@
     <Compile Include="API\PublicApi\Models\InterviewApiItem.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiView.cs" />
     <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
-    <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
     <Compile Include="API\PublicApi\Models\QuestionnaireApiItem.cs" />
     <Compile Include="API\PublicApi\Models\QuestionnaireApiView.cs" />
     <Compile Include="Models\Api\QuestionnaireToBeImported.cs" />
-    <Compile Include="API\PublicApi\Models\StatusChangeApiModel.cs" />
     <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
     <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
     <Compile Include="API\PublicApi\Models\UserApiView.cs" />

@@ -13,8 +13,6 @@ using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
-using WB.UI.Headquarters.API.PublicApi.Models;
-
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
@@ -38,7 +36,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         public void BecauseOf() 
         {
-            httpResponseMessage = controller.Approve(new StatusChangeApiModel() {Id = interviewId});
+            httpResponseMessage = controller.Approve(interviewId, null);
         }
 
         [NUnit.Framework.Test] public void should_return_OK_status_code () =>
