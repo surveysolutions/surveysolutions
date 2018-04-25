@@ -120,7 +120,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
             IQuestionnaire questionnaire)
         {
-            var rowsGroupedByInterviews = assignmentRows.GroupBy(assignmentRow => assignmentRow.InterviewIdValue.Value)
+            var rowsGroupedByInterviews = assignmentRows
+                .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ?? 
+                                          /*for single/anvanced preloading with main file only without interview ids*/Guid.NewGuid().ToString())
                 .Select(g => new
                 {
                     assignmentId = g.Key,

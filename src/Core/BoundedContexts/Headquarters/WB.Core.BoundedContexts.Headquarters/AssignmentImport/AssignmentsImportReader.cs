@@ -35,8 +35,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             foreach (var kv in record)
             {
                 var columnName = kv.Key.ToLower();
-                var value = (string) kv.Value;
+                var value = kv.Value?.ToString()?.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
+                    .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
+                    .Replace(ExportFormatSettings.MissingQuantityValue, string.Empty);
 
+                if(string.IsNullOrEmpty(value)) continue;
                 if (ignoredPreloadingColumns.Contains(columnName)) continue;
 
                 var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
@@ -52,9 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     VariableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName,
                     Row = rowIndex,
                     Column = kv.Key,
-                    Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
-                        .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
-                        .Replace(ExportFormatSettings.MissingQuantityValue, string.Empty),
+                    Value = value
                 });
             }
 

@@ -178,7 +178,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-                var fileErrors = allImportedFileInfos.SelectMany(x => this.dataVerifier.VerifyFile(x, questionnaire)).Take(10).ToArray();
+                var fileErrors = this.dataVerifier.VerifyFiles(allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (fileErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
@@ -257,7 +257,11 @@ namespace WB.UI.Headquarters.Controllers
             var isFile = new[] { @".tab", @".txt" }.Contains(extension);
             var isZip = @".zip" == extension;
 
-            if (isFile) preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.InputStream, model.File.FileName);
+            if (isFile)
+            {
+                preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.InputStream, model.File.FileName);
+                preloadedFileInfo.QuestionnaireOrRosterName = questionnaireFileName;/*we expect that it is main file*/
+            }
             else if (isZip)
             {
                 try
