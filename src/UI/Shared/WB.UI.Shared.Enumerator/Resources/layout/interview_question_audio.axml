@@ -33,7 +33,7 @@
                           BackgroundStyle MediaButtonStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));" />
                 
                 <ImageButton style="@style/Interview_Button"
-                             local:MvxBind="Visible QuestionState.IsAnswered; Click TogglePlayback; Playback IsPlaying"
+                             local:MvxBind="Visible And(QuestionState.IsAnswered, CanBePlayed); Click TogglePlayback; Playback IsPlaying"
                              local:srcCompat="@drawable/play_icon"/>
                 
                 

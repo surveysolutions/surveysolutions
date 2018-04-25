@@ -87,6 +87,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public bool CanBePlayed { get; private set; }
+
         public IQuestionStateViewModel QuestionState => this.questionState;
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
@@ -134,7 +136,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
             if (answerModel.IsAnswered())
+            {
                 this.SetAnswer(answerModel.GetAnswer().Length);
+                this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, GetAudioFileName()) != null;
+            }
 
             this.liteEventRegistry.Subscribe(this, interviewId);
         }
