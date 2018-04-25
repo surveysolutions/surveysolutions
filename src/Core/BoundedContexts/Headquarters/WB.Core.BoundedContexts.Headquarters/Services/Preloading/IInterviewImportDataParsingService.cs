@@ -1,6 +1,6 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
