@@ -328,7 +328,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 }
                 else
                 {
-                    await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
+                    if (this.Geometry.GeometryType == Esri.ArcGISRuntime.Geometry.GeometryType.Point)
+                        await this.MapView.SetViewpointCenterAsync(this.Geometry as MapPoint);
+                    else
+                        await this.MapView.SetViewpointGeometryAsync(this.Geometry, 120).ConfigureAwait(false);
                 }
 
                 var result = await GetGeometry().ConfigureAwait(false);
