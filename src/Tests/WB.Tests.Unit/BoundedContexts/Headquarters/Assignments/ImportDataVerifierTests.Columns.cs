@@ -26,11 +26,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = verifier.VerifyColumns(new[] {preloadedFile}, questionnaire).ToArray();
 
             // assert
-            Assert.That(errors.Length, Is.EqualTo(2));
+            Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0031"));
-            Assert.That(errors[1].Code, Is.EqualTo("PL0031"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
-            Assert.That(errors[1].References.First().Content, Is.EqualTo(variable));
         }
 
         [Test]
@@ -50,11 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = verifier.VerifyColumns(new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
-            Assert.That(errors.Length, Is.EqualTo(2));
+            Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0031"));
-            Assert.That(errors[1].Code, Is.EqualTo("PL0031"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
-            Assert.That(errors[1].References.First().Content, Is.EqualTo(variableUpper));
         }
 
         [Test]
@@ -85,13 +81,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
-            Assert.That(errors.Length, Is.EqualTo(2));
+            Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0031"));
-            Assert.That(errors[1].Code, Is.EqualTo("PL0031"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
-            Assert.That(errors[1].References.First().Content, Is.EqualTo(variable));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
-            Assert.That(errors[1].References.First().DataFile, Is.EqualTo(roster));
         }
 
         [Test]
