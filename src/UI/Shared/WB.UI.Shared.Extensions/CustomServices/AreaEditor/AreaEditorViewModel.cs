@@ -302,11 +302,10 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
-                    bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportDimensionsCalculation(geometry);
                     try
                     {
-                        this.GeometryArea = (doesGeometrySupportDimensionsCalculation ? GeometryEngine.AreaGeodetic(geometry) : 0).ToString("#.##");
-                        this.GeometryLength = (doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0).ToString("#.##");
+                        this.GeometryArea = GetGeometryArea(geometry).ToString("#.##");
+                        this.GeometryLength = GetGeometryLenght(geometry).ToString("#.##");
                     }
                     catch
                     {
@@ -346,13 +345,27 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 //project to geocoordinates
                 SpatialReference reference = new SpatialReference(4326);
-                var projectedPolygon = GeometryEngine.Project(result, reference) as Polygon;
+                var projectedGeometry = GeometryEngine.Project(result, reference);
 
                 string coordinates = string.Empty;
-                if (projectedPolygon != null)
+                if (projectedGeometry != null)
                 {
-                    var tco = projectedPolygon.Parts[0].Points.Select(x => $"{x.X.ToString(CultureInfo.InvariantCulture)},{x.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
-                    coordinates = string.Join(";", tco);
+                    switch (projectedGeometry.GeometryType)
+                    {
+                        case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
+                            var polygon = projectedGeometry as Polygon;
+                            var polygonCoordinates = polygon.Parts[0].Points.Select(x => $"{x.X.ToString(CultureInfo.InvariantCulture)},{x.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                            coordinates = string.Join(";", polygonCoordinates);
+                            break;
+                        case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
+                            var point = projectedGeometry as MapPoint;
+                            coordinates = $"{point.X.ToString(CultureInfo.InvariantCulture)},{point.X.ToString(CultureInfo.InvariantCulture)}";
+                            break;
+                        case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
+                            var polyline = projectedGeometry as Polyline;
+                            coordinates = string.Join(";", polyline.Parts[0].Points.Select(x => $"{x.X.ToString(CultureInfo.InvariantCulture)},{x.Y.ToString(CultureInfo.InvariantCulture)}").ToList());
+                            break;
+                    }
                 }
 
                 var resultArea = new AreaEditorResult()
@@ -360,8 +373,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     Geometry = result?.ToJson(),
                     MapName = this.SelectedMap,
                     Coordinates = coordinates,
-                    Area = DoesGeometrySupportDimensionsCalculation(result) ? GeometryEngine.AreaGeodetic(result) : 0,
-                    Length = DoesGeometrySupportDimensionsCalculation(result) ? GeometryEngine.LengthGeodetic(result) : 0,
+                    Area = GetGeometryArea(result),
+                    Length = GetGeometryLenght(result),
                     DistanceToEditor = dist,
                     NumberOfPoints = GetGeometryPointsCount(result)
                 };
@@ -376,6 +389,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Close(this);
             }
         });
+
+        private double GetGeometryArea(Geometry geometry)
+        {
+            bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportAreaCalculation(geometry);
+            return doesGeometrySupportDimensionsCalculation? GeometryEngine.AreaGeodetic(geometry) : 0;
+        }
+
+        private double GetGeometryLenght(Geometry geometry)
+        {
+            bool doesGeometrySupportDimensionsCalculation = DoesGeometrySupportLengthCalculation(geometry);
+            return doesGeometrySupportDimensionsCalculation ? GeometryEngine.LengthGeodetic(geometry) : 0;
+        }
 
         private int GetGeometryPointsCount(Geometry geometry)
         {
@@ -397,12 +422,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         }
 
-        private bool DoesGeometrySupportDimensionsCalculation(Geometry geometry)
+        private bool DoesGeometrySupportAreaCalculation(Geometry geometry)
         {
             if (geometry == null)
-                return false;
-
-            if (requestedGeometryType == GeometryType.Multipoint)
                 return false;
 
             if (geometry.GeometryType != Esri.ArcGISRuntime.Geometry.GeometryType.Polygon || geometry.Dimension != GeometryDimension.Area)
@@ -426,6 +448,17 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             if (groupedPoints.Count() < 3)
                 return false;
 
+            return true;
+        }
+
+        private bool DoesGeometrySupportLengthCalculation(Geometry geometry)
+        {
+            if (geometry == null)
+                return false;
+
+            if (requestedGeometryType == GeometryType.Multipoint || requestedGeometryType == GeometryType.Point)
+                return false;
+            
             return true;
         }
 
