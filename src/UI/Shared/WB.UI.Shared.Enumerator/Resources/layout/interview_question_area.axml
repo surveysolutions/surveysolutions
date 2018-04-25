@@ -9,7 +9,11 @@
       <TableLayout android:layout_width="wrap_content"
                    android:layout_height="wrap_content" 
                    android:stretchColumns="0">
-        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+          <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+              <include layout="@layout/interview_question__remove_button_recorded" />
+          </TableRow>
+
+          <TableRow local:MvxBind="Visible And(QuestionState.IsAnswered, Answer.AreaSize > 0)">
             <TextView android:singleLine="true"
                       android:textStyle="bold"
                       android:layout_width="wrap_content"
@@ -19,7 +23,7 @@
                     local:MvxBind="Text Answer.AreaSize; Tag Format('Answer_{0}', Identity); Visible QuestionState.IsAnswered" />
         </TableRow>
 
-        <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
+        <TableRow local:MvxBind="Visible And(QuestionState.IsAnswered, Answer.Length > 0)">
             <TextView android:singleLine="true"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
@@ -27,9 +31,9 @@
                       android:text="Length: " />            
             <TextView style="@style/Interview_Question_RecordedAnswer"
                     local:MvxBind="Text Answer.Length; Tag Format('Answer_{0}', Identity); Visible QuestionState.IsAnswered" />
-          <include layout="@layout/interview_question__remove_button_recorded" />
         </TableRow>
-      </TableLayout>
+      
+          </TableLayout>
       <Button style="@style/Interview_Question_InputButton"
               local:MvxBind="HideKeyboardOnClick .; 
                            Click SaveAnswerCommand; 
