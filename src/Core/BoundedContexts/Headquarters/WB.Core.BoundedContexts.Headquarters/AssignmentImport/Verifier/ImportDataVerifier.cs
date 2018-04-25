@@ -107,10 +107,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyFile(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyFiles(PreloadedFileInfo[] files,
+            IQuestionnaire questionnaire)
         {
-            foreach (var error in this.FileVerifiers.Select(x => x.Invoke(file, questionnaire)))
-                if (error != null) yield return error;
+            if (!files.Any(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire)))
+            {
+                var questionaireFileName = this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title);
+
+                yield return ToFileError("PL0040", messages.PL0040_QuestionnaireDataIsNotFound,
+                    new PreloadedFileInfo
+                    {
+                        FileName = $"{questionaireFileName}.tab",
+                        QuestionnaireOrRosterName = questionaireFileName
+                    });
+            }
+
+            foreach (var file in files)
+            {
+                foreach (var error in this.FileVerifiers.Select(x => x.Invoke(file, questionnaire)))
+                    if (error != null) yield return error;
+            }
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyRosters(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
@@ -147,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<Func<PreloadedFileInfo, IQuestionnaire, PanelImportVerificationError>> FileVerifiers => new[]
         {
-            Error(RosterNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster)
+            Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster)
         };
 
         private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, PanelImportVerificationError>> RosterVerifiers => new[]
@@ -185,7 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentGpsAnswer>(Gps_LatitudeMustBeGeaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
             Error<AssignmentGpsAnswer>(Gps_LongitudeMustBeGeaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
             Error<AssignmentGpsAnswer>(Gps_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
-            Error<AssignmentIntegerAnswer>(Integer_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
+            Error<AssignmentDoubleAnswer>(Double_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
             Error<AssignmentQuantity>(Quantity_IsNotInteger, "PL0035", messages.PL0035_QuantityNotParsed),
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
             Error<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
@@ -205,7 +221,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool NoInterviewId(AssignmentInterviewId answer)
             => string.IsNullOrWhiteSpace(answer.Value);
         
-        private bool RosterNotFound(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        private bool RosterFileNotFound(PreloadedFileInfo file, IQuestionnaire questionnaire)
             => !IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire) && !questionnaire.HasRoster(file.QuestionnaireOrRosterName);
 
         private bool UnknownColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -351,7 +367,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var maxAnswersCount = questionnaire.GetMaxSelectedAnswerOptions(questionId.Value);
 
             return maxAnswersCount.HasValue &&
-                   answer.Values.OfType<AssignmentDoubleAnswer>().Count(x => x.Answer >= 1) > maxAnswersCount;
+                   answer.Values.OfType<AssignmentIntegerAnswer>().Count(x => x.Answer >= 1) > maxAnswersCount;
         }
 
         private bool Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
@@ -407,7 +423,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool Integer_NotParsed(AssignmentIntegerAnswer answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Answer.HasValue;
 
-        private bool Integer_CommaSymbolIsNotAllowed(AssignmentIntegerAnswer answer)
+        private bool Double_CommaSymbolIsNotAllowed(AssignmentDoubleAnswer answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && answer.Value.Contains(",");
 
         private bool Integer_ExceededRosterSize(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)
@@ -515,6 +531,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private static PanelImportVerificationError ToCellError(string code, string message, PreloadingAssignmentRow row, AssignmentValue assignmentValue)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Column, row.Row, PreloadedDataVerificationReferenceType.Cell,
+                assignmentValue.Value, row.FileName));
+
+        private static PanelImportVerificationError ToCellError(string code, string message,
+            PreloadingAssignmentRow row, AssignmentAnswers assignmentValues, AssignmentAnswer assignmentValue)
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(
+                $"{assignmentValues.VariableName}[{assignmentValue.VariableName}]", row.Row,
+                PreloadedDataVerificationReferenceType.Cell,
                 assignmentValue.Value, row.FileName));
 
         private static PanelImportVerificationError ToCellsError(string code, string message, (PreloadingAssignmentRow row, AssignmentValue cell)[] errors)

@@ -71,7 +71,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 MissingFieldFound = null,
                 Delimiter = delimiter,
                 HasHeaderRecord = hasHeaderRow,
-                PrepareHeaderForMatch = s => s.ToLower()
+                PrepareHeaderForMatch = s => s.ToLower(),
+                BadDataFound = null
             };
         }
     }
