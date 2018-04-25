@@ -6,8 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 {
     public class AuditLogEntityView 
     {
-        [PrimaryKey]
-        [AutoIncrement]
+        [PrimaryKey, Unique, AutoIncrement]
         public int Id { get; set; }
 
         public AuditLogEntityType Type { get; set; }
