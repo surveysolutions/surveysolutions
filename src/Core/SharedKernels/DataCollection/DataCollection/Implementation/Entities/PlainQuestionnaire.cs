@@ -1630,7 +1630,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = GetQuestion(questions, questionId);
 
             if (question == null)
-                throw new QuestionnaireException($"Question with id '{questionId}' is not found.");
+                throw new QuestionnaireException("Question is not found.")
+                {
+                    Data = {{"QuestionId", questionId}}
+                };
 
             return question;
         }
@@ -1640,7 +1643,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IComposite entity = GetEntity(entities, entityId);
 
             if (entity == null)
-                throw new QuestionnaireException($"Entity with id '{entityId}' is not found.");
+                throw new QuestionnaireException($"Entity is not found.")
+                {
+                    Data = {{"entityId", entityId}}
+                };
 
             return entity;
         }

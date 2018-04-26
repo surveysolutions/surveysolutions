@@ -119,6 +119,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             serviceLocator.GetInstance<ExportJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
+            serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 
             serviceLocator.GetInstance<IScheduler>().Start();
             return Task.CompletedTask;

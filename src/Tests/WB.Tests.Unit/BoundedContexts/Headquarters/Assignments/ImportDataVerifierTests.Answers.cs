@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Tests.Abc;
 
