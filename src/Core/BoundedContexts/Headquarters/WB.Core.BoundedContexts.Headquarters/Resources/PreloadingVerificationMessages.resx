@@ -179,7 +179,7 @@
     <value>Picture question cannot be preloaded.</value>
   </data>
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
-    <value>Preloading data were not found</value>
+    <value>Preloading data were not found.</value>
   </data>
   <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
     <value>Responsible field was not provided for 1 or more observations</value>
