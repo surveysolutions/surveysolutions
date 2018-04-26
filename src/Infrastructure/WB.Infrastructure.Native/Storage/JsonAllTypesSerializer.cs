@@ -34,6 +34,11 @@ namespace WB.Infrastructure.Native.Storage
             return JsonConvert.DeserializeObject<T>(payload, jsonSerializerSettings);
         }
 
+        public T Deserialize<T>(string payload, Type payloadType)
+        {
+            return (T)JsonConvert.DeserializeObject(payload, payloadType, jsonSerializerSettings);
+        }
+
         public T Deserialize<T>(byte[] payload)
         {
             try

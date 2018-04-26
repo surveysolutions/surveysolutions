@@ -138,7 +138,7 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/maps/{id}",
                 c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));
             config.TypedRoute("api/interviewer/v2/auditlog",
-                c => c.Action<AuditLogApiV2Controller>(x => x.Post(Param.Any<AuditLogEntityApiView>())));
+                c => c.Action<AuditLogApiV2Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
         }
 #pragma warning restore 4014
     }

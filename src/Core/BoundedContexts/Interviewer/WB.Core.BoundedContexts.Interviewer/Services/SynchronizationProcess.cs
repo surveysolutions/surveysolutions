@@ -108,10 +108,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
-            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
+            await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
-            await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
+            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);

@@ -54,6 +54,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
 
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
-        Task UploadAuditLogEntityAsync(AuditLogEntityApiView auditLogEntity, CancellationToken cancellationToken);
+        Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);
     }
 }
