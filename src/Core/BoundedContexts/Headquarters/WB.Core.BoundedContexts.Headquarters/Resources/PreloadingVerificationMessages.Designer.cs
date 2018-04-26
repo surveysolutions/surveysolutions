@@ -259,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preloading data were not found.
+        ///   Looks up a localized string similar to Preloading data were not found..
         /// </summary>
         public static string PL0024_DataWasNotFound {
             get {

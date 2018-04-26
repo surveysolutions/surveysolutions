@@ -12,6 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void when_verify_non_roster_file_should_return_PL0004_error()
         {
             // arrange
+            var arhiveFileName = "arhive.zip";
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.Roster(variable: "someRoster")}));
@@ -23,19 +24,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFiles(new[] {mainFile, rosterFile}, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] {mainFile, rosterFile}, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0004"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(actualRosterName));
-            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(actualRosterName));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(arhiveFileName));
         }
 
         [Test]
         public void when_verify_roster_file_should_return_empty_errors()
         {
             // arrange
+            var arhiveFileName = "arhive.zip";
             var expectedRosterName = "someRoster";
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
@@ -47,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFiles(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -57,6 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void when_verify_roster_file_in_lower_case_should_return_empty_errors()
         {
             // arrange
+            var arhiveFileName = "arhive.zip";
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.Roster(variable: "someRoster")}));
@@ -67,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFiles(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -77,6 +80,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void when_verify_main_questionnaire_file_should_return_empty_errors()
         {
             // arrange
+            var arhiveFileName = "arhive.zip";
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.Roster(variable: "someRoster")}));
@@ -86,7 +90,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFiles(new[] { preloadedFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -96,12 +100,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void when_verify_main_questionnaire_file_in_lower_case_should_return_empty_errors()
         {
             // arrange
+            var arhiveFileName = "arhive.zip";
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter());
             var preloadedFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "questionnaire");
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFiles(new[] { preloadedFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors, Is.Empty);
@@ -111,6 +116,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         public void when_verify_files_and_dont_have_main_file_should_return_empty_errors()
         {
             // arrange
+            var arhiveFileName = "arhive.zip";
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
                     {Create.Entity.Roster(variable: "someRoster")}));
@@ -119,12 +125,13 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyFiles(new[] { preloadedFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0040"));
-            Assert.That(errors[0].References.First().DataFile, Is.EqualTo("Questionnaire.tab"));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(arhiveFileName));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo("Questionnaire.tab"));
         }
     }
 }

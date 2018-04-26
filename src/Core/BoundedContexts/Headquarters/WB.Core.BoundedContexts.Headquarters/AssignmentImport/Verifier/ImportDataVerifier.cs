@@ -103,8 +103,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyFiles(PreloadedFileInfo[] files,
-            IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
             if (!files.Any(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire)))
             {
@@ -113,14 +112,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 yield return ToFileError("PL0040", messages.PL0040_QuestionnaireDataIsNotFound,
                     new PreloadedFileInfo
                     {
-                        FileName = $"{questionaireFileName}.tab",
-                        QuestionnaireOrRosterName = questionaireFileName
-                    });
+                        FileName = $"{questionaireFileName}.tab"
+                    }, originalFileName);
+                yield break;
             }
 
             foreach (var file in files)
             {
-                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(file, questionnaire)))
+                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
                     if (error != null) yield return error;
             }
         }
@@ -163,7 +162,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private IEnumerable<Func<PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => new[]
+        private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => new[]
         {
             Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster)
         };
@@ -495,9 +494,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private static Func<PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
-            Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message) => (file, questionnaire) =>
-            hasError(file, questionnaire) ? new[]{ToFileError(code, message, file) } : Array.Empty<PanelImportVerificationError>();
+        private static Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
+            Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message) => (originalFileName, file, questionnaire) =>
+            hasError(file, questionnaire) ? new[]{ToFileError(code, message, file, originalFileName) } : Array.Empty<PanelImportVerificationError>();
 
         private static Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<List<PreloadingAssignmentRow>, IQuestionnaire, (PreloadingAssignmentRow row, AssignmentValue cell)[]> getRowsWithErrors,
@@ -547,8 +546,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return verify;
         }
 
-        private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo)
-            => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, fileInfo.FileName));
+        private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo, string originalFileName)
+            => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, originalFileName));
         private static PanelImportVerificationError ToColumnError(string code, string message, string fileName, string columnName)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.Column, columnName, fileName));
 
