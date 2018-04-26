@@ -77,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             this.Save(file.FileInfo.FileName, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version), 
                 assignmentRows.Select(row =>
-                        ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<AssignmentAnswer>())},
+                        ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<IAssignmentAnswer>())},
                             row.Responsible, row.Quantity, questionnaire, true))
                     .ToArray());
         }
@@ -131,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     rosters = g.Select(x => new
                     {
                         rosterVector = new RosterVector(x.RosterInstanceCodes.Select(y => y.Code.Value).ToArray()),
-                        answers = x.Answers.OfType<AssignmentAnswer>()
+                        answers = x.Answers.OfType<IAssignmentAnswer>()
                     })
                 });
             
@@ -277,7 +277,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         private AssignmentToImport ToAssignmentToImport(
-            IEnumerable<(RosterVector rosterVector, IEnumerable<AssignmentAnswer> answers)> answers,
+            IEnumerable<(RosterVector rosterVector, IEnumerable<IAssignmentAnswer> answers)> answers,
             AssignmentResponsible responsible, AssignmentQuantity quantity, IQuestionnaire questionnaire, bool verified) =>
             new AssignmentToImport
             {
@@ -291,7 +291,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     .ToList()
             };
 
-        private InterviewAnswer ToInterviewAnswer(BaseAssignmentValue value, RosterVector rosterVector, IQuestionnaire questionnaire)
+        private InterviewAnswer ToInterviewAnswer(IAssignmentAnswer value, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(value.VariableName);
             if (!questionId.HasValue) return null;
@@ -323,7 +323,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 case QuestionType.MultyOption:
                     {
                         var assignmentCategoricalMulti = ((AssignmentMultiAnswer)value)?.Values
-                            ?.OfType<AssignmentDoubleAnswer>()
+                            ?.OfType<AssignmentIntegerAnswer>()
                             .Where(x => x.Answer.HasValue)
                             ?.Select(x => new { code = Convert.ToInt32(x.VariableName), answer = Convert.ToInt32(x.Answer) })
                             .ToArray();
