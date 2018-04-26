@@ -981,22 +981,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         [Test]
-        public void Test_DaysInMonth2()
-        {
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(1900, 1));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(1900, 12));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(1901, 1));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(2016, 3));
-            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(1946, 1));
-            Assert.AreEqual(28, new LevelFunctions().DaysInMonth(1900, 2));
-            Assert.AreEqual(29, new LevelFunctions().DaysInMonth(2000, 2));
-            Assert.AreEqual(30, new LevelFunctions().DaysInMonth(2016, 11));
-
-            Assert.AreEqual(-9999, new LevelFunctions().DaysInMonth(2016, 13));
-            Assert.AreEqual(-9999, new LevelFunctions().DaysInMonth(-2, 12));
-        }
-
-        [Test]
         public void Test_DaysInMonth3()
         {
             Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 1, 9)));
