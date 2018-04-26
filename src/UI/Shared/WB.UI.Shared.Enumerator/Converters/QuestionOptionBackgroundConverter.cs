@@ -19,6 +19,9 @@ namespace WB.UI.Shared.Enumerator.Converters
                 case QuestionStateStyle.AnsweredEnabled:
                     return Resource.Drawable.question_option_background_answered;
 
+                case QuestionStateStyle.AnsweredProtected: 
+                    return Resource.Drawable.question_option_background_protected;
+
                 default:
                     return Resource.Drawable.question_text_question;
             }

@@ -396,6 +396,7 @@
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
+    <Compile Include="ValueCombiners\LayoutOptionBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
     <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
   </ItemGroup>
@@ -995,7 +996,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
@@ -1143,7 +1146,9 @@
     <AndroidResource Include="Resources\layout\interview_question_readonly.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_audio.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_audio.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_audio_dialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -1364,6 +1369,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\question_text_question_no_bottom_corners.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_background_protected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
