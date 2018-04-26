@@ -47,7 +47,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     {
     }
 
-    public class AssignmentAnswer : AssignmentValue { }
+    public interface IAssignmentAnswer
+    {
+        string VariableName { get; }
+    }
+
+    public class AssignmentAnswer : AssignmentValue, IAssignmentAnswer { }
 
     public class AssignmentRosterInstanceCode : AssignmentAnswer
     {
@@ -56,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentInterviewId : AssignmentValue { }
 
-    public class AssignmentAnswers : BaseAssignmentValue
+    public class AssignmentAnswers : BaseAssignmentValue, IAssignmentAnswer
     {
         public AssignmentAnswer[] Values { get; set; }
     }
