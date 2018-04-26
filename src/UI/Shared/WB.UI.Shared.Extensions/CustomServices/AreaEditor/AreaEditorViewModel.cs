@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.UI;
@@ -261,11 +262,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 if (!this.MapView.LocationDisplay.IsEnabled)
                     this.MapView.LocationDisplay.AutoPanMode = LocationDisplayAutoPanMode.Off;
 
-                if (!this.MapView.LocationDisplay.IsEnabled && !this.MapView.LocationDisplay.Started
-                    && (this.MapView.LocationDisplay.DataSource != null && !this.MapView.LocationDisplay.DataSource.IsStarted))
+                if (!this.MapView.LocationDisplay.IsEnabled &&
+                    !this.MapView.LocationDisplay.Started &&
+                    (this.MapView.LocationDisplay.DataSource != null &&
+                     !this.MapView.LocationDisplay.DataSource.IsStarted))
+                {
                     this.MapView.LocationDisplay.IsEnabled = true;
+                    this.MapView.LocationDisplay.LocationChanged += LocationDisplayOnLocationChanged;
+                }
+
                 else
+                {
+                    this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
                     this.MapView.LocationDisplay.IsEnabled = false;
+                }
             }
             catch (ArgumentException exc)
             {
@@ -282,6 +292,18 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
 
         });
+
+        private void LocationDisplayOnLocationChanged(object sender, Location e)
+        {
+            if (e.Position == null) { return; }
+
+            var point = GeometryEngine.Project(e.Position, this.MapView.SpatialReference);
+
+            if (!GeometryEngine.Contains(this.MapView.Map.Basemap.BaseLayers[0].FullExtent, point))
+            {
+                this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
+            }
+        }
 
         public IMvxCommand SwitchPanelCommand => new MvxCommand(() =>
         {
@@ -339,7 +361,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 double? dist = null;
                 if (position != null)
                 {
-                    var point = new MapPoint(position.X, position.Y, position.Z, this.MapView.SpatialReference);
+                    var point = GeometryEngine.Project(position, this.MapView.SpatialReference);
                     dist = GeometryEngine.Distance(result, point);
                 }
 
