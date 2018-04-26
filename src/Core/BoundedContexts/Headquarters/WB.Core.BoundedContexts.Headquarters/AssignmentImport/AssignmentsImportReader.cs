@@ -60,11 +60,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             return new PreloadingRow
             {
-                Cells = cells.Select(x => x.Value.Count == 1
+                Cells = cells.Select(x => x.Value.Count == 1 && x.Value.First().Column.ToLower() == x.Value.First().VariableOrCodeOrPropertyName
                     ? x.Value[0]
                     : (PreloadingCell) new PreloadingCompositeValue
                     {
-                        VariableOrCodeOrPropertyName = x.Key.ToLower(),
+                        VariableOrCodeOrPropertyName = x.Key,
                         Values = x.Value.ToArray()
                     }).ToArray()
             };

@@ -180,9 +180,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 switch (answerType)
                 {
+                    case AnswerType.OptionCode:
                     case AnswerType.Integer:
                         return ToAssignmentIntegerAnswer(answer);
-                    case AnswerType.OptionCode:
                     case AnswerType.Decimal:
                         return ToAssignmentDoubleAnswer(answer);
                     case AnswerType.DateTime:
