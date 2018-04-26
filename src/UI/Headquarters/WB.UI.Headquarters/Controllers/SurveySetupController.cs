@@ -229,7 +229,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-                var fileErrors = this.dataVerifier.VerifyFiles(allImportedFileInfos, questionnaire).Take(10).ToArray();
+                var fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (fileErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
