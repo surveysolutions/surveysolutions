@@ -37,6 +37,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettings);
         }
 
+        public T Deserialize<T>(string payload, Type payloadType)
+        {
+            return (T)JsonConvert.DeserializeObject(payload, payloadType, this.jsonSerializerSettings);
+        }
+
         public T Deserialize<T>(byte[] payload)
         {
             try

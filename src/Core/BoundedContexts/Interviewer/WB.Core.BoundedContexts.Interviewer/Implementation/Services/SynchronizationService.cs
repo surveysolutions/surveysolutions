@@ -113,11 +113,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             => this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<bool>(url: autoUpdateUrl, credentials: this.restCredentials, token: token));
 
-        public Task UploadAuditLogEntityAsync(AuditLogEntityApiView auditLogEntity, CancellationToken cancellationToken)
+        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView entities, CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.auditLogController}",
-                request: auditLogEntity,
+                request: entities,
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }
