@@ -185,10 +185,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_NoParsed, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_InvalidCode, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentTextAnswer>(Text_HasInvalidMask, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
-            Error<AssignmentDoubleAnswer>(CategoricalSingle_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
+            Error<AssignmentIntegerAnswer>(CategoricalSingle_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Error<AssignmentDateTimeAnswer>(DateTime_NotParsed, "PL0016", messages.PL0016_ExpectedDateTimeNotParsed),
             Errors<AssignmentGpsAnswer>(Gps_NotParsed, "PL0017", messages.PL0017_ExpectedGpsNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
+            Errorq<AssignmentMultiAnswer>(OptionCode_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
             Error<AssignmentDoubleAnswer>(Double_NotParsed, "PL0019", messages.PL0019_ExpectedDecimalNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_IsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
             Error<AssignmentResponsible>(Responsible_IsEmpty, "PL0025", messages.PL0025_ResponsibleNameIsEmpty),
@@ -323,10 +324,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Code.HasValue;
 
-        private bool CategoricalSingle_OptionNotFound(AssignmentDoubleAnswer answer, IQuestionnaire questionnaire)
+        private bool CategoricalSingle_OptionNotFound(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)
         {
-            if (string.IsNullOrEmpty(answer.Value)) return false;
-            if (Double_NotParsed(answer)) return false;
+            if (!answer.Answer.HasValue) return false;
 
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) return false;
@@ -365,6 +365,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             return maxAnswersCount.HasValue &&
                    answer.Values.OfType<AssignmentIntegerAnswer>().Count(x => x.Answer >= 1) > maxAnswersCount;
+        }
+
+        private IEnumerable<AssignmentAnswer> OptionCode_NotParsed(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
+            if (!questionId.HasValue) yield break;
+
+            if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.MultyOption) yield break;
+
+            foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
+                if (Integer_NotParsed(assignmentAnswer)) yield return assignmentAnswer;
         }
 
         private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
@@ -546,6 +557,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return verify;
         }
 
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>
+            Errorq<TValue>(Func<TValue, IQuestionnaire, IEnumerable<AssignmentAnswer>> hasError, string code, string message) where TValue : AssignmentAnswers
+        {
+            IEnumerable<PanelImportVerificationError> verify(PreloadingAssignmentRow row, BaseAssignmentValue cell, IQuestionnaire questionnaire)
+            {
+                if (!(cell is TValue compositeAnswer)) yield break;
+
+                foreach (var assignmentAnswerWithError in hasError(compositeAnswer, questionnaire))
+                    yield return ToCellError(code, message, row, compositeAnswer.VariableName,
+                        assignmentAnswerWithError.VariableName, assignmentAnswerWithError.Value);
+            }
+
+            return verify;
+        }
+
         private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo, string originalFileName)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, originalFileName));
         private static PanelImportVerificationError ToColumnError(string code, string message, string fileName, string columnName)
@@ -558,7 +584,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private static PanelImportVerificationError ToCellError(string code, string message,
             PreloadingAssignmentRow row, string variable, string optionCodeOrPropertyName, string value)
             => new PanelImportVerificationError(code, message,
-                new InterviewImportReference($"{variable}[{optionCodeOrPropertyName}]", row.Row,
+                new InterviewImportReference($"{variable}{(string.IsNullOrWhiteSpace(optionCodeOrPropertyName) ? "" : $"[{optionCodeOrPropertyName}]")}", row.Row,
                     PreloadedDataVerificationReferenceType.Cell, value, row.FileName));
 
         private static PanelImportVerificationError ToCellsError(string code, string message, (PreloadingAssignmentRow row, AssignmentValue cell)[] errors)

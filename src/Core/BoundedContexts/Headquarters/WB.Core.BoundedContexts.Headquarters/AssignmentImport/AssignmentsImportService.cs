@@ -315,9 +315,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 case QuestionType.SingleOption:
                     if (!isLinkedToQuestion && !isLinkedToRoster)
                     {
-                        var assignmentInt = ((AssignmentDoubleAnswer)value).Answer;
+                        var assignmentInt = ((AssignmentIntegerAnswer)value).Answer;
                         if (assignmentInt.HasValue)
-                            answer.Answer = CategoricalFixedSingleOptionAnswer.FromDecimal(Convert.ToDecimal(assignmentInt.Value));
+                            answer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(assignmentInt.Value);
                     }
                     break;
                 case QuestionType.MultyOption:
