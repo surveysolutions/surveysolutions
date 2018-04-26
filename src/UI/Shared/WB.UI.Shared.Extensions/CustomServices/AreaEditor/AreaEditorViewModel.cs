@@ -295,6 +295,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         private void LocationDisplayOnLocationChanged(object sender, Location e)
         {
+            //show only once
+            this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
+
             if (e.Position == null) { return; }
 
             var point = GeometryEngine.Project(e.Position, this.MapView.SpatialReference);
@@ -408,6 +411,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             finally
             {
                 this.IsEditing = false;
+                this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
                 Close(this);
             }
         });
@@ -611,8 +615,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 }
                 default:
                 {
-                    IsGeometryLengthVisible = false;
-                    IsGeometryAreaVisible = false;
+                    IsGeometryLengthVisible = true;
+                    IsGeometryAreaVisible = true;
 
                     return this.Geometry == null
                         ? await this.MapView.SketchEditor.StartAsync(SketchCreationMode.Polygon).ConfigureAwait(false)
