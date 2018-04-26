@@ -531,6 +531,9 @@
   <data name="AreaMap_Update_Maps" xml:space="preserve">
     <value>Обновить карты</value>
   </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Ваше местоположение вне границ карты</value>
+  </data>
   <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
     <value>Выйти из редактора</value>
   </data>

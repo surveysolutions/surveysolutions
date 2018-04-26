@@ -506,6 +506,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_NoChangesInfo" xml:space="preserve">
     <value>No changes we made to be saved.</value>
   </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Your location is out of boundaries of the map</value>
+  </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
   </data>
