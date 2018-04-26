@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             => string.Equals(this.fileSystem.MakeStataCompatibleFileName(questionnaireOrRosterName),
                 this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title), StringComparison.InvariantCultureIgnoreCase);
 
-        private IEnumerable<AssignmentValue> ToAssignmentAnswers(PreloadingCell[] cells, IQuestionnaire questionnaire)
+        private IEnumerable<BaseAssignmentValue> ToAssignmentAnswers(PreloadingCell[] cells, IQuestionnaire questionnaire)
         {
             foreach (var cell in cells)
             {
@@ -200,7 +200,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             => new AssignmentGpsAnswer
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Column = compositeValue.VariableOrCodeOrPropertyName,
                 Values = compositeValue.Values.Where(x => !string.IsNullOrWhiteSpace(x.Value))
                     .Select(ToGpsPropertyAnswer).ToArray()
             };
@@ -209,7 +208,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             => new AssignmentMultiAnswer
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Column = compositeValue.VariableOrCodeOrPropertyName,
                 Values = compositeValue.Values.Where(x => !string.IsNullOrWhiteSpace(x.Value))
                     .Select(ToAssignmentTextAnswer).ToArray()
             };
@@ -218,7 +216,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             => new AssignmentMultiAnswer
             {
                 VariableName = compositeValue.VariableOrCodeOrPropertyName,
-                Column = compositeValue.VariableOrCodeOrPropertyName,
                 Values = compositeValue.Values.Where(x => !string.IsNullOrWhiteSpace(x.Value))
                     .Select(ToAssignmentIntegerAnswer).ToArray()
             };

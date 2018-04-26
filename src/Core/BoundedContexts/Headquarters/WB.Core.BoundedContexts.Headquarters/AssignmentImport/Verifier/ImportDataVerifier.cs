@@ -87,13 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             foreach (var assignmentValue in assignmentRow.Answers)
             {
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, assignmentValue, questionnaire)))
-                    if (error != null) yield return error;
-
-                if (!(assignmentValue is AssignmentAnswers compositeValue)) continue;
-
-                foreach (var value in compositeValue.Values)
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, value, questionnaire)))
+                foreach (var error in this.AnswerVerifiers.SelectMany(x => x.Invoke(assignmentRow, assignmentValue, questionnaire)))
                     if (error != null) yield return error;
             }
 
@@ -102,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             {
                 if (serviceValue == null) continue;
 
-                foreach (var error in this.AnswerVerifiers.Select(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
+                foreach (var error in this.AnswerVerifiers.SelectMany(x => x.Invoke(assignmentRow, serviceValue, questionnaire)))
                     if (error != null) yield return error;
             }
         }
@@ -124,14 +118,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var file in files)
             {
-                foreach (var error in this.FileVerifiers.Select(x => x.Invoke(file, questionnaire)))
+                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(file, questionnaire)))
                     if (error != null) yield return error;
             }
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyRosters(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
-            foreach (var error in this.RosterVerifiers.Select(x => x.Invoke(allRowsByAllFiles, questionnaire)))
+            foreach (var error in this.RosterVerifiers.SelectMany(x => x.Invoke(allRowsByAllFiles, questionnaire)))
                 if (error != null) yield return error;
         }
 
@@ -144,12 +138,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     yield return ToColumnError("PL0031", messages.PL0031_ColumnNameDuplicatesFound,
                         file.FileName, duplicatedColumn.Key);
                 }
-            }
 
-            foreach (var file in files)
-            {
                 foreach (var columnName in file.Columns)
-                foreach (var error in this.ColumnVerifiers.Select(x => x.Invoke(file, columnName, questionnaire)))
+                foreach (var error in this.ColumnVerifiers.SelectMany(x => x.Invoke(file, columnName, questionnaire)))
                     if (error != null) yield return error;
 
                 var columnNames = file.Columns.Select(x => x.ToLower());
@@ -170,32 +161,32 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private IEnumerable<Func<PreloadedFileInfo, IQuestionnaire, PanelImportVerificationError>> FileVerifiers => new[]
+        private IEnumerable<Func<PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => new[]
         {
             Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster)
         };
 
-        private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, PanelImportVerificationError>> RosterVerifiers => new[]
+        private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> RosterVerifiers => new[]
         {
             Error(OrphanRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication)
         };
 
-        private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, PanelImportVerificationError>> ColumnVerifiers => new[]
+        private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> ColumnVerifiers => new[]
         {
             Error(UnknownColumn, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
             Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Error(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired)
         };
 
-        private IEnumerable<Func<PreloadingAssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError>> AnswerVerifiers => new[]
+        private IEnumerable<Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> AnswerVerifiers => new[]
         {
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_NoParsed, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_InvalidCode, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentTextAnswer>(Text_HasInvalidMask, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Error<AssignmentDoubleAnswer>(CategoricalSingle_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Error<AssignmentDateTimeAnswer>(DateTime_NotParsed, "PL0016", messages.PL0016_ExpectedDateTimeNotParsed),
-            Error<AssignmentGpsAnswer>(Gps_NotParsed, "PL0017", messages.PL0017_ExpectedGpsNotParsed),
+            Errors<AssignmentGpsAnswer>(Gps_NotParsed, "PL0017", messages.PL0017_ExpectedGpsNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
             Error<AssignmentDoubleAnswer>(Double_NotParsed, "PL0019", messages.PL0019_ExpectedDecimalNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_IsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
@@ -205,14 +196,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentResponsible>(Responsible_HasInvalidRole, "PL0028", messages.PL0028_UserIsNotSupervisorOrInterviewer),
             Error<AssignmentIntegerAnswer>(Integer_ExceededRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxRosterRowCount)),
             Error<AssignmentIntegerAnswer>(Integer_ExceededLongRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxLongRosterRowCount)),
-            Error<AssignmentGpsAnswer>(Gps_DontHaveLongitudeOrLatitude, "PL0030", messages.PL0030_GpsMandatoryFilds),
-            Error<AssignmentGpsAnswer>(Gps_LatitudeMustBeGeaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
-            Error<AssignmentGpsAnswer>(Gps_LongitudeMustBeGeaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
-            Error<AssignmentGpsAnswer>(Gps_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
+            Errors<AssignmentGpsAnswer>(Gps_DontHaveLongitudeOrLatitude, "PL0030", messages.PL0030_GpsMandatoryFilds),
+            Errors<AssignmentGpsAnswer>(Gps_LatitudeMustBeGeaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
+            Errors<AssignmentGpsAnswer>(Gps_LongitudeMustBeGeaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
+            Errors<AssignmentGpsAnswer>(Gps_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
             Error<AssignmentDoubleAnswer>(Double_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
             Error<AssignmentQuantity>(Quantity_IsNotInteger, "PL0035", messages.PL0035_QuantityNotParsed),
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
-            Error<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
+            Errors<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
         };
 
@@ -375,54 +366,52 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                    answer.Values.OfType<AssignmentIntegerAnswer>().Count(x => x.Answer >= 1) > maxAnswersCount;
         }
 
-        private bool Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
+        private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
+            => answer.Values.OfType<AssignmentDoubleAnswer>().Where(answerValue =>
+                !string.IsNullOrWhiteSpace(answerValue.Value) && answerValue.Value.Contains(","));
+
+        private bool Gps_LongitudeMustBeGeaterThenN180AndLessThen180(AssignmentGpsAnswer answer, IQuestionnaire questionnaire)
         {
-            var latitude = answer.Values.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Value;
-            var longitude = answer.Values.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Value;
-
-            return !string.IsNullOrWhiteSpace(latitude) && latitude.Contains(",") ||
-                   !string.IsNullOrWhiteSpace(longitude) && longitude.Contains(",");
-        }
-
-        private bool Gps_LongitudeMustBeGeaterThenN180AndLessThen180(AssignmentGpsAnswer answer)
-        {
-            if (this.Gps_DontHaveLongitudeOrLatitude(answer)) return false;
-
             var longitude = answer.Values.OfType<AssignmentDoubleAnswer>()
-                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower()).Answer;
+                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
 
-            return longitude < -180 || longitude > 180;
+            return longitude.HasValue && (longitude < -180 || longitude > 180);
         }
 
-        private bool Gps_LatitudeMustBeGeaterThenN90AndLessThen90(AssignmentGpsAnswer answer)
+        private bool Gps_LatitudeMustBeGeaterThenN90AndLessThen90(AssignmentGpsAnswer answer, IQuestionnaire questionnaire)
         {
-            if (this.Gps_DontHaveLongitudeOrLatitude(answer)) return false;
-
             var latitude = answer.Values.OfType<AssignmentDoubleAnswer>()
-                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower()).Answer;
+                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
 
-            return latitude < -90 || latitude > 90;
+            return latitude.HasValue && latitude < -90 || latitude > 90;
         }
 
-        private bool Gps_DontHaveLongitudeOrLatitude(AssignmentGpsAnswer answer)
+        private bool Gps_DontHaveLongitudeOrLatitude(AssignmentGpsAnswer answer, IQuestionnaire questionnaire)
         {
-            if (this.Gps_NotParsed(answer)) return false;
-
             var latitude = answer.Values.OfType<AssignmentDoubleAnswer>()
                 .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
             var longitude = answer.Values.OfType<AssignmentDoubleAnswer>()
                 .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
 
-            return (!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue);
+            return !latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue;
         }
 
-        private bool Gps_NotParsed(AssignmentGpsAnswer answer)
+        private IEnumerable<AssignmentAnswer> Gps_NotParsed(AssignmentGpsAnswer answer)
         {
-            var latitudeAnswer = answer.Values.OfType<AssignmentDoubleAnswer>().FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower());
-            var longitudeValueAnswer = answer.Values.OfType<AssignmentDoubleAnswer>().FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower());
+            foreach (var answerValue in answer.Values)
+            {
+                if(string.IsNullOrWhiteSpace(answerValue.Value)) continue;
 
-            return !string.IsNullOrWhiteSpace(latitudeAnswer.Value) && !latitudeAnswer.Answer.HasValue ||
-                   !string.IsNullOrWhiteSpace(longitudeValueAnswer.Value) && !longitudeValueAnswer.Answer.HasValue;
+                switch (answerValue)
+                {
+                    case AssignmentDoubleAnswer asDouble:
+                        if (!asDouble.Answer.HasValue) yield return asDouble;
+                        break;
+                    case AssignmentDateTimeAnswer asDateTime:
+                        if (!asDateTime.Answer.HasValue) yield return asDateTime;
+                        break;
+                }
+            }
         }
 
         private bool Integer_NotParsed(AssignmentIntegerAnswer answer)
@@ -504,30 +493,57 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private static Func<PreloadedFileInfo, IQuestionnaire, PanelImportVerificationError> Error(
+        private static Func<PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message) => (file, questionnaire) =>
-            hasError(file, questionnaire) ? ToFileError(code, message, file) : null;
+            hasError(file, questionnaire) ? new[]{ToFileError(code, message, file) } : Array.Empty<PanelImportVerificationError>();
 
-        private static Func<List<PreloadingAssignmentRow>, IQuestionnaire, PanelImportVerificationError> Error(
+        private static Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<List<PreloadingAssignmentRow>, IQuestionnaire, (PreloadingAssignmentRow row, AssignmentValue cell)[]> getRowsWithErrors,
             string code, string message)
             => (allRowsByAllFiles, questionnaire) =>
             {
                 var rowsWithErrors = getRowsWithErrors(allRowsByAllFiles, questionnaire);
-                return rowsWithErrors.Any() ? ToCellsError(code, message, rowsWithErrors) : null;
+                return rowsWithErrors.Any() ? new []{ToCellsError(code, message, rowsWithErrors)} : Array.Empty<PanelImportVerificationError>();
             };
 
-        private static Func<PreloadedFileInfo, string, IQuestionnaire, PanelImportVerificationError> Error(
+        private static Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<PreloadedFileInfo, string, IQuestionnaire, bool> hasError, string code, string message) => (file, columnName, questionnaire) =>
-            hasError(file, columnName?.ToLower(), questionnaire) ? ToColumnError(code, message, file.FileName, columnName) : null;
+            hasError(file, columnName?.ToLower(), questionnaire) ? new []{ToColumnError(code, message, file.FileName, columnName)} : Array.Empty<PanelImportVerificationError>();
         
-        private static Func<PreloadingAssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
-            cell is TValue && hasError((TValue)cell) ? ToCellError(code, message, row, cell) : null;
+            cell is TValue && hasError((TValue)cell) ? new []{ToCellError(code, message, row, (TValue)cell) } : Array.Empty<PanelImportVerificationError>();
 
-        private static Func<PreloadingAssignmentRow, AssignmentValue, IQuestionnaire, PanelImportVerificationError> Error<TValue>(
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
-            cell is TValue && hasError((TValue)cell, questionnaire) ? ToCellError(code, message, row, cell) : null;
+            cell is TValue && hasError((TValue)cell, questionnaire) ? new []{ToCellError(code, message, row, (TValue)cell) } : Array.Empty<PanelImportVerificationError>();
+
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>
+            Errors<TValue>(Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentAnswers
+        {
+            IEnumerable<PanelImportVerificationError> verify(PreloadingAssignmentRow row, BaseAssignmentValue cell, IQuestionnaire questionnaire)
+            {
+                if (!(cell is TValue compositeAnswer)) yield break;
+                if (hasError(compositeAnswer, questionnaire)) yield return ToCellError(code, message, row, compositeAnswer.VariableName, null, null);
+            }
+
+            return verify;
+        }
+
+        private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>
+            Errors<TValue>(Func<TValue, IEnumerable<AssignmentAnswer>> hasError, string code, string message) where TValue: AssignmentAnswers
+        {
+            IEnumerable<PanelImportVerificationError> verify(PreloadingAssignmentRow row, BaseAssignmentValue cell, IQuestionnaire questionnaire)
+            {
+                if (!(cell is TValue compositeAnswer)) yield break;
+
+                foreach (var assignmentAnswerWithError in hasError(compositeAnswer))
+                    yield return ToCellError(code, message, row, compositeAnswer.VariableName,
+                        assignmentAnswerWithError.VariableName, assignmentAnswerWithError.Value);
+            }
+
+            return verify;
+        }
 
         private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, fileInfo.FileName));
@@ -539,11 +555,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 assignmentValue.Value, row.FileName));
 
         private static PanelImportVerificationError ToCellError(string code, string message,
-            PreloadingAssignmentRow row, AssignmentAnswers assignmentValues, AssignmentAnswer assignmentValue)
-            => new PanelImportVerificationError(code, message, new InterviewImportReference(
-                $"{assignmentValues.VariableName}[{assignmentValue.VariableName}]", row.Row,
-                PreloadedDataVerificationReferenceType.Cell,
-                assignmentValue.Value, row.FileName));
+            PreloadingAssignmentRow row, string variable, string optionCodeOrPropertyName, string value)
+            => new PanelImportVerificationError(code, message,
+                new InterviewImportReference($"{variable}[{optionCodeOrPropertyName}]", row.Row,
+                    PreloadedDataVerificationReferenceType.Cell, value, row.FileName));
 
         private static PanelImportVerificationError ToCellsError(string code, string message, (PreloadingAssignmentRow row, AssignmentValue cell)[] errors)
             => new PanelImportVerificationError(code, message, errors.Select(x=> new InterviewImportReference(x.cell.Column, x.row.Row, PreloadedDataVerificationReferenceType.Cell,
