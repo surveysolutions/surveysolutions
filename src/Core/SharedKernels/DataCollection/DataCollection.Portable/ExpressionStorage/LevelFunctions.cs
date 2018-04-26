@@ -353,7 +353,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
             try
             {
-                new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
+                var dateTime = new DateTime((int)year.Value, (int)month.Value, (int)day.Value);
             }
             catch
             {
@@ -376,12 +376,12 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
             if (!day.HasValue) return false;
 
             if (year < 0) return false;
-            if (month < 0) return false;
-            if (day < 0) return false;
+            if (month < 0 || month > 12) return false;
+            if (day < 0 || day > 31) return false;
 
             try
             {
-                new DateTime(year.Value, month.Value, day.Value);
+                var dateTime = new DateTime(year.Value, month.Value, day.Value);
             }
             catch
             {
@@ -413,56 +413,6 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <summary>
         /// Number of days in a particular month
         /// </summary>
-        /// <param name="year">Year</param>
-        /// <param name="month">Month</param>
-        /// <returns>Number of days in the specified month; a special 
-        /// value -9999 is returned for an invalid combination of 
-        /// arguments.</returns>
-        public int DaysInMonth(int year, int month)
-        {
-            try
-            {
-                var d = new DateTime(year, month, 1);
-
-            }
-            catch
-            {
-                return -9999;
-            }
-
-            try
-            {
-                var d = new DateTime(year, month, 31);
-                return 31;
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                var d = new DateTime(year, month, 30);
-                return 30;
-            }
-            catch
-            {
-            }
-
-            try
-            {
-                var d = new DateTime(year, month, 29);
-                return 29;
-            }
-            catch
-            {
-            }
-
-            return 28;
-        }
-
-        /// <summary>
-        /// Number of days in a particular month
-        /// </summary>
         /// <param name="date1">A date</param>
         /// <returns>Number of days in the month, which contains 
         /// the given date or a special value -9999 if the date 
@@ -471,7 +421,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         {
             if (date1.HasValue == false) return -9999;
 
-            return DaysInMonth(date1.Value.Year, date1.Value.Month);
+            return DateTime.DaysInMonth(date1.Value.Year, date1.Value.Month);
         }
 
         /// <summary>
@@ -486,7 +436,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
             if (cmc < 0) return -9999;
             var year = YearOfCmc(cmc);
             var month = MonthOfCmc(cmc);
-            return DaysInMonth(year, month);
+            return DateTime.DaysInMonth(year, month);
         }
 
         /// <summary>
