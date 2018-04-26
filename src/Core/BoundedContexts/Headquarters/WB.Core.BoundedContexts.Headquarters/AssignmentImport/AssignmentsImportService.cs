@@ -291,7 +291,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     .ToList()
             };
 
-        private InterviewAnswer ToInterviewAnswer(AssignmentAnswer value, RosterVector rosterVector, IQuestionnaire questionnaire)
+        private InterviewAnswer ToInterviewAnswer(BaseAssignmentValue value, RosterVector rosterVector, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(value.VariableName);
             if (!questionId.HasValue) return null;

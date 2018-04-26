@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
     public class PreloadingAssignmentRow
     {
-        public AssignmentValue[] Answers { get; set; }
+        public BaseAssignmentValue[] Answers { get; set; }
         public AssignmentRosterInstanceCode[] RosterInstanceCodes { get; set; }
         public int Row { get; set; }
         public AssignmentValue InterviewIdValue { get; set; }
@@ -15,7 +15,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public string QuestionnaireOrRosterName { get; set; }
     }
 
-    public abstract class AssignmentValue
+    public abstract class BaseAssignmentValue
+    {
+        public string VariableName { get; set; }
+    }
+
+    public abstract class AssignmentValue : BaseAssignmentValue
     {
         public string Column { get; set; }
         public string Value { get; set; }
@@ -42,10 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     {
     }
 
-    public class AssignmentAnswer : AssignmentValue
-    {
-        public string VariableName { get; set; }
-    }
+    public class AssignmentAnswer : AssignmentValue { }
 
     public class AssignmentRosterInstanceCode : AssignmentAnswer
     {
@@ -54,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentInterviewId : AssignmentValue { }
 
-    public class AssignmentAnswers: AssignmentAnswer
+    public class AssignmentAnswers : BaseAssignmentValue
     {
         public AssignmentAnswer[] Values { get; set; }
     }
