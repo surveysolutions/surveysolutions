@@ -15,7 +15,9 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -32,6 +34,7 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -72,8 +75,10 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -665,5 +670,17 @@ namespace WB.Tests.Abc.TestFactories
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
                 userViewFactory ?? Mock.Of<IUserViewFactory>());
+
+        public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            IPlainStorageAccessor<Assignment> assignments = null,
+            IAssignmentsUpgradeService upgradeService = null)
+        {
+            return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
+                importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
+                Create.Service.PlainPostgresTransactionManager());
+        }
     }
 }

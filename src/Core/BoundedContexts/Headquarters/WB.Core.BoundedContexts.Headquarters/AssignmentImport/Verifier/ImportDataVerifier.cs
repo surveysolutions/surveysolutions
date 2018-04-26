@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -10,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.userViewFactory = userViewFactory;
         }
 
-        public InterviewImportError VerifyWithInterviewTree(List<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire)
+        public InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire)
         {
             var answersGroupedByLevels = answers.GroupedByLevels();
 
@@ -55,7 +55,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     {
                         var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
                         if (interviewTreeQuestion == null)
-                            continue;
+                        {
+                            new InterviewQuestionInvariants(answer.Identity, questionnaire, tree).RequireQuestionExists();
+                        }
 
                         interviewTreeQuestion.SetAnswer(answer.Answer);
 
