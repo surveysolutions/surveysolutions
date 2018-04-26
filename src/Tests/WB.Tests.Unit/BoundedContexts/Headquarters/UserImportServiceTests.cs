@@ -422,8 +422,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             TestDelegate act = () => service.VerifyAndSaveIfNoErrors(Encoding.UTF8.GetBytes(data), "file.txt").ToList();
 
             // Assert
-            var excpectedError = string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile, 2);
-            Assert.That(act, Throws.Exception.TypeOf<PreloadingException>().With.Message.EqualTo(excpectedError)); 
+            Assert.DoesNotThrow(act); 
         }
 
         private UserImportService CreateUserImportService(HqUser[] dbUsers = null, params UserToImport[] usersToImport)
