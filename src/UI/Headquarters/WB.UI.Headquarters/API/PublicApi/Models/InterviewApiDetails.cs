@@ -14,8 +14,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
     {
         public InterviewApiDetails(IStatefulInterview interview)
         {
-            this.Answers = interview.GetAllInterviewNodes().TreeToEnumerableDepthFirst(_ => _.Children)
-                                                           .OfType<InterviewTreeQuestion>()
+            this.Answers = interview.GetAllInterviewNodes().OfType<InterviewTreeQuestion>()
                                                            .Select(ToQuestionApiView)
                                                            .ToList();
         }
