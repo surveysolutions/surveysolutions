@@ -1218,4 +1218,7 @@
   <data name="InterviewerProfile_Relinked" xml:space="preserve">
     <value>Перепривязан</value>
   </data>
+  <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+    <value>Обновление заданий</value>
+  </data>
 </root>
