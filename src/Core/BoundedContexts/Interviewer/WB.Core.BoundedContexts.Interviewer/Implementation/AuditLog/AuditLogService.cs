@@ -14,14 +14,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 {
     public class AuditLogService : IAuditLogService
     {
-        private readonly IPlainStorage<AutoincrementKeyValue, int> auditLogStorage;
+        private readonly IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
         private readonly IPlainStorage<InterviewerIdentity> userIdentity;
         private readonly IJsonAllTypesSerializer serializer;
 
         private const string AuditLogSettingsKey = "settings";
 
-        public AuditLogService(IPlainStorage<AutoincrementKeyValue, int> auditLogStorage,
+        public AuditLogService(IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             IPlainStorage<InterviewerIdentity> userIdentity,
             IJsonAllTypesSerializer serializer)
@@ -32,10 +32,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
             this.serializer = serializer;
         }
 
-        public class AutoincrementKeyValue : IPlainStorageEntity<int>
+        public class AutoincrementKeyValue : IPlainStorageEntity<int?>
         {
             [PrimaryKey, Unique, AutoIncrement]
-            public int Id { get; set; }
+            public int? Id { get; set; }
             public string Json { get; set; }
         }
 
@@ -61,8 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 
         public void UpdateLastSyncIndex(int id)
         {
-            var settingsView = auditLogSettingsStorage.GetById(AuditLogSettingsKey);
-            settingsView.LastSyncedEntityId = id;
+            var settingsView = new AuditLogSettingsView() { Id = AuditLogSettingsKey, LastSyncedEntityId = id };
             auditLogSettingsStorage.Store(settingsView);
         }
 
@@ -76,7 +75,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
                     Entity = serializer.Deserialize<AuditLogEntityView>(kv.Json)
                 }).ToList();
             // fix id
-            list.ForEach(kv => kv.Entity.Id = kv.Id);
+            list.ForEach(kv => kv.Entity.Id = kv.Id.Value);
             return list.Select(kv => kv.Entity).ToList();
         }
     }

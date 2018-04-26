@@ -57,6 +57,11 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string LastSupervisorOrInterviewerComment { get; set; }
     }
 
+    public class AuditLogEntitiesApiView
+    {
+        public AuditLogEntityApiView[] Entities { get; set; }
+    }
+
     public class AuditLogEntityApiView
     {
         public int Id { get; set; }
@@ -69,6 +74,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid? ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
 
-        public IAuditLogEntity Payload { get; set; }
+        public string PayloadType { get; set; }
+        public string Payload { get; set; }
     }
 }
