@@ -418,7 +418,7 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <value>Back to import</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
-    <value>Assigned to {0} enumerators</value>
+    <value>Assigned to {0} interviewers</value>
     <comment>{0} - count of enumerators (always &gt; 1)</comment>
   </data>
   <data name="AssignedToMultipleSupervisors" xml:space="preserve">
@@ -426,7 +426,7 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <comment>{0} - count of supervisors (always &gt; 1)</comment>
   </data>
   <data name="AssignedToSingleEnumerator" xml:space="preserve">
-    <value>Assigned to 1 enumerator</value>
+    <value>Assigned to 1 interviewer</value>
   </data>
   <data name="AssignedToSingleSupervisor" xml:space="preserve">
     <value>Assigned to 1 supervisor</value>
