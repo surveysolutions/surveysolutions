@@ -189,7 +189,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentDateTimeAnswer>(DateTime_NotParsed, "PL0016", messages.PL0016_ExpectedDateTimeNotParsed),
             Errors<AssignmentGpsAnswer>(Gps_NotParsed, "PL0017", messages.PL0017_ExpectedGpsNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
-            Errorq<AssignmentMultiAnswer>(OptionCode_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
+            Errorq<AssignmentMultiAnswer>(CategoricalMulti_OptionCode_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
             Error<AssignmentDoubleAnswer>(Double_NotParsed, "PL0019", messages.PL0019_ExpectedDecimalNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_IsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
             Error<AssignmentResponsible>(Responsible_IsEmpty, "PL0025", messages.PL0025_ResponsibleNameIsEmpty),
@@ -367,7 +367,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                    answer.Values.OfType<AssignmentIntegerAnswer>().Count(x => x.Answer >= 1) > maxAnswersCount;
         }
 
-        private IEnumerable<AssignmentAnswer> OptionCode_NotParsed(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
+        private IEnumerable<AssignmentAnswer> CategoricalMulti_OptionCode_NotParsed(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) yield break;
@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
                 if (Integer_NotParsed(assignmentAnswer)) yield return assignmentAnswer;
         }
-
+        
         private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
             => answer.Values.OfType<AssignmentDoubleAnswer>().Where(answerValue =>
                 !string.IsNullOrWhiteSpace(answerValue.Value) && answerValue.Value.Contains(","));
@@ -427,7 +427,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private bool Integer_NotParsed(AssignmentIntegerAnswer answer)
-            => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Answer.HasValue;
+            => !string.IsNullOrWhiteSpace(answer.Value) && (answer.Value.Contains(",") || !answer.Answer.HasValue);
 
         private bool Double_CommaSymbolIsNotAllowed(AssignmentDoubleAnswer answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && answer.Value.Contains(",");
