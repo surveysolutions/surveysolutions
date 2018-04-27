@@ -107,7 +107,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0030"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(gpsAltitudeColumn));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[altitude]"));
         }
 
         [Test]
@@ -143,7 +143,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0030"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(gpsAltitudeColumn));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[altitude]"));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
         }
 
@@ -167,7 +167,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0014"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(unknownMultiOptionColumn));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[4]"));
         }
 
         [Test]
@@ -191,9 +191,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(2));
             Assert.That(errors[0].Code, Is.EqualTo("PL0014"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(unknownMultiOptionColumn1));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[4]"));
             Assert.That(errors[1].Code, Is.EqualTo("PL0014"));
-            Assert.That(errors[1].References.First().Content, Is.EqualTo(unknownMultiOptionColumn2));
+            Assert.That(errors[1].References.First().Content, Is.EqualTo($"{variable}[5]"));
         }
 
         [Test]
@@ -216,7 +216,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0014"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(unknownMultiOptionColumn));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[n4]"));
         }
 
         [Test]
@@ -254,10 +254,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(2));
             Assert.That(errors[0].Code, Is.EqualTo("PL0014"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(unknownMultiOptionColumn1));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[4]"));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
             Assert.That(errors[1].Code, Is.EqualTo("PL0014"));
-            Assert.That(errors[1].References.First().Content, Is.EqualTo(unknownMultiOptionColumn2));
+            Assert.That(errors[1].References.First().Content, Is.EqualTo($"{variable}[n5]"));
             Assert.That(errors[1].References.First().DataFile, Is.EqualTo(roster));
         }
 
