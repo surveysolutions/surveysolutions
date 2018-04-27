@@ -193,7 +193,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            this.auditLogService.Write(new LogoutAuditLogEntity());
+            var userName = this.Principal.CurrentUserIdentity.Name;
+            this.auditLogService.Write(new LogoutAuditLogEntity(userName));
             return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 

@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
                 List<InterviewAnswer> answers = this.GetAnswers(assignment.Answers);
 
+                var interviewKey = keyGenerator.Get();
                 ICommand createInterviewCommand = new CreateInterview(interviewId,
                     interviewerIdentity.UserId,
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
@@ -80,7 +81,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
-                    keyGenerator.Get(),
+                    interviewKey,
                     assignment.Id
                 );
 
@@ -90,7 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
-                auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title));
+                auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
                 await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoaginViewModelArg>(new LoaginViewModelArg{InterviewId = interviewId});
             }
             catch (InterviewException e)

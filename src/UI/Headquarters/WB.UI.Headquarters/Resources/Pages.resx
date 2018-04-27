@@ -393,6 +393,9 @@
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Edit personal info</value>
   </data>
+  <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+    <value>Show audit log</value>
+  </data>
   <data name="InterviewerProfile_Interviewers" xml:space="preserve">
     <value>Interviewers</value>
   </data>

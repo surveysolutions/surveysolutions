@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -54,7 +55,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         protected override Task CloseInterviewAfterComplete()
         {
-            auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId));
+            var statefulInterview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
             return base.CloseInterviewAfterComplete();
         }
     }

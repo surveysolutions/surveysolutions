@@ -2,8 +2,11 @@
 {
     public class LoginAuditLogEntity : BaseAuditLogEntity
     {
-        public LoginAuditLogEntity() : base(AuditLogEntityType.Login)
+        public LoginAuditLogEntity(string userName) : base(AuditLogEntityType.Login)
         {
+            UserName = userName;
         }
+
+        public string UserName { get; }
     }
 }

@@ -7,13 +7,15 @@ namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entitie
         public Guid InterviewId { get; }
         public int AssignmentId { get; }
         public string Title { get; }
+        public string InterviewKey { get; set; }
 
-        public CreateInterviewAuditLogEntity(Guid interviewId, int assignmentId, string title) 
+        public CreateInterviewAuditLogEntity(Guid interviewId, int assignmentId, string title, string interviewKey) 
             : base(AuditLogEntityType.CreateInterviewFromAssignment)
         {
             InterviewId = interviewId;
             AssignmentId = assignmentId;
             Title = title;
+            InterviewKey = interviewKey;
         }
     }
 }
