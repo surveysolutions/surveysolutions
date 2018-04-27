@@ -12,10 +12,10 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 {
     internal class when_getting_team_interviews : TeamInterviewsFactoryTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_return_correct_total_count () {
             Guid responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            version = 1;
+            var questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var version = 1;
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
@@ -30,23 +30,20 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
             PostgreReadSideStorage<InterviewSummary> repository;
             PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader;
-            reportFactory = CreateTeamInterviewsFactory(out repository, out featuredQuestionAnswersReader);
+            var reportFactory = CreateTeamInterviewsFactory(out repository, out featuredQuestionAnswersReader);
 
             ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
-            BecauseOf();
+
+            // Act
+            var report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
+            {
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = version,
+            }));
+
+            // Assert
+            report.TotalCount.Should().Be(3);
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
-        {
-            QuestionnaireId = questionnaireId,
-            QuestionnaireVersion = version,
-        }));
-
-        [NUnit.Framework.Test] public void should_return_correct_total_count () => report.TotalCount.Should().Be(3);
-
-        static ITeamInterviewsFactory reportFactory;
-        static TeamInterviewsView report;
-        static Guid questionnaireId;
-        static int version;
     }
 }

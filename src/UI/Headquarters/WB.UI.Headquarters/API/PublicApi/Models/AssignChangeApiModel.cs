@@ -3,14 +3,18 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
+    /// <summary>
+    /// Provide either responsible id or responsible name
+    /// </summary>
     public class AssignChangeApiModel
     {
         /// <summary>
-        /// Id of the interview to reassign
+        /// New responsible id
         /// </summary>
-        [Required]
-        public Guid Id { set; get; }
         public Guid? ResponsibleId { set; get; }
+        /// <summary>
+        /// New responsible name
+        /// </summary>
         public string ResponsibleName { set; get; }
     }
 }

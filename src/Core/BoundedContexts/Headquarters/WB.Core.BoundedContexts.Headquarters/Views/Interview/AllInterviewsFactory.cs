@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     ResponsibleId = x.ResponsibleId,
                     ResponsibleName = x.ResponsibleName,
                     ResponsibleRole = x.ResponsibleRole,
-                    HasErrors = x.HasErrors,
+                    ErrorsCount = x.ErrorsCount,
                     Status = x.Status.ToString(),
                     CanDelete = (x.Status == InterviewStatus.Created
                         || x.Status == InterviewStatus.SupervisorAssigned

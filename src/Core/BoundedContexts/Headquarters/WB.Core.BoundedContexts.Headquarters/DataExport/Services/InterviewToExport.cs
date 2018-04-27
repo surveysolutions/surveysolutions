@@ -7,11 +7,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public struct InterviewToExport
     {
-        public InterviewToExport(Guid id, string key, bool hasErrors, InterviewStatus status)
+        public InterviewToExport(Guid id, string key, int errorsCount, InterviewStatus status)
         {
             Id = id;
             Key = key;
-            HasErrors = hasErrors;
+            ErrorsCount = errorsCount;
             Status = status;
             Entities = new List<InterviewEntity>();
         }
@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public Guid Id { get; }
 
         public string Key { get; }
-        public bool HasErrors { get; }
+        public int ErrorsCount { get; }
         public InterviewStatus Status { get; set; }
         public List<InterviewEntity> Entities { get; set; }
     }

@@ -10,14 +10,15 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -73,8 +74,10 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -598,8 +601,7 @@ namespace WB.Tests.Abc.TestFactories
             UsersImportTask usersImportTask = null)
         {
             usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
-                                  x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()) 
-                                  == Task.FromResult(Array.Empty<IJobExecutionContext>().ToIReadOnlyCollection())));
+                                  x.GetCurrentlyExecutingJobs() == Array.Empty<IJobExecutionContext>()));
 
             userPreloadingSettings = userPreloadingSettings ?? Create.Entity.UserPreloadingSettings();
             return new UserImportService(
@@ -675,6 +677,18 @@ namespace WB.Tests.Abc.TestFactories
                 interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
                 transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
                 userRepository: userRepository ?? userRepositoryMock.Object);
+        }
+
+        public IAssignmentsUpgrader AssignmentsUpgrader(IInterviewImportService importService = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            IPlainStorageAccessor<Assignment> assignments = null,
+            IAssignmentsUpgradeService upgradeService = null)
+        {
+            return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
+                importService ?? Mock.Of<IInterviewImportService>(s => s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) == AssignmentVerificationResult.Ok()),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
+                Create.Service.PlainPostgresTransactionManager());
         }
     }
 }
