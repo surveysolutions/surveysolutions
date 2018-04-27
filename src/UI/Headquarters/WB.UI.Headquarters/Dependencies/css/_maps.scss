@@ -1,0 +1,34 @@
+.map-tooltip-info {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #dbdfe2;
+    &:last-of-type,
+    &:only-child{
+        margin-bottom: 0;
+        border: none;
+    }
+    p{
+        margin-bottom: 3px;
+        &:first-of-type {
+            font: 12px/14px "RobotoLight";
+            margin-bottom: 10px;
+        }
+        strong {
+            letter-spacing: 1px;
+            margin-right: 5px;
+        }
+        &:last-of-type {
+            padding-top: 5px;
+            a {
+                text-transform: uppercase;
+                font: 10px/12px "TrebuchetMSBold";
+                letter-spacing: 1px;
+                &:hover,
+                &:focus{
+                    text-decoration: none;
+	                color: #0e5591;
+                }
+            }
+        }
+    }
+}

@@ -73,6 +73,10 @@ main{
 	.container{
 		margin-left: 0;
 		margin-right: 0;
+		&.center-block{
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 
 }

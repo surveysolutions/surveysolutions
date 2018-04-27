@@ -301,7 +301,6 @@
 	&.answered .question-unit{
 		.options-group{
 			background-color: transparent;
-			font-size: 0;
 		}
 	}
 	&.has-error {
@@ -929,5 +928,15 @@
 				font-size: 10px;
 			}
 		}
+	}
+}
+
+.web-interview.center-block{
+	.question-editor{
+		margin: 0 auto;
+		max-width: 550px;
+	}
+	.action-container{
+		margin: 0 auto;
 	}
 }
