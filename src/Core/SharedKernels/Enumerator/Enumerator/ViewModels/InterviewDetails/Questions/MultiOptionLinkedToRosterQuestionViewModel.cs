@@ -54,6 +54,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var linkedOption in linkedQuestion.Options)
                 yield return this.CreateOptionViewModel(linkedOption, answeredOptions, interview);
+
+            UpateMaxAnswersCountMessage(answeredOptions.Length);
         }
 
         private MultiOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector[] answeredOptions, IStatefulInterview interview)
