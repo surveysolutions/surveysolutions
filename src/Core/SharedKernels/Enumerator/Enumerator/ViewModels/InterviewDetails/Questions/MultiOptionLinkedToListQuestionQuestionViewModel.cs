@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -154,7 +153,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 if (selectedValues.Length == this.maxAllowedAnswers)
                 {
-                    this.Options.Where(o => !o.Checked).ForEach(o => o.Enabled = false);
+                    this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
                 }
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
@@ -232,7 +231,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void UpdateOptionSelection(MultiOptionQuestionOptionViewModel option, List<decimal> selectedOptionValues)
         {
             option.Checked = selectedOptionValues.Contains(option.Value);
-            option.Enabled = !this.maxAllowedAnswers.HasValue || selectedOptionValues.Count < this.maxAllowedAnswers;
+            option.CanBeChecked = !this.maxAllowedAnswers.HasValue || selectedOptionValues.Count < this.maxAllowedAnswers;
 
             if (!this.areAnswersOrdered) return;
 
