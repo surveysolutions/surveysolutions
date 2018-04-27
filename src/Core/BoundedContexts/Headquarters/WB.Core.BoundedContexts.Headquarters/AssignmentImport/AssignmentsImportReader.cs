@@ -22,10 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.csvReader = csvReader;
             this.archiveUtils = archiveUtils;
         }
-
-        private static readonly string[] ignoredPreloadingColumns =
-            ServiceColumns.SystemVariables.Values.Select(x => x.VariableExportColumnName).ToArray();
-
+        
         private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
 
         private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
@@ -37,19 +34,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var columnName = kv.Key.ToLower();
                 var value = (string) kv.Value;
 
-                if (ignoredPreloadingColumns.Contains(columnName)) continue;
+                if (ServiceColumns.AllSystemVariables.Contains(columnName)) continue;
 
                 var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
                     StringSplitOptions.RemoveEmptyEntries);
 
                 var variableName = compositeColumnValues[0].ToLower();
+                var variableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName;
+
+                if (columnName == ServiceColumns.InterviewId)
+                {
+                    variableName = columnName;
+                    variableOrCodeOrPropertyName = columnName;
+                }
 
                 if (!cells.ContainsKey(variableName))
                     cells[variableName] = new List<PreloadingValue>();
 
                 cells[variableName].Add(new PreloadingValue
                 {
-                    VariableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName,
+                    VariableOrCodeOrPropertyName = variableOrCodeOrPropertyName,
                     Row = rowIndex,
                     Column = kv.Key,
                     Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)

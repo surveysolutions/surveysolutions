@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         public IEnumerable<T> ReadAll<T>(Stream csvFileStream, string delimiter, bool hasHeaderRow = true)
         {
             using (var reader = new CsvHelper.CsvReader(new StreamReader(csvFileStream),
-                GetConfiguration(delimiter, hasHeaderRow)))
+                GetConfiguration(delimiter, hasHeaderRow, true)))
             {
                 reader.Read();
                 reader.ReadHeader();
@@ -64,14 +64,20 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
             }
         }
 
-        private static Configuration GetConfiguration(string delimiter, bool hasHeaderRow)
-            => new Configuration
+        private static Configuration GetConfiguration(string delimiter, bool hasHeaderRow, bool ignoreCameCase = false)
+        {
+            var configuration = new Configuration
             {
                 MissingFieldFound = null,
                 Delimiter = delimiter,
                 HasHeaderRecord = hasHeaderRow,
-                PrepareHeaderForMatch = s => s.ToLower(),
                 IgnoreQuotes = true
             };
+
+            if (ignoreCameCase)
+                configuration.PrepareHeaderForMatch = s => s.ToLower();
+
+            return configuration;
+        }
     }
 }
