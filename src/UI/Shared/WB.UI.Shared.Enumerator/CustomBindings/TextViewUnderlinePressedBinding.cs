@@ -1,4 +1,5 @@
-﻿using Android.Text;
+﻿using System;
+using Android.Text;
 using Android.Text.Style;
 using Android.Views;
 using Android.Widget;
@@ -54,7 +55,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (isDisposing)
             {
-                if (this.Target != null)
+                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
                 {
                     this.Target.Touch -= Target_Touch;
                 }

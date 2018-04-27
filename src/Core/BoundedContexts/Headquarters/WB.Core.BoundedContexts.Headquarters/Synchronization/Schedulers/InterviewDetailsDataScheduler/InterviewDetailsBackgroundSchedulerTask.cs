@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
@@ -12,22 +11,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         public InterviewDetailsBackgroundSchedulerTask(IScheduler scheduler,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting)
         {
-            this.scheduler = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
-            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting ?? throw new ArgumentNullException(nameof(syncPackagesProcessorBackgroundJobSetting));
+            if (scheduler == null) throw new ArgumentNullException(nameof(scheduler));
+            if (syncPackagesProcessorBackgroundJobSetting == null) throw new ArgumentNullException(nameof(syncPackagesProcessorBackgroundJobSetting));
+            this.scheduler = scheduler;
+            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
         }
 
-        public async Task ConfigureAsync()
+        public void Configure()
         {
-            await RunSyncPackagesProcessorBackgroundJobAsync();
-            await RunSyncPackagesReprocessorBackgroundJobAsync();
+            RunSyncPackagesProcessorBackgroundJob();
+            RunSyncPackagesReprocessorBackgroundJob();
         }
 
-        public async Task RunSyncPackagesProcessorBackgroundJobAsync()
+        public void RunSyncPackagesProcessorBackgroundJob()
         {
             IJobDetail job = JobBuilder.Create<SyncPackagesProcessorBackgroundJob>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
                 .StoreDurably(true)
                 .Build();
+
 
             if (this.syncPackagesProcessorBackgroundJobSetting.Enabled)
             {
@@ -39,13 +41,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                         .RepeatForever())
                     .Build();
 
-                await this.scheduler.ScheduleJob(job, trigger);
+                this.scheduler.ScheduleJob(job, trigger);
             }
 
-            await this.scheduler.AddJob(job, true);
+            this.scheduler.AddJob(job, true);
         }
 
-        public async Task RunSyncPackagesReprocessorBackgroundJobAsync()
+        public void RunSyncPackagesReprocessorBackgroundJob()
         {
             IJobDetail job = JobBuilder.Create<SyncPackagesReprocessorBackgroundJob>()
                 .WithIdentity("Capi interview packages reprocesing", "Reprocessor")
@@ -60,8 +62,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     .RepeatForever())
                 .Build();
 
-            await this.scheduler.ScheduleJob(job, trigger);
-            await this.scheduler.AddJob(job, true);
+            this.scheduler.ScheduleJob(job, trigger);
+            this.scheduler.AddJob(job, true);
         }
     }
 }
