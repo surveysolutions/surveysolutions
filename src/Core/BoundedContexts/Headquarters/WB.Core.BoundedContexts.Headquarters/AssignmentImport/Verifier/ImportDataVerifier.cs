@@ -538,7 +538,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             IEnumerable<PanelImportVerificationError> verify(PreloadingAssignmentRow row, BaseAssignmentValue cell, IQuestionnaire questionnaire)
             {
                 if (!(cell is TValue compositeAnswer)) yield break;
-                if (hasError(compositeAnswer, questionnaire)) yield return ToCellError(code, message, row, compositeAnswer.VariableName, null, null);
+                if (hasError(compositeAnswer, questionnaire)) yield return ToCellError(code, message, row, compositeAnswer.VariableName, null);
             }
 
             return verify;
@@ -552,8 +552,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (!(cell is TValue compositeAnswer)) yield break;
 
                 foreach (var assignmentAnswerWithError in hasError(compositeAnswer))
-                    yield return ToCellError(code, message, row, compositeAnswer.VariableName,
-                        assignmentAnswerWithError.VariableName, assignmentAnswerWithError.Value);
+                    yield return ToCellError(code, message, row, assignmentAnswerWithError.Column, assignmentAnswerWithError.Value);
             }
 
             return verify;
@@ -567,8 +566,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (!(cell is TValue compositeAnswer)) yield break;
 
                 foreach (var assignmentAnswerWithError in hasError(compositeAnswer, questionnaire))
-                    yield return ToCellError(code, message, row, compositeAnswer.VariableName,
-                        assignmentAnswerWithError.VariableName, assignmentAnswerWithError.Value);
+                    yield return ToCellError(code, message, row, assignmentAnswerWithError.Column, assignmentAnswerWithError.Value);
             }
 
             return verify;
@@ -576,18 +574,31 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private static PanelImportVerificationError ToFileError(string code, string message, PreloadedFileInfo fileInfo, string originalFileName)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.File, fileInfo.FileName, originalFileName));
+
         private static PanelImportVerificationError ToColumnError(string code, string message, string fileName, string columnName)
-            => new PanelImportVerificationError(code, message, new InterviewImportReference(PreloadedDataVerificationReferenceType.Column, columnName, fileName));
+            => new PanelImportVerificationError(code, message,
+                new InterviewImportReference(PreloadedDataVerificationReferenceType.Column,
+                    ToNewColumnFormat(columnName), fileName));
 
         private static PanelImportVerificationError ToCellError(string code, string message, PreloadingAssignmentRow row, AssignmentValue assignmentValue)
             => new PanelImportVerificationError(code, message, new InterviewImportReference(assignmentValue.Column, row.Row, PreloadedDataVerificationReferenceType.Cell,
                 assignmentValue.Value, row.FileName));
 
         private static PanelImportVerificationError ToCellError(string code, string message,
-            PreloadingAssignmentRow row, string variable, string optionCodeOrPropertyName, string value)
+            PreloadingAssignmentRow row, string column, string value)
             => new PanelImportVerificationError(code, message,
-                new InterviewImportReference($"{variable}{(string.IsNullOrWhiteSpace(optionCodeOrPropertyName) ? "" : $"[{optionCodeOrPropertyName}]")}", row.Row,
+                new InterviewImportReference(ToNewColumnFormat(column), row.Row,
                     PreloadedDataVerificationReferenceType.Cell, value, row.FileName));
+
+        private static string ToNewColumnFormat(string columnName)
+        {
+            if (ServiceColumns.AllSystemVariables.Contains(columnName.ToLower())) return columnName;
+
+            var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            return compositeColumnValues.Length == 2 ? $"{compositeColumnValues[0]}[{compositeColumnValues[1]}]" : columnName;
+        }
 
         private static PanelImportVerificationError ToCellsError(string code, string message, (PreloadingAssignmentRow row, AssignmentValue cell)[] errors)
             => new PanelImportVerificationError(code, message, errors.Select(x=> new InterviewImportReference(x.cell.Column, x.row.Row, PreloadedDataVerificationReferenceType.Cell,
