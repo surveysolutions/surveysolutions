@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.Payload, pm =>
             {
                 pm.Lazy(false);
-                pm.Type<PostgresEntityJson<IAuditLogEntity>>();
+                pm.Type<PostgresEntityWithTypeJson<IAuditLogEntity>>();
             });
         }
     }
