@@ -354,7 +354,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Answer.HasValue;
 
         private bool Double_NotParsed(AssignmentDoubleAnswer answer)
-            => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Answer.HasValue;
+            => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Value.Contains(",") && !answer.Answer.HasValue;
 
         private bool CategoricalMulti_AnswerExceedsMaxAnswersCount(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
         {
@@ -419,7 +419,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 switch (answerValue)
                 {
                     case AssignmentDoubleAnswer asDouble:
-                        if (!asDouble.Answer.HasValue) yield return asDouble;
+                        if (!asDouble.Value.Contains(",") && !asDouble.Answer.HasValue) yield return asDouble;
                         break;
                     case AssignmentDateTimeAnswer asDateTime:
                         if (!asDateTime.Answer.HasValue) yield return asDateTime;
@@ -458,7 +458,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) return false;
 
-            return questionnaire.IsRosterSizeQuestion(questionId.Value) && answer.Answer.HasValue && answer.Answer < 0;
+            return questionnaire.IsRosterSizeQuestion(questionId.Value) && answer.Answer.HasValue && answer.Answer < Constants.MinLongRosterRowCount;
         }
 
         private bool Responsible_HasInvalidRole(AssignmentResponsible responsible) 
