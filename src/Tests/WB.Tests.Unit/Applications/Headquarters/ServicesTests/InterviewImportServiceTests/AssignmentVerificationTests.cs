@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -14,12 +16,12 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportServiceTests
 {
@@ -182,6 +184,22 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.InterviewImportS
             var result = importService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
 
             Assert.That(result.Status, Is.False);
+        }
+
+        [Test]
+        public void when_target_questionnaire_has_no_question_Should_report_error()
+        {
+            var questionnaireDocument = Create.Entity.PlainQuestionnaire();
+
+            List<InterviewAnswer>[] answersGroupedByLevels = {
+                new List<InterviewAnswer>
+                {
+                    Create.Entity.InterviewAnswer(Create.Identity(), Create.Entity.TextQuestionAnswer("blabla"))
+                }
+            };
+            var verificationResult = importService.VerifyAssignment(answersGroupedByLevels, questionnaireDocument);
+
+            Assert.That(verificationResult.Status, Is.False);
         }
 
         private InterviewImportService importService;

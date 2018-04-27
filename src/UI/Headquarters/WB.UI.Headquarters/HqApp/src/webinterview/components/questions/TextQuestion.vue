@@ -6,7 +6,8 @@
                 <div class="form-group">
                     <div class="field"
                          :class="{answered: $me.isAnswered}">
-                        <input ref="input"
+                         <input v-if="hasMask"
+                                ref="input"
                                autocomplete="off"
                                type="text"
                                class="field-to-fill"
@@ -16,7 +17,17 @@
                                v-blurOnEnterKey
                                @blur="answerTextQuestion"
                                v-mask="$me.mask"
-                               :data-mask-completed="$me.isAnswered">
+                               :data-mask-completed="$me.isAnswered" />
+                        <textarea-autosize v-else ref="inputTextArea"
+                               autocomplete="off"
+                               rows="1"
+                               class="field-to-fill"
+                               :placeholder="noAnswerWatermark"
+                               :value="$me.answer"
+                               :disabled="!$me.acceptAnswer"
+                               v-blurOnEnterKey
+                               @blur.native="answerTextQuestion"
+                               @blur="answerTextQuestion"></textarea-autosize>
                         <wb-remove-answer />
                     </div>                    
                 </div>    
@@ -33,6 +44,9 @@
         name: 'TextQuestion',
         mixins: [entityDetails],
         computed: {
+            hasMask(){
+                return this.$me.mask!=null;
+            },
             noAnswerWatermark() {
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : 
                     this.$t('WebInterviewUI.TextEnterMasked', {userFriendlyMask: this.userFriendlyMask})
@@ -49,8 +63,8 @@
         methods: {
             answerTextQuestion() {
                 this.sendAnswer(() => {
-                    const target = $(this.$refs.input)
-                    const answer = this.$refs.input.value
+                    const target = $(this.$refs.input || this.$refs.inputTextArea.$el)
+                    const answer = target.val()
 
                     if(this.handleEmptyAnswer(answer)) {
                         return

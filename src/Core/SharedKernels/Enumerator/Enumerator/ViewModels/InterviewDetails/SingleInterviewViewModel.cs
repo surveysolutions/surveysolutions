@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected override void ReloadFromBundle(IMvxBundle state)
         {
+            base.ReloadFromBundle(state);
             if (state.Data.ContainsKey("interviewId"))
             {
                 this.InterviewId = state.Data["interviewId"];

@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             var plQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
             var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaire);
-            var interviewIdsToExport = new List<InterviewToExport> { new InterviewToExport(interviewId, interviewKey, true, InterviewStatus.Completed) };
+            var interviewIdsToExport = new List<InterviewToExport> { new InterviewToExport(interviewId, interviewKey, 1, InterviewStatus.Completed) };
 
             var exportViewFactory = new Mock<IExportViewFactory>();
             string[][] answers = { new string[1] };

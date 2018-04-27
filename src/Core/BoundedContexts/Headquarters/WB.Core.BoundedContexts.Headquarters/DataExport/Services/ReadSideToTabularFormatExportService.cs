@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                     this.interviewSummaries.Query(_ => this.Filter(_, questionnaireIdentity, status, fromDate, toDate)
                         .OrderBy(x => x.InterviewId)
                         .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
-                        .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.HasErrors, x.Status))
+                        .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.ErrorsCount, x.Status))
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
                         .ToList()));
 

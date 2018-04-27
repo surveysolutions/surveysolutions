@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Resources;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Resources;
@@ -16,6 +19,8 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.Template;
 using WB.UI.Headquarters.Resources;
@@ -30,17 +35,22 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IQuestionnaireImportService importService;
         private readonly DesignerUserCredentials designerUserCredentials;
+        private readonly IAllUsersAndQuestionnairesFactory questionnaires;
+        private readonly IAssignmentsUpgradeService upgradeService;
 
         public TemplateController(ICommandService commandService, ILogger logger,
             IRestService designerQuestionnaireApiRestService, IQuestionnaireVersionProvider questionnaireVersionProvider,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, IQuestionnaireImportService importService,
-            DesignerUserCredentials designerUserCredentials)
+            DesignerUserCredentials designerUserCredentials, IAllUsersAndQuestionnairesFactory questionnaires,
+            IAssignmentsUpgradeService upgradeService)
             : base(commandService, logger)
         {
             this.designerQuestionnaireApiRestService = designerQuestionnaireApiRestService;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.importService = importService;
             this.designerUserCredentials = designerUserCredentials;
+            this.questionnaires = questionnaires;
+            this.upgradeService = upgradeService;
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             if (AppSettings.Instance.AcceptUnsignedCertificate)
@@ -75,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Import(Guid id)
+        public async Task<ActionResult> Import(Guid id, ImportModel request)
         {
             if (this.designerUserCredentials.Get() == null)
             {
@@ -86,11 +96,25 @@ namespace WB.UI.Headquarters.Controllers
             var model = await this.GetImportModel(id);
             if (model.QuestionnaireInfo != null)
             {
-                var result = await this.importService.Import(id, model?.QuestionnaireInfo?.Name, false);
+                var result = await this.importService.Import(id, model.QuestionnaireInfo?.Name, false);
                 model.ErrorMessage = result.ImportError;
 
                 if (result.IsSuccess)
+                {
+                    if (request.ShouldMigrateAssignments)
+                    {
+                        dynamic migrateFrom = JObject.Parse(request.MigrateFrom);
+                        long version = migrateFrom.version;
+                        Guid questionnaireId = migrateFrom.templateId;
+
+                        var processId = Guid.NewGuid();
+                        var sourceQuestionnaireId = new QuestionnaireIdentity(questionnaireId, version);
+                        this.upgradeService.EnqueueUpgrade(processId, sourceQuestionnaireId, result.Identity);
+                        return RedirectToAction("UpgradeProgress", "SurveySetup", new {id = processId});
+                    }
+
                     return this.RedirectToAction("Index", "SurveySetup");
+                }
             }
 
             return this.View("ImportMode", model);
@@ -107,6 +131,9 @@ namespace WB.UI.Headquarters.Controllers
 
                 model.QuestionnaireInfo = questionnaireInfo;
                 model.NewVersionNumber = this.questionnaireVersionProvider.GetNextVersion(id);
+                model.QuestionnairesToUpgradeFrom =
+                    this.questionnaires.GetOlderQuestionnairesWithPendingAssignments(id, model.NewVersionNumber);
+
             }
             catch (RestException e)
             {
@@ -185,5 +212,12 @@ namespace WB.UI.Headquarters.Controllers
 
             return this.View(model);
         }
+    }
+
+    public class ImportModel
+    {
+        public bool ShouldMigrateAssignments { get; set; }
+
+        public string MigrateFrom { get; set; }
     }
 }
