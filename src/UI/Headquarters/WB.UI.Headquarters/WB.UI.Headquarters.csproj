@@ -902,6 +902,14 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerAuditRecord.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.ru.resx">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -1668,6 +1676,7 @@
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
+    <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1850,6 +1859,7 @@
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\AssignmentsController.cs" />
+    <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
@@ -2079,6 +2089,11 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
       <DesignTime>True</DesignTime>

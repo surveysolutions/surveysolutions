@@ -1,0 +1,87 @@
+﻿@using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog
+@model WB.UI.Headquarters.Controllers.InterviewerAuditLogModel
+
+@{
+    ViewBag.Title = AuditLog.PageTitle;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<main>
+    <div class="container settings">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Profile", "Interviewer", new {Id = Model.InterviewerId})">@Model.InterviewerName</a></li>
+                </ol>
+                <h1>
+                    Detailed action log (Enum234)
+                </h1>
+                <ul class="list-unstyled">
+                    <li><b>GalaxyTab 8 (id 8acae1958fabd2f0)</b></li>
+                    <li><b>Interviewer App version: 13.7 	&mdash; <span class="success-text">Up to date</span></b></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row  extra-margin-bottom">
+            <div class="col-sm-7 ">
+                <a href="#">Download complete log in CSV format</a>
+            </div>
+        </div>
+
+        @foreach (var dateRecords in Model.RecordsByDate)
+        {
+            <div class="row">
+                <div class="col-sm-7">
+                    <h2>@dateRecords.Date.ToLongDateString() <span class="default-text">(@dateRecords.Date.DayOfWeek.ToString())</span></h2>
+                    <table class="table timestamps-table">
+                        <tbody>
+                            @foreach (var record in dateRecords.RecordsByDate)
+                            {
+                                <tr>
+                                    <td class="gray-text date">@record.Time.ToShortTimeString()</td>
+                                    <td><span class="@GetMessageCssClass(record.Type)">@record.Message</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="col-sm-7 ">
+                <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId, startDateTime = Model.StartDateTime.AddDays(-7), endDateTime = Model.EndDateTime.AddDays(-7)})">@InterviewerAuditRecord.ShowPrevious7Days</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+@functions
+{
+
+    string GetMessageCssClass(AuditLogEntityType entityType)
+    {
+        switch (entityType)
+        {
+            case AuditLogEntityType.SynchronizationCompleted:
+                return "success-text";
+            case AuditLogEntityType.Relink:
+            case AuditLogEntityType.DeleteInterview:
+            case AuditLogEntityType.SynchronizationCanceled:
+                return "error-text";
+            case AuditLogEntityType.OpenApplication:
+            case AuditLogEntityType.CreateInterviewFromAssignment:
+            case AuditLogEntityType.OpenInterview:
+            case AuditLogEntityType.CloseInterview:
+            case AuditLogEntityType.CompleteInterview:
+            case AuditLogEntityType.SynchronizationStarted:
+            case AuditLogEntityType.Login:
+            case AuditLogEntityType.Logout:
+            default:
+                return "";
+        }
+    }
+
+
+}

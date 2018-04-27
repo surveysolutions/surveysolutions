@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
             else
             {
-                auditLogService.Write(new LoginAuditLogEntity());
+                auditLogService.Write(new LoginAuditLogEntity(userName));
             }
 
             await this.viewModelNavigationService.NavigateToDashboardAsync();
