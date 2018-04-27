@@ -1528,6 +1528,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show audit log.
+        /// </summary>
+        public static string InterviewerProfile_ShowAuditLog {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ShowAuditLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Signal strength.
         /// </summary>
         public static string InterviewerProfile_SignalStrength {
