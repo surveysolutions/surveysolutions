@@ -215,7 +215,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 if (selectedValuesWithJustChanged.Length == this.maxAllowedAnswers)
                 {
-                    this.Options.Where(o => !o.YesSelected).ForEach(o => o.Enabled = false);
+                    this.Options.Where(o => !o.YesSelected).ForEach(o => o.YesCanBeChecked = false);
                 }
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -244,7 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Selected = null;
                     option.YesAnswerCheckedOrder = null;
-                    option.Enabled = true;
+                    option.YesCanBeChecked = true;
                 }
             }
         }
@@ -287,14 +287,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         : (int?)null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;
                     option.Selected = answeredYesNoOption.Yes;
-                    option.Enabled = answeredYesNoOption.Yes || isAllowYesCheckNewOptions;
+                    option.YesCanBeChecked = answeredYesNoOption.Yes || isAllowYesCheckNewOptions;
                 }
                 else
                 {
                     option.YesAnswerCheckedOrder = null;
                     option.AnswerCheckedOrder = null;
                     option.Selected = null;
-                    option.Enabled = isAllowYesCheckNewOptions;
+                    option.YesCanBeChecked = isAllowYesCheckNewOptions;
                 }
             }
         }
