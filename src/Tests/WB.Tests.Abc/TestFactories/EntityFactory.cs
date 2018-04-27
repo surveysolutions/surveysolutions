@@ -1914,7 +1914,7 @@ namespace WB.Tests.Abc.TestFactories
             AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
             AssignmentInterviewId interviewId = null,
             string questionnaireOrRosterName = null,
-            params AssignmentValue[] answers) => new PreloadingAssignmentRow
+            params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
         {
             FileName = fileName,
             QuestionnaireOrRosterName = questionnaireOrRosterName ?? "Questionnaire",
@@ -1950,6 +1950,61 @@ namespace WB.Tests.Abc.TestFactories
             IsLocked = isLocked,
             InterviewerId = interviewerId,
             SupervisorId = supervisorId
+        };
+
+        public AssignmentTextAnswer AssignmentTextAnswer(string column, string value) => new AssignmentTextAnswer
+        {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = value
+        };
+
+        public AssignmentIntegerAnswer AssignmentIntegerAnswer(string
+            column, int? answer = null, string value = null) => new AssignmentIntegerAnswer
+        {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            Answer = answer
+        };
+
+        public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string
+            column, int? answer = null, string value = null, string variable = null) => new AssignmentRosterInstanceCode
+            {
+            Column = column,
+            VariableName = variable ?? column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            Code = answer
+        };
+
+        public AssignmentDoubleAnswer AssignmentDoubleAnswer(string
+            column, double? answer = null, string value = null, string variable = null) => new AssignmentDoubleAnswer
+        {
+            Column = column,
+            VariableName = string.IsNullOrEmpty(variable) ? column.ToLower() : variable,
+            Value = answer.HasValue ? answer.ToString() : value,
+            Answer = answer
+        };
+
+        public AssignmentMultiAnswer AssignmentMultiAnswer(string variable, params AssignmentAnswer[] values) => new AssignmentMultiAnswer
+        {
+            VariableName = variable,
+            Values = values
+        };
+
+        public AssignmentGpsAnswer AssignmentGpsAnswer(string variable, params AssignmentAnswer[] values) => new AssignmentGpsAnswer
+        {
+            VariableName = variable,
+            Values = values
+        };
+
+        public AssignmentDateTimeAnswer AssignmentDateTimeAnswer(string
+            column, DateTime? answer = null, string value = null) => new AssignmentDateTimeAnswer
+        {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            Answer = answer
         };
     }
 }
