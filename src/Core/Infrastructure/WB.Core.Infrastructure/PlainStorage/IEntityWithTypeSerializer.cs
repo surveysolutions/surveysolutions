@@ -2,7 +2,7 @@
 
 namespace WB.Core.Infrastructure.PlainStorage
 {
-    public interface IEntitySerializer<TEntity> : IAtomicSerializer<TEntity> where TEntity: class
+    public interface IEntityWithTypeSerializer<TEntity> : IAtomicSerializer<TEntity> where TEntity: class
     {
     }
 }
