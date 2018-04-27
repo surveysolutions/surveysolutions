@@ -200,6 +200,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             optionViewModel.ItemEdited += this.ListItemEdited;
             optionViewModel.ItemDeleted += this.ListItemDeleted;
+            optionViewModel.IsProtected = true;
 
             return optionViewModel;
         }
