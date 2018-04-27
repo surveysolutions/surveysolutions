@@ -592,12 +592,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private static string ToNewColumnFormat(string columnName)
         {
-            if (ServiceColumns.AllSystemVariables.Contains(columnName.ToLower())) return columnName;
+            var lowerColumnName = columnName.ToLower();
+            if (lowerColumnName == ServiceColumns.InterviewId) return columnName;
+            if (ServiceColumns.AllSystemVariables.Contains(lowerColumnName)) return columnName;
 
             var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
                 StringSplitOptions.RemoveEmptyEntries);
 
-            return compositeColumnValues.Length == 2 ? $"{compositeColumnValues[0]}[{compositeColumnValues[1]}]" : columnName;
+            if (compositeColumnValues.Length != 2) return columnName;
+
+            return string.Format(ServiceColumns.IdSuffixFormat, compositeColumnValues[0]) == columnName
+                ? columnName
+                : $"{compositeColumnValues[0]}[{compositeColumnValues[1]}]";
         }
 
         private static PanelImportVerificationError ToCellsError(string code, string message, (PreloadingAssignmentRow row, AssignmentValue cell)[] errors)
