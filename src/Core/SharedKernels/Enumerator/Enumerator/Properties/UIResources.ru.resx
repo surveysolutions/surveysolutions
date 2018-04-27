@@ -599,4 +599,7 @@
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Сохранить подпись</value>
   </data>
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} из {1} опций выбрано</value>
+  </data>
 </root>

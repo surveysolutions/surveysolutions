@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -55,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private OptionBorderViewModel optionsTopBorderViewModel;
         private OptionBorderViewModel optionsBottomBorderViewModel;
+        private string maxAnswersCountMessage;
 
         public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options
         {
@@ -219,13 +221,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
         {
-            if (!this.areAnswersOrdered) return;
+            if (@event.QuestionId == this.questionIdentity.Id &&
+                @event.RosterVector.Identical(this.questionIdentity.RosterVector))
+            {
+                UpateMaxAnswersCountMessage(@event.SelectedValues.Length);
 
-            if (@event.QuestionId != this.questionIdentity.Id || !@event.RosterVector.Identical(this.questionIdentity.RosterVector))
-                return;
-
-            foreach (var option in this.options)
-                this.UpdateOptionSelection(option, @event.SelectedValues.ToList());
+                if (this.areAnswersOrdered)
+                {
+                    foreach (var option in this.options)
+                        this.UpdateOptionSelection(option, @event.SelectedValues.ToList());
+                }
+            }
         }
 
         private void UpdateOptionSelection(MultiOptionQuestionOptionViewModel option, List<decimal> selectedOptionValues)
@@ -289,6 +295,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.UpdateOptionSelection(viewModelOption, linkedQuestionAnswer);
             }
+
+            UpateMaxAnswersCountMessage(linkedQuestionAnswer.Count);
         }
 
         private void RemoveOptions(List<TextListAnswerRow> textListAnswerRows)
@@ -298,11 +306,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var removedOptionValue in removedOptionValues)
             {
-                                var removedOption =
-                                    this.options.SingleOrDefault(option => option.Value == removedOptionValue);
-                                if (removedOption == null) continue;
+                var removedOption =
+                    this.options.SingleOrDefault(option => option.Value == removedOptionValue);
+                if (removedOption == null) continue;
 
-                                this.options.Remove(removedOption);
+                this.options.Remove(removedOption);
             }
         }
 
@@ -321,6 +329,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.options.Clear();
                 this.RaisePropertyChanged(() => this.HasOptions);
+                UpateMaxAnswersCountMessage(0);
             });
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
@@ -331,9 +340,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 QuestionState = this.questionState
             };
 
-        public int? GetNextAnswerSortOrder()
+
+        private void UpateMaxAnswersCountMessage(int answersCount)
         {
-            return this.Options?.Max(x => x.CheckedOrder);
+            if (this.maxAllowedAnswers.HasValue && this.HasOptions)
+            {
+                this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
+                    answersCount, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));
+            }
+        }
+
+        public string MaxAnswersCountMessage
+        {
+            get => maxAnswersCountMessage;
+            set => SetProperty(ref maxAnswersCountMessage, value);
         }
     }
 }
