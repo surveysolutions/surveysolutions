@@ -301,9 +301,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         }
     }
 
-    public class PostgresEntityJson<T> : IUserType where T : class
+    public abstract class PostgresEntityJsonBase<T> : IUserType where T : class
     {
-        private IEntitySerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
+        protected abstract IAtomicSerializer<T> JsonConvert { get; } 
 
         public new bool Equals(object x, object y)
         {
@@ -376,6 +376,16 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         public Type ReturnedType => typeof(T);
 
         public bool IsMutable => true;
+    }
+
+    public class PostgresEntityJson<T> : PostgresEntityJsonBase<T> where T : class
+    {
+        protected override IAtomicSerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
+    }
+
+    public class PostgresEntityWithTypeJson<T> : PostgresEntityJsonBase<T> where T : class
+    {
+        protected override IAtomicSerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntityWithTypeSerializer<T>>();
     }
 
     public class PostgresJson<T> : IUserType where T : class
