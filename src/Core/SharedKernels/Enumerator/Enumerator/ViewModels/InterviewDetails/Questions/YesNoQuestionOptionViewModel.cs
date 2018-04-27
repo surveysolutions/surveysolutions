@@ -90,15 +90,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? AnswerCheckedOrder { get; set; }
 
-        private bool isAllowYesCheck = true;
-        public bool IsAllowYesCheck 
+        private bool enabled = true;
+        public bool Enabled 
         {
-            get => isAllowYesCheck;
+            get => enabled;
             set
             {
-                if (value == isAllowYesCheck) return;
-                isAllowYesCheck = value;
-                RaisePropertyChanged(() => IsAllowYesCheck);
+                if (value == enabled) return;
+                enabled = value;
+                RaisePropertyChanged(() => Enabled);
             }
         }
 
