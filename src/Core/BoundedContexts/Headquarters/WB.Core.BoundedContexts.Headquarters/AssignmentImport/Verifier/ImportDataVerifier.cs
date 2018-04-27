@@ -387,7 +387,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var longitude = answer.Values.OfType<AssignmentDoubleAnswer>()
                 .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower());
 
-            if (longitude.Answer != null && (longitude.Answer < -180 || longitude.Answer > 180))
+            if (longitude?.Answer != null && (longitude.Answer < -180 || longitude.Answer > 180))
                 yield return longitude;
         }
 
