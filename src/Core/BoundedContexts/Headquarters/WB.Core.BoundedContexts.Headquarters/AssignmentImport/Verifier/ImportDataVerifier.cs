@@ -382,20 +382,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             => answer.Values.OfType<AssignmentDoubleAnswer>().Where(answerValue =>
                 !string.IsNullOrWhiteSpace(answerValue.Value) && answerValue.Value.Contains(","));
 
-        private bool Gps_LongitudeMustBeGeaterThenN180AndLessThen180(AssignmentGpsAnswer answer, IQuestionnaire questionnaire)
+        private IEnumerable<AssignmentAnswer> Gps_LongitudeMustBeGeaterThenN180AndLessThen180(AssignmentGpsAnswer answer)
         {
             var longitude = answer.Values.OfType<AssignmentDoubleAnswer>()
-                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
+                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower());
 
-            return longitude.HasValue && (longitude < -180 || longitude > 180);
+            if (longitude.Answer != null && (longitude.Answer < -180 || longitude.Answer > 180))
+                yield return longitude;
         }
 
-        private bool Gps_LatitudeMustBeGeaterThenN90AndLessThen90(AssignmentGpsAnswer answer, IQuestionnaire questionnaire)
+        private IEnumerable<AssignmentAnswer> Gps_LatitudeMustBeGeaterThenN90AndLessThen90(AssignmentGpsAnswer answer)
         {
             var latitude = answer.Values.OfType<AssignmentDoubleAnswer>()
-                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
+                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower());
 
-            return latitude.HasValue && latitude < -90 || latitude > 90;
+            if (latitude?.Answer != null && (latitude.Answer < -90 || latitude.Answer > 90))
+                yield return latitude;
         }
 
         private bool Gps_DontHaveLongitudeOrLatitude(AssignmentGpsAnswer answer, IQuestionnaire questionnaire)
