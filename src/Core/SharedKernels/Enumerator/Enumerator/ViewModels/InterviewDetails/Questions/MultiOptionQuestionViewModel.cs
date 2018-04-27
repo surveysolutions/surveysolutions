@@ -201,7 +201,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (selectedValues.Length == this.maxAllowedAnswers)
                 {
-                    this.Options.Where(o => !o.Checked).ForEach(o => o.Enabled = false);
+                    this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
+                }
+                else
+                {
+                    this.Options.ForEach(o => o.CanBeChecked = true);
                 }
                 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -221,7 +225,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
-                    option.Enabled = true;
+                    option.CanBeChecked = true;
                 }
             }
         }
@@ -251,7 +255,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
-                    option.Enabled = moreOptionCanBeSelected;
+                    option.CanBeChecked = moreOptionCanBeSelected;
                 }
             }
         }
