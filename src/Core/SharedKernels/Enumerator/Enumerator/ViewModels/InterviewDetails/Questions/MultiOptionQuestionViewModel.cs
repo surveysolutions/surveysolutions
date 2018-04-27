@@ -198,10 +198,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || selectedValues.Length < this.maxAllowedAnswers;
-                this.Options.Where(o => !o.Checked && o.IsAllowCheck != isAllowCheckNewOptions).ForEach(o => o.IsAllowCheck = isAllowCheckNewOptions);
+                if (selectedValues.Length == this.maxAllowedAnswers)
+                {
+                    this.Options.Where(o => !o.Checked).ForEach(o => o.Enabled = false);
+                }
+                
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -218,7 +221,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
-                    option.IsAllowCheck = true;
+                    option.Enabled = true;
                 }
             }
         }
@@ -233,7 +236,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void PutOrderOnOptions(MultipleOptionsQuestionAnswered @event)
         {
-            var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || @event.SelectedValues.Length < this.maxAllowedAnswers;
+            var moreOptionCanBeSelected = !this.maxAllowedAnswers.HasValue || @event.SelectedValues.Length < this.maxAllowedAnswers;
 
             foreach (var option in this.Options)
             {
@@ -248,7 +251,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
-                    option.IsAllowCheck = isAllowCheckNewOptions;
+                    option.Enabled = moreOptionCanBeSelected;
                 }
             }
         }

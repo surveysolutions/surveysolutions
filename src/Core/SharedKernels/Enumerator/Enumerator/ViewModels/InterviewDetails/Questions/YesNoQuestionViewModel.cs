@@ -213,10 +213,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
+                if (selectedValuesWithJustChanged.Length == this.maxAllowedAnswers)
+                {
+                    this.Options.Where(o => !o.YesSelected).ForEach(o => o.Enabled = false);
+                }
+
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                var isAllowCheckNewOptions = !this.maxAllowedAnswers.HasValue || selectedValuesWithJustChanged.Count(o => o.Yes) < this.maxAllowedAnswers;
-                this.Options.Where(o => !o.YesSelected && o.IsAllowYesCheck != isAllowCheckNewOptions).ForEach(o => o.IsAllowYesCheck = isAllowCheckNewOptions);
             }
             catch (InterviewException ex)
             {
@@ -241,7 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Selected = null;
                     option.YesAnswerCheckedOrder = null;
-                    option.IsAllowYesCheck = true;
+                    option.Enabled = true;
                 }
             }
         }
@@ -284,14 +287,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         : (int?)null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;
                     option.Selected = answeredYesNoOption.Yes;
-                    option.IsAllowYesCheck = answeredYesNoOption.Yes || isAllowYesCheckNewOptions;
+                    option.Enabled = answeredYesNoOption.Yes || isAllowYesCheckNewOptions;
                 }
                 else
                 {
                     option.YesAnswerCheckedOrder = null;
                     option.AnswerCheckedOrder = null;
                     option.Selected = null;
-                    option.IsAllowYesCheck = isAllowYesCheckNewOptions;
+                    option.Enabled = isAllowYesCheckNewOptions;
                 }
             }
         }

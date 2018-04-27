@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private string title;
         private bool @checked;
-        private bool isAllowCheck = true;
+        private bool enabled = true;
         private int? checkedOrder;
 
         public MultiOptionQuestionOptionViewModelBase(IMultiOptionQuestionViewModelToggleable questionViewModel)
@@ -57,13 +57,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public bool IsAllowCheck
+        public bool Enabled
         {
-            get { return this.isAllowCheck; }
+            get => this.enabled;
             set
             {
-                if (this.isAllowCheck == value) return;
-                this.isAllowCheck = value; 
+                if (this.enabled == value) return;
+                this.enabled = value; 
                 this.RaisePropertyChanged();
             }
         }
