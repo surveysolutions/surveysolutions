@@ -522,7 +522,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private static Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<PreloadedFileInfo, string, IQuestionnaire, bool> hasError, string code, string message) => (file, columnName, questionnaire) =>
-            hasError(file, columnName?.ToLower(), questionnaire) ? new []{ToColumnError(code, message, file.FileName, columnName)} : Array.Empty<PanelImportVerificationError>();
+            hasError(file, columnName?.ToLower(), questionnaire) ? new []{ToColumnError(code, message, file.FileName, ToNewColumnFormat(columnName))} : Array.Empty<PanelImportVerificationError>();
         
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
