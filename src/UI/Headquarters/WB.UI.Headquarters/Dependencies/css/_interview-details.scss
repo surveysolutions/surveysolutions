@@ -73,7 +73,7 @@
 }
 .panel-details{
 	.panel-body{
-		padding-top: 0;
+		padding: 0 15px 10px 15px;
 	}
 	.aside-menu{
 		position: relative;
@@ -90,9 +90,7 @@
 		margin-bottom: 5px;
 	}
 	.about-questionnaire{
-		width: calc(100% - 445px);
-		float: left;
-		padding-right: 30px;
+		width: 100%;
 	}
 	h3{
 		margin-bottom: 5px;
@@ -105,7 +103,7 @@
 		}
 	}
 	.about-questionnaire-details ul{
-		padding-top: 15px;
+
 		margin-right: 20px;
 		margin-bottom: 0;
 		li{
@@ -116,21 +114,26 @@
 			.gray-action-unit{
 				margin-left: 10px;
 			}
+			span{
+				&:last-of-type{
+					padding-left: 5px;
+					.interviewer, .supervisor{
+						padding-left: 0;
+					}
+				}
+			}
 		}
 		.btn-link{
 			padding: 0;
 		}
 		&:last-of-type{
 			margin-right: 0;
-			li{
-				span:last-of-type{
-					padding-left: 5px;
-				}
-			}
+			
 		}
 	}
 	.main-info-column{
 		max-width: 375px;
+		padding-top: 15px;
 		font-family: "RobotoBold";
 		.questionnaire-title{
 			white-space: nowrap;
@@ -141,15 +144,16 @@
 	}
 	.table-info{
 		display: table;
+		border-spacing: 0 5px;
+		padding-top: 10px;
 		li{
 			display: table-row;
+			margin-bottom: 10px;
 			span{
 				display: table-cell;
 			}
-			&:nth-of-type(2n){
-				span{
-					padding-top: 5px;
-				}
+			&:last-child{
+				margin-bottom: 0;
 			}
 		}
 	}
@@ -175,6 +179,12 @@
 		}
 		.buttons-container{
 			display: inline-block;
+			.btn{
+				max-width: 145px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
 		}
 	}
 	.bootstrap-select.btn-group {
@@ -348,6 +358,27 @@
 		margin-bottom: 30px;
 	}
 }
+.panel-details{
+	&.contains-tranlation{
+		.about-questionnaire{
+			width: calc(100% - 200px);
+			padding-right: 20px;
+			float: left;
+		}
+	}
+	&.contains-action-buttons{
+		.about-questionnaire{
+			width: calc(100% - 355px);
+			float: left;
+			padding-right: 20px;
+		}
+	}
+	&.contains-tranlation.contains-action-buttons{
+		.about-questionnaire{
+			width: calc(100% - 555px);
+		}
+	}
+}
 
 @media only screen and (max-width: 1525px){
 	.web-interview-for-supervisor{
@@ -393,6 +424,20 @@
 		.details-interview{
 			&.questionnaire{
 				@include width-questionnaire(($filter-width + $content-width-small - 12px));
+			}
+		}
+	}
+	.panel-details{
+		&.contains-tranlation.contains-action-buttons{
+			.about-questionnaire{
+				width: 100%;
+				float: none;
+				padding-right: 0;
+			}
+			.questionnaire-details-actions{
+				width: 100%;
+				float: none;
+				padding-top: 10px;
 			}
 		}
 	}
@@ -490,8 +535,7 @@
 					}
 				}
 			}
-		}
-		
+		}	
 	}
 }
 @media (max-width: $screen-md-min){
@@ -577,19 +621,27 @@
 				}
 			}
 		}
-		.questionnaire-details-actions{
-			.buttons-container{
-				display: block;
-				margin-top: 15px;
-				&:only-child{
-					margin-top: 0;
-				}
+		
+	}
+	.panel-details{
+		.data-label{
+			text-align: left;
+		}
+		&.contains-tranlation, 
+		&.contains-action-buttons{
+			.about-questionnaire{
+				width: 100%;
+				padding-right: 0;
+				float: none;
 			}
-		} 
-	}
-	.panel-details .about-questionnaire {
-		width: calc(100% - 240px);
-	}
+			.questionnaire-details-actions{
+				float: none;
+				padding-top: 10px;
+			}
+		}
+		
+	} 
+
 }
 @media (max-width: $screen-sm-min){
 	.web-interview{
@@ -651,29 +703,28 @@
 			width: 100%;
 			float: none;
 			margin-bottom: 10px;
+			&:only-of-type{
+				margin-bottom: 0;
+			}
 		}
 		h2{
 			float: none;
-		}
-		.about-questionnaire-details{
-			float: none;
-			width: 100%;
-		}
-		.questionnaire-details-actions{
-			float: none;
-			margin-right: 0;
 		}
 		.aside-menu .dropdown-menu{
 			left: 35px;
 			right: auto;
 		}
 	}
-	.web-interview-for-supervisor{
-		.questionnaire-details-actions .buttons-container{
-			display: inline-block;
-			margin-top: 0;
+}
+@media only screen and (max-width: 600px){
+	.questionnaire-details-actions{
+		.buttons-container{
+			margin-top: 10px;
+			&:only-child{
+				margin-top: 0;
+			}
 		}
-	}
+	} 
 }
 @media (max-width: $screen-xs-min){
 	.web-interview.web-interview-for-supervisor {
@@ -696,10 +747,6 @@
 					padding-left: 0;
 				}
 			}
-		}
-		.questionnaire-details-actions .buttons-container{
-			display: block;
-			margin-top: 15px;
 		}
 	}
 	

@@ -256,14 +256,15 @@
         &.sorting_asc{
             color: $blue;
             &:after{
-                border-top-color: $blue;
+                border-top: none;
+                border-bottom: 10px solid $blue;
             }
         }
         &.sorting_desc{
             color: $blue;
             &:after{
-                border-top: none;
-                border-bottom: 10px solid $blue;
+                border-top-color: $blue;
+                
             }
         }
     }
@@ -739,4 +740,23 @@
 	.interviewer, .supervisor{
 		padding-left: 0;
 	}
+}
+.table.timestamps-table{
+    td{
+        vertical-align: top;
+        padding: 5px 10px 5px 0;
+        height: auto;
+        &:first-child{
+            width: 50px;
+        }
+    }
+    .app-oppened{
+        @include gradient-vertical($gray_form, $gray_form);
+        background-size: 250px 1px;
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        &:last-child{
+            background-image: none;
+        }
+    }
 }
