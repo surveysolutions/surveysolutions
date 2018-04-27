@@ -34,7 +34,6 @@
 	position: relative;
 	.field-to-fill{
 		@extend %field-to-fill;
-		display: block;
 	}
 	&.answered, &.has-error{
 		.btn-clear{
@@ -679,4 +678,10 @@ ul.dropdown-menu li, ul.dropdown-menu li *{
 		@include absolute(0, null, null, -10px);
 		font-size: 20px;
 	}
+}
+textarea.field-to-fill{
+	resize: none;
+	max-height: 500px;
+	display: block;
+	height: 40px;
 }
