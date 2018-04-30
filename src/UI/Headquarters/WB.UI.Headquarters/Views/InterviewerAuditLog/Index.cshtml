@@ -61,12 +61,15 @@
                 </div>
             </div>
         }
-
-        <div class="row">
-            <div class="col-sm-7 ">
-                <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId, startDateTime = Model.StartDateTime.AddDays(-7), endDateTime = Model.EndDateTime.AddDays(-7)})">@InterviewerAuditRecord.ShowPrevious7Days</a>
+        
+        @if (Model.StartDateTime.HasValue)
+        {
+            <div class="row">
+                <div class="col-sm-7 ">
+                    <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId, startDateTime = Model.StartDateTime.Value})">@InterviewerAuditRecord.ShowPrevious7Days</a>
+                </div>
             </div>
-        </div>
+        }
     </div>
 </main>
 

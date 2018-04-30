@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
         IEnumerable<AuditLogRecord> GetRecordsFor7Days(Guid responsibleId);
         IEnumerable<AuditLogRecord> GetRecords(Guid responsibleId);
         IEnumerable<AuditLogRecord> GetRecords(Guid responsibleId, DateTime startDateTime, DateTime endDateTime);
+        AuditLogResult GetLastExisted7DaysRecords(Guid responsibleId, DateTime dateTime);
     }
 }
