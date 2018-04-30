@@ -45,21 +45,19 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        public ActionResult Index(Guid id, DateTime? starDateTime, DateTime? endDateTime)
+        public ActionResult Index(Guid id, DateTime? starDateTime)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || !userView.IsInterviewer())
                 throw new InvalidOperationException($"Interviewer with id: {id} not fpund");
 
             if (!starDateTime.HasValue)
-                starDateTime = DateTime.UtcNow.Date.AddDays(-7);
-            if (!endDateTime.HasValue)
-                endDateTime = DateTime.UtcNow;
+                starDateTime = DateTime.UtcNow.AddDays(1);
 
-            var recordsFor7Days = auditLogFactory.GetRecords(id, starDateTime.Value, endDateTime.Value);
+            var records = auditLogFactory.GetLastExisted7DaysRecords(id, starDateTime.Value);
 
             var recordsByDate = new Dictionary<DateTime, List<AuditLogRecord>>();
-            foreach (var record in recordsFor7Days)
+            foreach (var record in records.Records)
             {
                 if (!recordsByDate.ContainsKey(record.Time.Date))
                     recordsByDate.Add(record.Time.Date, new List<AuditLogRecord>());
@@ -70,8 +68,7 @@ namespace WB.UI.Headquarters.Controllers
             var model = new InterviewerAuditLogModel();
             model.InterviewerName = userView.UserName;
             model.InterviewerId = userView.PublicKey;
-            model.StartDateTime = starDateTime.Value;
-            model.EndDateTime = endDateTime.Value;
+            model.StartDateTime = records.NextBatchRecordDate;
             model.RecordsByDate = recordsByDate.Select(kv => new InterviewerAuditLogDateRecordsModel()
             {
                 Date = kv.Key,
@@ -188,8 +185,7 @@ namespace WB.UI.Headquarters.Controllers
     {
         public string InterviewerName { get; set; }
         public Guid InterviewerId { get; set; }
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
+        public DateTime? StartDateTime { get; set; }
         public InterviewerAuditLogDateRecordsModel[] RecordsByDate { get; set; }
         public string InterviewerAppVersion { get; set; }
         public string DeviceId { get; set; }
