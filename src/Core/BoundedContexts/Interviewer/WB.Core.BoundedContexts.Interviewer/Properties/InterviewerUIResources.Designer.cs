@@ -1599,6 +1599,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Upload audit information.
+        /// </summary>
+        public static string Synchronization_UploadAuditLog {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadAuditLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preparing for synchronization.
         /// </summary>
         public static string Synchronization_UserAuthentication_Description {
