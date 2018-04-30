@@ -42,7 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var variableName = compositeColumnValues[0].ToLower();
                 var variableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName;
 
-                if (columnName == ServiceColumns.InterviewId)
+                if (columnName == ServiceColumns.InterviewId ||
+                    columnName == string.Format(ServiceColumns.IdSuffixFormat, variableName))
                 {
                     variableName = columnName;
                     variableOrCodeOrPropertyName = columnName;
