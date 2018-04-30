@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using CsvHelper;
 using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -26,13 +28,21 @@ namespace WB.UI.Headquarters.Controllers
     {
         private readonly IAuditLogFactory auditLogFactory;
         private readonly IUserViewFactory usersRepository;
+        private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
+        private readonly IInterviewerVersionReader interviewerVersionReader;
 
-        public InterviewerAuditLogController(ICommandService commandService, ILogger logger, 
+        public InterviewerAuditLogController(ICommandService commandService, 
+            ILogger logger, 
             IAuditLogFactory auditLogFactory,
-            IUserViewFactory usersRepository) : base(commandService, logger)
+            IUserViewFactory usersRepository,
+            IDeviceSyncInfoRepository deviceSyncInfoRepository,
+            IInterviewerVersionReader interviewerVersionReader) 
+            : base(commandService, logger)
         {
             this.auditLogFactory = auditLogFactory;
             this.usersRepository = usersRepository;
+            this.deviceSyncInfoRepository = deviceSyncInfoRepository;
+            this.interviewerVersionReader = interviewerVersionReader;
         }
 
         public ActionResult Index(Guid id, DateTime? starDateTime, DateTime? endDateTime)
@@ -72,6 +82,17 @@ namespace WB.UI.Headquarters.Controllers
                     Message = GetUserMessage(r)
                 }).ToArray()
             }).ToArray();
+
+            var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(id);
+            int? interviewerApkVersion = interviewerVersionReader.Version;
+            var hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
+                                         interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
+
+            model.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
+            model.DeviceId = lastSuccessDeviceInfo.DeviceId;
+            model.DeviceModel = lastSuccessDeviceInfo.DeviceModel;
+            model.HasUpdateForInterviewerApp = hasUpdateForInterviewerApp;
+
             return View(model);
         }
 
@@ -170,6 +191,10 @@ namespace WB.UI.Headquarters.Controllers
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public InterviewerAuditLogDateRecordsModel[] RecordsByDate { get; set; }
+        public string InterviewerAppVersion { get; set; }
+        public string DeviceId { get; set; }
+        public string DeviceModel { get; set; }
+        public bool HasUpdateForInterviewerApp { get; set; }
     }
 
     public class InterviewerAuditLogDateRecordsModel
