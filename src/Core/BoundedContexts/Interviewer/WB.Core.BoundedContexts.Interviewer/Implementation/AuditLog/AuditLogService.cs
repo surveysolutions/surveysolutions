@@ -18,18 +18,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
         private readonly IPlainStorage<InterviewerIdentity> userIdentity;
         private readonly IJsonAllTypesSerializer serializer;
+        private readonly ILogger logger;
 
         private const string AuditLogSettingsKey = "settings";
 
         public AuditLogService(IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             IPlainStorage<InterviewerIdentity> userIdentity,
-            IJsonAllTypesSerializer serializer)
+            IJsonAllTypesSerializer serializer,
+            ILogger logger)
         {
             this.auditLogStorage = auditLogStorage;
             this.auditLogSettingsStorage = auditLogSettingsStorage;
             this.userIdentity = userIdentity;
             this.serializer = serializer;
+            this.logger = logger;
         }
 
         public class AutoincrementKeyValue : IPlainStorageEntity<int?>
@@ -41,22 +44,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 
         public void Write(IAuditLogEntity entity)
         {
-            var interviewerIdentity = userIdentity.FirstOrDefault();
+            try
+            {
+                var interviewerIdentity = userIdentity.FirstOrDefault();
 
-            var auditLogEntityView = new AuditLogEntityView()
+                var auditLogEntityView = new AuditLogEntityView()
+                {
+                    ResponsibleId = interviewerIdentity?.UserId,
+                    ResponsibleName = interviewerIdentity?.Name,
+                    Time = DateTime.Now,
+                    TimeUtc = DateTime.UtcNow,
+                    Type = entity.Type,
+                    Payload = entity,
+                };
+                var json = serializer.Serialize(auditLogEntityView);
+                auditLogStorage.Store(new AutoincrementKeyValue()
+                {
+                    Json = json
+                });
+            }
+            catch (Exception e)
             {
-                ResponsibleId = interviewerIdentity?.UserId,
-                ResponsibleName = interviewerIdentity?.Name,
-                Time = DateTime.Now,
-                TimeUtc = DateTime.UtcNow,
-                Type = entity.Type,
-                Payload = entity,
-            };
-            var json = serializer.Serialize(auditLogEntityView);
-            auditLogStorage.Store(new AutoincrementKeyValue()
-            {
-                Json = json
-            });
+                logger.Error("Error write to interviewer audit log", e);
+            }
         }
 
         public void UpdateLastSyncIndex(int id)
