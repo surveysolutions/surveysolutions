@@ -97,6 +97,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detailed action log.
+        /// </summary>
+        public static string DetailedActionLog {
+            get {
+                return ResourceManager.GetString("DetailedActionLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download complete log in CSV format.
+        /// </summary>
+        public static string DownloadCsvLog {
+            get {
+                return ResourceManager.GetString("DownloadCsvLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User {0} logined in application.
         /// </summary>
         public static string Login {

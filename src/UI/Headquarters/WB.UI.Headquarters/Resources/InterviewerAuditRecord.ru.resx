@@ -117,56 +117,62 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-    <data name="CloseInterview" xml:space="preserve">
+  <data name="CloseInterview" xml:space="preserve">
     <value>Интервью {0} закрыто</value>
     <comment>Интервью {0} закрыто</comment>
   </data>
-    <data name="CompleteInterview" xml:space="preserve">
+  <data name="CompleteInterview" xml:space="preserve">
     <value>Интервью {0} завершено</value>
     <comment>Интервью {0} завершено</comment>
   </data>
-    <data name="CreateInterviewFromAssignment" xml:space="preserve">
+  <data name="CreateInterviewFromAssignment" xml:space="preserve">
     <value>Интервью {0} создано для задания {1}</value>
     <comment>Интервью {0} создано для задания {1}</comment>
   </data>
-    <data name="DeleteInterview" xml:space="preserve">
+  <data name="DeleteInterview" xml:space="preserve">
     <value>Интервью {0} удалено</value>
     <comment>Интервью {0} удалено</comment>
   </data>
-    <data name="OpenInterview" xml:space="preserve">
+  <data name="OpenInterview" xml:space="preserve">
     <value>Интервью {0} открыто</value>
     <comment>Интервью {0} открыто</comment>
   </data>
-    <data name="Login" xml:space="preserve">
+  <data name="Login" xml:space="preserve">
     <value>Пользователь  {0} залогинен в приложение</value>
     <comment>Юзер {0} залогинен в приложение</comment>
   </data>
-    <data name="Logout" xml:space="preserve">
+  <data name="Logout" xml:space="preserve">
     <value>Пользователь {0} вылогинелся из приложения</value>
     <comment>Пользователь {0} вылогинелся из приложения</comment>
   </data>
-    <data name="OpenApplication" xml:space="preserve">
+  <data name="OpenApplication" xml:space="preserve">
     <value>Приложение открыто</value>
     <comment>Приложение открыто</comment>
   </data>
-    <data name="Relink" xml:space="preserve">
+  <data name="Relink" xml:space="preserve">
     <value>Юзер привязал новый планшет</value>
     <comment>Юзер привязал новый планшет</comment>
   </data>
-    <data name="ShowPrevious7Days" xml:space="preserve">
+  <data name="ShowPrevious7Days" xml:space="preserve">
     <value>Показать преведущие 7 дней</value>
     <comment>Показать преведущие 7 дней</comment>
   </data>
-    <data name="SynchronizationStarted" xml:space="preserve">
+  <data name="SynchronizationStarted" xml:space="preserve">
     <value>Синхронизация начата</value>
     <comment>Синхронизация начата</comment>
   </data>
-    <data name="SynchronizationCompleted" xml:space="preserve">
+  <data name="SynchronizationCompleted" xml:space="preserve">
     <value>Синхронизация завершена</value>
     <comment>Синхронизация завершена</comment>
   </data>
-    <data name="SynchronizationCanceled" xml:space="preserve">
+  <data name="SynchronizationCanceled" xml:space="preserve">
     <value>Синхронизация отменена</value>
     <comment>Синхронизация отменена</comment>
+  </data>
+  <data name="DetailedActionLog" xml:space="preserve">
+    <value>Детальный лог действий</value>
+  </data>
+  <data name="DownloadCsvLog" xml:space="preserve">
+    <value>Загрузить полный лог в CSV формате</value>
   </data>
 </root>

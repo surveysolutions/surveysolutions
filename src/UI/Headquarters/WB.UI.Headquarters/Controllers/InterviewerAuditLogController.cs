@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using CsvHelper;
+using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
@@ -70,6 +73,48 @@ namespace WB.UI.Headquarters.Controllers
                 }).ToArray()
             }).ToArray();
             return View(model);
+        }
+
+        public FileResult DownloadCsvLog(Guid id)
+        {
+            var userView = usersRepository.GetUser(new UserViewInputModel(id));
+            if (userView == null || !userView.IsInterviewer())
+                throw new InvalidOperationException($"Interviewer with id: {id} not fpund");
+
+            var records = auditLogFactory.GetRecords(id);
+
+            var csvConfiguration = new Configuration
+            {
+                HasHeaderRecord = true,
+                TrimOptions = TrimOptions.Trim,
+                IgnoreQuotes = false,
+                Delimiter = "\t",
+                MissingFieldFound = null,
+            };
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                using (StreamWriter streamWriter = new StreamWriter(memoryStream))
+                using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
+                {
+                    csvWriter.WriteField("Time");
+                    csvWriter.WriteField("Message");
+                    csvWriter.NextRecord();
+
+                    foreach (var record in records)
+                    {
+                        csvWriter.WriteField(record.Time);
+                        csvWriter.WriteField(GetUserMessage(record));
+                        csvWriter.NextRecord();
+                    }
+
+                    csvWriter.Flush();
+                    streamWriter.Flush();
+
+                    var fileContent = memoryStream.ToArray();
+                    return File(fileContent, "text/csv", $"actions_log_{userView.UserName}.csv");
+                }
+            }
         }
 
         private string GetUserMessage(AuditLogRecord record)
