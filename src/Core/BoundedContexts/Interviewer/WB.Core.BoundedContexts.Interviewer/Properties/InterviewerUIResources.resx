@@ -655,6 +655,9 @@ for further instructions</value>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
   </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Upload audit information</value>
+  </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Create new interview using templates</value>
   </data>

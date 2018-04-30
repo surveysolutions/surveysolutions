@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_DownloadingLogo
+                Title = InterviewerUIResources.Synchronization_UploadAuditLog
             });
 
             var auditLogEntities = auditLogService.GetAuditLogEntitiesForSync();
