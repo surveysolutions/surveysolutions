@@ -2006,5 +2006,22 @@ namespace WB.Tests.Abc.TestFactories
             Value = answer.HasValue ? answer.ToString() : value,
             Answer = answer
         };
+
+        public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName, int row, string interviewId,
+            params AssignmentRosterInstanceCode[] rosterInstanceCodes) => new PreloadingAssignmentRow
+        {
+            FileName = fileName,
+            Row = row,
+            InterviewIdValue = Create.Entity.AssignmentInterviewId(interviewId),
+            RosterInstanceCodes = rosterInstanceCodes
+        };
+
+        public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string column, int code) =>
+            new AssignmentRosterInstanceCode
+            {
+                Column = column,
+                Code = code,
+                Value = code.ToString()
+            };
     }
 }

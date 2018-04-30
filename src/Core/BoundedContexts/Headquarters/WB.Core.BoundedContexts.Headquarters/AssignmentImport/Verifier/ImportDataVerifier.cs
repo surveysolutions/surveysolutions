@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -169,7 +170,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> RosterVerifiers => new[]
         {
-            Error(OrphanRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
+            Error(OrphanNestedRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication)
         };
 
@@ -209,14 +210,66 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
         };
 
-        private (PreloadingAssignmentRow row, AssignmentValue cell)[] OrphanRoster(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
+        private IEnumerable<InterviewImportReference> OrphanNestedRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
+            IQuestionnaire questionnaire)
         {
-            return Array.Empty<(PreloadingAssignmentRow row, AssignmentValue cell)>();
+            foreach (var rowsByInterview in allRowsByAllFiles.GroupBy(x => x.InterviewIdValue.Value))
+            {
+                var rowsByRosterInstances = rowsByInterview
+                    .Select(x => new
+                    {
+                        rosterVector = new RosterVector(x.RosterInstanceCodes.Select(y => y.Code.Value)),
+                        row = x
+                    }).Where(x => x.rosterVector != RosterVector.Empty).GroupBy(x => x.rosterVector);
+
+                var allRosterVectorsInInterview = rowsByRosterInstances.Select(x => x.Key).ToArray();
+
+                foreach (var rowsByRosterInstance in rowsByRosterInstances)
+                {
+                    /*for nested rosters only, because first level roster has parent with empty roster vector*/
+                    if (rowsByRosterInstance.Key.Length == 1) continue;
+
+                    var parentRosterVactor = new RosterVector(rowsByRosterInstance.Key.Shrink());
+
+                    if (!allRosterVectorsInInterview.Contains(parentRosterVactor))
+                    {
+                        foreach (var groupedRow in rowsByRosterInstance)
+                        {
+                            var rosterInstanceColumns = string.Join(", ", groupedRow.row.RosterInstanceCodes.Shrink().Select(x => x.Column));
+
+                            yield return new InterviewImportReference(rosterInstanceColumns,
+                                groupedRow.row.Row, PreloadedDataVerificationReferenceType.Cell,
+                                string.Join(", ", parentRosterVactor.Select(x => x.ToString())),
+                                groupedRow.row.FileName);
+                        }
+                    }
+                }
+            }
         }
 
-        private (PreloadingAssignmentRow row, AssignmentValue cell)[] DuplicatedRosterInstances(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
+        private IEnumerable<InterviewImportReference> DuplicatedRosterInstances(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
-            return Array.Empty<(PreloadingAssignmentRow row, AssignmentValue cell)>();
+            foreach (var rowsByFile in allRowsByAllFiles.Where(x => x.RosterInstanceCodes.Length > 0).GroupBy(x => x.FileName))
+            {
+                var answersByRosterInstances = rowsByFile
+                    .Select(x => new {interviewid = x.InterviewIdValue.Value, rosterInstanceId = new RosterVector(x.RosterInstanceCodes.Select(y => y.Code.Value)), row = x})
+                    .GroupBy(x => new {x.interviewid, x.rosterInstanceId})
+                    .Where(x => x.Count() > 1);
+
+                foreach (var answersByRosterInstance in answersByRosterInstances)
+                {
+                    var rosterInstanceColumns = string.Join(", ",
+                        answersByRosterInstance.First().row.RosterInstanceCodes.Select(x => x.Column));
+
+                    foreach (var duplicatedRosterInstanceRow in answersByRosterInstance)
+                    {
+                        yield return new InterviewImportReference(rosterInstanceColumns,
+                            duplicatedRosterInstanceRow.row.Row, PreloadedDataVerificationReferenceType.Cell,
+                            string.Join(", ", answersByRosterInstance.Key.rosterInstanceId.Select(x => x.ToString())),
+                            rowsByFile.Key);
+                    }
+                }
+            }
         }
 
         private bool NoInterviewId(AssignmentInterviewId answer)
@@ -512,12 +565,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             hasError(file, questionnaire) ? new[]{ToFileError(code, message, file, originalFileName) } : Array.Empty<PanelImportVerificationError>();
 
         private static Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
-            Func<List<PreloadingAssignmentRow>, IQuestionnaire, (PreloadingAssignmentRow row, AssignmentValue cell)[]> getRowsWithErrors,
+            Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<InterviewImportReference>> getRowsWithErrors,
             string code, string message)
             => (allRowsByAllFiles, questionnaire) =>
             {
-                var rowsWithErrors = getRowsWithErrors(allRowsByAllFiles, questionnaire);
-                return rowsWithErrors.Any() ? new []{ToCellsError(code, message, rowsWithErrors)} : Array.Empty<PanelImportVerificationError>();
+                var rowsWithErrors = getRowsWithErrors(allRowsByAllFiles, questionnaire).ToArray();
+                return rowsWithErrors.Any() ? new []{ new PanelImportVerificationError(code, message, rowsWithErrors)} : Array.Empty<PanelImportVerificationError>();
             };
 
         private static Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
@@ -605,9 +658,5 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 ? columnName
                 : $"{compositeColumnValues[0]}[{compositeColumnValues[1]}]";
         }
-
-        private static PanelImportVerificationError ToCellsError(string code, string message, (PreloadingAssignmentRow row, AssignmentValue cell)[] errors)
-            => new PanelImportVerificationError(code, message, errors.Select(x=> new InterviewImportReference(x.cell.Column, x.row.Row, PreloadedDataVerificationReferenceType.Cell,
-                x.cell.Value, x.row.FileName)).ToArray());
     }
 }
