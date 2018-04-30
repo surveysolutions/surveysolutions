@@ -6734,7 +6734,7 @@ a.disabled {
   background: url("../img/language.png") 0 15px no-repeat;
   padding-left: 40px;
   max-width: 300px;
-  min-width: 130px; }
+  min-width: 120px; }
   .language > a {
     white-space: nowrap;
     overflow: hidden;
@@ -7118,8 +7118,6 @@ a.disabled {
 
 .field {
   position: relative; }
-  .field .field-to-fill {
-    display: block; }
 
 ::-webkit-input-placeholder {
   font-weight: normal !important;
@@ -7745,6 +7743,12 @@ ul.dropdown-menu li, ul.dropdown-menu li * {
     top: 0;
     left: -10px;
     font-size: 20px; }
+
+textarea.field-to-fill {
+  resize: none;
+  max-height: 500px;
+  display: block;
+  height: 40px; }
 
 .aside-menu {
   position: absolute;
@@ -8504,12 +8508,12 @@ body > .ui-pnotify {
   .table-ordered thead tr th.sorting_asc {
     color: #2a81cb; }
     .table-ordered thead tr th.sorting_asc:after {
-      border-top-color: #2a81cb; }
+      border-top: none;
+      border-bottom: 10px solid #2a81cb; }
   .table-ordered thead tr th.sorting_desc {
     color: #2a81cb; }
     .table-ordered thead tr th.sorting_desc:after {
-      border-top: none;
-      border-bottom: 10px solid #2a81cb; }
+      border-top-color: #2a81cb; }
 
 .table-ordered thead th.padding-left-slide:first-child {
   padding-left: 365px; }
@@ -8819,6 +8823,24 @@ body > .ui-pnotify {
 .table .interviewer, .table .supervisor {
   padding-left: 0; }
 
+.table.timestamps-table td {
+  vertical-align: top;
+  padding: 5px 10px 5px 0;
+  height: auto; }
+  .table.timestamps-table td:first-child {
+    width: 70px; }
+
+.table.timestamps-table .app-oppened {
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#dbdfe2), to(#dbdfe2));
+  background-image: linear-gradient(to bottom, #dbdfe2 0%, #dbdfe2 100%);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFDBDFE2', endColorstr='#FFDBDFE2', GradientType=0);
+  background-size: 250px 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%; }
+  .table.timestamps-table .app-oppened:last-child {
+    background-image: none; }
+
 @font-face {
   font-family: "RobotoRegular";
   src: url("../fonts/RobotoRegular.woff2") format("woff2"), url("../fonts/RobotoRegular.woff") format("woff"), url("../fonts/RobotoRegular.ttf") format("truetype"), url("../fonts/RobotoRegular.svg#RobotoRegular") format("svg"); }
@@ -8917,6 +8939,9 @@ html {
 main .container {
   margin-left: 0;
   margin-right: 0; }
+  main .container.center-block {
+    margin-left: auto;
+    margin-right: auto; }
 
 h1 {
   font: 26px/28px "RobotoLight";

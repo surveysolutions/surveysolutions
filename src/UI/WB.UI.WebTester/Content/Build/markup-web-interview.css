@@ -597,8 +597,7 @@ span.image-zoom-box, span.image-option {
   .question-editor .block-with-data .btn-link {
     padding-left: 0; }
   .question-editor.answered .question-unit .options-group {
-    background-color: transparent;
-    font-size: 0; }
+    background-color: transparent; }
   .question-editor.has-error .question-unit .options-group {
     background-color: #f6d6d0; }
     .question-editor.has-error .question-unit .options-group .form-group {
@@ -1096,6 +1095,13 @@ span.image-zoom-box, span.image-option {
 @media only screen and (max-width: 425px) {
   .web-interview .audio-question .volume-message {
     font-size: 10px; } }
+
+.web-interview.center-block .question-editor {
+  margin: 0 auto;
+  max-width: 550px; }
+
+.web-interview.center-block .action-container, .web-interview.center-block .wrapper-info {
+  margin: 0 auto; }
 
 html body.dynamic-content {
   height: 100%; }
