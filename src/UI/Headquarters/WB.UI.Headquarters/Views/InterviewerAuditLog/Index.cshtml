@@ -18,8 +18,21 @@
                     @InterviewerAuditRecord.DetailedActionLog (@Model.InterviewerName)
                 </h1>
                 <ul class="list-unstyled">
-                    <li><b>GalaxyTab 8 (id 8acae1958fabd2f0)</b></li>
-                    <li><b>Interviewer App version: 13.7 	&mdash; <span class="success-text">Up to date</span></b></li>
+                    <li><b>@Model.DeviceModel (id @Model.DeviceId)</b></li>
+                    <li>
+                        <b>
+                            @Pages.InterviewerProfile_InterviewerAppVersion: @Model.InterviewerAppVersion &mdash; 
+                            
+                            @if (!Model.HasUpdateForInterviewerApp)
+                            {
+                                <span class="success-text">@Pages.InterviewerProfile_InterviewerUpToDate</span>
+                            }
+                            else
+                            {
+                                <span class="error-text">@Pages.InterviewerProfile_InterviewerCanBeUpdated</span>
+                            }
+                        </b>
+                    </li>
                 </ul>
             </div>
         </div>
