@@ -1,8 +1,4 @@
 .filters{
-    @include transition(width, 0.5s);    
-    @include transition(left, 0.3s);    
-}
-.filters{
 	@extend %aside;
 	width: $filter-width;
 	border-right: 3px solid $gray-super-light;
@@ -27,7 +23,6 @@
 	}
 	input.checkbox-filter{
 		& ~ label{
-	  		padding-left: 30px;
 			font-weight: normal;
 			color: $gray_light;
 			&:hover, &:focus{
@@ -69,14 +64,12 @@
 		margin-bottom: 5px;
 		label{
 			@include font(14px, 20px);
-			font-family: inherit;
 			margin: 0;
 		}
 		&:last-of-type{
 			margin-bottom: 0;
 		}
 	}
-
 }
 .form-date{
 	margin-bottom: 15px;
