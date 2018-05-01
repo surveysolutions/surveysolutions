@@ -1323,7 +1323,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
-        public void AnswerAreaQuestion(AnswerAreaQuestionCommand command)
+        public void AnswerAreaQuestion(AnswerGeographyQuestionCommand command)
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
