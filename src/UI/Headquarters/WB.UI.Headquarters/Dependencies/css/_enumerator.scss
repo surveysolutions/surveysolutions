@@ -26,7 +26,7 @@
         .description{
             padding-top: 7px;
             text-transform: uppercase;
-            font: 10px/12px "RobotoMedium";
+            font: 10px/12px $roboto_medium;
             width: 100px;
         }
         &:hover, &:focus, &:active, &:active:focus{
@@ -128,7 +128,7 @@
     .day{
         display: block;
         @include absolute(null, null, -15px, 0px);
-        font: 12px/14px "TrebuchetMS";
+        font: 12px/14px $trebuchet;
         text-transform: uppercase;
     }
     &:before{
@@ -237,7 +237,7 @@
 }
 .graphic-explanation{
     width: 300px;
-    font: 12px/14px "TrebuchetMSBold";
+    font: 12px/14px $trebuchet_bold;
     .recent-activity {
          align-items: flex-start;
          margin-left: 20px;

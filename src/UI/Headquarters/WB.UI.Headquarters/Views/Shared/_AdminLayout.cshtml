@@ -34,10 +34,12 @@
     <link rel="stylesheet" async href="@Url.Content("~/Dependencies/build/markup.css")">
     <!-- endinject -->
     @RenderSection("styles", false)
+    @if (!(ViewBag.ExcludeMarkupSpecific == true))
+    {
     <!-- css_markupSpecific:css -->
-    <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-specific.css")' >
+    <link rel='stylesheet' async href='@Url.Content("~/Dependencies/build/markup-specific.css")'>
     <!-- endinject -->
-    
+    }   
     @RenderSection(@"JsLibsHeader", false)
     
     @Html.Partial("GlobalSettings")
