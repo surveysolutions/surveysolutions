@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (answerArea != null)
                 {
-                    var command = new AnswerAreaQuestionCommand(
+                    var command = new AnswerGeographyQuestionCommand(
                         interviewId: Guid.Parse(this.interviewId),
                         userId: this.userId,
                         questionId: this.questionIdentity.Id,
