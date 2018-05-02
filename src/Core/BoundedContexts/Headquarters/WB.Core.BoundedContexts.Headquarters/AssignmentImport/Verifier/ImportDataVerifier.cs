@@ -186,7 +186,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_NoParsed, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentRosterInstanceCode>(RosterInstanceCode_InvalidCode, "PL0009", messages.PL0009_RosterIdIsInconsistantWithRosterSizeQuestion),
             Error<AssignmentTextAnswer>(Text_HasInvalidMask, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
-            Error<AssignmentIntegerAnswer>(CategoricalSingle_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
+            Error<AssignmentCategoricalSingleAnswer>(CategoricalSingle_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Errorq<AssignmentMultiAnswer>(CategoricalMulti_OptionCode_NotParsed, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
             Error<AssignmentDateTimeAnswer>(DateTime_NotParsed, "PL0016", messages.PL0016_ExpectedDateTimeNotParsed),
             Errors<AssignmentGpsAnswer>(Gps_NotParsed, "PL0017", messages.PL0017_ExpectedGpsNotParsed),
@@ -377,18 +377,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Code.HasValue;
 
-        private bool CategoricalSingle_OptionNotFound(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)
-        {
-            if (!answer.Answer.HasValue) return false;
-
-            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
-            if (!questionId.HasValue) return false;
-
-            if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.SingleOption) return false;
-
-            return questionnaire.GetQuestionByVariable(answer.VariableName)?.Answers
-                ?.All(x => x.AnswerValue != answer.Value) ?? false;
-        }
+        private bool CategoricalSingle_OptionNotFound(AssignmentCategoricalSingleAnswer answer, IQuestionnaire questionnaire)
+            => !string.IsNullOrWhiteSpace(answer.Value) &&
+               (!answer.OptionCode.HasValue || (questionnaire.GetQuestionByVariable(answer.VariableName)?.Answers
+                                                ?.All(x => x.AnswerValue != answer.Value) ?? false));
 
         private bool Text_HasInvalidMask(AssignmentTextAnswer answer, IQuestionnaire questionnaire)
         {
@@ -579,11 +571,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
-            cell is TValue && hasError((TValue)cell) ? new []{ToCellError(code, message, row, (TValue)cell) } : Array.Empty<PanelImportVerificationError>();
+            cell is TValue typedCell && hasError(typedCell) ? new []{ToCellError(code, message, row, typedCell) } : Array.Empty<PanelImportVerificationError>();
 
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error<TValue>(
             Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentValue => (row, cell, questionnaire) =>
-            cell is TValue && hasError((TValue)cell, questionnaire) ? new []{ToCellError(code, message, row, (TValue)cell) } : Array.Empty<PanelImportVerificationError>();
+            cell is TValue typedCell && hasError(typedCell, questionnaire) ? new []{ToCellError(code, message, row, typedCell) } : Array.Empty<PanelImportVerificationError>();
 
         private static Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>
             Errors<TValue>(Func<TValue, IQuestionnaire, bool> hasError, string code, string message) where TValue : AssignmentAnswers

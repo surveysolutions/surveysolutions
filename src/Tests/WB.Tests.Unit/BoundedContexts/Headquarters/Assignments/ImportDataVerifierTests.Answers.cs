@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.SingleOptionQuestion(variable: variableName, answerCodes: new[] {1m, 2m})));
 
-            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentIntegerAnswer(variableName, answer) });
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentCategoricalSingleAnswer(variableName, answer) });
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
@@ -132,6 +132,31 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0014"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(answer.ToString()));
+            Assert.That(errors[0].References.First().Column, Is.EqualTo(variableName));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_answers_and_categorical_single_question_with_comma_in_option_code_should_return_PL0014_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "categorical";
+            string answer = "999,99";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.SingleOptionQuestion(variable: variableName, answerCodes: new[] { 1m, 2m })));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentCategoricalSingleAnswer(variableName, value: answer) });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0014"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(answer));
             Assert.That(errors[0].References.First().Column, Is.EqualTo(variableName));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
         }
