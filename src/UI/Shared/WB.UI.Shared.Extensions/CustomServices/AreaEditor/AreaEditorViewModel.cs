@@ -334,10 +334,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     }
                     catch
                     {
-                        /*Console.WriteLine("LOG MESSAGE EXCEPTION");
-                        Console.WriteLine(e);
-                        Console.WriteLine(geometry.ToJson());*/
-                        throw;
                     }
 
                     this.CanUndo =
