@@ -181,6 +181,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 switch (answerType)
                 {
                     case AnswerType.OptionCode:
+                        return ToAssignmentCategoricalSingleAnswer(answer);
                     case AnswerType.Integer:
                         return ToAssignmentIntegerAnswer(answer);
                     case AnswerType.Decimal:
@@ -248,6 +249,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 VariableName = answer.VariableOrCodeOrPropertyName,
                 Column = answer.Column,
                 Value = answer.Value,
+            };
+        }
+
+        private static AssignmentAnswer ToAssignmentCategoricalSingleAnswer(PreloadingValue answer)
+        {
+            var integerAnswer = (AssignmentIntegerAnswer)ToAssignmentIntegerAnswer(answer);
+
+            return new AssignmentCategoricalSingleAnswer
+            {
+                VariableName = integerAnswer.VariableName,
+                Value = integerAnswer.Value,
+                Column = integerAnswer.Column,
+                OptionCode = integerAnswer.Answer
             };
         }
 

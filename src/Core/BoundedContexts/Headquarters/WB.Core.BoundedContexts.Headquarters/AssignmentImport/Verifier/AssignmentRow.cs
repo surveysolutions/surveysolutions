@@ -33,6 +33,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     {
         public int? Answer { get; set; }
     }
+
+    public class AssignmentCategoricalSingleAnswer : AssignmentAnswer
+    {
+        public int? OptionCode { get; set; }
+    }
     public class AssignmentDateTimeAnswer : AssignmentAnswer
     {
         public DateTime? Answer { get; set; }

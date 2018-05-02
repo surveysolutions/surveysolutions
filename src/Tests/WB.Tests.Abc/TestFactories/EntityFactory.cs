@@ -1968,6 +1968,15 @@ namespace WB.Tests.Abc.TestFactories
             Answer = answer
         };
 
+        public AssignmentCategoricalSingleAnswer AssignmentCategoricalSingleAnswer(string
+            column, int? answer = null, string value = null) => new AssignmentCategoricalSingleAnswer
+            {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            OptionCode = answer
+        };
+
         public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string
             column, int? answer = null, string value = null, string variable = null) => new AssignmentRosterInstanceCode
             {
