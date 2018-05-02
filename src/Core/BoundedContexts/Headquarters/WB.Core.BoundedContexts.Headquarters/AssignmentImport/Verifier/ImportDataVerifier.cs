@@ -135,24 +135,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             foreach (var file in files)
             {
-                foreach (var duplicatedColumn in file.Columns.GroupBy(x => x.ToLower()).Where(x => x.Count() > 1))
-                {
-                    yield return ToColumnError("PL0031", messages.PL0031_ColumnNameDuplicatesFound,
-                        file.FileName, duplicatedColumn.Key);
-                }
-
                 foreach (var columnName in file.Columns)
                 foreach (var error in this.ColumnVerifiers.SelectMany(x => x.Invoke(file, columnName, questionnaire)))
                     if (error != null) yield return error;
 
                 var columnNames = file.Columns.Select(x => x.ToLower());
-
-                foreach (var rosterColumnNames in this.GetRosterInstanceIdColumns(file, questionnaire))
-                {
-                    if (!columnNames.Any(columnName => rosterColumnNames.oldName == columnName || rosterColumnNames.newName == columnName))
-                        yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, rosterColumnNames.newName);
-                }
-
                 var isQuestionnaireFile = IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire);
                 var hasRosterFiles = files.Any(x => x.QuestionnaireOrRosterName != file.QuestionnaireOrRosterName);
 
@@ -165,7 +152,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => new[]
         {
-            Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster)
+            Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster),
+            Errors(MissingRosterInstanceColumns, "PL0007", messages.PL0007_ServiceColumnIsAbsent),
+            Errors(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
+            Errors(DuplicatedColumns, "PL0031", messages.PL0030_GpsFieldsRequired),
         };
 
         private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> RosterVerifiers => new[]
@@ -177,8 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> ColumnVerifiers => new[]
         {
             Error(UnknownColumn, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
-            Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed),
-            Error(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired)
+            Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed)
         };
 
         private IEnumerable<Func<PreloadingAssignmentRow, BaseAssignmentValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> AnswerVerifiers => new[]
@@ -314,24 +303,50 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return true;
         }
 
-        private bool OptionalGpsPropertyAndMissingLatitudeAndLongitude(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
+        private IEnumerable<string> MissingRosterInstanceColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {
-            var compositeColumnValues = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
-                StringSplitOptions.RemoveEmptyEntries);
+            if (file.Columns == null) yield break;
 
-            if (compositeColumnValues.Length < 2) return false;
+            var columnNames = file.Columns.Select(x => x.ToLower());
 
-            var questionVariableName = compositeColumnValues[0].ToLower();
+            foreach (var rosterColumnNames in this.GetRosterInstanceIdColumns(file, questionnaire))
+            {
+                if (!columnNames.Any(columnName => rosterColumnNames.oldName == columnName || rosterColumnNames.newName == columnName))
+                    yield return rosterColumnNames.newName;
+            }
+        }
 
-            var questionId = questionnaire.GetQuestionIdByVariable(questionVariableName);
-            if (!questionId.HasValue) return false;
+        private IEnumerable<string> DuplicatedColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        {
+            if (file.Columns == null) yield break;
+            foreach (var duplicatedColumn in file.Columns.GroupBy(x => x.ToLower()).Where(x => x.Count() > 1))
+                yield return duplicatedColumn.Key;
+        }
 
-            if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.GpsCoordinates) return false;
+        private IEnumerable<string> OptionalGpsPropertyAndMissingLatitudeAndLongitude(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        {
+            if(file.Columns == null) yield break;
 
-            var lowercaseColumnNames = file.Columns.Select(x => x.ToLower());
+            var allVariableNames = file.Columns
+                .Select(x => x.ToLower().Split(new[] {ServiceColumns.ColumnDelimiter}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .Distinct()
+                .ToArray();
 
-            return !lowercaseColumnNames.Contains($"{questionVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") || 
-                   !lowercaseColumnNames.Contains($"{questionVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}");
+            var allGpsVariableNames = allVariableNames
+                .Select(questionnaire.GetQuestionIdByVariable)
+                .Where(x => x.HasValue)
+                .Select(x=>x.Value)
+                .Where(x => questionnaire.GetQuestionType(x) == QuestionType.GpsCoordinates)
+                .Select(questionnaire.GetQuestionVariableName)
+                .ToArray();
+
+            foreach (var gpsVariableName in allGpsVariableNames)
+            {
+                if (!allVariableNames.Contains($"{gpsVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") ||
+                    !allVariableNames.Contains($"{gpsVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}"))
+                    yield return gpsVariableName;
+            }
         }
         
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
@@ -555,6 +570,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private static Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message) => (originalFileName, file, questionnaire) =>
             hasError(file, questionnaire) ? new[]{ToFileError(code, message, file, originalFileName) } : Array.Empty<PanelImportVerificationError>();
+
+        private static Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Errors(
+            Func<PreloadedFileInfo, IQuestionnaire, IEnumerable<string>> getColumnsWithErrors, string code, string message) => (originalFileName, file, questionnaire) =>
+            getColumnsWithErrors(file, questionnaire).Select(x=> ToColumnError(code, message, file.FileName, ToNewColumnFormat(x)));
 
         private static Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
             Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<InterviewImportReference>> getRowsWithErrors,

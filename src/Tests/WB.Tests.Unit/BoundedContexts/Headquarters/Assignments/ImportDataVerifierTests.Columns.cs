@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] {preloadedFile}, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] {preloadedFile}, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { preloadedFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -78,7 +78,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -102,12 +102,36 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { preloadedFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { preloadedFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0030"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[altitude]"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
+        }
+
+        [Test]
+        public void when_verify_columns_and_have_gps_altitude_and_latitude_should_return_PL0030_error()
+        {
+            // arrange
+            var variable = "gps";
+            var gpsAltitudeColumn = $"{variable}__altitude";
+            var gpsLatitudeColumn = $"{variable}__latitude";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.GpsCoordinateQuestion(variable: variable)}));
+
+            var preloadedFile = Create.Entity.PreloadedFileInfo(new[] { gpsAltitudeColumn, gpsLatitudeColumn });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles("original.zip", new[] { preloadedFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0030"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
         }
 
         [Test]
@@ -138,12 +162,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0030"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[altitude]"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
         }
 
@@ -353,7 +377,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -399,7 +423,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
@@ -431,7 +455,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             // act
-            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+            var errors = verifier.VerifyFiles("original.zip", new[] { mainFile, rosterFile }, questionnaire).ToArray();
 
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
