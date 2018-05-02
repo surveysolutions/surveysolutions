@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -160,7 +161,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = model.Title,
                 Selected = isSelected,
                 YesAnswerCheckedOrder = yesAnswerCheckedOrder,
-                AnswerCheckedOrder = answerCheckedOrder
+                AnswerCheckedOrder = answerCheckedOrder,
+                YesCanBeChecked = !maxAllowedAnswers.HasValue || checkedYesNoAnswerOptions.Count(x => x.Yes) < maxAllowedAnswers
             };
 
             return optionViewModel;
@@ -222,11 +224,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                if (selectedValuesWithJustChanged.Length == this.maxAllowedAnswers)
-                {
-                    this.Options.Where(o => !o.YesSelected).ForEach(o => o.YesCanBeChecked = false);
-                }
-
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
             }
@@ -249,7 +246,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector)))
             {
-                if (this.areAnswersOrdered)
+                if (this.areAnswersOrdered || this.maxAllowedAnswers.HasValue)
                 {
                     foreach (var option in this.Options.ToList())
                     {
@@ -315,6 +312,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.Selected = null;
                     option.YesCanBeChecked = maxAnswersCountNotReachedYet;
                 }
+
+                Mvx.Trace($"option {option.Value} has {option.YesCanBeChecked}");
             }
         }
 
