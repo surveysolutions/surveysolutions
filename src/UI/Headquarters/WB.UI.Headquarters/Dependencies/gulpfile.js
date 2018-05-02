@@ -97,7 +97,8 @@ const config = {
     css: {
         markup: "./css/markup.scss",
         ["markup-web-interview"]: "./css/markup-web-interview.scss",
-        ["markup-specific"]: "./css/markup-specific.scss"
+        ["markup-specific"]: "./css/markup-specific.scss",
+        ["markup-interview-review"]: "./css/markup-interview-review.scss"
     },
     webTester: {
         targetFolder: '../../../WB.UI.WebTester/Content/',
@@ -199,10 +200,15 @@ gulp.task('styles:specific', ['move-bootstrap-fonts'], wrapPipe(function (succes
     return compileCss(config.css["markup-specific"], error);
 }));
 
+gulp.task('styles:review', ['move-bootstrap-fonts'], wrapPipe(function (success, error) {
+    return compileCss(config.css["markup-interview-review"], error);
+}));
+
 gulp.task('styles', [
     'styles:markup',
     'styles:webinterview',
     'styles:specific',
+    'styles:review',
     'libsCss']);
 
 gulp.task('libsJs', ["checkSources"], wrapPipe((success, error) => {
@@ -262,20 +268,20 @@ gulp.task('inject', ['styles', 'libsJs'],
 
             var pipe = target
                 .pipe(inject(cssLibs, config.cssLibsInject))
-                .pipe(inject(jsLibs, config.jsLibsInject))
+                .pipe(inject(jsLibs, config.jsLibsInject));
 
             Object.keys(config.css).forEach(key => {
                 const conf = config.css[key];
-                
+
                 const injectKey = "css_" + _.camelCase(key); // css_markup, css_markupWebInterview, css_markupSpecific
                 const cssApp = gulp.src(config.buildDistDir + '/' + key + '-[a-f0-9]*.min.css', { read: false });
 
-                pipe = pipe.pipe(inject(cssApp, injectKey))
-            })
+                pipe = pipe.pipe(inject(cssApp, injectKey));
+            });
 
             pipe = pipe.pipe(gulp.dest(fileToInject.folder));
 
-            return pipe
+            return pipe;
         });
 
         return tasks;
