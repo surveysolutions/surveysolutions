@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         private readonly IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
         private readonly IPlainStorage<InterviewerIdentity> userIdentity;
-        private readonly IJsonAllTypesSerializer serializer;
+        private readonly ISerializer serializer;
         private readonly ILogger logger;
 
         private const string AuditLogSettingsKey = "settings";
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         public AuditLogService(IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             IPlainStorage<InterviewerIdentity> userIdentity,
-            IJsonAllTypesSerializer serializer,
+            ISerializer serializer,
             ILogger logger)
         {
             this.auditLogStorage = auditLogStorage;

@@ -16,11 +16,11 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
     public class AuditLogApiV2Controller : ApiController
     {
         private readonly IPlainStorageAccessor<AuditLogRecord> auditLogStorage;
-        private readonly IJsonAllTypesSerializer typesSerializer;
+        private readonly ISerializer typesSerializer;
         private readonly IAuditLogTypeResolver auditLogTypeResolver;
 
         public AuditLogApiV2Controller(IPlainStorageAccessor<AuditLogRecord> auditLogStorage,
-            IJsonAllTypesSerializer typesSerializer,
+            ISerializer typesSerializer,
             IAuditLogTypeResolver auditLogTypeResolver)
         {
             this.auditLogStorage = auditLogStorage;
@@ -36,7 +36,6 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
 
             foreach (var auditLogEntity in entities.Entities)
             {
-                var payloadType = auditLogTypeResolver.Resolve(auditLogEntity.PayloadType);
                 var auditLogRecord = new AuditLogRecord()
                 {
                     RecordId = auditLogEntity.Id,
@@ -45,8 +44,8 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
                     Time = auditLogEntity.Time,
                     TimeUtc = auditLogEntity.TimeUtc,
                     Type = auditLogEntity.Type,
-                    Payload = typesSerializer.Deserialize<IAuditLogEntity>(auditLogEntity.Payload, payloadType)
                 };
+                auditLogRecord.SetJsonPayload(auditLogEntity.Payload);
                 auditLogStorage.Store(auditLogRecord, auditLogRecord.Id);
             }
 
