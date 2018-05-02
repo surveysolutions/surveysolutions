@@ -140,40 +140,40 @@ namespace WB.UI.Headquarters.Controllers
             switch (record.Type)
             {
                 case AuditLogEntityType.CreateInterviewFromAssignment:
-                    var createInterviewAuditLogEntity = (CreateInterviewAuditLogEntity)record.Payload;
+                    var createInterviewAuditLogEntity = (CreateInterviewAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.CreateInterviewFromAssignment.FormatString(createInterviewAuditLogEntity.InterviewKey, createInterviewAuditLogEntity.AssignmentId);
                 case AuditLogEntityType.OpenInterview:
-                    var openInterviewAuditLogEntity = (OpenInterviewAuditLogEntity)record.Payload;
+                    var openInterviewAuditLogEntity = (OpenInterviewAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.OpenInterview.FormatString(openInterviewAuditLogEntity.InterviewKey);
                 case AuditLogEntityType.CloseInterview:
-                    var closeInterviewAuditLogEntity = (CloseInterviewAuditLogEntity)record.Payload;
+                    var closeInterviewAuditLogEntity = (CloseInterviewAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.CloseInterview.FormatString(closeInterviewAuditLogEntity.InterviewKey);
                 case AuditLogEntityType.CompleteInterview:
-                    var completeInterviewAuditLogEntity = (CompleteInterviewAuditLogEntity)record.Payload;
+                    var completeInterviewAuditLogEntity = (CompleteInterviewAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.CompleteInterview.FormatString(completeInterviewAuditLogEntity.InterviewKey);
                 case AuditLogEntityType.DeleteInterview:
-                    var deleteInterviewAuditLogEntity = (DeleteInterviewAuditLogEntity)record.Payload;
+                    var deleteInterviewAuditLogEntity = (DeleteInterviewAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.DeleteInterview.FormatString(deleteInterviewAuditLogEntity.InterviewKey);
                 case AuditLogEntityType.Login:
-                    var loginAuditLogEntity = (LoginAuditLogEntity)record.Payload;
+                    var loginAuditLogEntity = (LoginAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.Login.FormatString(loginAuditLogEntity.UserName);
                 case AuditLogEntityType.Logout:
-                    var logoutAuditLogEntity = (LogoutAuditLogEntity)record.Payload;
+                    var logoutAuditLogEntity = (LogoutAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.Logout.FormatString(logoutAuditLogEntity.UserName);
                 case AuditLogEntityType.Relink:
-                    //var relinkAuditLogEntity = (RelinkAuditLogEntity)record.Payload;
+                    //var relinkAuditLogEntity = (RelinkAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.Relink;
                 case AuditLogEntityType.SynchronizationStarted:
-                    //var synchronizationStartedAuditLogEntity = (SynchronizationStartedAuditLogEntity)record.Payload;
+                    //var synchronizationStartedAuditLogEntity = (SynchronizationStartedAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.SynchronizationStarted;
                 case AuditLogEntityType.SynchronizationCanceled:
-                    //var synchronizationCanceledAuditLogEntity = (SynchronizationCanceledAuditLogEntity)record.Payload;
+                    //var synchronizationCanceledAuditLogEntity = (SynchronizationCanceledAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.SynchronizationCanceled;
                 case AuditLogEntityType.SynchronizationCompleted:
-                    var synchronizationCompletedAuditLogEntity = (SynchronizationCompletedAuditLogEntity)record.Payload;
+                    var synchronizationCompletedAuditLogEntity = (SynchronizationCompletedAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.SynchronizationCompleted;
                 case AuditLogEntityType.OpenApplication:
-                    //var openApplicationAuditLogEntity = (OpenApplicationAuditLogEntity)record.Payload;
+                    //var openApplicationAuditLogEntity = (OpenApplicationAuditLogEntity)record.Entity;
                     return InterviewerAuditRecord.OpenApplication;
                 default:
                     throw new ArgumentException("Unknown audit record type: " + record.Type);

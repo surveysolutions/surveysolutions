@@ -22,7 +22,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindAsSingleton(typeof(IPlainKeyValueStorage<>), typeof(PostgresPlainKeyValueStorage<>));
 
             registry.BindAsSingleton(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
-            registry.BindAsSingleton(typeof(IEntityWithTypeSerializer<>), typeof(EntityWithTypeSerializer<>));
         }
     }
 }
