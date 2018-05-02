@@ -25,10 +25,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             this.Property(x => x.Time);
             this.Property(x => x.TimeUtc);
             this.Property(x => x.Type);
-            this.Property(x => x.Payload, pm =>
+            this.Property("Payload", m =>
             {
-                pm.Lazy(false);
-                pm.Type<PostgresEntityWithTypeJson<IAuditLogEntity>>();
+                m.Column("Payload");
             });
         }
     }
