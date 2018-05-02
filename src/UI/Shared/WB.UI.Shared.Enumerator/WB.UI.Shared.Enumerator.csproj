@@ -322,6 +322,7 @@
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
+    <Compile Include="CustomBindings\ImageButtonPlaybackToggleBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusOutBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
@@ -1147,7 +1148,9 @@
     <AndroidResource Include="Resources\layout\interview_question_readonly.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_audio.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_audio.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_audio_dialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -1373,6 +1376,17 @@
     <AndroidResource Include="Resources\drawable\question_text_question_no_bottom_corners.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\play_icon.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\stop_icon.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
