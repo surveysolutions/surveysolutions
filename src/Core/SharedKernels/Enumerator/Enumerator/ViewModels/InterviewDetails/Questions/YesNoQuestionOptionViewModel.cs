@@ -74,6 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private int? yesAnswerCheckedOrder;
+        private bool yesCanBeChecked = true;
 
         public int? YesAnswerCheckedOrder
         {
@@ -90,16 +91,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? AnswerCheckedOrder { get; set; }
 
-        private bool yesCanBeChecked = true;
-        public bool YesCanBeChecked 
+        public bool YesCanBeChecked
         {
             get => yesCanBeChecked;
-            set
-            {
-                if (value == yesCanBeChecked) return;
-                yesCanBeChecked = value;
-                RaisePropertyChanged(() => YesCanBeChecked);
-            }
+            set => SetProperty(ref yesCanBeChecked, value);
         }
 
         public async void RaiseToggleAnswer()

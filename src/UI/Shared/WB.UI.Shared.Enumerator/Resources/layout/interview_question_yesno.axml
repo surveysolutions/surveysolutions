@@ -6,15 +6,17 @@
               android:layout_height="wrap_content"
               local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
 
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              style="@style/Interview_Question_Instruction_Title"
+              android:layout_marginLeft="@dimen/Interview_Entity_margin_with_border_left"
+              android:layout_marginBottom="@dimen/Interview_Question_Option_vertical_padding"
+              local:MvxBind="Hidden Not(MaxAnswersCountMessage); Text MaxAnswersCountMessage;" />
+
     <LinearLayout style="@style/Interview_Question_YesNo_Title">
         <TextView style="@style/Interview_Question_YesNo_Title_text" local:MvxBind="Text Localization('Yes');" />
         <TextView style="@style/Interview_Question_YesNo_Title_delimeter" android:text=" / " />
         <TextView style="@style/Interview_Question_YesNo_Title_text" local:MvxBind="Text Localization('No');" />
     </LinearLayout>
-    <TextView android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Interview_Question_Instruction_Title"
-                android:layout_marginLeft="@dimen/Interview_Entity_margin_with_border_left"
-                android:layout_marginBottom="@dimen/Interview_Question_Option_vertical_padding"
-                local:MvxBind="Hidden Not(MaxAnswersCountMessage); Text MaxAnswersCountMessage;"></TextView>
+   
 </LinearLayout>
