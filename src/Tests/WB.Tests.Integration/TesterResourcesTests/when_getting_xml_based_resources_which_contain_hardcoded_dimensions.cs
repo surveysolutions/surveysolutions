@@ -9,12 +9,10 @@ namespace WB.Tests.Integration.TesterResourcesTests
         [Test]
         public void should_return_only_dimensions_xmls_from_values_folders()
         {
-            resources = GetXmlResourcesHavingHardcodedDimensions("UI/Tester/WB.UI.Tester/Resources").ToArray();
+            var resources = GetXmlResourcesHavingHardcodedDimensions("UI/Tester/WB.UI.Tester/Resources").ToArray();
 
             resources.Should().OnlyContain(resource =>
                 resource.ToLower().StartsWith("values") && resource.ToLower().Contains("dimensions"));
         }
-
-        private static string[] resources;
     }
 }
