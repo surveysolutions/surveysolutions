@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             get
             {
-                return new MvxCommand(async () =>
+                return new MvxAsyncCommand(async () =>
                 {
                     try
                     {

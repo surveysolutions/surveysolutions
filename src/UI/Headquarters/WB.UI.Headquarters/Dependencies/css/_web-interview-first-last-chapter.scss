@@ -37,7 +37,6 @@
 			resize:none;
     		overflow:hidden;
     		height: 42px;
-            display: block;
 		}
 	}
 }
@@ -52,7 +51,7 @@
 			font: 38px/40px "RobotoLight";
 			span{
 				display: block;
-				font: 16px/18px "RobotoMedium";
+				font: 16px/18px $roboto_medium;
 			}
 			&:first-child{
 				border-left: none;
