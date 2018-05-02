@@ -12,10 +12,19 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
         {
             bool isProtected = values[3].ConvertToBoolean();
 
-            if (isProtected)
-                return QuestionStateStyle.AnsweredProtected;
+            var state = base.GetValue(values);
 
-            return base.GetValue(values);
+            if (state == QuestionStateStyle.InvalidEnabled || state == QuestionStateStyle.InvalidDisabled)
+            {
+                return state;
+            }
+
+            if (isProtected)
+            {
+                return QuestionStateStyle.AnsweredProtected;
+            }
+
+            return state;
         }
     }
 }
