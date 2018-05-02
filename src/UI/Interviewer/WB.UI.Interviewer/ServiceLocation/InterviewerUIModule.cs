@@ -18,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
@@ -90,7 +91,8 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<DashboardSubTitleViewModel>();
             registry.Bind<CompanyLogoSynchronizer>();
             registry.Bind<LoadingViewModel>();
-            
+            registry.Bind<PhotoViewViewModel>();
+
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
