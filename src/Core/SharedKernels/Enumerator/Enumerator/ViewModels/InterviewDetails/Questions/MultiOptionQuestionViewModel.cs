@@ -43,7 +43,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
-        private int selectedOptionsCount;
         private int? maxAllowedAnswers;
         private string maxAnswersCountMessage;
 
