@@ -327,13 +327,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             if(file.Columns == null) yield break;
 
-            var allVariableNames = file.Columns
-                .Select(x => x.ToLower().Split(new[] {ServiceColumns.ColumnDelimiter}, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
+            var columnNames = file.Columns.Select(x => x.ToLower()).ToArray();
+            
+            var allGpsVariableNames = file.Columns
+                .Select(x => x.Split(new[] { ServiceColumns.ColumnDelimiter }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault())
                 .Where(x => !string.IsNullOrWhiteSpace(x))
                 .Distinct()
-                .ToArray();
-
-            var allGpsVariableNames = allVariableNames
                 .Select(questionnaire.GetQuestionIdByVariable)
                 .Where(x => x.HasValue)
                 .Select(x=>x.Value)
@@ -343,9 +342,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             foreach (var gpsVariableName in allGpsVariableNames)
             {
-                if (!allVariableNames.Contains($"{gpsVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}") ||
-                    !allVariableNames.Contains($"{gpsVariableName}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}"))
-                    yield return gpsVariableName;
+                var variable = gpsVariableName.ToLower();
+                var hasLatitude = columnNames.Contains($"{variable}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Latitude).ToLower()}");
+                var hasLongitude = columnNames.Contains($"{variable}{ServiceColumns.ColumnDelimiter}{nameof(GeoPosition.Longitude).ToLower()}");
+
+                if (!hasLongitude || !hasLatitude) yield return gpsVariableName;
             }
         }
         
