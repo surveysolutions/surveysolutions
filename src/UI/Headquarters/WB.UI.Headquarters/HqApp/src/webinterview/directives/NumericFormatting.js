@@ -1,6 +1,6 @@
 import * as $ from "jquery"
 import Vue from "vue"
-import AutoNumeric from "autoNumeric/dist/autoNumeric"
+import AutoNumeric from "autonumeric/dist/autonumeric.min"
 
 const defaults = {
     digitGroupSeparator: "",
