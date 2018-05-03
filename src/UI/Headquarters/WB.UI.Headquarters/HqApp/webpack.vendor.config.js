@@ -10,7 +10,7 @@ const shared = require("./.build/webpack.shared.vendor");
 module.exports = merge(shared(packageName, devMode), {
     entry: {
         [packageName]: [                       
-            "autonumeric/dist/autoNumeric.js",
+            "autonumeric/dist/autonumeric.min",
             "axios",
             "babel-polyfill",
             "bootbox",            
