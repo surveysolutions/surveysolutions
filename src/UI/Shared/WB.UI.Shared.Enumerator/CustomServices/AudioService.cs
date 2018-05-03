@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
 using Android.Media;
 using Android.Webkit;
 using Java.IO;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using Exception = System.Exception;
+using IOException = Java.IO.IOException;
 using Math = System.Math;
 using Stream = System.IO.Stream;
 
@@ -15,6 +20,11 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 {
     public class AudioService : IAudioService
     {
+        private bool disposed = false;
+        private object lockObject = new object();
+
+        private readonly IAudioFileStorage audioFileStorage;
+        
         private class AudioRecorderInfoLisener : Java.Lang.Object, MediaRecorder.IOnInfoListener
         {
             public event EventHandler OnMaxDurationReached;
@@ -38,17 +48,66 @@ namespace WB.UI.Shared.Enumerator.CustomServices
 
         private MediaRecorder recorder;
         private AudioRecorderInfoLisener audioRecorderInfoLisener;
+        private readonly string tempFileName;
+        private Identity playingIdentity;
+        readonly MediaPlayer mediaPlayer = new MediaPlayer();
 
-
-        public AudioService(string pathToAudioDirectory, IFileSystemAccessor fileSystemAccessor)
+        public AudioService(string pathToAudioDirectory, 
+            IFileSystemAccessor fileSystemAccessor,
+            IAudioFileStorage audioFileStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.audioFileStorage = audioFileStorage;
             this.pathToAudioFile = this.fileSystemAccessor.CombinePath(pathToAudioDirectory, audioFileName);
+            this.tempFileName = Path.GetTempFileName();
+            mediaPlayer.Completion += MediaPlayerOnCompletion;
+        }
+
+        private void MediaPlayerOnCompletion(object sender, EventArgs eventArgs)
+        {
+            this.OnOnPlaybackCompleted(new PlaybackCompletedEventArgs(this.playingIdentity));
         }
 
         public event EventHandler OnMaxDurationReached;
+        public event EventHandler<PlaybackCompletedEventArgs> OnPlaybackCompleted;
 
-        public void Start()
+        public void Play(Guid interviewId, Identity questionId, string fileName)
+        {
+            lock (this.lockObject)
+            {
+                if (this.mediaPlayer.IsPlaying)
+                {
+                    this.mediaPlayer.Stop();
+                    OnOnPlaybackCompleted(new PlaybackCompletedEventArgs(this.playingIdentity));
+                }
+                
+                this.mediaPlayer.Reset();
+                this.fileSystemAccessor.DeleteFile(this.tempFileName);
+
+                var interviewBinaryData = this.audioFileStorage.GetInterviewBinaryData(interviewId, fileName);
+                this.fileSystemAccessor.WriteAllBytes(this.tempFileName, interviewBinaryData);
+                
+                this.mediaPlayer.SetDataSource(this.tempFileName);
+                this.mediaPlayer.SetVolume(1, 1);
+                this.mediaPlayer.Prepare();
+                this.mediaPlayer.Start();
+                this.playingIdentity = questionId;
+            }
+        }
+
+        public void Stop()
+        {
+            lock (this.lockObject)
+            {
+                if (this.mediaPlayer.IsPlaying)
+                {
+                    this.mediaPlayer.Reset();
+                    this.fileSystemAccessor.DeleteFile(this.tempFileName);
+                }
+            }
+        }
+
+        public void StartRecording()
         {
             if (this.recorder != null) return;
 
@@ -91,7 +150,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
         private void AudioRecorderInfoLisener_OnMaxDurationReached(object sender, EventArgs e)
             => this.OnMaxDurationReached?.Invoke(this, EventArgs.Empty);
 
-        public void Stop()
+        public void StopRecording()
         {
             if (!this.IsRecording()) return;
 
@@ -189,6 +248,19 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.recorder = null;
         }
 
-        public void Dispose() => this.ReleaseAudioRecorder();
+        public void Dispose()
+        {
+            if (disposed) return;
+            
+            this.ReleaseAudioRecorder();
+            this.mediaPlayer.Dispose();
+
+            this.disposed = true;
+        }
+
+        protected virtual void OnOnPlaybackCompleted(PlaybackCompletedEventArgs e)
+        {
+            OnPlaybackCompleted?.Invoke(this, e);
+        }
     }
 }
