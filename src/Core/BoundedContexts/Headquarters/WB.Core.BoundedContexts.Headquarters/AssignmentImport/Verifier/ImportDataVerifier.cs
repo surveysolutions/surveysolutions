@@ -331,8 +331,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<string> DuplicatedColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {
             if (file.Columns == null) yield break;
-            foreach (var duplicatedColumn in file.Columns.GroupBy(x => x.ToLower()).Where(x => x.Count() > 1))
-                yield return duplicatedColumn.Key;
+            foreach (var duplicatedColumns in file.Columns.GroupBy(x => x.ToLower()).Where(x => x.Count() > 1))
+                // as discussed, user should see all duplicated column names in all caps
+                yield return string.Join(", ", duplicatedColumns);
         }
 
         private IEnumerable<string> OptionalGpsPropertyAndMissingLatitudeAndLongitude(PreloadedFileInfo file, IQuestionnaire questionnaire)
@@ -615,7 +616,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             IEnumerable<PanelImportVerificationError> verify(PreloadingAssignmentRow row, BaseAssignmentValue cell, IQuestionnaire questionnaire)
             {
                 if (!(cell is TValue compositeAnswer)) yield break;
-                if (hasError(compositeAnswer, questionnaire)) yield return ToCellError(code, message, row, compositeAnswer.VariableName, null);
+                if (hasError(compositeAnswer, questionnaire))
+                {
+                    // as discussed, user should see questionnaire's variable name for question if generic error by multiply columns
+                    var originalQuestionVariableName = compositeAnswer.VariableName;
+                    
+                    var questionId = questionnaire.GetQuestionIdByVariable(originalQuestionVariableName);
+                    if (questionId.HasValue)
+                        originalQuestionVariableName = questionnaire.GetQuestionVariableName(questionId.Value);
+
+                    yield return ToCellError(code, message, row, originalQuestionVariableName, null);
+                }
             }
 
             return verify;

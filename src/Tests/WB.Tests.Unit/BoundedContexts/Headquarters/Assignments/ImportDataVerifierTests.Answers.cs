@@ -439,6 +439,36 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_answers_and_gps_have_latitude_but_dont_have_longitude_and_question_variable_in_caps_should_return_PL0030_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "GPS";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.GpsCoordinateQuestion(variable: variableName)));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                answers: new[]
+                {
+                    Create.Entity.AssignmentGpsAnswer(variableName, Create.Entity.AssignmentDoubleAnswer("longitude"),
+                        Create.Entity.AssignmentDoubleAnswer("latitude", 60))
+                });
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0030"));
+            Assert.That(errors[0].References.First().Content, Is.Null);
+            Assert.That(errors[0].References.First().Column, Is.EqualTo(variableName));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
         public void when_verify_answers_and_gps_have_longitude_but_dont_have_latitude_should_return_PL0030_error()
         {
             // arrange
@@ -678,6 +708,36 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.MultipleOptionsQuestion(variable: variableName, answers: new []{ 1, 2 }, maxAllowedAnswers: 1)));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                answers: new[]
+                {
+                    Create.Entity.AssignmentMultiAnswer(variableName, Create.Entity.AssignmentIntegerAnswer($"{variableName}__1", 1),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__2", 2))
+                });
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0041"));
+            Assert.That(errors[0].References.First().Content, Is.Null);
+            Assert.That(errors[0].References.First().Column, Is.EqualTo(variableName));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_answers_and_categorical_multi_question_has_more_than_max_answers_count_and_question_variable_in_caps_should_return_PL0041_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "CATEGORICAL";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultipleOptionsQuestion(variable: variableName, answers: new[] { 1, 2 }, maxAllowedAnswers: 1)));
 
             var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
                 answers: new[]
