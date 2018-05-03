@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
@@ -20,6 +21,7 @@ namespace WB.Tests.Unit.Infrastructure
                 questionnaireId: Create.Entity.QuestionnaireIdentity(),
                 answers: new List<InterviewAnswer>(),
                 answersTime: DateTime.UtcNow,
+                questionsWithProtectedAnswers: new List<Identity>(), 
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: Create.Entity.InterviewKey(),

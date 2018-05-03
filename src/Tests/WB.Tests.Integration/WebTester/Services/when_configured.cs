@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
@@ -37,6 +38,7 @@ namespace WB.Tests.Integration.WebTester.Services
             var events = manager.Execute(new CreateInterview(interviewId, Id.g1,
                 Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 new List<InterviewAnswer>(),
+                new List<Identity>(), 
                 DateTime.UtcNow,
                 Guid.NewGuid(),
                 null,
