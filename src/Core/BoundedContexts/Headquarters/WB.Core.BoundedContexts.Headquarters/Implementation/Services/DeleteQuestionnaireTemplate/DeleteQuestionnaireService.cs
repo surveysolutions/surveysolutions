@@ -37,6 +37,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
+        IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
@@ -102,7 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity);
 
-                var assignmentsImportStatus = this.importService.GetImportStatus();
+                var assignmentsImportStatus = plainTransactionManager.ExecuteInPlainTransaction(() => this.importService.GetImportStatus());
 
                 var isAssignmentImportIsGoing = assignmentsImportStatus != null && 
                                                 assignmentsImportStatus.InQueueCount > assignmentsImportStatus.WithErrorsCount &&
@@ -111,8 +113,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 if (!isAssignmentImportIsGoing)
                 {
                     this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
-
-                    IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
                     plainTransactionManager.ExecuteInPlainTransaction(() =>
                         this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
