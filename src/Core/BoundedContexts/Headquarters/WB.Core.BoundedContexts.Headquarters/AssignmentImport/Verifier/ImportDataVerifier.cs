@@ -298,7 +298,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (questionnaire.GetVariableName(variableId).ToLower() == questionOrVariableName) return false;
 
             foreach (var questionId in questionnaire.GetAllUnderlyingQuestionsOutsideRosters(rosterId))
-                if (questionnaire.GetQuestionVariableName(questionId).ToLower() == questionOrVariableName) return false;
+            {
+                var questionVariable = questionnaire.GetQuestionVariableName(questionId).ToLower();
+
+                if (questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates)
+                {
+                    if(GeoPosition.PropertyNames.Select(x => $"{questionVariable}{ServiceColumns.ColumnDelimiter}{x.ToLower()}")
+                        .Contains(columnName)) return false;
+                }
+                else
+                {
+                    if (questionVariable == questionOrVariableName) return false;
+                }
+            }
 
             return true;
         }
