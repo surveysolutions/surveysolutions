@@ -3,13 +3,19 @@
               xmlns:local="http://schemas.android.com/apk/res-auto"
               style="@style/Interview_Question_Answer_Option_Background"
               android:orientation="horizontal"
-              local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false))">
+              local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutOptionBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false, IsProtected))">
   <TextView
     style="@style/Interview_Question_MultiOptionOrder"
     local:MvxBind="Text CheckedOrder; Visible CheckedOrder;"/>
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked; Tag ItemTag" />
+    local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked; Tag ItemTag; Enabled Not(IsProtected)" />
 
+    <ImageView android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               local:srcCompat="@drawable/lock_icon"
+               android:layout_gravity="center_vertical"
+               android:paddingRight="@dimen/Interview_Question_Answer_Input_background_padding"
+               local:MvxBind="Visible IsProtected" />
 </LinearLayout>
