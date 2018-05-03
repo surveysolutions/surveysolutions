@@ -136,7 +136,7 @@
     <value>Download complete log in CSV format</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>User {0} logined in application</value>
+    <value>User {0} logged in application</value>
   </data>
   <data name="Logout" xml:space="preserve">
     <value>User {0} logout from application</value>
