@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User {0} logined in application.
+        ///   Looks up a localized string similar to User {0} logged in application.
         /// </summary>
         public static string Login {
             get {
