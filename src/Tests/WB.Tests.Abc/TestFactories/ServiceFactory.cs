@@ -682,5 +682,8 @@ namespace WB.Tests.Abc.TestFactories
                 upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
                 Create.Service.PlainPostgresTransactionManager());
         }
+
+        public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null) 
+            => new AssignmentsImportFileConverter(fs ?? Create.Service.FileSystemIOAccessor(), userViewFactory ?? Mock.Of<IUserViewFactory>());
     }
 }

@@ -34,9 +34,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 
                 var preloadingValues = preloadingRow.Cells.OfType<PreloadingValue>().ToArray();
 
-                var preloadingInterviewId = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.InterviewId);
-                var preloadingResponsible = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.ResponsibleColumnName);
-                var preloadingQuantity = preloadingValues.FirstOrDefault(x => x.Column == ServiceColumns.AssignmentsCountColumnName);
+                var preloadingInterviewId = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.InterviewId);
+                var preloadingResponsible = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.ResponsibleColumnName);
+                var preloadingQuantity = preloadingValues.FirstOrDefault(x => x.VariableOrCodeOrPropertyName == ServiceColumns.AssignmentsCountColumnName);
 
                 yield return new PreloadingAssignmentRow
                 {
