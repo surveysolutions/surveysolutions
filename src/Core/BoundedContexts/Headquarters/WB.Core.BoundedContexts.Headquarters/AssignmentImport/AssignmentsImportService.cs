@@ -328,7 +328,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                             ?.Select(x => new { code = Convert.ToInt32(x.VariableName), answer = Convert.ToInt32(x.Answer) })
                             .ToArray();
 
-                        if (assignmentCategoricalMulti.Length > 0)
+                        if (assignmentCategoricalMulti?.Length > 0)
                         {
                             if (questionnaire.ShouldQuestionRecordAnswersOrder(questionId.Value))
                             {
