@@ -156,6 +156,9 @@
     <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="PhotoView, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.PhotoView.2.1.3\lib\MonoAndroid\PhotoView.dll</HintPath>
+    </Reference>
     <Reference Include="Plugin.CurrentActivity, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
       <Private>True</Private>
@@ -284,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Activities\PhotoViewActivity.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
     <Compile Include="Activities\BaseSplashScreenActivity.cs" />
@@ -318,6 +322,7 @@
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
+    <Compile Include="CustomBindings\ImageButtonPlaybackToggleBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusOutBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
@@ -1157,6 +1162,9 @@
     <AndroidResource Include="Resources\layout\interview_question_signature.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\interview_photo_view.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
@@ -1376,6 +1384,17 @@
     <AndroidResource Include="Resources\drawable\question_option_background_protected.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\play_icon.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\stop_icon.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
