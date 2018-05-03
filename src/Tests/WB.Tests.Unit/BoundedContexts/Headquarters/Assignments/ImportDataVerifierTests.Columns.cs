@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0031"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}, {variable}"));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0031"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}, {variableUpper}"));
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0031"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(variable));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}, {variable}"));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
         }
 
