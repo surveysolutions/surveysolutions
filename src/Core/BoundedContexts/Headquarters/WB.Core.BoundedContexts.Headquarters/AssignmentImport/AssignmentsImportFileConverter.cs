@@ -132,25 +132,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         private static AssignmentAnswer ToGpsPropertyAnswer(PreloadingValue answer)
-        {
-            var doublePropertyNames = new[]
-            {
-                nameof(GeoPosition.Longitude).ToLower(),
-                nameof(GeoPosition.Latitude).ToLower(),
-                nameof(GeoPosition.Altitude).ToLower(),
-                nameof(GeoPosition.Accuracy).ToLower(),
-            };
-
-            if (doublePropertyNames.Contains(answer.VariableOrCodeOrPropertyName))
-                return ToAssignmentDoubleAnswer(answer);
-
-            if (answer.VariableOrCodeOrPropertyName == nameof(GeoPosition.Timestamp).ToLower())
-                return ToAssignmentDateTimeAnswer(answer);
-
-            throw new NotSupportedException(
-                $"Gps property {answer.Value} not supported. " +
-                $"Supported properties: {string.Join(", ", GeoPosition.PropertyNames)}");
-        }
+            => answer.VariableOrCodeOrPropertyName == nameof(GeoPosition.Timestamp).ToLower()
+                ? ToAssignmentDateTimeAnswer(answer)
+                : ToAssignmentDoubleAnswer(answer);
 
         private AssignmentRosterInstanceCode ToAssignmentRosterInstanceCode(PreloadingValue answer)
         {
