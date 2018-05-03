@@ -1190,9 +1190,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultiOptionQuestion() : base(InterviewQuestionType.MultiFixedOption)
         {
+            this.ProtectedAnswers = Array.Empty<int>();
         }
 
-        public InterviewTreeMultiOptionQuestion(object answer) : base (InterviewQuestionType.MultiFixedOption)
+        public InterviewTreeMultiOptionQuestion(object answer) : this()
         {
             this.answer = CategoricalFixedMultiOptionAnswer.Convert(answer);
         }
@@ -1207,10 +1208,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var interviewTreeMultiOptionQuestion = question as InterviewTreeMultiOptionQuestion;
             if (interviewTreeMultiOptionQuestion == null)
                 return false;
-             if (interviewTreeMultiOptionQuestion?.answer == null && this.answer == null)
+             if (interviewTreeMultiOptionQuestion.answer == null && this.answer == null)
                 return true;
 
-            if (interviewTreeMultiOptionQuestion?.answer != null && this.answer != null)
+            if (interviewTreeMultiOptionQuestion.answer != null && this.answer != null)
                 return interviewTreeMultiOptionQuestion.answer.CheckedValues.SequenceEqual(this.answer.CheckedValues);
 
             return false;
@@ -1224,6 +1225,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(answer.CheckedValues);
         }
+
+        public void ProtectAnswers()
+        {
+            this.ProtectedAnswers = GetAnswer()?.CheckedValues ?? Array.Empty<int>();
+        }
+
+        public IReadOnlyCollection<int> ProtectedAnswers { get; private set; }
     }
 
     [DebuggerDisplay("{ToString()}")]

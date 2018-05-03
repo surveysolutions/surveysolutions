@@ -20,7 +20,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             AreLinkedToListOptionsChanged = AreLinkedToListOptionsChangedImpl(sourceQuestionNode, changedQuestionNode);
 
             NodeIsMarkedAsReadonly = NodeIsMarkedAsReadonlyImpl(sourceQuestionNode, changedQuestionNode);
+            AnswersMarkedAsProtected = AnswersMarkedAsProtectedImpl(sourceQuestionNode, changedQuestionNode);
         }
+
+        public bool AnswersMarkedAsProtected { get; }
 
         public new InterviewTreeQuestion SourceNode => base.SourceNode as InterviewTreeQuestion;
         public new InterviewTreeQuestion ChangedNode => base.ChangedNode as InterviewTreeQuestion;
@@ -41,6 +44,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (IsNodeRemoved) return false;
             if (IsNodeAdded && !changedNode.Title.HasSubstitutions) return false;
             return sourceNode?.Title.Text != changedNode.Title.Text;
+        }
+
+        public bool AnswersMarkedAsProtectedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
+        {
+            if (changedNode == null) return false;
+            if (IsNodeAdded) return changedNode.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswers.Count > 0;
+
+            var multipleOptions = changedNode.GetAsInterviewTreeMultiOptionQuestion();
+            if (multipleOptions == null) return false;
+            return multipleOptions.ProtectedAnswers.Count > 0;
         }
 
         public bool IsAnswerRemovedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)

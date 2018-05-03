@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             public static readonly string MaxRosterRowCount = "MaxRosterRowCount";
             public static readonly string AvailableRosterVectors = "AvailableRosterVectors";
             public static readonly string ParentValue = "ParentValue";
+            public static readonly string ProtectedAnswer = "ProtectedAnswer";
         }
 
         private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
@@ -148,7 +149,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
                 .RequireMaxAnswersCountLimit(selectedValues.Count);
 
-        public void RequireFixedMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues)
+
+        public void RequireFixedMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
             => this
                 .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireOptionsExist(selectedValues)
@@ -156,7 +158,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
                 .RequireMaxAnswersCountLimit(selectedValues.Count)
-                .RequireQuestionEnabled();
+                .RequireQuestionEnabled()
+                .RequireProtectedAnswersNotRemoved(selectedValues, protectedValues);
+
+        public void RequireProtectedAnswersNotRemoved(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
+        {
+            var missingProtectedAnswers = protectedValues.Where(p => !selectedValues.Contains(p)).ToList();
+            if (missingProtectedAnswers.Count > 0)
+            {
+                throw new InterviewException("Removing protected answer is not allowed")
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                        {ExceptionKeys.ProvidedAnswerValue, JoinUsingCommas(selectedValues) },
+                        {ExceptionKeys.ProtectedAnswer, JoinUsingCommas(protectedValues)}
+                    }
+                };
+            }
+        }
 
         public void RequireLinkedToListMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues)
             => this

@@ -253,13 +253,15 @@ namespace WB.Tests.Abc.TestFactories
             Guid supervisorId,
             Guid? interviewerId = null,
             InterviewKey interviewKey = null,
-            int? assignmentId = null)
+            int? assignmentId = null,
+            List<Identity> protectedAnswers = null)
         {
             return new CreateInterview(
                 interviewId, 
                 userId, 
                 Create.Entity.QuestionnaireIdentity(questionnaireId, version), 
                 answers, 
+                protectedAnswers ?? new List<Identity>(),
                 answersTime, 
                 supervisorId, 
                 interviewerId, 
@@ -272,7 +274,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? responsibleSupervisorId = null,
             List<InterviewAnswer> answersToFeaturedQuestions = null,
             Guid? userId = null,
-            DateTime? answersTime = null)
+            DateTime? answersTime = null,
+            List<Identity> protectedAnswers = null)
         {
             return this.CreateInterview(
                 Guid.NewGuid(),
@@ -283,7 +286,9 @@ namespace WB.Tests.Abc.TestFactories
                 answersTime ?? DateTime.Now,
                 responsibleSupervisorId ?? Guid.NewGuid(),
                 null,
-                Create.Entity.InterviewKey());
+                Create.Entity.InterviewKey(),
+                null,
+                protectedAnswers);
         }
 
         public CreateInterview CreateInterview(
@@ -294,13 +299,13 @@ namespace WB.Tests.Abc.TestFactories
             Guid? supervisorId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            List<InterviewAnswer> answersToIdentifyingQuestions = null)
+            List<InterviewAnswer> answers = null)
         {
             return this.CreateInterview(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(), 
                 questionnaireIdentity?.QuestionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? 1,
-                answersToIdentifyingQuestions ?? new List<InterviewAnswer>(),
+                answers ?? new List<InterviewAnswer>(),
                 answersTime ?? DateTime.UtcNow,
                 supervisorId ?? Guid.NewGuid(),
                 userId,
