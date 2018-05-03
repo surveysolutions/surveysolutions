@@ -926,5 +926,29 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Content, Is.EqualTo(questionInsideOfRoster));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(mainFileName));
         }
+
+        [Test]
+        public void when_verify_columns_and_gps_column_has_unknown_property_should_return_PL0003_error()
+        {
+            // arrange
+            var variable = "to_preload_gps";
+            var column = $"{variable}__Latitude {variable}__Longitude";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.GpsCoordinateQuestion(variable: variable)));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] {column });
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(column));
+        }
     }
 }

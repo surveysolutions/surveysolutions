@@ -338,6 +338,13 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
+                var fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, new[] {preloadedFileInfo}, questionnaire).Take(10).ToArray();
+                if (fileErrors.Any())
+                {
+                    return this.View("InterviewImportVerificationErrors",
+                        CreateError(questionnaireIdentity, model.File.FileName, errors: fileErrors));
+                }
+
                 var columnErrors = this.dataVerifier.VerifyColumns(new[] { preloadedFileInfo }, questionnaire).Take(10).ToArray();
                 if (columnErrors.Any())
                 {
