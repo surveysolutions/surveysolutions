@@ -474,6 +474,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.Tree.GetQuestion(questionIdentity)?.MarkAsReadonly();
         }
 
+        public virtual void Apply(AnswersMarkedAsProtected @event)
+        {
+            foreach (var protectedAnswer in @event.Questions)
+                this.Tree.GetQuestion(protectedAnswer)?.GetAsInterviewTreeMultiOptionQuestion()?.ProtectAnswers();
+        }
+
         public virtual void Apply(StaticTextsEnabled @event)
         {
             foreach (var staticTextIdentity in @event.StaticTexts)
@@ -1176,7 +1182,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
+            var answeredQuestion = this.Tree.GetQuestion(questionIdentity);
+            var isLinkedToList = answeredQuestion.IsLinkedToListQuestion;
 
             if (isLinkedToList)
             {
@@ -1185,8 +1192,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
+                var protectedValues = answeredQuestion.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswers;
                 new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                    .RequireFixedMultipleOptionsAnswerAllowed(selectedValues);
+                    .RequireFixedMultipleOptionsAnswerAllowed(selectedValues, protectedValues);
             }
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1445,6 +1453,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
             this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
+            this.ProtectAnswers(changedInterviewTree, command.QuestionsWithProtectedAnswers);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
@@ -1479,6 +1488,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (defaultTranslation != null)
             {
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
+            }
+        }
+
+        private void ProtectAnswers(InterviewTree changedInterviewTree, List<Identity> protectedAnswers)
+        {
+            foreach (var protectedAnswer in protectedAnswers)
+            {
+                changedInterviewTree.GetQuestion(protectedAnswer).GetAsInterviewTreeMultiOptionQuestion().ProtectAnswers();
             }
         }
 
@@ -2010,6 +2027,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
             this.ApplySubstitutionEvents(diff);
             this.ApplyReadonlyStateEvents(diff);
+            this.ApplyProtectedAnswers(diff);
         }
 
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
@@ -2179,6 +2197,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var diffByQuestions = allNotNullableNodes.OfType<InterviewTreeQuestionDiff>().ToList();
             var readonlyQuestions = diffByQuestions.Where(x => x.NodeIsMarkedAsReadonly).Select(x => x.ChangedNode.Identity).ToArray();
             if (readonlyQuestions.Any()) this.ApplyEvent(new QuestionsMarkedAsReadonly(readonlyQuestions));
+        }
+
+        private void ApplyProtectedAnswers(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var allNotNullableNodes = diff.Where(x => x.ChangedNode != null)
+                                          .OfType<InterviewTreeQuestionDiff>()
+                                          .Where(x => x.AnswersMarkedAsProtected)
+                                          .Select(x => x.ChangedNode)
+                                          .ToList();
+            if (allNotNullableNodes.Count > 0)
+            {
+                var @event = new AnswersMarkedAsProtected(allNotNullableNodes.Select(x => x.Identity).ToArray());
+                this.ApplyEvent(@event);
+            }
         }
 
         private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)

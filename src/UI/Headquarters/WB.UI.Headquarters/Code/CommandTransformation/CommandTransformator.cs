@@ -84,6 +84,7 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 authorizedUser.Id,
                 new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion),
                 answers,
+                new List<Identity>(),
                 DateTime.UtcNow,
                 command.SupervisorId,
                 null,
