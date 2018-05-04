@@ -14,17 +14,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
 {
     public class TextListQuestionWithProtectedAnswersTests : InterviewTestsContext
     {
-        Guid questionId = Id.g1;
-        Guid userId = Id.gA;
+        readonly Guid questionId = Id.g1;
+        readonly Guid userId = Id.gA;
         private StatefulInterview interview;
         private TextListAnswer preloadedAnswer;
 
         [SetUp]
         public void Should_not_allow_removing_protected_answer()
         {
-            Guid questionId = Id.g1;
-            Guid userId = Id.gA;
-
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextListQuestion(questionId));
 
