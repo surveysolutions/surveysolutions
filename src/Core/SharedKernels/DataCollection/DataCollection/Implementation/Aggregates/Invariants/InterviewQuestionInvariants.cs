@@ -87,13 +87,34 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
 
-        public void RequireNumericIntegerAnswerAllowed(int answer)
+        public void RequireNumericIntegerAnswerAllowed(int answer, int? protectedAnswer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
-                .RequireQuestionEnabled();
+                .RequireQuestionEnabled()
+                .RequireProtectedAnswersNotReduced(answer, protectedAnswer);
+
+        private void RequireProtectedAnswersNotReduced(int answer, int? protectedAnswer)
+        {
+            if (protectedAnswer.HasValue)
+            {
+                if (answer < protectedAnswer)
+                {
+                    throw new InterviewException("Reduce value of protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer },
+                            {ExceptionKeys.ProtectedAnswer, protectedAnswer }
+                        }
+                    };
+                }
+            }
+        }
 
         public void RequireNumericRealPreloadValueAllowed()
             => this
@@ -166,7 +187,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var missingProtectedAnswers = protectedValues.Any(p => !selectedValues.Contains(p));
             if (missingProtectedAnswers)
             {
-                throw new InterviewException("Removing protected answer is not allowed")
+                throw new InterviewException("Removing protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
                 {
                     Data =
                     {
@@ -248,7 +269,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             {
                 if (!selectedValues.Any(x => protectedAnswer.Value == x.Item1 && protectedAnswer.Text == x.Item2))
                 {
-                    throw new InterviewException("Removing or modification of protected answer is not allowed")
+                    throw new InterviewException("Removing or modification of protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
                     {
                         Data =
                         {

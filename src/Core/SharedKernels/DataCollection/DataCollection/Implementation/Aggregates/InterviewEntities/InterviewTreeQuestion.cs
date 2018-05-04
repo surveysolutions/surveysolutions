@@ -286,6 +286,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsQRBarcode => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.QRBarcode;
         public bool IsText => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Text;
         public bool IsTextList => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.TextList;
+
+        public bool IsNumericInteger => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Integer;
         public bool IsYesNo => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.YesNo;
         public bool IsDateTime => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.DateTime;
         public bool IsGps => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Gps;
@@ -756,6 +758,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsMultiFixedOption) this.GetAsInterviewTreeMultiOptionQuestion().ProtectAnswer();
             else if (this.IsTextList) this.GetAsInterviewTreeTextListQuestion().ProtectAnswer();
+            else if (this.IsNumericInteger) this.GetAsInterviewTreeIntegerQuestion().ProtectAnswer();
             else 
                 throw new InvalidOperationException($"Can't protect answers for question of type {InterviewQuestionType}");
         }
@@ -764,6 +767,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers.Count > 0;
             if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswers.Count > 0;
+            if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.HasValue;
 
             return false;
         }
@@ -772,6 +776,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().IsAnswerProtected(value);
             if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().IsAnswerProtected(value);
+            if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().IsAnswerProtected(value);
+
             return false;
         }
     }
@@ -962,6 +968,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = answer == null ? null : NumericIntegerAnswer.FromInt(Convert.ToInt32(answer));
         }
 
+        public int? ProtectedAnswer { get; private set; }
+
         public override bool IsAnswered() => this.answer != null;
         public virtual NumericIntegerAnswer GetAnswer() => this.answer;
         public void SetAnswer(NumericIntegerAnswer answer) => this.answer = answer;
@@ -976,6 +984,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
             questionInvariants.RequireNumericIntegerPreloadValueAllowed(answer.Value);
+        }
+
+        public void ProtectAnswer()
+        {
+            this.ProtectedAnswer = this.answer.Value;
+        }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswer == (int) value;
         }
     }
 
