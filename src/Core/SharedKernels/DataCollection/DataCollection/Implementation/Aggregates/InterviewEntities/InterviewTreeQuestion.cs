@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.FailedErrors = Enumerable.Empty<FailedValidationCondition>().ToList();
         }
 
-        public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; } = Enumerable.Empty<FailedValidationCondition>().ToReadOnlyCollection();
+        public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; } = Array.Empty<FailedValidationCondition>();
 
         public void MarkPlausible()
             => this.FailedWarnings = new List<FailedValidationCondition>();
@@ -378,8 +378,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
-
         public override string ToString()
             => $"{GetTypeAsText()} Question {this.Identity} '{this.VariableName}'. " +
                $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
@@ -465,7 +463,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     this.GetAsInterviewTreeMultiOptionLinkedToListQuestion().SetAnswer(CategoricalFixedMultiOptionAnswer.Convert(exsitingAnswerOptions));
             }
         }
-
 
         [Obsolete("use SetAnswer instead")]
         public void SetObjectAnswer(object answer)
@@ -753,6 +750,22 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkAsReadonly()
         {
             this.IsReadonly = true;
+        }
+
+        public void ProtectAnswer()
+        {
+            if (this.IsMultiFixedOption) this.GetAsInterviewTreeMultiOptionQuestion().ProtectAnswer();
+            else if (this.IsTextList) this.GetAsInterviewTreeTextListQuestion().ProtectAnswer();
+            else 
+                throw new InvalidOperationException($"Can't protect answers for question of type {InterviewQuestionType}");
+        }
+
+        public bool HasProtectedAnswer()
+        {
+            if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers.Count > 0;
+            if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswers.Count > 0;
+
+            return false;
         }
     }
 
@@ -1101,12 +1114,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeTextListQuestion() : base(InterviewQuestionType.TextList)
         {
+            this.ProtectedAnswers = Array.Empty<TextListAnswerRow>();
         }
 
-        public InterviewTreeTextListQuestion(object answer) : base(InterviewQuestionType.TextList)
+        public InterviewTreeTextListQuestion(object answer) : this()
         {
             this.answer = TextListAnswer.FromTupleArray(answer as Tuple<decimal, string>[]);
         }
+
+        public IReadOnlyList<TextListAnswerRow> ProtectedAnswers { get; private set; }
 
         public override bool IsAnswered() => this.answer != null && this.answer.Rows.Count > 0;
         public virtual TextListAnswer GetAnswer() => this.answer;
@@ -1142,6 +1158,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
             questionInvariants.RequireTextListPreloadValueAllowed(answer.ToTupleArray());
+        }
+
+        public void ProtectAnswer()
+        {
+            this.ProtectedAnswers = this.GetAnswer().Rows.ToList();
         }
     }
 
@@ -1226,7 +1247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(answer.CheckedValues);
         }
 
-        public void ProtectAnswers()
+        public void ProtectAnswer()
         {
             this.ProtectedAnswers = GetAnswer()?.CheckedValues ?? Array.Empty<int>();
         }
