@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         public void Setup()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultipleOptionsQuestion(questionId, answers: new[]{1, 2, 3}));
+                Create.Entity.MultipleOptionsQuestion(questionId, answers: new[] { 1, 2, 3 }));
 
             interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
@@ -35,17 +35,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
                     Create.Entity.InterviewAnswer(questionIdentity, Create.Entity.MultiOptionAnswer(1))
                 },
                 userId,
-                protectedAnswers: new List<Identity>{questionIdentity});
-            
+                protectedAnswers: new List<Identity> { questionIdentity });
+
             interview.CreateInterview(command);
         }
-        
+
         [Test]
         public void When_answer_extends_existing_protected_answer_Should_allow()
         {
             using (EventContext eventContext = new EventContext())
             {
-                interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[]{1, 2});
+                interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { 1, 2 });
 
                 eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
             }
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [Test]
         public void should_throw_when_protected_answer_is_removed()
         {
-            TestDelegate act = () => interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] {3});
+            TestDelegate act = () => interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { 3 });
 
             Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Removing protected answer is not allowed"));
         }

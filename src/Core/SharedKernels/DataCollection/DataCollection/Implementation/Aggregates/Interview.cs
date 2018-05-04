@@ -1273,11 +1273,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireTextListAnswerAllowed(answers);
+                .RequireTextListAnswerAllowed(answers, 
+                    this.tree.GetQuestion(questionIdentity).GetAsInterviewTreeTextListQuestion()?.ProtectedAnswers ?? Array.Empty<TextListAnswerRow>());
 
             var changedInterviewTree = this.Tree.Clone();
+            var interviewTreeQuestion = changedInterviewTree.GetQuestion(questionIdentity);
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(TextListAnswer.FromTupleArray(answers));
+            interviewTreeQuestion.SetAnswer(TextListAnswer.FromTupleArray(answers));
 
             changedInterviewTree.ActualizeTree();
 
