@@ -17,20 +17,26 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
         {
             Guid multipleOptionsQuestionId = Id.g1;
             Guid textListQuestionId = Id.g2;
+            Guid numericQuestionId = Id.g3;
+
             Guid userId = Id.gA;
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.MultipleOptionsQuestion(multipleOptionsQuestionId, answers: new int[] { 1, 2, 3 }),
-                Create.Entity.TextListQuestion(questionId: textListQuestionId));
+                Create.Entity.TextListQuestion(questionId: textListQuestionId),
+                Create.Entity.NumericIntegerQuestion(numericQuestionId));
 
             var interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
 
-
-            var preloadedMultipleOptionsAnswer = new[] {1};
             var multipleOptionsQuestionIdentity = Create.Identity(multipleOptionsQuestionId);
             var listQuestionIdentity = Create.Identity(textListQuestionId);
+            var numericQuestionIdentity = Create.Identity(numericQuestionId);
+
+            var preloadedMultipleOptionsAnswer = new[] {1};
             var preloadedTextListAnswer = Create.Entity.ListAnswer(5, 10);
+            var preloadedNumericAnswer = 11;
+            
             var command =
                 Create.Command.CreateInterview(
                     questionnaire.PublicKey, 1,
@@ -38,10 +44,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
                     new List<InterviewAnswer>
                     {
                         Create.Entity.InterviewAnswer(multipleOptionsQuestionIdentity, Create.Entity.MultiOptionAnswer(preloadedMultipleOptionsAnswer)),
-                        Create.Entity.InterviewAnswer(listQuestionIdentity, preloadedTextListAnswer)
+                        Create.Entity.InterviewAnswer(listQuestionIdentity, preloadedTextListAnswer),
+                        Create.Entity.InterviewAnswer(numericQuestionIdentity, Create.Entity.NumericIntegerAnswer(preloadedNumericAnswer))
                     },
                     userId,
-                    protectedAnswers: new List<Identity>{multipleOptionsQuestionIdentity, listQuestionIdentity});
+                    protectedAnswers: new List<Identity>{multipleOptionsQuestionIdentity, listQuestionIdentity, numericQuestionIdentity});
 
             // Act
             using (EventContext eventContext = new EventContext())
@@ -52,6 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
 
                 Assert.That(answersMarkedAsProtected.Questions, Does.Contain(multipleOptionsQuestionIdentity));
                 Assert.That(answersMarkedAsProtected.Questions, Does.Contain(listQuestionIdentity));
+                Assert.That(answersMarkedAsProtected.Questions, Does.Contain(numericQuestionIdentity));
             }
 
             var multipleOptionsTreeProtectedAnswers = interview.GetQuestion(multipleOptionsQuestionIdentity)
@@ -60,8 +68,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
 
             var listProtectedQuestionProtectedAnswers = interview.GetQuestion(listQuestionIdentity).GetAsInterviewTreeTextListQuestion()
                 .ProtectedAnswers;
-
             Assert.That(listProtectedQuestionProtectedAnswers.Select(x => x.Value), Is.EquivalentTo(preloadedTextListAnswer.Rows.Select(x => x.Value)));
+
+            var numericProtectedAnswer = interview.GetQuestion(numericQuestionIdentity).GetAsInterviewTreeIntegerQuestion().ProtectedAnswer;
+
+            Assert.That(numericProtectedAnswer, Is.EqualTo(preloadedNumericAnswer));
         }
     }
 }
