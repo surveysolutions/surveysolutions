@@ -79,14 +79,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         {
             var settingsView = auditLogSettingsStorage.GetById(AuditLogSettingsKey);
             int lastSyncedEntityId = settingsView?.LastSyncedEntityId ?? -1;
-            var list = auditLogStorage.Where(kv => kv.Id > lastSyncedEntityId).Select(kv =>
-                new {
-                    Id = kv.Id,
-                    Entity = serializer.Deserialize<AuditLogEntityView>(kv.Json)
-                }).ToList();
-            // fix id
-            list.ForEach(kv => kv.Entity.Id = kv.Id.Value);
-            return list.Select(kv => kv.Entity).ToList();
+            foreach (var logItem in auditLogStorage.Where(kv => kv.Id > lastSyncedEntityId))
+            {
+                var entity = serializer.Deserialize<AuditLogEntityView>(logItem.Json);
+                entity.Id = logItem.Id.Value;
+                yield return entity;
+            }
         }
     }
 }
