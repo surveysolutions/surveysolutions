@@ -213,7 +213,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<TextListAnswerRow> Rows { get; set; }
+        public IReadOnlyList<TextListAnswerRow> Rows { get; set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
