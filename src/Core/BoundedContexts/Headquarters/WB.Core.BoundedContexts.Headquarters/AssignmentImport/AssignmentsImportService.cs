@@ -332,19 +332,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         {
                             if (questionnaire.ShouldQuestionRecordAnswersOrder(questionId.Value))
                             {
-                                assignmentCategoricalMulti = assignmentCategoricalMulti.Where(x => x.answer > 0).ToArray();
-
                                 if (questionnaire.IsQuestionYesNo(questionId.Value))
                                 {
-                                    answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(assignmentCategoricalMulti
-                                        .OrderBy(x => x.answer)
-                                        .Select(x => new AnsweredYesNoOption(x.code, true)));
+                                    answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(
+                                        assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => new AnsweredYesNoOption(x.code, x.answer != 0)));
                                 }
                                 else if (!isLinkedToQuestion && !isLinkedToRoster)
                                 {
                                     answer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(
-                                        assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => x.code)
-                                            .ToArray());
+                                        assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => x.code).ToArray());
                                 }
                             }
                             else
@@ -352,7 +348,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                                 if (questionnaire.IsQuestionYesNo(questionId.Value))
                                 {
                                     answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(
-                                        assignmentCategoricalMulti.Select(x => new AnsweredYesNoOption(x.code, x.answer > 0)));
+                                        assignmentCategoricalMulti.Select(x => new AnsweredYesNoOption(x.code, x.answer != 0)));
                                 }
                                 else if (!isLinkedToQuestion && !isLinkedToRoster)
                                 {
