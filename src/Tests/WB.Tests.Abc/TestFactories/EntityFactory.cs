@@ -2044,11 +2044,20 @@ namespace WB.Tests.Abc.TestFactories
             Cells = cells
         };
 
-        public PreloadingValue PreloadingValue(string variableName, string value) => new PreloadingValue
+        public PreloadingValue PreloadingValue(string variableName, string value, string columnName) => new PreloadingValue
         {
             VariableOrCodeOrPropertyName = variableName.ToLower(),
             Value = value,
-            Column = variableName
+            Column = columnName ?? variableName
+        };
+
+        public PreloadingValue PreloadingValue(string variableName, string value)
+            => PreloadingValue(variableName, value, null);
+
+        public PreloadingCompositeValue PreloadingCompositeValue(string variableName, params PreloadingValue[] values) => new PreloadingCompositeValue
+        {
+            VariableOrCodeOrPropertyName = variableName.ToLower(),
+            Values = values
         };
     }
 }
