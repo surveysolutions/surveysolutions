@@ -23,7 +23,8 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
-    public class AssignmentsImportService : IAssignmentsImportService
+    public class 
+        AssignmentsImportService : IAssignmentsImportService
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
@@ -330,31 +331,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                         if (assignmentCategoricalMulti?.Length > 0)
                         {
-                            if (questionnaire.ShouldQuestionRecordAnswersOrder(questionId.Value))
+                            if (questionnaire.IsQuestionYesNo(questionId.Value))
                             {
-                                if (questionnaire.IsQuestionYesNo(questionId.Value))
-                                {
-                                    answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(
-                                        assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => new AnsweredYesNoOption(x.code, x.answer != 0)));
-                                }
-                                else if (!isLinkedToQuestion && !isLinkedToRoster)
-                                {
-                                    answer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(
-                                        assignmentCategoricalMulti.OrderBy(x => x.answer).Select(x => x.code).ToArray());
-                                }
+                                var orderedAnswers = assignmentCategoricalMulti
+                                    .Where(x => x.answer > -1)
+                                    .OrderBy(x => x.answer)
+                                    .Select(x => new AnsweredYesNoOption(x.code, x.answer != 0))
+                                    .ToArray();
+
+                                answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(orderedAnswers);
                             }
-                            else
+                            else if (!isLinkedToQuestion && !isLinkedToRoster)
                             {
-                                if (questionnaire.IsQuestionYesNo(questionId.Value))
-                                {
-                                    answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(
-                                        assignmentCategoricalMulti.Select(x => new AnsweredYesNoOption(x.code, x.answer != 0)));
-                                }
-                                else if (!isLinkedToQuestion && !isLinkedToRoster)
-                                {
-                                    answer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(
-                                        assignmentCategoricalMulti.Where(x => x.answer == 1).Select(x => x.code).ToArray());
-                                }
+                                var orderedAnswers = assignmentCategoricalMulti
+                                    .Where(x => x.answer > 0)
+                                    .OrderBy(x => x.answer)
+                                    .Select(x => x.code)
+                                    .Distinct()
+                                    .ToArray();
+
+                                answer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(orderedAnswers);
                             }
                         }
                     }
