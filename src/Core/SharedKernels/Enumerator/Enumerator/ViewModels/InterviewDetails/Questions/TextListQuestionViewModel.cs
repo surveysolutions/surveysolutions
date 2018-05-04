@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -70,11 +69,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
-
-            this.questionIdentity = entityIdentity;
-            this.interviewId = interviewId;
+            this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 
             this.InstructionViewModel.Init(interviewId, entityIdentity);
             this.questionState.Init(interviewId, entityIdentity, navigationState);
@@ -88,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var textListQuestion = interview.GetTextListQuestion(entityIdentity);
             if (textListQuestion.IsAnswered())
             {
-                var answerViewModels = textListQuestion.GetAnswer().ToTupleArray().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2));
+                var answerViewModels = textListQuestion.GetAnswer().ToTupleArray().Select(x => this.CreateListItemViewModel(x.Item1, x.Item2, interview));
 
                 answerViewModels.ForEach(answerViewModel => this.Answers.Add(answerViewModel));
             }
@@ -148,7 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 : answerViewModels.Max(x => x.Value) + 1;
 
             this.Answers.Insert(this.Answers.Count - 1,
-                this.CreateListItemViewModel(maxValue, e.NewText));
+                this.CreateListItemViewModel(maxValue, e.NewText, this.interviewRepository.Get(this.interviewId)));
 
             this.SaveAnswers();
 
@@ -190,7 +186,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private TextListItemViewModel CreateListItemViewModel(decimal value, string title)
+        private TextListItemViewModel CreateListItemViewModel(decimal value, string title, IStatefulInterview interview)
         {
             var optionViewModel = new TextListItemViewModel(this.questionState)
             {
@@ -200,7 +196,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             optionViewModel.ItemEdited += this.ListItemEdited;
             optionViewModel.ItemDeleted += this.ListItemDeleted;
-            optionViewModel.IsProtected = true;
+            optionViewModel.IsProtected = interview.IsAnswerProtected(this.questionIdentity, value);
 
             return optionViewModel;
         }

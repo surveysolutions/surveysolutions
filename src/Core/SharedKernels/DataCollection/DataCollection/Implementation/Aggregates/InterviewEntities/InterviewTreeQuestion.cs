@@ -767,6 +767,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return false;
         }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().IsAnswerProtected(value);
+            if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().IsAnswerProtected(value);
+            return false;
+        }
     }
 
     public abstract class BaseInterviewQuestion
@@ -1164,6 +1171,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.ProtectedAnswers = this.GetAnswer().Rows.ToList();
         }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswers.Any(x => x.Value == value);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1253,6 +1265,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public IReadOnlyCollection<int> ProtectedAnswers { get; private set; }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswers.Contains((int) value);
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
