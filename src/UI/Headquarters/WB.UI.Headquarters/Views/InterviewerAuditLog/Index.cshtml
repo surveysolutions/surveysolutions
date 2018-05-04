@@ -12,6 +12,7 @@
         <div class="row">
             <div class="page-header">
                 <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Interviewers")">@Pages.InterviewerProfile_Interviewers</a></li>
                     <li><a href="@Url.Action("Profile", "Interviewer", new {Id = Model.InterviewerId})">@Model.InterviewerName</a></li>
                 </ol>
                 <h1>
@@ -21,8 +22,8 @@
                     <li><b>@Model.DeviceModel (id @Model.DeviceId)</b></li>
                     <li>
                         <b>
-                            @Pages.InterviewerProfile_InterviewerAppVersion: @Model.InterviewerAppVersion &mdash; 
-                            
+                            @Pages.InterviewerProfile_InterviewerAppVersion: @Model.InterviewerAppVersion &mdash;
+
                             @if (!Model.HasUpdateForInterviewerApp)
                             {
                                 <span class="success-text">@Pages.InterviewerProfile_InterviewerUpToDate</span>
