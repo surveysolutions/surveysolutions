@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Android.Provider;
+using Android.Util;
+using Android.Widget;
+using Esri.ArcGISRuntime;
+using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Rasters;
+using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
 using MvvmCross.Core.ViewModels;
@@ -18,6 +25,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.UI.Shared.Enumerator.Services;
 using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
@@ -248,6 +256,33 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         });
 
+
+        public IMvxAsyncCommand LoadShapefile => new MvxAsyncCommand(async () =>
+        {
+            // Get the path to the downloaded shapefile
+            var filepath = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/ShapefileCache/1/1.shp");
+            
+            // Open the shapefile
+            ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(filepath);
+
+            // Create a feature layer to display the shapefile
+            FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
+
+            await newFeatureLayer.LoadAsync();
+            SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Aqua, 1.0);
+            SimpleFillSymbol fillSymbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromArgb(30, Color.Aquamarine), lineSymbol);
+
+            var alternateRenderer = new SimpleRenderer(fillSymbol);
+
+            newFeatureLayer.Renderer = alternateRenderer;
+
+            // Add the feature layer to the map
+            this.MapView.Map.OperationalLayers.Add(newFeatureLayer);
+
+            // Zoom the map to the extent of the shapefile
+            await this.MapView.SetViewpointGeometryAsync(newFeatureLayer.FullExtent);
+        });
+
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
         {
             if (!IsLocationServiceSwitchEnabled)
@@ -324,6 +359,9 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.IsEditing = true;
             try
             {
+                //this.MapView.GeoViewTapped += MapView_GeoViewTapped;
+
+
                 this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
                 {
                     var geometry = args.NewGeometry;
@@ -411,6 +449,19 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 Close(this);
             }
         });
+
+        /*private void MapView_GeoViewTapped(object sender, GeoViewInputEventArgs e)
+        {
+            var mapPoint = e.Location;
+
+            if (!this.MapView.SpatialReference.IsEqual(e.Location.SpatialReference))
+            {
+                var mapPoint1 = GeometryEngine.Project((Esri.ArcGISRuntime.Geometry.Geometry) mapPoint,
+                    this.MapView.SpatialReference) as MapPoint;
+
+                var test1 =this.MapView.SpatialReference.IsEqual(mapPoint1.SpatialReference);
+            }
+        }*/
 
         private double GetGeometryArea(Geometry geometry)
         {
