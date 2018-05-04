@@ -312,8 +312,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.Selected = null;
                     option.YesCanBeChecked = maxAnswersCountNotReachedYet;
                 }
-
-                Mvx.Trace($"option {option.Value} has {option.YesCanBeChecked}");
             }
         }
 
