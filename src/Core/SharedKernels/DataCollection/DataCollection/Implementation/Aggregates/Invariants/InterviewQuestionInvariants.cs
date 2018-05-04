@@ -163,8 +163,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireProtectedAnswersNotRemoved(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
         {
-            var missingProtectedAnswers = protectedValues.Where(p => !selectedValues.Contains(p)).ToList();
-            if (missingProtectedAnswers.Count > 0)
+            var missingProtectedAnswers = protectedValues.Any(p => !selectedValues.Contains(p));
+            if (missingProtectedAnswers)
             {
                 throw new InterviewException("Removing protected answer is not allowed")
                 {
@@ -230,7 +230,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
                 .RequireMaxAnswersCountLimit(answers.Length);
 
-        public void RequireTextListAnswerAllowed(Tuple<decimal, string>[] answers)
+        public void RequireTextListAnswerAllowed(Tuple<decimal, string>[] answers, IReadOnlyList<TextListAnswerRow> protectedAnswers)
             => this
                 .RequireQuestionExists(QuestionType.TextList)
                 .RequireRosterSizeAnswerNotNegative(answers.Length)
@@ -239,7 +239,28 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionEnabled()
                 .RequireUniqueValues(answers)
                 .RequireNotEmptyTexts(answers)
-                .RequireMaxAnswersCountLimit(answers);
+                .RequireMaxAnswersCountLimit(answers)
+                .RequireProtectedAnswersNotRemoved(answers, protectedAnswers);
+
+        private void RequireProtectedAnswersNotRemoved(Tuple<decimal, string>[] selectedValues, IReadOnlyList<TextListAnswerRow> protectedAnswers)
+        {
+            foreach (var protectedAnswer in protectedAnswers)
+            {
+                if (!selectedValues.Any(x => protectedAnswer.Value == x.Item1 && protectedAnswer.Text == x.Item2))
+                {
+                    throw new InterviewException("Removing or modification of protected answer is not allowed")
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, JoinUsingCommas(selectedValues.Select(x => x.Item1)) },
+                            {ExceptionKeys.ProtectedAnswer, JoinUsingCommas(protectedAnswers.Select(x => x.Value))}
+                        }
+                    };
+                }
+            }
+        }
 
         public void RequireGpsCoordinatesPreloadValueAllowed(GeoPosition answer)
             => this
