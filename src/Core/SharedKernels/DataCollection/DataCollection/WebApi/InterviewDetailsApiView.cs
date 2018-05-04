@@ -47,8 +47,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
 
         public AuditLogEntityType Type { get; set; }
 
-        public DateTime Time { get; set; }
-        public DateTime TimeUtc { get; set; }
+        public DateTimeOffset Time { get; set; }
+        public DateTimeOffset TimeUtc { get; set; }
 
         public Guid? ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
