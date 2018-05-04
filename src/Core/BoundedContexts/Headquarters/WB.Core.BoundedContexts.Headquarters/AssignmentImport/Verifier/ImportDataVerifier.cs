@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
@@ -82,7 +84,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 var errorMessage = string.Format(Interviews.ImportInterviews_GenericError, allAnswersInString,
                     responsible?.UserName, ex.Message);
 
-                return new InterviewImportError("PL0011", errorMessage);
+                var errorInfo = new List<string>();
+
+                foreach (DictionaryEntry data in ex.Data)
+                    errorInfo.Add($"{data.Key}: {data.Value}");
+
+                return new InterviewImportError("PL0011", $"PL0011: {errorMessage}. {string.Join(", ", errorInfo)}");
             }
         }
 
