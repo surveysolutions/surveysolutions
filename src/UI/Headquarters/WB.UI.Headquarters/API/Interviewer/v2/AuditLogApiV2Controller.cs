@@ -41,8 +41,8 @@ namespace WB.UI.Headquarters.API.Interviewer.v2
                     RecordId = auditLogEntity.Id,
                     ResponsibleId = auditLogEntity.ResponsibleId,
                     ResponsibleName = auditLogEntity.ResponsibleName,
-                    Time = auditLogEntity.Time,
-                    TimeUtc = auditLogEntity.TimeUtc,
+                    Time = auditLogEntity.Time.DateTime,
+                    TimeUtc = auditLogEntity.TimeUtc.DateTime,
                     Type = auditLogEntity.Type,
                 };
                 auditLogRecord.SetJsonPayload(auditLogEntity.Payload);
