@@ -907,12 +907,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return childNode != null && childNode.Parents.Select(x => x.Identity).Any(x => x.Equals(parentIdentity));
         }
 
-        public bool IsAnswerProtected(Identity questionIdentity, decimal value)
-        {
-            var question = this.Tree.GetQuestion(questionIdentity);
-            return question.IsAnswerProtected(value);
-        }
-
         public void Pause(PauseInterviewCommand command)
         {
             if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)

@@ -11,17 +11,18 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
 {
-    public class MultipleOptionsQuestionWithProtectedAnswersTests : InterviewTestsContext
+    public class NumericIntegerQuestionWithProtectedAnswersTests : InterviewTestsContext
     {
         private StatefulInterview interview;
         readonly Guid questionId = Id.g1;
         readonly Guid userId = Id.gA;
+        private readonly int preloadedAnswer = 5;
 
         [SetUp]
         public void Setup()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultipleOptionsQuestion(questionId, answers: new[] { 1, 2, 3 }));
+                Create.Entity.NumericIntegerQuestion(questionId));
 
             interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
@@ -32,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
                 null,
                 new List<InterviewAnswer>
                 {
-                    Create.Entity.InterviewAnswer(questionIdentity, Create.Entity.MultiOptionAnswer(1))
+                    Create.Entity.InterviewAnswer(questionIdentity, Create.Entity.NumericIntegerAnswer(preloadedAnswer))
                 },
                 userId,
                 protectedAnswers: new List<Identity> { questionIdentity });
@@ -45,18 +46,18 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         {
             using (EventContext eventContext = new EventContext())
             {
-                interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { 1, 2 });
+                interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, preloadedAnswer + 1);
 
-                eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
+                eventContext.ShouldContainEvent<NumericIntegerQuestionAnswered>();
             }
         }
 
         [Test]
-        public void should_throw_when_protected_answer_is_removed()
+        public void should_throw_when_protected_answer_is_reduced()
         {
-            TestDelegate act = () => interview.AnswerMultipleOptionsQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, new[] { 3 });
+            TestDelegate act = () => interview.AnswerNumericIntegerQuestion(userId, questionId, RosterVector.Empty, DateTime.UtcNow, preloadedAnswer - 1); ;
 
-            Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Removing protected answer is not allowed"));
+            Assert.That(act, Throws.Exception.TypeOf<InterviewException>().With.Message.EqualTo("Reduce value of protected answer is not allowed"));
         }
 
         [Test]

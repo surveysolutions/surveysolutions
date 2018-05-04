@@ -1068,7 +1068,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireNumericIntegerAnswerAllowed(answer);
+                .RequireNumericIntegerAnswerAllowed(answer, this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeIntegerQuestion()?.ProtectedAnswer);
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -1274,7 +1274,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireTextListAnswerAllowed(answers, 
-                    this.tree.GetQuestion(questionIdentity).GetAsInterviewTreeTextListQuestion()?.ProtectedAnswers ?? Array.Empty<TextListAnswerRow>());
+                    this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeTextListQuestion()?.ProtectedAnswers ?? Array.Empty<TextListAnswerRow>());
 
             var changedInterviewTree = this.Tree.Clone();
             var interviewTreeQuestion = changedInterviewTree.GetQuestion(questionIdentity);
@@ -1400,6 +1400,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
+        public bool IsAnswerProtected(Identity questionIdentity, decimal value)
+        {
+            var question = this.Tree.GetQuestion(questionIdentity);
+            return question.IsAnswerProtected(value);
+        }
+
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
             new InterviewPropertiesInvariants(this.properties)
@@ -1412,6 +1418,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireQuestionExists()
                 .RequireQuestionEnabled();
+
+            var targetQuestion = this.tree.GetQuestion(questionIdentity);
+            if (targetQuestion.HasProtectedAnswer())
+            {
+                throw new InterviewException("Removing protected answer is not allowed",
+                    InterviewDomainExceptionType.AnswerNotAccepted)
+                {
+                    Data =
+                    {
+                        { InterviewQuestionInvariants.ExceptionKeys.InterviewId, this.EventSourceId },
+                        { InterviewQuestionInvariants.ExceptionKeys.QuestionId, questionIdentity.ToString() }
+                    }
+                };
+            }
 
             var changedInterviewTree = this.Tree.Clone();
 
