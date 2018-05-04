@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Spec;
-using NHibernate.Util;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -16,36 +15,53 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
         [Test]
         public void When_interview_created_with_protected_answers_Should_raise_event_about_it()
         {
-            Guid questionId = Id.g1;
+            Guid multipleOptionsQuestionId = Id.g1;
+            Guid textListQuestionId = Id.g2;
             Guid userId = Id.gA;
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultipleOptionsQuestion(questionId, answers: new int[] { 1, 2, 3 }));
+                Create.Entity.MultipleOptionsQuestion(multipleOptionsQuestionId, answers: new int[] { 1, 2, 3 }),
+                Create.Entity.TextListQuestion(questionId: textListQuestionId));
 
             var interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
 
-            var questionIdentity = Create.Identity(questionId);
+
+            var preloadedMultipleOptionsAnswer = new[] {1};
+            var multipleOptionsQuestionIdentity = Create.Identity(multipleOptionsQuestionId);
+            var listQuestionIdentity = Create.Identity(textListQuestionId);
+            var preloadedTextListAnswer = Create.Entity.ListAnswer(5, 10);
             var command =
                 Create.Command.CreateInterview(
                     questionnaire.PublicKey, 1,
                     null,
                     new List<InterviewAnswer>
                     {
-                        Create.Entity.InterviewAnswer(questionIdentity, Create.Entity.MultiOptionAnswer(1))
+                        Create.Entity.InterviewAnswer(multipleOptionsQuestionIdentity, Create.Entity.MultiOptionAnswer(preloadedMultipleOptionsAnswer)),
+                        Create.Entity.InterviewAnswer(listQuestionIdentity, preloadedTextListAnswer)
                     },
                     userId,
-                    protectedAnswers: new List<Identity>{questionIdentity});
+                    protectedAnswers: new List<Identity>{multipleOptionsQuestionIdentity, listQuestionIdentity});
 
             // Act
             using (EventContext eventContext = new EventContext())
             {
                 interview.CreateInterview(command);
 
-                var fixedMultipleOptionsEvent = eventContext.GetEvent<AnswersMarkedAsProtected>();
+                var answersMarkedAsProtected = eventContext.GetEvent<AnswersMarkedAsProtected>();
 
-                Assert.That(fixedMultipleOptionsEvent.Questions, Does.Contain(questionIdentity));
+                Assert.That(answersMarkedAsProtected.Questions, Does.Contain(multipleOptionsQuestionIdentity));
+                Assert.That(answersMarkedAsProtected.Questions, Does.Contain(listQuestionIdentity));
             }
+
+            var multipleOptionsTreeProtectedAnswers = interview.GetQuestion(multipleOptionsQuestionIdentity)
+                .GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers;
+            Assert.That(multipleOptionsTreeProtectedAnswers, Is.EqualTo(preloadedMultipleOptionsAnswer));
+
+            var listProtectedQuestionProtectedAnswers = interview.GetQuestion(listQuestionIdentity).GetAsInterviewTreeTextListQuestion()
+                .ProtectedAnswers;
+
+            Assert.That(listProtectedQuestionProtectedAnswers.Select(x => x.Value), Is.EquivalentTo(preloadedTextListAnswer.Rows.Select(x => x.Value)));
         }
     }
 }

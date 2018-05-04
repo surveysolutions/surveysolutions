@@ -49,11 +49,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool AnswersMarkedAsProtectedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
             if (changedNode == null) return false;
-            if (IsNodeAdded) return changedNode.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswers.Count > 0;
-
-            var multipleOptions = changedNode.GetAsInterviewTreeMultiOptionQuestion();
-            if (multipleOptions == null) return false;
-            return multipleOptions.ProtectedAnswers.Count > 0;
+            return changedNode.HasProtectedAnswer();
         }
 
         public bool IsAnswerRemovedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)

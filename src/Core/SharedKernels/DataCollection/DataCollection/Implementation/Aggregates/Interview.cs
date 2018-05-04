@@ -477,7 +477,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public virtual void Apply(AnswersMarkedAsProtected @event)
         {
             foreach (var protectedAnswer in @event.Questions)
-                this.Tree.GetQuestion(protectedAnswer)?.GetAsInterviewTreeMultiOptionQuestion()?.ProtectAnswers();
+                this.Tree.GetQuestion(protectedAnswer).ProtectAnswer();
         }
 
         public virtual void Apply(StaticTextsEnabled @event)
@@ -1495,7 +1495,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var protectedAnswer in protectedAnswers)
             {
-                changedInterviewTree.GetQuestion(protectedAnswer).GetAsInterviewTreeMultiOptionQuestion().ProtectAnswers();
+                changedInterviewTree.GetQuestion(protectedAnswer).ProtectAnswer();
             }
         }
 
