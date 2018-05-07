@@ -2027,7 +2027,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             FileName = fileName,
             Row = row,
-            InterviewIdValue = Create.Entity.AssignmentInterviewId(interviewId),
+            InterviewIdValue = string.IsNullOrWhiteSpace(interviewId) ? null : Create.Entity.AssignmentInterviewId(interviewId),
             RosterInstanceCodes = rosterInstanceCodes
         };
 
