@@ -1,4 +1,5 @@
 using System;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
@@ -17,5 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public long VerifiedCount { get; set; }
         public long WithErrorsCount { get; set; }
         public long TotalCount { get; set; }
+        public AssignmentsImportProcessStatus ProcessStatus { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -40,16 +41,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             try
             {
                 var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
-                if (importProcess == null) return;
-
-                if (importProcess.AssignedToInterviewersCount + importProcess.AssignedToSupervisorsCount == 0)
-                    return;
-
-                if (importProcess.VerifiedCount != importProcess.TotalCount)
-                    return;
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Import) return;
 
                 var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());
-                if (allAssignmentIds.Length == 0) return;
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
@@ -79,10 +73,16 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
                     });
+                
+                this.ExecuteInPlain(() =>
+                {
+                    importProcess = this.importAssignmentsService.GetImportStatus();
 
-                importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
-                if(importProcess.WithErrorsCount == 0)
-                    this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAllAssignmentsToImport());
+                    if (importProcess.WithErrorsCount == 0)
+                        this.importAssignmentsService.RemoveAllAssignmentsToImport();
+                    else
+                        this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
+                });
 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");

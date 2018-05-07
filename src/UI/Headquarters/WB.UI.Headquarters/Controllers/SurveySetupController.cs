@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -92,7 +93,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var prevImportFinishedWithErrors = status != null && status.InQueueCount == status.WithErrorsCount;
+            var prevImportFinishedWithErrors =
+                status?.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted && status.WithErrorsCount > 0;
+
             if (!prevImportFinishedWithErrors)
             {
                 var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(BatchUpload));
@@ -186,7 +189,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var prevImportFinishedWithErrors = status != null && status.InQueueCount == status.WithErrorsCount;
+            var prevImportFinishedWithErrors =
+                status?.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted && status.WithErrorsCount > 0;
+
             if (!prevImportFinishedWithErrors)
             {
                 var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(PanelBatchUploadAndVerify));
@@ -278,7 +283,9 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var prevImportFinishedWithErrors = status != null && status.InQueueCount == status.WithErrorsCount;
+            var prevImportFinishedWithErrors =
+                status?.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted && status.WithErrorsCount > 0;
+
             if (!prevImportFinishedWithErrors)
             {
                 var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(AssignmentsBatchUploadAndVerify));
@@ -436,7 +443,9 @@ namespace WB.UI.Headquarters.Controllers
             if (!model.WasResponsibleProvided && model.ResponsibleId.HasValue)
                 this.assignmentsImportService.SetResponsibleToAllImportedAssignments(model.ResponsibleId.Value);
 
-            assignmentsImportTask.Run();
+            this.assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
+
+            this.assignmentsImportTask.Run();
 
             return this.RedirectToAction("InterviewImportProgress");
         }
@@ -501,7 +510,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 (nameof(InterviewImportProgress), () => IsAssignmentsImportIsInProgress(status)),
                 (nameof(InterviewVerificationProgress), () => IsAssignmentsVerifying(status)),
-                (nameof(InterviewImportConfirmation), () => NoResponsibleForVerifiedAssignments(status)),
+                (nameof(InterviewImportConfirmation), () => IsAssignmentsReadyToImport(status)),
             };
 
             foreach (var importAssignmentsPage in importAssignmentsPages)
@@ -513,17 +522,15 @@ namespace WB.UI.Headquarters.Controllers
             return null;
         }
 
-        private static bool NoResponsibleForVerifiedAssignments(AssignmentsImportStatus status)
-            => status.VerifiedCount == status.TotalCount &&
-               status.InQueueCount > status.WithErrorsCount &&
-               status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount == 0;
+        private static bool IsAssignmentsReadyToImport(AssignmentsImportStatus status)
+            => status.ProcessStatus == AssignmentsImportProcessStatus.VerificationCompleted;
 
         private static bool IsAssignmentsVerifying(AssignmentsImportStatus status)
-            => status.InQueueCount == status.TotalCount && status.VerifiedCount < status.TotalCount;
+            => status.ProcessStatus  == AssignmentsImportProcessStatus.Verification;
 
         private static bool IsAssignmentsImportIsInProgress(AssignmentsImportStatus status)
-            => status.InQueueCount < status.TotalCount && status.InQueueCount > status.WithErrorsCount ||
-               status.InQueueCount == status.WithErrorsCount;
+            => status.ProcessStatus == AssignmentsImportProcessStatus.Import ||
+               status.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted;
 
         private ImportDataParsingErrorsView CreateError(QuestionnaireIdentity questionnaireIdentity,
             string fileName, string error = null, PanelImportVerificationError[] errors = null)

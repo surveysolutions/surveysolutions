@@ -27,5 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         IEnumerable<string> GetImportAssignmentsErrors();
         void SetVerifiedToAssignment(int assignmentId, string errorMessage);
         void RemoveAssignmentToImport(int assignmentId);
+        void SetImportProcessStatus(AssignmentsImportProcessStatus status);
     }
 }
