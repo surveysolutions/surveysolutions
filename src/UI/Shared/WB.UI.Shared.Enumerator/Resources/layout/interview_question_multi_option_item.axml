@@ -12,10 +12,7 @@
     style="@style/Interview_Question_Answer_Option_Input"
     local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Checked; Click CheckAnswerCommand; Bold Checked; Tag ItemTag; Enabled Not(IsProtected)" />
 
-    <ImageView android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               local:srcCompat="@drawable/lock_icon"
-               android:layout_gravity="center_vertical"
-               android:paddingRight="@dimen/Interview_Question_Answer_Input_background_padding"
-               local:MvxBind="Visible IsProtected" />
+    <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
+               local:MvxBind="Visible IsProtected" 
+               local:srcCompat="@drawable/lock_icon" />
 </LinearLayout>
