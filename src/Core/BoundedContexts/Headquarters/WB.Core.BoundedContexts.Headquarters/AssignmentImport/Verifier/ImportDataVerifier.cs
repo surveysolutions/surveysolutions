@@ -209,6 +209,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<InterviewImportReference> OrphanNestedRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
             IQuestionnaire questionnaire)
         {
+            // if only main file without interview id column in zip 
+            // this verification should be skipped
+            if (allRowsByAllFiles.Any(x => x.InterviewIdValue == null)) yield break;
+
             foreach (var rowsByInterview in allRowsByAllFiles.GroupBy(x => x.InterviewIdValue.Value))
             {
                 var rowsByRosterInstances = rowsByInterview
