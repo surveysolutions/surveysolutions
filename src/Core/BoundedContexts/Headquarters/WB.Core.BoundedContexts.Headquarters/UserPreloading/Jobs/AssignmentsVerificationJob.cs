@@ -45,10 +45,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             try
             {
                 var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
-                if (importProcess == null) return;
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
                 var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToVerify());
-                if (allAssignmentIds.Length == 0) return;
 
                 this.logger.Debug("Assignments verification job: Started");
 
@@ -86,6 +85,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
                     });
+
+                this.ExecuteInPlain(() =>
+                    this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.VerificationCompleted));
 
                 sw.Stop();
                 this.logger.Debug($"Assignments verfication job: Finished. Elapsed time: {sw.Elapsed}");
