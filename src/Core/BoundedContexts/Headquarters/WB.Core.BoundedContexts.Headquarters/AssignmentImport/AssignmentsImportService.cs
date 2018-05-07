@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 Interviewer = responsible?.Responsible?.InterviewerId,
                 Supervisor = responsible?.Responsible?.SupervisorId,
-                Quantity = quantity.Quantity.HasValue ? (quantity.Quantity > -1 ? quantity.Quantity : null) : 1,
+                Quantity = quantity?.Quantity.HasValue ?? false ? (quantity.Quantity > -1 ? quantity.Quantity : null) : 1,
                 Verified = verified,
                 Answers = answers
                     .SelectMany(x => x.answers.Select(y => ToInterviewAnswer(y, x.rosterVector, questionnaire)))
