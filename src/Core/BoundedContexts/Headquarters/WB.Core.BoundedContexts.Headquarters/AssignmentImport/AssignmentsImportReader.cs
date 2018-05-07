@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     Column = kv.Key,
                     Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
                         .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
-                        .Replace(ExportFormatSettings.MissingQuantityValue, string.Empty),
+                        .Replace(ExportFormatSettings.MissingQuantityValue, "-1"),
                 });
             }
 
