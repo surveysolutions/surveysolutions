@@ -89,5 +89,32 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Column, Is.EqualTo(parentRosterColumn));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(nestedRoster));
         }
+
+        [Test]
+        public void when_verify_rosters_with_main_file_only_without_interview_id_column_should_return_empty_errors()
+        {
+            // arrange
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                {
+                    Create.Entity.FixedRoster(fixedTitles: Create.Entity.FixedTitles(1, 2),
+                        children: new[]
+                            {Create.Entity.FixedRoster(fixedTitles: Create.Entity.FixedTitles(1, 2))})
+                }));
+
+
+            var allRowsByAllFiles = new List<PreloadingAssignmentRow>
+            {
+                Create.Entity.PreloadingAssignmentRow("questionnaire", 1, null)
+            };
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRosters(allRowsByAllFiles, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
     }
 }
