@@ -57,7 +57,6 @@ input.radio-row{
 	left: -999999px;
 }
 input.wb-checkbox{
-    //display: none;
     @extend %questionnaire-sprite;
 	& ~ label:hover .tick,
 	&:focus ~ label .tick,
@@ -89,7 +88,6 @@ input.wb-checkbox{
 }
 
 input.checkbox-filter{
-  	//display: none;
   	& ~ label{
   		position: relative;
   		padding-left: 30px;
@@ -131,7 +129,6 @@ input.checkbox-filter{
 	  }
 }
 input.double-checkbox{
-  	//display: none;
   	& ~ label{
   		position: relative;
   		cursor: pointer;
@@ -161,7 +158,6 @@ input.double-checkbox{
   	}
 }
 input.double-checkbox-white{
-  	//display: none;
   	& ~ label{
   		position: relative;
   		cursor: pointer;
@@ -198,7 +194,6 @@ input.double-checkbox-white{
 	    padding: 7px 0;
 	}
     input.wb-radio{
-        //display: none;
 	    @extend %questionnaire-sprite;
 	    &:checked + label{
             color:  $gray_text;

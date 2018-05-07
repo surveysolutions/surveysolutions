@@ -389,7 +389,7 @@
     <Content Include="App_GlobalResources\Dashboard.resx">
       <SubType>Designer</SubType>
       <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>Dashboard.Designer.cs</LastGenOutput>
+      <LastGenOutput>Dashboard.designer.cs</LastGenOutput>
     </Content>
     <Content Include="App_GlobalResources\Dashboard.ru.resx">
       <DependentUpon>Dashboard.resx</DependentUpon>
@@ -1677,6 +1677,8 @@
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
     <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
+    <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
+    <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1695,6 +1697,7 @@
   <ItemGroup>
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
+    <Compile Include="API\AssignmentsUpgradeApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\AuditLogApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
@@ -1716,6 +1719,11 @@
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
+    <Compile Include="App_GlobalResources\Dashboard.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\DataExport.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1771,11 +1779,6 @@
     </Compile>
     <Compile Include="App_GlobalResources\Common.designer.cs">
       <DependentUpon>Common.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="App_GlobalResources\Dashboard.Designer.cs">
-      <DependentUpon>Dashboard.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
@@ -1940,6 +1943,7 @@
     <Compile Include="Models\Maps\MapDetailsModel.cs" />
     <Compile Include="Models\Reports\StatusDurationModel.cs" />
     <Compile Include="Models\Reports\DevicesInterviewersModel.cs" />
+    <Compile Include="Models\UpgradeAssignmentsModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxModel.cs" />
     <Compile Include="Models\User\ResponsibleComboboxOptionModel.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
@@ -2018,11 +2022,9 @@
     <Compile Include="API\PublicApi\Models\InterviewApiItem.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiView.cs" />
     <Compile Include="Models\Api\Interview\QuestionApiItem.cs" />
-    <Compile Include="Models\Api\Interview\RosterApiItem.cs" />
     <Compile Include="API\PublicApi\Models\QuestionnaireApiItem.cs" />
     <Compile Include="API\PublicApi\Models\QuestionnaireApiView.cs" />
     <Compile Include="Models\Api\QuestionnaireToBeImported.cs" />
-    <Compile Include="API\PublicApi\Models\StatusChangeApiModel.cs" />
     <Compile Include="API\PublicApi\Models\UserApiDetails.cs" />
     <Compile Include="API\PublicApi\Models\UserApiItem.cs" />
     <Compile Include="API\PublicApi\Models\UserApiView.cs" />

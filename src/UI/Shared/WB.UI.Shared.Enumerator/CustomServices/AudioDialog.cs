@@ -45,7 +45,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.ShowDialog(title);
 
             this.audioService.OnMaxDurationReached += AudioService_OnMaxDurationReached;
-            this.audioService.Start();
+            this.audioService.StartRecording();
 
             this.durationTimer = new Timer(this.OnEvery41Milisecond, null, 0, 41);
             this.noiseTimer = new Timer(this.OnEvery100Millisecond, null, 0, 100);
@@ -105,7 +105,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.noiseTimer.Dispose();
             this.noiseTimer = null;
             
-            this.audioService.Stop();
+            this.audioService.StopRecording();
             this.audioService.OnMaxDurationReached -= this.AudioService_OnMaxDurationReached;
 
             this.modalDialog.Dismiss();

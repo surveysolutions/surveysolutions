@@ -159,7 +159,7 @@
             background-color: #2a81cb; }
         .structured-content .panel-default > .panel-heading h3 a {
           display: block;
-          font: 16px/18px "RobotoMedium";
+          font: 16px/18px "RobotoRegular";
           font-weight: normal;
           color: #2a81cb;
           padding: 15px 20px 15px 30px;
@@ -394,7 +394,7 @@ span.image-zoom-box, span.image-option {
 
 .complete-link {
   display: block;
-  font: 16px/18px "RobotoMedium";
+  font: 16px/18px "RobotoRegular";
   padding: 15px 20px 15px 60px;
   border-bottom: 1px solid #dddddd; }
   .complete-link:hover, .complete-link:focus, .complete-link:active {
@@ -441,11 +441,11 @@ span.image-zoom-box, span.image-option {
         margin-bottom: 0; }
       .questionnaire .unit-title .breadcrumb li a {
         color: rgba(255, 255, 255, 0.5);
-        font: 10px/12px "TrebuchetMS"; }
+        font: 10px/12px "Trebuchet MS", Helvetica, sans-serif; }
       .questionnaire .unit-title .breadcrumb > li:after {
         color: rgba(255, 255, 255, 0.5); }
     .questionnaire .unit-title h3 {
-      font: 16px/18px "RobotoMedium"; }
+      font: 16px/18px "RobotoRegular"; }
   .questionnaire .complete-section > .unit-title {
     background-color: #3ca21a; }
   .questionnaire .section-with-error > .unit-title {
@@ -685,8 +685,8 @@ span.image-zoom-box, span.image-option {
   position: absolute;
   top: 0;
   left: -40px;
-  line-height: 42px;
   text-align: right;
+  line-height: 42px;
   font-size: 14px;
   font-weight: bold;
   width: 25px;
@@ -938,7 +938,8 @@ span.image-zoom-box, span.image-option {
     line-height: 20px; }
 
 .audio-question .btn-recording-done {
-  font: 16px/22px "RobotoItalic";
+  font: 16px/22px "RobotoRegular";
+  font-style: italic;
   text-transform: initial;
   float: right;
   letter-spacing: normal;
@@ -1111,9 +1112,9 @@ html body.dynamic-content {
 
 .start-web-interview {
   display: table;
-  height: calc(100% - 100px);
+  height: 100%;
   width: 100%; }
-  .start-web-interview .content-wrapper {
+  .start-web-interview .container-wrapper {
     display: table-cell;
     vertical-align: middle; }
   .start-web-interview .two-columns-form {
@@ -1231,7 +1232,7 @@ body.no-cookies div.no-cookies {
     font: 38px/40px "RobotoLight"; }
     .question-status ul li span {
       display: block;
-      font: 16px/18px "RobotoMedium"; }
+      font: 16px/18px "RobotoRegular"; }
     .question-status ul li:first-child {
       border-left: none; }
     .question-status ul li.has-value.answered {

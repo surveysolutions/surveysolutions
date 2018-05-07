@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
@@ -84,6 +85,7 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
         /// <exception cref="ActivationException">if there is are errors resolving
         /// the service instance.</exception>
         /// <returns>The requested service instance.</returns>
+        [DebuggerStepThrough]
         public virtual TService GetInstance<TService>()
         {
             return (TService)GetInstance(typeof(TService), null);
