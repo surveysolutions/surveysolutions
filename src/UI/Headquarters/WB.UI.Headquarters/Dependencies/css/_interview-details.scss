@@ -97,7 +97,8 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		font: 14px/16px "RobotoItalic";
+		font: 14px/16px $roboto_italic;
+		font-style: italic;
 		span{
 			font-family: "RobotoLight";
 		}
@@ -158,13 +159,11 @@
 		}
 	}
 	.data-label{
-		//display: inline-block;
-		//width: 110px;
 		text-align: right;
 		color: $gray_light;
 	}
 	.data{
-		font-family: "RobotoMedium";
+		font-family: $roboto_medium;
 	}
 	.questionnaire-details-actions,
 	.about-questionnaire{
@@ -750,4 +749,21 @@
 		}
 	}
 	
+}
+.panel-details{
+	border-radius: 0;
+	margin-bottom: 0;
+	border: none;
+	box-shadow: none;
+	position: fixed;
+	top: 70px;
+	left: 12px;
+	right: 0;
+	border-bottom: 4px solid $gray_form;
+	z-index: 3;
+}
+@media (max-width: $screen-md-min){
+	.panel-details{
+		top: 60px;
+	}
 }

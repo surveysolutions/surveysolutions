@@ -1,18 +1,27 @@
-﻿using System.Runtime.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using WB.Core.SharedKernels.DataCollection;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Models.Api.Interview
+namespace WB.UI.Headquarters.Models.Api.Interview
 {
     public class QuestionApiItem
     {
-        public QuestionApiItem(string name, object value)
+        public QuestionApiItem(string variableName, Identity questionId, string answer)
         {
-            this.Value = value;
-            this.Name = name;
+            VariableName = variableName;
+            QuestionId = questionId;
+            Answer = answer;
         }
 
-        [DataMember]
-        public string Name { set; get; }
-        [DataMember]
-        public object Value { set; get; }
+        [DataMember(IsRequired = true)]
+        [Required]
+        public string VariableName { set; get; }
+        
+        [DataMember(IsRequired = true)]
+        [Required]
+        public Identity QuestionId { get; set; }
+
+        [DataMember(IsRequired = false)]
+        public string Answer { set; get; }
     }
 }

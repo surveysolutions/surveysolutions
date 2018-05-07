@@ -18,7 +18,7 @@
                                @blur="answerTextQuestion"
                                v-mask="$me.mask"
                                :data-mask-completed="$me.isAnswered" />
-                        <textarea-autosize v-else ref="input"
+                        <textarea-autosize v-else ref="inputTextArea"
                                autocomplete="off"
                                rows="1"
                                class="field-to-fill"
@@ -26,6 +26,7 @@
                                :value="$me.answer"
                                :disabled="!$me.acceptAnswer"
                                v-blurOnEnterKey
+                               @blur.native="answerTextQuestion"
                                @blur="answerTextQuestion"></textarea-autosize>
                         <wb-remove-answer />
                     </div>                    
@@ -62,8 +63,8 @@
         methods: {
             answerTextQuestion() {
                 this.sendAnswer(() => {
-                    const target = $(this.$refs.input)
-                    const answer = this.$refs.input.value
+                    const target = $(this.$refs.input || this.$refs.inputTextArea.$el)
+                    const answer = target.val()
 
                     if(this.handleEmptyAnswer(answer)) {
                         return

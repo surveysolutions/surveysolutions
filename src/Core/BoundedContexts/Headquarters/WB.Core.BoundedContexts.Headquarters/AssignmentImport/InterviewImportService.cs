@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -20,7 +21,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -163,7 +163,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     {
                         var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
                         if (interviewTreeQuestion == null)
-                            continue;
+                        {
+                            new InterviewQuestionInvariants(answer.Identity, questionnaire, tree).RequireQuestionExists();
+                        }
 
                         interviewTreeQuestion.SetAnswer(answer.Answer);
 

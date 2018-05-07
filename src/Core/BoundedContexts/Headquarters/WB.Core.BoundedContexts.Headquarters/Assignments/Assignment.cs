@@ -26,9 +26,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.ResponsibleId = responsibleId;
             this.Quantity = quantity;
             this.QuestionnaireId = questionnaireId;
-
-            Answers = new List<InterviewAnswer>();
-            IdentifyingData = new List<IdentifyingAnswer>();
         }
 
         public virtual int Id { get; protected set; }

@@ -98,10 +98,11 @@
                 border-bottom: none;
                 border-top: none;
                 &.date{
-                    font: 14px/16px "TrebuchetMS";
+                    font: 14px/16px $trebuchet;
+                    white-space: nowrap;
                 }
                 &.parameters{
-                    font-family: "TrebuchetMSBold";
+                    font-family: $trebuchet_bold;
                     color: $gray-highlight-font;
                     span{
                         @extend %gray-uppercase;
@@ -325,8 +326,6 @@
     thead tr, tbody tr{
         td, th{
             &.checkbox-cell{
-                // min-width: 40px !important;
-                // width: 40px !important;
                 text-align: center;
                 padding: 15px 3px 15px 10px;
                 outline: none;
@@ -421,7 +420,7 @@
         float: right;
         padding-top: 0.755em;
         padding-bottom: 10px;
-        font: 13px/15px "TrebuchetMSBold";
+        font: 13px/15px $trebuchet_bold;
         padding-left: 20px;
         text-align: right;
     }
@@ -478,11 +477,6 @@
         }
     }
 }
-// .table-wrapper{
-//     .dataTables_filter{
-//         top: -40px;
-//     }
-// }
 @media only screen and (max-width: 1450px){
     .table-ordered{
         thead{
@@ -525,9 +519,6 @@
     .table-ordered thead th.padding-left-slide:first-child{
         padding-left: 265px;
     }
-    // .dataTables_paginate{
-    //     margin-bottom: 30px;
-    // }
     .table-wrapper{
         .dataTables_paginate{
             margin-bottom: 0;
@@ -587,7 +578,7 @@
                 text-align:left;
                 padding-right: 10px;
                 text-transform: uppercase;
-                font-family: "TrebuchetMSBold";
+                font-family: $trebuchet_bold;
                 letter-spacing: 0.5px;
                 float: left;
                 clear: both;
