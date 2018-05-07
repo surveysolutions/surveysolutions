@@ -1,10 +1,11 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 {
-    public class QuestionnaireCompositeItem
+    public class QuestionnaireCompositeItem : IView
     {
         public virtual int Id { get; set; }
         public virtual string QuestionnaireIdentity { get; set; }

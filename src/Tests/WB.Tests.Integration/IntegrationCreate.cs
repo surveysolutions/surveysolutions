@@ -377,12 +377,12 @@ namespace WB.Tests.Integration
             => new DesignerEngineVersionService();
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
-            ISessionProvider sessionProvider = null, string idColumnName = "Id")
+            ISessionProvider sessionProvider = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgreReadSideStorage<TEntity>(
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
-                Mock.Of<ILogger>(), idColumnName);
+                Mock.Of<ILogger>());
         }
 
         public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)
