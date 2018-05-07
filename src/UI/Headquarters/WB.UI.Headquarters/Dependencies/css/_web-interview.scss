@@ -57,7 +57,7 @@
 }
 .complete-link{
 	display: block;
-	font: 16px/18px "RobotoMedium";
+	font: 16px/18px $roboto_medium;
 	padding: 15px 20px 15px 60px;
 	border-bottom: 1px solid rgb(221, 221, 221);
 	&:hover, &:focus, &:active{
@@ -111,14 +111,14 @@
 			}
 			li a{
 					color: rgba(255, 255, 255, 0.5);
-					font: 10px/12px "TrebuchetMS";
+					font: 10px/12px $trebuchet;
 			}
 			& > li:after{
 		  		color: rgba(255, 255, 255, 0.5);
 		  	}
 		}
 		h3{
-			font: 16px/18px "RobotoMedium";
+			font: 16px/18px $roboto_medium;
 		}
 	}
 	.complete-section>.unit-title{
@@ -149,7 +149,7 @@
 	color: $gray_light;
 	h6, .comment label{
 		margin-top: 20px;
-		font: 10px/12px "TrebuchetMSBold";
+		font: 10px/12px $trebuchet_bold;
 		letter-spacing: 0.5px;
     	text-transform: uppercase;
     	display: block;
@@ -293,7 +293,7 @@
 		&:before{left: -25px;}
 	}
 	.btn-link{
-		font: 10px/12px "TrebuchetMSBold";
+		font: 10px/12px $trebuchet_bold;
 	}
 	.block-with-data .btn-link{
 		padding-left: 0;
@@ -435,8 +435,8 @@
 	background-color: transparent;
 	display: none;
 	@include absolute(0, null, null, -40px);
-	line-height: 42px;
 	text-align: right;
+	line-height: 42px;
 	font-size: 14px;
 	font-weight: bold;
 	width: 25px;
@@ -720,7 +720,8 @@
 		}
 	}
 	.btn-recording-done{
-		font: 16px/22px "RobotoItalic";
+		font: 16px/22px $roboto_italic;
+		font-style: italic;
 		text-transform: initial;
 		float: right;
 		letter-spacing: normal;

@@ -227,6 +227,9 @@
       <HintPath>..\..\..\..\packages\PCLStorage.1.0.2\lib\monoandroid\PCLStorage.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PhotoView, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.Android.PhotoView.2.1.3\lib\MonoAndroid\PhotoView.dll</HintPath>
+    </Reference>
     <Reference Include="Plugin.CurrentActivity, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Plugin.CurrentActivity.1.0.1\lib\MonoAndroid10\Plugin.CurrentActivity.dll</HintPath>
       <Private>True</Private>
@@ -604,7 +607,6 @@
     <AndroidResource Include="Resources\menu\finish.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_item_default.xml" />
-    <AndroidResource Include="Resources\drawable\location_icon.png" />
     <AndroidResource Include="Resources\drawable\dashboard_remove_icon_pressed.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
