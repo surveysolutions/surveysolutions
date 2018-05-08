@@ -8,8 +8,8 @@
                         <input class="wb-radio" type="radio" 
                             :name="$me.id + '_' + option.value" 
                             :id="$me.id + '_' + option.value + '_yes'" 
-                            :checked="isYesChecked(option.value)"
-                            :disabled="!$me.acceptAnswer"
+                            :checked="isYesChecked(option)"
+                            :disabled="!$me.acceptAnswer || isProtected(option)"
                             value="true"                            
                             @click="answerYes(option.value)" 
                             v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}" />
@@ -21,14 +21,14 @@
                             :name="$me.id + '_' + option.value" 
                             :id="$me.id + '_' + option.value + '_no'" 
                             :checked="isNoChecked(option.value)"
-                            :disabled="!$me.acceptAnswer"
+                            :disabled="!$me.acceptAnswer || isProtected(option)"
                             value="false"
                             @click="answerNo(option.value)" />
                         <label :for="$me.id + '_' + option.value + '_no'">
                             <span class="tick"></span>
                         </label>
                         <span>{{option.title}}</span>
-                        <button type="submit" v-if="$me.acceptAnswer" class="btn btn-link btn-clear" @click="clearAnswer(option.value)">
+                        <button type="submit" v-if="$me.acceptAnswer && !isProtected(option)" class="btn btn-link btn-clear" @click="clearAnswer(option.value)">
                             <span></span>
                         </button>
                         <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value)}}</div>
@@ -107,13 +107,14 @@
                 const answerIndex = findIndex(yesAnswers, (x) =>  { return x.value == optionValue })
                 return  answerIndex > -1 ? answerIndex + 1 : ""
             },
-            isYesChecked(optionValue) {
-                const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue; });
-                return answerObj.length == 0 ? false : answerObj[0].yes;
+            isYesChecked(answer) {
+                return answer.yes;
             },
-            isNoChecked(optionValue) {
-                const answerObj = $.grep(this.$me.answer, (e) => { return e.value == optionValue; });
-                return answerObj.length == 0 ? false : !answerObj[0].yes;
+            isNoChecked(answer) {
+                return !answer.yes;
+            },
+            isProtected(answer) {
+                return answer.isProtected;
             },
             sendAnswer(optionValue, answerValue) {
                 const previousAnswer = this.$me.answer;
