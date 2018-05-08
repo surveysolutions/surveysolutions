@@ -154,7 +154,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
-                            typedResult.PretectedAnswer = typedResult.Answer
+                            typedResult.ProtectedAnswer = typedResult.Answer
                                 .Where(i => callerInterview.IsAnswerProtected(question.Identity, i))
                                 .ToArray();
                         }
