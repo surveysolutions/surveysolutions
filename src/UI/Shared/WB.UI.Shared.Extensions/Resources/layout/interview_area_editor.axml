@@ -4,24 +4,19 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-  <LinearLayout
-    android:id="@+id/area_map_view_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" />
-  
+    <LinearLayout
+        android:id="@+id/area_map_view_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" />
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-      
         <android.support.design.widget.AppBarLayout
-            
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-        
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -40,7 +35,7 @@
                         android:id="@+id/areaEditor_No_Maps_Text"
                         android:textColor="@color/text_color_light"
                         android:textSize="16sp"
-                        local:MvxBind="Text Localization('AreaMap_Active_Map_Title');" /> 
+                        local:MvxBind="Text Localization('AreaMap_Active_Map_Title');" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -56,82 +51,77 @@
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
     </android.support.design.widget.CoordinatorLayout>
-
-  <LinearLayout
-                      android:clickable="true"
-                      android:layout_alignParentTop="true"
-                      android:id="@+id/area_map_list_maps"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical"
-                      android:layout_marginTop="?attr/actionBarSize"
-                      android:background="#AA575757"
-                      local:MvxBind="Visibility Visibility(IsPanelVisible);">
-    <ProgressBar        
-        style="@style/Progress_Indicator"
-        android:indeterminate="true"
-        local:MvxBind="Visibility Visibility(IsInProgress);" />    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/areaEditor_No_Maps_Text"
-        android:textColor="@color/text_color_light"
-        android:textSize="16sp"
-        android:layout_marginTop="@dimen/area_editor_common_margin_top"
-        android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-        local:MvxBind="Text Localization('AreaMap_Available_Maps_Title');"/>
-      
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:id="@+id/areaEditor_No_Maps_Text"
-          android:textColor="@color/text_color_light"
-          android:textSize="14sp"
-          android:layout_marginTop="@dimen/area_editor_common_margin_top"
-          android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-          local:MvxBind="Text Localization('AreaMap_NoMapsFound'); Visibility Visibility(Map == null);" />
-    <MvxRecyclerView
-        android:id="@+id/mapsList"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        local:MvxBind="ItemsSource AvailableMaps; ItemClick SwitchMapCommand;"
-        local:MvxItemTemplate="@layout/map_item" />
-
     <LinearLayout
-        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/area_map_list_maps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/area_editor_common_margin_top"
-        android:orientation="horizontal"        
-        android:weightSum="1.0"
-        android:gravity="center_vertical|right"
-        android:clickable="true">
-
-      <LinearLayout
-            android:layout_alignParentLeft="true"
-            android:id="@+id/area_stats"
+        android:orientation="vertical"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="#AA575757"
+        local:MvxBind="Visibility Visibility(IsPanelVisible);">
+        <ProgressBar
+            style="@style/Progress_Indicator"
+            android:indeterminate="true"
+            local:MvxBind="Visibility Visibility(IsInProgress);" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/areaEditor_No_Maps_Text"
+            android:textColor="@color/text_color_light"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/area_editor_common_margin_top"
+            android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+            local:MvxBind="Text Localization('AreaMap_Available_Maps_Title');" />
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            android:layout_weight="0.5"
-            android:gravity="center_vertical|left"
-            android:orientation="vertical">
-        <Button
-            style="@style/Area_Screen_Button_Bordered"
-            android:id="@+id/areaEditor_Close_Panel"
-            android:layout_marginLeft="@dimen/area_editor_common_margin_right"
-            local:MvxBind="Click SwitchPanelCommand;Text Localization('AreaMap_Close');" />
-      </LinearLayout>
-      <LinearLayout
-          android:layout_gravity="left"
-          android:layout_weight="0.5"
-          android:layout_width="wrap_content"
-          android:layout_height="match_parent"
-          android:gravity="center_vertical|right">
-      </LinearLayout>
+            android:layout_height="wrap_content"
+            android:id="@+id/areaEditor_No_Maps_Text"
+            android:textColor="@color/text_color_light"
+            android:textSize="14sp"
+            android:layout_marginTop="@dimen/area_editor_common_margin_top"
+            android:layout_marginLeft="@dimen/area_editor_common_margin_left"
+            local:MvxBind="Text Localization('AreaMap_NoMapsFound'); Visibility Visibility(Map == null);" />
+        <MvxRecyclerView
+            android:id="@+id/mapsList"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            local:MvxBind="ItemsSource AvailableMaps; ItemClick SwitchMapCommand;"
+            local:MvxItemTemplate="@layout/map_item" />
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/area_editor_common_margin_top"
+            android:orientation="horizontal"
+            android:weightSum="1.0"
+            android:gravity="center_vertical|right"
+            android:clickable="true">
+            <LinearLayout
+                android:layout_alignParentLeft="true"
+                android:id="@+id/area_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:layout_weight="0.5"
+                android:gravity="center_vertical|left"
+                android:orientation="vertical">
+                <Button
+                    style="@style/Area_Screen_Button_Bordered"
+                    android:id="@+id/areaEditor_Close_Panel"
+                    android:layout_marginLeft="@dimen/area_editor_common_margin_right"
+                    local:MvxBind="Click SwitchPanelCommand;Text Localization('AreaMap_Close');" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_gravity="left"
+                android:layout_weight="0.5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|right" />
+        </LinearLayout>
     </LinearLayout>
-  </LinearLayout>
     <Button
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
@@ -140,12 +130,10 @@
         local:MvxBind="Click UndoCommand;Text Localization('AreaMap_Undo'); Enabled CanUndo; Visibility Visibility(IsPanelVisible == false);"
         android:layout_marginRight="@dimen/area_editor_common_margin_right"
         android:layout_marginTop="@dimen/area_editor_undo_margin_top" />
-    
     <Button
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         style="@style/Area_Screen_Button_Bordered"
-        
         local:MvxBind="Click LoadShapefile;Text 'Shapeifle'; Visibility Visibility(IsPanelVisible == false);"
         android:layout_marginLeft="@dimen/area_editor_common_margin_right"
         android:layout_marginTop="@dimen/area_editor_undo_margin_top" />
@@ -167,7 +155,6 @@
         local:MvxBind="Click ZoomMapOut; Visibility Visibility(Map != null);"
         android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom"
         android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
-
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/area_editor_lower_panel_margin_bottom"
@@ -185,7 +172,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:layout_weight="0.6"
-                android:duplicateParentState="true"
+            android:duplicateParentState="true"
             android:gravity="center_vertical|left"
             android:orientation="vertical">
             <TextView
@@ -207,7 +194,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="left"
-                    android:duplicateParentState="true"
+                android:duplicateParentState="true"
                 android:id="@+id/areaEditor_GeometryLength"
                 local:MvxBind="Text Format('{0} {1} m', Localization('AreaMap_LengthFormat'), GeometryLength) ; Visibility Visibility(IsGeometryLengthVisible);" />
         </LinearLayout>
@@ -216,7 +203,7 @@
             android:layout_weight="0.4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-                android:duplicateParentState="true"
+            android:duplicateParentState="true"
             android:gravity="center_vertical|right">
             <Button
                 style="@style/Area_Screen_Button"
