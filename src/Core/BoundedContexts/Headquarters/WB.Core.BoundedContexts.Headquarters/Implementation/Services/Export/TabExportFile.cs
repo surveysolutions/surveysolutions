@@ -36,12 +36,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             HasHeaderRecord = false,
             TrimOptions = TrimOptions.Trim,
             IgnoreQuotes = false,
-            Delimiter = "\t",
+            Delimiter = Delimiter,
         };
 
         public override string MimeType => "text/tab-separated-values";
         public override string FileExtension => Extention;
 
         public const string Extention = ".tab";
+        public const string Delimiter = "\t";
     }
 }

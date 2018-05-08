@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public IEnumerable<UserImportVerificationError> VerifyAndSaveIfNoErrors(byte[] data, string fileName)
         {
             if (this.usersImportTask.IsJobRunning())
-                throw new UserPreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
+                throw new PreloadingException(UserPreloadingServiceMessages.HasUsersToImport);
 
             var csvDelimiter = ExportFileSettings.DataFileSeparator.ToString();
 
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
             var missingColumns = requiredColumns.Where(x => !columns.Contains(x));
 
             if (missingColumns.Any())
-                throw new UserPreloadingException(string.Format(UserPreloadingServiceMessages.FileColumnsMissingFormat,
+                throw new PreloadingException(string.Format(UserPreloadingServiceMessages.FileColumnsMissingFormat,
                         fileName, string.Join(", ", missingColumns)));
 
             var usersToImport = new List<UserToImport>();
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     }
                     catch (CsvHelper.BadDataException dataException)
                     {
-                        throw new UserPreloadingException(
+                        throw new PreloadingException(
                             string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile,
                                 dataException.ReadingContext.Row));
                     }
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                     }
 
                     if (usersToImport.Count > userPreloadingSettings.MaxAllowedRecordNumber)
-                        throw new UserPreloadingException(string.Format(
+                        throw new PreloadingException(string.Format(
                             UserPreloadingServiceMessages.TheDatasetMaxRecordNumberReachedFormat,
                             this.userPreloadingSettings.MaxAllowedRecordNumber));
                 } while (userToImports.Current != null);

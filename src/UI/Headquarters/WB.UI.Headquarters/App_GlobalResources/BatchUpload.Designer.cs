@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to {0} enumerators.
+        ///   Looks up a localized string similar to Assigned to {0} interviewers.
         /// </summary>
         internal static string AssignedToMultipleEnumerators {
             get {
@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to 1 enumerator.
+        ///   Looks up a localized string similar to Assigned to 1 interviewer.
         /// </summary>
         internal static string AssignedToSingleEnumerator {
             get {

@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
@@ -34,9 +35,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             assignmentToMigrate.Archive();
 
             assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
-            var importService = Mock.Of<IInterviewImportService>(s =>
-                s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) ==
-                AssignmentVerificationResult.Error("Generic error"));
+            var importService = Mock.Of<IPreloadedDataVerifier>(s =>
+                s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) ==
+                new InterviewImportError("Some code", "Generic error"));
 
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage,
                 importService: importService);
@@ -67,9 +68,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 questionnaireIdentity: migrateFrom);
 
             assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
-            var importService = Mock.Of<IInterviewImportService>(s =>
-                s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) ==
-                AssignmentVerificationResult.Error("Generic error"));
+            var importService = Mock.Of<IPreloadedDataVerifier>(s =>
+                s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) ==
+                new InterviewImportError("Some code", "Generic error"));
 
             var service = Create.Service.AssignmentsUpgrader(assignments: assignmentsStorage,
                 importService: importService);

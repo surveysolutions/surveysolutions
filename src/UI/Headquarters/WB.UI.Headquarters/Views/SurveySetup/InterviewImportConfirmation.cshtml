@@ -81,7 +81,7 @@
                         </p>
                     }
                 </div>
-                @using (Html.BeginForm("InterviewImportConfirmation", "SurveySetup", new { Id = Model.Id, questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
+                @using (Html.BeginForm("InterviewImportConfirmation", "SurveySetup", new { questionnaireId = Model.QuestionnaireId, version = Model.Version }, FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     @Html.HiddenFor(x => x.EntitiesCount)
@@ -89,7 +89,6 @@
                     @Html.HiddenFor(x => x.SupervisorsCount)
                     @Html.HiddenFor(x => x.FileName)
                     @Html.HiddenFor(x => x.WasResponsibleProvided)
-                    @Html.HiddenFor(x => x.AssignmentImportType)
 
                     <input id="responsibleId" name="responsibleId" type="hidden" data-bind="value: selectedResponsibleId">
                     if (hasModelLevelErrors)
@@ -119,7 +118,7 @@
                         <button type="submit" class="btn btn-success" data-bind="@if (!Model.WasResponsibleProvided) { <text>enable: isResponsibleSelected</text> }">
                              @BatchUpload.CreateAssignments
                         </button>
-                        <a href="@Url.Action("BatchUpload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
+                        <a href="@Url.Action("CancelImportAssignments", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.Version})" class="back-link">
                             @BatchUpload.BackToImport
                         </a>
                     </div>

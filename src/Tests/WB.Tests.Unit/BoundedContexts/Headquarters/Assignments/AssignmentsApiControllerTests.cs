@@ -3,6 +3,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -28,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IInterviewCreatorFromAssignment>(),
                 Mock.Of<IAuditLog>(),
-                Mock.Of<IInterviewImportService>()
+                Mock.Of<IPreloadedDataVerifier>()
             );
 
             controller.Get(new AssignmentsApiController.AssignmentsDataTableRequest
