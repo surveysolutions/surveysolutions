@@ -132,7 +132,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool Ordered { get; set; }
         public int[] Answer { get; set; }
         public bool IsRosterSize { get; set; }
-        public int[] PretectedAnswer { get; set; }
+        public int[] ProtectedAnswer { get; set; }
     }
 
     public class InterviewYesNoQuestion : CategoricalQuestion
