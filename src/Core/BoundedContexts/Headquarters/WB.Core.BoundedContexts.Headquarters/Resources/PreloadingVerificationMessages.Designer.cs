@@ -61,11 +61,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0001] Questionnaire is missing in HQ.
+        ///   Looks up a localized string similar to Password-protected archives are not supported.
         /// </summary>
-        public static string PL0001_NoQuestionnaire {
+        public static string ArchiveWithPasswordNotSupported {
             get {
-                return ResourceManager.GetString("PL0001_NoQuestionnaire", resourceCulture);
+                return ResourceManager.GetString("ArchiveWithPasswordNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please, wait until previous import of assignments is completed.
+        /// </summary>
+        public static string HasAssignmentsToImport {
+            get {
+                return ResourceManager.GetString("HasAssignmentsToImport", resourceCulture);
             }
         }
         
@@ -250,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preloading data were not found.
+        ///   Looks up a localized string similar to Preloading data were not found..
         /// </summary>
         public static string PL0024_DataWasNotFound {
             get {
@@ -412,7 +421,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer to multiple choice question cannot contain more than {0} answers..
+        ///   Looks up a localized string similar to Answered options count to multiple choice question can&apos;t be more than max allowed answers count.
         /// </summary>
         public static string PL0041_AnswerExceedsMaxAnswersCount {
             get {
