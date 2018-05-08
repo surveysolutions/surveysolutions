@@ -147,14 +147,7 @@
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
     <value>Для GPS вопроса обязательно наличие значений и широты и долготы</value>
   </data>
-  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>Ответ на вопрос не может содержать более чем {0} отвеченных опций.</value>
-  </data>
-  <data name="PL0001_NoQuestionnaire" xml:space="preserve">
-    <value>[PL0001] Опросник отсутствует на сервере</value>
-    <comment>[PL0001] Опросник отсутствует на сервере</comment>
-  </data>
-  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
     <comment>[PL0002] N/A</comment>
   </data>
@@ -286,5 +279,16 @@
   </data>
   <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
     <value>Вопрос со списком {0} содержит неуникальные коды: {1}. Код интервью: {2}</value>
+  </data>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Количество отвеченных опций не может быть больше чем максимально разрешенное количство отвеченных опций</value>
+  </data>
+    <data name="HasAssignmentsToImport" xml:space="preserve">
+    <value>Пожалуйста подождите пока завершится текущий процесс импорта назначений</value>
+    <comment>Пожалуйста подождите пока завершится текущий процесс импорта назначений</comment>
+  </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Архивы защищенные паролем не поддерживаются</value>
+    <comment>Архивы защищенные паролем не поддерживаются</comment>
   </data>
 </root>

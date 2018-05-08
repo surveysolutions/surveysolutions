@@ -18,15 +18,10 @@ namespace WB.UI.Headquarters.Models
     public class PreloadedDataInProgressModel
     {
         public PreloadedDataQuestionnaireModel Questionnaire { get; set; }
-        public string CurrentProcessId { get; set; }
     }
 
     public class PreloadedDataConfirmationModel : IValidatableObject
     {
-        public string Id { get; set; }
-
-        public AssignmentImportType AssignmentImportType { get; set; }
-
         public Guid QuestionnaireId { get; set; }
 
         public long Version { get; set; }
@@ -39,7 +34,7 @@ namespace WB.UI.Headquarters.Models
 
         public bool WasResponsibleProvided { get; set; }
 
-        public int EntitiesCount { get; set; }
+        public long EntitiesCount { get; set; }
         public int EnumeratorsCount { get; set; }
         public int SupervisorsCount { get; set; }
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

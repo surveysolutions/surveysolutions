@@ -702,7 +702,7 @@
     <value>Not all points were loaded</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
-    <value>There is no any information about geolocation points.</value>
+    <value>This questionnaire contains no GPS coordinates to show on the map for selected variable.</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
     <value>No markers were added</value>

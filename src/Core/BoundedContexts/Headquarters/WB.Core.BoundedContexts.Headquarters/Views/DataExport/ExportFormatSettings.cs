@@ -8,5 +8,6 @@
         public const string DisableValue = "";
         public const string MissingNumericQuestionValue = "-999999999";
         public const string MissingStringQuestionValue = "##N/A##";
+        public const string MissingQuantityValue = "INF";
     }
 }

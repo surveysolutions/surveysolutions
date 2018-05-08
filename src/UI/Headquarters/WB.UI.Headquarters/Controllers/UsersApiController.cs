@@ -332,7 +332,7 @@ namespace WB.UI.Headquarters.Controllers
                     .Take(8).Select(ToImportError).ToArray();
                 return this.Ok(importUserErrors);
             }
-            catch (UserPreloadingException e)
+            catch (PreloadingException e)
             {
                 return this.BadRequest(e.Message);
             }
