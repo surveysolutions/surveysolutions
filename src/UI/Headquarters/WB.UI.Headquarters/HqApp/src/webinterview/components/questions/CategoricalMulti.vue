@@ -4,7 +4,7 @@
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="form-group" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
-                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" :disabled="!$me.acceptAnswer" v-model="answer" v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
+                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" :disabled="!$me.acceptAnswer || isProtected(option.value)" v-model="answer" v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
@@ -63,6 +63,10 @@
         methods: {
             toggleOptions(){
                 this.showAllOptions = !this.showAllOptions;
+            },
+            isProtected(answerValue) {
+                var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
+                return answerIndex > -1;
             },
             getAnswerOrder(answerValue) {
                 var answerIndex = this.$me.answer.indexOf(answerValue)
