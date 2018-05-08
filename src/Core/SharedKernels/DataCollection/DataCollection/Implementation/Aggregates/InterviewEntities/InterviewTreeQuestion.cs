@@ -759,6 +759,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption) this.GetAsInterviewTreeMultiOptionQuestion().ProtectAnswer();
             else if (this.IsTextList) this.GetAsInterviewTreeTextListQuestion().ProtectAnswer();
             else if (this.IsNumericInteger) this.GetAsInterviewTreeIntegerQuestion().ProtectAnswer();
+            else if (this.IsYesNo) this.GetAsInterviewTreeYesNoQuestion().ProtectYesAnswers();
             else 
                 throw new InvalidOperationException($"Can't protect answers for question of type {InterviewQuestionType}");
         }
@@ -768,6 +769,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers.Count > 0;
             if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswers.Count > 0;
             if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.HasValue;
+            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().ProtectedYesAnswers.Count > 0;
 
             return false;
         }
@@ -777,6 +779,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().IsAnswerProtected(value);
             if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().IsAnswerProtected(value);
             if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().IsAnswerProtected(value);
+            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().IsAnswerProtected(value);
 
             return false;
         }
@@ -1120,6 +1123,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return interviewTreeYesNoQuestion.answer.ToAnsweredYesNoOptions().SequenceEqual(this.answer.ToAnsweredYesNoOptions());
 
             return false;
+        }
+
+        public void ProtectYesAnswers()
+        {
+            this.ProtectedYesAnswers = GetAnswer()?.CheckedOptions.Where(o => o.Yes).Select(o => o.Value).ToArray() ?? Array.Empty<int>();
+        }
+
+        public IReadOnlyCollection<int> ProtectedYesAnswers { get; private set; }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedYesAnswers.Contains((int)value);
         }
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeYesNoQuestion) this.MemberwiseClone();
