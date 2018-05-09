@@ -185,7 +185,7 @@ for further instructions</value>
     <value>No New</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>This interview is completed. Do you want to restart the interview?</value>
+    <value>This interview is completed. Do you want to reopen the interview?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Rejected ({0})</value>
