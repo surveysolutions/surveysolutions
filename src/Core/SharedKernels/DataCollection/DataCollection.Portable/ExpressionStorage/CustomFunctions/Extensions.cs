@@ -94,6 +94,25 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
 
             return false;
         }
+
+        public static bool ContainsAnyOtherThan(this int[] multichoice, params int[] valuesList)
+        {
+            if (multichoice == null) return false;
+            if (multichoice.Length == 0) return false;
+
+            if (valuesList == null) return true;
+            if (valuesList.Length == 0) return true;
+
+            for (var j = 0; j < multichoice.Length; j++)
+            {
+                var other = true;
+                for (var i = 0; i < valuesList.Length; i++)
+                    if (multichoice[j] == valuesList[i]) other = false;
+                if (other) return true;
+            }
+
+            return false;
+        }
         #endregion
     }
 }
