@@ -47,7 +47,7 @@
         {
             <div class="row">
                 <div class="col-sm-7">
-                    <h2>@dateRecords.Date.ToLongDateString() <span class="default-text">(@dateRecords.Date.DayOfWeek.ToString())</span></h2>
+                    <h2>@dateRecords.Date.ToLongDateString()</h2>
                     <table class="table timestamps-table">
                         <tbody>
                             @foreach (var record in dateRecords.RecordsByDate)
