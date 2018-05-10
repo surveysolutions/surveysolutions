@@ -21,7 +21,7 @@ using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers
 {
-    [AuthorizeOr403(Roles = "Administrator")]
+    [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
     [ObserverNotAllowed]
     [LimitsFilter]
     public class InterviewerAuditLogController : BaseController
@@ -77,8 +77,8 @@ namespace WB.UI.Headquarters.Controllers
                     Time = r.Time,
                     Type = r.Type,
                     Message = GetUserMessage(r)
-                }).ToArray()
-            }).ToArray();
+                }).OrderByDescending(i => i.Time).ToArray()
+            }).OrderByDescending(i => i.Date).ToArray();
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(id);
             int? interviewerApkVersion = interviewerVersionReader.Version;
