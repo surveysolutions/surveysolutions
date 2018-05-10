@@ -209,7 +209,7 @@
     <value>To interview</value>
   </data>
   <data name="DiscardAndStart" xml:space="preserve">
-    <value>Restart</value>
+    <value>Reopen</value>
   </data>
   <data name="OrStartInterview" xml:space="preserve">
     <value>Or you can start a new interview</value>

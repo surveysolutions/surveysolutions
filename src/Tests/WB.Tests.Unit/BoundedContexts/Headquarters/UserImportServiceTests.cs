@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userImportService = CreateUserImportService(null, usersToImport);
 
             //act
-            var exception = Assert.Catch<UserPreloadingException>(() => userImportService
+            var exception = Assert.Catch<PreloadingException>(() => userImportService
                 .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
 
             //assert
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userImportService = Create.Service.UserImportService(csvReader: csvReader);
 
             //act
-            var exception = Assert.Catch<UserPreloadingException>(() => userImportService
+            var exception = Assert.Catch<PreloadingException>(() => userImportService
                 .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
 
             //assert
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                 {
                     Mock.Of<IJobExecutionContext>(y =>
                         y.JobDetail ==
-                        Mock.Of<IJobDetail>(z => z.Key == new JobKey("import users job", "Import users")))
+                        Mock.Of<IJobDetail>(z => z.Key == new JobKey("Import users job", "Import users")))
                 });
 
             var usersImportTask = new UsersImportTask(scheduler);
@@ -73,7 +73,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             var userImportService = CreateUserImportServiceWithRepositories(usersImportTask: usersImportTask);
 
             //act
-            var exception = Assert.Catch<UserPreloadingException>(() => userImportService
+            var exception = Assert.Catch<PreloadingException>(() => userImportService
                 .VerifyAndSaveIfNoErrors(new byte[0], "file.txt").ToArray());
 
             //assert
@@ -422,8 +422,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             TestDelegate act = () => service.VerifyAndSaveIfNoErrors(Encoding.UTF8.GetBytes(data), "file.txt").ToList();
 
             // Assert
-            var excpectedError = string.Format(UserPreloadingServiceMessages.CannotParseIncomingFile, 2);
-            Assert.That(act, Throws.Exception.TypeOf<UserPreloadingException>().With.Message.EqualTo(excpectedError)); 
+            Assert.DoesNotThrow(act); 
         }
 
         private UserImportService CreateUserImportService(HqUser[] dbUsers = null, params UserToImport[] usersToImport)

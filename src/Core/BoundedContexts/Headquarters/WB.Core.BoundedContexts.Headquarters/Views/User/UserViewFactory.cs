@@ -86,6 +86,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
         }
 
+        public UserToVerify[] GetUsersByUserNames(string[] userNames)
+        {
+            var interviewerRoleId = UserRoles.Interviewer.ToUserId();
+            var supervisorRoleId = UserRoles.Supervisor.ToUserId();
+
+            return this.UserRepository.Users
+                .Where(x => userNames.Contains(x.UserName) && !x.IsArchived)
+                .Select(x => new UserToVerify
+                {
+                    IsLocked = x.IsLockedByHeadquaters || x.IsLockedBySupervisor,
+                    SupervisorId = x.Roles.Any(role => role.RoleId == supervisorRoleId) ? x.Id : x.Profile.SupervisorId,
+                    InterviewerId = x.Roles.Any(role => role.RoleId == interviewerRoleId) ? x.Id : (Guid?)null
+                }).ToArray();
+        }
+
         public UserListView GetUsersByRole(int pageIndex, int pageSize, string orderBy, string searchBy, bool archived, UserRoles role)
         {
             Func<IQueryable<HqUser>, IQueryable<InterviewersItem>> query =
