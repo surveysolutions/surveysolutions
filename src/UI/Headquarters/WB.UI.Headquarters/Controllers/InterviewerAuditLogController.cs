@@ -45,16 +45,16 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        public ActionResult Index(Guid id, DateTime? starDateTime)
+        public ActionResult Index(Guid id, DateTime? startDateTime)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || !userView.IsInterviewer())
                 throw new InvalidOperationException($"Interviewer with id: {id} not fpund");
 
-            if (!starDateTime.HasValue)
-                starDateTime = DateTime.UtcNow.AddDays(1);
+            if (!startDateTime.HasValue)
+                startDateTime = DateTime.UtcNow.AddDays(1);
 
-            var records = auditLogFactory.GetLastExisted7DaysRecords(id, starDateTime.Value);
+            var records = auditLogFactory.GetLastExisted7DaysRecords(id, startDateTime.Value);
 
             var recordsByDate = new Dictionary<DateTime, List<AuditLogRecord>>();
             foreach (var record in records.Records)
