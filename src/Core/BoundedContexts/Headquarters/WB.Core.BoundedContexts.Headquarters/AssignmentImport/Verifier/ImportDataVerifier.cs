@@ -39,6 +39,56 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.userViewFactory = userViewFactory;
         }
 
+        public List<PanelImportVerificationError> VerifyAndParseProtectedVariables(string originalFileName,
+            IList<string[]> file, IQuestionnaire questionnaire, out List<string> protectedVariables)
+        {
+            protectedVariables = new List<string>();
+            List<PanelImportVerificationError> errors = new List<PanelImportVerificationError>();
+            if (file == null || file.Count == 0)
+                return errors;
+
+            var headerRow = file[0];
+
+            if (!headerRow.Contains(ServiceColumns.ProtectedVariableNameColumn))
+            {
+                errors.Add(ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
+                    new PreloadedFileInfo
+                    {
+                        Columns = file.FirstOrDefault(),
+                        FileName = ServiceFiles.ProtectedVariables
+                    }, originalFileName));
+                return errors;
+            }
+
+            for (int rowNumber = 1; rowNumber < file.Count; rowNumber++)
+            {
+                string firstCellValue = file[rowNumber].FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(firstCellValue))
+                {
+                    var questionByVariable = questionnaire.GetQuestionByVariable(firstCellValue);
+                    if(questionByVariable == null)
+                    {
+                        errors.Add(ToCellError("PL0048",
+                            string.Format(messages.PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire,
+                                firstCellValue),
+                            new PreloadingAssignmentRow
+                            {
+                                FileName = ServiceFiles.ProtectedVariables,
+                                Row = rowNumber
+                            }, column: ServiceColumns.ProtectedVariableNameColumn,
+                            value: firstCellValue));
+                    }
+                    else
+                    {
+                        protectedVariables.Add(firstCellValue);
+                    }
+                }
+            }
+
+            return errors;
+        }
+
         public InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire)
         {
             var answersGroupedByLevels = answers.GroupedByLevels();

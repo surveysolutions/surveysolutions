@@ -473,5 +473,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0046_HasDifferentTextsInListAndRosterTitles", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required column {0} is missing.
+        /// </summary>
+        public static string PL0047_ProtectedVariables_MissingColumn {
+            get {
+                return ResourceManager.GetString("PL0047_ProtectedVariables_MissingColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protected variable {0} is not found in provided questionnaire.
+        /// </summary>
+        public static string PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire {
+            get {
+                return ResourceManager.GetString("PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire", resourceCulture);
+            }
+        }
     }
 }

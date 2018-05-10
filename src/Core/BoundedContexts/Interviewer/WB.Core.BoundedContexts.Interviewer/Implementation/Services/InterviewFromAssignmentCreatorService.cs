@@ -69,12 +69,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
                 List<InterviewAnswer> answers = this.GetAnswers(assignment.Answers);
+                List<string> protectedVariables = assignment.ProtectedVariables.Select(x => x.Variable).ToList();
 
                 ICommand createInterviewCommand = new CreateInterview(interviewId,
                     interviewerIdentity.UserId,
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
                     answers,
-                    new List<Identity>(),
+                    protectedVariables,
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,

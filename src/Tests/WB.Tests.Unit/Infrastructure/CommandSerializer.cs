@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Infrastructure
                 questionnaireId: Create.Entity.QuestionnaireIdentity(),
                 answers: new List<InterviewAnswer>(),
                 answersTime: DateTime.UtcNow,
-                questionsWithProtectedAnswers: new List<Identity>(), 
+                protectedVariables: new List<string>(), 
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: Create.Entity.InterviewKey(),

@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream);
         PreloadedFile ReadFileFromZip(Stream inputStream, string fileName);
         IEnumerable<PreloadedFileInfo> ReadZipFileInfo(Stream inputStream);
+        List<string[]> ReadProtectedVariablesFile(Stream fileInputStream);
     }
 }

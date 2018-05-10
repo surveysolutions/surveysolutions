@@ -9,8 +9,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public static readonly string InterviewActions = "interview__actions";
         public static readonly string InterviewErrors = "interview__errors";
         public static readonly string InterviewComments = "interview__comments";
+        public static readonly string ProtectedVariables = "protected__variables";
 
-        public static readonly string[] AllSystemFiles = {Readme, InterviewActions, InterviewComments, InterviewErrors};
+        public static readonly string[] AllSystemFiles = {Readme, InterviewActions, InterviewComments, InterviewErrors, ProtectedVariables};
     }
 
     public static class ServiceColumns
@@ -22,6 +23,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         public static readonly string Key = $"interview{ColumnDelimiter}key";
         public static readonly string InterviewId = $"interview{ColumnDelimiter}id";
         public static readonly string InterviewStatus = $"interview{ColumnDelimiter}status";
+        public static readonly string ProtectedVariableNameColumn = $"variable{ColumnDelimiter}name";
 
         public static readonly string IdSuffixFormat = $"{{0}}{ColumnDelimiter}id";
 
@@ -41,6 +43,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
         };
 
         public static readonly string[] AllSystemVariables = SystemVariables.Values
-            .Select(x => x.VariableExportColumnName).Select(x => x.ToLower()).ToArray();
+            .Select(x => x.VariableExportColumnName).Concat(ProtectedVariableNameColumn.ToEnumerable()).Select(x => x.ToLower()).ToArray();
     }
 }

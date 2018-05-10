@@ -254,14 +254,14 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewerId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            List<Identity> protectedAnswers = null)
+            List<string> protectedAnswers = null)
         {
             return new CreateInterview(
                 interviewId, 
                 userId, 
                 Create.Entity.QuestionnaireIdentity(questionnaireId, version), 
                 answers, 
-                protectedAnswers ?? new List<Identity>(),
+                protectedAnswers ?? new List<string>(),
                 answersTime, 
                 supervisorId, 
                 interviewerId, 
@@ -275,7 +275,7 @@ namespace WB.Tests.Abc.TestFactories
             List<InterviewAnswer> answersToFeaturedQuestions = null,
             Guid? userId = null,
             DateTime? answersTime = null,
-            List<Identity> protectedAnswers = null)
+            List<string> protectedAnswers = null)
         {
             return this.CreateInterview(
                 Guid.NewGuid(),

@@ -1475,7 +1475,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
             this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
-            this.ProtectAnswers(changedInterviewTree, command.QuestionsWithProtectedAnswers);
+            this.ProtectAnswers(changedInterviewTree, command.ProtectedVariables);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
@@ -1513,11 +1513,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
         }
 
-        private void ProtectAnswers(InterviewTree changedInterviewTree, List<Identity> protectedAnswers)
+        private void ProtectAnswers(InterviewTree changedInterviewTree, List<string> protectedAnswers)
         {
-            foreach (var protectedAnswer in protectedAnswers)
+            foreach (var treeQuestion in changedInterviewTree.AllNodes.OfType<InterviewTreeQuestion>())
             {
-                changedInterviewTree.GetQuestion(protectedAnswer).ProtectAnswer();
+                if (protectedAnswers.Any(x =>
+                    treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                {
+                    treeQuestion.ProtectAnswer();
+                }
             }
         }
 

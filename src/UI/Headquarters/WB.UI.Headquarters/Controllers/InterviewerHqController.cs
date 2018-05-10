@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.PublicKey,
                 assignment.QuestionnaireId,
                 assignment.Answers.ToList(),
-                new List<Identity>(), // TODO implement in KP-11287
+                assignment.ProtectedVariables,
                 DateTime.UtcNow,
                 interviewer.Supervisor.Id,
                 interviewer.PublicKey,

@@ -15,6 +15,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
         IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire);
         IEnumerable<PanelImportVerificationError> VerifyRosters(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire);
         IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire);
+
+        List<PanelImportVerificationError> VerifyAndParseProtectedVariables(string originalFileName,
+            IList<string[]> file,
+            IQuestionnaire questionnaire,
+            out List<string> protectedVariables);
+
         InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire);
     }
 }
