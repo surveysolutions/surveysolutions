@@ -10,6 +10,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Text;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -34,6 +35,7 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -237,23 +239,7 @@ namespace WB.Tests.Abc.TestFactories
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
-
-        public ImportDataParsingService PreloadedDataService(QuestionnaireDocument questionnaire)
-            => new ImportDataParsingService(
-                new ExportViewFactory(new FileSystemIOAccessor(),
-                        new ExportQuestionService(),
-                        Mock.Of<IQuestionnaireStorage>(_ =>
-                            _.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire &&
-                            _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
-                            Create.Entity.PlainQuestionnaire(questionnaire, 1, null)),
-                        new RosterStructureService(),
-                        Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>())
-                    .CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                new RosterStructureService().GetRosterScopes(questionnaire),
-                questionnaire,
-                new QuestionDataParser(),
-                new UserViewFactory(Mock.Of<IUserRepository>(), Mock.Of<IInterviewerProfileFactory>()));
-
+        
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
@@ -680,16 +666,38 @@ namespace WB.Tests.Abc.TestFactories
                 userRepository: userRepository ?? userRepositoryMock.Object);
         }
 
-        public IAssignmentsUpgrader AssignmentsUpgrader(IInterviewImportService importService = null,
+        public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
+            IInterviewTreeBuilder interviewTreeBuilder = null,
+            IUserViewFactory userViewFactory = null)
+            => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
+                interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
+                userViewFactory ?? Mock.Of<IUserViewFactory>());
+
+        public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorageAccessor<Assignment> assignments = null,
             IAssignmentsUpgradeService upgradeService = null)
         {
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
-                importService ?? Mock.Of<IInterviewImportService>(s => s.VerifyAssignment(It.IsAny<List<InterviewAnswer>[]>(), It.IsAny<IQuestionnaire>()) == AssignmentVerificationResult.Ok()),
+                importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
                 Create.Service.PlainPostgresTransactionManager());
         }
+
+        public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null) 
+            => new AssignmentsImportFileConverter(fs ?? Create.Service.FileSystemIOAccessor(), userViewFactory ?? Mock.Of<IUserViewFactory>());
+
+        public AssignmentsImportReader AssignmentsImportReader(ICsvReader csvReader = null,
+            IArchiveUtils archiveUtils = null)
+            => new AssignmentsImportReader(csvReader ?? Create.Service.CsvReader(),
+                archiveUtils ?? Create.Service.ArchiveUtils());
+
+        public CsvReader CsvReader() => new CsvReader();
+        public ZipArchiveUtils ArchiveUtils() => new ZipArchiveUtils();
+
+        public Stream TabDelimitedTextStream(string[] headers, params string[][] cells)
+            => new MemoryStream(Encoding.UTF8.GetBytes(string.Join(Environment.NewLine,
+                new[] {headers}.Union(cells).Select(x => string.Join(TabExportFile.Delimiter, x)))));
     }
 }

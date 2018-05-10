@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PL0001_NoQuestionnaire" xml:space="preserve">
-    <value>[PL0001] Questionnaire is missing in HQ</value>
-  </data>
   <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
   </data>
@@ -182,7 +179,7 @@
     <value>Picture question cannot be preloaded.</value>
   </data>
   <data name="PL0024_DataWasNotFound" xml:space="preserve">
-    <value>Preloading data were not found</value>
+    <value>Preloading data were not found.</value>
   </data>
   <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
     <value>Responsible field was not provided for 1 or more observations</value>
@@ -235,10 +232,10 @@
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>File with questionnaire level data is missing.</value>
   </data>
-  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>Answer to multiple choice question cannot contain more than {0} answers.</value>
+    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>Answered options count to multiple choice question can't be more than max allowed answers count</value>
   </data>
-  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+    <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
     <value>Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}</value>
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
@@ -252,5 +249,11 @@
   </data>
   <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
     <value>Text list question {0} has non-unique item codes: {1}. Interview id: {2}</value>
+  </data>
+    <data name="HasAssignmentsToImport" xml:space="preserve">
+    <value>Please, wait until previous import of assignments is completed</value>
+  </data>
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <value>Password-protected archives are not supported</value>
   </data>
 </root>

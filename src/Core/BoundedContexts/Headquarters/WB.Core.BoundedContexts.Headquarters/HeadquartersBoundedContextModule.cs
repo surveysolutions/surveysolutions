@@ -147,10 +147,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
            
             registry.BindWithConstructorArgument<IPreloadingTemplateService, AssignmentImportTemplateGenerator>("folderPath", this.currentFolderPath);
-            registry.BindAsSingletonWithConstructorArgument<IPreloadedDataRepository, FilebasedPreloadedDataRepository>("folderPath", this.currentFolderPath);
             registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
-            registry.Bind<IQuestionDataParser, QuestionDataParser>();
-            registry.Bind<IPreloadedDataService, ImportDataParsingService>();
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
 
@@ -158,8 +155,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            registry.Bind<IRecordsAccessorFactory, CsvRecordsAccessorFactory>();
-            registry.Bind<IPreloadedDataServiceFactory, PreloadedDataServiceFactory>();
             registry.Bind<IBrokenInterviewPackagesViewFactory, BrokenInterviewPackagesViewFactory>();
             registry.Bind<ISynchronizationLogViewFactory, SynchronizationLogViewFactory>();
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
@@ -194,9 +189,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             
-
-            registry.Bind<IInterviewImportDataParsingService, InterviewImportDataParsingService>();
-
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
