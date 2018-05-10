@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interview is completed. Do you want to restart the interview?.
+        ///   Looks up a localized string similar to This interview is completed. Do you want to reopen the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {
             get {
