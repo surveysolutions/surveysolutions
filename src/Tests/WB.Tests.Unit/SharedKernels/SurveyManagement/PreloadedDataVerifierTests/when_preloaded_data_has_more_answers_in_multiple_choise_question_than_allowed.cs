@@ -34,13 +34,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             var preloadedDataService = Create.Service.PreloadedDataService(questionnaire);
             var importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataService);
 
-            var result = importDataVerifier.VerifyAssignmentsSample(questionnaireId, 1, preloadedDataByFile);
+            var result = importDataVerifier.VerifyAssignmentsSample(preloadedDataByFile, preloadedDataService).ToList();
 
-            Assert.That(result.Errors, Has.Count.EqualTo(1));
-            Assert.That(result.Errors.Single().Code, Is.EqualTo("PL0041"));
+            Assert.That(result, Has.Count.EqualTo(1));
+            Assert.That(result.Single().Code, Is.EqualTo("PL0041"));
 
             var expectedErrorMessage = string.Format(PreloadingVerificationMessages.PL0041_AnswerExceedsMaxAnswersCount, question.MaxAllowedAnswers);
-            Assert.That(result.Errors.Single().Message, Is.EqualTo(expectedErrorMessage));
+            Assert.That(result.Single().Message, Is.EqualTo(expectedErrorMessage));
         }
     }
 }

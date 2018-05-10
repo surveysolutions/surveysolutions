@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -19,13 +20,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
     internal class AssignmentsUpgrader : IAssignmentsUpgrader
     {
         private readonly IPlainStorageAccessor<Assignment> assignments;
-        private readonly IInterviewImportService importService;
+        private readonly IPreloadedDataVerifier importService;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IPlainTransactionManager transactionManager;
 
         public AssignmentsUpgrader(IPlainStorageAccessor<Assignment> assignments,
-            IInterviewImportService importService,
+            IPreloadedDataVerifier importService,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsUpgradeService upgradeService,
             IPlainTransactionManager transactionManager
@@ -59,8 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                         var oldAssignment = assignments.GetById(assignmentId);
                         if (!oldAssignment.IsCompleted)
                         {
-                            var assignmentVerification = this.importService.VerifyAssignment(oldAssignment.Answers.GroupedByLevels(), targetQuestionnaire);
-                            if (assignmentVerification.Status)
+                            var assignmentVerification = this.importService.VerifyWithInterviewTree(oldAssignment.Answers, null, targetQuestionnaire);
+                            if (assignmentVerification == null)
                             {
                                 oldAssignment.Archive();
 
