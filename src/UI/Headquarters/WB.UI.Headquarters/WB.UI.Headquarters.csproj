@@ -1620,7 +1620,6 @@
     <Content Include="Views\SurveySetup\InterviewImportConfirmation.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportProgress.cshtml" />
     <Content Include="Views\DataExport\Index.cshtml" />
-    <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\SurveySetup\Index.cshtml" />
     <Content Include="Views\Interviewers\Index.cshtml" />
     <Content Include="Views\WebInterviewSetup\Start.cshtml" />
@@ -1898,6 +1897,8 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201710021139_ChangeJsonToJsonB.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805071404_Add_Status_to_ImportAssignments.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201804061653_ImportAssignments.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201802191312_AddColumnsToRetryReprocessBrokenPackages.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201711141615_ImportUsers.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201710161320_UserMaps.cs" />
