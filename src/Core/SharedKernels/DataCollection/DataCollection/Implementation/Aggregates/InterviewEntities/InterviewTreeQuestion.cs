@@ -769,7 +769,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers.Count > 0;
             if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswers.Count > 0;
             if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.HasValue;
-            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().ProtectedYesAnswers.Count > 0;
+            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().ProtectedAnswers.Count > 0;
 
             return false;
         }
@@ -1097,7 +1097,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeYesNoQuestion() : base(InterviewQuestionType.YesNo)
         {
-            this.ProtectedYesAnswers = Array.Empty<int>();
+            this.ProtectedAnswers = Array.Empty<int>();
         }
 
         public InterviewTreeYesNoQuestion(object answer): this()
@@ -1128,14 +1128,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProtectYesAnswers()
         {
-            this.ProtectedYesAnswers = GetAnswer()?.CheckedOptions.Where(o => o.Yes).Select(o => o.Value).ToArray() ?? Array.Empty<int>();
+            this.ProtectedAnswers = GetAnswer()?.CheckedOptions.Select(o => o.Value).ToArray() ?? Array.Empty<int>();
         }
 
-        public IReadOnlyCollection<int> ProtectedYesAnswers { get; private set; }
+        public IReadOnlyCollection<int> ProtectedAnswers { get; private set; }
 
         public bool IsAnswerProtected(decimal value)
         {
-            return this.ProtectedYesAnswers.Contains((int)value);
+            return this.ProtectedAnswers.Contains((int)value);
         }
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeYesNoQuestion) this.MemberwiseClone();
