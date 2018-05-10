@@ -22,8 +22,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [SetUp]
         public void Should_not_allow_removing_protected_answer()
         {
+            var variableName = "protected";
+
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.TextListQuestion(questionId));
+                Create.Entity.TextListQuestion(questionId, variable: variableName));
 
             interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
@@ -38,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
                     Create.Entity.InterviewAnswer(questionIdentity, preloadedAnswer)
                 },
                 userId,
-                protectedAnswers: new List<Identity> { questionIdentity });
+                protectedAnswers: new List<string> { variableName });
 
             interview.CreateInterview(command);
         }

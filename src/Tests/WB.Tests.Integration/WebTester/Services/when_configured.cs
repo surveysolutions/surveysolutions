@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.WebTester.Services
             var events = manager.Execute(new CreateInterview(interviewId, Id.g1,
                 Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 new List<InterviewAnswer>(),
-                new List<Identity>(), 
+                new List<string>(), 
                 DateTime.UtcNow,
                 Guid.NewGuid(),
                 null,

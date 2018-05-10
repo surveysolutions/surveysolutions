@@ -78,16 +78,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            this.Save(file.FileInfo.FileName, questionnaireIdentity, 
-                assignmentRows.Select(row =>
-                        ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<IAssignmentAnswer>())},
-                            row.Responsible, row.Quantity, questionnaire))
-                    .ToArray());
+            var assignmentToImport = assignmentRows.Select(row =>
+                    ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<IAssignmentAnswer>())},
+                        row.Responsible, row.Quantity, questionnaire))
+                .ToArray();
+
+            this.Save(file.FileInfo.FileName, questionnaireIdentity,  assignmentToImport);
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
             PreloadedFile[] allImportedFiles,
-            IQuestionnaire questionnaire)
+            IQuestionnaire questionnaire,
+            List<string> protectedVariablesFileContent)
         {
             bool hasErrors = false;
 
@@ -119,7 +121,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            this.Save(originalFileName, questionnaireIdentity, ConcatRosters(assignmentRows, questionnaire));
+            var assignmentsToImport = ConcatRosters(assignmentRows, questionnaire);
+
+            foreach (var assignmentToImport in assignmentsToImport)
+            {
+                assignmentToImport.ProtectedVariables = protectedVariablesFileContent;
+            }
+
+            this.Save(originalFileName, questionnaireIdentity, assignmentsToImport);
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
@@ -240,6 +249,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
+            assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
 
             this.assignmentsStorage.Store(assignment, null);
 
@@ -295,7 +305,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private AssignmentToImport ToAssignmentToImport(
             IEnumerable<(RosterVector rosterVector, IEnumerable<IAssignmentAnswer> answers)> answers,
-            AssignmentResponsible responsible, AssignmentQuantity quantity, IQuestionnaire questionnaire) =>
+            AssignmentResponsible responsible, 
+            AssignmentQuantity quantity,
+            IQuestionnaire questionnaire) =>
             new AssignmentToImport
             {
                 Interviewer = responsible?.Responsible?.InterviewerId,

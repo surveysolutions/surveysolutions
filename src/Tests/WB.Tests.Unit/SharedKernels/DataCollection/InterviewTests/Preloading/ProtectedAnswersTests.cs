@@ -22,9 +22,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
             Guid userId = Id.gA;
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultipleOptionsQuestion(multipleOptionsQuestionId, answers: new int[] { 1, 2, 3 }),
-                Create.Entity.TextListQuestion(questionId: textListQuestionId),
-                Create.Entity.NumericIntegerQuestion(numericQuestionId));
+                Create.Entity.MultipleOptionsQuestion(multipleOptionsQuestionId, answers: new int[] { 1, 2, 3 }, variable:"variable1"),
+                Create.Entity.TextListQuestion(questionId: textListQuestionId, variable:"variable2"),
+                Create.Entity.NumericIntegerQuestion(numericQuestionId, variable:"variable3"));
 
             var interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
                         Create.Entity.InterviewAnswer(numericQuestionIdentity, Create.Entity.NumericIntegerAnswer(preloadedNumericAnswer))
                     },
                     userId,
-                    protectedAnswers: new List<Identity>{multipleOptionsQuestionIdentity, listQuestionIdentity, numericQuestionIdentity});
+                    protectedAnswers: new List<string>{"variable1", "variable2", "variable3"});
 
             // Act
             using (EventContext eventContext = new EventContext())
