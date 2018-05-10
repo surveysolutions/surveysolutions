@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -50,6 +51,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
 
                 eventContext.ShouldContainEvent<MultipleOptionsQuestionAnswered>();
             }
+
+            var question = interview.GetQuestion(Create.Identity(questionId)).GetAsInterviewTreeMultiOptionQuestion();
+
+            Assert.That(question.ProtectedAnswers, Is.EquivalentTo(1.ToEnumerable()));
         }
 
         [Test]

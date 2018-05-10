@@ -49,7 +49,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool AnswersMarkedAsProtectedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
         {
             if (changedNode == null) return false;
-            return changedNode.HasProtectedAnswer();
+
+            return sourceNode != null && sourceNode.HasProtectedAnswer() != changedNode.HasProtectedAnswer();
         }
 
         public bool IsAnswerRemovedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
