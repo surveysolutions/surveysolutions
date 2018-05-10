@@ -88,7 +88,8 @@ namespace WB.UI.Headquarters.Implementation.Services
         }
 
         private void ExecuteCreateInterviewCommand(QuestionnaireIdentity questionnaireIdentity,
-            int assignmentId, Guid responsibleSupervisorId, Guid? responsibleInterviewerId, List<InterviewAnswer> answers)
+            int assignmentId, Guid responsibleSupervisorId, Guid? responsibleInterviewerId,
+            List<InterviewAnswer> answers)
         {
             var userId = this.authorizedUser.Id;
 
@@ -99,7 +100,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 interviewerId: responsibleInterviewerId,
                 answersTime: DateTime.UtcNow,
                 answers: answers,
-                questionsWithProtectedAnswers: new List<Identity>(), // TODO implement in KP-11287
+                protectedVariables: new List<string>(),
                 interviewKey: this.interviewKeyGenerator.Get(),
                 assignmentId: assignmentId);
 

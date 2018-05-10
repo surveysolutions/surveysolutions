@@ -88,9 +88,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
             var createInterviewCommand = new CreateInterview(interviewId,
-                interviewerIdentity.UserId, this.questionnaireIdentity, new List<InterviewAnswer>(), new List<Identity>(), DateTime.UtcNow,
+                interviewerIdentity.UserId, this.questionnaireIdentity, 
+                new List<InterviewAnswer>(),
+                new List<string>(),
+                DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                interviewerIdentity.UserId, keyGenerator.Get(), null);
+                interviewerIdentity.UserId,
+                keyGenerator.Get(),
+                null);
             await this.commandService.ExecuteAsync(createInterviewCommand);
             await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
         }

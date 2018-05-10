@@ -20,8 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
         [SetUp]
         public void Setup()
         {
+            var variableName = "protected";
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultipleOptionsQuestion(questionId, answers: new[] { 1, 2, 3 }));
+                Create.Entity.MultipleOptionsQuestion(questionId, answers: new[] { 1, 2, 3 }, variable: variableName));
 
             interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false,
                 questionnaire: questionnaire);
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
                     Create.Entity.InterviewAnswer(questionIdentity, Create.Entity.MultiOptionAnswer(1))
                 },
                 userId,
-                protectedAnswers: new List<Identity> { questionIdentity });
+                protectedAnswers: new List<string> { variableName });
 
             interview.CreateInterview(command);
         }

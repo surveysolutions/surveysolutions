@@ -192,7 +192,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionnaireId: questionnaireIdentity,
                 answers: new List<InterviewAnswer>(), 
-                questionsWithProtectedAnswers: new List<Identity>(), 
+                protectedVariables: new List<string>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),

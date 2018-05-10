@@ -139,5 +139,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
         }
+
+        public List<string[]> ReadProtectedVariablesFile(Stream inputStream)
+        {
+            if (inputStream == null || !this.archiveUtils.IsZipStream(inputStream)) return null;
+            var file = this.archiveUtils.GetFilesFromArchive(inputStream)
+                                        .FirstOrDefault(x => Path.GetFileNameWithoutExtension(x.Name).Equals(ServiceFiles.ProtectedVariables));
+            if (file == null) return null;
+
+            return this.csvReader.ReadRowsWithHeader(new MemoryStream(file.Bytes), TabExportFile.Delimiter).ToList();
+        }
     }
 }

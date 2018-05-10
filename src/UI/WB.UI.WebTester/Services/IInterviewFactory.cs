@@ -56,7 +56,7 @@ namespace WB.UI.WebTester.Services
                 questionnaireId: questionnaire,
                 answers: new List<InterviewAnswer>(),
                 answersTime: DateTime.UtcNow,
-                questionsWithProtectedAnswers: new List<Identity>(),
+                protectedVariables: new List<string>(),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: new InterviewKey(new Random().Next(99999999)),

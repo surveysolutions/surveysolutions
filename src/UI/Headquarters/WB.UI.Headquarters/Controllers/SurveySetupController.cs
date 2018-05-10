@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
@@ -234,11 +235,21 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-                var fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, allImportedFileInfos, questionnaire).Take(10).ToArray();
+                PanelImportVerificationError[] fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (fileErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
                         CreateError(questionnaireIdentity, model.File.FileName, errors: fileErrors));
+                }
+
+                var protectedVariablesFileContent = this.assignmentsImportReader.ReadProtectedVariablesFile(model.File.InputStream);
+                var protectedVariablesFileErrors = this.dataVerifier.VerifyAndParseProtectedVariables(model.File.FileName, protectedVariablesFileContent
+                    , questionnaire, out List<string> protectedVariables).Take(10).ToArray();
+
+                if (protectedVariablesFileErrors.Length > 0)
+                {
+                    return this.View("InterviewImportVerificationErrors",
+                        CreateError(questionnaireIdentity, model.File.FileName, errors: protectedVariablesFileErrors));
                 }
 
                 var columnErrors = this.dataVerifier.VerifyColumns(allImportedFileInfos, questionnaire).Take(10).ToArray();
@@ -250,7 +261,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream).ToArray();
                 var answerErrors = this.assignmentsImportService
-                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire).Take(10).ToArray();
+                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire, protectedVariables).Take(10).ToArray();
 
                 if (answerErrors.Any())
                 {
