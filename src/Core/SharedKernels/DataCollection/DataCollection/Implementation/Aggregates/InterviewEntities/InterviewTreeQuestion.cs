@@ -1097,9 +1097,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeYesNoQuestion() : base(InterviewQuestionType.YesNo)
         {
+            this.ProtectedYesAnswers = Array.Empty<int>();
         }
 
-        public InterviewTreeYesNoQuestion(object answer): base(InterviewQuestionType.YesNo)
+        public InterviewTreeYesNoQuestion(object answer): this()
         {
             this.answer = YesNoAnswer.FromAnsweredYesNoOptions(answer as AnsweredYesNoOption[]);
         }
