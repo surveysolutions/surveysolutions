@@ -387,7 +387,7 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: answerErrors));
                 }
 
-                this.assignmentsImportTask.Run(3);
+                this.assignmentsVerificationTask.Run(3);
             }
             catch (Exception e)
             {
