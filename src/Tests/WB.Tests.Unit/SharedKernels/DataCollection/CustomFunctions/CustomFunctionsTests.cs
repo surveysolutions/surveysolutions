@@ -5,6 +5,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {
@@ -14,14 +15,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         // For all methods using params[], the indication is that 16383 is the limit:
         // http://stackoverflow.com/questions/12658883/what-is-the-maximum-number-of-parameters-that-a-c-sharp-method-can-be-defined-as
 
-        private decimal[] _mc123;
-        private decimal[] _mc3;
+        private int[] _mc123;
+        private int[] _mc3;
 
         [SetUp]
         public void Init()
         {
-            _mc123 = new decimal[] { 1, 2, 3 };
-            _mc3 = new decimal[] { 3 };
+            _mc123 = new int[] { 1, 2, 3 };
+            _mc3 = new int[] { 3 };
         }
 
         #region Tests
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_InRange()
         {
-            Assert.IsTrue(Extensions.InRange(1, 0, 10));
+            Assert.IsTrue(1.InRange(0, 10));
             Assert.IsFalse(Extensions.InRange(1, 3, 10));
             Assert.IsFalse(Extensions.InRange(13, 3, 10));
 
@@ -128,7 +129,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.IsTrue(_mc123.ContainsAny(2));
 
             Assert.IsTrue(_mc123.ContainsAny(null));
-            Assert.IsTrue(_mc123.ContainsAny(new decimal[0]));
+            Assert.IsTrue(_mc123.ContainsAny(new int[0]));
 
             decimal[] empty = null;
             Assert.IsFalse(empty.ContainsAny(2));
@@ -177,7 +178,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             Assert.IsFalse(_mc123.ContainsAll(3, 9));
 
-            Assert.IsTrue(_mc123.ContainsAll(null));
+            Assert.IsTrue(_mc123.ContainsAll((decimal[])null));
+            Assert.IsTrue(_mc123.ContainsAll((int[])null));
+            
             Assert.IsTrue(_mc123.ContainsAll(new decimal[0]));
 
 
@@ -225,15 +228,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_CountValues()
         {
-            Assert.AreEqual(1, _mc123.CountValues(1));
-            Assert.AreEqual(1, _mc123.CountValues(2));
-            Assert.AreEqual(1, _mc123.CountValues(3));
-            Assert.AreEqual(2, _mc123.CountValues(1, 2));
-            Assert.AreEqual(2, _mc123.CountValues(1, 3));
-            Assert.AreEqual(3, _mc123.CountValues(1, 2, 3));
-            Assert.AreEqual(3, _mc123.CountValues(1, 2, 3, 4));
-            Assert.AreEqual(0, _mc123.CountValues());
-            Assert.AreEqual(0, _mc123.CountValues(null));
+            var _mc123_1 = new decimal[] { 1, 2, 3 };
+
+            Assert.AreEqual(1, _mc123_1.CountValues(1));
+            Assert.AreEqual(1, _mc123_1.CountValues(2));
+            Assert.AreEqual(1, _mc123_1.CountValues(3));
+            Assert.AreEqual(2, _mc123_1.CountValues(1, 2));
+            Assert.AreEqual(2, _mc123_1.CountValues(1, 3));
+            Assert.AreEqual(3, _mc123_1.CountValues(1, 2, 3));
+            Assert.AreEqual(3, _mc123_1.CountValues(1, 2, 3, 4));
+            Assert.AreEqual(0, _mc123_1.CountValues());
+            Assert.AreEqual(0, _mc123_1.CountValues(null));
 
             decimal[] empty = null;
             Assert.AreEqual(0, empty.CountValues(1, 2, 3));
@@ -1016,23 +1021,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_ContainsAnyOtherThan()
         {
-            Assert.IsTrue(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, 2)); // Contains 1, 3
-            Assert.IsTrue(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, 2, 0)); // Contains 1, 3; 0 is irrelevant
-            Assert.IsTrue(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, 5, 10)); // Contains 1,2,3
-            Assert.IsTrue(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, null)); // Contains 1,2,3
-            Assert.IsTrue(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, new decimal[0])); // Contains 1,2,3
-            Assert.IsFalse(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, 1, 2, 3)); // No, does not contain anything else
-            Assert.IsFalse(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(_mc123, 1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
+            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 2)); // Contains 1, 3
+            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 2, 0)); // Contains 1, 3; 0 is irrelevant
+            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 5, 10)); // Contains 1,2,3
+            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, null)); // Contains 1,2,3
+            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, new int[0])); // Contains 1,2,3
+            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 1, 2, 3)); // No, does not contain anything else
+            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
 
-            decimal[] empty = null;
-            Assert.IsFalse(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(empty, 2)); // No, empty does not contain any other
-            Assert.IsFalse(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(empty ,null));
+            int[] empty = null;
+            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(empty, 2)); // No, empty does not contain any other
+            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(empty ,null));
 
-            empty = new decimal[0];
-            Assert.IsFalse(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(empty ,2)); // No, empty does nto contain any other
+            empty = new int[0];
+            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(empty ,2)); // No, empty does nto contain any other
 
-            decimal[] trivial = new decimal[] { 0 };
-            Assert.IsTrue(WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions.Extensions.ContainsAnyOtherThan(trivial,2)); // Yes, contains 0
+            var trivial = new int[] { 0 };
+            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(trivial,2)); // Yes, contains 0
         }
 
         [Test]
