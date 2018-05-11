@@ -9,10 +9,10 @@
                             :name="$me.id + '_' + option.value" 
                             :id="$me.id + '_' + option.value + '_yes'" 
                             :checked="isYesChecked(option.value)"
-                            :disabled="!$me.acceptAnswer || isProtected(option.value)"
+                            :disabled="!$me.acceptAnswer"
                             value="true"                            
                             @click="answerYes(option.value)" 
-                            v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}" />
+                            v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer, forceDisabled: !$me.acceptAnswer || isProtected(option.value)}" />
                         <label :for="$me.id + '_' + option.value + '_yes'">
                             <span class="tick"></span>
                         </label>
@@ -32,6 +32,7 @@
                             <span></span>
                         </button>
                         <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value)}}</div>
+                        <div class="lock"></div>
                     </div>
                 </div>
                 <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
