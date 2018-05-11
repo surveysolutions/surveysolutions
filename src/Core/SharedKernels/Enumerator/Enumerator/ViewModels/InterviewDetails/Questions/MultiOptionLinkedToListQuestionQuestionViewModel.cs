@@ -225,19 +225,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
                 UpateMaxAnswersCountMessage(@event.SelectedValues.Length);
-
-                if (this.areAnswersOrdered)
-                {
-                    foreach (var option in this.options)
-                        this.UpdateOptionSelection(option, @event.SelectedValues.ToList());
-                }
+                
+                foreach (var option in this.options)
+                    this.UpdateOptionSelection(option, @event.SelectedValues.ToList());
             }
         }
 
         private void UpdateOptionSelection(MultiOptionQuestionOptionViewModel option, List<decimal> selectedOptionValues)
         {
             option.Checked = selectedOptionValues.Contains(option.Value);
-            option.CanBeChecked = !this.maxAllowedAnswers.HasValue || selectedOptionValues.Count < this.maxAllowedAnswers;
+            option.CanBeChecked = option.Checked || !this.maxAllowedAnswers.HasValue || selectedOptionValues.Count < this.maxAllowedAnswers;
 
             if (!this.areAnswersOrdered) return;
 
@@ -337,7 +334,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 Title = optionValue.Text,
                 Value = Convert.ToInt32(optionValue.Value),
-                QuestionState = this.questionState
+                QuestionState = this.questionState,
             };
 
 
