@@ -874,6 +874,28 @@ span.image-zoom-box, span.image-option {
     -webkit-box-shadow: none;
             box-shadow: none; }
 
+.unavailable-option {
+  background: rgba(248, 248, 248, 0.8);
+  border-radius: 5px; }
+  .unavailable-option:hover, .unavailable-option:focus, .unavailable-option:active {
+    -webkit-box-shadow: none;
+            box-shadow: none; }
+  .unavailable-option label, .unavailable-option input[type="text"]:disabled, .unavailable-option input[type="number"]:disabled {
+    background: rgba(248, 248, 248, 0.8);
+    border-radius: 5px; }
+    .unavailable-option label:hover, .unavailable-option label:focus, .unavailable-option label:active, .unavailable-option input[type="text"]:disabled:hover, .unavailable-option input[type="text"]:disabled:focus, .unavailable-option input[type="text"]:disabled:active, .unavailable-option input[type="number"]:disabled:hover, .unavailable-option input[type="number"]:disabled:focus, .unavailable-option input[type="number"]:disabled:active {
+      -webkit-box-shadow: none;
+              box-shadow: none; }
+
+.locked-option .lock {
+  display: block;
+  background-size: 18px 18px;
+  top: calc(50% - 9px);
+  left: auto;
+  right: 9px;
+  width: 18px;
+  height: 18px; }
+
 .audio-question.answered .btn-action-questionnaire {
   border-color: #dbdfe2; }
 
@@ -950,10 +972,11 @@ span.image-zoom-box, span.image-option {
   background: rgba(248, 248, 248, 0.8); }
 
 .readonly .btn:disabled,
-.readonly .btn.disabled {
+.readonly .btn.disabled, .unavailable-option .btn:disabled,
+.unavailable-option .btn.disabled {
   background: #f8f8f8; }
 
-.readonly .btn.btn-clear {
+.readonly .btn.btn-clear, .unavailable-option .btn.btn-clear {
   display: none; }
 
 @media only screen and (max-width: 1525px) {
@@ -1076,7 +1099,9 @@ span.image-zoom-box, span.image-option {
   .web-interview .action-container, .web-interview .wrapper-info {
     padding-left: 45px; }
   .web-interview .lock {
-    left: -25px; } }
+    left: -25px; }
+  .locked-option .lock {
+    left: auto; } }
 
 @media (max-width: 481px) {
   .web-interview .action-container, .web-interview .wrapper-info {
@@ -1091,7 +1116,9 @@ span.image-zoom-box, span.image-option {
   .web-interview .questionnaire .options-group .badge {
     left: -28px; }
   .web-interview .lock {
-    left: -17px; } }
+    left: -17px; }
+  .locked-option .lock {
+    left: auto; } }
 
 @media only screen and (max-width: 425px) {
   .web-interview .audio-question .volume-message {
