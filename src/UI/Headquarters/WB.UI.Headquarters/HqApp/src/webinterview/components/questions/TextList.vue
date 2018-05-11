@@ -13,6 +13,7 @@
                             v-if="$me.acceptAnswer && !row.isProtected"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(index)"><span></span></button>
+                        <div class="lock"></div>
                     </div>
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
