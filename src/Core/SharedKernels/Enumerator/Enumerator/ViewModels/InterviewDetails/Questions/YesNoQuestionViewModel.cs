@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, AnsweredYesNoOption[] checkedYesNoAnswerOptions)
         {
             var isExistAnswer = checkedYesNoAnswerOptions != null && checkedYesNoAnswerOptions.Any(a => a.OptionValue == model.Value);
-            var isSelected = isExistAnswer 
+            bool? isSelected = isExistAnswer 
                 ? checkedYesNoAnswerOptions.First(a => a.OptionValue == model.Value).Yes 
                 : (bool?) null;
             var yesAnswerCheckedOrder = isExistAnswer && this.areAnswersOrdered
@@ -162,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Selected = isSelected,
                 YesAnswerCheckedOrder = yesAnswerCheckedOrder,
                 AnswerCheckedOrder = answerCheckedOrder,
-                YesCanBeChecked = !maxAllowedAnswers.HasValue || checkedYesNoAnswerOptions.Count(x => x.Yes) < maxAllowedAnswers
+                YesCanBeChecked = isSelected.GetValueOrDefault() || !maxAllowedAnswers.HasValue || checkedYesNoAnswerOptions.Count(x => x.Yes) < maxAllowedAnswers
             };
 
             return optionViewModel;
