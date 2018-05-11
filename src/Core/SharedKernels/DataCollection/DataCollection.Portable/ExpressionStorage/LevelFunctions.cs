@@ -283,9 +283,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         #endregion
 
         /// @}
-
-
-
+        
 
         /// <summary>
         /// Counts the occurrancies of a certain value in a group of single choice questions
@@ -301,7 +299,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
             return c;
         }
-
+        
         /// <summary>
         /// Concatenates multiple strings into one.
         /// </summary>
@@ -509,7 +507,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the left intervals.
-        public int BracketIndexLeft(decimal x, params decimal?[] cuts)
+        public int BracketIndexLeft(decimal x, params decimal[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x > cuts[c]) c++;
@@ -524,7 +522,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the left intervals.
-        public int BracketIndexLeft(double x, params double?[] cuts)
+        public int BracketIndexLeft(double x, params double[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x > cuts[c]) c++;
@@ -539,7 +537,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the left intervals.
-        public int BracketIndexLeft(long x, params long?[] cuts)
+        public int BracketIndexLeft(long x, params long[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x > cuts[c]) c++;
@@ -554,7 +552,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the left intervals.
-        public int BracketIndexLeft(int x, params int?[] cuts)
+        public int BracketIndexLeft(int x, params int[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x > cuts[c]) c++;
@@ -570,7 +568,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the right intervals.
-        public int BracketIndexRight(decimal x, params decimal?[] cuts)
+        public int BracketIndexRight(decimal x, params decimal[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x >= cuts[c]) c++;
@@ -586,7 +584,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the right intervals.
-        public int BracketIndexRight(double x, params double?[] cuts)
+        public int BracketIndexRight(double x, params double[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x >= cuts[c]) c++;
@@ -601,7 +599,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the right intervals.
-        public int BracketIndexRight(long x, params long?[] cuts)
+        public int BracketIndexRight(long x, params long[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x >= cuts[c]) c++;
@@ -616,7 +614,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
         /// <returns>A zero-based index of an interval </returns>
         /// 
         /// Breaking the ties: exact values fall to the right intervals.
-        public int BracketIndexRight(int x, params int?[] cuts)
+        public int BracketIndexRight(int x, params int[] cuts)
         {
             var c = 0;
             while (c < cuts.Length && x >= cuts[c]) c++;
