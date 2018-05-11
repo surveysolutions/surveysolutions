@@ -128,7 +128,13 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             interviewIntegerQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
 
                             if (interviewIntegerQuestion.Answer.HasValue)
-                                interviewIntegerQuestion.IsProtected = callerInterview.IsAnswerProtected(question.Identity, interviewIntegerQuestion.Answer.Value);
+                            {
+                                var hasProtectedAnswer = question.HasProtectedAnswer();
+                                interviewIntegerQuestion.IsProtected = hasProtectedAnswer;
+
+                                if (hasProtectedAnswer)
+                                    interviewIntegerQuestion.ProtectedAnswer = question.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer;
+                            }
 
                             result = interviewIntegerQuestion;
                         }
@@ -155,7 +161,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                             typedResult.ProtectedAnswer = typedResult.Answer
-                                .Where(i => callerInterview.IsAnswerProtected(question.Identity, i))
+                                .Where(i => question.IsAnswerProtected(i))
                                 .ToArray();
                         }
                         break;
@@ -188,7 +194,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                             foreach (var textListAnswerRowDto in typedResult.Rows)
                             {
-                                textListAnswerRowDto.IsProtected = callerInterview.IsAnswerProtected(question.Identity, textListAnswerRowDto.Value);
+                                textListAnswerRowDto.IsProtected = question.IsAnswerProtected(textListAnswerRowDto.Value);
                             }
                         }
                         break;
@@ -203,7 +209,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
                             foreach (var answerRowDto in interviewYesNoQuestion.Answer)
                             {
-                                answerRowDto.IsProtected = callerInterview.IsAnswerProtected(question.Identity, answerRowDto.Value);
+                                answerRowDto.IsProtected = question.IsAnswerProtected(answerRowDto.Value);
                             }
 
                             result = interviewYesNoQuestion;

@@ -639,6 +639,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entered value can not be less then protected answer.
+        /// </summary>
+        internal static string NumberCannotBeLessThenProtected {
+            get {
+                return ResourceManager.GetString("NumberCannotBeLessThenProtected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Entered value can not be parsed as integer value.
         /// </summary>
         internal static string NumberCannotParse {
