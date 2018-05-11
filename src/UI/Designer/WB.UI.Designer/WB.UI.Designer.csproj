@@ -474,6 +474,7 @@
     <Content Include="questionnaire\details\scripts\modules\ng-context-menu.js" />
     <Content Include="questionnaire\details\scripts\modules\perfect_scrollbar.js" />
     <Content Include="questionnaire\details\scripts\modules\positionCalculator.js" />
+    <Content Include="questionnaire\details\scripts\modules\ui-ace.js" />
     <Content Include="questionnaire\details\scripts\modules\unsavedChanges.js" />
     <Content Include="questionnaire\details\scripts\services\alertService.js" />
     <Content Include="questionnaire\details\scripts\services\commentsService.js" />
