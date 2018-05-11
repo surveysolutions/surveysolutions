@@ -66,6 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Checked = answeredOptions.Contains(linkedOption),
                 QuestionState = this.questionState,
                 CheckedOrder = this.areAnswersOrdered ? Array.FindIndex(answeredOptions, x => x.Identical(linkedOption)) + 1 : (int?)null,
+                CanBeChecked = answeredOptions.Contains(linkedOption) || answeredOptions.Length < this.maxAllowedAnswers
             };
 
         public void Handle(LinkedOptionsChanged @event)
