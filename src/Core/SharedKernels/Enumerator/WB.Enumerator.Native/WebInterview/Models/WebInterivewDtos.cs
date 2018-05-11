@@ -62,6 +62,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool UseFormatting { get; set; }
         public List<CategoricalOption> Options { get; set; }
         public bool IsProtected { get; set; }
+        public int? ProtectedAnswer { get; set; }
     }
 
     public class InterviewDoubleQuestion : GenericQuestion
