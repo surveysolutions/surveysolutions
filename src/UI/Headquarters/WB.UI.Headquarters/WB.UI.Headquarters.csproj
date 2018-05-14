@@ -1922,6 +1922,8 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201802131620_AddIndexesAndViewsToSlimInterviewTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201804171241_ChangeHasErrorsToNumberOfErrors.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201804201634_RemoveHasErrorsPropery.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201805141156_AddIndexForInterviewStatusChangeHistory.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
