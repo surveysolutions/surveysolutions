@@ -9,10 +9,11 @@
         SynchronizationStarted,
         SynchronizationCanceled,
         SynchronizationCompleted,
+        SynchronizationFailed,
         CreateInterviewFromAssignment,
         OpenInterview,
         CloseInterview,
         DeleteInterview,
-        CompleteInterview
+        CompleteInterview,
     }
 }
