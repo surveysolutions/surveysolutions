@@ -26,6 +26,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     
     internal class ImportDataVerifier : IPreloadedDataVerifier
     {
+        QuestionType[] TypesThatSupportProtection = new[]
+        {
+            QuestionType.MultyOption, QuestionType.Numeric, QuestionType.TextList
+        };
+
         private readonly IFileSystemAccessor fileSystem;
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
@@ -71,6 +76,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     {
                         errors.Add(ToCellError("PL0048",
                             string.Format(messages.PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire,
+                                firstCellValue),
+                            new PreloadingAssignmentRow
+                            {
+                                FileName = ServiceFiles.ProtectedVariables,
+                                Row = rowNumber
+                            }, column: ServiceColumns.ProtectedVariableNameColumn,
+                            value: firstCellValue));
+                    }
+                    else if (!TypesThatSupportProtection.Contains(questionByVariable.QuestionType))
+                    {
+                        errors.Add(ToCellError("PL0049",
+                            string.Format(messages.PL0049_ProtectedVariables_VariableNotSupportsProtection,
                                 firstCellValue),
                             new PreloadingAssignmentRow
                             {
