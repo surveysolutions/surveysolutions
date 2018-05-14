@@ -291,4 +291,14 @@
     <value>Архивы защищенные паролем не поддерживаются</value>
     <comment>Архивы защищенные паролем не поддерживаются</comment>
   </data>
+    <data name="PL0047_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <value>Ответ на мультиселект вопрос должен быть больше или равен 1</value>
+    <comment>Ответ на мультиселект вопрос должен быть больше или равен 1</comment>
+  </data>
+    <data name="PL0048_YesNo_AnswerMustBeGreaterOrEqualThen0" xml:space="preserve">
+    <value>Ответ на да/нет вопрос должен быть больше или равен 0
+</value>
+    <comment>Ответ на да/нет вопрос должен быть больше или равен 0
+</comment>
+  </data>
 </root>

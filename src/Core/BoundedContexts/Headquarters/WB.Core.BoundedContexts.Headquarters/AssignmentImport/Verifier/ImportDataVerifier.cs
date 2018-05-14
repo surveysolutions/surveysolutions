@@ -196,14 +196,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentIntegerAnswer>(Integer_ExceededRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxRosterRowCount)),
             Error<AssignmentIntegerAnswer>(Integer_ExceededLongRosterSize, "PL0029", string.Format(messages.PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40, Constants.MaxLongRosterRowCount)),
             Errors<AssignmentGpsAnswer>(Gps_DontHaveLongitudeOrLatitude, "PL0030", messages.PL0030_GpsMandatoryFilds),
-            Errors<AssignmentGpsAnswer>(Gps_LatitudeMustBeGeaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
-            Errors<AssignmentGpsAnswer>(Gps_LongitudeMustBeGeaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
+            Errors<AssignmentGpsAnswer>(Gps_LatitudeMustBeGreaterThenN90AndLessThen90, "PL0032", messages.PL0032_LatitudeMustBeGeaterThenN90AndLessThen90),
+            Errors<AssignmentGpsAnswer>(Gps_LongitudeMustBeGreaterThenN180AndLessThen180, "PL0033", messages.PL0033_LongitudeMustBeGeaterThenN180AndLessThen180),
             Errors<AssignmentGpsAnswer>(Gps_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
             Error<AssignmentDoubleAnswer>(Double_CommaSymbolIsNotAllowed, "PL0034", messages.PL0034_CommaSymbolIsNotAllowedInNumericAnswer),
             Error<AssignmentQuantity>(Quantity_IsNotInteger, "PL0035", messages.PL0035_QuantityNotParsed),
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
             Errors<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
+            Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen1, "PL0047", messages.PL0047_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
+            Errorq<AssignmentMultiAnswer>(YesNo_AnswerMustBeGreaterOrEqualThen0, "PL0048", messages.PL0048_YesNo_AnswerMustBeGreaterOrEqualThen0),
         };
 
         private IEnumerable<InterviewImportReference> OrphanNestedRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
@@ -463,11 +465,35 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (Integer_NotParsed(assignmentAnswer)) yield return assignmentAnswer;
         }
         
+        private IEnumerable<AssignmentAnswer> CategoricalMulti_AnswerMustBeGreaterOrEqualThen1(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
+            if (!questionId.HasValue) yield break;
+
+            if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.MultyOption) yield break;
+            if (questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
+
+            foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
+                if (Interger_BiggerOrEqualThen(assignmentAnswer, 1)) yield return assignmentAnswer;
+        }
+        
+        private IEnumerable<AssignmentAnswer> YesNo_AnswerMustBeGreaterOrEqualThen0(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
+        {
+            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
+            if (!questionId.HasValue) yield break;
+
+            if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.MultyOption) yield break;
+            if (!questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
+
+            foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
+                if (Interger_BiggerOrEqualThen(assignmentAnswer, 0)) yield return assignmentAnswer;
+        }
+        
         private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
             => answer.Values.OfType<AssignmentDoubleAnswer>().Where(answerValue =>
                 !string.IsNullOrWhiteSpace(answerValue.Value) && answerValue.Value.Contains(","));
 
-        private IEnumerable<AssignmentAnswer> Gps_LongitudeMustBeGeaterThenN180AndLessThen180(AssignmentGpsAnswer answer)
+        private IEnumerable<AssignmentAnswer> Gps_LongitudeMustBeGreaterThenN180AndLessThen180(AssignmentGpsAnswer answer)
         {
             var longitude = answer.Values.OfType<AssignmentDoubleAnswer>()
                 .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower());
@@ -476,7 +502,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 yield return longitude;
         }
 
-        private IEnumerable<AssignmentAnswer> Gps_LatitudeMustBeGeaterThenN90AndLessThen90(AssignmentGpsAnswer answer)
+        private IEnumerable<AssignmentAnswer> Gps_LatitudeMustBeGreaterThenN90AndLessThen90(AssignmentGpsAnswer answer)
         {
             var latitude = answer.Values.OfType<AssignmentDoubleAnswer>()
                 .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower());
@@ -518,6 +544,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private bool Double_CommaSymbolIsNotAllowed(AssignmentDoubleAnswer answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && answer.Value.Contains(",");
+
+        private bool Interger_BiggerOrEqualThen(AssignmentIntegerAnswer answer, int value)
+            => int.TryParse(answer.Value, out int parsedValue) && parsedValue >= value;
 
         private bool Integer_ExceededRosterSize(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)
         {
