@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 {
     public class AuditLogService : IAuditLogService
     {
-        private readonly IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage;
+        private readonly IPlainStorage<AuditLogRecordView, int?> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
         private readonly IPlainStorage<InterviewerIdentity> userIdentity;
         private readonly ISerializer serializer;
@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
 
         private const string AuditLogSettingsKey = "settings";
 
-        public AuditLogService(IPlainStorage<AutoincrementKeyValue, int?> auditLogStorage,
+        public AuditLogService(IPlainStorage<AuditLogRecordView, int?> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             IPlainStorage<InterviewerIdentity> userIdentity,
             ISerializer serializer,
@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
             this.logger = logger;
         }
 
-        public class AutoincrementKeyValue : IPlainStorageEntity<int?>
+        public class AuditLogRecordView : IPlainStorageEntity<int?>
         {
             [PrimaryKey, Unique, AutoIncrement]
             public int? Id { get; set; }
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
                     Payload = entity,
                 };
                 var json = serializer.Serialize(auditLogEntityView);
-                auditLogStorage.Store(new AutoincrementKeyValue()
+                auditLogStorage.Store(new AuditLogRecordView()
                 {
                     Json = json
                 });
