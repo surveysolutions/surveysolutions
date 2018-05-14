@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var columns = new[] { "column1", "column2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns);
+            var stream = Create.Other.TabDelimitedTextStream(columns);
             // act
             var fileInfo = reader.ReadTextFileInfo(stream, fileName);
             // assert
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var columns = new[] { "column1", "column2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns);
+            var stream = Create.Other.TabDelimitedTextStream(columns);
             // act
             var fileInfos = reader.ReadZipFileInfo(stream);
             // assert
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var columns = new[] { "column1", "column2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns);
+            var stream = Create.Other.TabDelimitedTextStream(columns);
             // act
             var files = reader.ReadZipFile(stream);
             // assert
@@ -61,7 +61,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var columns = new[] { "column1", "column2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns);
+            var stream = Create.Other.TabDelimitedTextStream(columns);
             // act
             var files = reader.ReadFileFromZip(stream, "file.tab");
             // assert
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var columns = new[] { "column1", "column2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns);
+            var stream = Create.Other.TabDelimitedTextStream(columns);
             // act
             var file = reader.ReadTextFile(stream, fileName);
             // assert
@@ -94,7 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] {interviewId};
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { "1", "2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { "1" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -168,7 +168,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { value };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -193,7 +193,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { "1", "2" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -227,7 +227,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { value };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -243,7 +243,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { value };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -259,7 +259,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { value };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
@@ -275,7 +275,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var row = new[] { "1" };
 
             var reader = Create.Service.AssignmentsImportReader();
-            var stream = Create.Service.TabDelimitedTextStream(columns, row);
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
             // act
             var file = reader.ReadTextFile(stream, "file.tab");
             // assert
