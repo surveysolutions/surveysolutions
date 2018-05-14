@@ -1,11 +1,11 @@
 ﻿<template>
-    <div class="combo-box">
+    <div class="combo-box" :title="value == null ? '' : value.value">
         <div class="btn-group btn-input clearfix">
             <button type="button"
                     class="btn dropdown-toggle"
                     data-toggle="dropdown">
                 <span data-bind="label"
-                      v-if="value === null"
+                      v-if="value == null"
                       class="gray-text">{{placeholderText}}</span>
                 <span data-bind="label"
                       :class="[value.iconClass]"
@@ -40,7 +40,7 @@
                 </li>
             </ul>
         </div>
-        <button v-if="value !== null"
+        <button v-if="value != null"
                 class="btn btn-link btn-clear"
                 @click="clear">
             <span></span>
