@@ -28,18 +28,14 @@ namespace WB.UI.Interviewer.Services
 
                 this.thread = new Thread(() =>
                 {
-                    var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
                     try
                     {
-                        auditLogService.Write(new SynchronizationStartedAuditLogEntity());
                         synchronizationProcess.SyncronizeAsync(this.CurrentProgress.Progress, this.CurrentProgress.CancellationTokenSource.Token)
                                               .WaitAndUnwrapException(); // do not pass cancellationToken, since it will always throw operation cancelled here
-                        auditLogService.Write(new SynchronizationCompletedAuditLogEntity());
                     }
                     catch (System.OperationCanceledException ec)
                     {
                         Mvx.Resolve<ILoggerProvider>().GetFor<SyncBgService>().Error(">!>Failed to synchronize (canceled)", ec);
-                        auditLogService.Write(new SynchronizationCanceledAuditLogEntity());
                     }
                     catch (Exception e)
                     {

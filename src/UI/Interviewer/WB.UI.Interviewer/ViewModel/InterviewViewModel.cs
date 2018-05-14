@@ -55,7 +55,7 @@ namespace WB.UI.Interviewer.ViewModel
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => {
-            auditLogService.Write(new CloseInterviewAuditLogEntity(this.InterviewId, this.InterviewKey));
+            auditLogService.Write(new CloseInterviewAuditLogEntity(this.InterviewId, this.interviewKey?.ToString()));
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
@@ -72,7 +72,7 @@ namespace WB.UI.Interviewer.ViewModel
             }
             else
             {
-                auditLogService.Write(new CloseInterviewAuditLogEntity(this.InterviewId, this.InterviewKey));
+                auditLogService.Write(new CloseInterviewAuditLogEntity(this.InterviewId, this.interviewKey?.ToString()));
                 await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             }
         }

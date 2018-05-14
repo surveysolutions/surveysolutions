@@ -62,9 +62,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAudioFileStorage audioFileStorage,
             ITabletDiagnosticService diagnosticService,
             IInterviewerSettings interviewerSettings,
-            IAuditLogSynchronizer auditLogSynchronizer) : base(synchronizationService, logger,
+            IAuditLogSynchronizer auditLogSynchronizer,
+            IAuditLogService auditLogService) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
-            interviewViewRepository)
+            interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
             this.interviewViewRepository = interviewViewRepository;

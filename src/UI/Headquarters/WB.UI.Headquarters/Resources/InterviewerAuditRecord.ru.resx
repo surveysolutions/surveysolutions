@@ -162,12 +162,13 @@
     <comment>Синхронизация начата</comment>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">
-    <value>Синхронизация завершена</value>
-    <comment>Синхронизация завершена</comment>
+    <value>Синхронизация завершена (Задания: новые - {0}, удаленые - {1}; Интервью: новые - {2}, загруженно на сервер - {3}, отклоненные - {4}, удаленные - {5})</value>
   </data>
   <data name="SynchronizationCanceled" xml:space="preserve">
     <value>Синхронизация отменена</value>
-    <comment>Синхронизация отменена</comment>
+  </data>
+  <data name="SynchronizationFailed" xml:space="preserve">
+    <value>Ошибка синхронизации</value>
   </data>
   <data name="DetailedActionLog" xml:space="preserve">
     <value>Детальный лог действий</value>

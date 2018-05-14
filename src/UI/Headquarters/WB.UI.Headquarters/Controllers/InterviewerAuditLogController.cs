@@ -170,8 +170,18 @@ namespace WB.UI.Headquarters.Controllers
                     //var synchronizationCanceledAuditLogEntity = record.GetEntity<SynchronizationCanceledAuditLogEntity>();
                     return InterviewerAuditRecord.SynchronizationCanceled;
                 case AuditLogEntityType.SynchronizationCompleted:
+                    var synchronizationCompletedAuditLogEntity = record.GetEntity<SynchronizationCompletedAuditLogEntity>();
+                    return InterviewerAuditRecord.SynchronizationCompleted.FormatString(
+                        synchronizationCompletedAuditLogEntity.NewAssignmentsCount,
+                        synchronizationCompletedAuditLogEntity.RemovedAssignmentsCount,
+                        synchronizationCompletedAuditLogEntity.NewInterviewsCount,
+                        synchronizationCompletedAuditLogEntity.SuccessfullyUploadedInterviewsCount,
+                        synchronizationCompletedAuditLogEntity.RejectedInterviewsCount,
+                        synchronizationCompletedAuditLogEntity.DeletedInterviewsCount
+                        );
+                case AuditLogEntityType.SynchronizationFailed:
                     //var synchronizationCompletedAuditLogEntity = record.GetEntity<SynchronizationCompletedAuditLogEntity>();
-                    return InterviewerAuditRecord.SynchronizationCompleted;
+                    return InterviewerAuditRecord.SynchronizationFailed;
                 case AuditLogEntityType.OpenApplication:
                     //var openApplicationAuditLogEntity = record.GetEntity<OpenApplicationAuditLogEntity>();
                     return InterviewerAuditRecord.OpenApplication;
