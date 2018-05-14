@@ -695,9 +695,5 @@ namespace WB.Tests.Abc.TestFactories
 
         public CsvReader CsvReader() => new CsvReader();
         public ZipArchiveUtils ArchiveUtils() => new ZipArchiveUtils();
-
-        public Stream TabDelimitedTextStream(string[] headers, params string[][] cells)
-            => new MemoryStream(Encoding.UTF8.GetBytes(string.Join(Environment.NewLine,
-                new[] {headers}.Union(cells).Select(x => string.Join(TabExportFile.Delimiter, x)))));
     }
 }
