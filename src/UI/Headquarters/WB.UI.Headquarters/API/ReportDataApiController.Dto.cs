@@ -103,13 +103,14 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         private HttpResponseMessage CreateReportResponse(string exportType, ReportView report, string reportName)
         {
-            ExportFileType type;
-
-            Enum.TryParse(exportType, true, out type);
+            if(!Enum.TryParse(exportType, true, out ExportFileType type))
+            {
+                type = ExportFileType.Csv;
+            }
 
             var exportFile = this.exportFactory.CreateExportFile(type);
 
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
