@@ -491,5 +491,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable {0} has type that does not support protection.
+        /// </summary>
+        public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
+            get {
+                return ResourceManager.GetString("PL0049_ProtectedVariables_VariableNotSupportsProtection", resourceCulture);
+            }
+        }
     }
 }

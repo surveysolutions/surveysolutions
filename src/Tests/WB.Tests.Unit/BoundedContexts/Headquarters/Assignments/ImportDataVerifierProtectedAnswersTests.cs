@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
@@ -58,6 +59,32 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(protectedVariables, Has.Count.EqualTo(1));
             Assert.That(protectedVariables.FirstOrDefault(), Is.EqualTo(variableName));
             Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_question_is_not_supporting_protection([Values] QuestionType questionType)
+        {
+            QuestionType[] typesThatSupportProtection = new[]
+            {
+                QuestionType.MultyOption, QuestionType.Numeric, QuestionType.TextList
+            };
+
+            if (typesThatSupportProtection.Contains(questionType)) return;
+
+            var variableName = "myVariable";
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.Question(variable: variableName, questionType: questionType));
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            List<PanelImportVerificationError> errors = 
+                verifier.VerifyAndParseProtectedVariables("test", 
+                    new List<string[]>{ new []{ServiceColumns.ProtectedVariableNameColumn}, new []{variableName}}, Create.Entity.PlainQuestionnaire(questionnaire),
+                    out List<string> protectedVariables);
+
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors.FirstOrDefault(), Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0049"));
+            Assert.That(protectedVariables, Is.Empty);
         }
     }
 }

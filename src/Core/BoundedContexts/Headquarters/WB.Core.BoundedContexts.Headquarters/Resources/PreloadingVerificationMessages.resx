@@ -262,4 +262,7 @@
   <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
     <value>Protected variable {0} is not found in provided questionnaire</value>
   </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>Variable {0} has type that does not support protection</value>
+  </data>
 </root>
