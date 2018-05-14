@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             base.StoreQuestionnaire(id, version, questionnaireDocument);
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString();
-
+            
             foreach (var composite in questionnaireDocument.Children.TreeToEnumerable(d => d.Children))
             {
                 var question = composite as IQuestion;
@@ -47,6 +47,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     QuestionScope = question?.QuestionScope,
                     EntityType = composite.GetEntityType()
                 };
+
+                if (question is AbstractQuestion abstractQuestion)
+                {
+                    compositeItem.LinkedToQuestionId = abstractQuestion.LinkedToQuestionId;
+                    compositeItem.LinkedToRosterId = abstractQuestion.LinkedToRosterId;
+                    compositeItem.CascadeFromQuestionId = abstractQuestion.CascadeFromQuestionId;
+                    compositeItem.IsFilteredCombobox = abstractQuestion.IsFilteredCombobox ?? false;
+                    compositeItem.QuestionText = abstractQuestion.QuestionText;
+                    compositeItem.VariableLabel = abstractQuestion.VariableLabel;
+                    compositeItem.StatExportCaption = abstractQuestion.StataExportCaption;
+                }
+
+                if (question?.Answers != null && question.Answers.Any())
+                {
+                    compositeItem.Answers = question.Answers.Select(a => new QuestionnaireCompositeItemAnswer
+                    {
+                        Value = a.AnswerValue,
+                        Text = a.AnswerText,
+                        AnswerCode = a.AnswerCode,
+                        Parent = a.ParentValue,
+                        ParentCode = a.ParentCode
+                    }).ToList();
+                }
 
                 questionnaireItemsWriter.Store(compositeItem);
             }
