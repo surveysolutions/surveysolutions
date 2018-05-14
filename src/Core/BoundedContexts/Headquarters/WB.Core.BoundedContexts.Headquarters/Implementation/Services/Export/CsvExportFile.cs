@@ -3,13 +3,17 @@ using System.Linq;
 using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 {
     public class CsvExportFile : ExportFile
     {
-        public override byte[] GetFileBytes(string[] headers, object[][] data)
+        public override byte[] GetFileBytes(ReportView report)
         {
+            var headers = report.Headers;
+            var data = report.Data;
+
             var sb = new StringBuilder();
             using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
             {

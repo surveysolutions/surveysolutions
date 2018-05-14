@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var reportView = mapStorageService.GetAllMapUsersReportView();
             
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(reportView.Headers, reportView.Data));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(reportView));
 
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
