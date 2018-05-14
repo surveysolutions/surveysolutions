@@ -1510,7 +1510,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     interviewTreeQuestion.SetAnswer(answer.Answer);
 
-                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, this.tree));
+                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, changedInterviewTree));
 
                     if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
                     {
