@@ -387,7 +387,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var exportFile = this.exportFactory.CreateExportFile(type);
 
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
