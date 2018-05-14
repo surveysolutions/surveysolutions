@@ -9,11 +9,10 @@
              v-if="exportable">
             {{$t("Pages.DownloadReport")}}
             <a target="_blank"
-               v-bind:href="$store.state.reports.exportUrls.excel">XLSX</a> {{$t("Pages.Or")}}
+               v-bind:href="this.export.excel">XLSX</a>, <a target="_blank"
+               v-bind:href="this.export.csv">CSV</a> {{$t("Pages.Or")}}
             <a target="_blank"
-               v-bind:href="$store.state.reports.exportUrls.csv">CSV</a> {{$t("Pages.Or")}}
-            <a target="_blank"
-               v-bind:href="$store.state.reports.exportUrls.tab">TAB</a>
+               v-bind:href="this.export.tab">TAB</a>
         </div>
         <slot />
     </div>
@@ -60,6 +59,10 @@ export default {
         contextMenuItems: {
             type: Function
         },
+        pageLength: {
+            type: Number,
+            default: 20
+        },
         authorizedUser: { type: Object, default() { return {} } },
         reloadDebounce: { type: Number, default: 500 },
         noPaging: Boolean,
@@ -74,7 +77,12 @@ export default {
         return {
             selectedRows: [],
             table: null,
-            processing: null
+            processing: null,
+            export: {
+                excel: null,
+                csv: null,
+                tab: null
+            }
         }
     },
 
@@ -130,7 +138,7 @@ export default {
                 searchHighlight: true,
                 pagingType: "full_numbers",
                 lengthChange: false, // do not show page size selector
-                pageLength: 20, // page size
+                pageLength: this.pageLength, // page size
                 dom: "frtp",
                 conditionalPaging: true,
                 paging: !this.noPaging,
@@ -175,26 +183,28 @@ export default {
                 options.ajax.data = (d) => {
                     this.addParamsToRequest(d);
 
+                    // reducing length of GET request URI
                     d.columns.forEach((column) => {
                         delete (column.orderable);
                         delete (column.search);
+                        delete (column.data);
                         delete (column.searchable);
                     });
+                    d._c = d.columns // aliasing columns arg name
+                    delete d.columns
 
-                    var requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
+                    const requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
 
                     if(this.exportable) {
-                        this.$store.dispatch('setExportUrls', {
-                            excel: requestUrl + "&exportType=excel",
-                            csv: requestUrl + "&exportType=csv",
-                            tab: requestUrl + "&exportType=tab"
-                        });
+                        this.export.excel = requestUrl + "&exportType=excel"
+                        this.export.csv = requestUrl + "&exportType=csv"
+                        this.export.tab = requestUrl + "&exportType=tab"
                     }
                 };
 
                 options.ajax.complete = (response) => {
                     self.$emit("totalRows", response.responseJSON.recordsTotal)
-                    self.$emit("ajaxComplete");
+                    self.$emit("ajaxComplete", response.responseJSON);
                 };
             }
 
