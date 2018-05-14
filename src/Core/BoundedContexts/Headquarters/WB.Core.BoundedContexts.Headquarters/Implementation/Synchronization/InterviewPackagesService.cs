@@ -224,21 +224,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var aggregateRootEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events);
 
-
-                var firstEvent = aggregateRootEvents[0];
-                var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
-
-                var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
-                    _.FirstOrDefault(x => x.FirstEventId == firstEvent.EventIdentifier &&
-                                          x.FirstEventTimestamp == firstEvent.EventTimeStamp &&
-                                          x.LastEventId == lastEvent.EventIdentifier &&
-                                          x.LastEventTimestamp == lastEvent.EventTimeStamp));
-
-                if (existingReceivedPackageLog != null)
-                {
-                    throw new InterviewException("Package already received and processed",
-                        InterviewDomainExceptionType.DuplicateSyncPackage);
-                }
+                AssertPackageNotDuplicated(aggregateRootEvents);
 
                 var serializedEvents = aggregateRootEvents
                     .Select(e => e.Payload)
@@ -267,13 +253,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
                 ), this.syncSettings.Origin);
 
-                this.packagesTracker.Store(new ReceivedPackageLogEntry
-                {
-                    FirstEventId = aggregateRootEvents[0].EventIdentifier,
-                    FirstEventTimestamp = aggregateRootEvents[0].EventTimeStamp,
-                    LastEventId = aggregateRootEvents.Last().EventIdentifier,
-                    LastEventTimestamp = aggregateRootEvents.Last().EventTimeStamp
-                }, null);
+                RecordProcessedPackageInfo(aggregateRootEvents);
 
                 if (startedOwnTransaction)
                 {
@@ -314,6 +294,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
 
             innerwatch.Stop();
+        }
+
+        private void RecordProcessedPackageInfo(AggregateRootEvent[] aggregateRootEvents)
+        {
+            if (aggregateRootEvents.Length > 0)
+            {
+                this.packagesTracker.Store(new ReceivedPackageLogEntry
+                {
+                    FirstEventId = aggregateRootEvents[0].EventIdentifier,
+                    FirstEventTimestamp = aggregateRootEvents[0].EventTimeStamp,
+                    LastEventId = aggregateRootEvents.Last().EventIdentifier,
+                    LastEventTimestamp = aggregateRootEvents.Last().EventTimeStamp
+                }, null);
+            }
+        }
+
+        private void AssertPackageNotDuplicated(AggregateRootEvent[] aggregateRootEvents)
+        {
+            if (aggregateRootEvents.Length > 0)
+            {
+                var firstEvent = aggregateRootEvents[0];
+                var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
+
+                var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
+                    _.FirstOrDefault(x => x.FirstEventId == firstEvent.EventIdentifier &&
+                                          x.FirstEventTimestamp == firstEvent.EventTimeStamp &&
+                                          x.LastEventId == lastEvent.EventIdentifier &&
+                                          x.LastEventTimestamp == lastEvent.EventTimeStamp));
+
+                if (existingReceivedPackageLog != null)
+                {
+                    throw new InterviewException("Package already received and processed",
+                        InterviewDomainExceptionType.DuplicateSyncPackage);
+                }
+            }
         }
 
         private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid interviewerId,
