@@ -178,11 +178,20 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sync completed.
+        ///   Looks up a localized string similar to Sync completed (Assignments: New - {0}, Removed - {1}; Interviews: New - {2}, Uploaded - {3}, Rejected - {4}, Deleted - {5}).
         /// </summary>
         public static string SynchronizationCompleted {
             get {
                 return ResourceManager.GetString("SynchronizationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sync failed.
+        /// </summary>
+        public static string SynchronizationFailed {
+            get {
+                return ResourceManager.GetString("SynchronizationFailed", resourceCulture);
             }
         }
         

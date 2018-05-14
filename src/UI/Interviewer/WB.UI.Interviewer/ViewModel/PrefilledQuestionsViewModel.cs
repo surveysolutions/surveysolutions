@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -45,7 +46,8 @@ namespace WB.UI.Interviewer.ViewModel
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            auditLogService.Write(new CloseInterviewAuditLogEntity(InterviewId, null));
+            var statefulInterview = this.interviewRepository.Get(InterviewId);
+            auditLogService.Write(new CloseInterviewAuditLogEntity(InterviewId, statefulInterview.GetInterviewKey()?.ToString()));
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
@@ -58,5 +60,13 @@ namespace WB.UI.Interviewer.ViewModel
         });
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
+
+        public override Task NavigateToPreviousViewModelAsync()
+        {
+            var statefulInterview = this.interviewRepository.Get(InterviewId);
+            auditLogService.Write(new CloseInterviewAuditLogEntity(InterviewId, statefulInterview.GetInterviewKey()?.ToString()));
+
+            return base.NavigateToPreviousViewModelAsync();
+        }
     }
 }

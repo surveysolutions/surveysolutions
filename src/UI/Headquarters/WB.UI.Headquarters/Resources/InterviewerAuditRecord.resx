@@ -157,7 +157,10 @@
     <value>Sync canceled</value>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">
-    <value>Sync completed</value>
+    <value>Sync completed (Assignments: New - {0}, Removed - {1}; Interviews: New - {2}, Uploaded - {3}, Rejected - {4}, Deleted - {5})</value>
+  </data>
+  <data name="SynchronizationFailed" xml:space="preserve">
+    <value>Sync failed</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
     <value>Sync started</value>

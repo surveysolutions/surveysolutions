@@ -909,6 +909,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\InterviewerAuditRecord.ru.resx">
       <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
