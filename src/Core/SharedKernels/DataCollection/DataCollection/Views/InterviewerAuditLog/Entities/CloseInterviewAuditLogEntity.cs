@@ -1,11 +1,13 @@
-﻿namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities
+﻿using System;
+
+namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities
 {
     public class CloseInterviewAuditLogEntity : BaseAuditLogEntity
     {
-        public string InterviewId { get; }
+        public Guid InterviewId { get; }
         public string InterviewKey { get; }
 
-        public CloseInterviewAuditLogEntity(string interviewId, string interviewKey) 
+        public CloseInterviewAuditLogEntity(Guid interviewId, string interviewKey) 
             : base(AuditLogEntityType.CloseInterview)
         {
             InterviewId = interviewId;

@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
 
             var records = storageAccessor.Query(_ =>
                 _.Where(r => r.ResponsibleId == responsibleId && last7Days.Contains(r.TimeUtc.Date))
-                    .OrderByDescending(r => r.RecordId)
+                    .OrderByDescending(r => r.Id)
             ).ToList();
 
             return new AuditLogResult()
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
                 if (endDate.HasValue)
                     records = records.Where(r => r.TimeUtc < endDate);
 
-                return records.OrderByDescending(r => r.RecordId);
+                return records.OrderByDescending(r => r.Id);
             }).ToList();
         }
     }

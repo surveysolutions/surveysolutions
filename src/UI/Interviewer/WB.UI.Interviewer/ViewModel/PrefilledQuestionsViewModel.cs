@@ -15,8 +15,6 @@ namespace WB.UI.Interviewer.ViewModel
 {
     public class PrefilledQuestionsViewModel : BasePrefilledQuestionsViewModel
     {
-        private readonly IAuditLogService auditLogService;
-
         public PrefilledQuestionsViewModel(
             IInterviewViewModelFactory interviewViewModelFactory,
             IQuestionnaireStorage questionnaireRepository,
@@ -26,8 +24,7 @@ namespace WB.UI.Interviewer.ViewModel
             IPrincipal principal,
             ICommandService commandService,
             ICompositeCollectionInflationService compositeCollectionInflationService,
-            VibrationViewModel vibrationViewModel,
-            IAuditLogService auditLogService)
+            VibrationViewModel vibrationViewModel)
             : base(
                 interviewViewModelFactory,
                 questionnaireRepository,
@@ -39,15 +36,12 @@ namespace WB.UI.Interviewer.ViewModel
                 compositeCollectionInflationService,
                 vibrationViewModel)
         {
-            this.auditLogService = auditLogService;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            var statefulInterview = this.interviewRepository.Get(InterviewId);
-            auditLogService.Write(new CloseInterviewAuditLogEntity(InterviewId, statefulInterview.GetInterviewKey()?.ToString()));
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
@@ -60,13 +54,5 @@ namespace WB.UI.Interviewer.ViewModel
         });
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
-
-        public override Task NavigateToPreviousViewModelAsync()
-        {
-            var statefulInterview = this.interviewRepository.Get(InterviewId);
-            auditLogService.Write(new CloseInterviewAuditLogEntity(InterviewId, statefulInterview.GetInterviewKey()?.ToString()));
-
-            return base.NavigateToPreviousViewModelAsync();
-        }
     }
 }
