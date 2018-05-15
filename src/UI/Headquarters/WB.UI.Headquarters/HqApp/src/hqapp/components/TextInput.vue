@@ -31,8 +31,8 @@ export default {
             this.$emit("changed")
         },
         changed(ev) {
-            if(ev != null && ev.srcElement == null) return
-            this.$emit("input", parseInt(ev.srcElement.value))
+            if(ev != null && ev.target == null) return
+            this.$emit("input", parseInt(ev.target.value))
             this.$emit("changed")
         }
     }

@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         {
             var connection = this.sessionProvider.GetSession().Connection;
             var questionnaire = questionnaireIdentity.ToString();
-            return connection.Query<GetReportCategoricalPivotReportItem>(@"select a as rowvalue, b as colvalue, count
+            return connection.Query<GetReportCategoricalPivotReportItem>(@"select a as colvalue, b as rowvalue, count
                 from readside.get_report_categorical_pivot(@teamLeadId, @questionnaire, @variableA, @variableB)", new
             {
                 teamLeadId,

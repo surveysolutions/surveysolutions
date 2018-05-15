@@ -112,7 +112,9 @@ namespace WB.UI.Headquarters.API.PublicApi
                     Type = q.QuestionType.ToString(),
                     StataExportCaption = q.StataExportCaption,
                     Label = q.VariableLabel,
-                    HasTotal = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
+                    HasTotal = q.QuestionType == QuestionType.SingleOption 
+                               || q.QuestionType == QuestionType.MultyOption
+                               || q.Answers.Any(),
                     SupportConditions = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
                     Pivotable = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
                     QuestionText = q.QuestionText.RemoveHtmlTags().Replace("%rostertitle%", "[...]")
