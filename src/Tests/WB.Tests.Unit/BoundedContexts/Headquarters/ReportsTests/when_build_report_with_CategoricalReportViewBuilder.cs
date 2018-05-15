@@ -9,7 +9,7 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
 {
     [TestFixture]
-    public class when_add_data_to_TabulateCategoricalVariableReportViewTests
+    public class when_build_report_with_CategoricalReportViewBuilder
     {
         private List<Answer> answers;
         private List<GetCategoricalReportItem> rows;
@@ -77,10 +77,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             Assert.That(ValuesFor(interviewerB), Is.EqualTo(new[] { 15, 25, 35 }));
             Assert.That(ValuesFor(interviewerC), Is.EqualTo(new[] { 100, 200, 0 }), "Should fill missing values with zero");
 
-            int[] ValuesFor(string responsibleName) => GetValuesFor(subject, d => d.ResponsibleName == responsibleName);
+            long[] ValuesFor(string responsibleName) => GetValuesFor(subject, d => d.ResponsibleName == responsibleName);
         }
 
-        private int[] GetValuesFor(CategoricalReportViewBuilder perTeamReport, Func<CategoricalReportViewItem, bool> predicate)
+        private long[] GetValuesFor(CategoricalReportViewBuilder perTeamReport, Func<CategoricalReportViewItem, bool> predicate)
         {
             return perTeamReport.Data.Where(predicate).Select(d => d.Values).SingleOrDefault();
         }

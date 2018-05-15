@@ -2,8 +2,8 @@
 {
     public class GetReportCategoricalPivotReportItem
     {
-        public int A { get; set; }
-        public int B { get; set; }
+        public int RowValue { get; set; }
+        public int ColValue { get; set; }
         public long Count { get; set; }
     }
 }
