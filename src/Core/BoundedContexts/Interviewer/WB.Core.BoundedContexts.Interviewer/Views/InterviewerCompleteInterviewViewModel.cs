@@ -7,7 +7,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -30,8 +29,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             InterviewStateViewModel interviewState,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             DynamicTextViewModel dynamicTextViewModel,
+            ILastCompletionComments lastCompletionComments,
             IAuditLogService auditLogService)
-            : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, interviewState, dynamicTextViewModel)
+            : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel)
         {
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;
@@ -50,7 +50,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
-            this.CompleteComment = statefulInterview.InterviewerCompleteComment;
+            if (string.IsNullOrEmpty(this.CompleteComment))
+            {
+                this.CompleteComment = statefulInterview.InterviewerCompleteComment;
+            }
         }
 
         protected override Task CloseInterviewAfterComplete()
