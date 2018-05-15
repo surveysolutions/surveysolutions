@@ -138,20 +138,17 @@
     <comment>Интервью {0} открыто</comment>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Пользователь  {0} залогинен в приложение</value>
-    <comment>Юзер {0} залогинен в приложение</comment>
+    <value>Пользователь  {0} залогинился в приложение</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Пользователь {0} вылогинелся из приложения</value>
-    <comment>Пользователь {0} вылогинелся из приложения</comment>
+    <value>Пользователь {0} вылогинился из приложения</value>
   </data>
   <data name="OpenApplication" xml:space="preserve">
     <value>Приложение открыто</value>
     <comment>Приложение открыто</comment>
   </data>
   <data name="Relink" xml:space="preserve">
-    <value>Юзер привязал новый планшет</value>
-    <comment>Юзер привязал новый планшет</comment>
+    <value>Новый планшет был привязан к пользователю</value>
   </data>
   <data name="ShowPrevious7Days" xml:space="preserve">
     <value>Показать преведущие 7 дней</value>
@@ -162,7 +159,7 @@
     <comment>Синхронизация начата</comment>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">
-    <value>Синхронизация завершена (Задания: новые - {0}, удаленые - {1}; Интервью: новые - {2}, загруженно на сервер - {3}, отклоненные - {4}, удаленные - {5})</value>
+    <value>Синхронизация завершена (Задания: новые - {0}, удаленные - {1}; Интервью: новые - {2}, загруженно на сервер - {3}, отклоненные - {4}, удаленные - {5})</value>
   </data>
   <data name="SynchronizationCanceled" xml:space="preserve">
     <value>Синхронизация отменена</value>
