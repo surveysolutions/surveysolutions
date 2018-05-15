@@ -2176,6 +2176,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File is too big.
+        /// </summary>
+        public static string Map_UploadingFileTooBig {
+            get {
+                return ResourceManager.GetString("Map_UploadingFileTooBig", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Maps were succesfuly uploaded.
         /// </summary>
         public static string Map_UploadingSuccess {
