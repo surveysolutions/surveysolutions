@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entitie
 
         public SynchronizationFailedAuditLogEntity(Exception exception) : base(AuditLogEntityType.SynchronizationFailed)
         {
-            ExceptionMessage = exception.Message;
-            StackTrace = exception.StackTrace;
+            ExceptionMessage = exception?.Message;
+            StackTrace = exception?.StackTrace;
         }
     }
 }
