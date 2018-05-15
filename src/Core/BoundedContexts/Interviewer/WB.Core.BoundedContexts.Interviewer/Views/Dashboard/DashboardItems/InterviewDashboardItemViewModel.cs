@@ -260,7 +260,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 }
 
                 Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
-                auditLogService.Write(new OpenInterviewAuditLogEntity(this.interview.InterviewId, this.interview.InterviewKey, this.interview.Assignment));
                 await this.ViewModelNavigationService.NavigateToAsync<LoadingViewModel, LoaginViewModelArg>(new LoaginViewModelArg{ InterviewId = this.interview.InterviewId });
             }
             finally

@@ -117,6 +117,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.QuestionnaireTitle = questionnaire.Title;
 
+            assignmentId = interview.GetAssignmentId();
+
             interviewKey = interview.GetInterviewKey();
             this.InterviewKey = interviewKey == null ? null : String.Format(UIResources.InterviewKey, interviewKey.ToString());
 
@@ -277,6 +279,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public string QuestionnaireTitle { get; set; }
         public string InterviewKey { get; set; }
         protected InterviewKey interviewKey;
+        protected int? assignmentId;
 
         public bool HasPrefilledQuestions { get; set; }
         public bool HasEdiablePrefilledQuestions { get; set; }
