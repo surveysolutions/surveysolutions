@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         {
             var connection = this.sessionProvider.GetSession().Connection;
             var questionnaire = questionnaireIdentity.ToString();
-            return connection.Query<GetReportCategoricalPivotReportItem>(@"select a, b, count
+            return connection.Query<GetReportCategoricalPivotReportItem>(@"select a as rowvalue, b as colvalue, count
                 from readside.get_report_categorical_pivot(@teamLeadId, @questionnaire, @variableA, @variableB)", new
             {
                 teamLeadId,
@@ -68,7 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             var result = connection.Query<GetCategoricalReportItem>(SqlQuery, @params);
             var totals = connection.Query<GetCategoricalReportItem>(SqlQuery, @params.AsTotals());
 
-            return result.Union(totals).ToList();
+            return result.Concat(totals).ToList();
         }
         
         public List<GetNumericalReportItem> GetNumericalReportData(QuestionnaireIdentity questionnaireIdentity,

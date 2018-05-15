@@ -8,20 +8,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
     public class CategoricalPivotReportViewBuilder
     {
-        private readonly IQuestion questionA;
+        private readonly IQuestion columnQuestion;
         private readonly IQuestion rowsQuestion;
         private readonly List<GetReportCategoricalPivotReportItem> items;
 
-        public CategoricalPivotReportViewBuilder(IQuestion questionA, IQuestion rowsQuestion, List<GetReportCategoricalPivotReportItem> items)
+        public CategoricalPivotReportViewBuilder(IQuestion columnQuestion, IQuestion rowsQuestion, List<GetReportCategoricalPivotReportItem> items)
         {
-            this.questionA = questionA;
+            this.columnQuestion = columnQuestion;
             this.rowsQuestion = rowsQuestion;
-            this.items = items;
+            this.items = items ?? new List<GetReportCategoricalPivotReportItem>();
         }
 
         public ReportView AsReportView()
         {
-            var columnAnswers = GetAnswersIndex(questionA);
+            var columnAnswers = GetAnswersIndex(columnQuestion);
             var rowsAnswers = GetAnswersIndex(rowsQuestion);
 
             var report = new ReportView();
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 yield return "variable";
 
-                foreach (var answer in questionA.Answers)
+                foreach (var answer in columnQuestion.Answers)
                 {
                     yield return answer.AsColumnName();
                 }
@@ -42,14 +42,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 yield return rowsQuestion.StataExportCaption;
 
-                foreach (var answer in questionA.Answers)
+                foreach (var answer in columnQuestion.Answers)
                 {
                     yield return answer.AnswerText;
                 }
 
                 yield return Strings.Total;
             }
-
 
             report.Columns = GetColumns().ToArray();
             report.Headers = GetHeaders().ToArray();
@@ -74,10 +73,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             // A - is a columns, B - is rows
             foreach (var item in items)
             {
-                var rowIndex = rowsAnswers[item.B];
+                var rowIndex = rowsAnswers[item.RowValue];
                 var row = report.Data[rowIndex.index];
 
-                var columnIndex = columnAnswers[item.A];
+                var columnIndex = columnAnswers[item.ColValue];
                 row[columnIndex.index + 1] = item.Count;
 
                 AddAt(row,           report.Columns.Length - 1, item.Count);
