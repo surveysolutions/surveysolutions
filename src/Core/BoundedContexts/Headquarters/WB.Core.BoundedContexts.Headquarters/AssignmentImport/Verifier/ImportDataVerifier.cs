@@ -482,7 +482,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) yield break;
 
-            if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.MultyOption) yield break;
             if (!questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
 
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
