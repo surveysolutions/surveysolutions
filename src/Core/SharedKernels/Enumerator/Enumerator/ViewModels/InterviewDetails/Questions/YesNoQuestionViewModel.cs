@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -114,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetYesNoQuestion(this.Identity);
 
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), interview))
+                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), answerModel))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -135,7 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model,
             AnsweredYesNoOption[] checkedYesNoAnswerOptions, 
-            IStatefulInterview interview)
+            InterviewTreeYesNoQuestion treeQuestion)
         {
             var isExistAnswer = checkedYesNoAnswerOptions != null && checkedYesNoAnswerOptions.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
@@ -155,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Selected = isSelected,
                 YesAnswerCheckedOrder = yesAnswerCheckedOrder,
                 AnswerCheckedOrder = answerCheckedOrder,
-                IsProtected = interview.IsAnswerProtected(this.Identity, model.Value)
+                IsProtected = treeQuestion.IsAnswerProtected(model.Value)
             };
 
             return optionViewModel;
