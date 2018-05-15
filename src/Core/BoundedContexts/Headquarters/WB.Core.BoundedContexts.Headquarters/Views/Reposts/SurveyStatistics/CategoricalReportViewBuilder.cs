@@ -30,16 +30,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             }
 
             Headers = new[] {TeamLeadColumn, ResponsibleColumn}
-                .Union(answers.Select(a => a.AnswerText))
-                .Union(new [] {Strings.Total})
+                .Concat(answers.Select(a => a.AnswerText))
+                .Concat(new [] {Strings.Total})
                 .ToArray();
 
             Columns = new[]
             {
                 TeamLeadColumn,
                 ResponsibleColumn
-            }.Union(answers.Select(a => a.AsColumnName()))
-                .Union(new []{"total"})
+            }.Concat(answers.Select(a => a.AsColumnName()))
+             .Concat(new []{"total"})
             .ToArray();
 
             SetData(rows);
@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         {
             this.Data.Clear();
             this.Totals = new long[answersIndexMap.Count];
-
+            if (rows == null) return;
             CategoricalReportViewItem perTeamReportItem = null;
             
             foreach (var row in rows)
@@ -76,11 +76,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     {
                         ResponsibleName = row.ResponsibleName,
                         TeamLeadName = row.TeamLeadName,
-                        Values = new int[answersIndexMap.Count]
+                        Values = new long[answersIndexMap.Count]
                     };
                 }
 
                 perTeamReportItem.Values[answersIndexMap[row.Answer]] = row.Count;
+
             }
 
             if (perTeamReportItem != null) this.Data.Add(perTeamReportItem);

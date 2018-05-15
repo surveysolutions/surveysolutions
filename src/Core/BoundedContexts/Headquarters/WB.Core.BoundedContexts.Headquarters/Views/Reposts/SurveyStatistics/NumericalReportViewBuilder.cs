@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         
         public NumericalReportViewBuilder(List<GetNumericalReportItem> numericalData, CategoricalReportViewBuilder specialValuesData)
         {
-            this.numericalData = numericalData;
+            this.numericalData = numericalData ?? new List<GetNumericalReportItem>();
             this.specialValuesData = specialValuesData;
         }
 
@@ -36,49 +36,82 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         {
             var report = new ReportView
             {
-                // skip 2 - is TeamLead and Responsible columns
-                Columns = NumericColumns.Union(this.specialValuesData.Columns.Skip(2)).ToArray(),
-                Headers=  NumericHeaders.Union(this.specialValuesData.Headers.Skip(2)).ToArray()
+                Columns = NumericColumns,
+                Headers = NumericHeaders
             };
+
+            var hasSpecialValues = this.specialValuesData.Columns.Length > 3;
+            if (hasSpecialValues) // has any data
+            {
+                // skip 2 - is TeamLead and Responsible columns
+                report.Columns = report.Columns.Concat(this.specialValuesData.Columns.Skip(2)).ToArray();
+                report.Headers = report.Columns.Concat(this.specialValuesData.Headers.Skip(2)).ToArray();
+            }
 
             report.Totals = new object[report.Columns.Length];
 
             Dictionary<(string teamLeadName, string responsibleName), CategoricalReportViewItem> categoricalData 
                 = this.specialValuesData.Data.ToDictionary(d => (d.TeamLeadName, d.ResponsibleName));
 
-            var data = new List<object[]>();
+            var resultData = new List<object[]>();
 
-            object[] CreateRow(GetNumericalReportItem numeric, (string teamLeadName, string responsible) categoricalKey, params string[] rowPrefix)
+            foreach (GetNumericalReportItem reportItem in this.numericalData)
+            {
+                if (reportItem.TeamLeadName == null && reportItem.ResponsibleName == null)
+                {
+                    report.Totals = CreateRow(reportItem, (null, null), AllTeams, AllResponsible);
+                    continue;
+                }
+
+                var row = CreateRow(reportItem, (reportItem.TeamLeadName, reportItem.ResponsibleName), reportItem.TeamLeadName, reportItem.ResponsibleName);
+                resultData.Add(row);
+            }
+
+            // for those cases when there is only Special Values answers
+            foreach (var categoricalItem in categoricalData.Values.ToList())
+            {
+                if(!categoricalData.ContainsKey((categoricalItem.TeamLeadName, categoricalItem.ResponsibleName)))
+                    continue;
+                
+                if (categoricalItem.TeamLeadName == null && categoricalItem.ResponsibleName == null)
+                {
+                    report.Totals = CreateRow(null, (null, null), AllTeams, AllResponsible);
+                    continue;
+                }
+                
+                var row = CreateRow(null, (categoricalItem.TeamLeadName, categoricalItem.ResponsibleName), 
+                    categoricalItem.TeamLeadName, categoricalItem.ResponsibleName);
+
+                resultData.Add(row);
+            }
+
+            report.Data = resultData.ToArray();
+            return report;
+            
+            object[] CreateRow(GetNumericalReportItem numeric, (string teamLeadName, string responsible) categoricalKey, 
+                params string[] rowPrefix)
             {
                 var row = new object[report.Columns.Length];
                 int rowIndex = 0;
                 void AppendToRow(object value) => row[rowIndex++] = value;
 
+                // adding row prefixes
                 foreach (var column in rowPrefix)
                 {
                     AppendToRow(column);
                 }
+                
+                AppendToRow(numeric?.Count);
+                AppendToRow(numeric?.Average);
+                AppendToRow(numeric?.Median);
+                AppendToRow(numeric?.Sum);
+                AppendToRow(numeric?.Min);
+                AppendToRow(numeric?.Percentile05);
+                AppendToRow(numeric?.Percentile50);
+                AppendToRow(numeric?.Percentile95);
+                AppendToRow(numeric?.Max);
 
-                if (numeric != null)
-                {
-                    var numericRowData = new object[]
-                    {
-                        numeric.Count, numeric.Average, numeric.Median, numeric.Sum,
-                        numeric.Min, numeric.Percentile05, numeric.Percentile50, numeric.Percentile95, numeric.Max
-                    };
-
-                    foreach (var value in numericRowData)
-                    {
-                        AppendToRow(value);
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < NumericColumns.Length - 2; i++)
-                    {
-                        AppendToRow(null);
-                    }
-                }
+                if (!hasSpecialValues) return row;
 
                 if (categoricalData.TryGetValue(categoricalKey, out var categorical))
                 {
@@ -86,6 +119,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     {
                         AppendToRow(value);
                     }
+
+                    AppendToRow(categorical.Total);
 
                     categoricalData.Remove(categoricalKey);
                 }
@@ -109,39 +144,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
                 return row;
             }
-
-            foreach (GetNumericalReportItem numeric in this.numericalData)
-            {
-                if (numeric.TeamLeadName == null && numeric.ResponsibleName == null)
-                {
-                    report.Totals = CreateRow(numeric, (null, null), AllTeams, AllResponsible);
-                    continue;
-                }
-
-                var row = CreateRow(numeric, (numeric.TeamLeadName, numeric.ResponsibleName), numeric.TeamLeadName, numeric.ResponsibleName);
-                data.Add(row);
-            }
-
-            // for those cases when there is only Special Values answers
-            foreach (var categoricalItem in categoricalData.Values.ToList())
-            {
-                if(!categoricalData.ContainsKey((categoricalItem.TeamLeadName, categoricalItem.ResponsibleName)))
-                    continue;
-                
-                if (categoricalItem.TeamLeadName == null && categoricalItem.ResponsibleName == null)
-                {
-                    report.Totals = CreateRow(null, (null, null), AllTeams, AllResponsible);
-                    continue;
-                }
-                
-                var row = CreateRow(null, (categoricalItem.TeamLeadName, categoricalItem.ResponsibleName), 
-                    categoricalItem.TeamLeadName, categoricalItem.ResponsibleName);
-
-                data.Add(row);
-            }
-
-            report.Data = data.ToArray();
-            return report;
         }
     }
 }

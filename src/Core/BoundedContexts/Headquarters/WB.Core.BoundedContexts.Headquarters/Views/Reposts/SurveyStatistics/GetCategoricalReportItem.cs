@@ -8,7 +8,7 @@
         public string ResponsibleName { get; set; }
         public string TeamLeadName { get; set; }
         public int Answer { get; set; }
-        public int Count { get; set; }
+        public long Count { get; set; }
         public string AnswerText { get; set; }
 
         public override string ToString() 
