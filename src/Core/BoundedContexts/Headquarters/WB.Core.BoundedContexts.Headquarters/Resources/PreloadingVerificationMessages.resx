@@ -235,10 +235,10 @@
     <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Answered options count to multiple choice question can't be more than max allowed answers count</value>
   </data>
-    <data name="PL0047_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
     <value>Answer on Categorical Multi question must be greater or equal then 1</value>
   </data>
-    <data name="PL0048_YesNo_AnswerMustBeGreaterOrEqualThen0" xml:space="preserve">
+    <data name="PL0051_YesNo_AnswerMustBeGreaterOrEqualThen0" xml:space="preserve">
     <value>Answer on Yes/No question must be greater or equal then 0</value>
   </data>
     <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">

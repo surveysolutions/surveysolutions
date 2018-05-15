@@ -477,18 +477,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Answer on Categorical Multi question must be greater or equal then 1.
         /// </summary>
-        public static string PL0047_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1 {
+        public static string PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1 {
             get {
-                return ResourceManager.GetString("PL0047_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1", resourceCulture);
+                return ResourceManager.GetString("PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Answer on Yes/No question must be greater or equal then 0.
         /// </summary>
-        public static string PL0048_YesNo_AnswerMustBeGreaterOrEqualThen0 {
+        public static string PL0051_YesNo_AnswerMustBeGreaterOrEqualThen0 {
             get {
-                return ResourceManager.GetString("PL0048_YesNo_AnswerMustBeGreaterOrEqualThen0", resourceCulture);
+                return ResourceManager.GetString("PL0051_YesNo_AnswerMustBeGreaterOrEqualThen0", resourceCulture);
             }
         }
     }

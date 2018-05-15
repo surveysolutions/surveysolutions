@@ -204,8 +204,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
             Errors<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
-            Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen1, "PL0047", messages.PL0047_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
-            Errorq<AssignmentMultiAnswer>(YesNo_AnswerMustBeGreaterOrEqualThen0, "PL0048", messages.PL0048_YesNo_AnswerMustBeGreaterOrEqualThen0),
+            Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen1, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
+            Errorq<AssignmentMultiAnswer>(YesNo_AnswerMustBeGreaterOrEqualThen0, "PL0051", messages.PL0051_YesNo_AnswerMustBeGreaterOrEqualThen0),
         };
 
         private IEnumerable<InterviewImportReference> OrphanNestedRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
@@ -474,7 +474,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
 
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
-                if (!Interger_BiggerOrEqualThen(assignmentAnswer, 1)) yield return assignmentAnswer;
+                if (assignmentAnswer.Answer < 1) yield return assignmentAnswer;
         }
         
         private IEnumerable<AssignmentAnswer> YesNo_AnswerMustBeGreaterOrEqualThen0(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
@@ -486,7 +486,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (!questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
 
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
-                if (!Interger_BiggerOrEqualThen(assignmentAnswer, 0)) yield return assignmentAnswer;
+                if (assignmentAnswer.Answer < 0) yield return assignmentAnswer;
         }
         
         private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
@@ -544,9 +544,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private bool Double_CommaSymbolIsNotAllowed(AssignmentDoubleAnswer answer)
             => !string.IsNullOrWhiteSpace(answer.Value) && answer.Value.Contains(",");
-
-        private bool Interger_BiggerOrEqualThen(AssignmentIntegerAnswer answer, int value)
-            => int.TryParse(answer.Value, out int parsedValue) && parsedValue >= value;
 
         private bool Integer_ExceededRosterSize(AssignmentIntegerAnswer answer, IQuestionnaire questionnaire)
         {
