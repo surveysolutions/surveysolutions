@@ -73,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireTextPreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.Text);
+                .RequireQuestionExists(QuestionType.Text);
 
         public void RequireTextAnswerAllowed()
             => this
@@ -82,7 +82,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireNumericIntegerPreloadValueAllowed(int answer)
             => this
-                .RequireQuestionDeclared(QuestionType.Numeric)
+                .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
@@ -118,7 +118,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireNumericRealPreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.Numeric)
+                .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericRealQuestionDeclared();
 
         public void RequireNumericRealAnswerAllowed(double answer)
@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireDateTimePreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.DateTime);
+                .RequireQuestionExists(QuestionType.DateTime);
 
         public void RequireDateTimeAnswerAllowed()
             => this
@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireFixedSingleOptionPreloadValueAllowed(decimal selectedValue)
             => this
-                .RequireQuestionDeclared(QuestionType.SingleOption)
+                .RequireQuestionExists(QuestionType.SingleOption)
                 .RequireOptionExists(selectedValue);
 
         public void RequireFixedSingleOptionAnswerAllowed(decimal selectedValue, QuestionnaireIdentity questionnaireIdentity)
@@ -163,7 +163,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireFixedMultipleOptionsPreloadValueAllowed(IReadOnlyCollection<int> selectedValues)
             => this
-                .RequireQuestionDeclared(QuestionType.MultyOption)
+                .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireOptionsExist(selectedValues)
                 .RequireNotYesNoMultipleOptionsQuestion()
                 .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
@@ -223,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
 
             this
-                .RequireQuestionDeclared(QuestionType.MultyOption)
+                .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireOptionsExist(selectedValues)
                 .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
@@ -246,7 +246,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireTextListPreloadValueAllowed(Tuple<decimal, string>[] answers)
             => this
-                .RequireQuestionDeclared(QuestionType.TextList)
+                .RequireQuestionExists(QuestionType.TextList)
                 .RequireRosterSizeAnswerNotNegative(answers.Length)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
                 .RequireMaxAnswersCountLimit(answers.Length);
@@ -285,7 +285,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireGpsCoordinatesPreloadValueAllowed(GeoPosition answer)
             => this
-                .RequireQuestionDeclared(QuestionType.GpsCoordinates)
+                .RequireQuestionExists(QuestionType.GpsCoordinates)
                 .RequireGpsCoordinatesBeInRange(answer);
 
         public void RequireGpsCoordinatesAnswerAllowed()
@@ -295,7 +295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireQRBarcodePreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.QRBarcode);
+                .RequireQuestionExists(QuestionType.QRBarcode);
 
         public void RequireQRBarcodeAnswerAllowed()
             => this
