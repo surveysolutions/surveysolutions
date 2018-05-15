@@ -1203,7 +1203,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProtectAnswer()
         {
-            this.ProtectedAnswers = this.GetAnswer().Rows.ToList();
+            this.ProtectedAnswers = this.GetAnswer()?.Rows.ToArray() ?? Array.Empty<TextListAnswerRow>();
         }
 
         public bool IsAnswerProtected(decimal value)
