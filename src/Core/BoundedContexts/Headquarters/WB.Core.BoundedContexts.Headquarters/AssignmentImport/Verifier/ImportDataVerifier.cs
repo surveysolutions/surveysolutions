@@ -474,7 +474,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
 
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
-                if (Interger_BiggerOrEqualThen(assignmentAnswer, 1)) yield return assignmentAnswer;
+                if (!Interger_BiggerOrEqualThen(assignmentAnswer, 1)) yield return assignmentAnswer;
         }
         
         private IEnumerable<AssignmentAnswer> YesNo_AnswerMustBeGreaterOrEqualThen0(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
@@ -486,7 +486,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             if (!questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
 
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
-                if (Interger_BiggerOrEqualThen(assignmentAnswer, 0)) yield return assignmentAnswer;
+                if (!Interger_BiggerOrEqualThen(assignmentAnswer, 0)) yield return assignmentAnswer;
         }
         
         private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
