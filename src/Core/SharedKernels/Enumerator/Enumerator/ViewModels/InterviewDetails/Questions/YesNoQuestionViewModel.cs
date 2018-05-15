@@ -7,6 +7,7 @@ using MvvmCross.Platform.Core;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -113,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetYesNoQuestion(this.Identity);
 
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray()))
+                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), interview))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -132,7 +133,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, AnsweredYesNoOption[] checkedYesNoAnswerOptions)
+        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model,
+            AnsweredYesNoOption[] checkedYesNoAnswerOptions, 
+            IStatefulInterview interview)
         {
             var isExistAnswer = checkedYesNoAnswerOptions != null && checkedYesNoAnswerOptions.Any(a => a.OptionValue == model.Value);
             var isSelected = isExistAnswer 
@@ -151,7 +154,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = model.Title,
                 Selected = isSelected,
                 YesAnswerCheckedOrder = yesAnswerCheckedOrder,
-                AnswerCheckedOrder = answerCheckedOrder
+                AnswerCheckedOrder = answerCheckedOrder,
+                IsProtected = interview.IsAnswerProtected(this.Identity, model.Value)
             };
 
             return optionViewModel;
