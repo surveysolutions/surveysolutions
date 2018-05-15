@@ -41,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<IFriendlyErrorMessageService, FriendlyErrorMessageService>();
             registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
+            registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
 
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
