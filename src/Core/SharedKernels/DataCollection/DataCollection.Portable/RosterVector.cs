@@ -135,6 +135,9 @@ namespace WB.Core.SharedKernels.DataCollection
             return new RosterVector(value.ParseMinusDelimitedIntArray());
         }
 
+        public void Replace(int index, int replaceTo)
+            => this.coordinates[index] = replaceTo;
+
         public int Last()
         {
             return this.coordinates[this.Length - 1];
