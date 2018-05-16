@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label for="min">Min</label>
+                        <label for="min">{{ $t("Reports.Max") }}</label>
                         <input type="number" class="form-control input-sm" name="min"
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange" 
@@ -37,7 +37,7 @@
                 </div>
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label for="max">Max</label>
+                        <label for="max">{{ $t("Reports.Max") }}</label>
                         <input type="number" class="form-control input-sm" 
                             :placeholder="$t('Reports.Max')"                                
                             name="max" @input="inputChange" 
@@ -297,13 +297,20 @@ export default {
     },
 
     questionsList() {
+        function getValue(question) {
+            let result = `[${question.StataExportCaption}]`
+            if(question.Label) result += '\r\n'
+            result += question.QuestionText
+            return result
+        }
+
         return _.chain(this.questions).map(q => {
             return {
                 key: q.PublicKey,
                 pivotable: q.Pivotable,
                 name: q.StataExportCaption,
                 supportConditions: q.SupportConditions,
-                value: `[${q.StataExportCaption}]\r\n${q.Label}\r\n${q.QuestionText}`,
+                value: getValue(q),
                 breadcrumbs: q.Breadcrumbs
             };
       }).value();

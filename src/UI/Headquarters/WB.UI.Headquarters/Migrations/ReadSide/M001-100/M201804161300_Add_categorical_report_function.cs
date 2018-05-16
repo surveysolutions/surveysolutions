@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                            if _condition_var is not null
                            then
                                RETURN QUERY
-                                select agg.teamleadname, agg.responsiblename, agg.answer, count(*)
+                                select agg.teamleadname, agg.responsiblename, agg.answer, count(distinct interview_id)
                                 from (
                                     select 
                                         case when totals then null else s.teamleadid end as teamleadid,
@@ -49,7 +49,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 order by 1, 2 ,3;
                            else
                                RETURN QUERY
-                                select agg.teamleadname, agg.responsiblename, agg.answer, count(*)
+                                select agg.teamleadname, agg.responsiblename, agg.answer, count(distinct interview_id)
                                 from (
                                     select 
                                         case when totals then null else s.teamleadid end as teamleadid,
@@ -69,8 +69,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 order by 1, 2 ,3;
                            end if;
                     END;
-                $function$
-            ");
+                $function$");
         }
 
         public override void Down()

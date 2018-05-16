@@ -127,10 +127,6 @@ export default {
             return this.filter.question
         },
 
-        subTitle() {
-            return `${this.filter.question.Label}${this.filter.question.QuestionText}`
-        },
-
         isSupervisor() {
             return this.$config.authorizedUser.IsSupervisor
         },
@@ -206,7 +202,7 @@ export default {
                 return [{
                         data: "variable",
                         name: "variable",
-                        title: this.filter.condition.Label,
+                        title: this.filter.condition.Label || this.filter.condition.StataExportCaption,
                         orderable: true
                     }
                 ]
