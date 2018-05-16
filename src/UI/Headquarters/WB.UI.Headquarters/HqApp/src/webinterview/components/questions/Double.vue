@@ -11,7 +11,7 @@
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
-                            v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',maximumValue: '99999999999999.99999999999999',digitGroupSeparator: groupSeparator,decimalCharacter: decimalSeparator, decimalPlaces: decimalPlacesCount, allowDecimalPadding: false}">
+                            v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',maximumValue:'99999999999999.99999999999999',digitGroupSeparator: groupSeparator,decimalCharacter:decimalSeparator, decimalPlaces: decimalPlacesCount, allowDecimalPadding: false}">
                             <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
                     </div>
                 </div>
@@ -56,23 +56,37 @@
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
             },
             groupSeparator() {
+
+                var defaultSeparator = ''
+
                 if (this.$me.useFormatting) {                    
                     var etalon = 1111
                     var localizedNumber = etalon.toLocaleString()
-                    return localizedNumber.substring(1, localizedNumber.length - 3)
+                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
+                
+                    return (separator == null || separator == undefined)
+                        ? defaultSeparator
+                        : separator  
                 }
 
-                return ''
+                return defaultSeparator
             },
             decimalSeparator() {
+
+                var defaultSeparator = '.'
+
                 if (this.$me.useFormatting) {
                     
                     var etalon = 1.111
                     var localizedNumber = etalon.toLocaleString()
-                    return localizedNumber.substring(1, localizedNumber.length - 3)
+                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
+
+                    return (separator == null || separator == undefined)
+                        ? defaultSeparator
+                        : separator
                 }
 
-                return '.'
+                return defaultSeparator
             },
             decimalPlacesCount(){
                 if (this.$me.countOfDecimalPlaces == null || this.$me.countOfDecimalPlaces == undefined)
