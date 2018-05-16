@@ -163,6 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Errors(MissingRosterInstanceColumns, "PL0007", messages.PL0007_ServiceColumnIsAbsent),
             Errors(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
             Errors(DuplicatedColumns, "PL0031", messages.PL0031_ColumnNameDuplicatesFound),
+            Errors(ColumnByTextListRosterSizeAnswerNotFound, "PL0052", messages.PL0052_ColumnByTextListRosterSizeAnswerNotFound),
         };
 
         private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> RosterVerifiers => new[]
@@ -345,6 +346,25 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var duplicatedColumns in file.Columns.GroupBy(x => x.ToLower()).Where(x => x.Count() > 1))
                 // as discussed, user should see all duplicated column names in all caps
                 yield return string.Join(", ", duplicatedColumns);
+        }
+
+        private IEnumerable<string> ColumnByTextListRosterSizeAnswerNotFound(PreloadedFileInfo file, IQuestionnaire questionnaire)
+        {
+            if (file.Columns == null) yield break;
+
+            var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
+            if(!rosterId.HasValue) yield break;
+            if(questionnaire.IsFixedRoster(rosterId.Value)) yield break;
+
+            var rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId.Value);
+            var rosterSizeQuestionType = questionnaire.GetQuestionType(rosterSizeQuestionId);
+            var rosterSizeQuestionVariable = questionnaire.GetQuestionVariableName(rosterSizeQuestionId);
+            var rosterSizeQuestionVariableLower = rosterSizeQuestionVariable.ToLower();
+
+            var columnNames = file.Columns.Select(x => x.ToLower()).ToArray();
+
+            if (rosterSizeQuestionType == QuestionType.TextList && !columnNames.Contains(rosterSizeQuestionVariableLower))
+                yield return rosterSizeQuestionVariable;
         }
 
         private IEnumerable<string> OptionalGpsPropertyAndMissingLatitudeAndLongitude(PreloadedFileInfo file, IQuestionnaire questionnaire)
