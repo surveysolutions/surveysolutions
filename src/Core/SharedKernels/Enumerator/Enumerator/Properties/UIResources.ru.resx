@@ -590,4 +590,7 @@
   <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
     <value>Новый ответ на защищённый вопрос должен быть больше либо равен {0}</value>
   </data>
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} из {1} опций выбрано</value>
+  </data>
 </root>

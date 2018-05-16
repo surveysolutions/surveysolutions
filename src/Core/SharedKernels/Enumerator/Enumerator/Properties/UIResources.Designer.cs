@@ -792,6 +792,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} out of {1} options selected.
+        /// </summary>
+        public static string Interview_MaxAnswersCount {
+            get {
+                return ResourceManager.GetString("Interview_MaxAnswersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
