@@ -639,11 +639,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Entered value can not be less then protected answer.
+        ///   Looks up a localized string similar to Entered value can not be less than protected answer.
         /// </summary>
-        internal static string NumberCannotBeLessThenProtected {
+        internal static string NumberCannotBeLessThanProtected {
             get {
-                return ResourceManager.GetString("NumberCannotBeLessThenProtected", resourceCulture);
+                return ResourceManager.GetString("NumberCannotBeLessThanProtected", resourceCulture);
             }
         }
         
