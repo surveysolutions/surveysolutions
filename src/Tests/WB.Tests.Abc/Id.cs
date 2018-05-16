@@ -22,25 +22,25 @@ namespace WB.Tests.Abc
         public static readonly Guid g9 = Guid.Parse("99999999999999999999999999999999");
         public static readonly Guid g10 = Guid.Parse("11111111111111110000000000000000");
 
-        public static Identity Identity1 = Create.Entity.Identity(1, RosterVector.Empty);
-        public static Identity Identity2 = Create.Entity.Identity(2, RosterVector.Empty);
-        public static Identity Identity3 = Create.Entity.Identity(3, RosterVector.Empty);
-        public static Identity Identity4 = Create.Entity.Identity(4, RosterVector.Empty);
-        public static Identity Identity5 = Create.Entity.Identity(5, RosterVector.Empty);
-        public static Identity Identity6 = Create.Entity.Identity(6, RosterVector.Empty);
-        public static Identity Identity7 = Create.Entity.Identity(7, RosterVector.Empty);
-        public static Identity Identity8 = Create.Entity.Identity(8, RosterVector.Empty);
-        public static Identity Identity9 = Create.Entity.Identity(9, RosterVector.Empty);
-        public static Identity Identity10 = Create.Entity.Identity(g10, RosterVector.Empty);
-        public static Identity Identity11 = Create.Entity.Identity(12, RosterVector.Empty);
+        public static readonly Identity Identity1 = Create.Entity.Identity(1, RosterVector.Empty);
+        public static readonly Identity Identity2 = Create.Entity.Identity(2, RosterVector.Empty);
+        public static readonly Identity Identity3 = Create.Entity.Identity(3, RosterVector.Empty);
+        public static readonly Identity Identity4 = Create.Entity.Identity(4, RosterVector.Empty);
+        public static readonly Identity Identity5 = Create.Entity.Identity(5, RosterVector.Empty);
+        public static readonly Identity Identity6 = Create.Entity.Identity(6, RosterVector.Empty);
+        public static readonly Identity Identity7 = Create.Entity.Identity(7, RosterVector.Empty);
+        public static readonly Identity Identity8 = Create.Entity.Identity(8, RosterVector.Empty);
+        public static readonly Identity Identity9 = Create.Entity.Identity(9, RosterVector.Empty);
+        public static readonly Identity Identity10 = Create.Entity.Identity(g10, RosterVector.Empty);
+        public static readonly Identity Identity11 = Create.Entity.Identity(12, RosterVector.Empty);
 
-        public static Identity IdentityA = Create.Entity.Identity(gA, RosterVector.Empty);
-        public static Identity IdentityB = Create.Entity.Identity(gB, RosterVector.Empty);
-        public static Identity IdentityC = Create.Entity.Identity(gC, RosterVector.Empty);
-        public static Identity IdentityD = Create.Entity.Identity(gD, RosterVector.Empty);
+        public static readonly Identity IdentityA = Create.Entity.Identity(gA, RosterVector.Empty);
+        public static readonly Identity IdentityB = Create.Entity.Identity(gB, RosterVector.Empty);
+        public static readonly Identity IdentityC = Create.Entity.Identity(gC, RosterVector.Empty);
+        public static readonly Identity IdentityD = Create.Entity.Identity(gD, RosterVector.Empty);
 
-        public static Identity IdentityA_0 = Create.Entity.Identity(gA, new RosterVector(new[] { 0.0m }));
-        public static Identity IdentityB_0 = Create.Entity.Identity(gB, new RosterVector(new[] { 0.0m }));
-        public static Identity IdentityC_0 = Create.Entity.Identity(gC, new RosterVector(new[] { 0.0m }));
+        public static readonly Identity IdentityA_0 = Create.Entity.Identity(gA, new RosterVector(new[] { 0.0m }));
+        public static readonly Identity IdentityB_0 = Create.Entity.Identity(gB, new RosterVector(new[] { 0.0m }));
+        public static readonly Identity IdentityC_0 = Create.Entity.Identity(gC, new RosterVector(new[] { 0.0m }));
     }
 }
