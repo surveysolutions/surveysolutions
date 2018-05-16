@@ -85,9 +85,6 @@
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 
-  <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
-  </style>
-
   <style name="Interview_Question_Answer">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>

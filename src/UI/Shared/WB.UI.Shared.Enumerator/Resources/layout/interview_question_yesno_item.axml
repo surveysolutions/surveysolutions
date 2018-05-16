@@ -11,7 +11,7 @@
   
   <RadioButton
     style="@style/Interview_Question_Answer_YesNo_Option"
-    local:MvxBind="HideKeyboardOnClick .; Checked YesSelected; Tag YesItemTag; Enabled Not(IsProtected)" />
+    local:MvxBind="HideKeyboardOnClick .; Checked YesSelected; Tag YesItemTag; Enabled And(YesCanBeChecked, Not(IsProtected))" />
 
   <TextView style="@style/Interview_Question_Answer_YesNo_Option" android:text="/" />
   
