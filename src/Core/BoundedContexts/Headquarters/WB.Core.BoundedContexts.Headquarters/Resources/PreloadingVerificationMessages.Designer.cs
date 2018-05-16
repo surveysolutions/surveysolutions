@@ -484,7 +484,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Protected variable {0} is not found in provided questionnaire.
+        ///   Looks up a localized string similar to Protected variable is not found in provided questionnaire.
         /// </summary>
         public static string PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire {
             get {
@@ -493,7 +493,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable {0} has type that does not support protection.
+        ///   Looks up a localized string similar to Variable has type that does not support protection.
         /// </summary>
         public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
             get {

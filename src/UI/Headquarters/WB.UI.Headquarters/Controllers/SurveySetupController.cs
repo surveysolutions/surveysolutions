@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -242,16 +243,6 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: fileErrors));
                 }
 
-                var protectedVariablesFileContent = this.assignmentsImportReader.ReadProtectedVariablesFile(model.File.InputStream);
-                var protectedVariablesFileErrors = this.dataVerifier.VerifyAndParseProtectedVariables(model.File.FileName, protectedVariablesFileContent
-                    , questionnaire, out List<string> protectedVariables).Take(10).ToArray();
-
-                if (protectedVariablesFileErrors.Length > 0)
-                {
-                    return this.View("InterviewImportVerificationErrors",
-                        CreateError(questionnaireIdentity, model.File.FileName, errors: protectedVariablesFileErrors));
-                }
-
                 var columnErrors = this.dataVerifier.VerifyColumns(allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (columnErrors.Any())
                 {
@@ -260,8 +251,23 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream).ToArray();
+
+                PreloadedFile protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.IsProtectedVariablesFile);
+                if (protectedFile != null)
+                {
+                    var protectedVariablesFileErrors = this.dataVerifier.VerifyProtectedVariables(protectedFile,
+                        questionnaire).Take(10).ToArray();
+
+                    if (protectedVariablesFileErrors.Length > 0)
+                    {
+                        return this.View("InterviewImportVerificationErrors",
+                            CreateError(questionnaireIdentity, model.File.FileName,
+                                errors: protectedVariablesFileErrors));
+                    }
+                }
+
                 var answerErrors = this.assignmentsImportService
-                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire, protectedVariables).Take(10).ToArray();
+                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire).Take(10).ToArray();
 
                 if (answerErrors.Any())
                 {

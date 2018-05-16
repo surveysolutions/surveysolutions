@@ -26,7 +26,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     
     internal class ImportDataVerifier : IPreloadedDataVerifier
     {
-        QuestionType[] TypesThatSupportProtection = new[]
+        readonly QuestionType[] TypesThatSupportProtection = new[]
         {
             QuestionType.MultyOption, QuestionType.Numeric, QuestionType.TextList
         };
@@ -44,66 +44,46 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.userViewFactory = userViewFactory;
         }
 
-        public List<PanelImportVerificationError> VerifyAndParseProtectedVariables(string originalFileName,
-            IList<string[]> file, IQuestionnaire questionnaire, out List<string> protectedVariables)
+        public IEnumerable<PanelImportVerificationError> VerifyProtectedVariables(PreloadedFile file, IQuestionnaire questionnaire)
         {
-            protectedVariables = new List<string>();
-            List<PanelImportVerificationError> errors = new List<PanelImportVerificationError>();
-            if (file == null || file.Count == 0)
-                return errors;
-
-            var headerRow = file[0];
-
-            if (!headerRow.Contains(ServiceColumns.ProtectedVariableNameColumn))
+            foreach (var preloadingRow in file.Rows)
             {
-                errors.Add(ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
-                    new PreloadedFileInfo
-                    {
-                        Columns = file.FirstOrDefault(),
-                        FileName = ServiceFiles.ProtectedVariables
-                    }, originalFileName));
-                return errors;
+                foreach (var error in this.ProtectedVariablesVerifiers.SelectMany(x =>
+                    x.Invoke(file.FileInfo.FileName, (PreloadingValue)preloadingRow.Cells[0], questionnaire)))
+                    if (error != null)
+                        yield return error;
             }
+        }
 
-            for (int rowNumber = 1; rowNumber < file.Count; rowNumber++)
+        private IEnumerable<Func<string, PreloadingValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> ProtectedVariablesVerifiers => new[]
+        {
+            Error(ProtectedVariableIsMissingInQuestionnaire, "PL0048", messages.PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire),
+            Error(VariableCannotBeProtected, "PL0049", messages.PL0049_ProtectedVariables_VariableNotSupportsProtection)
+        };
+
+        private bool VariableCannotBeProtected(PreloadingValue protectedVariablesFile, IQuestionnaire questionnaire)
+        {
+            var variableName = protectedVariablesFile.Value;
+            if (questionnaire.HasQuestion(variableName))
             {
-                string firstCellValue = file[rowNumber].FirstOrDefault();
+                var question = questionnaire.GetQuestionByVariable(variableName);
+                var questionType = question.QuestionType;
 
-                if (!string.IsNullOrWhiteSpace(firstCellValue))
+                if (questionType == QuestionType.Numeric)
                 {
-                    var questionByVariable = questionnaire.GetQuestionByVariable(firstCellValue);
-                    if(questionByVariable == null)
-                    {
-                        errors.Add(ToCellError("PL0048",
-                            string.Format(messages.PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire,
-                                firstCellValue),
-                            new PreloadingAssignmentRow
-                            {
-                                FileName = ServiceFiles.ProtectedVariables,
-                                Row = rowNumber
-                            }, column: ServiceColumns.ProtectedVariableNameColumn,
-                            value: firstCellValue));
-                    }
-                    else if (!TypesThatSupportProtection.Contains(questionByVariable.QuestionType))
-                    {
-                        errors.Add(ToCellError("PL0049",
-                            string.Format(messages.PL0049_ProtectedVariables_VariableNotSupportsProtection,
-                                firstCellValue),
-                            new PreloadingAssignmentRow
-                            {
-                                FileName = ServiceFiles.ProtectedVariables,
-                                Row = rowNumber
-                            }, column: ServiceColumns.ProtectedVariableNameColumn,
-                            value: firstCellValue));
-                    }
-                    else
-                    {
-                        protectedVariables.Add(firstCellValue);
-                    }
+                    if(question.Answers.Count > 0 || !questionnaire.IsQuestionInteger(question.PublicKey))
+                        return true;
                 }
+
+                return !TypesThatSupportProtection.Contains(questionType);
             }
 
-            return errors;
+            return false;
+        }
+
+        private bool ProtectedVariableIsMissingInQuestionnaire(PreloadingValue protectedVariablesFile, IQuestionnaire questionnaire)
+        {
+            return !questionnaire.HasQuestion(protectedVariablesFile.Value);
         }
 
         public InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire)
@@ -180,6 +160,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
+            var protectedVariableFile = files.FindProtectedVariables();
+            if (protectedVariableFile != null)
+            {
+                if (!protectedVariableFile.Columns.Contains(ServiceColumns.ProtectedVariableNameColumn))
+                {
+
+                    yield return ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
+                        new PreloadedFileInfo
+                        {
+                            FileName = $"{ServiceFiles.ProtectedVariables}.tab",
+                            Columns = protectedVariableFile.Columns
+                        }, originalFileName);
+                }
+            }
+
             if (!files.Any(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire)))
             {
                 var questionaireFileName = this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title);
@@ -207,7 +202,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         public IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
-            foreach (var file in files)
+            foreach (var file in files.ExceptProtectedVariables())
             {
                 foreach (var columnName in file.Columns)
                 foreach (var error in this.ColumnVerifiers.SelectMany(x => x.Invoke(file, columnName, questionnaire)))
@@ -343,7 +338,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             => string.IsNullOrWhiteSpace(answer.Value);
         
         private bool RosterFileNotFound(PreloadedFileInfo file, IQuestionnaire questionnaire)
-            => !IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire) && !questionnaire.HasRoster(file.QuestionnaireOrRosterName);
+            => !IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire) && 
+               !questionnaire.HasRoster(file.QuestionnaireOrRosterName) &&
+               !file.QuestionnaireOrRosterName.Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase);
 
         private bool UnknownColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
@@ -660,8 +657,31 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         }
 
         private static Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
-            Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message) => (originalFileName, file, questionnaire) =>
-            hasError(file, questionnaire) ? new[]{ToFileError(code, message, file, originalFileName) } : Array.Empty<PanelImportVerificationError>();
+            Func<PreloadedFileInfo, IQuestionnaire, bool> hasError, string code, string message)
+        {
+            return (originalFileName, file, questionnaire) =>
+            {
+                return hasError(file, questionnaire)
+                    ? new[] {ToFileError(code, message, file, originalFileName)}
+                    : Array.Empty<PanelImportVerificationError>();
+            };
+        }
+
+        private static Func<string, PreloadingValue, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Error(
+            Func<PreloadingValue, IQuestionnaire, bool> hasError, string code, string message)
+        {
+            return (originalFileName, row, questionnaire) => hasError(row, questionnaire)
+                ? new[] {ToCellError(originalFileName, code, message, row.Row, row.Column, row.Value)}
+                : Array.Empty<PanelImportVerificationError>();
+        }
+
+        private static PanelImportVerificationError ToCellError(string originalFileName, string code, string message, int row,
+            string columnName, string columnValue)
+        {
+            return new PanelImportVerificationError(code, message,
+                new InterviewImportReference(columnName, row,
+                    PreloadedDataVerificationReferenceType.Cell, columnValue, originalFileName));
+        }
 
         private static Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>> Errors(
             Func<PreloadedFileInfo, IQuestionnaire, IEnumerable<string>> getColumnsWithErrors, string code, string message) => (originalFileName, file, questionnaire) =>
