@@ -259,9 +259,9 @@
     <value>Необходимая колонка {0} отсутствует</value>
   </data>
   <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
-    <value>Защищённая переменная {0} не найдена в выбранном опроснике</value>
+    <value>Защищённая переменная не найдена в выбранном опроснике</value>
   </data>
   <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
-    <value>Переменная {0} имеет тип не поддерживающий защиту</value>
+    <value>Переменная имеет тип не поддерживающий защиту</value>
   </data>
 </root>
