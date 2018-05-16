@@ -20,6 +20,7 @@ namespace WB.UI.Shared.Enumerator.Converters
                     return Resource.Drawable.question_option_background_answered;
 
                 case QuestionStateStyle.AnsweredProtected: 
+                case QuestionStateStyle.MaxAnswersCountReached:
                     return Resource.Drawable.question_option_background_protected;
 
                 default:
