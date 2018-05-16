@@ -107,7 +107,7 @@
                     }
 
                     if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
-                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotBeLessThenProtected"))
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotBeLessThanProtected"))
                         return
                     }
 

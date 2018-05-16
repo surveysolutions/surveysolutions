@@ -276,8 +276,8 @@
   <data name="NumberCannotParse" xml:space="preserve">
     <value>Entered value can not be parsed as integer value</value>
   </data>
-  <data name="NumberCannotBeLessThenProtected" xml:space="preserve">
-    <value>Entered value can not be less then protected answer</value>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>Entered value can not be less than protected answer</value>
   </data>
   <data name="NumberRosterError" xml:space="preserve">
     <value>Answer '{{answer}}' is incorrect because question is used as size of roster and specified answer is negative</value>
