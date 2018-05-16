@@ -4,6 +4,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
@@ -12,20 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
     [TestOf(typeof(ImportDataVerifier))]
     public class ImportDataVerifierProtectedAnswersTests
     {
-        [Test]
-        public void should_not_allow_preloading_of_file_without_variable_name()
-        {
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneQuestion();
-
-            var verifier = Create.Service.ImportDataVerifier();
-
-            List<PanelImportVerificationError> errors = 
-                verifier.VerifyAndParseProtectedVariables("test", 
-                    new List<string[]>{ new []{"bla"}}, Create.Entity.PlainQuestionnaire(questionnaire), out _);
-
-            Assert.That(errors, Has.Count.EqualTo(1));
-            Assert.That(errors.FirstOrDefault(), Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0047"));
-        }
+        private string preloadedFileName = $"{ServiceFiles.ProtectedVariables}.tab";
 
         [Test]
         public void should_not_allow_to_protect_variable_that_is_not_in_questionnaire()
@@ -34,31 +22,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var verifier = Create.Service.ImportDataVerifier();
 
-            List<PanelImportVerificationError> errors = 
-                verifier.VerifyAndParseProtectedVariables("test", 
-                    new List<string[]>{ new []{ServiceColumns.ProtectedVariableNameColumn}, new []{"m1"}}, Create.Entity.PlainQuestionnaire(questionnaire), out _);
+            var errors = 
+                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                            Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, "bla"))), 
+                        Create.Entity.PlainQuestionnaire(questionnaire))
+                    .ToList();
 
             Assert.That(errors, Has.Count.EqualTo(1));
             Assert.That(errors.FirstOrDefault(), Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0048"));
-        }
-
-        [Test]
-        public void should_return_list_of_protected_variables()
-        {
-            var variableName = "multiple";
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.MultipleOptionsQuestion(variable: variableName));
-
-            var verifier = Create.Service.ImportDataVerifier();
-
-            List<PanelImportVerificationError> errors = 
-                verifier.VerifyAndParseProtectedVariables("test", 
-                    new List<string[]>{ new []{ServiceColumns.ProtectedVariableNameColumn}, new []{variableName}}, Create.Entity.PlainQuestionnaire(questionnaire),
-                    out List<string> protectedVariables);
-
-            Assert.That(protectedVariables, Has.Count.EqualTo(1));
-            Assert.That(protectedVariables.FirstOrDefault(), Is.EqualTo(variableName));
-            Assert.That(errors, Is.Empty);
         }
 
         [Test]
@@ -77,14 +48,52 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var verifier = Create.Service.ImportDataVerifier();
 
-            List<PanelImportVerificationError> errors = 
-                verifier.VerifyAndParseProtectedVariables("test", 
-                    new List<string[]>{ new []{ServiceColumns.ProtectedVariableNameColumn}, new []{variableName}}, Create.Entity.PlainQuestionnaire(questionnaire),
-                    out List<string> protectedVariables);
+            var errors = 
+                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                            Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName))), 
+                        Create.Entity.PlainQuestionnaire(questionnaire))
+                    .ToList();
 
             Assert.That(errors, Has.Count.EqualTo(1));
             Assert.That(errors.FirstOrDefault(), Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0049"));
-            Assert.That(protectedVariables, Is.Empty);
+        }
+
+        [Test]
+        public void should_not_allow_protect_non_integer_numeric_question()
+        {
+            var variableName = "myVariable";
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericRealQuestion(variable: variableName));
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            var errors = 
+                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                            Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName))), 
+                        Create.Entity.PlainQuestionnaire(questionnaire))
+                    .ToList();
+
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors.FirstOrDefault(), Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0049"));
+        }
+
+        [Test]
+        public void should_not_allow_protect_numeric_question_with_special_values()
+        {
+            var variableName = "myVariable";
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericIntegerQuestion(variable: variableName, specialValues: Create.Entity.Answer("one", 1).ToEnumerable()));
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            var errors = 
+                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                            Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName))), 
+                        Create.Entity.PlainQuestionnaire(questionnaire))
+                    .ToList();
+
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors.FirstOrDefault(), Has.Property(nameof(PanelImportVerificationError.Code)).EqualTo("PL0049"));
         }
     }
 }
