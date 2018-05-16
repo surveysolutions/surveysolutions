@@ -956,7 +956,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(errors[1].Code, Is.EqualTo("PL0050"));
             Assert.That(errors[1].References.First().Content, Is.EqualTo(0.ToString()));
-            Assert.That(errors[1].References.First().Column, Is.EqualTo($"{variableName}[4]"));
+            Assert.That(errors[1].References.First().Column, Is.EqualTo($"{variableName}[5]"));
             Assert.That(errors[1].References.First().DataFile, Is.EqualTo(fileName));
         }
 
