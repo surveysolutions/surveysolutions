@@ -256,4 +256,7 @@
     <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
     <value>Password-protected archives are not supported</value>
   </data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>Roster by list question should have column for text list answers</value>
+  </data>
 </root>
