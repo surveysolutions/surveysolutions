@@ -291,4 +291,8 @@
     <value>Архивы защищенные паролем не поддерживаются</value>
     <comment>Архивы защищенные паролем не поддерживаются</comment>
   </data>
+    <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
+    <value>Ростер размноженый из лист вопроса должен содержать колонку для ответов на лист вопрос</value>
+    <comment>Ростер размноженый из лист вопроса должен содержать колоку для ответов на лист вопрос</comment>
+  </data>
 </root>

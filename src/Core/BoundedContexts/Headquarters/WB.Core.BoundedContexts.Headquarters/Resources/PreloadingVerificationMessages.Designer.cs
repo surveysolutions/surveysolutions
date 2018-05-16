@@ -473,5 +473,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0046_HasDifferentTextsInListAndRosterTitles", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster by list question should have column for text list answers.
+        /// </summary>
+        public static string PL0052_ColumnByTextListRosterSizeAnswerNotFound {
+            get {
+                return ResourceManager.GetString("PL0052_ColumnByTextListRosterSizeAnswerNotFound", resourceCulture);
+            }
+        }
     }
 }
