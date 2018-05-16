@@ -219,7 +219,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 var stopwatch = Stopwatch.StartNew();
 
                 var report = this.surveyStatisticsReport.GetReport(inputModel);
-                report.Name = $"[ {question.StataExportCaption} ] {question.VariableLabel}";
+                report.Name = $"[ {question.StataExportCaption} ] {question.VariableLabel ?? string.Empty}";
 
                 stopwatch.Stop();
                 var reportTimeToMonitor = question.QuestionType + (conditionalQuestion != null ? @"_filtered" : "");
