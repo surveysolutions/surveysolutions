@@ -1515,12 +1515,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ProtectAnswers(InterviewTree changedInterviewTree, List<string> protectedAnswers)
         {
-            foreach (var treeQuestion in changedInterviewTree.AllNodes.OfType<InterviewTreeQuestion>())
+            if (protectedAnswers?.Count > 0)
             {
-                if (protectedAnswers.Any(x =>
-                    treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                foreach (var treeQuestion in changedInterviewTree.AllNodes.OfType<InterviewTreeQuestion>())
                 {
-                    treeQuestion.ProtectAnswer();
+                    if (protectedAnswers.Any(x =>
+                        treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        treeQuestion.ProtectAnswer();
+                    }
                 }
             }
         }

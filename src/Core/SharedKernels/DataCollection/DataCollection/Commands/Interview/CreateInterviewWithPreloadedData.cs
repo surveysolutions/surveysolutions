@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.Id = interviewId;
             this.QuestionnaireId = questionnaireId;
             this.Answers = answers;
-            this.ProtectedVariables = protectedVariables;
+            this.ProtectedVariables = protectedVariables ?? new List<string>();
             this.AnswersTime = answersTime;
             this.SupervisorId = supervisorId;
             this.InterviewerId = interviewerId;

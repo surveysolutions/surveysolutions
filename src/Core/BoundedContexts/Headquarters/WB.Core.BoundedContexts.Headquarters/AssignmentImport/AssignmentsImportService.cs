@@ -88,14 +88,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
             PreloadedFile[] allImportedFiles,
-            IQuestionnaire questionnaire,
-            List<string> protectedVariablesFileContent)
+            IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
 
             var assignmentRows = new List<PreloadingAssignmentRow>();
 
-            foreach (var importedFile in allImportedFiles)
+            foreach (var importedFile in allImportedFiles.Except(x => x.FileInfo.IsProtectedVariablesFile))
             {
                 foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(importedFile, questionnaire))
                 {
@@ -123,9 +122,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var assignmentsToImport = ConcatRosters(assignmentRows, questionnaire);
 
-            foreach (var assignmentToImport in assignmentsToImport)
+            var protectedVariables = allImportedFiles.FirstOrDefault(x => x.FileInfo.IsProtectedVariablesFile);
+
+            if (protectedVariables != null)
             {
-                assignmentToImport.ProtectedVariables = protectedVariablesFileContent;
+                var variables = protectedVariables.Rows.Select(x => ((PreloadingValue)x.Cells[0]).Value).ToList();
+                foreach (var assignmentToImport in assignmentsToImport)
+                {
+                    assignmentToImport.ProtectedVariables = variables;
+                }
             }
 
             this.Save(originalFileName, questionnaireIdentity, assignmentsToImport);

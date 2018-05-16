@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
 {
@@ -9,6 +11,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
         public string[] Columns { get; set; }
+
+        public bool IsProtectedVariablesFile => QuestionnaireOrRosterName?.Equals(ServiceFiles.ProtectedVariables,
+                                                    StringComparison.OrdinalIgnoreCase) ?? false;
     }
 
     [DebuggerDisplay("{FileInfo.FileName} [{Rows.Length} rows]")]

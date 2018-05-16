@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         
         private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
 
-        private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
+        private PreloadingRow ToRow(int rowIndex, ExpandoObject record, string fileName)
         {
             var cells = new Dictionary<string, List<PreloadingValue>>();
             
@@ -43,7 +43,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var variableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName;
 
                 if (columnName == ServiceColumns.InterviewId ||
-                    columnName == string.Format(ServiceColumns.IdSuffixFormat, variableName))
+                    columnName == string.Format(ServiceColumns.IdSuffixFormat, variableName) ||
+                    fileName.Equals($"{ServiceFiles.ProtectedVariables}.tab", StringComparison.OrdinalIgnoreCase) &&
+                    columnName.Equals(ServiceColumns.ProtectedVariableNameColumn))
                 {
                     variableName = columnName;
                     variableOrCodeOrPropertyName = columnName;
@@ -91,7 +93,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
             },
             Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
+                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record, fileName)).ToArray()
         };
 
         public IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream)
@@ -138,16 +140,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 if (allowedExtension && !isSystemFile)
                     yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
-        }
-
-        public List<string[]> ReadProtectedVariablesFile(Stream inputStream)
-        {
-            if (inputStream == null || !this.archiveUtils.IsZipStream(inputStream)) return null;
-            var file = this.archiveUtils.GetFilesFromArchive(inputStream)
-                                        .FirstOrDefault(x => Path.GetFileNameWithoutExtension(x.Name).Equals(ServiceFiles.ProtectedVariables));
-            if (file == null) return null;
-
-            return this.csvReader.ReadRowsWithHeader(new MemoryStream(file.Bytes), TabExportFile.Delimiter).ToList();
         }
     }
 }
