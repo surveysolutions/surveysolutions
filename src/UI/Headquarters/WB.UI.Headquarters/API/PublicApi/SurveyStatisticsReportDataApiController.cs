@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                                || q.Answers.Any(),
                     SupportConditions = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
                     Pivotable = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
-                    QuestionText = q.QuestionText.RemoveHtmlTags().Replace("%rostertitle%", "[...]")
+                    QuestionText = q.QuestionText.RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
                 })
                 .ToList();
         }
