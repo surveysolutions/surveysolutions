@@ -25,20 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public class  AssignmentsImportService : IAssignmentsImportService
     {
-        private class AssignmentTemp
-        {
-            public string AssignmentId { get; set; }
-            public int? Quantity { get; set; }
-            public UserToVerify Responsible { get; set; }
-            public List<AssignmentAnswerTemp> Answers { get; set; }
-        }
-
-        private class AssignmentAnswerTemp
-        {
-            public RosterVector RosterVector { get; set; }
-            public IAssignmentAnswer Answer { get; set; }
-        }
-
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
         private readonly IAuthorizedUser authorizedUser;
@@ -91,13 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            var assignmentToImports = assignmentRows.Select(row => ToAssignmentToImport(new AssignmentTemp
-            {
-                Responsible = row.Responsible?.Responsible,
-                Quantity = row.Quantity?.Quantity,
-                Answers = row.Answers.OfType<IAssignmentAnswer>().Select(x =>
-                    new AssignmentAnswerTemp {RosterVector = RosterVector.Empty, Answer = x}).ToList()
-            }, questionnaire)).ToList();
+            var assignmentToImports = ConcatRosters(assignmentRows, questionnaire);
 
             this.Save(file.FileInfo.FileName, questionnaireIdentity, assignmentToImports);
         }
@@ -136,30 +116,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            var answersByAssignments = this.ConcatRosters(assignmentRows).Select(x => ToAssignmentToImport(x, questionnaire));
+            var answersByAssignments = this.ConcatRosters(assignmentRows, questionnaire);
 
             var assignmentsToImport = FixRosterSizeAnswers(answersByAssignments, questionnaire).ToList();
 
             this.Save(originalFileName, questionnaireIdentity, assignmentsToImport);
         }
-
-        private IEnumerable<AssignmentTemp> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows)
-            => assignmentRows
-                .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ??
-                                          /*for single/anvanced preloading with main file only without interview ids*/
-                                          Guid.NewGuid().ToString())
-                .Select(g => new AssignmentTemp
-                {
-                    AssignmentId = g.Key,
-                    Quantity = g.Select(_ => _.Quantity).FirstOrDefault(_ => _ != null)?.Quantity,
-                    Responsible = g.Select(_ => _.Responsible).FirstOrDefault(_ => _ != null)?.Responsible,
-                    Answers = g.SelectMany(_ => _.Answers.OfType<IAssignmentAnswer>().Select(y =>
-                        new AssignmentAnswerTemp
-                        {
-                            RosterVector = new RosterVector(_.RosterInstanceCodes.Select(x => x.Code.Value).ToArray()),
-                            Answer = y
-                        })).ToList()
-                });
 
         public AssignmentToImport GetAssignmentById(int assignmentId)
             => this.importAssignmentsRepository.Query(x => x.FirstOrDefault(_ => _.Id == assignmentId));
@@ -310,34 +272,47 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 new Tuple<AssignmentToImport, object>(x, x.Id)));
         }
 
-        private AssignmentToImport ToAssignmentToImport(AssignmentTemp assignment, IQuestionnaire questionnaire)
-            => new AssignmentToImport
+        private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
+            IQuestionnaire questionnaire)
+            => assignmentRows
+                .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ??
+                                          /*for single/anvanced preloading with main file only without interview ids*/
+                                          Guid.NewGuid().ToString())
+                .Select(x => ToAssignmentToImport(x, questionnaire))
+                .ToList();
+
+        private AssignmentToImport ToAssignmentToImport(IGrouping<string, PreloadingAssignmentRow> assignment, IQuestionnaire questionnaire)
+        {
+            var quantity = assignment.Select(_ => _.Quantity).FirstOrDefault(_ => _ != null)?.Quantity;
+            var responsible = assignment.Select(_ => _.Responsible).FirstOrDefault(_ => _ != null)?.Responsible;
+            var answers = assignment.SelectMany(_ => _.Answers.OfType<IAssignmentAnswer>().Select(y =>
+                ToInterviewAnswer(y, ToRosterVector(_.RosterInstanceCodes), questionnaire)));
+
+            return new AssignmentToImport
             {
-                Interviewer = assignment.Responsible?.InterviewerId,
-                Supervisor = assignment.Responsible?.SupervisorId,
+                Quantity = quantity.HasValue ? (quantity > -1 ? quantity : null) : 1,
+                Answers = answers.Where(y => y?.Answer != null).ToList(),
+                Interviewer = responsible?.InterviewerId,
+                Supervisor = responsible?.SupervisorId,
                 Verified = false,
-                Quantity = assignment?.Quantity.HasValue ?? false
-                    ? (assignment.Quantity > -1 ? assignment.Quantity : null)
-                    : 1,
-                Answers = assignment.Answers
-                    .Select(x => ToInterviewAnswer(x.Answer, x.RosterVector, questionnaire))
-                    .Where(y => y?.Answer != null)
-                    .ToList()
             };
+        }
+
+        private static RosterVector ToRosterVector(AssignmentRosterInstanceCode[] rosterInstanceCodes)
+            => new RosterVector(rosterInstanceCodes.Select(x => x.Code.Value).ToArray());
 
         private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments, IQuestionnaire questionnaire)
         {
             var allRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions();
+            if (allRosterSizeQuestions.Count == 0)
+                foreach (var assignmentToImport in assignments)
+                    yield return assignmentToImport;
 
             var questionsInsideRosters = allRosterSizeQuestions
                 .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
                 .Select(x => (rosterSize: x.rosterSize,
                     rosterQuestions: x.rosters.SelectMany(questionnaire.GetAllUnderlyingQuestions).ToArray()))
                 .ToArray();
-
-            if (allRosterSizeQuestions.Count == 0)
-                foreach (var assignmentToImport in assignments)
-                    yield return assignmentToImport;
 
             foreach (var assignment in assignments)
             {
@@ -381,8 +356,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 foreach (var answersByRosterLevel in answersByRosterLevels)
                 {
+                    var rosterSizeLevel = rosterAnswers.Value.rosterSizeLevel;
+                    var rosterSizeType = rosterAnswers.Value.rosterSizeType;
+                    var rosterSizeQuestionId = rosterAnswers.Key;
+                    var rosterSizeQuestionRosterVector = answersByRosterLevel.Key;
+
                     var answersGroupedByRosterInstanceId = answersByRosterLevel
-                        .GroupBy(x => x.Identity.RosterVector.ElementAt(rosterAnswers.Value.rosterSizeLevel))
+                        .GroupBy(x => x.Identity.RosterVector.ElementAt(rosterSizeLevel))
                         .OrderBy(x => x.Key);
 
                     // user defined roster instance ids
@@ -393,26 +373,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         .Select((x, i) => (newId: i, oldId: x))
                         .ToDictionary(x => x.oldId, x => x.newId);
 
-                    var rosterSizeAnswer = new InterviewAnswer
-                    {
-                        Identity = Identity.Create(rosterAnswers.Key, answersByRosterLevel.Key)
-                    };
-
-                    switch (rosterAnswers.Value.rosterSizeType)
-                    {
-                        case QuestionType.MultyOption:
-                            rosterSizeAnswer.Answer = ToRosterSizeCategoricalAnswer(questionnaire, rosterSizeAnswer, rosterSizeAnsweredOptions);
-                            break;
-                        case QuestionType.Numeric:
-                            rosterSizeAnswer.Answer = NumericIntegerAnswer.FromInt(rosterSizeAnsweredOptions.Length);
-                            FixRosterVectors(answersGroupedByRosterInstanceId, oldToNewRosterInstanceIds, rosterAnswers.Value.rosterSizeLevel);
-                            break;
-                        case QuestionType.TextList:
-                            var newRosterInstanceIds = oldToNewRosterInstanceIds.Select(x=>x.Value).ToArray();
-                            rosterSizeAnswer.Answer = ToRosterSizeListAnswer(newRosterInstanceIds, listRosterTitles, rosterSizeAnswer);
-                            FixRosterVectors(answersGroupedByRosterInstanceId, oldToNewRosterInstanceIds, rosterAnswers.Value.rosterSizeLevel);
-                            break;
-                    }
+                    var rosterSizeAnswer = GetRosterSizeAnswerByRosterAnswers(questionnaire, rosterSizeType,
+                        rosterSizeQuestionRosterVector, listRosterTitles, rosterSizeQuestionId,
+                        rosterSizeAnsweredOptions, oldToNewRosterInstanceIds);
+                    
+                    if (new []{ QuestionType.TextList, QuestionType.Numeric }.Contains(rosterSizeType))
+                        FixRosterVectors(answersGroupedByRosterInstanceId, oldToNewRosterInstanceIds, rosterSizeLevel);
 
                     calculatedRosterSizeAnswers.Add(rosterSizeAnswer);
                 }
@@ -429,6 +395,32 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             assignment.Answers.AddRange(calculatedRosterSizeAnswers);
         }
 
+        private static InterviewAnswer GetRosterSizeAnswerByRosterAnswers(IQuestionnaire questionnaire,
+            QuestionType rosterSizeType, RosterVector rosterSizeRosterVector, InterviewAnswer[] listRosterTitles,
+            Guid rosterSizeQuestionId, int[] rosterSizeAnsweredOptions, Dictionary<int, int> oldToNewRosterInstanceIds)
+        {
+            var rosterSizeAnswer = new InterviewAnswer
+            {
+                Identity = Identity.Create(rosterSizeQuestionId, rosterSizeRosterVector)
+            };
+
+            switch (rosterSizeType)
+            {
+                case QuestionType.MultyOption:
+                    rosterSizeAnswer.Answer = ToRosterSizeCategoricalAnswer(questionnaire, rosterSizeAnswer, rosterSizeAnsweredOptions);
+                    break;
+                case QuestionType.Numeric:
+                    rosterSizeAnswer.Answer = NumericIntegerAnswer.FromInt(rosterSizeAnsweredOptions.Length);
+                    break;
+                case QuestionType.TextList:
+                    var newRosterInstanceIds = oldToNewRosterInstanceIds.Select(x => x.Value).ToArray();
+                    rosterSizeAnswer.Answer = ToRosterSizeListAnswer(newRosterInstanceIds, listRosterTitles, rosterSizeAnswer);
+                    break;
+            }
+
+            return rosterSizeAnswer;
+        }
+
         private static void FixRosterVectors(
             IOrderedEnumerable<IGrouping<int, InterviewAnswer>> answersGroupedByRosterInstanceId,
             Dictionary<int, int> oldToNewRosterInstanceIds, int rosterSizeLevel)
@@ -440,15 +432,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 foreach (var interviewAnswer in answersByRosterInstanceId)
                 {
-                    interviewAnswer.Identity.RosterVector.Replace(rosterSizeLevel,
-                        oldToNewRosterInstanceIds[answersByRosterInstanceId.Key]);
+                      var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
+                        rosterSizeLevel, oldToNewRosterInstanceIds[answersByRosterInstanceId.Key]);
+
+                    interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
                 }
             }
         }
 
         private static TextListAnswer ToRosterSizeListAnswer(int[] rosterSizeAnsweredOptions,
             InterviewAnswer[] listRosterTitles, InterviewAnswer rosterSizeAnswer)
-            => TextListAnswer.FromTupleArray(rosterSizeAnsweredOptions.Select(x => new Tuple<decimal, string>(x,
+            => TextListAnswer.FromTupleArray(rosterSizeAnsweredOptions.Select(x => new Tuple<int, string>(x,
                     ((TextAnswer) listRosterTitles.FirstOrDefault(y =>
                         y.Identity == Identity.Create(rosterSizeAnswer.Identity.Id,
                             rosterSizeAnswer.Identity.RosterVector.ExtendWithOneCoordinate(x)))?.Answer)?.Value ?? ""))
