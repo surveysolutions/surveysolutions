@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label for="min">{{ $t("Reports.Max") }}</label>
+                        <label for="min">{{ $t("Reports.Min") }}</label>
                         <input type="number" class="form-control input-sm" name="min"
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange" 
@@ -171,7 +171,12 @@ export default {
             if(this.query.mode == ReportMode.Pivot && !id.pivotable) {
                 change.mode = this.getDefaultMode() 
             }
+
+            if(!id.SupportConditions){
+                change.conditionId = null
+            }
         } else {
+            change.conditionId = null
             change.mode = this.getDefaultMode()
         }
 

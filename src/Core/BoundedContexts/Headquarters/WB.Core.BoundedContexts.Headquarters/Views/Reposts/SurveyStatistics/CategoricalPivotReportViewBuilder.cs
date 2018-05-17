@@ -54,7 +54,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             report.Headers = GetHeaders().ToArray();
             report.Totals = new object[report.Columns.Length];
             report.Totals[0] = Strings.Total;
-            
+
+            for (int i = 1; i < report.Totals.Length; i++)
+            {
+                report.Totals[i] = 0L;
+            }
+
             report.Data = new object[rowsQuestion.Answers.Count][];
 
             foreach (var rowIndex in rowsAnswers.Values)

@@ -285,9 +285,6 @@
   <data name="QuestionText" xml:space="preserve">
     <value>Question text</value>
   </data>
-  <data name="AreNotRealtime" xml:space="preserve">
-    <value>Reports are not realtime</value>
-  </data>
   <data name="Average" xml:space="preserve">
     <value>Average</value>
   </data>
