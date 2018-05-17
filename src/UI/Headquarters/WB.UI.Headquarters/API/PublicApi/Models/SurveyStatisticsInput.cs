@@ -10,19 +10,20 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public string Question { get; set; }
         public Guid? TeamLeadId { get; set; }
         public bool DetailedView => this.Mode == ReportMode.WithInterviewers;
+
         public int? Min { get; set; }
         public int? Max { get; set; }
         public ExportFileType? exportType { get; set; }
         public string ConditionalQuestion { get; set; }
         public int[] Condition { get; set; }
         public int[] ExcludeCategories { get; set; }
-        public bool Pivot => this.Mode == ReportMode.Pivot;
+        public bool Pivot { get; set; }
 
         public ReportMode Mode { get; set; }
 
         public enum ReportMode
         {
-            TeamLeads, WithInterviewers, Pivot
+            TeamLeads, WithInterviewers
         }
     }
 }
