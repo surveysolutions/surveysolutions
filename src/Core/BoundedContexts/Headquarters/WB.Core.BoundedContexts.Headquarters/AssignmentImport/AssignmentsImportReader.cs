@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         
         private readonly string[] permittedFileExtensions = { TabExportFile.Extention, TextExportFile.Extension };
 
-        private PreloadingRow ToRow(int rowIndex, ExpandoObject record, string fileName)
+        private PreloadingRow ToRow(int rowIndex, ExpandoObject record)
         {
             var cells = new Dictionary<string, List<PreloadingValue>>();
             
@@ -43,9 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var variableOrCodeOrPropertyName = compositeColumnValues.Length > 1 ? compositeColumnValues[1] : variableName;
 
                 if (columnName == ServiceColumns.InterviewId ||
-                    columnName == string.Format(ServiceColumns.IdSuffixFormat, variableName) ||
-                    fileName.Equals($"{ServiceFiles.ProtectedVariables}.tab", StringComparison.OrdinalIgnoreCase) &&
-                    columnName.Equals(ServiceColumns.ProtectedVariableNameColumn))
+                    columnName == string.Format(ServiceColumns.IdSuffixFormat, variableName))
                 {
                     variableName = columnName;
                     variableOrCodeOrPropertyName = columnName;
@@ -93,8 +91,44 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
             },
             Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record, fileName)).ToArray()
+                .Select((record, rowIndex) => 
+                    fileName.Equals($"{ServiceFiles.ProtectedVariables}.tab", StringComparison.OrdinalIgnoreCase) ?
+                        (PreloadingRow)this.ToProtectedVariablesRow(rowIndex + 1, record) : 
+                        (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
         };
+
+        private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record)
+        {
+            var cells = new Dictionary<string, List<PreloadingValue>>();
+
+            foreach (var kv in record)
+            {
+                var columnName = kv.Key.ToLower();
+                var value = (string) kv.Value;
+
+                if (columnName.Equals(ServiceColumns.ProtectedVariableNameColumn, StringComparison.OrdinalIgnoreCase))
+                {
+                    var variableName = columnName;
+                    var variableOrCodeOrPropertyName = columnName;
+
+                    if (!cells.ContainsKey(variableName))
+                        cells[variableName] = new List<PreloadingValue>();
+                    cells[variableName].Add(new PreloadingValue
+                    {
+                        VariableOrCodeOrPropertyName = variableOrCodeOrPropertyName,
+                        Row = rowIndex,
+                        Column = kv.Key,
+                        Value = value,
+                    });
+                }
+               
+            }
+
+            return new PreloadingRow
+            {
+                Cells = cells.Select(x => x.Value[0]).ToArray()
+            };
+        }
 
         public IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream)
         {
