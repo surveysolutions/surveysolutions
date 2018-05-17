@@ -15,17 +15,14 @@
                 @selected="selectQuestion" />
         </FilterBlock>            
 
-        <FilterBlock :title="$t('Reports.ViewOptions')">
-            <div class="options-group">
-                <Radio :label="$t('Reports.TeamLeadsOnly')" radioGroup="TeamLeads" name="mode" 
-                    v-if="!isSupervisor"                     
+        <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
+            <div class="options-group" >
+                <Radio :label="$t('Reports.TeamLeadsOnly')" 
+                    radioGroup="TeamLeads" name="mode" 
                     :value="query.mode" @input="radioChanged" />           
-                <Radio :label="$t('Reports.WithInterviewers')" radioGroup="WithInterviewers" name="mode"                     
-                    :value="query.mode" @input="radioChanged" />           
-                <Radio :label="$t('Reports.PivotView')" radioGroup="Pivot" name="mode"                     
-                    :value="query.mode" @input="radioChanged"
-                    v-if="condition != null && (question != null && question.Pivotable)"
-                    :tooltip="condition == null ? $t('Reports.SelectConditionalQuestionToPivot') : $t('Reports.CannotPivotOverThisVariable')" />           
+                <Radio :label="$t('Reports.WithInterviewers')" 
+                    radioGroup="WithInterviewers" name="mode"                     
+                    :value="query.mode" @input="radioChanged" />
             </div>
         </FilterBlock>        
                 
@@ -61,8 +58,12 @@
                     fuzzy
                     @selected="selectCondition" />
             </FilterBlock>
-            <template v-if="condition != null">            
-                <ul class="list-group small" v-if="query.mode != 'Pivot'">                
+            <template v-if="condition != null">
+                  <Checkbox :label="$t('Reports.PivotView')" name="pivot"
+                    :value="query.pivot" @input="checkedChange"                    
+                    :tooltip="condition == null ? $t('Reports.SelectConditionalQuestionToPivot') : $t('Reports.CannotPivotOverThisVariable')" />
+
+                <ul class="list-group small" v-if="!query.pivot">                
                     <li class="list-group-item pointer"
                         v-for="answer in condition.Answers" :key="answer.Answer"                    
                         :class="{ 'list-group-item-success': isSelectedAnswer(answer.Answer)}"
@@ -83,8 +84,7 @@ function formatGuid(val) {
 
 const ReportMode = {
     TeamLeads: "TeamLeads",
-    WithInterviewers: "WithInterviewers",
-    Pivot: "Pivot"
+    WithInterviewers: "WithInterviewers"
 }
 
 export default {
@@ -108,11 +108,7 @@ export default {
     await this.loadQuestionnaires();
 
     if(this.selectedQuestionnaire == null && this.questionnaireList.length > 0) {
-        this.selectQuestionnaire(this.questionnaireList[0])
-    }
-
-    if(this.query.mode == null){
-        this.onChange({ mode: this.getDefaultMode() })
+        this.selectQuestionnaire(this.questionnaireList[this.questionnaireList.length - 1])
     }
 
     await this.loadQuestions();
@@ -164,42 +160,30 @@ export default {
     },
 
     selectQuestion(id) {
-        const questionId = id == null ? null : id.name
-        const change = { questionId }
+        this.onChange(query => {
+            query.questionId = id == null ? null : id.name
 
-        if(id != null) {
-            if(this.query.mode == ReportMode.Pivot && !id.pivotable) {
-                change.mode = this.getDefaultMode() 
+            if(id != null && !id.SupportConditions){
+                query.conditionId = null
+            } else {
+                query.conditionId = null
+                query.mode = this.getDefaultMode()
             }
-
-            if(!id.SupportConditions){
-                change.conditionId = null
-            }
-        } else {
-            change.conditionId = null
-            change.mode = this.getDefaultMode()
-        }
-
-        this.onChange(change)
+        })
     },
 
     getDefaultMode() {
-        return this.isSupervisor ? ReportMode.WithInterviewers : ReportMode.TeamLeads 
+        return ReportMode.TeamLeads 
     },
 
     selectCondition(id) {
-        const conditionId = id == null ? null : id.name
-
-        if(id == null){
-            this.selectedAnswers = []
+        this.onChange(query => {
+            query.conditionId = id == null ? null : id.name
             
-            if(this.query.mode == ReportMode.Pivot) {
-                this.onChange({conditionId, mode: this.getDefaultMode() })
-                return
+            if(id == null){
+                query.pivot = false
             }
-        }
-
-        this.onChange({ conditionId })
+        })
     },
 
     checkedChange(ev) {
@@ -228,7 +212,18 @@ export default {
         })
     },
 
-    onChange(data = null) {
+    onChange(options = null) {
+        let data = {}
+
+        if(typeof(options) == 'function') {
+            const result = options(data)
+            if(result != null){
+                data = result
+            }
+        } else {
+            data = options
+        }
+
         const state = Object.assign(_.clone(this.queryString), data)       
 
         if(state.min != null 
@@ -245,8 +240,6 @@ export default {
             condition: this.condition,
             conditionAnswers: this.conditionAnswers
         }, state))
-
-        return true
     },
 
     updateRoute(newQuery) {
@@ -284,11 +277,12 @@ export default {
             questionId: this.query.questionId,
             conditionId: this.query.conditionId,
             ans: this.condition != null ? this.selectedAnswers : null,
-            mode: this.query.mode == null ? ReportMode.TeamLeads : this.query.mode,
+            mode: this.query.mode || this.getDefaultMode(),
+            pivot: this.query.pivot,
             min: this.min,
             max: this.max
         }
-    },
+    },    
 
     max() {
         const result = parseInt(this.$route.query.max)
