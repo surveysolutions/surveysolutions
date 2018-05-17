@@ -328,9 +328,6 @@
   <data name="QuestionText" xml:space="preserve">
     <value>Текст вопроса</value>
   </data>
-  <data name="AreNotRealtime" xml:space="preserve">
-    <value>Отчет не строиться в реальном времени</value>
-  </data>
   <data name="ByAnswerValue" xml:space="preserve">
     <value>Отфильтровать по числовому значению</value>
   </data>

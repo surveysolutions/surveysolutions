@@ -79,15 +79,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reports are not realtime.
-        /// </summary>
-        internal static string AreNotRealtime {
-            get {
-                return ResourceManager.GetString("AreNotRealtime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Average.
         /// </summary>
         internal static string Average {

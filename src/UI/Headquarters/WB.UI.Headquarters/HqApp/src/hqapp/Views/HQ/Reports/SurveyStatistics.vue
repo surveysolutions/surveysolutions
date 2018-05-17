@@ -2,15 +2,14 @@
     <HqLayout has-filter
         :title="$t('MainMenu.SurveyStatistics')">
         <div slot="subtitle">
-            <!-- <p>{{$t('Pages.Report_VariablePerTeam_SubTitle')}}</p> -->
-            <div class="row">
-            <div class="col-md-6">
-                <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
+            <div class="row">                
+                <div class="col-md-6">
+                    <QuestionDetail :question="filter.question" :title="$t('Reports.Question')"></QuestionDetail>
+                </div>
+                <div class="col-md-6"> 
+                     <QuestionDetail :question="filter.condition" :title="$t('Reports.ConditionQuestion')"></QuestionDetail>
+                </div>
             </div>
-            <div class="col-md-6"> 
-                 <QuestionDetail :question="filter.condition" :title="$t('Reports.ConditionQuestion')"></QuestionDetail>
-            </div>
-        </div>
         </div>
 
         <Filters slot="filters">
@@ -22,11 +21,9 @@
             :tableOptions="tableOptions" :pageLength="pivot ? filter.condition.Answers.length : 15"
             :addParamsToRequest="addFilteringParams"        
             @ajaxComplete="reportDataRecieved">
-                <hr v-if="status.isRunning || status.lastRefresh" />
-                <p class="text-right small">{{$t("Reports.AreNotRealtime")}}</p>
+                <hr v-if="status.isRunning" />                
                 <p class="text-right" v-if="status.isRunning">
                     <small>{{ $t("Reports.Updating") }}</small>
-                    <small v-if="!status.isRunning && status.lastRefresh">{{ infoMessage }}</small>
                 </p>
         </DataTables>
     </HqLayout>

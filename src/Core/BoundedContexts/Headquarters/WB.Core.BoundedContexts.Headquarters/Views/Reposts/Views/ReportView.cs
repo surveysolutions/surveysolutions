@@ -8,10 +8,5 @@
         public string[] Headers { get; set; }
         public object[][] Data { get; set; }
         public long TotalCount { get; set; }
-
-        public enum ColumnType
-        {
-            Text, Numeric, Total
-        }
     }
 }
