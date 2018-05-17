@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
@@ -11,8 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
         public const string TeamLeadColumn = "TeamLead";
         public const string ResponsibleColumn = "Responsible";
-        public const string AllTeams = "AllTeams";
-        public const string AllResponsible = "AllResponsible";
         
         public NumericalReportViewBuilder(List<GetNumericalReportItem> numericalData, CategoricalReportViewBuilder specialValuesData)
         {
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 if (reportItem.TeamLeadName == null && reportItem.ResponsibleName == null)
                 {
-                    report.Totals = CreateRow(reportItem, (null, null), AllTeams, AllResponsible);
+                    report.Totals = CreateRow(reportItem, (null, null), Strings.AllTeams, Strings.AllInterviewers);
                     continue;
                 }
 
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 
                 if (categoricalItem.TeamLeadName == null && categoricalItem.ResponsibleName == null)
                 {
-                    report.Totals = CreateRow(null, (null, null), AllTeams, AllResponsible);
+                    report.Totals = CreateRow(null, (null, null), Strings.AllTeams, Strings.AllInterviewers);
                     continue;
                 }
                 
