@@ -7,9 +7,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Execute.Sql(@"create or replace function readside.get_report_categorical_pivot(_teamleadid uuid, _questionnaireid text, _a uuid, _b uuid)
-                returns table (a int, b int, count bigint)
-                as $$	
+            Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_report_categorical_pivot(_teamleadid uuid, _questionnaireid text, _a uuid, _b uuid)
+                 RETURNS TABLE(a integer, b integer, count bigint)
+                 LANGUAGE sql
+                AS $function$	
                   with
   	                vara as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity = _questionnaireid and qe.entityid = _a),
                     varb as (select id from readside.questionnaire_entities qe where qe.questionnaireidentity = _questionnaireid and qe.entityid = _b),
@@ -24,11 +25,11 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 	 		                and v2.entity_id in (select id from varb)
 			                and (_teamleadid is null or _teamleadid = s.teamleadid)
 	                )
-	                select a1 as a, a2 as b, count(*)
+	                select  a1, a2, count(distinct interview_id)
 	                from agg
 	                group by 1, 2
 	                order by 1, 2
-                $$ LANGUAGE SQL;");
+                $function$;");
         }
 
         public override void Down()
