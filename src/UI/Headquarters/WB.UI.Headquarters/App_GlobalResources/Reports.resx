@@ -291,9 +291,6 @@
   <data name="ByAnswerValue" xml:space="preserve">
     <value>Filter by numeric value</value>
   </data>
-  <data name="CannotPivotOverThisVariable" xml:space="preserve">
-    <value>Cannot build pivot table over this question</value>
-  </data>
   <data name="Count" xml:space="preserve">
     <value>Count</value>
   </data>
@@ -311,9 +308,6 @@
   </data>
   <data name="Percentile95" xml:space="preserve">
     <value>Percentile 95</value>
-  </data>
-  <data name="SelectConditionalQuestionToPivot" xml:space="preserve">
-    <value>Select conditional question to enable pivot table</value>
   </data>
   <data name="SelectConditionQuestion" xml:space="preserve">
     <value>Select condition question</value>
