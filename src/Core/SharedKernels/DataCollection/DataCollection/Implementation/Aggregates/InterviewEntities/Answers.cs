@@ -222,6 +222,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public static TextListAnswer FromTextListAnswerRows(IEnumerable<TextListAnswerRow> rows) => rows == null ? null : new TextListAnswer(rows);
 
+        public static TextListAnswer FromTupleArray(Tuple<int, string>[] tupleArray)
+            => tupleArray == null ? null : new TextListAnswer(
+                tupleArray.Select(tuple => new TextListAnswerRow(tuple.Item1, tuple.Item2.Trim().RemoveControlChars())));
+
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
             => tupleArray == null ? null : new TextListAnswer(
                tupleArray.Select(tuple => new TextListAnswerRow(Convert.ToInt32(tuple.Item1), tuple.Item2.Trim().RemoveControlChars())));

@@ -135,8 +135,13 @@ namespace WB.Core.SharedKernels.DataCollection
             return new RosterVector(value.ParseMinusDelimitedIntArray());
         }
 
-        public void Replace(int index, int replaceTo)
-            => this.coordinates[index] = replaceTo;
+        public RosterVector Replace(int index, int replaceTo)
+        {
+            var clonedRosterVector = (int[])this.coordinates.Clone();
+            clonedRosterVector[index] = replaceTo;
+
+            return clonedRosterVector;
+        }
 
         public int Last()
         {
