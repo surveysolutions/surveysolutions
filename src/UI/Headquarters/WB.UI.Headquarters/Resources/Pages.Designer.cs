@@ -1078,7 +1078,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please provide a comment if needed to restart an interview.
+        ///   Looks up a localized string similar to Please provide a comment if needed to reopen an interview.
         /// </summary>
         public static string InterviewerHq_RestartConfirm {
             get {
@@ -1087,7 +1087,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restart.
+        ///   Looks up a localized string similar to Reopen.
         /// </summary>
         public static string InterviewerHq_RestartInterview {
             get {
