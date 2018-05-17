@@ -61,12 +61,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error(VariableCannotBeProtected, "PL0049", messages.PL0049_ProtectedVariables_VariableNotSupportsProtection)
         };
 
-        private bool VariableCannotBeProtected(PreloadingValue protectedVariablesFile, IQuestionnaire questionnaire)
+        private bool VariableCannotBeProtected(PreloadingValue variableName, IQuestionnaire questionnaire)
         {
-            var variableName = protectedVariablesFile.Value;
-            if (questionnaire.HasQuestion(variableName))
+            if (questionnaire.HasQuestion(variableName.Value))
             {
-                var question = questionnaire.GetQuestionByVariable(variableName);
+                var question = questionnaire.GetQuestionByVariable(variableName.Value);
                 var questionType = question.QuestionType;
 
                 if (questionType == QuestionType.Numeric)
@@ -160,7 +159,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
-            var protectedVariableFile = files.FindProtectedVariables();
+            var protectedVariableFile = files.FirstOrDefault(x => x.IsProtectedVariablesFile);
             if (protectedVariableFile != null)
             {
                 if (!protectedVariableFile.Columns.Contains(ServiceColumns.ProtectedVariableNameColumn))
@@ -202,7 +201,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         public IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
-            foreach (var file in files.ExceptProtectedVariables())
+            foreach (var file in files.Where(x => !x.IsProtectedVariablesFile))
             {
                 foreach (var columnName in file.Columns)
                 foreach (var error in this.ColumnVerifiers.SelectMany(x => x.Invoke(file, columnName, questionnaire)))
@@ -339,8 +338,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         
         private bool RosterFileNotFound(PreloadedFileInfo file, IQuestionnaire questionnaire)
             => !IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire) && 
-               !questionnaire.HasRoster(file.QuestionnaireOrRosterName) &&
-               !file.QuestionnaireOrRosterName.Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase);
+               !questionnaire.HasRoster(file.QuestionnaireOrRosterName);
 
         private bool UnknownColumn(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
