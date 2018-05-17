@@ -66,6 +66,8 @@
                 this.showAllOptions = !this.showAllOptions;
             },
             isProtected(answerValue) {
+                if (!this.$me.protectedAnswer) return false;
+                
                 var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
                 return answerIndex > -1;
             },
