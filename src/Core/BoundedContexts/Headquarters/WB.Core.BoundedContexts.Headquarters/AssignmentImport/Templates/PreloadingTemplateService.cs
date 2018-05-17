@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates
 
         public byte[] GetPrefilledPreloadingTemplateFile(Guid questionnaireId, long version)
         {
-            var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(questionnaireId, version)).ColumnListToPreload;
+            var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(questionnaireId, version)).IdentifyingQuestions;
 
             byte[] templateFile = null;
             var csvConfiguration = new Configuration

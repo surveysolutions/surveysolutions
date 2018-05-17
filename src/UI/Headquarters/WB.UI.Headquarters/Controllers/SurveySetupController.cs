@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
@@ -18,6 +19,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -102,7 +104,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
             }
 
-            var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
+            SampleUploadView sampleUploadView = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version));
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
 
             var viewModel = new BatchUploadModel
@@ -110,7 +112,9 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                FeaturedQuestions = featuredQuestionItems
+                FeaturedQuestions = sampleUploadView.IdentifyingQuestions,
+                HiddenQuestions = sampleUploadView.HiddenQuestions,
+                RosterSizeQuestions = sampleUploadView.RosterSizeQuestions
             };
 
             return this.View(viewModel);
