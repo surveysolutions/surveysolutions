@@ -361,9 +361,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var rosterSizeQuestionVariable = questionnaire.GetQuestionVariableName(rosterSizeQuestionId);
             var rosterSizeQuestionVariableLower = rosterSizeQuestionVariable.ToLower();
 
-            var columnNames = file.Columns.Select(x => x.ToLower()).ToArray();
+            var hasRosterSizeTextListAnswersColumn = file.Columns.Any(x =>
+                string.Equals(x, rosterSizeQuestionVariableLower, StringComparison.OrdinalIgnoreCase));
 
-            if (rosterSizeQuestionType == QuestionType.TextList && !columnNames.Contains(rosterSizeQuestionVariableLower))
+            if (rosterSizeQuestionType == QuestionType.TextList && !hasRosterSizeTextListAnswersColumn)
                 yield return rosterSizeQuestionVariable;
         }
 
