@@ -171,7 +171,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
                 var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
 
-                if (allowedExtension && !isSystemFile)
+                if (allowedExtension && !isSystemFile && !Path.GetFileNameWithoutExtension(file.Name).Equals(ServiceFiles.ProtectedVariables))
                     yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
         }

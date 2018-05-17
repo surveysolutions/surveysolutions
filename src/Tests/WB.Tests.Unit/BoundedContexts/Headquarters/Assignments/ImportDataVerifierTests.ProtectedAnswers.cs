@@ -100,19 +100,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [Test]
         public void should_not_allow_preloading_without_variable__name_column()
         {
-            var variableName = "myVariable";
-            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                Create.Entity.NumericIntegerQuestion(variable: variableName));
-
             var verifier = Create.Service.ImportDataVerifier();
 
             var errors =
-                verifier.VerifyFiles(preloadedFileName, new[]
-                    {
-                        Create.Entity.PreloadedFileInfo(columns: new []{"not__expected"},
-                            questionnaireOrRosterName: ServiceFiles.ProtectedVariables,
-                            fileName: preloadedFileName)
-                    }, Create.Entity.PlainQuestionnaire(questionnaire))
+                verifier.VerifyProtectedVariablesFile(
+                        preloadedFileName, 
+                        Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: ServiceFiles.ProtectedVariables, columns: new [] {"bla"}))
                     .ToList();
 
             errors.Should().Contain(x => x.Code == "PL0047");
