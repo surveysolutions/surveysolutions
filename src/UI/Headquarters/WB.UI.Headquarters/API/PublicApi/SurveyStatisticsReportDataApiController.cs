@@ -146,7 +146,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             return Request.CreateResponse(HttpStatusCode.OK, new
             {
                 data = new string[0],
-                recordsTotal = 0
+                recordsTotal = 0,
+                recordsFiltered = 0
             }, new JsonMediaTypeFormatter());
         }
 

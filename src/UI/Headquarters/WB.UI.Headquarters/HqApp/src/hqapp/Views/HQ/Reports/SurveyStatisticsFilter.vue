@@ -16,11 +16,17 @@
         </FilterBlock>            
 
         <FilterBlock :title="$t('Reports.ViewOptions')">
-            <Checkbox :label="$t('Reports.TeamLeadsOnly')" v-if="!isSupervisor" radioGroup="TeamLeads" name="mode" :value="query.mode" @input="radioChanged" />           
-            <Checkbox :label="$t('Reports.WithInterviewers')" radioGroup="WithInterviewers" name="mode" :value="query.mode" @input="radioChanged" />           
-            <Checkbox :label="$t('Reports.PivotView')" radioGroup="Pivot" name="mode" :value="query.mode" @input="radioChanged"
-                :enabled="condition != null && (question != null && question.Pivotable)"
-                :tooltip="condition == null ? $t('Reports.SelectConditionalQuestionToPivot') : $t('Reports.CannotPivotOverThisVariable')" />           
+            <div class="options-group">
+                <Radio :label="$t('Reports.TeamLeadsOnly')" radioGroup="TeamLeads" name="mode" 
+                    v-if="!isSupervisor"                     
+                    :value="query.mode" @input="radioChanged" />           
+                <Radio :label="$t('Reports.WithInterviewers')" radioGroup="WithInterviewers" name="mode"                     
+                    :value="query.mode" @input="radioChanged" />           
+                <Radio :label="$t('Reports.PivotView')" radioGroup="Pivot" name="mode"                     
+                    :value="query.mode" @input="radioChanged"
+                    v-if="condition != null && (question != null && question.Pivotable)"
+                    :tooltip="condition == null ? $t('Reports.SelectConditionalQuestionToPivot') : $t('Reports.CannotPivotOverThisVariable')" />           
+            </div>
         </FilterBlock>        
                 
         <FilterBlock :title="$t('Reports.ByAnswerValue')" 
@@ -161,8 +167,12 @@ export default {
         const questionId = id == null ? null : id.name
         const change = { questionId }
 
-        if(this.query.mode == ReportMode.Pivot && !id.pivotable) {
-            change.mode = this.getDefaultMode() 
+        if(id != null) {
+            if(this.query.mode == ReportMode.Pivot && !id.pivotable) {
+                change.mode = this.getDefaultMode() 
+            }
+        } else {
+            change.mode = this.getDefaultMode()
         }
 
         this.onChange(change)

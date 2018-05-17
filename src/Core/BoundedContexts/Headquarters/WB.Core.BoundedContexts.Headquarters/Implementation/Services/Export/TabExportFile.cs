@@ -10,23 +10,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
     {
         public override byte[] GetFileBytes(ReportView report)
         {
-            var headers = report.Headers;
-            var data = report.Data;
             var sb = new StringBuilder();
             using (var csvWriter = new CsvWriter(new StringWriter(sb), this.CreateCsvConfiguration()))
             {
-                foreach (var header in headers)
-                {
-                    csvWriter.WriteField(header);
-                }
-                csvWriter.NextRecord();
+                WriteRow(report.Headers);
 
-                foreach (var row in data)
+                if (report.Totals != null)
+                {
+                    WriteRow(report.Totals);
+                }
+
+                foreach (var row in report.Data)
+                {
+                    WriteRow(row);
+                }
+
+                void WriteRow<T>(T[] row) where T : class
                 {
                     foreach (var column in row)
                     {
-                        csvWriter.WriteField(column ?? "");
+                        csvWriter.WriteField((object)column ?? string.Empty);
                     }
+
                     csvWriter.NextRecord();
                 }
             }
