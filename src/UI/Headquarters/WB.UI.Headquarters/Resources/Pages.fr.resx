@@ -676,10 +676,10 @@
     <value>Ouvrir</value>
   </data>
   <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
-    <value>Veuillez fournir un commentaire si nécessaire pour redémarrer un entretien</value>
+    <value>Veuillez fournir un commentaire si nécessaire pour rouvrir un entretien</value>
   </data>
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
-    <value>Redémarrer</value>
+    <value>Rouvrir</value>
   </data>
   <data name="InterviewerIsArchived" xml:space="preserve">
     <value>L'enquêteur est archivé</value>

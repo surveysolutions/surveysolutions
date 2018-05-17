@@ -148,7 +148,7 @@
     <value>Aucun nouveau entretien</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Cet entretien est terminé. Vous voulez le réinitialiser afin d'y apporter des changements ?</value>
+    <value>Cet entretien est terminé. Vous voulez le rouvrir afin d'y apporter des changements?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Rejeté(s) ({0})</value>
