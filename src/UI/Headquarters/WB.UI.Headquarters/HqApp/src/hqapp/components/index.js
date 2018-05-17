@@ -9,6 +9,7 @@ import ModalFrame from "./ModalFrame"
 import Typeahead from './Typeahead'
 import TextInput from './TextInput'
 import Checkbox from './Checkbox'
+import Radio from './Radio'
 
 Vue.component("Confirm", Confirm)
 Vue.component("DataTables", DataTables)
@@ -19,6 +20,7 @@ Vue.component("ModalFrame", ModalFrame)
 Vue.component("Typeahead", Typeahead)
 Vue.component("TextInput", TextInput)
 Vue.component("Checkbox", Checkbox)
+Vue.component("Radio", Radio)
 
 export default {
     Confirm,
@@ -29,5 +31,6 @@ export default {
     ModalFrame,
     Typeahead,
     TextInput,
-    Checkbox
+    Checkbox,
+    Radio
 }

@@ -18,9 +18,9 @@
                 :isSupervisor="isSupervisor" />
         </Filters>
        
-        <DataTables ref="table" noSearch exportable multiorder hasTotalRow
+        <DataTables ref="table" noSearch exportable multiorder hasTotalRow noSelect
             :tableOptions="tableOptions" :pageLength="pivot ? filter.condition.Answers.length : 15"
-            :addParamsToRequest="addFilteringParams"
+            :addParamsToRequest="addFilteringParams"        
             @ajaxComplete="reportDataRecieved">
                 <hr v-if="status.isRunning || status.lastRefresh" />
                 <p class="text-right small">{{$t("Reports.AreNotRealtime")}}</p>
@@ -208,19 +208,24 @@ export default {
                 ]
             }
 
-            return [{
+            const columns = [{
                 data: "TeamLead",
                 name: "TeamLead",
                 title: this.$t("DevicesInterviewers.Teams"),
                 orderable: true,
                 visible: !this.isSupervisor
-            }, {
-                data: "Responsible",
-                name: "Responsible",
-                title: this.$t("Pages.TeamMember"),
-                orderable: true,
-                visible: this.detailedView || this.isSupervisor
             }]
+
+            if( this.detailedView || this.isSupervisor){
+                columns.push({
+                    data: "Responsible",
+                    name: "Responsible",
+                    title: this.$t("Pages.TeamMember"),
+                    orderable: true
+                })
+            }
+
+            return columns
         },
 
         tableOptions() {

@@ -13,33 +13,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
             using (ExcelPackage excelPackage = new ExcelPackage())
             {
                 var worksheet = excelPackage.Workbook.Worksheets.Add(report.Name ?? "Data");
+                var rowIndex = 1;
 
                 // setting headers
                 for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)
                 {
-                    var cell = worksheet.Cells[1, columnIndex + 1];
+                    var cell = worksheet.Cells[rowIndex, columnIndex + 1];
                     cell.Value = headers[columnIndex];
                     cell.Style.Font.Bold = true;
                 }
 
-                // setting table data
-                for (int rowIndex = 0; rowIndex < data.Length; rowIndex++)
-                {
-                    var rowData = data[rowIndex];
-
-                    for (int columnIndex = 0; columnIndex < rowData.Length; columnIndex++)
-                    {
-                        var cell = worksheet.Cells[rowIndex + 2, columnIndex + 1];
-                        var value = rowData[columnIndex];
-
-                        SetCellValue(value, cell);
-                    }
-                }
+                rowIndex++;
 
                 // setting table totals if exists
                 if (report.Totals != null)
                 {
-                    var rowIndex = 1 /* header */ + data.Length /* data rows count*/ + 1 /* total row */; 
                     for (int columnIndex = 0; columnIndex < report.Totals.Length; columnIndex++)
                     {
                         var cell = worksheet.Cells[rowIndex, columnIndex + 1];
@@ -48,8 +36,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
 
                         SetCellValue(value, cell);
                     }
+
+                    rowIndex++;
                 }
 
+                // setting table data
+                for (int dataIndex = 0; dataIndex < data.Length; dataIndex++)
+                {
+                    var rowData = data[dataIndex];
+
+                    for (int columnIndex = 0; columnIndex < rowData.Length; columnIndex++)
+                    {
+                        var cell = worksheet.Cells[rowIndex, columnIndex + 1];
+                        var value = rowData[columnIndex];
+
+                        SetCellValue(value, cell);
+                    }
+
+                    rowIndex++;
+                }
+                
                 worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
                 for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)
