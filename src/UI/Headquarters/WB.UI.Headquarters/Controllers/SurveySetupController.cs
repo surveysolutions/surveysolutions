@@ -243,6 +243,9 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: fileErrors));
                 }
 
+                
+              
+
                 var columnErrors = this.dataVerifier.VerifyColumns(allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (columnErrors.Any())
                 {
@@ -255,14 +258,24 @@ namespace WB.UI.Headquarters.Controllers
                 PreloadedFile protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.IsProtectedVariablesFile);
                 if (protectedFile != null)
                 {
-                    var protectedVariablesFileErrors = this.dataVerifier.VerifyProtectedVariables(protectedFile,
-                        questionnaire).Take(10).ToArray();
+                    var protectedVariablesFileErrors = this.dataVerifier
+                        .VerifyProtectedVariablesFile(model.File.FileName, protectedFile.FileInfo).Take(10).ToArray();
 
                     if (protectedVariablesFileErrors.Length > 0)
                     {
                         return this.View("InterviewImportVerificationErrors",
                             CreateError(questionnaireIdentity, model.File.FileName,
                                 errors: protectedVariablesFileErrors));
+                    }
+
+                    var protectedVariablesErrors = this.dataVerifier.VerifyProtectedVariables(protectedFile,
+                        questionnaire).Take(10).ToArray();
+
+                    if (protectedVariablesErrors.Length > 0)
+                    {
+                        return this.View("InterviewImportVerificationErrors",
+                            CreateError(questionnaireIdentity, model.File.FileName,
+                                errors: protectedVariablesErrors));
                     }
                 }
 

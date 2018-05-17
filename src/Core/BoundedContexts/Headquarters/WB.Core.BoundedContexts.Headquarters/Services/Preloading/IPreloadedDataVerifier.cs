@@ -20,5 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.Preloading
             IQuestionnaire questionnaire);
 
         InterviewImportError VerifyWithInterviewTree(IList<InterviewAnswer> answers, Guid? responsibleId, IQuestionnaire questionnaire);
+
+        IEnumerable<PanelImportVerificationError> VerifyProtectedVariablesFile(string originalFileName,
+            PreloadedFileInfo file);
     }
 }
