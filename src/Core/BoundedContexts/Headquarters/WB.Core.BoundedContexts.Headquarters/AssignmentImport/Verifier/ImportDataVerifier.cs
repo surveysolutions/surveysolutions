@@ -204,8 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentQuantity>(Quantity_IsNegative, "PL0036", messages.PL0036_QuantityShouldBeGreaterThanMinus1),
             Errors<AssignmentMultiAnswer>(CategoricalMulti_AnswerExceedsMaxAnswersCount, "PL0041", messages.PL0041_AnswerExceedsMaxAnswersCount),
             Error<AssignmentInterviewId>(NoInterviewId, "PL0042", messages.PL0042_IdIsEmpty),
-            Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen1, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
-            Errorq<AssignmentMultiAnswer>(YesNo_AnswerMustBeGreaterOrEqualThen0, "PL0051", messages.PL0051_YesNo_AnswerMustBeGreaterOrEqualThen0),
+            Errorq<AssignmentMultiAnswer>(CategoricalMulti_AnswerMustBeGreaterOrEqualThen0, "PL0050", messages.PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1),
         };
 
         private IEnumerable<InterviewImportReference> OrphanNestedRoster(List<PreloadingAssignmentRow> allRowsByAllFiles,
@@ -465,16 +464,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (Integer_NotParsed(assignmentAnswer)) yield return assignmentAnswer;
         }
         
-        private IEnumerable<AssignmentAnswer> CategoricalMulti_AnswerMustBeGreaterOrEqualThen1(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
+        private IEnumerable<AssignmentAnswer> CategoricalMulti_AnswerMustBeGreaterOrEqualThen0(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
         {
             var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
             if (!questionId.HasValue) yield break;
 
             if (questionnaire.GetQuestionType(questionId.Value) != QuestionType.MultyOption) yield break;
-            if (questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
 
             foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
-                if (assignmentAnswer.Answer < 1) yield return assignmentAnswer;
+                if (assignmentAnswer.Answer < 0) yield return assignmentAnswer;
         }
         
         private IEnumerable<AssignmentAnswer> YesNo_AnswerMustBeGreaterOrEqualThen0(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
