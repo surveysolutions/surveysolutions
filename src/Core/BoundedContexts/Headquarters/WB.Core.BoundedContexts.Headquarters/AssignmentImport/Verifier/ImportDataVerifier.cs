@@ -157,23 +157,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
+        public IEnumerable<PanelImportVerificationError> VerifyProtectedVariablesFile(string originalFileName,
+            PreloadedFileInfo protectedVariableFile)
+        {
+            if (!protectedVariableFile.Columns.Contains(ServiceColumns.ProtectedVariableNameColumn))
+            {
+
+                yield return ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
+                    new PreloadedFileInfo
+                    {
+                        FileName = $"{ServiceFiles.ProtectedVariables}.tab",
+                        Columns = protectedVariableFile.Columns
+                    }, originalFileName);
+            }
+        }
+
         public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
-            var protectedVariableFile = files.FirstOrDefault(x => x.IsProtectedVariablesFile);
-            if (protectedVariableFile != null)
-            {
-                if (!protectedVariableFile.Columns.Contains(ServiceColumns.ProtectedVariableNameColumn))
-                {
-
-                    yield return ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
-                        new PreloadedFileInfo
-                        {
-                            FileName = $"{ServiceFiles.ProtectedVariables}.tab",
-                            Columns = protectedVariableFile.Columns
-                        }, originalFileName);
-                }
-            }
-
             if (!files.Any(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire)))
             {
                 var questionaireFileName = this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title);
