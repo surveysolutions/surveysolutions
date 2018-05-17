@@ -70,7 +70,14 @@ export default {
         exportable: Boolean,
         // support for rows selection
         selectable: Boolean,
-        selectableId: { type: String, default: 'id' }
+        selectableId: { type: String, default: 'id' },
+        pagingType: {
+            type: String, 
+            default: "full_numbers"
+        },
+        noSelect: {
+            type: Boolean, default: false
+        }
     },
 
     data() {
@@ -105,7 +112,7 @@ export default {
             var options = $.extend({
                 processing: false,
                 destroy: shouldDestroy,
-                select: true,
+                select: !this.noSelect,
                 serverSide: true,
                 language:
                 {
@@ -136,7 +143,7 @@ export default {
                 },
                 orderMulti: this.multiorder,
                 searchHighlight: true,
-                pagingType: "full_numbers",
+                pagingType: this.pagingType,
                 lengthChange: false, // do not show page size selector
                 pageLength: this.pageLength, // page size
                 dom: "frtp",

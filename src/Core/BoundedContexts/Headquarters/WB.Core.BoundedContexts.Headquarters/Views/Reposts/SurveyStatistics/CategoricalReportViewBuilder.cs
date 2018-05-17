@@ -12,46 +12,45 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         private readonly Dictionary<int, int> answersIndexMap;
         public const string TeamLeadColumn = "TeamLead";
         public const string ResponsibleColumn = "Responsible";
-         
-        public List<CategoricalReportViewItem> Data { get; set; } = new List<CategoricalReportViewItem>();
 
+        public List<CategoricalReportViewItem> Data { get; set; } = new List<CategoricalReportViewItem>();
         public string[] Headers { get; }
         public string[] Columns { get; }
         public long[] Totals { get; set; }
-        
+        private bool TeamLeadOnly { get; }
+
         public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows)
         {
             this.answersIndexMap = new Dictionary<int, int>();
+            var data = (rows ?? new List<GetCategoricalReportItem>()).ToList();
+            this.TeamLeadOnly = data.All(d => string.IsNullOrWhiteSpace(d.ResponsibleName));
 
             for (var index = 0; index < answers.Count; index++)
             {
                 var answer = answers[index];
-                answersIndexMap.Add((int)answer.GetParsedValue(), index);
+                answersIndexMap.Add((int) answer.GetParsedValue(), index);
             }
 
-            Headers = new[] {TeamLeadColumn, ResponsibleColumn}
+            Headers = (this.TeamLeadOnly ? new [] {"TEAMS"} : new[] {"TEAMS", "TEAM MEMBER"})
                 .Concat(answers.Select(a => a.AnswerText))
-                .Concat(new [] {Strings.Total})
+                .Concat(new[] {Strings.Total})
                 .ToArray();
 
-            Columns = new[]
-            {
-                TeamLeadColumn,
-                ResponsibleColumn
-            }.Concat(answers.Select(a => a.AsColumnName()))
-             .Concat(new []{"total"})
-            .ToArray();
+            Columns = (this.TeamLeadOnly ? new[] { TeamLeadColumn} : new[] { TeamLeadColumn, ResponsibleColumn })
+                .Concat(answers.Select(a => a.AsColumnName()))
+                .Concat(new[] {"total"})
+                .ToArray();
 
-            SetData(rows);
+            SetData(data);
         }
 
-        public void SetData(IEnumerable<GetCategoricalReportItem> rows)
+        private void SetData(List<GetCategoricalReportItem> rows)
         {
             this.Data.Clear();
             this.Totals = new long[answersIndexMap.Count];
-            if (rows == null) return;
-            CategoricalReportViewItem perTeamReportItem = null;
             
+            CategoricalReportViewItem perTeamReportItem = null;
+
             foreach (var row in rows)
             {
                 // check if this is total row related data
@@ -62,9 +61,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     continue;
                 }
 
-                if (perTeamReportItem != null 
+                if (perTeamReportItem != null
                     && (perTeamReportItem.ResponsibleName != row.ResponsibleName
-                    || perTeamReportItem.TeamLeadName != row.TeamLeadName))
+                        || perTeamReportItem.TeamLeadName != row.TeamLeadName))
                 {
                     this.Data.Add(perTeamReportItem);
                     perTeamReportItem = null;
@@ -81,12 +80,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 }
 
                 perTeamReportItem.Values[answersIndexMap[row.Answer]] = row.Count;
-
             }
 
             if (perTeamReportItem != null) this.Data.Add(perTeamReportItem);
         }
-        
+
         public ReportView AsReportView()
         {
             var report = new ReportView
@@ -98,9 +96,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             };
 
             report.Totals[0] = Strings.AllTeams;
-            report.Totals[1] = Strings.AllInterviewers;
 
-            Array.Copy(Totals,0, report.Totals, 2, Totals.Length);
+            if (!TeamLeadOnly)
+                report.Totals[1] = Strings.AllInterviewers;
+
+            int dataIndexStart = TeamLeadOnly ? 1 : 2;
+
+            Array.Copy(Totals, 0, report.Totals, dataIndexStart, Totals.Length);
 
             report.Totals[Columns.Length - 1] = Totals.Sum();
 
@@ -110,11 +112,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
                 var row = new object[report.Columns.Length];
                 row[0] = item.TeamLeadName;
-                row[1] = item.ResponsibleName;
+
+                if(!TeamLeadOnly)
+                    row[1] = item.ResponsibleName;
 
                 var results = item.Values;
 
-                Array.Copy(results, 0, row, 2, results.Length);
+                Array.Copy(results, 0, row, dataIndexStart, results.Length);
 
                 row[report.Columns.Length - 1] = item.Total;
                 report.Data[index] = row;
@@ -123,6 +127,4 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             return report;
         }
     }
-
-    
 }

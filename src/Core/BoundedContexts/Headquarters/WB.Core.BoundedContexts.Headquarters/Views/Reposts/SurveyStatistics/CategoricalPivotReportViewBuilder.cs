@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             
             IEnumerable<string> GetHeaders()
             {
-                yield return rowsQuestion.StataExportCaption;
+                yield return rowsQuestion.VariableLabel ?? rowsQuestion.StataExportCaption;
 
                 foreach (var answer in columnQuestion.Answers)
                 {
