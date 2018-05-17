@@ -17,8 +17,9 @@
                 :isSupervisor="isSupervisor" />
         </Filters>
        
-        <DataTables ref="table" noSearch exportable multiorder hasTotalRow noSelect
-            :tableOptions="tableOptions" :pageLength="pivot ? filter.condition.Answers.length : 15"
+        <DataTables ref="table" 
+            noSearch exportable multiorder hasTotalRow noSelect
+            :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
             :addParamsToRequest="addFilteringParams"        
             @ajaxComplete="reportDataRecieved">
                 <hr v-if="status.isRunning" />                
@@ -46,9 +47,11 @@ export default {
                 questionnaire: null,
                 question: null,
                 answers: null,
+                condition: null,
                 mode: 'TeamLeads',
                 min: this.min,
-                max: this.max
+                max: this.max,
+                pivot: false
             },          
             status: {
                 isRunning: false,
@@ -78,7 +81,6 @@ export default {
 
     methods: {
         filterChanged(filter) {
-
             Object.keys(filter).forEach(key => {
                 this.filter[key] = filter[key]
             })
@@ -101,8 +103,9 @@ export default {
 
             if(this.filter.condition != null) {
                 data.ConditionalQuestion = this.filter.condition.PublicKey
+                data.pivot = this.filter.pivot
 
-                if(!this.pivot || this.filter.conditionAnswers.length > 0) {
+                if(!data.pivot || this.filter.conditionAnswers.length > 0) {
                     data.Condition = _.map(this.filter.conditionAnswers, 'Answer')
                 }
             }
@@ -119,24 +122,29 @@ export default {
     },
 
     computed: {        
-        question() {
-            if (this.filter == null) return null
-            return this.filter.question
-        },
-
         isSupervisor() {
-            return this.$config.model.IsSupervisor
+            return this.$config.model.isSupervisor
         },
-
-        isAdmin() { return this.$config.authorizedUser.IsAdministrator },
 
         infoMessage() {
             return this.$t("Reports.Updated").replace("{0}", moment(this.status.lastRefresh).fromNow())
         },
 
-        detailedView() { return this.filter.mode.toLowerCase() == 'withinterviewers' },
+        detailedView() { 
+            if(this.filter.mode == null) return false
 
-        pivot() { return this.filter.mode.toLowerCase() == 'pivot' },
+            return this.filter.mode.toLowerCase() == 'withinterviewers' 
+        },
+
+        isPivot() {
+            return this.filter.pivot && this.filter.condition != null
+        },
+        
+        conditionAnswers() {
+            if(this.condition == null) return 15
+
+            return this.condition.Answers.length
+        },
 
         numericColumns() {
             if(this.filter.question != null){
@@ -170,7 +178,7 @@ export default {
         totalColumn() {
             if(this.question == null) return []
 
-            if(this.question.HasTotal || this.pivot){
+            if(this.question.HasTotal || this.isPivot){
                 return [{                
                         class: "type-numeric",
                         title: this.$t("Pages.Total"),
@@ -195,7 +203,7 @@ export default {
         },
 
         identifyingColumns() {
-            if(this.pivot) {
+            if(this.isPivot) {
                 return [{
                         data: "variable",
                         name: "variable",
@@ -205,15 +213,19 @@ export default {
                 ]
             }
 
-            const columns = [{
-                data: "TeamLead",
-                name: "TeamLead",
-                title: this.$t("DevicesInterviewers.Teams"),
-                orderable: true,
-                visible: !this.isSupervisor
-            }]
+            const columns = []
 
-            if( this.detailedView || this.isSupervisor){
+            if(!this.isSupervisor) {
+                columns.push({
+                    data: "TeamLead",
+                    name: "TeamLead",
+                    title: this.$t("DevicesInterviewers.Teams"),
+                    orderable: true,
+                    visible: !this.isSupervisor
+                })
+            }
+
+            if(this.isSupervisor || this.detailedView){
                 columns.push({
                     data: "Responsible",
                     name: "Responsible",
@@ -225,15 +237,19 @@ export default {
             return columns
         },
 
-        tableOptions() {
-            return {
-                deferLoading: 250,
-                columns: _.union(
+        tableColumns() {
+            return _.concat(
                     this.identifyingColumns,
                     this.numericColumns,
                     this.categoriesColumns,
                     this.totalColumn
-                ),
+            )
+        },
+
+        tableOptions() {
+            return {
+                deferLoading: 250,
+                columns: this.tableColumns,
                 ajax: {
                     url: this.$hq.Report.SurveyStatistics.Uri,
                     type: "GET",
