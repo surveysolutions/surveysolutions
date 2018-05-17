@@ -97,15 +97,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot build pivot table over this question.
-        /// </summary>
-        internal static string CannotPivotOverThisVariable {
-            get {
-                return ResourceManager.GetString("CannotPivotOverThisVariable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
         internal static string Completed {
@@ -525,15 +516,6 @@ namespace Resources {
         internal static string Restarted {
             get {
                 return ResourceManager.GetString("Restarted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select conditional question to enable pivot table.
-        /// </summary>
-        internal static string SelectConditionalQuestionToPivot {
-            get {
-                return ResourceManager.GetString("SelectConditionalQuestionToPivot", resourceCulture);
             }
         }
         

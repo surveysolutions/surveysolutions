@@ -283,12 +283,6 @@
   <data name="PivotView" xml:space="preserve">
     <value>Сводная таблица</value>
   </data>
-  <data name="SelectConditionalQuestionToPivot" xml:space="preserve">
-    <value>Выберите уточняющий вопрос чтобы активировать сводные таблицы</value>
-  </data>
-  <data name="CannotPivotOverThisVariable" xml:space="preserve">
-    <value>Невозможно построить сводную таблицу по этому вопросу</value>
-  </data>
   <data name="Question" xml:space="preserve">
     <value>Вопрос</value>
   </data>
