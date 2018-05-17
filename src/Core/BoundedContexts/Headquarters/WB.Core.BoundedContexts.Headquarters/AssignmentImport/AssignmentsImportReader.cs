@@ -99,34 +99,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record)
         {
-            var cells = new Dictionary<string, List<PreloadingValue>>();
-
-            foreach (var kv in record)
-            {
-                var columnName = kv.Key.ToLower();
-                var value = (string) kv.Value;
-
-                if (columnName.Equals(ServiceColumns.ProtectedVariableNameColumn, StringComparison.OrdinalIgnoreCase))
-                {
-                    var variableName = columnName;
-                    var variableOrCodeOrPropertyName = columnName;
-
-                    if (!cells.ContainsKey(variableName))
-                        cells[variableName] = new List<PreloadingValue>();
-                    cells[variableName].Add(new PreloadingValue
-                    {
-                        VariableOrCodeOrPropertyName = variableOrCodeOrPropertyName,
-                        Row = rowIndex,
-                        Column = kv.Key,
-                        Value = value,
-                    });
-                }
-               
-            }
-
             return new PreloadingRow
             {
-                Cells = cells.Select(x => x.Value[0]).ToArray()
+                Cells = record.Where(x => x.Key.Equals(ServiceColumns.ProtectedVariableNameColumn, StringComparison.OrdinalIgnoreCase))
+                    .Select(x => new PreloadingValue
+                    {
+                        VariableOrCodeOrPropertyName = x.Key.ToLower(),
+                        Column = x.Key,
+                        Row = rowIndex,
+                        Value = (string) x.Value
+                    }).ToArray()
             };
         }
 
