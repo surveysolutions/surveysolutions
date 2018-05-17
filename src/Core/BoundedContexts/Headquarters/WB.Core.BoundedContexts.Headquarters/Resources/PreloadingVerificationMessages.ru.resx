@@ -147,7 +147,7 @@
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
     <value>Для GPS вопроса обязательно наличие значений и широты и долготы</value>
   </data>
-    <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
     <value>[PL0002] N/A</value>
     <comment>[PL0002] N/A</comment>
   </data>
@@ -264,7 +264,7 @@
     <value>Звуковой вопрос не может быть предварительно загружен.</value>
     <comment>Звуковой вопрос не может быть предварительно загружен.</comment>
   </data>
-    <data name="PL0042_IdIsEmpty" xml:space="preserve">
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
     <value>Отсутствует значение для поля Id интервью</value>
     <comment>Отсутствует значение для поля Id интервью</comment>
   </data>
@@ -280,25 +280,19 @@
   <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
     <value>Вопрос со списком {0} содержит неуникальные коды: {1}. Код интервью: {2}</value>
   </data>
-    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Количество отвеченных опций не может быть больше чем максимально разрешенное количство отвеченных опций</value>
   </data>
-    <data name="HasAssignmentsToImport" xml:space="preserve">
+  <data name="HasAssignmentsToImport" xml:space="preserve">
     <value>Пожалуйста подождите пока завершится текущий процесс импорта назначений</value>
     <comment>Пожалуйста подождите пока завершится текущий процесс импорта назначений</comment>
   </data>
-    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
     <value>Архивы защищенные паролем не поддерживаются</value>
     <comment>Архивы защищенные паролем не поддерживаются</comment>
   </data>
-    <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
+  <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
     <value>Ответ на мультиселект вопрос должен быть больше или равен 1</value>
     <comment>Ответ на мультиселект вопрос должен быть больше или равен 1</comment>
-  </data>
-    <data name="PL0051_YesNo_AnswerMustBeGreaterOrEqualThen0" xml:space="preserve">
-    <value>Ответ на да/нет вопрос должен быть больше или равен 0
-</value>
-    <comment>Ответ на да/нет вопрос должен быть больше или равен 0
-</comment>
   </data>
 </root>
