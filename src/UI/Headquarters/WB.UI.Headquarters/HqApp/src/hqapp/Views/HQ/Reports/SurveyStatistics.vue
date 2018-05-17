@@ -125,7 +125,7 @@ export default {
         },
 
         isSupervisor() {
-            return this.$config.authorizedUser.IsSupervisor
+            return this.$config.model.IsSupervisor
         },
 
         isAdmin() { return this.$config.authorizedUser.IsAdministrator },

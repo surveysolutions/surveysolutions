@@ -148,7 +148,10 @@ namespace WB.UI.Headquarters.Controllers
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
         public ActionResult SurveyStatistics()
         {
-            return this.View("SurveyStatistics");
+            return this.View("SurveyStatistics", new
+            {
+                isSupervisor = this.authorizedUser.IsSupervisor
+            });
         }
 
         private ComboboxOptionModel[] GetAllQuestionnaires()
