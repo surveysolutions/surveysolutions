@@ -64,7 +64,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 new MvxObservableCollection<ShapefileDescription>(this.mapService.GetAvailableShapefiles());
 
             var localMaps = this.mapService.GetAvailableMaps();
-            localMaps.Add(this.mapService.PrepareAndGetDefaultMap());
+            var defaultMap = this.mapService.PrepareAndGetDefaultMap();
+            localMaps.Add(defaultMap);
 
             this.AvailableMaps = new MvxObservableCollection<MapDescription>(localMaps);
             this.MapsList = this.AvailableMaps.Select(x => x.MapName).ToList();
@@ -80,6 +81,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 this.SelectedMap = this.MapsList.FirstOrDefault();
             }
+
+            Basemap basemap = await GetBaseMap(defaultMap);
+            this.Map = new Map(basemap);
+
+            this.Map.Loaded += Map_Loaded;
         }
 
         private MvxObservableCollection<MapDescription> availableMaps = new MvxObservableCollection<MapDescription>();
@@ -108,8 +114,68 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             get => this.selectedMap;
             set => this.RaiseAndSetIfChanged(ref this.selectedMap, value);
-            
         }
+
+
+        public async Task<Basemap> GetBaseMap(MapDescription existingMap)
+        {
+            if (existingMap != null)
+            {
+                var mapFileExtention = this.fileSystemAccessor.GetFileExtension(existingMap.MapFullPath);
+
+                switch (mapFileExtention)
+                {
+                    case ".mmpk":
+                        {
+                            MobileMapPackage package = await MobileMapPackage.OpenAsync(existingMap.MapFullPath);
+                            if (package.Maps.Count > 0)
+                            {
+                                {
+                                    var basemap = package.Maps.First().Basemap.Clone();
+                                    await basemap.LoadAsync();
+                                    return basemap;
+                                }
+                            }
+                            break;
+                        }
+                    case ".tpk":
+                        {
+                            TileCache titleCache = new TileCache(existingMap.MapFullPath);
+                            var layer = new ArcGISTiledLayer(titleCache)
+                            {
+                                //zoom to any level
+                                //if area is out of the map
+                                // should be available to navigate
+
+                                MinScale = 100000000,
+                                MaxScale = 1
+                            };
+
+                            await layer.LoadAsync();
+                            return new Basemap(layer);
+
+                            break;
+                        }
+                    case ".tif":
+                        {
+                            Raster raster = new Raster(existingMap.MapFullPath);
+                            RasterLayer newRasterLayer = new RasterLayer(raster);
+                            await newRasterLayer.LoadAsync();
+
+                            //add error display
+                            if (newRasterLayer.SpatialReference.IsProjected)
+                            {
+                                return new Basemap(newRasterLayer);
+                            }
+                            break;
+                        }
+                }
+            }
+
+            return null;
+        }
+
+
 
         public async Task UpdateBaseMap()
         {
@@ -117,66 +183,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             if (existingMap != null)
             {
-                //woraround to fix size of map
-                //on map reload
-                if (MapView?.LocationDisplay != null)
-                    this.MapView.LocationDisplay.IsEnabled = false;
+                var basemap = await GetBaseMap(existingMap);
 
+                this.Map.Basemap = basemap;
 
-                this.Map = await GetMap(existingMap.MapFullPath).ConfigureAwait(false);
+                if (basemap?.BaseLayers[0]?.FullExtent != null)
+                    await MapView.SetViewpointGeometryAsync(basemap.BaseLayers[0].FullExtent);
             }
-            else
-            {
-                this.Map = null;
-            }
-        }
-
-        private SpatialReference InitialSpatialReference { set; get; }
-
-        private async Task<Map> GetMap(string pathToMapFile)
-        {
-            var mapFileExtention = this.fileSystemAccessor.GetFileExtension(pathToMapFile);
-
-            switch (mapFileExtention)
-            {
-                case ".mmpk":
-                {
-                    MobileMapPackage package = await MobileMapPackage.OpenAsync(pathToMapFile);
-                    if (package.Maps.Count > 0)
-                        return package.Maps.First();
-                    break;
-                }
-                case ".tpk":
-                {
-                    TileCache titleCache = new TileCache(pathToMapFile);
-                    var layer = new ArcGISTiledLayer(titleCache)
-                    {
-                        //zoom to any level
-                        //if area is out of the map
-                        // should be available to navigate
-                        MinScale = 100000000,
-                        MaxScale = 1
-                    };
-                    return new Map
-                    {
-                        Basemap = new Basemap(layer),
-                        MinScale = 100000000,
-                        MaxScale = 1
-                    };
-                }
-                case ".tif":
-                {
-                    Raster raster = new Raster(pathToMapFile);
-                    RasterLayer newRasterLayer = new RasterLayer(raster);
-                    await newRasterLayer.LoadAsync();
-
-                    //add error display
-                    if (newRasterLayer.SpatialReference.IsProjected)
-                        return new Map(new Basemap(newRasterLayer));
-                    break;
-                }
-            }
-            return null;
         }
 
 
@@ -213,16 +226,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set
             {
                 this.mapView = value;
-                if (this.mapView != null)
-                {
-                    this.mapView.ViewAttachedToWindow +=
-                        delegate
-                        {
-                            if (this.StartEditAreaCommand.CanExecute())
-                                this.StartEditAreaCommand.Execute();
-                        };
-                }
             }
+        }
+
+        private void Map_Loaded(object sender, EventArgs e)
+        {
+            if (this.StartEditAreaCommand.CanExecute())
+                this.StartEditAreaCommand.ExecuteAsync();
         }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
@@ -275,7 +285,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             var handler = this.OnAreaEditCompleted;
             handler?.Invoke(null);
             Close(this);
-
         });
 
 
@@ -381,11 +390,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public IMvxAsyncCommand StartEditAreaCommand => new MvxAsyncCommand(async () =>
         {
-            if (this.Map == null)
-                await UpdateBaseMap();
-
-            if (this.IsEditing || this.Map == null)
-                return;
+            //if(this.Map == null)
+            await UpdateBaseMap();
 
             this.IsEditing = true;
             try
@@ -643,8 +649,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         private async Task<Geometry> GetGeometry(WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType, Geometry geometry)
         {
-            this.InitialSpatialReference = this.MapView.SpatialReference;
-            
             switch (geometryType)
             {
                 case GeometryType.Polyline:
