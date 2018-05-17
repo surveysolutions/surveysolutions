@@ -514,6 +514,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(question => question.PublicKey)
                 .ToReadOnlyCollection();
 
+        public ReadOnlyCollection<Guid> GetHiddenQuestions()
+            => this
+                .QuestionnaireDocument
+                .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Hidden)
+                .Select(question => question.PublicKey)
+                .ToReadOnlyCollection();
+        
+
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
         public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)
