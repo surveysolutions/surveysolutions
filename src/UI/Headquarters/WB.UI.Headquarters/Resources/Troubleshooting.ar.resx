@@ -117,43 +117,86 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="InterviewDataIsMissingDescription" xml:space="preserve">
+    <value>حدد مفتاح مقابلة أو معرف مقابلة للبحث.</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="InterviewDataIsMissingTitle" xml:space="preserve">
+    <value>يدعي أحد الباحثين أنه تم الانتهاء من المقابلة وتزامنها، ولكني لا أرى أية بيانات لتلك المقابلة على الخادم</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="MissingCensusInterviews_Filters_Dates" xml:space="preserve">
+    <value>البحث عن مقابلات متزامنة بين تاريخين</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="MissingCensusInterviews_Filters_DatesPlaceholder" xml:space="preserve">
+    <value>اختيار التواريخ</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
+  <data name="MissingCensusInterviews_Filters_Interviewer" xml:space="preserve">
+    <value>الباحث</value>
+  </data>
+  <data name="MissingCensusInterviews_Filters_InterviewerPlaceholder" xml:space="preserve">
     <value>اختر الباحث</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="MissingCensusInterviews_Filters_Questionnaire" xml:space="preserve">
+    <value>استبيان</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="MissingCensusInterviews_Filters_QuestionnairePlaceholder" xml:space="preserve">
+    <value>حدد الاستبيان</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="MissingCensusInterviews_Filters_Search" xml:space="preserve">
+    <value>البحث</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="MissingCensusInterviews_FiltersTitle" xml:space="preserve">
+    <value>شروط التثفية</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
+    <value>لتحديد موقع المقابلة، يرجى تقديم اسم الباحث. &lt;br/&gt;
+حدد المقابلات والإطار الزمني لتضييق نتيجة البحث </value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
+    <value>{0} مقابلات تلبي شروط التصفية</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="MissingCensusInterviews_NothingFound_Message" xml:space="preserve">
+    <value>لا مقابلات تلبي شروط التصفية</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="MissingCensusInterviews_OneInterviewFound_Message" xml:space="preserve">
+    <value>مقابلة واحدة تستوفي شروط التصفية</value>
+  </data>
+  <data name="MissingCensusInterviews_PageHeader" xml:space="preserve">
+    <value>تحديد موقع مقابلة محددة</value>
+  </data>
+  <data name="MissingCensusInterviewsDescription" xml:space="preserve">
+    <value>تقديم اسم تسجيل الدخول للباحث واسم الاستبيان ونطاق زمني</value>
+  </data>
+  <data name="MissingCensusInterviewsTitle" xml:space="preserve">
+    <value>أنا بحاجة إلى تحديد موقع المقابلة</value>
+  </data>
+  <data name="NoData_Description" xml:space="preserve">
+    <value>حدد مفتاح مقابلة (XX-XX-XX-XX) أو معرف المقابلة للبحث.</value>
+  </data>
+  <data name="NoData_Filters_InterviewKey" xml:space="preserve">
+    <value>مفتاح المقابلة أو معرف المقابلة</value>
+  </data>
+  <data name="NoData_Filters_InterviewKeyPlaceholder" xml:space="preserve">
+    <value>أدخل مفتاح المقابلة أو المعرف</value>
+  </data>
+  <data name="NoData_Title" xml:space="preserve">
+    <value>لا أرى أية بيانات لمقابلة متزامنة على الخادم</value>
+  </data>
+  <data name="SupportSite" xml:space="preserve">
+    <value>انقر على رابط المشكلة التي تريد حلها. للمشكلات غير المذكورة أدناه، انتقل إلى Survey Solutions &lt;a href="{0}" target="_blank"&gt; موقع الدعم &lt;/a&gt;.</value>
+  </data>
+  <data name="TableTitle_Enumerator" xml:space="preserve">
+    <value>عداد</value>
+  </data>
+  <data name="TableTitle_InterviewId" xml:space="preserve">
+    <value>معرف المقابلة</value>
+  </data>
+  <data name="TableTitle_LastUpdate" xml:space="preserve">
+    <value>اخر تحديث</value>
+  </data>
+  <data name="TableTitle_Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>استكشاف الأخطاء وإصلاحها</value>
   </data>
 </root>

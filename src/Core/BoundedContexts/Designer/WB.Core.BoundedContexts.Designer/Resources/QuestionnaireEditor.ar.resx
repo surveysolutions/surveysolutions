@@ -117,43 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="NewSection" xml:space="preserve">
+    <value>قسم جديد</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="QuestionScopeHidden" xml:space="preserve">
+    <value>مخفي</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="QuestionScopeIdentifying" xml:space="preserve">
+    <value>تحديد</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="QuestionScopeInterviewer" xml:space="preserve">
+    <value>الباحث</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="QuestionScopeSupervisor" xml:space="preserve">
+    <value>مشرف</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="QuestionTypeArea" xml:space="preserve">
+    <value>منطقة</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="QuestionTypeAudio" xml:space="preserve">
+    <value>صوتي</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="QuestionTypeBarcode" xml:space="preserve">
+    <value>شيفرة التعرف (باركود)</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="QuestionTypeDate" xml:space="preserve">
+    <value>التاريخ</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="QuestionTypeGPS" xml:space="preserve">
+    <value>نظام تحديد المواقع</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="QuestionTypeList" xml:space="preserve">
+    <value>قائمة</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="QuestionTypeMultiSelect" xml:space="preserve">
+    <value>التصنيف: اختيار متعدد</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="QuestionTypeNumeric" xml:space="preserve">
+    <value>رقمي</value>
+  </data>
+  <data name="QuestionTypePicture" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+  <data name="QuestionTypeSingleSelect" xml:space="preserve">
+    <value>التصنيف: اختيار أحادي</value>
+  </data>
+  <data name="QuestionTypeText" xml:space="preserve">
+    <value>نص</value>
   </data>
 </root>

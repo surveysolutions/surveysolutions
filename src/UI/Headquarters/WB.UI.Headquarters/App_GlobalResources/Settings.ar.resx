@@ -117,43 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="ChangeStateConfirm" xml:space="preserve">
+    <value>هل انت متاكد أنك تريد تغيير حالة الحماية؟ سوف تحتاج الى إعادة تجديد البيانات المصدرة من اجل فتحها</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="CurrentLogo" xml:space="preserve">
+    <value>الشعار الحالي</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="EnableEncryption" xml:space="preserve">
+    <value>تفعيل التشفير</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="ExportEncryption_Description" xml:space="preserve">
+    <value>حدد تفعيل مربع التشفير لتشفير أرشيفات بيانات التصدير وحمايتها باستخدام كلمة المرور المقدمة. تغيير كلمة المرور عن طريق الضغط على زر الخطأ. بعد التشفير، فقط الأشخاص الذين يعرفون كلمة المرور يمكنهم فتح البيانات التي تم تصديرها</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="ExportEncryption_Title" xml:space="preserve">
+    <value>تصدير التشفير</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="ExportEncryptionSettings" xml:space="preserve">
+    <value>تصدير اعدادات التشفير</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="GlobalNoteClearingConfirm" xml:space="preserve">
+    <value>هل انت متأكد انك تريد حذف الملاحظة العامه؟</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="GlobalNoteSaved" xml:space="preserve">
+    <value>لم يتم الحفظ</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="GlobalNoteSettings" xml:space="preserve">
+    <value>ملاحظة عامة</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="GlobalNoteSettings_Description" xml:space="preserve">
+    <value>حدد نص في حقل الملاحظة العامة ليتم عرضه في أعلى كل شاشة على الخادم</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="GlobalNotice" xml:space="preserve">
+    <value>ملاحظة عامة</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Logo" xml:space="preserve">
+    <value>شعار الشركة</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="LogoNotUpdated" xml:space="preserve">
+    <value>لم يتم تحديث شعار الشركة يرجى توزيد صورة صحيحة</value>
+  </data>
+  <data name="LogoSettings" xml:space="preserve">
+    <value>شعار الشركة</value>
+  </data>
+  <data name="LogoSettings_Description" xml:space="preserve">
+    <value>شعار الشركة يظهر صورة مخصصة على صفحة تسجيل دخول الخادم و على صفحة تسجيل الدخول على تطبيق الباحث. انقر على زر اختيار ملف لتحميل صورة من جهاز الحاسوب الى الخادم</value>
+  </data>
+  <data name="LogoUpdated" xml:space="preserve">
+    <value>تم تحديث شعار الشركة</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="RegeneratePasswordConfirm" xml:space="preserve">
+    <value>هل انت متأكد انك تريد انشاء كلمة مرور جديدة؟ سوف تحتاج إلى اعدة تجديد البيانات المصدرة من أجل فتحها.</value>
+  </data>
+  <data name="RemoveLogo" xml:space="preserve">
+    <value>إزالة الشعار</value>
+  </data>
+  <data name="Settings_Title" xml:space="preserve">
+    <value>الاعدادات</value>
   </data>
 </root>

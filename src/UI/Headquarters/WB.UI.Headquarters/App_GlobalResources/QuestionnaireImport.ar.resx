@@ -117,43 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="BeforeSignInToDesigner" xml:space="preserve">
+    <value>قبل تسجيل الدخول، يرجى التأكد من توفر موقع "المصمم"</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="Chapters" xml:space="preserve">
+    <value>اقسام</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>تم انشاءه على</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="DesignerQuestionnaires" xml:space="preserve">
+    <value>مصمم الاستبيانات</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="Gropus" xml:space="preserve">
+    <value>اقسام فرعية</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="ImportAsNewVersion" xml:space="preserve">
+    <value>إنشاء إصدار جديد (# {0})</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="ImportModePageTitle" xml:space="preserve">
+    <value>استيراد الاستبيان:</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="ImportModeTitle" xml:space="preserve">
+    <value>وضع استيراد الاستبيان</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="LastModifiedAt" xml:space="preserve">
+    <value>تاريخ اخر تعديل</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="ListOfMyQuestionnaires" xml:space="preserve">
+    <value>قائمة استبياناتي</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="LoginToDesignerError" xml:space="preserve">
+    <value>تعذر الاتصال بالمصمم. الرجاء التحقق مما إذا كان المصمم متوفرا ومحاولة &lt;a href='{0}'&gt; مرة أخرى &lt;/a&gt;</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="MyQuestionnairesTitle" xml:space="preserve">
+    <value>مصمم: استبياناتي</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="QuestionnaireExists" xml:space="preserve">
+    <value>لقد قمت باستيراد هذا الاستبيان بالفعل</value>
+  </data>
+  <data name="Questions" xml:space="preserve">
+    <value>أسئلة</value>
+  </data>
+  <data name="QuestionsWithConditions" xml:space="preserve">
+    <value>{0} منهم مع الشروط</value>
+  </data>
+  <data name="RegularImportSubTitle" xml:space="preserve">
+    <value>سيسمح لك هذا بانشاء مهام فردية قد تحتوي على بيانات تعريف. وستظهر هذه المهام على أجهزة الباحثين فقط</value>
+  </data>
+  <data name="RegularImportTitle" xml:space="preserve">
+    <value>استيراد</value>
+  </data>
+  <data name="Rosters" xml:space="preserve">
+    <value>قوائم</value>
+  </data>
+  <data name="SignInToDesigner" xml:space="preserve">
+    <value>يرجى تسجيل الدخول الى المصمم</value>
+  </data>
+  <data name="SignInToDesignerTitle" xml:space="preserve">
+    <value>تسجيل الدخول للمصمم</value>
   </data>
 </root>

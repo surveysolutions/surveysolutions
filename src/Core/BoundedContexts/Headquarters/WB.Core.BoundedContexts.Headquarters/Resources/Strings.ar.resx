@@ -117,43 +117,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="AllInterviewers" xml:space="preserve">
+    <value>جميع المقابلات</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="AllPeriods" xml:space="preserve">
+    <value>جميع الفترات</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="AllQuestionnaires" xml:space="preserve">
+    <value>جميع الاستبيانات</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="AllTeams" xml:space="preserve">
+    <value>جميع الفرق</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="AnyHeadquarters" xml:space="preserve">
+    <value>أي مقر رئيسي</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="Assignments" xml:space="preserve">
+    <value>مهام</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="Average" xml:space="preserve">
+    <value>معدل </value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>إلغاء</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="CommandTransformator_ParseQuestionError" xml:space="preserve">
+    <value>خطأ عند تحليل سؤال الإجابة</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="ControlPanelController_RepeatLastInterviewStatus" xml:space="preserve">
+    <value>الحالة وضعت من قبل فريق دعم Survey Solutions</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Days" xml:space="preserve">
+    <value>أيام</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Error" xml:space="preserve">
+    <value>خطأ</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfully" xml:space="preserve">
+    <value>تم تحديث كلمة المرور للحساب بنجاح</value>
+  </data>
+  <data name="HQ_AccountController_AccountPasswordChangedSuccessfullyFormat" xml:space="preserve">
+    <value>تم تحديث كلمة المرور للحساب &lt;b&gt; {0} &lt;/ b&gt; بنجاح</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfully" xml:space="preserve">
+    <value>تم تحديث معلومات الحساب بنجاح</value>
+  </data>
+  <data name="HQ_AccountController_AccountUpdatedSuccessfullyFormat" xml:space="preserve">
+    <value>تم تحديث معلومات حول &lt;b&gt; {0} &lt;/ b&gt; بنجاح</value>
+  </data>
+  <data name="HQ_Views_Manage_Title" xml:space="preserve">
+    <value>إدارة الحساب</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>مقابلات</value>
+  </data>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>موافق عليه من قبل المقر الرئيسي</value>
+  </data>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>موافق عليه من قبل المشرف</value>
+  </data>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="InterviewStatus_Created" xml:space="preserve">
+    <value>تم انشاءه</value>
+  </data>
+  <data name="InterviewStatus_Deleted" xml:space="preserve">
+    <value>محذوف</value>
+  </data>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>الباحث المعين</value>
+  </data>
+  <data name="InterviewStatus_ReadyForInterview" xml:space="preserve">
+    <value>جاهز للمقابلة</value>
+  </data>
+  <data name="InterviewStatus_RejectedByHeadquarters" xml:space="preserve">
+    <value>مرفوض من المقر الرئيسي</value>
+  </data>
+  <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
+    <value>مرفوض من قبل المشرف</value>
+  </data>
+  <data name="InterviewStatus_Restarted" xml:space="preserve">
+    <value>تم اعادة تشغيله</value>
+  </data>
+  <data name="InterviewStatus_Restored" xml:space="preserve">
+    <value>تم استعادته</value>
+  </data>
+  <data name="InterviewStatus_SentToCapi" xml:space="preserve">
+    <value>ارسل الى Capi</value>
+  </data>
+  <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
+    <value>المشرف المعين</value>
+  </data>
+  <data name="ObserverNotAllowed" xml:space="preserve">
+    <value>لا يسمح للمراقب بتنفيذ هذا الإجراء</value>
+  </data>
+  <data name="SurverManagement_MainMenu_ManageAccount" xml:space="preserve">
+    <value>إدارة الحساب</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>مجموع</value>
+  </data>
+  <data name="UnexpectedErrorOccurred" xml:space="preserve">
+    <value>حدث خطأ غير متوقع </value>
+  </data>
+  <data name="ViewHelpers_Invalid_property" xml:space="preserve">
+    <value>خاصية غير صالحة</value>
   </data>
 </root>

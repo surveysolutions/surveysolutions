@@ -117,43 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="Aria_SortAscending" xml:space="preserve">
+    <value>: تنشيط ترتيب العامود تصاعديا</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="Aria_SortDescending" xml:space="preserve">
+    <value>: تنشيط ترتيب العامود تنازليا</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="EmptyTable" xml:space="preserve">
+    <value>معلومات غير متوفرة في الجدول</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="Info" xml:space="preserve">
+    <value>اظهار _ٍStart _الى_END_محموع_ادخالات</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="InfoEmpty" xml:space="preserve">
+    <value>عرص 0 الى 0 من 0 ادخالات</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="InfoFiltered" xml:space="preserve">
+    <value>(مفلتر من_MAX_اجمالي المدخلات)</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="InfoThousands" xml:space="preserve">
+    <value>,</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="LengthMenu" xml:space="preserve">
+    <value>اظهر_قائمة_مدخلات</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="LoadingRecords" xml:space="preserve">
+    <value>جار التحميل...</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="Paginate_First" xml:space="preserve">
+    <value>الأول</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Paginate_Last" xml:space="preserve">
+    <value>الأخير</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Paginate_Next" xml:space="preserve">
+    <value>التالي</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="Paginate_Previous" xml:space="preserve">
+    <value>السابق</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>قيد المعالجة</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>بحث:</value>
+  </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+    <value>بحث...</value>
+  </data>
+  <data name="ZeroRecords" xml:space="preserve">
+    <value>لم يتم العثور على سجلات مطابقة</value>
   </data>
 </root>

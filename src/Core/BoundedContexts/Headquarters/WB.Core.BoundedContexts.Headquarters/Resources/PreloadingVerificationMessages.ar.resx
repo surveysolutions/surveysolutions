@@ -117,181 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm" xml:space="preserve">
-    <value>تأكيد </value>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>إلغاء</value>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>لا يمكن تعيين العامود الى أي سؤال في الاستبيان</value>
   </data>
-  <data name="Ok" xml:space="preserve">
-    <value>حسنا</value>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>لا يمكن تعيين الملف إلى أي لائحة في الاستبيان.</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>مدير</value>
+  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
+    <value>[PL0002] N/A</value>
   </data>
-  <data name="AllAssignments" xml:space="preserve">
-    <value>جميع المهام</value>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>تم العثور على قيم معرف مكرر.</value>
   </data>
-  <data name="AllQuestionnaires" xml:space="preserve">
-    <value>جميع الاستبيانات</value>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>سجل القائمة ليس لديه الاصل.</value>
   </data>
-  <data name="AllResponsible" xml:space="preserve">
-    <value>جميع المسؤولين</value>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>لا يتعارض معرف القائمة مع حجم القائمة.</value>
   </data>
-  <data name="AllStatuses" xml:space="preserve">
-    <value>جميع الحالات</value>
+  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
+    <value>لا يمكن تحميل الأسئلة المرتبطة مسبقا.</value>
   </data>
-  <data name="AllSupervisors" xml:space="preserve">
-    <value>جميع المشرفين</value>
+  <data name="PL0011_GeneralError" xml:space="preserve">
+    <value>حدث خطأ عام.</value>
   </data>
-  <data name="AlRightsReserved" xml:space="preserve">
-    <value>جميع الحقوق محفوظة</value>
+  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
+    <value>السؤال الذي تم العثور عليه في الملف (الملفات) التي تم تحميلها والتي لا توجد في الاستبيان</value>
   </data>
-  <data name="Any" xml:space="preserve">
-    <value>أي</value>
+  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
+    <value>القيمة المقدمة صفر أو فارغة</value>
   </data>
-  <data name="Approve" xml:space="preserve">
-    <value>الموافقة </value>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>قيمة السؤال المقدمة غير مسموحة</value>
   </data>
-  <data name="Archived" xml:space="preserve">
-    <value>تم أرشفته</value>
+  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
+    <value>نوع السؤال غير صحيح</value>
   </data>
-  <data name="Assign" xml:space="preserve">
-    <value>تعيين</value>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>تم إدخال قيمة التاريخ أو الوقت غير صالحة في سؤال التاريخ.</value>
   </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>مهمة</value>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>قيمة نظام تحديد المواقع غير صالحة.</value>
   </data>
-  <data name="AuditLog" xml:space="preserve">
-    <value>سجل التدقيق</value>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>يسمح فقط بعدد صحيح.</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>انشاء</value>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>يسمح فقط بالقيم الحقيقية.</value>
   </data>
-  <data name="CreatedOnClient" xml:space="preserve">
-    <value>تم انشاءه للعميل</value>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>لا يمكن أن يكون لحجم قائمة السؤال قيم سالبة</value>
   </data>
-  <data name="CreateNewAssignment" xml:space="preserve">
-    <value>انشاء مهمة جديدة</value>
+  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
+    <value>لا يمكن اعادة تحميل سؤال الصورة</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>حذف</value>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>لم يتم العثور على بيانات التحميل المسبق</value>
   </data>
-  <data name="Download" xml:space="preserve">
-    <value>تنزيل</value>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>الحقل المسؤول لم يقدم لواحد أو أكثر من الملاحظات</value>
   </data>
-  <data name="ErrorsLog" xml:space="preserve">
-    <value>سجل الأخطاء</value>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>المسؤول غير موجود لواحد أو أكثر من الملاحظات</value>
   </data>
-  <data name="GetInterviewerApp" xml:space="preserve">
-    <value>الحصول على تطبيق الباحث</value>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>المسؤول هو مستخدم مقفل لواحد أو أكثر من الملاحظات</value>
   </data>
-  <data name="HideIdentifying" xml:space="preserve">
-    <value>مخفي</value>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>المستخدم ليس المشرف أو الباحث ل 1 أو أكثر من الملاحظات</value>
   </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>مفتاح المقابلة</value>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>لا يمكن أن تكون الإجابة على سؤال حجم القائمة أكبر من {0}.</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>مقابلات</value>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>تتطلب أسئلة نظام تحديد المواقع العالمي أعمدة منفصلة لخطوط الطول والعرض</value>
   </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>تم تحديثه في</value>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>يتطلب تحديد مسألة نظام تحديد المواقع تحديد خط العرض وخط الطول.</value>
   </data>
-  <data name="Legal" xml:space="preserve">
-    <value>قانوني</value>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>عامودين او اكثر لهما نفس الاسم</value>
   </data>
-  <data name="Loading" xml:space="preserve">
-    <value>جاري التحميل الرجاءالانتظار</value>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>يجب أن يكون خط العرض أكبر من -90 درجة وأقل من 90 درجة.</value>
   </data>
-  <data name="Logoff" xml:space="preserve">
-    <value>إطفاء</value>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>يجب أن يكون خط الطول أكبر من -180 درجة وأقل من 180 درجة.</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>الأسم</value>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>فاصل عشري غير صالح. لا يسمح الرمز "،" في إجابات رقمية. الرجاء استخدام "." بدلاً منه</value>
   </data>
-  <data name="NewVersionAvailable" xml:space="preserve">
-    <value>الإصدار الجديد متاح:</value>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>يسمح فقط بعدد صحيح.</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>لا</value>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>يجب أن تكون الكمية أكبر من أو تساوي -1.</value>
   </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>لم يتم العثور على نتائج</value>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>لا يمكن تعيين العامود الى أي سؤال غير محدد</value>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>افتح</value>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>سؤال المنطقة لا يمكن إعادة تحميله</value>
   </data>
-  <data name="OpenResponsiblesProfile" xml:space="preserve">
-    <value>افتح الملف الشخصي للشخص المسؤول</value>
+  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
+    <value>لا يمكن إعادة تحميل السؤال الصوتي</value>
   </data>
-  <data name="PrefilledQuestions" xml:space="preserve">
-    <value>تحديد الأسئلة</value>
-  </data>
-  <data name="Processing" xml:space="preserve">
-    <value>قيد المعالجة</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>استبيان</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>الاستبيانات</value>
-  </data>
-  <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>مستلم من الباحث</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>تحديث</value>
-  </data>
-  <data name="Reject" xml:space="preserve">
-    <value>رفض</value>
-  </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>مسؤول</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>حفظ</value>
-  </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>حفظ التغييرات</value>
-  </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>الاعدادات</value>
-  </data>
-  <data name="ShowIdentifying" xml:space="preserve">
-    <value>اظهار التحديد</value>
-  </data>
-  <data name="ShowStatusHistory" xml:space="preserve">
-    <value>اظهار تاريخ الحالة </value>
-  </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>تسجيل الدخول</value>
-  </data>
-  <data name="Status" xml:space="preserve">
-    <value>الحالة</value>
-  </data>
-  <data name="Template" xml:space="preserve">
-    <value>نموذج</value>
-  </data>
-  <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>مجموعة البنك الدولي</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>عنوان</value>
-  </data>
-  <data name="Total" xml:space="preserve">
-    <value>مجموع</value>
-  </data>
-  <data name="Unapprove" xml:space="preserve">
-    <value>عدم الموافقة</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>نعم</value>
-  </data>
-  <data name="НasErrors" xml:space="preserve">
-    <value>فيه أخطاء</value>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>الملف مع البيانات على مستوى الاستبيان مفقود.</value>
   </data>
 </root>
