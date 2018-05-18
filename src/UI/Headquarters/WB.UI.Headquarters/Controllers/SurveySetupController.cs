@@ -246,9 +246,6 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, errors: fileErrors));
                 }
 
-                
-              
-
                 var columnErrors = this.dataVerifier.VerifyColumns(allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (columnErrors.Any())
                 {
@@ -258,20 +255,13 @@ namespace WB.UI.Headquarters.Controllers
 
                 var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream).ToArray();
 
-                PreloadedFile protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.IsProtectedVariablesFile);
+                PreloadedFile protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.QuestionnaireOrRosterName
+                                                                                             .Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase));
                 if (protectedFile != null)
                 {
-                    var protectedVariablesFileErrors = this.dataVerifier
-                        .VerifyProtectedVariablesFile(model.File.FileName, protectedFile.FileInfo).Take(10).ToArray();
-
-                    if (protectedVariablesFileErrors.Length > 0)
-                    {
-                        return this.View("InterviewImportVerificationErrors",
-                            CreateError(questionnaireIdentity, model.File.FileName,
-                                errors: protectedVariablesFileErrors));
-                    }
-
-                    var protectedVariablesErrors = this.dataVerifier.VerifyProtectedVariables(protectedFile,
+                    var protectedVariablesErrors = this.dataVerifier.VerifyProtectedVariables(
+                        model.File.FileName,
+                        protectedFile,
                         questionnaire).Take(10).ToArray();
 
                     if (protectedVariablesErrors.Length > 0)
@@ -283,7 +273,7 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 var answerErrors = this.assignmentsImportService
-                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire).Take(10).ToArray();
+                    .VerifyPanel(model.File.FileName, allImportedFiles.Where(x => !x.Equals(protectedFile)).ToArray(), protectedFile, questionnaire).Take(10).ToArray();
 
                 if (answerErrors.Any())
                 {
