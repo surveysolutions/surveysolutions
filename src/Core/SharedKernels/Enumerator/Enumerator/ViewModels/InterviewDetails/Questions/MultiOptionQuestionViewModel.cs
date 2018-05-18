@@ -177,7 +177,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?)null;
             result.QuestionState = this.questionState;
             result.IsProtected = interview.IsAnswerProtected(this.questionIdentity, result.Value);
-            result.CanBeChecked = result.Checked || answer.Length < this.maxAllowedAnswers;
+            result.CanBeChecked = result.Checked || !this.maxAllowedAnswers.HasValue || answer.Length < this.maxAllowedAnswers;
 
             return result;
         }
