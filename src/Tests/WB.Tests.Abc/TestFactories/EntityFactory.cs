@@ -97,7 +97,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer,
-                comments ?? new CommentSynchronizationDto[0]);
+                comments ?? new CommentSynchronizationDto[0],
+                null);
 
         public AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
             => new AnsweredYesNoOption(value, answer);

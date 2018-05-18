@@ -512,6 +512,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsAudio) { ((InterviewTreeAudioQuestion)this.InterviewQuestion).SetAnswer((AudioAnswer)answer); return; }
         }
 
+        public void SetObjectProtectedAnswer(object answer)
+        {
+            if (this.IsInteger) { ((InterviewTreeIntegerQuestion)this.InterviewQuestion).SetProtectedAnswer(NumericIntegerAnswer.FromInt(Convert.ToInt32(answer))); return; }
+            if (this.IsMultiFixedOption)
+            {
+                RosterVector answerAsRosterVector = RosterVector.Convert(answer);
+                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.Convert(answerAsRosterVector.Array);
+                ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).SetProtectedAnswer(categoricalFixedMultiOptionAnswer);
+                return;
+            }
+            if (this.IsYesNo) { ((InterviewTreeYesNoQuestion)this.InterviewQuestion).SetProtectedAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
+            if (this.IsTextList) { ((InterviewTreeTextListQuestion)this.InterviewQuestion).SetProtectedAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
+        }
+
         public string GetAnswerAsString(CultureInfo cultureInfo = null)
         {
             if (!this.IsAnswered()) return null;
@@ -602,6 +616,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsMultiLinkedToList) return ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray();
             if (question.IsArea) return ((InterviewTreeAreaQuestion)question.InterviewQuestion).GetAnswer()?.Value;
             if (question.IsAudio) return ((InterviewTreeAudioQuestion)question.InterviewQuestion).GetAnswer();
+
+            return null;
+        }
+
+        public static object GetProtectedAnswerAsObject(InterviewTreeQuestion question)
+        {
+            if (!question.HasProtectedAnswer()) return null;
+
+            if (question.IsInteger) return ((InterviewTreeIntegerQuestion)question.InterviewQuestion).ProtectedAnswer?.Value;
+            if (question.IsTextList) return ((InterviewTreeTextListQuestion)question.InterviewQuestion).ProtectedAnswer?.ToTupleArray();
+            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).ProtectedAnswer?.ToDecimals()?.ToArray();
+            if (question.IsYesNo) return ((InterviewTreeYesNoQuestion)question.InterviewQuestion).ProtectedAnswer?.ToAnsweredYesNoOptions()?.ToArray();
 
             return null;
         }
@@ -766,10 +792,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool HasProtectedAnswer()
         {
-            if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers.Count > 0;
-            if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswers.Count > 0;
-            if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.HasValue;
-            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().ProtectedAnswers.Count > 0;
+            if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswer?.CheckedValues.Count > 0;
+            if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswer?.Rows.Count > 0;
+            if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer != null;
+            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer?.CheckedOptions.Count > 0;
 
             return false;
         }
@@ -971,7 +997,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = answer == null ? null : NumericIntegerAnswer.FromInt(Convert.ToInt32(answer));
         }
 
-        public int? ProtectedAnswer { get; private set; }
+        public NumericIntegerAnswer ProtectedAnswer { get; private set; }
 
         public override bool IsAnswered() => this.answer != null;
         public virtual NumericIntegerAnswer GetAnswer() => this.answer;
@@ -991,12 +1017,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProtectAnswer()
         {
-            this.ProtectedAnswer = this.answer.Value;
+            this.ProtectedAnswer = GetAnswer();
+        }
+
+        public void SetProtectedAnswer(NumericIntegerAnswer value)
+        {
+            this.ProtectedAnswer = value;
         }
 
         public bool IsAnswerProtected(decimal value)
         {
-            return this.ProtectedAnswer == (int) value;
+            return this.ProtectedAnswer?.Value == (int) value;
         }
     }
 
@@ -1097,7 +1128,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeYesNoQuestion() : base(InterviewQuestionType.YesNo)
         {
-            this.ProtectedAnswers = Array.Empty<CheckedYesNoAnswerOption>();
         }
 
         public InterviewTreeYesNoQuestion(object answer): this()
@@ -1128,14 +1158,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProtectAnswers()
         {
-            this.ProtectedAnswers = GetAnswer()?.CheckedOptions.ToArray() ?? Array.Empty<CheckedYesNoAnswerOption>();
+            this.ProtectedAnswer = GetAnswer();
         }
 
-        public IReadOnlyCollection<CheckedYesNoAnswerOption> ProtectedAnswers { get; private set; }
+        public void SetProtectedAnswer(YesNoAnswer yesNoAnswer)
+        {
+            this.ProtectedAnswer = yesNoAnswer;
+        }
+
+        public YesNoAnswer ProtectedAnswer { get; private set; }
 
         public bool IsAnswerProtected(decimal value)
         {
-            return this.ProtectedAnswers.Any(a => a.Value == (int)value);
+            return this.ProtectedAnswer?.CheckedOptions.Any(a => a.Value == (int)value) ?? false;
         }
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeYesNoQuestion) this.MemberwiseClone();
@@ -1155,7 +1190,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeTextListQuestion() : base(InterviewQuestionType.TextList)
         {
-            this.ProtectedAnswers = Array.Empty<TextListAnswerRow>();
+            this.ProtectedAnswer = null;
         }
 
         public InterviewTreeTextListQuestion(object answer) : this()
@@ -1163,7 +1198,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = TextListAnswer.FromTupleArray(answer as Tuple<decimal, string>[]);
         }
 
-        public IReadOnlyList<TextListAnswerRow> ProtectedAnswers { get; private set; }
+        public TextListAnswer ProtectedAnswer { get; private set; }
 
         public override bool IsAnswered() => this.answer != null && this.answer.Rows.Count > 0;
         public virtual TextListAnswer GetAnswer() => this.answer;
@@ -1203,12 +1238,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProtectAnswer()
         {
-            this.ProtectedAnswers = this.GetAnswer()?.Rows.ToArray() ?? Array.Empty<TextListAnswerRow>();
+            this.ProtectedAnswer = this.GetAnswer();
+        }
+
+        public void SetProtectedAnswer(TextListAnswer textListAnswer)
+        {
+            this.ProtectedAnswer = textListAnswer;
         }
 
         public bool IsAnswerProtected(decimal value)
         {
-            return this.ProtectedAnswers.Any(x => x.Value == value);
+            return this.ProtectedAnswer?.Rows.Any(x => x.Value == value) ?? false;
         }
     }
 
@@ -1257,7 +1297,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultiOptionQuestion() : base(InterviewQuestionType.MultiFixedOption)
         {
-            this.ProtectedAnswers = Array.Empty<int>();
+            this.ProtectedAnswer = null;
         }
 
         public InterviewTreeMultiOptionQuestion(object answer) : this()
@@ -1295,14 +1335,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public void ProtectAnswer()
         {
-            this.ProtectedAnswers = GetAnswer()?.CheckedValues ?? Array.Empty<int>();
+            this.ProtectedAnswer = GetAnswer();
         }
 
-        public IReadOnlyCollection<int> ProtectedAnswers { get; private set; }
+        public void SetProtectedAnswer(CategoricalFixedMultiOptionAnswer answer)
+        {
+            this.ProtectedAnswer = answer;
+        }
+
+        public CategoricalFixedMultiOptionAnswer ProtectedAnswer { get; private set; }
 
         public bool IsAnswerProtected(decimal value)
         {
-            return this.ProtectedAnswers.Contains((int) value);
+            return this.ProtectedAnswer?.CheckedValues.Contains((int) value) ?? false;
         }
     }
 

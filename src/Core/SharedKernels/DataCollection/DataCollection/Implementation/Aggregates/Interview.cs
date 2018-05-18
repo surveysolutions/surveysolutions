@@ -1068,7 +1068,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireNumericIntegerAnswerAllowed(answer, this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeIntegerQuestion()?.ProtectedAnswer);
+                .RequireNumericIntegerAnswerAllowed(answer, this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeIntegerQuestion()?.ProtectedAnswer?.Value);
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -1192,7 +1192,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                var protectedValues = answeredQuestion.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswers;
+                var protectedValues = answeredQuestion.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswer?.CheckedValues;
                 new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                     .RequireFixedMultipleOptionsAnswerAllowed(selectedValues, protectedValues);
             }
@@ -1274,7 +1274,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireTextListAnswerAllowed(answers, 
-                    this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeTextListQuestion()?.ProtectedAnswers ?? Array.Empty<TextListAnswerRow>());
+                    this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeTextListQuestion()?.ProtectedAnswer?.Rows ?? Array.Empty<TextListAnswerRow>());
 
             var changedInterviewTree = this.Tree.Clone();
             var interviewTreeQuestion = changedInterviewTree.GetQuestion(questionIdentity);
