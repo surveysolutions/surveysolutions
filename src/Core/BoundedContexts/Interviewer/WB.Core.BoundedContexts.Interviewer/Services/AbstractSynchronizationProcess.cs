@@ -299,15 +299,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics
                 });
-
-                auditLogService.Write(new SynchronizationCompletedAuditLogEntity(
-                    statistics.NewAssignmentsCount,
-                    statistics.RemovedAssignmentsCount,
-                    statistics.NewInterviewsCount,
-                    statistics.SuccessfullyUploadedInterviewsCount,
-                    statistics.RejectedInterviewsCount,
-                    statistics.DeletedInterviewsCount
-                ));
             }
             catch (OperationCanceledException)
             {
