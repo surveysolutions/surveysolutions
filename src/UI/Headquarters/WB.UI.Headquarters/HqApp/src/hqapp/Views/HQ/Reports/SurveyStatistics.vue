@@ -176,9 +176,9 @@ export default {
         },
 
         totalColumn() {
-            if(this.question == null) return []
+            if(this.filter.question == null) return []
 
-            if(this.question.HasTotal || this.isPivot){
+            if(this.filter.question.HasTotal || this.isPivot){
                 return [{                
                         class: "type-numeric",
                         title: this.$t("Pages.Total"),
@@ -219,7 +219,7 @@ export default {
                 columns.push({
                     data: "TeamLead",
                     name: "TeamLead",
-                    title: this.$t("DevicesInterviewers.Teams"),
+                    title: this.$t("Report.COLUMN_TEAMS"),
                     orderable: true,
                     visible: !this.isSupervisor
                 })
@@ -229,7 +229,7 @@ export default {
                 columns.push({
                     data: "Responsible",
                     name: "Responsible",
-                    title: this.$t("Pages.TeamMember"),
+                    title: this.$t("Report.COLUMN_TEAM_MEMBER"),
                     orderable: true
                 })
             }

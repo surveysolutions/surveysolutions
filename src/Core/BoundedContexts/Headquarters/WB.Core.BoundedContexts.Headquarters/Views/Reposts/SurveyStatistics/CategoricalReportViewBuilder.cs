@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 answersIndexMap.Add((int) answer.GetParsedValue(), index);
             }
 
-            Headers = (this.TeamLeadOnly ? new [] {"TEAMS"} : new[] {"TEAMS", "TEAM MEMBER"})
+            Headers = (this.TeamLeadOnly ? new[] { Report.COLUMN_TEAMS } : new[] { Report.COLUMN_TEAMS, Report.COLUMN_TEAM_MEMBER })
                 .Concat(answers.Select(a => a.AnswerText))
                 .Concat(new[] {Strings.Total})
                 .ToArray();
