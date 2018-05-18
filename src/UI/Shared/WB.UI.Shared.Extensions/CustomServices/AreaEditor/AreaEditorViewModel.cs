@@ -153,8 +153,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                             await layer.LoadAsync();
                             return new Basemap(layer);
-
-                            break;
                         }
                     case ".tif":
                         {
