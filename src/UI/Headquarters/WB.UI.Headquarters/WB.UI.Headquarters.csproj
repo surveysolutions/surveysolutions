@@ -1061,6 +1061,7 @@
     <EmbeddedResource Include="Resources\Troubleshooting.fr.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ar.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.es.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>

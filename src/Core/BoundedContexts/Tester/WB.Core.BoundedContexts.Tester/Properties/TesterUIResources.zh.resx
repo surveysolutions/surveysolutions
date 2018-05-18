@@ -213,4 +213,10 @@
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>问卷数据不能应用于新版本的问卷模板。我们将打开一份空问卷</value>
   </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>显示每个答案的已用时间</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>度量启用、验证和名单传播的时间。接收GPS数据或图片的时间没有包括在内。</value>
+  </data>
 </root>
