@@ -44,8 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             if (hasSpecialValues) // has any data
             {
                 // skip 2 - is TeamLead and Responsible columns
-                report.Columns = report.Columns.Concat(this.specialValuesData.Columns.Skip(2)).ToArray();
-                report.Headers = report.Columns.Concat(this.specialValuesData.Headers.Skip(2)).ToArray();
+                report.Columns = report.Columns.Concat(this.specialValuesData.Columns.Skip(this.specialValuesData.DataStartAtIndex)).ToArray();
+                report.Headers = report.Columns.Concat(this.specialValuesData.Headers.Skip(this.specialValuesData.DataStartAtIndex)).ToArray();
             }
 
             report.Totals = new object[report.Columns.Length];
