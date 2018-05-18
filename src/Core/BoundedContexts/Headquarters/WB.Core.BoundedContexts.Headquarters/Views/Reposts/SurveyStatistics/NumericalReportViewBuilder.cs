@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
         private static readonly string[] NumericHeaders =
         {
-            TeamLeadColumn, ResponsibleColumn,
+            Report.COLUMN_TEAMS, Report.COLUMN_TEAM_MEMBER,
             "Count", "Average", "Median", "Sum", "Min", "Percentile05", "Percentile50", "Percentile95", "Max"
         };
 
@@ -45,13 +45,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             {
                 // skip 2 - is TeamLead and Responsible columns
                 report.Columns = report.Columns.Concat(this.specialValuesData.Columns.Skip(this.specialValuesData.DataStartAtIndex)).ToArray();
-                report.Headers = report.Columns.Concat(this.specialValuesData.Headers.Skip(this.specialValuesData.DataStartAtIndex)).ToArray();
+                report.Headers = report.Headers.Concat(this.specialValuesData.Headers.Skip(this.specialValuesData.DataStartAtIndex)).ToArray();
             }
 
             report.Totals = new object[report.Columns.Length];
 
-            Dictionary<(string teamLeadName, string responsibleName), CategoricalReportViewItem> categoricalData 
-                = this.specialValuesData.Data.ToDictionary(d => (d.TeamLeadName, d.ResponsibleName));
+            Dictionary<(string teamLeadName, string responsibleName), CategoricalReportViewItem> categoricalData
+                = this.specialValuesData.Data.ToDictionary(d => (d.TeamLeadName, d.ResponsibleName));                
 
             var resultData = new List<object[]>();
 
@@ -132,6 +132,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                         {
                             AppendToRow(total);
                         }
+
+                        AppendToRow(specialValuesData.Totals.Sum());
                     }
                     else
                     {
