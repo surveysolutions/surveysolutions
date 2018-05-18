@@ -8,14 +8,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
     [DebuggerDisplay("{FileName} [{Columns.Length} columns]")]
     public class PreloadedFileInfo
     {
-        private bool? isProtectedVariablesFile;
-
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
         public string[] Columns { get; set; }
-
-        public bool IsProtectedVariablesFile => isProtectedVariablesFile ?? (isProtectedVariablesFile = QuestionnaireOrRosterName?.Equals(ServiceFiles.ProtectedVariables,
-                                                    StringComparison.OrdinalIgnoreCase)) ?? false;
     }
 
     [DebuggerDisplay("{FileInfo.FileName} [{Rows.Length} rows]")]

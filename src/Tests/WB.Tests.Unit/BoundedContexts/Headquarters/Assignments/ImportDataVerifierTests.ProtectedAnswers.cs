@@ -2,7 +2,6 @@
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,7 +23,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             var errors =
-                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                verifier.VerifyProtectedVariables(
+                        preloadedFileName,
+                        Create.Entity.PreloadedFile(preloadedFileName,
                             Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, "bla"))),
                         Create.Entity.PlainQuestionnaire(questionnaire))
                     .ToList();
@@ -50,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             var errors =
-                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                verifier.VerifyProtectedVariables(preloadedFileName,Create.Entity.PreloadedFile(preloadedFileName,
                             Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName))),
                         Create.Entity.PlainQuestionnaire(questionnaire))
                     .ToList();
@@ -68,9 +69,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var verifier = Create.Service.ImportDataVerifier();
 
+            var preloadedFile = Create.Entity.PreloadedFile(preloadedFileName,
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName)));
             var errors =
-                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
-                            Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName))),
+                verifier.VerifyProtectedVariables(preloadedFileName,preloadedFile,
                         Create.Entity.PlainQuestionnaire(questionnaire))
                     .ToList();
 
@@ -88,7 +90,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var verifier = Create.Service.ImportDataVerifier();
 
             var errors =
-                verifier.VerifyProtectedVariables(Create.Entity.PreloadedFile(preloadedFileName,
+                verifier.VerifyProtectedVariables(preloadedFileName,
+                        Create.Entity.PreloadedFile(preloadedFileName,
                             Create.Entity.PreloadingRow(Create.Entity.PreloadingValue(ServiceColumns.ProtectedVariableNameColumn, variableName))),
                         Create.Entity.PlainQuestionnaire(questionnaire))
                     .ToList();
@@ -102,10 +105,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             var verifier = Create.Service.ImportDataVerifier();
 
+            var preloadedFile = Create.Entity.PreloadedFile(ServiceFiles.ProtectedVariables);
+            preloadedFile.FileInfo = Create.Entity.PreloadedFileInfo(new[] {"c1"});
+
             var errors =
-                verifier.VerifyProtectedVariablesFile(
+                verifier.VerifyProtectedVariables(
                         preloadedFileName, 
-                        Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: ServiceFiles.ProtectedVariables, columns: new [] {"bla"}))
+                        preloadedFile,
+                        Create.Entity.PlainQuestionnaire())
                     .ToList();
 
             errors.Should().Contain(x => x.Code == "PL0047");

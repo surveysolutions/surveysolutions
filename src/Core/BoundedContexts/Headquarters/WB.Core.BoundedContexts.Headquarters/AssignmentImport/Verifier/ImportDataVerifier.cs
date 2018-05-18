@@ -44,8 +44,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             this.userViewFactory = userViewFactory;
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyProtectedVariables(PreloadedFile file, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyProtectedVariables(string originalFileName, PreloadedFile file, IQuestionnaire questionnaire)
         {
+            if (!file.FileInfo.Columns.Contains(ServiceColumns.ProtectedVariableNameColumn))
+            {
+
+                yield return ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
+                    new PreloadedFileInfo
+                    {
+                        FileName = $"{ServiceFiles.ProtectedVariables}.tab",
+                        Columns = file.FileInfo.Columns
+                    }, originalFileName);
+                yield break;
+            }
+
             foreach (var preloadingRow in file.Rows)
             {
                 foreach (var error in this.ProtectedVariablesVerifiers.SelectMany(x =>
@@ -157,21 +169,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyProtectedVariablesFile(string originalFileName,
-            PreloadedFileInfo protectedVariableFile)
-        {
-            if (!protectedVariableFile.Columns.Contains(ServiceColumns.ProtectedVariableNameColumn))
-            {
-
-                yield return ToFileError("PL0047", string.Format(messages.PL0047_ProtectedVariables_MissingColumn, ServiceColumns.ProtectedVariableNameColumn),
-                    new PreloadedFileInfo
-                    {
-                        FileName = $"{ServiceFiles.ProtectedVariables}.tab",
-                        Columns = protectedVariableFile.Columns
-                    }, originalFileName);
-            }
-        }
-
         public IEnumerable<PanelImportVerificationError> VerifyFiles(string originalFileName, PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
             if (!files.Any(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire)))
@@ -201,7 +198,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         public IEnumerable<PanelImportVerificationError> VerifyColumns(PreloadedFileInfo[] files, IQuestionnaire questionnaire)
         {
-            foreach (var file in files.Where(x => !x.IsProtectedVariablesFile))
+            foreach (var file in files)
             {
                 foreach (var columnName in file.Columns)
                 foreach (var error in this.ColumnVerifiers.SelectMany(x => x.Invoke(file, columnName, questionnaire)))
