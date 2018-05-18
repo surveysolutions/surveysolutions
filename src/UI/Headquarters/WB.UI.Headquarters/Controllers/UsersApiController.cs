@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             public virtual Guid UserId { get; set; }
             public virtual string UserName { get; set; }
-            public virtual string CreationDate { get; set; }
+            public virtual DateTime CreationDate { get; set; }
             public virtual string Email { get; set; }
             public virtual bool IsLocked { get; set; }
             public virtual bool IsArchived { get; set; }
