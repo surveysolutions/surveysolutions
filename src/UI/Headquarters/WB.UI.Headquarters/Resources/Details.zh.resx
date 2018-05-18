@@ -150,4 +150,10 @@
   <data name="Status" xml:space="preserve">
     <value>状态：{{ name }}</value>
   </data>
+  <data name="Duration" xml:space="preserve">
+    <value>持续时间</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>问卷模板：{{ name }}</value>
+  </data>
 </root>

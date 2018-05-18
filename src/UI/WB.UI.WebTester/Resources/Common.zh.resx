@@ -117,88 +117,31 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>操作</value>
+  <data name="AlRightsReserved" xml:space="preserve">
+    <value>版权所有</value>
   </data>
-  <data name="AllData" xml:space="preserve">
-    <value>全部数据</value>
+  <data name="CantOpenQuestionnaire" xml:space="preserve">
+    <value>不能打开问卷模板。</value>
   </data>
-  <data name="AllDataSpss" xml:space="preserve">
-    <value>全部SPSS数据</value>
+  <data name="FixErrorsOnDesigner" xml:space="preserve">
+    <value>请在问卷设计网站中修正错误。</value>
   </data>
-  <data name="AllDataStata" xml:space="preserve">
-    <value>全部Stata数据</value>
+  <data name="Legal" xml:space="preserve">
+    <value>法律</value>
   </data>
-  <data name="ApprovedData" xml:space="preserve">
-    <value>已审核通过的数据</value>
+  <data name="PageNotFound" xml:space="preserve">
+    <value>未找到</value>
   </data>
-  <data name="ApprovedDataSpss" xml:space="preserve">
-    <value>已审核通过的SPSS数据</value>
+  <data name="PageNotFoundDesc" xml:space="preserve">
+    <value>页面未找到。请回到问卷设计网站并重新开始网络测试。</value>
   </data>
-  <data name="ApprovedDataStata" xml:space="preserve">
-    <value>已审核通过的Stata数据</value>
+  <data name="QuestionnaireHasErrors" xml:space="preserve">
+    <value>问卷模板有错误。</value>
   </data>
-  <data name="BinaryData" xml:space="preserve">
-    <value>二进制数据</value>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>调查数据不能应用于新版本的问卷模板。清空生成的问卷</value>
   </data>
-  <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>复制问卷</value>
-  </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>创建日期</value>
-  </data>
-  <data name="History" xml:space="preserve">
-    <value>历史</value>
-  </data>
-  <data name="ImportTemplate" xml:space="preserve">
-    <value>导入模板</value>
-  </data>
-  <data name="LastEntryDate" xml:space="preserve">
-    <value>最近一次输入日期</value>
-  </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>问卷</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>标题</value>
-  </data>
-  <data name="Version" xml:space="preserve">
-    <value>版本</value>
-  </data>
-  <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>删除问卷</value>
-  </data>
-  <data name="ImportDate" xml:space="preserve">
-    <value>导入日期</value>
-  </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>问卷</value>
-  </data>
-  <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. 点击导入模板按钮从问卷设计网站导入一个问卷</value>
-  </data>
-  <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. 点击列表中的一个问卷创建新的访谈任务</value>
-  </data>
-  <data name="WebInterviewSetup" xml:space="preserve">
-    <value>网络访谈设置</value>
-  </data>
-  <data name="DeleteMap" xml:space="preserve">
-    <value>删除地图</value>
-  </data>
-  <data name="DeleteMapUser" xml:space="preserve">
-    <value>删除地图用户</value>
-  </data>
-  <data name="Maps" xml:space="preserve">
-    <value>地图</value>
-  </data>
-  <data name="NewAssignment" xml:space="preserve">
-    <value>新任务</value>
-  </data>
-  <data name="UploadAssignments" xml:space="preserve">
-    <value>上传任务</value>
-  </data>
-  <data name="ExportQuestionnaire" xml:space="preserve">
-    <value>导出问卷</value>
+  <data name="TheWorldBankGroup" xml:space="preserve">
+    <value>世界银行集团</value>
   </data>
 </root>

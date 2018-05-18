@@ -321,4 +321,7 @@
   <data name="Variable_Update" xml:space="preserve">
     <value>变量{0}已添加</value>
   </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>已更新问卷模板元数据{0}</value>
+  </data>
 </root>

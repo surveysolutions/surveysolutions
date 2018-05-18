@@ -117,88 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>操作</value>
+  <data name="AllAccountsCreated" xml:space="preserve">
+    <value>成功创建了{{total}}个账户：</value>
   </data>
-  <data name="AllData" xml:space="preserve">
-    <value>全部数据</value>
+  <data name="AssignedTo" xml:space="preserve">
+    <value>督导员</value>
   </data>
-  <data name="AllDataSpss" xml:space="preserve">
-    <value>全部SPSS数据</value>
+  <data name="AssignedToDescription" xml:space="preserve">
+    <value>调查员必填，包含该调查员所属的督导员的用户名</value>
   </data>
-  <data name="AllDataStata" xml:space="preserve">
-    <value>全部Stata数据</value>
+  <data name="BackToImport" xml:space="preserve">
+    <value>回到用户导入</value>
   </data>
-  <data name="ApprovedData" xml:space="preserve">
-    <value>已审核通过的数据</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
   </data>
-  <data name="ApprovedDataSpss" xml:space="preserve">
-    <value>已审核通过的SPSS数据</value>
+  <data name="Column" xml:space="preserve">
+    <value>列</value>
   </data>
-  <data name="ApprovedDataStata" xml:space="preserve">
-    <value>已审核通过的Stata数据</value>
+  <data name="CompleteDescription" xml:space="preserve">
+    <value>您可以从“问卷模板”部分为这些团队分配任务。也可以以批处理方式创建任务。</value>
   </data>
-  <data name="BinaryData" xml:space="preserve">
-    <value>二进制数据</value>
+  <data name="Description" xml:space="preserve">
+    <value>通过上传包含所有必要信息的文件来创建一组用户。文件中可以同时包含督导员和调查员。或者可以创建</value>
   </data>
-  <data name="CloneQuestionnaire" xml:space="preserve">
-    <value>复制问卷</value>
+  <data name="DownloadTemplateLink" xml:space="preserve">
+    <value>下载上传用户的.tab模板</value>
   </data>
-  <data name="CreationDate" xml:space="preserve">
-    <value>创建日期</value>
+  <data name="Email" xml:space="preserve">
+    <value>电子邮箱</value>
   </data>
-  <data name="History" xml:space="preserve">
-    <value>历史</value>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>约剩余{{estimatedTime}}</value>
   </data>
-  <data name="ImportTemplate" xml:space="preserve">
-    <value>导入模板</value>
+  <data name="FullName" xml:space="preserve">
+    <value>全名</value>
   </data>
-  <data name="LastEntryDate" xml:space="preserve">
-    <value>最近一次输入日期</value>
+  <data name="ImportingUserInfo" xml:space="preserve">
+    <value>正在导入用户信息，从</value>
+  </data>
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
+    <value>{{supervisorsCount}}个督导员和{{interviewersCount}}个调查员</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>行</value>
+  </data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve">
+    <value>调查员</value>
+  </data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve">
+    <value>督导员</value>
+  </data>
+  <data name="NoCreatedUsers" xml:space="preserve">
+    <value>没有创建账号</value>
+  </data>
+  <data name="OptionalInformation" xml:space="preserve">
+    <value>个人信息（可选）</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>或</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="PasswordDescription" xml:space="preserve">
+    <value>密码必须至少包含一个数字、一个大写字母、一个小写字母。</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>电话号码</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>手动创建</value>
   </data>
   <data name="Questionnaires" xml:space="preserve">
-    <value>问卷</value>
+    <value>问卷模板</value>
+  </data>
+  <data name="RequiredData" xml:space="preserve">
+    <value>创建调查员和督导员需要的数据</value>
+  </data>
+  <data name="ReUploadTabFile" xml:space="preserve">
+    <value>重新上传.tab文件</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="TimeDetermination" xml:space="preserve">
+    <value>时间确定</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>标题</value>
+    <value>正在创建批量上传的多个用户</value>
   </data>
-  <data name="Version" xml:space="preserve">
-    <value>版本</value>
+  <data name="UploadBtn" xml:space="preserve">
+    <value>上传.tab文件</value>
   </data>
-  <data name="DeleteQuestionnaire" xml:space="preserve">
-    <value>删除问卷</value>
+  <data name="Uploading" xml:space="preserve">
+    <value>正在导入{{totalUsersToImportCount}}个用户中的{{importedUsersCount}}个</value>
   </data>
-  <data name="ImportDate" xml:space="preserve">
-    <value>导入日期</value>
+  <data name="UploadInProgress" xml:space="preserve">
+    <value>警告：另外一个用户“{{userName}}”的批量上传正在处理中。</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>问卷</value>
+  <data name="UploadInProgressDescription" xml:space="preserve">
+    <value>当前进程完成后，您将可以开始您的上传。</value>
   </data>
-  <data name="SurveySetupIntroMessage1" xml:space="preserve">
-    <value>1. 点击导入模板按钮从问卷设计网站导入一个问卷</value>
+  <data name="UserName" xml:space="preserve">
+    <value>登录</value>
   </data>
-  <data name="SurveySetupIntroMessage2" xml:space="preserve">
-    <value>2. 点击列表中的一个问卷创建新的访谈任务</value>
+  <data name="UserNameDescription" xml:space="preserve">
+    <value>用户名称应该在3到15个字符之间，并且只包含字母，数字和下划线符号</value>
   </data>
-  <data name="WebInterviewSetup" xml:space="preserve">
-    <value>网络访谈设置</value>
-  </data>
-  <data name="DeleteMap" xml:space="preserve">
-    <value>删除地图</value>
-  </data>
-  <data name="DeleteMapUser" xml:space="preserve">
-    <value>删除地图用户</value>
-  </data>
-  <data name="Maps" xml:space="preserve">
-    <value>地图</value>
-  </data>
-  <data name="NewAssignment" xml:space="preserve">
-    <value>新任务</value>
-  </data>
-  <data name="UploadAssignments" xml:space="preserve">
-    <value>上传任务</value>
-  </data>
-  <data name="ExportQuestionnaire" xml:space="preserve">
-    <value>导出问卷</value>
+  <data name="VerificationFailed" xml:space="preserve">
+    <value>验证失败</value>
   </data>
 </root>
