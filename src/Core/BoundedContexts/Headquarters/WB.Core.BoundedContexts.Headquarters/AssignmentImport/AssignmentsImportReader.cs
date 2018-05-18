@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 FileInfo = new PreloadedFileInfo
                 {
-                    FileName = fileNameWithoutExtension,
+                    FileName = fileName,
                     QuestionnaireOrRosterName = fileNameWithoutExtension,
                     Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
                 },
