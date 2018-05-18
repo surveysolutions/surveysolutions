@@ -219,4 +219,16 @@
   <data name="NoMapsForUser" xml:space="preserve">
     <value>没有可以下载的地图</value>
   </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>已请求新的应用程序文件</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>已请求新的扩展应用程序文件</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>已请求扩展版本{0}的补丁文件</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>已请求版本{0}的补丁文件</value>
+  </data>
 </root>
