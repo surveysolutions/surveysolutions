@@ -74,15 +74,6 @@
             android:layout_marginTop="@dimen/area_editor_common_margin_top"
             android:layout_marginLeft="@dimen/area_editor_common_margin_left"
             local:MvxBind="Text Localization('AreaMap_Available_Maps_Title');" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/areaEditor_No_Maps_Text"
-            android:textColor="@color/text_color_light"
-            android:textSize="14sp"
-            android:layout_marginTop="@dimen/area_editor_common_margin_top"
-            android:layout_marginLeft="@dimen/area_editor_common_margin_left"
-            local:MvxBind="Text Localization('AreaMap_NoMapsFound'); Visibility Visibility(Map == null);" />
         <MvxRecyclerView
             android:id="@+id/mapsList"
             android:orientation="vertical"
@@ -134,25 +125,25 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         style="@style/Area_Screen_Button_Bordered"
-        local:MvxBind="Click LoadShapefile;Text 'Shapeifle'; Visibility Visibility(IsPanelVisible == false);"
+        local:MvxBind="Click LoadShapefile;Text 'Shapefile'; Visibility Visibility(IsPanelVisible == false);"
         android:layout_marginLeft="@dimen/area_editor_common_margin_right"
         android:layout_marginTop="@dimen/area_editor_undo_margin_top" />
     <ImageButton
         style="@style/Area_CompassButton"
         android:layout_alignParentBottom="true"
-        local:MvxBind="Click RotateMapToNorth; Visibility Visibility(Map != null);"
+        local:MvxBind="Click RotateMapToNorth; Visibility Visibility(IsPanelVisible == false);"
         android:layout_marginBottom="@dimen/area_editor_compass_margin_bottom"
         android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
     <ImageButton
         style="@style/Area_ZoomMapInButton"
         android:layout_alignParentBottom="true"
-        local:MvxBind="Click ZoomMapIn; Visibility Visibility(Map != null);"
+        local:MvxBind="Click ZoomMapIn; Visibility Visibility(IsPanelVisible == false);"
         android:layout_marginBottom="@dimen/area_editor_zoom_in_margin_bottom"
         android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
     <ImageButton
         style="@style/Area_ZoomMapOutButton"
         android:layout_alignParentBottom="true"
-        local:MvxBind="Click ZoomMapOut; Visibility Visibility(Map != null);"
+        local:MvxBind="Click ZoomMapOut; Visibility Visibility(IsPanelVisible == false);"
         android:layout_marginBottom="@dimen/area_editor_zoom_out_margin_bottom"
         android:layout_marginLeft="@dimen/area_editor_common_margin_left" />
     <LinearLayout
