@@ -151,9 +151,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
             {
                 var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
-                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(fileNameWithoutExtension);
 
-                if (allowedExtension && !isSystemFile && !Path.GetFileNameWithoutExtension(file.Name).Equals(ServiceFiles.ProtectedVariables))
+                if (allowedExtension && !isSystemFile && !fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables))
                     yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
         }

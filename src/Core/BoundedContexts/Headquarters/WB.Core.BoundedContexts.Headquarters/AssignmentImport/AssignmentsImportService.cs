@@ -23,8 +23,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
-    public class 
-        AssignmentsImportService : IAssignmentsImportService
+    public class AssignmentsImportService : IAssignmentsImportService
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
@@ -88,13 +87,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
             PreloadedFile[] allImportedFiles,
+            PreloadedFile protectedVariables,
             IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
 
             var assignmentRows = new List<PreloadingAssignmentRow>();
 
-            foreach (var importedFile in allImportedFiles.Except(x => x.FileInfo.IsProtectedVariablesFile))
+            foreach (var importedFile in allImportedFiles)
             {
                 foreach (var assignmentRow in this.assignmentsImportFileConverter.GetAssignmentRows(importedFile, questionnaire))
                 {
@@ -121,8 +121,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
             var assignmentsToImport = ConcatRosters(assignmentRows, questionnaire);
-
-            var protectedVariables = allImportedFiles.FirstOrDefault(x => x.FileInfo.IsProtectedVariablesFile);
 
             if (protectedVariables != null)
             {
