@@ -5,7 +5,7 @@
             <thead ref="header"><slot name="header"></slot></thead>            
             <tbody ref="body"></tbody>
             <transition name="fade">
-                <div class='dataTables_processing' v-if="isProcessing" :class="{ 'with-error': errorMessage != null }">
+                <div class='dataTables_processing' v-if="isProcessing" :class="{ 'error': errorMessage != null }">
                     <div v-if="errorMessage" >{{errorMessage}}</div>
                     <div v-else>Processing...</div>
                 </div>
@@ -228,7 +228,6 @@ export default {
 
                 options.ajax.error = function(response) {
                     self.errorMessage = response.responseJSON.Message
-                    console.log(arguments)
                 }
             }
 
@@ -380,17 +379,3 @@ export default {
     }
 }
 </script>
-
-<style>
-    .with-error {
-        background-color: rgba(100, 0, 0, 0.1)
-    }
- 
-    .fade-enter-active, .fade-leave-active {
-         transition: opacity .5s;
-    }
-    
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        opacity: 0;
-    }
-</style>
