@@ -1,12 +1,10 @@
 <template>
     <div class="form-group" :title="tooltip">
         <input class="checkbox-filter" 
-            :id="name + '_' + radioGroup" :type="inputType"
+            :id="name" type="checkbox"
             :disabled="!enabled ? 'disabled': null" 
-            :name="name" :checked="checked" @change="checkedChange"
-            :value="radioGroup"
-            >
-        <label :for="name + '_' + radioGroup">
+            :name="name" :checked="checked" @change="checkedChange" />
+        <label :for="name">
             <span class="tick"></span>{{ label }}</label>
     </div>
 </template>
@@ -14,11 +12,6 @@
 <script>
 export default {
     props: {
-        radioGroup: {
-            type: String,
-            default: null
-        },
-
         enabled: {tyep: Boolean, default: true},
 
         name: {
