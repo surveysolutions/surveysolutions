@@ -178,11 +178,74 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sync completed (Assignments: New - {0}, Removed - {1}; Interviews: New - {2}, Uploaded - {3}, Rejected - {4}, Deleted - {5}).
+        ///   Looks up a localized string similar to Sync completed:.
         /// </summary>
         public static string SynchronizationCompleted {
             get {
                 return ResourceManager.GetString("SynchronizationCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} new assignments downloaded.
+        /// </summary>
+        public static string SynchronizationCompleted_AssignmentsDownloaded {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_AssignmentsDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} assignments removed.
+        /// </summary>
+        public static string SynchronizationCompleted_AssignmentsRemoved {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_AssignmentsRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} new interviews downloaded.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsDownloaded {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsDownloaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews rejected.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsRejected {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsRejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews removed.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsRemoved {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} interviews uploaded.
+        /// </summary>
+        public static string SynchronizationCompleted_InterviewsUploaded {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_InterviewsUploaded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to nothing to sync.
+        /// </summary>
+        public static string SynchronizationCompleted_NothingToSync {
+            get {
+                return ResourceManager.GetString("SynchronizationCompleted_NothingToSync", resourceCulture);
             }
         }
         

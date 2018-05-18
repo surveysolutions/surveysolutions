@@ -157,7 +157,28 @@
     <value>Sync canceled</value>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">
-    <value>Sync completed (Assignments: New - {0}, Removed - {1}; Interviews: New - {2}, Uploaded - {3}, Rejected - {4}, Deleted - {5})</value>
+    <value>Sync completed:</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
+    <value>{0} interviews uploaded</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
+    <value>{0} interviews removed</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
+    <value>{0} interviews rejected</value>
+  </data>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
+    <value>{0} new interviews downloaded</value>
+  </data>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
+    <value>{0} new assignments downloaded</value>
+  </data>
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+    <value>{0} assignments removed</value>
+  </data>
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
+    <value>nothing to sync</value>
   </data>
   <data name="SynchronizationFailed" xml:space="preserve">
     <value>Sync failed</value>
