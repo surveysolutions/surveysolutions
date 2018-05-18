@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
 
             var question = interview.GetQuestion(Create.Identity(questionId)).GetAsInterviewTreeMultiOptionQuestion();
 
-            Assert.That(question.ProtectedAnswers, Is.EquivalentTo(1.ToEnumerable()));
+            Assert.That(question.ProtectedAnswer.CheckedValues, Is.EquivalentTo(1.ToEnumerable()));
         }
 
         [Test]
