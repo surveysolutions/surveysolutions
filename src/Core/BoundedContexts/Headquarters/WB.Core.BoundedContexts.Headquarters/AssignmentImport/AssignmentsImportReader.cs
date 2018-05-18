@@ -82,20 +82,24 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
         };
 
-        public PreloadedFile ReadTextFile(Stream inputStream, string fileName) => new PreloadedFile
+        public PreloadedFile ReadTextFile(Stream inputStream, string fileName)
         {
-            FileInfo = new PreloadedFileInfo
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            return new PreloadedFile
             {
-                FileName = fileName,
-                QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
-                Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
-            },
-            Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                .Select((record, rowIndex) => 
-                    fileName.Equals($"{ServiceFiles.ProtectedVariables}.tab", StringComparison.OrdinalIgnoreCase) ?
-                        (PreloadingRow)this.ToProtectedVariablesRow(rowIndex + 1, record) : 
-                        (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
-        };
+                FileInfo = new PreloadedFileInfo
+                {
+                    FileName = fileNameWithoutExtension,
+                    QuestionnaireOrRosterName = fileNameWithoutExtension,
+                    Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+                },
+                Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
+                    .Select((record, rowIndex) =>
+                        fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase)
+                            ? (PreloadingRow) this.ToProtectedVariablesRow(rowIndex + 1, record)
+                            : (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
+            };
+        }
 
         private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record)
         {
