@@ -171,14 +171,24 @@ namespace WB.UI.Headquarters.Controllers
                     return InterviewerAuditRecord.SynchronizationCanceled;
                 case AuditLogEntityType.SynchronizationCompleted:
                     var synchronizationCompletedAuditLogEntity = record.GetEntity<SynchronizationCompletedAuditLogEntity>();
-                    return InterviewerAuditRecord.SynchronizationCompleted.FormatString(
-                        synchronizationCompletedAuditLogEntity.NewAssignmentsCount,
-                        synchronizationCompletedAuditLogEntity.RemovedAssignmentsCount,
-                        synchronizationCompletedAuditLogEntity.NewInterviewsCount,
-                        synchronizationCompletedAuditLogEntity.SuccessfullyUploadedInterviewsCount,
-                        synchronizationCompletedAuditLogEntity.RejectedInterviewsCount,
-                        synchronizationCompletedAuditLogEntity.DeletedInterviewsCount
-                        );
+                    List<string> statusMessages = new List<string>();
+                    if (synchronizationCompletedAuditLogEntity.NewAssignmentsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_AssignmentsDownloaded.FormatString(synchronizationCompletedAuditLogEntity.NewAssignmentsCount));
+                    if (synchronizationCompletedAuditLogEntity.RemovedAssignmentsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_AssignmentsRemoved.FormatString(synchronizationCompletedAuditLogEntity.RemovedAssignmentsCount));
+                    if (synchronizationCompletedAuditLogEntity.NewInterviewsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsDownloaded.FormatString(synchronizationCompletedAuditLogEntity.NewInterviewsCount));
+                    if (synchronizationCompletedAuditLogEntity.SuccessfullyUploadedInterviewsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsUploaded.FormatString(synchronizationCompletedAuditLogEntity.SuccessfullyUploadedInterviewsCount));
+                    if (synchronizationCompletedAuditLogEntity.RejectedInterviewsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsRejected.FormatString(synchronizationCompletedAuditLogEntity.RejectedInterviewsCount));
+                    if (synchronizationCompletedAuditLogEntity.DeletedInterviewsCount > 0)
+                        statusMessages.Add(InterviewerAuditRecord.SynchronizationCompleted_InterviewsRemoved.FormatString(synchronizationCompletedAuditLogEntity.DeletedInterviewsCount));
+
+                    string statusMessage = statusMessages.Count == 0
+                        ? InterviewerAuditRecord.SynchronizationCompleted_NothingToSync
+                        : string.Join(", ", statusMessages);
+                    return $"{InterviewerAuditRecord.SynchronizationCompleted} {statusMessage}";
                 case AuditLogEntityType.SynchronizationFailed:
                     //var synchronizationCompletedAuditLogEntity = record.GetEntity<SynchronizationCompletedAuditLogEntity>();
                     return InterviewerAuditRecord.SynchronizationFailed;

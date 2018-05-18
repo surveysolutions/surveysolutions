@@ -159,7 +159,7 @@
     <comment>Синхронизация начата</comment>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">
-    <value>Синхронизация завершена (Задания: новые - {0}, удаленные - {1}; Интервью: новые - {2}, загруженно на сервер - {3}, отклоненные - {4}, удаленные - {5})</value>
+    <value>Синхронизация завершена:</value>
   </data>
   <data name="SynchronizationCanceled" xml:space="preserve">
     <value>Синхронизация отменена</value>
@@ -172,5 +172,33 @@
   </data>
   <data name="DownloadCsvLog" xml:space="preserve">
     <value>Загрузить полный лог в CSV формате</value>
+  </data>
+    <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
+    <value>нечего синхронизировать</value>
+    <comment>нечего синхронизировать</comment>
+  </data>
+    <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+    <value>удалено {0} заданий</value>
+    <comment>удалено {0} заданий</comment>
+  </data>
+    <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
+    <value>скачено {0} новых заданий</value>
+    <comment>скачено {0} новых заданий</comment>
+  </data>
+    <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
+    <value>скачено {0} новых интервью</value>
+    <comment>скачено {0} новых интервью</comment>
+  </data>
+    <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
+    <value>{0} откланенных интервью </value>
+    <comment>{0} откланенных интервью </comment>
+  </data>
+    <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
+    <value>удалено {0} интервью</value>
+    <comment>удалено {0} интервью</comment>
+  </data>
+    <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
+    <value>отправлено {0} интервью</value>
+    <comment>отправлено {0} интервью</comment>
   </data>
 </root>
