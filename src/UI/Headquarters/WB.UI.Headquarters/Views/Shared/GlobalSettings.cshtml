@@ -59,6 +59,8 @@
         appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
         dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
         signalrPath: '@Url.Content("~/signalr/hubs")',
-        supportedTransports: ["webSockets", "longPolling"],
+        supportedTransports: ["webSockets", "longPolling"]
     }
+
+    moment.locale('@UICulture');
 </script>

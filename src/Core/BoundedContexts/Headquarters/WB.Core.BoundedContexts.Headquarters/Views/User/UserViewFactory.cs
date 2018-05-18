@@ -377,7 +377,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             {
                 IsLockedBySupervisor = x.IsLockedBySupervisor,
                 IsLockedByHQ = x.IsLockedByHQ,
-                CreationDate = x.CreationDate.FormatDateWithTime(),
+                CreationDate = x.CreationDate,
                 Email = x.Email,
                 UserId = x.UserId,
                 UserName = x.UserName,

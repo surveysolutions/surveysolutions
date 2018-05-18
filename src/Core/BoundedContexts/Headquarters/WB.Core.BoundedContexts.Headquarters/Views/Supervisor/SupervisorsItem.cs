@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Supervisor
 
         public bool IsLockedByHQ { get; set; }
 
-        public string CreationDate { get; set; }
+        public DateTime CreationDate { get; set; }
 
         public string Email { get; set; }
 
