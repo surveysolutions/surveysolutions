@@ -515,13 +515,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void SetObjectProtectedAnswer(object answer)
         {
             if (this.IsInteger) { ((InterviewTreeIntegerQuestion)this.InterviewQuestion).SetProtectedAnswer(NumericIntegerAnswer.FromInt(Convert.ToInt32(answer))); return; }
-            if (this.IsMultiFixedOption)
-            {
-                RosterVector answerAsRosterVector = RosterVector.Convert(answer);
-                var categoricalFixedMultiOptionAnswer = CategoricalFixedMultiOptionAnswer.Convert(answerAsRosterVector.Array);
-                ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).SetProtectedAnswer(categoricalFixedMultiOptionAnswer);
-                return;
-            }
+            if (this.IsMultiFixedOption) { ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).SetProtectedAnswer(CategoricalFixedMultiOptionAnswer.FromIntArray((int[])answer)); return; }
             if (this.IsYesNo) { ((InterviewTreeYesNoQuestion)this.InterviewQuestion).SetProtectedAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
             if (this.IsTextList) { ((InterviewTreeTextListQuestion)this.InterviewQuestion).SetProtectedAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
         }
@@ -626,7 +620,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (question.IsInteger) return ((InterviewTreeIntegerQuestion)question.InterviewQuestion).ProtectedAnswer?.Value;
             if (question.IsTextList) return ((InterviewTreeTextListQuestion)question.InterviewQuestion).ProtectedAnswer?.ToTupleArray();
-            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).ProtectedAnswer?.ToDecimals()?.ToArray();
+            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).ProtectedAnswer?.ToInts()?.ToArray();
             if (question.IsYesNo) return ((InterviewTreeYesNoQuestion)question.InterviewQuestion).ProtectedAnswer?.ToAnsweredYesNoOptions()?.ToArray();
 
             return null;
