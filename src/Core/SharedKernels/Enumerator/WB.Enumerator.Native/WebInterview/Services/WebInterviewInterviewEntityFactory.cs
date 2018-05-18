@@ -133,7 +133,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 interviewIntegerQuestion.IsProtected = hasProtectedAnswer;
 
                                 if (hasProtectedAnswer)
-                                    interviewIntegerQuestion.ProtectedAnswer = question.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer;
+                                    interviewIntegerQuestion.ProtectedAnswer = question.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.Value;
                             }
 
                             result = interviewIntegerQuestion;

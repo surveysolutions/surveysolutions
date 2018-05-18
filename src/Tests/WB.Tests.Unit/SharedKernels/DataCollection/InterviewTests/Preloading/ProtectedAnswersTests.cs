@@ -75,17 +75,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
             }
 
             var multipleOptionsTreeProtectedAnswers = interview.GetQuestion(multipleOptionsQuestionIdentity)
-                .GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswers;
+                .GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswer.CheckedValues;
             Assert.That(multipleOptionsTreeProtectedAnswers, Is.EqualTo(preloadedMultipleOptionsAnswer));
 
             var listProtectedQuestionProtectedAnswers = interview.GetQuestion(listQuestionIdentity).GetAsInterviewTreeTextListQuestion()
-                .ProtectedAnswers;
+                .ProtectedAnswer.Rows;
             Assert.That(listProtectedQuestionProtectedAnswers.Select(x => x.Value), Is.EquivalentTo(preloadedTextListAnswer.Rows.Select(x => x.Value)));
 
-            var numericProtectedAnswer = interview.GetQuestion(numericQuestionIdentity).GetAsInterviewTreeIntegerQuestion().ProtectedAnswer;
+            var numericProtectedAnswer = interview.GetQuestion(numericQuestionIdentity).GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.Value;
             Assert.That(numericProtectedAnswer, Is.EqualTo(preloadedNumericAnswer));
 
-            var yesNoProtectedAnswer = interview.GetQuestion(yesNoQuestionIdentity).GetAsInterviewTreeYesNoQuestion().ProtectedAnswers;
+            var yesNoProtectedAnswer = interview.GetQuestion(yesNoQuestionIdentity).GetAsInterviewTreeYesNoQuestion().ProtectedAnswer.CheckedOptions;
             Assert.That(yesNoProtectedAnswer, Is.EquivalentTo(preloadedYesNoAnswer).Using(new YesNoAnswerComparer()));
         }
     }

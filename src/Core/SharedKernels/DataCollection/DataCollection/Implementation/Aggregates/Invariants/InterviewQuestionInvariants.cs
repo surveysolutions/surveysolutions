@@ -184,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireProtectedAnswersNotRemoved(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
         {
-            var missingProtectedAnswers = protectedValues.Any(p => !selectedValues.Contains(p));
+            var missingProtectedAnswers = protectedValues?.Any(p => !selectedValues.Contains(p)) ?? false;
             if (missingProtectedAnswers)
             {
                 throw new InterviewException("Removing protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
