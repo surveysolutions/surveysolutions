@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Web.Http;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -158,6 +160,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <returns>Report view of proper type</returns>
         [Localizable(false)]
         [HttpGet]
+        
         [Route(@"")]
         public HttpResponseMessage Report([FromUri] SurveyStatisticsInput input)
         {
@@ -219,6 +222,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
                 var stopwatch = Stopwatch.StartNew();
 
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
                 var report = this.surveyStatisticsReport.GetReport(inputModel);
                 report.Name = $"[ {question.StataExportCaption} ] {question.VariableLabel ?? string.Empty}";
 
