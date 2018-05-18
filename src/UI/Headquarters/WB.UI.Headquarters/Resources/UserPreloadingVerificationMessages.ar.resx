@@ -117,43 +117,46 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="PLU0001" xml:space="preserve">
+    <value>هناك مستخدم لديه تسجيل الدخول هذا موجود من قبل</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="PLU0002" xml:space="preserve">
+    <value>هناك قيم مكررة لتسجيل الدخول في الملف</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="PLU0003" xml:space="preserve">
+    <value>لا يمكن إعادة تسجيل الدخول إلى مستخدم مؤرشف لأنه ينتمي إلى فريق آخر</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="PLU0004" xml:space="preserve">
+    <value>لا يمكن إعادة تسجيل الدخول إلى مستخدم مؤرشف لأنه موجود في دور آخر</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="PLU0005" xml:space="preserve">
+    <value>يجب أن يكون تسجيل الدخول بين 3 و 15 حرفا، ويجب أن يحتوي على أحرف وأرقام ورمز شرطة سفلية فقط</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="PLU0006" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على رقم واحد على الأقل، وحرف واحد من الأحرف الكبيرة، وحرف واحد من الأحرف الصغيرة. يجب أن يكون الطول بين 10 و 100 حرف.</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="PLU0007" xml:space="preserve">
+    <value>البريد الإلكتروني غير صالح</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="PLU0008" xml:space="preserve">
+    <value>رقم الهاتف غير صالح</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="PLU0009" xml:space="preserve">
+    <value>الدور غير صالح. يسمح فقط "المشرف" أو "الباحث"</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="PLU0010" xml:space="preserve">
+    <value>يجب أن يكون المشرف إما مستخدم موجود أو مستخدم تم إنشاؤه في الملف الحالي</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="PLU0011" xml:space="preserve">
+    <value>عامود المشرف يجي ان يكون فارغ للمستخدم صاحب دور المشرف</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="PLU0012" xml:space="preserve">
+    <value>الأسم لا يمكن ان يحتوي على أكثر من 100 حرف</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="PLU0013" xml:space="preserve">
+    <value>رقم الهانف لا يمكن ان يحتوي على أكثر من 15 حرف</value>
+  </data>
+  <data name="PLU0014" xml:space="preserve">
+    <value>اسم المستخدم يحتوي على احرف خاطئة. فقط أحرف أبجدية، نقات، مساحات فارغه، او فواصل منقوطة مسموح بها</value>
   </data>
 </root>

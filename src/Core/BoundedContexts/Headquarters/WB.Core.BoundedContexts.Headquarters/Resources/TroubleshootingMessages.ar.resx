@@ -117,43 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="MissingCensusInterviews_NoBrokenPackages_Message" xml:space="preserve">
+    <value>إذا كانت المقابلة التي تحاول تحديد مكانها ليست في القائمة، يرجى إرشاد الباحث لإكمال المقابلة والمزامنة مرة أخرى.</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="MissingCensusInterviews_SomeBrokenPackages_Message" xml:space="preserve">
+    <value>إذا كانت المقابلة التي تحاول تحديد مكانها ليست في القائمة، يرجى إرشاد الباحث لإكمال المقابلة والمزامنة مرة أخرى. ثم ابحث عن المقابلة مرة أخرى. إذا لم يتم العثور على المقابلة على البحث الثاني، اتصل بفريق الدعم.</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="NoData_ContactSupport" xml:space="preserve">
+    <value>البيانات من المقابلة {0} كانت تالفة. اتصل بالدعم لاستعادة تلك المقابلة</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="NoData_ContactSupportWithMoreDetails" xml:space="preserve">
+    <value>يرجى الاتصال بالدعم لتقديم مزيد من التفاصيل</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="NoData_InterveiwWasNotUploadedYet" xml:space="preserve">
+    <value>لم تتم مزامنة المقابلة {0} بعد</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="NoData_InterviewDeleted" xml:space="preserve">
+    <value>تم حذف المقابلة {0} بواسطة المقر الرئيسي أو المسؤول، وبالتالي لا يمكن استردادها</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="NoData_InterviewerChangedDevice" xml:space="preserve">
+    <value>غير المقابل الأجهزة اللوحية. قد يتم فقدان البيانات لمقابلة {0} لأنه يتم حذف البيانات عند انتقال المقابلات من جهاز لوحي إلى آخر. وفي هذه الحالة، لا يمكن استرداد تلك المقابلة</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="NoData_InterviewWasNotReceived" xml:space="preserve">
+    <value>لم يتم تلقي المقابلة {0} من قبل الباحث {1}. لم تتم مزامنة الباحث بعد.</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="NoData_NoIssuesInterviewOnServer" xml:space="preserve">
+    <value>لا توجد أية مشكلات مسجلة على الخادم {0} في الخادم. &lt;br /&gt; يرجى الحصول على مزيد من المعلومات من الشخص المسؤول حاليا عن هذه المقابلة. &lt;br /&gt; إذا استمرت المشكلة، فاتصل بالدعم لتقديم مزيد من التفاصيل</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="NoData_NotFound" xml:space="preserve">
+    <value>لا يمكن العثور على المقابلة {0}</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="NoData_QuestionnaireDeleted" xml:space="preserve">
+    <value>قام مسؤول الخادم بحذف الاستبيان للمقابلة {0}. ونتيجة لذلك، حذفت جميع المقابلات المرتبطة بهذا الاستبيان ولا يمكن استعادتها</value>
   </data>
 </root>

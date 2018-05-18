@@ -117,43 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="CreateSample" xml:space="preserve">
+    <value>انشاء عينة من هذه البيانات</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="ParsingCompleted" xml:space="preserve">
+    <value>اكتمل التحليل</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="ParsingError" xml:space="preserve">
+    <value>خطأ تحليل</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="ParsingInProgress" xml:space="preserve">
+    <value>جار التحليل ...</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
-  </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
-  </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
-  </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
-  </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
-  </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>اختر مسؤول</value>
   </data>
 </root>

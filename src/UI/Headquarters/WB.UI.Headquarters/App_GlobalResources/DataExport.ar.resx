@@ -117,43 +117,109 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="BinaryData" xml:space="preserve">
+    <value>البيانات الثنائية</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>الأرشيف مع البيانات الثنائية (على سبيل المثال، الصور والصوت)</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="Bytes" xml:space="preserve">
+    <value>ميجابيت</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="Compressing" xml:space="preserve">
+    <value>ضغط</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>هل تريد التوقف بالتأكيد ؟</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>اختر النوع والتنسيق للتصدير </value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="DataExport_Title" xml:space="preserve">
+    <value>تصدير البيانات</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>لم يتم إنشاؤها</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Download" xml:space="preserve">
+    <value>تنزيل</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>لا يمكنك تغيير إعدادات التصدير لأن عملية التصدير قيد التشغيل بالفعل.</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="export" xml:space="preserve">
+    <value>عملية التصدير</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>الضغط على زر إنشاء  أرشيف البيانات من المقابلات المتاحة على الخادم في ذلك الوقت. يتم عرض وقت إنشاء الأرشيف وحجم الأرشيف في الجدول. آخر أرشيف بيانات تم إنشاءه يمكن تحميله عن طريق الضغط على زر تحميل. اضغط على زر إنشاء مرة أخرى لإنشاء أرشيف جديد.</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>نطاق التصدير:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>حجم الملف</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>الشكل</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>الشكل</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>انشاء</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>العناصر الموجودة في قائمة انتظار التصدير:</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>تاريخ آخر تحديث</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>بيانات المسح الرئيسية</value>
+  </data>
+  <data name="Metadata" xml:space="preserve">
+    <value>البيانات الوصفية</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>الأسم</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>لا تتوافر بيانات</value>
+  </data>
+  <data name="ParaData" xml:space="preserve">
+    <value>بيانات الفقرة</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>البيانات الوصفية عن عملية المقابلة (الأحداث والتوقيت)</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>التقدم</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>في قائمة الانتظار</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>تاريخ البدء</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>حالة لمقابلات مصدره</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(نسخة) استبيان المسح</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>تنسيق جدولي</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>تنسيق xml</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>أرشيف مضغوط مع بيانات المقابلة الرئيسية</value>
   </data>
 </root>

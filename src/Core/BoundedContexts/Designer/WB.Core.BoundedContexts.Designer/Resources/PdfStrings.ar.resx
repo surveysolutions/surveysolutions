@@ -117,181 +117,190 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Confirm" xml:space="preserve">
-    <value>تأكيد </value>
+  <data name="Appendix_Conditions" xml:space="preserve">
+    <value>شروط التمكين للملحق{0} {1} </value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>إلغاء</value>
+  <data name="Appendix_Instructions" xml:space="preserve">
+    <value>التعليمات للملحق {0} {1} </value>
   </data>
-  <data name="Ok" xml:space="preserve">
-    <value>حسنا</value>
+  <data name="Appendix_OptionFilters" xml:space="preserve">
+    <value> مرشحات الخيار للملحق {0} {1}</value>
   </data>
-  <data name="Admin" xml:space="preserve">
-    <value>مدير</value>
+  <data name="Appendix_Options" xml:space="preserve">
+    <value>الخيارات للملحق {0} {1} </value>
   </data>
-  <data name="AllAssignments" xml:space="preserve">
-    <value>جميع المهام</value>
+  <data name="Appendix_Validations" xml:space="preserve">
+    <value>شروط التحقق والرسائل للملحق {0} {1} </value>
   </data>
-  <data name="AllQuestionnaires" xml:space="preserve">
-    <value>جميع الاستبيانات</value>
+  <data name="Appendix_Variables" xml:space="preserve">
+    <value>المتغيرات للملحق {0} {1} </value>
   </data>
-  <data name="AllResponsible" xml:space="preserve">
-    <value>جميع المسؤولين</value>
+  <data name="AppendixLink" xml:space="preserve">
+    <value>و {0} رموز أخرى [{1}]</value>
   </data>
-  <data name="AllStatuses" xml:space="preserve">
-    <value>جميع الحالات</value>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>استبيان تم إنشاؤه بواسطة {0}</value>
   </data>
-  <data name="AllSupervisors" xml:space="preserve">
-    <value>جميع المشرفين</value>
+  <data name="EnablementCondition" xml:space="preserve">
+    <value>شرط التمكين</value>
   </data>
-  <data name="AlRightsReserved" xml:space="preserve">
-    <value>جميع الحقوق محفوظة</value>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>تم إنشاء ملف PDF  بواسطة {0}</value>
   </data>
-  <data name="Any" xml:space="preserve">
-    <value>أي</value>
+  <data name="LastEdited" xml:space="preserve">
+    <value>{0} آخر تعديل {1}</value>
   </data>
-  <data name="Approve" xml:space="preserve">
-    <value>الموافقة </value>
+  <data name="LastModifiedBy" xml:space="preserve">
+    <value>آخر تعديل بواسطة {0}</value>
   </data>
-  <data name="Archived" xml:space="preserve">
-    <value>تم أرشفته</value>
+  <data name="Legend" xml:space="preserve">
+    <value>العنوان التفسيري </value>
   </data>
-  <data name="Assign" xml:space="preserve">
-    <value>تعيين</value>
+  <data name="NeverEdited" xml:space="preserve">
+    <value>{0} (لم يتم تعديله مطلقا)</value>
   </data>
-  <data name="Assignment" xml:space="preserve">
-    <value>مهمة</value>
+  <data name="NotShared" xml:space="preserve">
+    <value>لم تتم مشاركتها مع أي شخص</value>
   </data>
-  <data name="AuditLog" xml:space="preserve">
-    <value>سجل التدقيق</value>
+  <data name="Options" xml:space="preserve">
+    <value>خيارات:</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>انشاء</value>
+  <data name="PdfLegend" xml:space="preserve">
+    <value>العنوان التفسيري وهيكل المعلومات في هذا الملف</value>
   </data>
-  <data name="CreatedOnClient" xml:space="preserve">
-    <value>تم انشاءه للعميل</value>
-  </data>
-  <data name="CreateNewAssignment" xml:space="preserve">
-    <value>انشاء مهمة جديدة</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>حذف</value>
-  </data>
-  <data name="Download" xml:space="preserve">
-    <value>تنزيل</value>
-  </data>
-  <data name="ErrorsLog" xml:space="preserve">
-    <value>سجل الأخطاء</value>
-  </data>
-  <data name="GetInterviewerApp" xml:space="preserve">
-    <value>الحصول على تطبيق الباحث</value>
-  </data>
-  <data name="HideIdentifying" xml:space="preserve">
+  <data name="QuestionScope_Hidden" xml:space="preserve">
     <value>مخفي</value>
   </data>
-  <data name="InterviewKey" xml:space="preserve">
-    <value>مفتاح المقابلة</value>
+  <data name="QuestionScope_Identifying" xml:space="preserve">
+    <value>تحديد</value>
   </data>
-  <data name="Interviews" xml:space="preserve">
-    <value>مقابلات</value>
+  <data name="QuestionScope_Supervisor" xml:space="preserve">
+    <value>مشرف</value>
   </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>تم تحديثه في</value>
+  <data name="QuestionType_Area" xml:space="preserve">
+    <value>منطقة</value>
   </data>
-  <data name="Legal" xml:space="preserve">
-    <value>قانوني</value>
+  <data name="QuestionType_Audio" xml:space="preserve">
+    <value>صوتي</value>
   </data>
-  <data name="Loading" xml:space="preserve">
-    <value>جاري التحميل الرجاءالانتظار</value>
+  <data name="QuestionType_Barcode" xml:space="preserve">
+    <value>شيفرة التعرف (باركود)</value>
   </data>
-  <data name="Logoff" xml:space="preserve">
-    <value>إطفاء</value>
+  <data name="QuestionType_Cascading" xml:space="preserve">
+    <value>المتتالي</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>الأسم</value>
+  <data name="QuestionType_Combobox" xml:space="preserve">
+    <value>مربع التحرير و السرد </value>
   </data>
-  <data name="NewVersionAvailable" xml:space="preserve">
-    <value>الإصدار الجديد متاح:</value>
+  <data name="QuestionType_CurrentTime" xml:space="preserve">
+    <value>التاريخ: الوقت الحالي</value>
   </data>
-  <data name="No" xml:space="preserve">
-    <value>لا</value>
+  <data name="QuestionType_Date" xml:space="preserve">
+    <value>التاريخ</value>
   </data>
-  <data name="NoResultsFound" xml:space="preserve">
-    <value>لم يتم العثور على نتائج</value>
+  <data name="QuestionType_Decimal" xml:space="preserve">
+    <value>عدد عشري</value>
   </data>
-  <data name="Open" xml:space="preserve">
-    <value>افتح</value>
+  <data name="QuestionType_GPS" xml:space="preserve">
+    <value>نظام تحديد المواقع</value>
   </data>
-  <data name="OpenResponsiblesProfile" xml:space="preserve">
-    <value>افتح الملف الشخصي للشخص المسؤول</value>
+  <data name="QuestionType_Integer" xml:space="preserve">
+    <value>عدد صحيح</value>
   </data>
-  <data name="PrefilledQuestions" xml:space="preserve">
-    <value>تحديد الأسئلة</value>
+  <data name="QuestionType_Linked" xml:space="preserve">
+    <value>مرتبط</value>
   </data>
-  <data name="Processing" xml:space="preserve">
-    <value>قيد المعالجة</value>
+  <data name="QuestionType_List" xml:space="preserve">
+    <value>قائمة</value>
   </data>
-  <data name="Questionnaire" xml:space="preserve">
-    <value>استبيان</value>
+  <data name="QuestionType_MultiSelect" xml:space="preserve">
+    <value>اختيار متعدد</value>
   </data>
-  <data name="Questionnaires" xml:space="preserve">
-    <value>الاستبيانات</value>
+  <data name="QuestionType_Numeric" xml:space="preserve">
+    <value>رقمي:</value>
   </data>
-  <data name="ReceivedByInterviewer" xml:space="preserve">
-    <value>مستلم من الباحث</value>
+  <data name="QuestionType_Ordered" xml:space="preserve">
+    <value>تم طلبه</value>
   </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>تحديث</value>
+  <data name="QuestionType_Picture" xml:space="preserve">
+    <value>صورة</value>
   </data>
-  <data name="Reject" xml:space="preserve">
-    <value>رفض</value>
+  <data name="QuestionType_SingleSelect" xml:space="preserve">
+    <value>اختيار احادي</value>
   </data>
-  <data name="Responsible" xml:space="preserve">
-    <value>مسؤول</value>
+  <data name="QuestionType_Text" xml:space="preserve">
+    <value>نص</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>حفظ</value>
+  <data name="QuestionType_YesNo" xml:space="preserve">
+    <value>نعم\لا</value>
   </data>
-  <data name="SaveChanges" xml:space="preserve">
-    <value>حفظ التغييرات</value>
+  <data name="Roster" xml:space="preserve">
+    <value>قائمة:</value>
   </data>
-  <data name="Search" xml:space="preserve">
-    <value>البحث</value>
+  <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+    <value>تم انشائها بواسطة قائمة ثابتة</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>الاعدادات</value>
+  <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+    <value>تم انشائها بواسطة {0} سؤال {1}</value>
   </data>
-  <data name="ShowIdentifying" xml:space="preserve">
-    <value>اظهار التحديد</value>
+  <data name="RosterType_List" xml:space="preserve">
+    <value>قائمة</value>
   </data>
-  <data name="ShowStatusHistory" xml:space="preserve">
-    <value>اظهار تاريخ الحالة </value>
+  <data name="RosterType_Multi" xml:space="preserve">
+    <value>اختيار متعدد</value>
   </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>تسجيل الدخول</value>
+  <data name="RosterType_Numeric" xml:space="preserve">
+    <value>رقمي:</value>
   </data>
-  <data name="Status" xml:space="preserve">
-    <value>الحالة</value>
+  <data name="Scope" xml:space="preserve">
+    <value>نطاق: {0}</value>
   </data>
-  <data name="Template" xml:space="preserve">
-    <value>نموذج</value>
+  <data name="SharedWith" xml:space="preserve">
+    <value>تمت المشاركة مع:</value>
   </data>
-  <data name="TheWorldBankGroup" xml:space="preserve">
-    <value>مجموعة البنك الدولي</value>
+  <data name="Stat_NoQuestions" xml:space="preserve">
+    <value>لا توجد أسئلة</value>
   </data>
-  <data name="Title" xml:space="preserve">
-    <value>عنوان</value>
+  <data name="Stat_NoRosters" xml:space="preserve">
+    <value>لا توجد لائحة</value>
   </data>
-  <data name="Total" xml:space="preserve">
-    <value>مجموع</value>
+  <data name="Stat_NoSubsections" xml:space="preserve">
+    <value>لا يوجد اقسام فرعية</value>
   </data>
-  <data name="Unapprove" xml:space="preserve">
-    <value>عدم الموافقة</value>
+  <data name="Stat_Questions" xml:space="preserve">
+    <value>أسئلة: {0}</value>
   </data>
-  <data name="Yes" xml:space="preserve">
-    <value>نعم</value>
+  <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+    <value>أسئلة مع الشروط التمكينية: {0}</value>
   </data>
-  <data name="НasErrors" xml:space="preserve">
-    <value>فيه أخطاء</value>
+  <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+    <value>أسئلة مع شروط التحقق: {0}</value>
+  </data>
+  <data name="Stat_Rosters" xml:space="preserve">
+    <value>اللوائح: {0}</value>
+  </data>
+  <data name="Stat_Sections" xml:space="preserve">
+    <value>الأقسام: {0}</value>
+  </data>
+  <data name="Stat_StaticTexts" xml:space="preserve">
+    <value>النصوص الثابتة: {0}</value>
+  </data>
+  <data name="Stat_Subsections" xml:space="preserve">
+    <value>الأقسام الفرعية: {0}</value>
+  </data>
+  <data name="Stat_Variables" xml:space="preserve">
+    <value>المتغيرات: {0}</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>نص ثابت</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>التحقق من صحة الحالة:</value>
+  </data>
+  <data name="ValidationMessage" xml:space="preserve">
+    <value>رسالة التحقق من الصحة:</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>متغير</value>
   </data>
 </root>

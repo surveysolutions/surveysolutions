@@ -117,43 +117,85 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="Actions" xml:space="preserve">
+    <value>إجراءات</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="AllData" xml:space="preserve">
+    <value>جميع البيانات</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="AllDataSpss" xml:space="preserve">
+    <value>جميع بيانات نظام التحليل الاحصائي SPSS</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="AllDataStata" xml:space="preserve">
+    <value>جميع بيانات نظام التحليل الاحصائي STATA</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="ApprovedData" xml:space="preserve">
+    <value>بييانات تم قبولها</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="ApprovedDataSpss" xml:space="preserve">
+    <value>البيانات المعتمدة SPSS</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="ApprovedDataStata" xml:space="preserve">
+    <value>البيانات المعتمدة STATA</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="BinaryData" xml:space="preserve">
+    <value>البيانات الثنائية</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="CloneQuestionnaire" xml:space="preserve">
+    <value>استنساخ الاستبيان</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="CreationDate" xml:space="preserve">
+    <value>تم انشاءه على</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
+  <data name="DeleteMap" xml:space="preserve">
+    <value>حذف خريطة</value>
+  </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>حذف مستخدم الخريطة</value>
+  </data>
+  <data name="DeleteQuestionnaire" xml:space="preserve">
+    <value>حذف الاستبيان</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>سجل</value>
+  </data>
+  <data name="ImportDate" xml:space="preserve">
+    <value>المستوردة على</value>
+  </data>
+  <data name="ImportTemplate" xml:space="preserve">
+    <value>استيراد الاستبيان</value>
+  </data>
+  <data name="LastEntryDate" xml:space="preserve">
+    <value>تعديل على</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>خرائط</value>
+  </data>
+  <data name="NewAssignment" xml:space="preserve">
+    <value>مهمة جديدة</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>استبيان</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>الاستبيانات</value>
+  </data>
+  <data name="SurveySetupIntroMessage1" xml:space="preserve">
+    <value>انقر فوق زر استيراد الاستبيان لتحميل استبيان من المصمم</value>
+  </data>
+  <data name="SurveySetupIntroMessage2" xml:space="preserve">
+    <value>انقر على استبيان من القائمة لإنشاء مهام مقابلة</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="UploadAssignments" xml:space="preserve">
+    <value>تحميل المهمات</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>نسخة</value>
+  </data>
+  <data name="WebInterviewSetup" xml:space="preserve">
     <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
   </data>
 </root>

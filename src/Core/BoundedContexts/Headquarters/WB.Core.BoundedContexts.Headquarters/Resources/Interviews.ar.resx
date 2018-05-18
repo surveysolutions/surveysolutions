@@ -117,43 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
+    <value>حدث خطأ أثناء استيراد المقابلة مع تحديد الأسئلة {0}. المشرف المسؤول مفقود</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="ImportInterviews_GenericError" xml:space="preserve">
+    <value>تم إنشاء وثيقة PDF (دقائق).
+الحجم: {1{;كيلوبايت </value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+    <value>ملف البيانات غير صحيح</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
-  </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
-  </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
-  </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
-  </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
-  </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
-  </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
-  </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
-  </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
+    <value>لم يتم العثور على الاستبيان</value>
   </data>
 </root>

@@ -117,43 +117,73 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="COLUMN_ANDROID_4_4_OR_LOWER" xml:space="preserve">
+    <value>اندرويد 4.4 أو أقل</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
+    <value>موافق عليه من قبل المقر الرئيسي</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
+    <value>موافق عليه من قبل المشرف</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="COLUMN_AVERAGE" xml:space="preserve">
+    <value>معدل </value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="COLUMN_COMPLETED" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="COLUMN_DAYS" xml:space="preserve">
+    <value>أيام</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="COLUMN_INTERVIEWER_ASSIGNED" xml:space="preserve">
+    <value>الباحث المعين</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
+    <value>مساحة فارغه اقل من 100 ميغابايت</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
+    <value>لم تتزامن أبدا</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
+    <value>لم يتم التحميل مطلقا</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
+    <value>لم يتم تلقي اية مهام</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="COLUMN_OLD_VERSION" xml:space="preserve">
+    <value>النسخة القديمة</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
+    <value>عنوان الاستبيان</value>
+  </data>
+  <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
+    <value>مرفوض من قبل المقر الرئيسي</value>
+  </data>
+  <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
+    <value>مرفوض من قبل المشرف</value>
+  </data>
+  <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
+    <value>المشرف المعين</value>
+  </data>
+  <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
+    <value>اعادة تعيين الجهاز اللوحي</value>
+  </data>
+  <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
+    <value>عضو فريق</value>
+  </data>
+  <data name="COLUMN_TEAMS" xml:space="preserve">
+    <value>الفرق</value>
+  </data>
+  <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
+    <value>نسخة الاستبيان</value>
+  </data>
+  <data name="COLUMN_TOTAL" xml:space="preserve">
+    <value>مجموع</value>
+  </data>
+  <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
+    <value>وقت خاطئ على الجهاز اللوحي</value>
+  </data>
+  <data name="TOTAL" xml:space="preserve">
+    <value>مجموع</value>
   </data>
 </root>
