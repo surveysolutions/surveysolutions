@@ -60,8 +60,7 @@
             </FilterBlock>
             <template v-if="condition != null">
                   <Checkbox :label="$t('Reports.PivotView')" name="pivot"
-                    :value="query.pivot" @input="checkedChange"                    
-                    :tooltip="condition == null ? $t('Reports.SelectConditionalQuestionToPivot') : $t('Reports.CannotPivotOverThisVariable')" />
+                    :value="query.pivot" @input="checkedChange" />
 
                 <ul class="list-group small" v-if="!query.pivot">                
                     <li class="list-group-item pointer"
@@ -308,7 +307,13 @@ export default {
     questionsList() {
         function getValue(question) {
             let result = `[${question.StataExportCaption}]`
-            if(question.Label) result += '\r\n'
+
+            if(question.Label) {
+                result += ' ' + question.Label + '\r\n' + question.QuestionText
+            } else {
+                result += ' ' + question.QuestionText
+            }
+
             result += question.QuestionText
             return result
         }

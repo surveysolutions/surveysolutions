@@ -2,8 +2,14 @@
     <div :class="wrapperClass">
         <table ref="table"
                class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes table-with-prefilled-column table-interviews responsive">
-            <thead><slot name="header"></slot></thead>
-            <tbody></tbody>
+            <thead ref="header"><slot name="header"></slot></thead>            
+            <tbody ref="body"></tbody>
+            <transition name="fade">
+                <div class='dataTables_processing' v-if="isProcessing" :class="{ 'with-error': errorMessage != null }">
+                    <div v-if="errorMessage" >{{errorMessage}}</div>
+                    <div v-else>Processing...</div>
+                </div>
+            </transition>
         </table>
         <div class="download-report-as"
              v-if="exportable">
@@ -26,7 +32,12 @@ import 'jquery-contextmenu'
 import 'jquery-highlight'
 import './datatable.plugins'
 
-$.fn.dataTable.ext.errMode = 'throw';
+$.fn.dataTable.ext.errMode = function() {
+    // swallow all errors for production
+    if (process.env.NODE_ENV !== 'production') {
+        throw arguments
+    }
+};
 
 var checkBox =
     _.template(
@@ -82,9 +93,9 @@ export default {
 
     data() {
         return {
+            isProcessing: false,
             selectedRows: [],
             table: null,
-            processing: null,
             export: {
                 excel: null,
                 csv: null,
@@ -189,7 +200,7 @@ export default {
                         
                 options.ajax.data = (d) => {
                     this.addParamsToRequest(d);
-
+                    self.errorMessage = null
                     // reducing length of GET request URI
                     d.columns.forEach((column) => {
                         delete (column.orderable);
@@ -210,14 +221,21 @@ export default {
                 };
 
                 options.ajax.complete = (response) => {
+                    
                     self.$emit("totalRows", response.responseJSON.recordsTotal)
                     self.$emit("ajaxComplete", response.responseJSON);
                 };
+
+                options.ajax.error = function(response) {
+                    self.errorMessage = response.responseJSON.Message
+                    console.log(arguments)
+                }
             }
 
             if(shouldDestroy) {
                 this.table.destroy();
-                $(this.$refs.table).empty();
+                $(this.$refs.header).empty();
+                $(this.$refs.body).empty();
             }
 
             this.table = $(this.$refs.table).DataTable(options);
@@ -290,11 +308,10 @@ export default {
         },
 
         initProcessingBox() {
+            const self = this
             this.table.on('processing', _.debounce(function(evnt, dt, show) {
-                $(this).find(".dataTables_processing").css( 'display', show ? 'block' : 'none' );
+                self.isProcessing = show
             }, 250))
-
-            $(this.$refs.table).prepend("<div class='dataTables_processing'><div>Processing...</div></div>");
         },
 
         initHeaderCheckBox() {
@@ -363,3 +380,17 @@ export default {
     }
 }
 </script>
+
+<style>
+    .with-error {
+        background-color: rgba(100, 0, 0, 0.1)
+    }
+ 
+    .fade-enter-active, .fade-leave-active {
+         transition: opacity .5s;
+    }
+    
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+    }
+</style>
