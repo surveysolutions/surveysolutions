@@ -1527,7 +1527,7 @@ namespace WB.Tests.Abc.TestFactories
             => new FeaturedQuestionItem(id ?? Guid.NewGuid(), title,  caption);
 
         public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
-            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems);
+            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems, null, null);
 
         public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
             => new AnswerNotifier(liteEventRegistry);
