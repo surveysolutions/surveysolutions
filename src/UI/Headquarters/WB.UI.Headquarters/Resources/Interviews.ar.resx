@@ -164,7 +164,7 @@
   </data>
   <data name="RejectConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;
-&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt;. </value>
+&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt;و &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>معرف المهمة. انقر في الحقل لكتابة رقم التعريف الكامل.</value>
