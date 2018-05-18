@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         public long[] Totals { get; set; }
         private bool TeamLeadOnly { get; }
 
+        public int DataStartAtIndex => TeamLeadOnly ? 1 : 2;
+
         public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows)
         {
             this.answersIndexMap = new Dictionary<int, int>();
@@ -100,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             if (!TeamLeadOnly)
                 report.Totals[1] = Strings.AllInterviewers;
 
-            int dataIndexStart = TeamLeadOnly ? 1 : 2;
+            int dataIndexStart = DataStartAtIndex;
 
             Array.Copy(Totals, 0, report.Totals, dataIndexStart, Totals.Length);
 
