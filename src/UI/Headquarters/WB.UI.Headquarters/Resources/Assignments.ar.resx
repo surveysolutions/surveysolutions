@@ -136,7 +136,7 @@
     <value>اختايار مهمة (مهام) {0}</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
-    <value>تحرير الحجم للمهمة {0}</value>
+    <value>تحرير الحجم للمهمة {{assignmentId}}</value>
   </data>
   <data name="Count" xml:space="preserve">
     <value>تعداد</value>
@@ -163,7 +163,7 @@
     <value>حقل الحجم يجب ان يكون -1 أو أكثر</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{0} مهمة (مهام) سوف يتم تغيرها </value>
+    <value>{{count}} مهمة (مهام) سوف يتم تغيرها </value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
     <value>استبيان</value>
