@@ -117,43 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="CompleteRegistration" xml:space="preserve">
+    <value>اكمال التسجيل</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="ConfirmationEmail" xml:space="preserve">
+    <value>مرحبا {0}، لإكمال عملية التسجيل اضغط على هذا الرابط:</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="MailNotifier_NotifyOwnerAboutShareChange_view" xml:space="preserve">
+    <value>عرض</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_edit" xml:space="preserve">
+    <value>تحرير</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_link" xml:space="preserve">
+    <value>ريط</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="MailNotifier_NotifyTargetPersonAboutShareChange_user" xml:space="preserve">
+    <value>المستخدم</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="OwnerShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited__2__to__3__your_questionnaire__" xml:space="preserve">
+    <value>مرحبا {0}، &lt;br&gt; {1} دعا {2} إلى {3} استبيانك:</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="OwnerStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_revoked_access_for__2__to_your_questionnaire___3_" xml:space="preserve">
+    <value>مرحبا {0}، &lt;br&gt; {1} قد ألغى الوصول إلى {2} إلى الاستبيان: {3}</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>اعادة ضبط كلمة المرور</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="ResetPasswordEmail" xml:space="preserve">
+    <value>مرحبا {0}، لإكمال عملية إعادة تعيين كلمة المرور، انقر على هذا الرابط:</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="SystemMailer_ConfirmationEmail_Complete_Registration_Process" xml:space="preserve">
+    <value>اكمال عملية التسجيل</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="SystemMailer_GetOwnerShareNotificationEmail_Your_questionnaire_sharing_notification" xml:space="preserve">
+    <value>إشعار مشاركة الاستبيان</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="SystemMailer_GetOwnerStopShareNotificationEmail_Your_questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>توقف الاستبيان عن مشاركة الإشعار</value>
+  </data>
+  <data name="SystemMailer_GetShareNotificationEmail_Questionnaire_sharing_notification" xml:space="preserve">
+    <value>إخطار مشاركة الاستبيان</value>
+  </data>
+  <data name="SystemMailer_GetStopShareNotificationEmail_Questionnaire_stop_sharing_notification" xml:space="preserve">
+    <value>إخطار ايقاف مشاركة الاستبيان</value>
+  </data>
+  <data name="SystemMailer_ResetPasswordEmail_Complete_Password_Reset" xml:space="preserve">
+    <value>اكمال اعدة تعيين كلمة المرور</value>
+  </data>
+  <data name="TargetPersonShareNotification_cshtml_Execute_Hello__0____br____br____1__has_invited_you_to__2__the_following_questionnaire_" xml:space="preserve">
+    <value>مرحبا {0}، &lt;br&gt; {1} دعاك إلى {2} الاستبيان التالي:</value>
+  </data>
+  <data name="TargetPersonStopShareNotification_cshtml_Execute_Hello__0____br____br____1__has_stopped_to_share_with_you_questionnaire___2_" xml:space="preserve">
+    <value>مرحبا {0}، &lt;br&gt; {1} توقفت عن مشاركة الاستبيان معك: {2}</value>
   </data>
 </root>

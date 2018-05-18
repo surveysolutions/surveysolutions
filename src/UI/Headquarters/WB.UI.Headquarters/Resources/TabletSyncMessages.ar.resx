@@ -117,43 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="AndroidDeviceIdWasNotProvided" xml:space="preserve">
+    <value>أخفقت المزامنة. لم يتم توفير معرف جهاز أندرويد. يرجى الاتصال بالمطورين.</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="FileWasNotFound" xml:space="preserve">
+    <value>أخفقت المزامنة. لم يتم العثور على ملف مع أحدث إصدار. يرجى الاتصال بالمطورين.</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="IncorrectFilesCount" xml:space="preserve">
+    <value>أخفقت المزامنة. عدد الملفات غير صحيح. يرجى الاتصال بالمطورين.</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="IncorrectMediaType" xml:space="preserve">
+    <value>أخفقت المزامنة. نوع الوسائط غير صحيح. يرجى الاتصال بالمطورين.</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="InterviewerApplicationShouldBeUpdated" xml:space="preserve">
+    <value>أخفقت المزامنة. تطبيقك غير متوافق مع الخادم. تحديث التطبيق الباحث الخاص بك</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="InterviewerIsNotCompatibleWithThisVersion" xml:space="preserve">
+    <value>أخفقت المزامنة. تطبيقك غير متوافق مع الخادم. إلغاء تثبيت التطبيق الخاص بك وتحميل نسخة جديدة من التطبيق الباحث</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="InvalidDeviceIdentifier" xml:space="preserve">
+    <value>معرف الجهاز غير صالح. حدث شيء مع تثبيت تطبيق العميل، يرجى إرسال معلومات الجهاز اللوحي.</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="InvalidSequenceIdentifier" xml:space="preserve">
+    <value>أخفقت المزامنة. معرف تسلسل غير صالح. حدث شيء مع تثبيت التطبيق العميل، اضغط على زر "إرسال معلومات الكمبيوتر اللوحي".</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="InvalidUserFormat" xml:space="preserve">
+    <value>أخفقت المزامنة. المستخدم غير مخول. يرجى التحقق من تسجيل الدخول / كلمة المرور ل {0}.</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="InvalidUserRole" xml:space="preserve">
+    <value>لا يحتوي حسابك على دور يسمح بهذه العملية.</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Maintenance" xml:space="preserve">
+    <value>الخادم في وضع الصيانة الآن. آسف للإزعاج. الرجاء معاودة المحاولة في وقت لاحق.</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="NoClientIdentifier" xml:space="preserve">
+    <value>أخفقت المزامنة. الرجاء إعادة تثبيت التطبيق. معرف التثبيت مفقود. يرجى الاتصال بالمطورين.</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="OldInterviewerNeedsCleanup" xml:space="preserve">
+    <value>أخفقت المزامنة جزئيا. تم إرسال المقابلات المكتملة إلى الخادم، ولكنك لن تتلقى مهام جديدة. يرجى الانتقال إلى إعدادات android -&gt; تطبيقات -&gt; الباحث والضغط على زر مسح البيانات. ثم مزامنة من الصفر.</value>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>أخفقت المزامنة. حدث خطأ داخلي في الخادم. يرجى الاتصال بالمطورين.</value>
+  </data>
+  <data name="Sync_package_with_id__0__was_not_found_on_serverFormat" xml:space="preserve">
+    <value>أخفقت المزامنة. لم يتم العثور على حزمة المزامنة ذات المعرف '{0}' على الخادم. يرجى الاتصال بالمطورين.</value>
+  </data>
+  <data name="WrongAndroidDeviceIdWasProvided" xml:space="preserve">
+    <value>أخفقت المزامنة. تم توفير معرف جهاز الروبوت خاطئ. يرجى الاتصال بالمطورين.</value>
   </data>
 </root>

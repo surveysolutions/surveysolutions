@@ -117,43 +117,100 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="Dashboard_HaveNotBeenUpdated" xml:space="preserve">
+    <value>لم يتم تحديث القائمة</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="Dashboard_LastUpdated" xml:space="preserve">
+    <value>تم تحديث القائمة {0}</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="ImportQuestionnaire_CheckConnectionToServer" xml:space="preserve">
+    <value>الاتصال بالخادم</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="ImportQuestionnaire_CreateInterview" xml:space="preserve">
+    <value>انشاء مقابلة</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="ImportQuestionnaire_DownloadProgress" xml:space="preserve">
+    <value>تنزيل الاستبيان - {0}٪</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="ImportQuestionnaire_Error_Forbidden" xml:space="preserve">
+    <value>لا يمكن فتح الاستبيان "{0}". حساب المستخدم المصمم غير مصرح به يرجى التحقق من تسجيل الدخول وكلمة المرور</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="ImportQuestionnaire_Error_NotFound" xml:space="preserve">
+    <value>لا يمكن فتح الاستبيان "{0}". لا يمكن العثور على الاستبيان. يرجى تحديث قائمة الاستبيانات.</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="ImportQuestionnaire_Error_PreconditionFailed" xml:space="preserve">
+    <value>لا يمكن فتح الاستبيان "{0}". يحتوي الاستبيان على أخطاء. الرجاء إصلاح هذا في المصمم.</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="ImportQuestionnaire_StoreQuestionnaire" xml:space="preserve">
+    <value>حفظ الاستبيان إلى التخزين المحلي</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="ImportQuestionnaireAttachments_DownloadProgress" xml:space="preserve">
+    <value>تنزيل مرفقات الاستبيان - {0}٪</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="Login_Error_NotFound" xml:space="preserve">
+    <value>تطبيق الويب للمصمم لا يمكن الوصول إليه في هذه اللحظة. تحقق من إعداد الاتصال أو أعد المحاولة لاحقا</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>الاستبيانات</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>أصلي</value>
+  </data>
+  <data name="MenuItem_Title_Reload" xml:space="preserve">
+    <value>إعادة تحميل الاستبيان</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>الاعدادات</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedSummary" xml:space="preserve">
+    <value>تعطيل التحقق من صحة شهادة SSL.</value>
+  </data>
+  <data name="Prefs_AcceptUnsignedTitle" xml:space="preserve">
+    <value>قبول جميع شهادات SSL</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>اعدادات الاتصال</value>
+  </data>
+  <data name="Prefs_DesignerEndPointSummary" xml:space="preserve">
+    <value>عنوان url الذي يتم استخدامه للتواصل مع تطبيق المصمم</value>
+  </data>
+  <data name="Prefs_DesignerEndPointTitle" xml:space="preserve">
+    <value>عنوان المصمم URL</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>عدد الثواني للانتظار للإحداثيات</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>نظام تحديد المواقع وصل الى انتهاء المهلة</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>عدد الثواني للانتظار حتى استجابة الخادم</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>مهلة استجابة الخادم انتهت</value>
+  </data>
+  <data name="Prefs_ShowVariables" xml:space="preserve">
+    <value>اظهار المتغيرات</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_Checked" xml:space="preserve">
+    <value>يتم عرض المتغيرات في المقابلة مع القيمة والوصف</value>
+  </data>
+  <data name="Prefs_ShowVariablesSummary_UnChecked" xml:space="preserve">
+    <value>المتغيرات مخفية</value>
+  </data>
+  <data name="Prefs_VersionSummaryFormat" xml:space="preserve">
+    <value>النسخة :{0}</value>
+  </data>
+  <data name="Prefs_VersionTitle" xml:space="preserve">
+    <value>نسخة التطبيق</value>
+  </data>
+  <data name="ReloadInterviewErrorMessage" xml:space="preserve">
+    <value>لا يمكن تطبيق بيانات المقابلة على النسخة الجديدة من الاستبيان. سنفتح مقابلة فارغة</value>
   </data>
 </root>

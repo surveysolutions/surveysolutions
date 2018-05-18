@@ -117,43 +117,106 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="Active" xml:space="preserve">
+    <value>نشط</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>جميع المهام</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="Archive" xml:space="preserve">
+    <value>الأرشيف</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="Archived" xml:space="preserve">
+    <value>تم أرشفته</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>مهام</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>اختايار مهمة (مهام) {0}</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>تحرير الحجم للمهمة {0}</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="Count" xml:space="preserve">
+    <value>تعداد</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>املأ كل أو بعض حقول التحديد</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>اختار مسؤول (مشرف أو باحث) لهده المهمة</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>تم انشاءه على</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>بدء مقابلة جديدة</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>تحديد الأسئلة</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>المقابلات مطلوبة</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>حقل الحجم يجب ان يكون -1 أو أكثر</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{0} مهمة (مهام) سوف يتم تغيرها </value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>استبيان</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>اختر مسؤول</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>حالة الأرشفة</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>الحجم</value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>حدد العدد الأقصى للمقابلات التي ستنشأ لهذا التعيين. القيم المسموح بها: -1 هي للتخصيص غير المحدود، 0 هو للتخصيص الفارغ، وأرقام لحجم التعيين</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>مؤشر ما إذا كانت التخصيصات نشطة أو تم حفظها.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد "جميع الاستبيانات" لرؤية المقابلات المرتبطة بأي استبيان.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>المستخدم المسؤول. انقر في الحقل لاختيار اسم مستخدم إما بتحديده مباشرة أو الكتابة لتصفية قائمة أسماء المستخدمين كذلك.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>عدد المقابلات المقدمة حاليا لهذا التنازل. قد يكون قد تم إنشاء المزيد من المقابلات ولكن لم تتم مزامنتها. انقر على أي خلية لعرض المقابلات المرتبطة بها. انقر على أيقونة الفرز لفرز حسب العد.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>عند إنشاء التعيين في البداية. انقر على رمز الفرز للفرز حسب الوقت.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>المعلومات التي تحدد كل مهمة. هذه هي الإجابات على الأسئلة التي تم تحديدها على أنها محددة في المصمم.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>عدد المقابلات اللازمة لإتمام هذه المهمة.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>المستخدم المسؤول حاليا عن التعيين. انقر على رمز الفرز لفرز اسم المستخدم.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>الحد الأقصى لعدد المقابلات التي يمكن إجراؤها لهذه المهمة. انقر على أي خلية لتغيير هذا الرقم. انقر على رمز الفرز للفرز حسب الحجم.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>عندما تم تحديث آخر مهمة. انقر على رمز الفرز للفرز حسب الوقت.</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>الغاء الارشفة</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>غير محدود</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>تم تحديثه في</value>
   </data>
 </root>

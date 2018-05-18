@@ -117,43 +117,49 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="InterviewerFacet_None" xml:space="preserve">
+    <value>لا شيء</value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="InterviewStatus_ApprovedByHeadquarters" xml:space="preserve">
+    <value>موافق عليه من قبل المقر الرئيسي</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
+    <value>موافق عليه من قبل المشرف</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="InterviewStatus_Completed" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="InterviewStatus_InterviewerAssigned" xml:space="preserve">
+    <value>الباحث المعين</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="MenuItem_Completed" xml:space="preserve">
+    <value>مكتمل</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="MenuItem_Profile" xml:space="preserve">
+    <value>ملف شخصي</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="MenuItem_Rejected" xml:space="preserve">
+    <value>مرفوض</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="MenuItem_Started" xml:space="preserve">
+    <value>بدأ</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="UserRoles_Administrator" xml:space="preserve">
+    <value>المدير</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="UserRoles_ApiUser" xml:space="preserve">
+    <value>مستخدم API</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="UserRoles_Headquarter" xml:space="preserve">
+    <value>المقر الرئيسي</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="UserRoles_Interviewer" xml:space="preserve">
+    <value>الباحث</value>
+  </data>
+  <data name="UserRoles_Observer" xml:space="preserve">
+    <value>مراقب</value>
+  </data>
+  <data name="UserRoles_Supervisor" xml:space="preserve">
+    <value>مشرف</value>
   </data>
 </root>

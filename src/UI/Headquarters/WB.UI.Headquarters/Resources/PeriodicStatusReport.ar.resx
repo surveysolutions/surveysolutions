@@ -117,43 +117,124 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BackToQuestionnaires" xml:space="preserve">
-    <value>الرجوع إلى نظام المسح</value>
+  <data name="Average" xml:space="preserve">
+    <value>معدل </value>
   </data>
-  <data name="Done" xml:space="preserve">
-    <value>أنجز</value>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>معدل مدة تعيين الحالة</value>
   </data>
-  <data name="DownloadTitle" xml:space="preserve">
-    <value>تنزيل ({0})</value>
+  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+    <value>معدل الوقت من تعيين المقابلة للباحث ووقت الضغط على زر الاكمال في الجهاز اللوحي</value>
   </data>
-  <data name="ExportAssignmentsTitle" xml:space="preserve">
-    <value>يمكنك تنزيل قائمة بالمهام المستحدثة التي أسندت إلى الباحث من أجل تسليم الوصلات الإلكترونية إلى المجيبين</value>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>معدل وقت معالجة المكتب الرئيسي</value>
   </data>
-  <data name="SelectInterviwer" xml:space="preserve">
-    <value>اختر الباحث</value>
+  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+    <value>معدل الوقت من قبول المشرف للمقابلة ووقت قبول او رفض هذه المقابلة من قبل المقر الرئيسي</value>
   </data>
-  <data name="Start" xml:space="preserve">
-    <value>بدء</value>
+  <data name="AverageInterviewDuration" xml:space="preserve">
+    <value>معدل مدة المقابلة</value>
   </data>
-  <data name="Started_Title" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية</value>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>معدل وقت تسجيل الباحث لأول اجابة على الجهاز اللوحي ووقت ضغط الباحث على زر الاكمال</value>
   </data>
-  <data name="StartInfo" xml:space="preserve">
-    <value>البدء بالمقابلة الإلكترونية لـ {0}</value>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>معدل الوقت اللازم لمعالجة الحالة الكلية</value>
   </data>
-  <data name="StopWebInterview" xml:space="preserve">
-    <value>إيقاف المقابلة الإلكترونية </value>
+  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+    <value>معدل الوقت من تعيين الباحث ووقت الموافقة على المقابلة من قبل المقر الرئيسي</value>
   </data>
-  <data name="UseCaptcha" xml:space="preserve">
-    <value>تمكين الحماية من البريد الإلكتروني غير المطلوب</value>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>معدل وقت معالجة المشرف</value>
   </data>
-  <data name="WebInterviewSetup_PageHeader" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+    <value>معدل الوقت الذي يضغط فيه الباحث على الزر الاكمال والوقت الذي يقبل به المشرف أو يرفض تلك المقابلة.</value>
   </data>
-  <data name="WebInterviewSetup_Title" xml:space="preserve">
-    <value>تهيئة المقابلة الإلكترونية </value>
+  <data name="BackToSupervisors" xml:space="preserve">
+    <value>الرجوع الى المشرفين</value>
   </data>
-  <data name="WebInterviewStarted" xml:space="preserve">
-    <value>تم البدء بالمقابلة الإلكترونية  لـ {0}</value>
+  <data name="By" xml:space="preserve">
+    <value>من قبل</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>أيام</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>من</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>إجراءات المقابلة</value>
+  </data>
+  <data name="InThe" xml:space="preserve">
+    <value>في</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>في الفريق  {0}</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>ابتداء من </value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>شهور</value>
+  </data>
+  <data name="NumberOfCompletedInterviews" xml:space="preserve">
+    <value>عدد المقابلات المكتملة</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+    <value>عدد المقابلات المكتملة من قبل الفريق. </value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>عدد المقابلات التي وافق عليها المقر الرئيسي</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+    <value>عدد المقابلات التي تم جمعها بواسطة {0} ووافق عليها المقر الرئيسي.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>عدد معاملات المقابلات التي أجراها المقر الرئيسي</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+    <value>عدد الموافقات والرفض من المقر الرئيسي على المقابلات التي تم جمعها من قبل {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>عدد معاملات المقابلات من قبل المشرف</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+    <value>عدد الموافقات والرفض من قبل المشرف على المقابلات التي تم جمعها من قبل {0}.</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>خلال اخر</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>فترة</value>
+  </data>
+  <data name="PeriodCount" xml:space="preserve">
+    <value>تعداد الفترة</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>وحدة الفترة</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>استبيان</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>الفريق</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>عضو الفريق</value>
+  </data>
+  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+    <value>معدل وقت اكمال المقابلة</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>المجموع</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>النوع</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>النسخة</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>أسابيع</value>
   </data>
 </root>
