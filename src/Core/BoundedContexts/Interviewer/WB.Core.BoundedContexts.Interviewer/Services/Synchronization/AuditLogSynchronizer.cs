@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
@@ -30,6 +31,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             {
                 Title = InterviewerUIResources.Synchronization_UploadAuditLog
             });
+
+            auditLogService.Write(new SynchronizationCompletedAuditLogEntity(
+                statistics.NewAssignmentsCount,
+                statistics.RemovedAssignmentsCount,
+                statistics.NewInterviewsCount,
+                statistics.SuccessfullyUploadedInterviewsCount,
+                statistics.RejectedInterviewsCount,
+                statistics.DeletedInterviewsCount
+            ));
 
             var auditLogEntities = auditLogService.GetAuditLogEntitiesForSync();
 
