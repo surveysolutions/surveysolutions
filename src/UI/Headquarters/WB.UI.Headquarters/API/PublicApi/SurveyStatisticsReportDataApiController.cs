@@ -115,8 +115,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     StataExportCaption = q.StataExportCaption,
                     Label = q.VariableLabel,
                     HasTotal = q.QuestionType == QuestionType.SingleOption 
-                               || q.QuestionType == QuestionType.MultyOption
-                               || q.Answers.Any(),
+                               || q.QuestionType == QuestionType.MultyOption,
                     SupportConditions = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
                     Pivotable = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
                     QuestionText = q.QuestionText.RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
@@ -202,7 +201,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                     QuestionnaireIdentity = questionnaireIdentity,
                     Question = question,
                     TeamLeadId = input.TeamLeadId,
-                    DetailedView = input.DetailedView,
+                    ShowTeamMembers = input.DetailedView,
+                    ShowTeamLead = true,
                     Orders = input.ToOrderRequestItems(),
                     PageSize = input.exportType == null ? input.PageSize : int.MaxValue,
                     Page = input.exportType == null ? input.PageIndex : 1,
@@ -211,13 +211,15 @@ namespace WB.UI.Headquarters.API.PublicApi
                     Condition = input.Condition,
                     ConditionalQuestion = conditionalQuestion,
                     ExcludeCategories = input.ExcludeCategories,
+                    Columns = input.ColummnsList.Select(c => c.Name).ToArray(),
                     Pivot = input.Pivot
                 };
 
                 if (this.authorizedUser.IsSupervisor)
                 {
                     inputModel.TeamLeadId = this.authorizedUser.Id;
-                    inputModel.DetailedView = true;
+                    inputModel.ShowTeamMembers = true;
+                    inputModel.ShowTeamLead = false;
                 }
 
                 var stopwatch = Stopwatch.StartNew();

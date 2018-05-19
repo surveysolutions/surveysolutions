@@ -1,5 +1,6 @@
 ﻿using System;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
@@ -22,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 var specialValuesData = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
                         input.QuestionnaireIdentity.ToString(),
-                        input.DetailedView,
+                        input.ShowTeamMembers,
                         input.Question.PublicKey,
                         input.TeamLeadId,
                         input.ConditionalQuestion?.PublicKey,
@@ -30,17 +31,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                         input.ExcludeCategories)
                 );
 
-                var catergoricalData = new CategoricalReportViewBuilder(question.Answers, specialValuesData);
+                var catergoricalData = new CategoricalReportViewBuilder(question.Answers, specialValuesData, input.ShowTeamLead, input.ShowTeamMembers);
 
                 var numericalData = this.interviewReportDataRepository.GetNumericalReportData(
                     input.QuestionnaireIdentity,
                     input.Question.PublicKey,
                     input.TeamLeadId,
-                    input.DetailedView,
+                    input.ShowTeamMembers,
                     input.MinAnswer ?? Int32.MinValue, input.MaxAnswer ?? Int32.MaxValue);
 
-                var numericReport = new NumericalReportViewBuilder(numericalData, catergoricalData);
-                reportView = numericReport.AsReportView();
+                var numericReport = new NumericalReportViewBuilder(numericalData, input.ShowTeamLead, input.ShowTeamMembers);
+                var specialValuesReport = catergoricalData.AsReportView();
+
+                reportView = numericReport.Merge(specialValuesReport);
             }
             else if (input.Pivot && input.ConditionalQuestion != null)
             {
@@ -56,18 +59,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 var queryResult = this.interviewReportDataRepository.GetCategoricalReportData(
                     new GetCategoricalReportParams(
                         input.QuestionnaireIdentity.ToString(),
-                        input.DetailedView,
+                        input.ShowTeamMembers,
                         input.Question.PublicKey,
                         input.TeamLeadId, 
                         input.Condition != null ? input.ConditionalQuestion?.PublicKey : null,
                         input.Condition,
                         input.ExcludeCategories));
 
-                var report = new CategoricalReportViewBuilder(question.Answers, queryResult);
+                var report = new CategoricalReportViewBuilder(question.Answers, queryResult, input.ShowTeamLead, input.ShowTeamMembers);
                 reportView = report.AsReportView();
             }
 
-            return reportView.ApplyOrderAndPaging(input.Orders, input.Page, input.PageSize);
+            return reportView
+                .SelectColumns(input.Columns)
+                .ApplyOrderAndPaging(input.Orders, input.Page, input.PageSize);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
+namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
 {
     public class GetCategoricalReportParams
     {

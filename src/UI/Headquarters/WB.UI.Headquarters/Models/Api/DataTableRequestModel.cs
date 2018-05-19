@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Models.Api
         public List<ColumnInfo> _C { get; set; }
         public List<ColumnInfo> Columns { get; set; }
 
-        private List<ColumnInfo> ColummnsList => Columns ?? _C;
+        public List<ColumnInfo> ColummnsList => Columns ?? _C;
 
         public SearchInfo Search { get; set; }
         public int PageIndex => 1 + this.Start / this.Length;
