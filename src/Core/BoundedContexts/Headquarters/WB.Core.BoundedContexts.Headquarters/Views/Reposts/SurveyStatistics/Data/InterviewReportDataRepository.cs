@@ -5,7 +5,7 @@ using Dapper;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
-namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
+namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
 {
     partial class InterviewReportDataRepository : IInterviewReportDataRepository
     {

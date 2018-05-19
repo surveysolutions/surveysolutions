@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Tests.Abc;
 
