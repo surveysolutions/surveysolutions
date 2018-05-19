@@ -61,5 +61,158 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
             result.Data = data.Skip((page - 1) * pageSize).Take(pageSize).ToArray();
             return result;
         }
+
+        /// <summary>
+        /// Set value to all items of array starting from index till arraLength
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="array"></param>
+        /// <param name="value"></param>
+        /// <param name="index"></param>
+        /// <param name="arrayLength"></param>
+        public static void Clear<T>(this object[] array, T value, int index, int? arrayLength = null)
+        {
+            for (int i = index; i < (arrayLength ?? array.Length); i++)
+            {
+                array[i] = value;
+            }
+        }
+
+        /// <summary>
+        /// Merge two Report Views into one by common index columns
+        /// For example
+        /// RV1: (TL, TM, A, B, C)              RV2: (TL, TM, E, D)
+        /// Merge(RV1, RV2, [TL, TM]) => (TL, TM, A, B, C, E, D) 
+        /// </summary>
+        /// <param name="a">First report view</param>
+        /// <param name="b">Second report to merge</param>
+        /// <param name="indexColumns">Which columns to use as index. Should be unique</param>
+        /// <returns>Merged reports</returns>
+        public static ReportView Merge(this ReportView a, ReportView b, params string[] indexColumns)
+        {
+            var report = new ReportView();
+
+            IEnumerable<(string column, string header, object total)> GetColumnStructure()
+            {
+                for (int i = 0; i < a.Columns.Length; i++)
+                {
+                    yield return a.GetAt(i);
+                }
+
+                for (int i = 0; i < b.Columns.Length; i++)
+                {
+                    if (indexColumns.Contains(b.Columns[i])) continue;
+                    yield return b.GetAt(i);
+                }
+            }
+
+            var newStructure = GetColumnStructure().ToArray();
+
+            report.Columns = newStructure.Select(c => c.column).ToArray();
+            report.Headers = newStructure.Select(c => c.header).ToArray();
+            report.Totals = newStructure.Select(c => c.total).ToArray();
+
+            var reportBIndex = b.GetIndex(indexColumns);
+            var reportAIndex = a.GetIndex(indexColumns);
+
+            var reportData = new List<object[]>();
+
+            foreach (var key in reportAIndex.Keys.Union(reportBIndex.Keys))
+            {
+                reportAIndex.TryGetValue(key, out var rowsA);
+                reportBIndex.TryGetValue(key, out var rowsB);
+
+                object[] result = new object[report.Columns.Length];
+                reportData.Add(result);
+
+                int index = 0;
+                foreach (var col in report.Columns)
+                {
+                    var value = a.GetAt(rowsA, col) ?? b.GetAt(rowsB, col);
+                    result[index] = value ?? 0L;
+                    index++;
+                }
+            }
+
+            report.Data = reportData.ToArray();
+            return report;
+        }
+
+        public static ReportView SelectColumns(this ReportView a, params string[] columns)
+        {
+            if (columns == null || columns.Length == 0) return a;
+
+            if (columns.SequenceEqual(a.Columns)) return a;
+
+            var report = new ReportView();
+
+            IEnumerable<(string column, string header, object total)> GetColumnStructure()
+            {
+                for (int i = 0; i < a.Columns.Length; i++)
+                {
+                    if (columns.Contains(a.Columns[i]))
+                    {
+                        yield return a.GetAt(i);
+                    }
+                }
+            }
+
+            var newStructure = GetColumnStructure().ToArray();
+
+            report.Columns = newStructure.Select(c => c.column).ToArray();
+            report.Headers = newStructure.Select(c => c.header).ToArray();
+            report.Totals = newStructure.Select(c => c.total).ToArray();
+            
+            var reportData = new List<object[]>();
+
+            foreach (var row in a.Data)
+            {
+                object[] result = new object[report.Columns.Length];
+                reportData.Add(result);
+
+                int index = 0;
+                foreach (var col in report.Columns)
+                {
+                    var value = a.GetAt(row, col);
+                    result[index] = value;
+                    index++;
+                }
+            }
+
+            report.Data = reportData.ToArray();
+            return report;
+        }
+
+        private static (string column, string header, object total) GetAt(this ReportView report, int index)
+        {
+            return (report.Columns[index], report.Headers[index], report.Totals[index]);
+        }
+
+        private static object GetAt(this ReportView report, object[] row, string columnName)
+        {
+            if (row == null) return null;
+            var index = Array.IndexOf(report.Columns, columnName);
+
+            if (index < 0) return null;
+
+            return row[index];
+        }
+
+        private static string GetIndexValue(this ReportView report, object[] row, string[] columnNames)
+        {
+            var res = string.Empty;
+            foreach (var column in columnNames)
+            {
+                var value = report.GetAt(row, column);
+                if (value == null) res += "_null_";
+                else res += value.ToString();
+            }
+            return res;
+        }
+
+        private static Dictionary<string, object[]> GetIndex(this ReportView report, string[] indexColumns)
+        {
+            return report.Data.ToDictionary(d => report.GetIndexValue(d, indexColumns));
+        }
     }
 }

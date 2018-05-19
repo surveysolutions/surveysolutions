@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
@@ -13,8 +16,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
     {
         private List<Answer> answers;
         private List<GetCategoricalReportItem> rows;
-        private readonly Guid firstTeamLead = Id.g1;
-        private readonly Guid secondTeamLead = Id.g2;
+        private readonly string firstTeamLead = Id.g1.ToString();
+        private readonly string secondTeamLead = Id.g2.ToString();
 
         readonly int answerNewYork = 1;
         readonly int answerWashington = 2;
@@ -23,6 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
         private const string interviewerA = "interviewerA";
         private const string interviewerB = "interviewerB";
         private const string interviewerC = "interviewerC";
+
+        private ReportView report;
 
         [SetUp]
         public void Context()
@@ -33,12 +38,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
                 Create.Entity.Answer("Washington", answerWashington),
                 Create.Entity.Answer("Rural", answerRural)
             };
-            
-            GetCategoricalReportItem CreateRowItem(string responsible, int answer, int count, Guid? teamLead = null)
+
+            GetCategoricalReportItem CreateRowItem(string teamLead, string responsible, int answer, long count)
             {
                 return new GetCategoricalReportItem
                 {
-                    TeamLeadName = (teamLead ?? Id.gA).ToString(),
+                    TeamLeadName = teamLead,
                     ResponsibleName = responsible,
                     Answer = answer,
                     Count = count
@@ -47,42 +52,67 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
 
             this.rows = new List<GetCategoricalReportItem>
             {
-                CreateRowItem(interviewerA, answerNewYork,    10, firstTeamLead),
-                CreateRowItem(interviewerA, answerWashington, 20, firstTeamLead),
-                CreateRowItem(interviewerA, answerRural,      30, firstTeamLead),
+                CreateRowItem(null, null,      answerNewYork, 100),
+                CreateRowItem(null, null,      answerWashington, 200),
+                CreateRowItem(null, null,      answerRural, 300),
 
-                CreateRowItem(interviewerB, answerWashington, 25, secondTeamLead),
-                CreateRowItem(interviewerB, answerRural,      35, secondTeamLead),
-                CreateRowItem(interviewerB, answerNewYork,    15, secondTeamLead), // changed order of answers
+                CreateRowItem(firstTeamLead, interviewerA,    answerNewYork, 10),
+                CreateRowItem(firstTeamLead, interviewerA, answerWashington, 20),
+                CreateRowItem(firstTeamLead, interviewerA,      answerRural, 30),
 
-                CreateRowItem(interviewerC, answerNewYork,    100, firstTeamLead),
-                CreateRowItem(interviewerC, answerWashington, 200, firstTeamLead), // missing answer on rural
+
+                CreateRowItem(secondTeamLead, interviewerB, answerWashington, 25),
+                CreateRowItem(secondTeamLead, interviewerB,      answerRural, 35),
+                CreateRowItem(secondTeamLead, interviewerB,    answerNewYork, 15), // changed order of answers
+
+                CreateRowItem(firstTeamLead, interviewerC,    answerNewYork, 100),
+                CreateRowItem(firstTeamLead, interviewerC, answerWashington, 200), // missing answer on rural
             };
+
+            var subject = new CategoricalReportViewBuilder(answers, rows, true, true);
+            this.report = subject.AsReportView();
         }
 
         [Test]
-        public void should_group_result_by_responsible()
+        public void should_return_columns_in_order_of_answers_then_total()
         {
-            var subject = new CategoricalReportViewBuilder(answers, rows);
-
-            Assert.That(subject.Data.Count, Is.EqualTo(3), "should be equal to number of different responsibles");
+            Assert.That(this.report.Columns, Is.EqualTo(new []
+            {
+                "TeamLead", "Responsible", "col_1", "col_2", "col_3", "total"
+            }));
         }
 
         [Test]
-        public void should_move_counts_into_proper_columns()
+        public void should_calculate_total_based_on_rows_with_null_tl_tm()
         {
-            var subject = new CategoricalReportViewBuilder(answers, rows);
-
-            Assert.That(ValuesFor(interviewerA), Is.EqualTo(new[] { 10, 20, 30 }));
-            Assert.That(ValuesFor(interviewerB), Is.EqualTo(new[] { 15, 25, 35 }));
-            Assert.That(ValuesFor(interviewerC), Is.EqualTo(new[] { 100, 200, 0 }), "Should fill missing values with zero");
-
-            long[] ValuesFor(string responsibleName) => GetValuesFor(subject, d => d.ResponsibleName == responsibleName);
+            Assert.That(this.report.Totals, Is.EqualTo(new object[]
+            {
+                "All teams", "All interviewers", 100, 200, 300, 600
+            }));
         }
 
-        private long[] GetValuesFor(CategoricalReportViewBuilder perTeamReport, Func<CategoricalReportViewItem, bool> predicate)
+        [Test]
+        public void should_transpose_counts_into_columns()
         {
-            return perTeamReport.Data.Where(predicate).Select(d => d.Values).SingleOrDefault();
+            report.Data.AssertEqualInAnyOrder(
+                new object[]{ firstTeamLead, interviewerA, 10L, 20L, 30L, 60L },
+                new object[]{ firstTeamLead, interviewerC, 100L, 200L, 0L, 300L },
+                new object[]{ secondTeamLead, interviewerB, 15L, 25L, 35L, 75L }
+            );
+        }
+
+        [TestCase(true, true, "TeamLead", "Responsible")]
+        [TestCase(true, false, "TeamLead")]
+        [TestCase(false, true, "Responsible")]
+        public void should_return_teamlead_responsible_columns_as_requested(bool showTeamLead, bool showResponsible, 
+            params string[] columns)
+        {
+            var subject = new CategoricalReportViewBuilder(answers, rows, showTeamLead, showResponsible);
+            var report = subject.AsReportView();
+
+            columns = columns.Concat(new[] {this.answers[0].AsColumnName()}).ToArray();
+
+            Assert.That(report.Columns.Take(columns.Length), Is.EqualTo(columns));
         }
     }
 }

@@ -3,130 +3,131 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
     public class CategoricalReportViewBuilder
     {
+        // map answer value into its position in answers list of question
         private readonly Dictionary<int, int> answersIndexMap;
-        public const string TeamLeadColumn = "TeamLead";
-        public const string ResponsibleColumn = "Responsible";
 
-        public List<CategoricalReportViewItem> Data { get; set; } = new List<CategoricalReportViewItem>();
-        public string[] Headers { get; }
-        public string[] Columns { get; }
-        public long[] Totals { get; set; }
-        private bool TeamLeadOnly { get; }
+        private readonly IEnumerable<string> columnsWithData;
+        private readonly IEnumerable<string> headersWithData;
 
-        public int DataStartAtIndex => TeamLeadOnly ? 1 : 2;
+        private readonly GetCategoricalReportItem[] rows;
+        private readonly bool showResponsible;
+        private readonly bool showTeamLead;
 
-        public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows)
+        /// <summary>
+        /// Convert into table result of get_categorical_report function
+        /// Input: Array of (TeamLeadName, ResponsibleName, Answer, CountOfInterviewsWithThisAnswer)
+        /// where Answer is answer code for question
+        /// (TeamLead, ReponsibleName, Answer1, Answer2, ..., Total) 
+        /// where values are count of interviews with this answer
+        /// </summary>
+        /// <param name="answers"></param>
+        /// <param name="rows"></param>
+        /// <param name="showTeamLead"></param>
+        /// <param name="showResponsible"></param>
+        public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows,
+            bool showTeamLead, bool showResponsible)
         {
-            this.answersIndexMap = new Dictionary<int, int>();
-            var data = (rows ?? new List<GetCategoricalReportItem>()).ToList();
-            this.TeamLeadOnly = data.All(d => string.IsNullOrWhiteSpace(d.ResponsibleName));
+            answersIndexMap = GetAnswersMap(answers);
 
-            for (var index = 0; index < answers.Count; index++)
-            {
-                var answer = answers[index];
-                answersIndexMap.Add((int) answer.GetParsedValue(), index);
-            }
+            headersWithData = answers.Select(a => a.AnswerText);
+            columnsWithData = answers.Select(a => a.AsColumnName());
 
-            Headers = (this.TeamLeadOnly ? new[] { Report.COLUMN_TEAMS } : new[] { Report.COLUMN_TEAMS, Report.COLUMN_TEAM_MEMBER })
-                .Concat(answers.Select(a => a.AnswerText))
-                .Concat(new[] {Strings.Total})
-                .ToArray();
-
-            Columns = (this.TeamLeadOnly ? new[] { TeamLeadColumn} : new[] { TeamLeadColumn, ResponsibleColumn })
-                .Concat(answers.Select(a => a.AsColumnName()))
-                .Concat(new[] {"total"})
-                .ToArray();
-
-            SetData(data);
-        }
-
-        private void SetData(List<GetCategoricalReportItem> rows)
-        {
-            this.Data.Clear();
-            this.Totals = new long[answersIndexMap.Count];
-            
-            CategoricalReportViewItem perTeamReportItem = null;
-
-            foreach (var row in rows)
-            {
-                // check if this is total row related data
-                if (string.IsNullOrWhiteSpace(row.TeamLeadName) && string.IsNullOrWhiteSpace(row.ResponsibleName))
-                {
-                    Totals[answersIndexMap[row.Answer]] = row.Count;
-
-                    continue;
-                }
-
-                if (perTeamReportItem != null
-                    && (perTeamReportItem.ResponsibleName != row.ResponsibleName
-                        || perTeamReportItem.TeamLeadName != row.TeamLeadName))
-                {
-                    this.Data.Add(perTeamReportItem);
-                    perTeamReportItem = null;
-                }
-
-                if (perTeamReportItem == null)
-                {
-                    perTeamReportItem = new CategoricalReportViewItem
-                    {
-                        ResponsibleName = row.ResponsibleName,
-                        TeamLeadName = row.TeamLeadName,
-                        Values = new long[answersIndexMap.Count]
-                    };
-                }
-
-                perTeamReportItem.Values[answersIndexMap[row.Answer]] = row.Count;
-            }
-
-            if (perTeamReportItem != null) this.Data.Add(perTeamReportItem);
+            this.rows = rows?.ToArray() ?? Array.Empty<GetCategoricalReportItem>();
+            this.showTeamLead = showTeamLead;
+            this.showResponsible = showResponsible;
         }
 
         public ReportView AsReportView()
         {
             var report = new ReportView
             {
-                Columns = Columns,
-                Headers = Headers,
-                Totals = new object[Columns.Length],
-                Data = new object[Data.Count][]
+                Columns = GetColumnData().Select(c => c.column).ToArray(),
+                Headers = GetColumnData().Select(c => c.header).ToArray()
             };
 
-            report.Totals[0] = Strings.AllTeams;
+            report.Totals = new object[report.Columns.Length];
+            var dataIndex = 0;
 
-            if (!TeamLeadOnly)
-                report.Totals[1] = Strings.AllInterviewers;
+            if (showTeamLead) SetRowValue(report.Totals, dataIndex++, Strings.AllTeams);
+            if (showResponsible) SetRowValue(report.Totals, dataIndex++, Strings.AllInterviewers);
 
-            int dataIndexStart = DataStartAtIndex;
+            report.Totals.Clear(0L, dataIndex);
 
-            Array.Copy(Totals, 0, report.Totals, dataIndexStart, Totals.Length);
+            var reportData = new Dictionary<(string, string), object[]>();
+            var lastColumnIndex = report.Totals.Length - 1;
 
-            report.Totals[Columns.Length - 1] = Totals.Sum();
-
-            for (var index = 0; index < Data.Count; index++)
+            foreach (var row in rows)
             {
-                var item = Data[index];
+                var answerIndex = answersIndexMap[row.Answer] + dataIndex;
 
-                var row = new object[report.Columns.Length];
-                row[0] = item.TeamLeadName;
+                if (row.TeamLeadName == null && row.ResponsibleName == null) // handle total row
+                {
+                    SetRowValue(report.Totals, answerIndex,     row.Count);
+                    SetRowValue(report.Totals, lastColumnIndex, row.Count);
+                    continue;
+                }
 
-                if(!TeamLeadOnly)
-                    row[1] = item.ResponsibleName;
+                var rowKey = (row.TeamLeadName, row.ResponsibleName);
+                
+                if (!reportData.TryGetValue(rowKey, out var existingRow))
+                {
+                    existingRow = new object[report.Columns.Length];
+                    var rowIndex = 0;
+                    if (showTeamLead)    SetRowValue(existingRow, rowIndex++, row.TeamLeadName);
+                    if (showResponsible) SetRowValue(existingRow, rowIndex++, row.ResponsibleName);
 
-                var results = item.Values;
+                    existingRow.Clear(0L, rowIndex);
 
-                Array.Copy(results, 0, row, dataIndexStart, results.Length);
+                    reportData.Add(rowKey, existingRow);
+                }
 
-                row[report.Columns.Length - 1] = item.Total;
-                report.Data[index] = row;
+                SetRowValue(existingRow, answerIndex,     row.Count);
+                SetRowValue(existingRow, lastColumnIndex, row.Count);
             }
 
+            report.Data = reportData.Values.ToArray();
+
             return report;
+        }
+
+        private Dictionary<int, int> GetAnswersMap(List<Answer> answers)
+        {
+            var result = new Dictionary<int, int>();
+
+            for (var index = 0; index < answers.Count; index++)
+            {
+                var answer = answers[index];
+                result.Add((int) answer.GetParsedValue(), index);
+            }
+
+            return result;
+        }
+
+        private IEnumerable<(string column, string header)> GetColumnData()
+        {
+            if (showTeamLead) yield return ("TeamLead", Report.COLUMN_TEAMS);
+            if (showResponsible) yield return ("Responsible", Report.COLUMN_TEAM_MEMBER);
+
+            foreach (var data in columnsWithData.Zip(headersWithData, (col, head) => (col, head))) yield return data;
+
+            yield return ("total", Strings.Total);
+        }
+
+        private void SetRowValue(object[] array, int index, long value)
+        {
+            array[index] = (long) (array[index] ?? 0L) + value;
+        }
+
+        private void SetRowValue(object[] array, int index, string value)
+        {
+            array[index] = value;
         }
     }
 }

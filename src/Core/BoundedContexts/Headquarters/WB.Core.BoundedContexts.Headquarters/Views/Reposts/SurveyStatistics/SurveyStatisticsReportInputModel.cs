@@ -9,7 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public IQuestion Question { get; set; }
         public Guid? TeamLeadId { get; set; }
-        public bool DetailedView { get; set; }
+        public bool ShowTeamLead { get; set; }
+        public bool ShowTeamMembers { get; set; }
         public int? MinAnswer { get; set; }
         public int? MaxAnswer { get; set; }
 
@@ -17,5 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         public int[] Condition { get; set; }
         public int[] ExcludeCategories { get; set; }
         public bool Pivot { get; set; }
+        public string[] Columns { get; set; }
     }
 }

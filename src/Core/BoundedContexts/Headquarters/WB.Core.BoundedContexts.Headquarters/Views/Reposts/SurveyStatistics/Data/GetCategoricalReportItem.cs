@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
+﻿namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
 {
     /// <summary>
     /// Result of readside.get_categorical_report function
