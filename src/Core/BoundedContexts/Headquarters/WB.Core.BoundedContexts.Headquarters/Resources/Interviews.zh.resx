@@ -127,6 +127,6 @@
     <value>未找到问卷模板</value>
   </data>
   <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>导入访谈失败：{0}。InterviewerId{1}, QuestionnaireId{2}, Exception:{3}</value>
+    <value>导入访谈失败：{0}。InterviewerId{1}, Exception:{2}</value>
   </data>
 </root>
