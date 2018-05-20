@@ -62,7 +62,7 @@ export default {
     },
 
     watch: {
-        "status.lastRefresh"(){
+        "status.lastRefresh"() {
             this.$refs.table.reload()
         },
 
@@ -84,7 +84,7 @@ export default {
             Object.keys(filter).forEach(key => {
                 this.filter[key] = filter[key]
             })
-            
+
             this.$refs.table.reload()
         },
 
@@ -113,11 +113,6 @@ export default {
 
         reportDataRecieved() {
             this.refreshStatus();
-        },
-
-        updateNow(){
-            this.$hq.Report.SurveyStatistics.UpdateNow()
-            this.status.isRunning = true            
         }
     },
 
@@ -187,6 +182,8 @@ export default {
                         orderable: true
                 }]
             }
+
+            return []
         },
 
         categoriesColumns() {
@@ -248,7 +245,6 @@ export default {
 
         tableOptions() {
             return {
-                deferLoading: 250,
                 columns: this.tableColumns,
                 ajax: {
                     url: this.$hq.Report.SurveyStatistics.Uri,
