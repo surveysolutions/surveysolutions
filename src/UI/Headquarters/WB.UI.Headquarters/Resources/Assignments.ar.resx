@@ -133,7 +133,7 @@
     <value>مهام</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>اختايار مهمة (مهام) {0}</value>
+    <value>اختايار مهمة (مهام) {{count}}</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
     <value>تحرير الحجم للمهمة {{assignmentId}}</value>
