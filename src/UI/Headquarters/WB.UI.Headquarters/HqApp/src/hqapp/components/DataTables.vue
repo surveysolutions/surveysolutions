@@ -32,10 +32,10 @@ import 'jquery-contextmenu'
 import 'jquery-highlight'
 import './datatable.plugins'
 
-$.fn.dataTable.ext.errMode = function() {
+$.fn.dataTable.ext.errMode = function(a,b,c,d) {
     // swallow all errors for production
     if (process.env.NODE_ENV !== 'production') {
-        throw arguments
+        console.log(a,b,c,d)
     }
 };
 
@@ -75,7 +75,7 @@ export default {
             default: 20
         },
         authorizedUser: { type: Object, default() { return {} } },
-        reloadDebounce: { type: Number, default: 500 },
+        reloadDebounce: { type: Number, default: 100 },
         noPaging: Boolean,
         noSearch: Boolean,
         exportable: Boolean,
@@ -111,10 +111,11 @@ export default {
     },
 
     methods: {
-        reload: _.debounce(function(data) {
-            this.table.ajax.data = this.addParamsToRequest(data || {});
-            this.table.rows().deselect();
-            this.table.ajax.reload();
+        reload: _.debounce(function() {
+            if(this.table != null) {
+                this.table.rows().deselect();
+                this.table.draw();
+            }
         }, this.reloadDebounce),
 
         init(shouldDestroy = false) {
@@ -122,7 +123,7 @@ export default {
             var self = this;
             var options = $.extend({
                 processing: false,
-                destroy: shouldDestroy,
+                deferLoading: 200,
                 select: !this.noSelect,
                 serverSide: true,
                 language:
@@ -221,7 +222,6 @@ export default {
                 };
 
                 options.ajax.complete = (response) => {
-                    
                     self.$emit("totalRows", response.responseJSON.recordsTotal)
                     self.$emit("ajaxComplete", response.responseJSON);
                 };
@@ -232,9 +232,9 @@ export default {
             }
 
             if(shouldDestroy) {
-                this.table.destroy();
-                $(this.$refs.header).empty();
-                $(this.$refs.body).empty();
+                this.table.destroy()
+                 $(this.$refs.header).empty()
+                 $(this.$refs.body).empty();
             }
 
             this.table = $(this.$refs.table).DataTable(options);
@@ -268,6 +268,8 @@ export default {
             });
 
             this.$emit('DataTableRef', this.table);
+
+            this.reload()
         },
 
         disableRow(rowIndex) {
