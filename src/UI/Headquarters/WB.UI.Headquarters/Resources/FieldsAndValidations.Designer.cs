@@ -223,6 +223,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field is mandatory.
+        /// </summary>
+        public static string MandatoryField {
+            get {
+                return ResourceManager.GetString("MandatoryField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New password.
         /// </summary>
         public static string NewPasswordFieldName {

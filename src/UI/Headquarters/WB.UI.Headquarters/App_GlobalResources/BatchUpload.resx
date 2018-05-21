@@ -575,4 +575,13 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   <data name="RosterSizeQuestions" xml:space="preserve">
     <value>Roster size questions</value>
   </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Select default responsible (required)</value>
+  </data>
+    <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>If no responsible assigned in batch file use this supervisor/interviewer account:</value>
+  </data>
+    <data name="RequiredField" xml:space="preserve">
+    <value>This field is mandatory</value>
+  </data>
 </root>

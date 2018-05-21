@@ -23,5 +23,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public int ClientTimezoneOffset { get; set; }
         public IList<string> HiddenQuestions { get; set; }
         public IList<string> RosterSizeQuestions { get; set; }
+        [Required(ErrorMessageResourceType = typeof(FieldsAndValidations), ErrorMessageResourceName = nameof(FieldsAndValidations.MandatoryField))]
+        public Guid ResponsibleId { get; set; }
     }
 }
