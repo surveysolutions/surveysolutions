@@ -301,9 +301,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
         }
     }
 
-    public class PostgresEntityJson<T> : IUserType where T : class
+    public abstract class PostgresEntityJson<T> : IUserType where T : class
     {
-        private IEntitySerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
+        protected IEntitySerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
 
         public new bool Equals(object x, object y)
         {

@@ -792,6 +792,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} out of {1} options selected.
+        /// </summary>
+        public static string Interview_MaxAnswersCount {
+            get {
+                return ResourceManager.GetString("Interview_MaxAnswersCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next section.
         /// </summary>
         public static string Interview_NextSection_ButtonText {
@@ -950,6 +959,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Questions_Gps_SaveAnswer {
             get {
                 return ResourceManager.GetString("Interview_Questions_Gps_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New answer to a protected question should be greater or equal to {0}.
+        /// </summary>
+        public static string Interview_Questions_Integer_ProtectedValue {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Integer_ProtectedValue", resourceCulture);
             }
         }
         

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
@@ -13,11 +14,13 @@ using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -102,7 +105,7 @@ namespace WB.UI.Headquarters.Controllers
                 if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
             }
 
-            var featuredQuestionItems = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version)).ColumnListToPreload;
+            SampleUploadView sampleUploadView = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version));
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
 
             var viewModel = new BatchUploadModel
@@ -110,7 +113,9 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = id,
                 QuestionnaireVersion = version,
                 QuestionnaireTitle = questionnaireInfo?.Title,
-                FeaturedQuestions = featuredQuestionItems
+                FeaturedQuestions = sampleUploadView.IdentifyingQuestions,
+                HiddenQuestions = sampleUploadView.HiddenQuestions,
+                RosterSizeQuestions = sampleUploadView.RosterSizeQuestions
             };
 
             return this.View(viewModel);
@@ -234,7 +239,7 @@ namespace WB.UI.Headquarters.Controllers
             {
                 var questionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
 
-                var fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, allImportedFileInfos, questionnaire).Take(10).ToArray();
+                PanelImportVerificationError[] fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, allImportedFileInfos, questionnaire).Take(10).ToArray();
                 if (fileErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
@@ -249,8 +254,26 @@ namespace WB.UI.Headquarters.Controllers
                 }
 
                 var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream).ToArray();
+
+                PreloadedFile protectedFile = allImportedFiles.FirstOrDefault(x => x.FileInfo.QuestionnaireOrRosterName
+                                                                                             .Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase));
+                if (protectedFile != null)
+                {
+                    var protectedVariablesErrors = this.dataVerifier.VerifyProtectedVariables(
+                        model.File.FileName,
+                        protectedFile,
+                        questionnaire).Take(10).ToArray();
+
+                    if (protectedVariablesErrors.Length > 0)
+                    {
+                        return this.View("InterviewImportVerificationErrors",
+                            CreateError(questionnaireIdentity, model.File.FileName,
+                                errors: protectedVariablesErrors));
+                    }
+                }
+
                 var answerErrors = this.assignmentsImportService
-                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire).Take(10).ToArray();
+                    .VerifyPanel(model.File.FileName, allImportedFiles.Where(x => !x.Equals(protectedFile)).ToArray(), protectedFile, questionnaire).Take(10).ToArray();
 
                 if (answerErrors.Any())
                 {

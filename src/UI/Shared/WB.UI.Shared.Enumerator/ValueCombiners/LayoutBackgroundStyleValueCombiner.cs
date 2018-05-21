@@ -13,14 +13,17 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             bool isInvalid = values[0].ConvertToBoolean();
             bool isAnswered = values[1].ConvertToBoolean();
             bool isDisabled = values[2].ConvertToBoolean();
-
+            
             if (isInvalid)
                 return isDisabled ? QuestionStateStyle.InvalidDisabled : QuestionStateStyle.InvalidEnabled;
 
             if (isAnswered)
                 return isDisabled ? QuestionStateStyle.AnsweredDisabled : QuestionStateStyle.AnsweredEnabled;
-            
-            return isDisabled ? QuestionStateStyle.NonAnsweredDisabled : QuestionStateStyle.NonAnsweredEnabled;
+
+            if (isDisabled)
+                return QuestionStateStyle.NonAnsweredDisabled;
+
+            return QuestionStateStyle.NonAnsweredEnabled;
         }
     }
 }

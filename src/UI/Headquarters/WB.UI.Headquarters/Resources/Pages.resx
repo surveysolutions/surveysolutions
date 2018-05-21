@@ -393,6 +393,9 @@
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Edit personal info</value>
   </data>
+  <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+    <value>Show audit log</value>
+  </data>
   <data name="InterviewerProfile_Interviewers" xml:space="preserve">
     <value>Interviewers</value>
   </data>
@@ -1017,10 +1020,10 @@
     <value>Open</value>
   </data>
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
-    <value>Restart</value>
+    <value>Reopen</value>
   </data>
   <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
-    <value>Please provide a comment if needed to restart an interview</value>
+    <value>Please provide a comment if needed to reopen an interview</value>
   </data>
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
     <value>Are You sure that You want to discard interview data?</value>

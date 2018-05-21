@@ -159,4 +159,70 @@
   <data name="PLU0014" xml:space="preserve">
     <value>用户名含有无效字符。 只允许使用字母、点、空格和单引号。</value>
   </data>
+  <data name="PLU0001Description" xml:space="preserve">
+    <value>用户‘{0}’已存在</value>
+  </data>
+  <data name="PLU0002Description" xml:space="preserve">
+    <value>文件中有重名‘{0}’</value>
+  </data>
+  <data name="PLU0003Description" xml:space="preserve">
+    <value>用户“{0}”已归档并属于另一个团队</value>
+  </data>
+  <data name="PLU0003Recomendation" xml:space="preserve">
+    <value>已归档的用户不能被再次使用因为它属于另一个团队</value>
+  </data>
+  <data name="PLU0004Description" xml:space="preserve">
+    <value>用户“{0}”已归档并具有其他角色</value>
+  </data>
+  <data name="PLU0004Recomendation" xml:space="preserve">
+    <value>已归档的用户不能被再次使用因为它存在于另外一个角色中</value>
+  </data>
+  <data name="PLU0005Description" xml:space="preserve">
+    <value>用户名“{0}”的格式错误</value>
+  </data>
+  <data name="PLU0005Recomendation" xml:space="preserve">
+    <value>应该在3到15个字符之间，并且只能包含字母，数字和下划线符号</value>
+  </data>
+  <data name="PLU0006Description" xml:space="preserve">
+    <value>密码“{0}”的格式错误</value>
+  </data>
+  <data name="PLU0006Recomendation" xml:space="preserve">
+    <value>必须包含至少一个数字，一个大写字符和一个小写字符。 长度应该在10到100个字符之间</value>
+  </data>
+  <data name="PLU0007Description" xml:space="preserve">
+    <value>电子邮箱‘{0}’的格式错误</value>
+  </data>
+  <data name="PLU0008Description" xml:space="preserve">
+    <value>电话号码‘{0}’的格式错误</value>
+  </data>
+  <data name="PLU0009Description" xml:space="preserve">
+    <value>角色‘{0}’无效</value>
+  </data>
+  <data name="PLU0009Recomendation" xml:space="preserve">
+    <value>只允许“supervisor”或“interviewer”</value>
+  </data>
+  <data name="PLU0010Description" xml:space="preserve">
+    <value>未找到督导员‘{0}'</value>
+  </data>
+  <data name="PLU0011Description" xml:space="preserve">
+    <value>督导员角色的Supervisor一列应为空</value>
+  </data>
+  <data name="PLU0012Description" xml:space="preserve">
+    <value>全名“{0}”的格式错误</value>
+  </data>
+  <data name="PLU0012Recomendation" xml:space="preserve">
+    <value>不应该包含超过100个字符</value>
+  </data>
+  <data name="PLU0013Description" xml:space="preserve">
+    <value>电话号码‘{0}’的格式错误</value>
+  </data>
+  <data name="PLU0013Recomendation" xml:space="preserve">
+    <value>不应该包含超过15个字符</value>
+  </data>
+  <data name="PLU0014Description" xml:space="preserve">
+    <value>全名‘{0}’包含无效字符</value>
+  </data>
+  <data name="PLU0014Recomendation" xml:space="preserve">
+    <value>只允许使用字母、点、空格和撇号</value>
+  </data>
 </root>

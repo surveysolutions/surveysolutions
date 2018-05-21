@@ -231,4 +231,28 @@
   <data name="Compressing" xml:space="preserve">
     <value>正在压缩</value>
   </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>从</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>保存二进制文件到：</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>到</value>
+  </data>
+  <data name="ZipFile" xml:space="preserve">
+    <value>Zip压缩文件</value>
+  </data>
 </root>
