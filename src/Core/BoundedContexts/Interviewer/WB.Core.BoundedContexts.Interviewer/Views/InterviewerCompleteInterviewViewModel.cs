@@ -23,8 +23,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IStatefulInterviewRepository interviewRepository,
             InterviewStateViewModel interviewState,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
+            ILastCompletionComments lastCompletionComments,
             DynamicTextViewModel dynamicTextViewModel)
-            : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, interviewState, dynamicTextViewModel)
+            : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel)
         {
             this.interviewRepository = interviewRepository;
         }
@@ -42,7 +43,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
-            this.CompleteComment = statefulInterview.InterviewerCompleteComment;
+            if (string.IsNullOrEmpty(this.CompleteComment))
+            {
+                this.CompleteComment = statefulInterview.InterviewerCompleteComment;
+            }
         }
     }
 }

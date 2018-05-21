@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
+        private readonly ILastCompletionComments lastCompletionComments;
         protected readonly IPrincipal principal;
 
         public InterviewStateViewModel InterviewState { get; set; }
@@ -32,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IPrincipal principal, 
             IMvxMessenger messenger,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
+            ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel)
         {
@@ -40,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.principal = principal;
             this.messenger = messenger;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
+            this.lastCompletionComments = lastCompletionComments;
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
@@ -70,6 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
                     this.entitiesListViewModelFactory.MaxNumberOfEntities)
                 : UIResources.Interview_Complete_Entities_With_Errors;
+
+            this.CompleteComment = lastCompletionComments.Get(this.interviewId);
         }
 
         public int AnsweredCount { get; set; }
@@ -92,9 +97,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public string CompleteComment { get; set; }
+        public string CompleteComment
+        {
+            get => completeComment;
+            set
+            {
+                completeComment = value;
+                this.lastCompletionComments.Store(this.interviewId, value);
+            }
+        }
 
         private bool wasThisInterviewCompleted = false;
+        private string completeComment;
 
         private async Task CompleteInterviewAsync()
         {
@@ -108,11 +122,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 completeTime: DateTime.UtcNow);
 
             await this.commandService.ExecuteAsync(completeInterview);
+            this.lastCompletionComments.Remove(interviewId);
 
             await this.CloseInterview();
         }
 
-        protected virtual async Task CloseInterview()
+        protected async Task CloseInterview()
         {
             await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
 

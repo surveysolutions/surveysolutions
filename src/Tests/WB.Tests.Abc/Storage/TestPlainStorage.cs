@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Tests.Abc.Storage
@@ -67,16 +66,6 @@ namespace WB.Tests.Abc.Storage
         public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
         {
             return query.Invoke(this.entites.Values.AsQueryable());
-        }
-
-        public IEnumerable<T> Query(Func<T, bool> query)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> Query(Expression<T> query)
-        {
-            throw new NotImplementedException();
         }
 
         public void Clear() { this.entites.Clear();}

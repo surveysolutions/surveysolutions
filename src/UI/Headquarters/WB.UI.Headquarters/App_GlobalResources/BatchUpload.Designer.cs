@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to {0} enumerators.
+        ///   Looks up a localized string similar to Assigned to {0} interviewers.
         /// </summary>
         internal static string AssignedToMultipleEnumerators {
             get {
@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to 1 enumerator.
+        ///   Looks up a localized string similar to Assigned to 1 interviewer.
         /// </summary>
         internal static string AssignedToSingleEnumerator {
             get {
@@ -507,6 +507,15 @@ namespace Resources {
         internal static string FormatNotSupported {
             get {
                 return ResourceManager.GetString("FormatNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List of hidden questions.
+        /// </summary>
+        internal static string HiddenQuestions {
+            get {
+                return ResourceManager.GetString("HiddenQuestions", resourceCulture);
             }
         }
         
@@ -997,6 +1006,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Roster size questions.
+        /// </summary>
+        internal static string RosterSizeQuestions {
+            get {
+                return ResourceManager.GetString("RosterSizeQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Row.
         /// </summary>
         internal static string Row {
@@ -1363,6 +1381,15 @@ namespace Resources {
         internal static string ViewListPrefilledData {
             get {
                 return ResourceManager.GetString("ViewListPrefilledData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View list of preloaded values.
+        /// </summary>
+        internal static string ViewListPreloadedData {
+            get {
+                return ResourceManager.GetString("ViewListPreloadedData", resourceCulture);
             }
         }
     }

@@ -177,4 +177,7 @@
   <data name="MyQuestionnairesTitle" xml:space="preserve">
     <value>Designer: My Questionnaires</value>
   </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Upgrade assignments</value>
+  </data>
 </root>

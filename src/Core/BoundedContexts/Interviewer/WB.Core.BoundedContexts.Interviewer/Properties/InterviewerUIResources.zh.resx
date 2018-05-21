@@ -708,4 +708,31 @@
   <data name="Warning" xml:space="preserve">
     <value>警告</value>
   </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>搜索以显示结果</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>没找到</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>退出搜索</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>找到{0}个元素</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>输入要搜索的文本</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>正在检查应用程序更新</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>正在下载应用程序更新</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>以{2}收到{1}中的{0}({3}%)</value>
+  </data>
 </root>

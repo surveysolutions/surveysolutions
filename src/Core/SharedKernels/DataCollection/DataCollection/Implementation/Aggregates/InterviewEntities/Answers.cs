@@ -152,7 +152,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return null;
         }
-        
+
+        public static CategoricalFixedMultiOptionAnswer FromIntArray(int[] checkedValues)
+            => new CategoricalFixedMultiOptionAnswer(checkedValues);
+
         public static CategoricalFixedMultiOptionAnswer FromDecimalArray(decimal[] checkedValues)
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 
