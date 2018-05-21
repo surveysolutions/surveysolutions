@@ -24,6 +24,8 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage
 
         public bool IsAnswered(AudioAnswerForConditions answer) => !string.IsNullOrEmpty(answer?.FileName) && answer.Length.Ticks > 0;
 
+        public bool IsAnswered(Georgaphy answer) => answer != null;
+
         /// @name  Date and time management functions
         /// @{
 

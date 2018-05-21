@@ -12,9 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public string Coordinates { set; get; }
         public double? DistanceToEditor { set; get; }
 
+        public int? NumberOfPoints { set; get; }
+
         public AreaQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector,
                                     DateTime answerTimeUtc, string geometry, string mapName, double? areaSize, 
-                                    double? length, string coordinates, double? distanceToEditor)
+                                    double? length, string coordinates, double? distanceToEditor, int? numberOfPoints)
             : base(userId, questionId, rosterVector, answerTimeUtc)
         {
             
@@ -24,6 +26,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.Length = length;
             this.Coordinates = coordinates;
             this.DistanceToEditor = distanceToEditor;
+            this.NumberOfPoints = numberOfPoints;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
@@ -54,7 +55,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
 
         public QuestionnaireInfoFactory.SelectOption[] QuestionTypeOptions { get; set; }
         public QuestionnaireInfoFactory.SelectOption[] AllQuestionScopeOptions { get; set; }
-        
+        public QuestionnaireInfoFactory.SelectOption[] GeometryTypeOptions { get; set; }
+
+        public GeometryType GeometryType { get; set; }
+
         public Breadcrumb[] Breadcrumbs { get; set; }
         public bool WereOptionsTruncated { get; set; }
         public int OptionsCount { get; set; }

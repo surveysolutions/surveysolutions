@@ -166,6 +166,6 @@
     <value>Error occurred. Archive contains not map files </value>
   </data>
   <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>Invalid file {0}</value>
+    <value>File '{0}' contains data system can't process.</value>
   </data>
 </root>
