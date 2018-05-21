@@ -11,6 +11,7 @@ using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
@@ -44,6 +45,7 @@ namespace WB.UI.Tester
                 {typeof (DashboardViewModel), typeof (DashboardActivity)},
                 {typeof (CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
+                {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
 #if !EXCLUDEEXTENSIONS
                 { typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

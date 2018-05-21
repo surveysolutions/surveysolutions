@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -139,6 +140,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
+                
+                if (selectedValues.Length == this.maxAllowedAnswers)
+                {
+                    this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
+                }
+                else
+                {
+                    this.Options.ForEach(x => x.CanBeChecked = true);
+                }
+
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
@@ -150,6 +161,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void PutOrderOnOptions(MultipleOptionsLinkedQuestionAnswered @event)
         {
+            var moreOptionsCanBeChecked = !this.maxAllowedAnswers.HasValue || @event.SelectedRosterVectors.Length < this.maxAllowedAnswers;
+
             foreach (var option in this.Options)
             {
                 var foundIndex = @event.SelectedRosterVectors
@@ -167,15 +180,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.CanBeChecked = moreOptionsCanBeChecked;
                 }
             }
         }
+
+
+        protected void UpateMaxAnswersCountMessage(int answersCount)
+        {
+            if (this.maxAllowedAnswers.HasValue && this.HasOptions)
+            {
+                this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
+                    answersCount, this.maxAllowedAnswers);
+            }
+        }
+
+        public string MaxAnswersCountMessage { get; set; }
 
         public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
         {
             if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
                 this.PutOrderOnOptions(@event);
+                UpateMaxAnswersCountMessage(@event.SelectedRosterVectors?.Length ?? 0);
             }
         }
 
@@ -187,7 +214,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.CanBeChecked = true;
                 }
+
+                UpateMaxAnswersCountMessage(0);
             }
         }
 

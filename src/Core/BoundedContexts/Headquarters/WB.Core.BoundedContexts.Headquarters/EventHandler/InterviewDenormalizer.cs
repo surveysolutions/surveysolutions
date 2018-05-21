@@ -121,6 +121,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 state.Enablement.Remove(removedEntity);
                 state.Validity.Remove(removedEntity);
                 state.ReadOnly.Remove(removedEntity);
+                state.Warnings.Remove(removedEntity);
 
                 if (!state.Removed.Contains(removedEntity))
                     state.Removed.Add(removedEntity);

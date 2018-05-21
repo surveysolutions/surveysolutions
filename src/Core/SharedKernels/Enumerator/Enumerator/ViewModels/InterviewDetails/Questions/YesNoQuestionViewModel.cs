@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Base;
-using MvvmCross.ViewModels;
+using MvvmCross.Platform;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private readonly QuestionStateViewModel<YesNoQuestionAnswered> questionState;
+        private string maxAnswersCountMessage;
 
         public AnsweringViewModel Answering { get; set; }
 
@@ -48,6 +49,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
         public CovariantObservableCollection<YesNoQuestionOptionViewModel> Options { get; set; }
+
+        public string MaxAnswersCountMessage
+        {
+            get => maxAnswersCountMessage;
+            set => SetProperty(ref maxAnswersCountMessage, value);
+        }
 
         public YesNoQuestionViewModel(IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
@@ -112,15 +119,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewIdAsString);
             var answerModel = interview.GetYesNoQuestion(this.Identity);
 
+            var checkedYesNoAnswerOptions = answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray() ?? Array.Empty<AnsweredYesNoOption>();
+
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray()))
+                .Select(model => this.ToViewModel(model, checkedYesNoAnswerOptions))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
             
             this.Options.Clear();
             newOptions.ForEach(x => this.Options.Add(x));
-            
+            UpateMaxAnswersCountMessage(checkedYesNoAnswerOptions.Count(x => x.Yes));
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -135,7 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, AnsweredYesNoOption[] checkedYesNoAnswerOptions)
         {
             var isExistAnswer = checkedYesNoAnswerOptions != null && checkedYesNoAnswerOptions.Any(a => a.OptionValue == model.Value);
-            var isSelected = isExistAnswer 
+            bool? isSelected = isExistAnswer 
                 ? checkedYesNoAnswerOptions.First(a => a.OptionValue == model.Value).Yes 
                 : (bool?) null;
             var yesAnswerCheckedOrder = isExistAnswer && this.areAnswersOrdered
@@ -151,7 +160,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Title = model.Title,
                 Selected = isSelected,
                 YesAnswerCheckedOrder = yesAnswerCheckedOrder,
-                AnswerCheckedOrder = answerCheckedOrder
+                AnswerCheckedOrder = answerCheckedOrder,
+                YesCanBeChecked = isSelected.GetValueOrDefault() || !maxAllowedAnswers.HasValue || checkedYesNoAnswerOptions.Count(x => x.Yes) < maxAllowedAnswers
             };
 
             return optionViewModel;
@@ -214,6 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
             }
             catch (InterviewException ex)
             {
@@ -232,21 +243,32 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Handle(AnswersRemoved @event)
         {
-            if (this.areAnswersOrdered && @event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector)))
+            if (@event.Questions.Any(x => x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector)))
             {
-                foreach (var option in this.Options.ToList())
+                if (this.areAnswersOrdered || this.maxAllowedAnswers.HasValue)
                 {
-                    option.Selected = null;
-                    option.YesAnswerCheckedOrder = null;
+                    foreach (var option in this.Options.ToList())
+                    {
+                        option.Selected = null;
+                        option.YesAnswerCheckedOrder = null;
+                        option.YesCanBeChecked = true;
+                    }
                 }
+
+                UpateMaxAnswersCountMessage(0);
             }
         }
 
         public void Handle(YesNoQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == this.Identity.Id && @event.RosterVector.Identical(this.Identity.RosterVector))
+            if (@event.QuestionId == this.Identity.Id && @event.RosterVector.Identical(this.Identity.RosterVector))
             {
-                this.PutOrderOnOptions(@event);
+                if (this.areAnswersOrdered || this.maxAllowedAnswers.HasValue)
+                {
+                    this.PutOrderOnOptions(@event);
+                }
+
+                UpateMaxAnswersCountMessage(@event.AnsweredOptions.Count(x => x.Yes));
             }
         }
 
@@ -266,6 +288,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToList();
             var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
+            var maxAnswersCountNotReachedYet = !this.maxAllowedAnswers.HasValue || orderedYesOptions.Count < this.maxAllowedAnswers;
 
             foreach (var option in this.Options.ToList())
             {
@@ -279,13 +302,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         : (int?)null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;
                     option.Selected = answeredYesNoOption.Yes;
+                    option.YesCanBeChecked = answeredYesNoOption.Yes || maxAnswersCountNotReachedYet;
                 }
                 else
                 {
                     option.YesAnswerCheckedOrder = null;
                     option.AnswerCheckedOrder = null;
                     option.Selected = null;
+                    option.YesCanBeChecked = maxAnswersCountNotReachedYet;
                 }
+            }
+        }
+
+        private void UpateMaxAnswersCountMessage(int answersCount)
+        {
+            if (this.maxAllowedAnswers.HasValue)
+            {
+                this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
+                    answersCount, this.maxAllowedAnswers);
             }
         }
     }

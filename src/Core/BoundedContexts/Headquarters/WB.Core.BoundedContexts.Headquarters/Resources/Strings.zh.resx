@@ -225,4 +225,7 @@
   <data name="Total" xml:space="preserve">
     <value>合计</value>
   </data>
+  <data name="WithErrors" xml:space="preserve">
+    <value>有错误</value>
+  </data>
 </root>
