@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var checkedYesNoAnswerOptions = answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray() ?? Array.Empty<AnsweredYesNoOption>();
 
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray(), answerModel))
+                .Select(model => this.ToViewModel(model, checkedYesNoAnswerOptions, answerModel))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
