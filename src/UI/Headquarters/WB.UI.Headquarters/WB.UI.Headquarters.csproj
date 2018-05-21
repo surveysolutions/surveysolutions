@@ -732,6 +732,58 @@
       <LastGenOutput>Maps.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="App_GlobalResources\BatchUpload.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>BatchUpload.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Dashboard.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Dashboard.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\DataExport.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>DataExport.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\HQ.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>HQ.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Import.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Import.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\MapReport.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MapReport.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Maps.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Maps.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireClonning.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireClonning.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\QuestionnaireImport.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>QuestionnaireImport.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Reports.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Reports.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Settings.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Settings.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\TakeNewInterview.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>TakeNewInterview.ar.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="App_GlobalResources\Users.ar.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Users.ar.designer.cs</LastGenOutput>
+    </Content>
     <EmbeddedResource Include="Content\img\no_image_found.jpg" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
@@ -902,12 +954,24 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Resources\Archived.ar.resx" />
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerAuditRecord.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.ru.resx">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Assignments.ar.resx" />
     <EmbeddedResource Include="Resources\Assignments.es.resx">
       <DependentUpon>Assignments.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AuditLog.ar.resx" />
     <EmbeddedResource Include="Resources\AuditLog.es.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
@@ -917,18 +981,21 @@
     <EmbeddedResource Include="Resources\AuditLog.zh.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DataTables.ar.resx" />
     <EmbeddedResource Include="Resources\DataTables.es.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\DataTables.fr.resx">
       <DependentUpon>DataTables.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Details.ar.resx" />
     <EmbeddedResource Include="Resources\Details.es.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Details.fr.resx">
       <DependentUpon>Details.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\DevicesInterviewers.ar.resx" />
     <EmbeddedResource Include="Resources\DevicesInterviewers.es.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
@@ -938,27 +1005,33 @@
     <EmbeddedResource Include="Resources\DevicesInterviewers.zh.resx">
       <DependentUpon>DevicesInterviewers.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\EnumNames.ar.resx" />
     <EmbeddedResource Include="Resources\EnumNames.es.resx">
       <DependentUpon>EnumNames.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\FieldsAndValidations.es.resx">
       <DependentUpon>FieldsAndValidations.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ImportQuestionnaire.ar.resx" />
     <EmbeddedResource Include="Resources\ImportQuestionnaire.es.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImportQuestionnaire.fr.resx">
       <DependentUpon>ImportQuestionnaire.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Interviews.ar.resx" />
     <EmbeddedResource Include="Resources\Interviews.es.resx">
       <DependentUpon>Interviews.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LimitsIndicator.ar.resx" />
     <EmbeddedResource Include="Resources\LimitsIndicator.es.resx">
       <DependentUpon>LimitsIndicator.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\LoginToDesigner.ar.resx" />
     <EmbeddedResource Include="Resources\LoginToDesigner.es.resx">
       <DependentUpon>LoginToDesigner.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\OutdatedBrowser.ar.resx" />
     <EmbeddedResource Include="Resources\OutdatedBrowser.es.resx">
       <DependentUpon>OutdatedBrowser.resx</DependentUpon>
     </EmbeddedResource>
@@ -968,9 +1041,11 @@
     <EmbeddedResource Include="Resources\Pages.es.resx">
       <DependentUpon>Pages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PeriodicStatusReport.ar.resx" />
     <EmbeddedResource Include="Resources\PeriodicStatusReport.es.resx">
       <DependentUpon>PeriodicStatusReport.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.ar.resx" />
     <EmbeddedResource Include="Resources\ReviewInterview.es.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -980,18 +1055,23 @@
     <EmbeddedResource Include="Resources\ReviewInterview.ru.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SyncLogMessages.ar.resx" />
     <EmbeddedResource Include="Resources\SyncLogMessages.es.resx">
       <DependentUpon>SyncLogMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\TabletSyncMessages.ar.resx" />
     <EmbeddedResource Include="Resources\TabletSyncMessages.es.resx">
       <DependentUpon>TabletSyncMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Troubleshooting.ar.resx" />
     <EmbeddedResource Include="Resources\Troubleshooting.es.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Troubleshooting.fr.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.zh.resx" />
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ar.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.es.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1667,6 +1747,7 @@
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
+    <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
@@ -1689,6 +1770,7 @@
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
+    <Compile Include="API\Interviewer\v2\AuditLogApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
@@ -1708,20 +1790,85 @@
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
+    <Compile Include="App_GlobalResources\BatchUpload.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BatchUpload.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Dashboard.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Dashboard.ar.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Dashboard.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Dashboard.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\DataExport.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataExport.ar.resx</DependentUpon>
     </Compile>
     <Compile Include="App_GlobalResources\DataExport.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataExport.resx</DependentUpon>
     </Compile>
+    <Compile Include="App_GlobalResources\HQ.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>HQ.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Import.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Import.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\MapReport.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MapReport.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Maps.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Maps.ar.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_GlobalResources\Maps.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Maps.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireClonning.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireClonning.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\QuestionnaireImport.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuestionnaireImport.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Reports.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Settings.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Settings.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\TakeNewInterview.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TakeNewInterview.ar.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\Users.ar.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Users.ar.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -1851,6 +1998,7 @@
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\AssignmentsController.cs" />
+    <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
@@ -1877,6 +2025,8 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
@@ -1892,6 +2042,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201802201015_AddInterviewKeyToPackage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201804031536_MakeUserPreloadingOptionalFields.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805101216_AddProtectedVariables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -2080,6 +2231,11 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
       <DesignTime>True</DesignTime>

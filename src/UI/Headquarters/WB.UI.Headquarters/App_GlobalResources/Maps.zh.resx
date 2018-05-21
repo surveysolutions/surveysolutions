@@ -144,4 +144,28 @@
   <data name="UpdateDate" xml:space="preserve">
     <value>导入于</value>
   </data>
+  <data name="FileLoadingNotTsvError" xml:space="preserve">
+    <value>发生错误。文件不是.tab文件</value>
+  </data>
+  <data name="MapEngineIsNotInitialized" xml:space="preserve">
+    <value>地图组件未初始化。请联系系统管理员。</value>
+  </data>
+  <data name="MapLoadingInvalidFile" xml:space="preserve">
+    <value>无效的文件{0}</value>
+  </data>
+  <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
+    <value>发生错误。归档不包括地图文件</value>
+  </data>
+  <data name="MapLoadingUnsupportedFilesInArchive" xml:space="preserve">
+    <value>发生错误。归档不包括地图文件</value>
+  </data>
+  <data name="MappingsLoadingError" xml:space="preserve">
+    <value>加载地图链接时发生错误。</value>
+  </data>
+  <data name="UploadMappingsSummaryFormat" xml:space="preserve">
+    <value>已处理{0}个地图链接，其中{1}个无效</value>
+  </data>
+  <data name="UploadMapsSummaryFormat" xml:space="preserve">
+    <value>已处理{0}个地图文件，其中{1}个无效</value>
+  </data>
 </root>

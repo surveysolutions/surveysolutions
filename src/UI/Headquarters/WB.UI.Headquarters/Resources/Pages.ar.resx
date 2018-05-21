@@ -118,6 +118,952 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Password" xml:space="preserve">
-    <value>كلمه السر</value>
+    <value>كلمة المرور</value>
+  </data>
+  <data name="AccessDenied_Title" xml:space="preserve">
+    <value>تم رفض الوصول</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>تغيير كلمة المرور</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>استخدم النموذج أدناه لتغيير كلمة المرور للحساب</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>تعديل تفاصيل معلومات الملف الشخصي العامة</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>دور</value>
+  </data>
+  <data name="AccountManage_SaveChanges" xml:space="preserve">
+    <value>حفظ التغييرات</value>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>تعديل {0} الملف الشخصي</value>
+  </data>
+  <data name="AnyOption" xml:space="preserve">
+    <value>أي</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>موافق عليه من قبل المقر الرئيسي</value>
+  </data>
+  <data name="ApprovedByupervisor" xml:space="preserve">
+    <value>موافق عليه من قبل المشرف</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+    <value>الموافقة </value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+    <value>الموافقة على المقابلة</value>
+  </data>
+  <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
+    <value>تعليق</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectAction" xml:space="preserve">
+    <value>رفض</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
+    <value>رفض المقابلة</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
+    <value>عدم الموافقة</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
+    <value>عدم الموافقة على المقابلة</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>منطقة</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>متر مربع</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>مهام</value>
+  </data>
+  <data name="Attention" xml:space="preserve">
+    <value>انتباه!</value>
+  </data>
+  <data name="Backup_IndexTitle" xml:space="preserve">
+    <value>الفهرس</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>الغاء</value>
+  </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>تحذير:</value>
+  </data>
+  <data name="CloseLabel" xml:space="preserve">
+    <value>اغلق</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>مطلوب الاثبات</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>انشاء</value>
+  </data>
+  <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
+    <value>اكتب تعليق...</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>تعليمات التثبيت</value>
+  </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>تحميل تطبيق الباحث</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>تكنولوجيا المقابلة الشخصية بمساعدة الحاسوب التي وضعها البنك الدولي.</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>نسخة</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>مرحبا في صفحة تحميل Survey Solutions</value>
+  </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>تنزيل التقرير ك......</value>
+  </data>
+  <data name="EditQuestion_Save" xml:space="preserve">
+    <value>حفظ</value>
+  </data>
+  <data name="Error_Description" xml:space="preserve">
+    <value>حدث خطأ أثناء معالجة طلبك.</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="ErrorIndex_Title" xml:space="preserve">
+    <value>خطأ</value>
+  </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>مهمة</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>مصفيات</value>
+  </data>
+  <data name="Forbidden_Title" xml:space="preserve">
+    <value>غير مسموح</value>
+  </data>
+  <data name="GetLatestApp" xml:space="preserve">
+    <value>تحميل اخر اصدار من تقبيل الباحث</value>
+  </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>هل تريد حذف الخريطة؟</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+    <value>هل تريد بالتأكيد حذف الاستبيان؟ ستفقد جميع المقابلات التي تم إجرائها على هذا الاستبيان.</value>
+  </data>
+  <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
+    <value>ليس لديك الصلاحية لهذا الإجراء.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
+    <value>طلبك السابق غير كامل. يرجى الانتظار حتى يتم الانتهاء وكرر العملية.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
+    <value>يرجى الانتظار</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
+    <value>تم التوصل إلى عدد النقاط لمستوى هذا التكبير. يرجى زيادة المستوى وتحديث النقاط.</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
+    <value>لم يتم تحميل جميع النقاط</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
+    <value>لا توجد أية معلومات حول نقاط تحديد الموقع الجغرافي.</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
+    <value>لم يتم إضافة علامات</value>
+  </data>
+  <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
+    <value>حدث خطأ غير متوقع. نحن نأسف للإزعاج.</value>
+  </data>
+  <data name="GPS_accuracy" xml:space="preserve">
+    <value>الدقة</value>
+  </data>
+  <data name="GPS_altitude" xml:space="preserve">
+    <value>ارتفاع</value>
+  </data>
+  <data name="GPS_latitude" xml:space="preserve">
+    <value>خط العرض</value>
+  </data>
+  <data name="GPS_longitude" xml:space="preserve">
+    <value>خط الطول</value>
+  </data>
+  <data name="HealthCheck_Header" xml:space="preserve">
+    <value>مراقبة فحص الصحة</value>
+  </data>
+  <data name="HealthCheck_IndexTitle" xml:space="preserve">
+    <value>صفحة التحقق من الصحة</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>إخفاء التصفية</value>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>تم تعيينه ل...</value>
+  </data>
+  <data name="HistoryOfStatuses_By" xml:space="preserve">
+    <value>من قبل</value>
+  </data>
+  <data name="HistoryOfStatuses_Comment" xml:space="preserve">
+    <value>تعليق</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>مقابلة</value>
+  </data>
+  <data name="HistoryOfStatuses_On" xml:space="preserve">
+    <value>تغيير على</value>
+  </data>
+  <data name="HistoryOfStatuses_State" xml:space="preserve">
+    <value>حالة</value>
+  </data>
+  <data name="HistoryOfStatuses_Title" xml:space="preserve">
+    <value>تاريخ حالة المقابلة</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>عرض مقابلة</value>
+  </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>المقر الرئيسي المؤمنين (مربع تحديد) لا يمكنهم تسجيل الدخول الى الخادم وتنفيذ اي اجراءات.</value>
+  </data>
+  <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
+    <value>هل تريد الاستمرار؟</value>
+  </data>
+  <data name="InstallationInstruction" xml:space="preserve">
+    <value>تعليمات التثبيت</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
+    <value>الحالة وضعت من قبل فريق دعم حلول Survey Solutions</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
+    <value>تكرار الحالة الأخيرة لم ينجح.</value>
+  </data>
+  <data name="InterviewController_RevalidationFailed" xml:space="preserve">
+    <value>إعادة التحقق لم تكن ناجحة.</value>
+  </data>
+  <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
+    <value>الكل</value>
+  </data>
+  <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
+    <value>تمت الاجابة</value>
+  </data>
+  <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
+    <value>تم التعليق</value>
+  </data>
+  <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+    <value>أصلي</value>
+  </data>
+  <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
+    <value>مفعل</value>
+  </data>
+  <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
+    <value>تحمل علم</value>
+  </data>
+  <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
+    <value>مجموعات</value>
+  </data>
+  <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
+    <value>مخفي</value>
+  </data>
+  <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
+    <value>إخفاء المجموعات</value>
+  </data>
+  <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
+    <value>غير صحيح</value>
+  </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>تفاصيل</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>لا توجد عناصر تلبي الفلتر المختار</value>
+  </data>
+  <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
+    <value>المقابلة لديها حزم مزامنة معلقة في قائمة الانتظار</value>
+  </data>
+  <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
+    <value>مسؤول</value>
+  </data>
+  <data name="InterviewDetails_ShowGroupsLabel" xml:space="preserve">
+    <value>اظهر المجموعات</value>
+  </data>
+  <data name="InterviewDetails_StatusLabel" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
+    <value>المشرف</value>
+  </data>
+  <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
+    <value>غير مجاب</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>الباحثين المؤمنين (مربع التحديد) لا يستطيعون ايصال اجهزتهم اللوحية مع الخادم وارسال المقابلات الى الخادم</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>الباحث المعين</value>
+  </data>
+  <data name="InterviewerController_EditSuccess" xml:space="preserve">
+    <value>تم تحديث المعلومات حول {0} بنجاح</value>
+  </data>
+  <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
+    <value>تم انشاء الباحث بنجاح</value>
+  </data>
+  <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
+    <value>تعذر تحديث معلومات المستخدم لأن المستخدم الحالي غير موجود</value>
+  </data>
+  <data name="InterviewerCreate_CreateIn" xml:space="preserve">
+    <value>انشئ باحث في</value>
+  </data>
+  <data name="InterviewerCreate_Team" xml:space="preserve">
+    <value>فريق</value>
+  </data>
+  <data name="InterviewerCreate_Title" xml:space="preserve">
+    <value>انشاء</value>
+  </data>
+  <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
+    <value>معرف الجهاز</value>
+  </data>
+  <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
+    <value>الباحث لم يزامن حتى الآن. لا توجد معلومات حول أجهزته/أجهزتها.</value>
+  </data>
+  <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
+    <value>البدء باستخدام التاريخ</value>
+  </data>
+  <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
+    <value>الباحث: {0}</value>
+  </data>
+  <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+    <value>هل انت متأكد انك تريد تجاهل معلومات المقابلة؟</value>
+  </data>
+  <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+    <value>تجاهل</value>
+  </data>
+  <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+    <value>فتح</value>
+  </data>
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+    <value>يرجى تقديم تعليق إذا لزم الأمر لإعادة بدء المقابلة</value>
+  </data>
+  <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+    <value>إعادة تشغيل</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>تم ارشفة الباحث</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>نسخة نظام الاندرويد</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>المقابلات المنتهية (تمت اكمالها والموافقة عليها من قبل المقر الرئيسي)</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (المشرف: {1})</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>معدل سرعة المزامنة</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>حالة البطارية (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>غير مفعل</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>مفعل</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}٪، مصدر الطاقة: {1}، موفر البطارية {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>النوع: {0} {1}، المشغل: {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>سرعة الاتصال</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>نوع الاتصال</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>النوع :{0}</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>قاعدة البيانات</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} تم تحميلة {1} تم تنزيلة</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>احصائيات الجهاز و الاتصال</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>تاريخ تسليم الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>وقت الجهاز اللوحي عند بدء المزامنة</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>معرف الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>معلومات الجهاز التفصيلية</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>لغة الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>موقع الجهاز أو اخر موقع معروف</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>نمودج الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>اتجاه الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>الرقم التسلسلي للجهاز</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>المقابلات التي تم استلامها من الباحث</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>الاستبيانات المستلمة بواسطة المقابل</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>البريد الالكتروني: {0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>الاسم الكامل: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>تحرير المعلومات الشخصية</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>نسخة تطبيق الباحث</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>يمكن تحديثه</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>الباحثين</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>اخر تاريخ لتحديث Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>حتى الان</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>نسخة Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>آخر إحصاءات الاتصال</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>آخر مزامنة فاشلة</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>آخر مزامنة ناجحة</value>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>تاريخ اخر تواصل</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>الذاكرة (متوفر / الإجمالي)</value>
+  </data>
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+    <value>جديد على الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>العدد الكلي للمزامنات الفاشلة</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>العدد الكلي للمزامنات الناجحة</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>رقم الهاتف: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
+    <value>رفض مرة أخرى على الجهاز</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>وقت الخادم عند البدء بالمزامنة</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>قوة الاشارة</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>المهام التي تم البدء بها, ولكن لم تتكتمل</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>التخزين (متوفر / إجمالي)</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+    <value>عدد المهام غير المكتملة أو غير المتزامنة على الجهاز في كل لحظة</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>المهام التي تم تنزيلها</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>محاولة مزامنة فاشلة</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>اتصال ناجح، لا يوجد شيء لمزامنته</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>نشاط المزامنة الأخيرة</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>تم تحميله على الخادم للموافقة</value>
+  </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>الباحث: {0}</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>مدة المزامنة</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>تم استلام المقابلات المكتملة من الباحث</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>بانتظار الموافقة</value>
+  </data>
+  <data name="Interviewers_ActiveUsers" xml:space="preserve">
+    <value>المقابلين النشطين</value>
+  </data>
+  <data name="Interviewers_Archive" xml:space="preserve">
+    <value>الأرشيف</value>
+  </data>
+  <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+    <value>الباحثين الذين تم ارشفتهم</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
+    <value>سيتم ارشفة الباحث(الباحثين)</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
+    <value>هل تريد الاستمرار؟</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
+    <value>اذا اكمل الباحث المقابلة على جهازه اللوحي سيتم فقدان البيانات </value>
+  </data>
+  <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+    <value>حالة الأرشيف</value>
+  </data>
+  <data name="Interviewers_Connected" xml:space="preserve">
+    <value>متصل </value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>متصل بالخادم</value>
+  </data>
+  <data name="Interviewers_CreationDateTitle" xml:space="preserve">
+    <value>الحساب انشىء في</value>
+  </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>تاريخ انشاء حساب المقابل</value>
+  </data>
+  <data name="Interviewers_EmailTitle" xml:space="preserve">
+    <value>البريد الالكتروني للباحثين</value>
+  </data>
+  <data name="Interviewers_Header" xml:space="preserve">
+    <value>الباحثين</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>لم يتم توصيله ابدا</value>
+  </data>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>نسخة التطبيق</value>
+  </data>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>تم ابلاغ الخادم بنسخة تطبيق الباحث خلال اخر مزامنة لجهازه/جهازها اللوحي </value>
+  </data>
+  <data name="Interviewers_NotConnected" xml:space="preserve">
+    <value>غير موصول</value>
+  </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>لم يتم توصيله ابدا</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>قديم</value>
+  </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>الباحث(الباحثين) المختار</value>
+  </data>
+  <data name="Interviewers_SupervisorTitle" xml:space="preserve">
+    <value>مشرف</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>اسم تسجيل الدخول للمشرف على الباحث</value>
+  </data>
+  <data name="Interviewers_Title" xml:space="preserve">
+    <value>الباحثين</value>
+  </data>
+  <data name="Interviewers_Unarchive" xml:space="preserve">
+    <value>إلغاء الأرشفة</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>حتى الان</value>
+  </data>
+  <data name="Interviewers_UserNameTitle" xml:space="preserve">
+    <value>اسم تسجيل الدخول</value>
+  </data>
+  <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+    <value>الأجهزة/الباحثين</value>
+  </data>
+  <data name="InterviewHistory_Header" xml:space="preserve">
+    <value>تاريخ المقابلة</value>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>المقابلة (المقابلات) المختارة</value>
+  </data>
+  <data name="Layout_Filter" xml:space="preserve">
+    <value>تصفية</value>
+  </data>
+  <data name="Layout_Legal" xml:space="preserve">
+    <value>قانوني</value>
+  </data>
+  <data name="Layout_RightsReserved" xml:space="preserve">
+    <value>جميع الحقوق محفوظة</value>
+  </data>
+  <data name="Layout_WorldBank" xml:space="preserve">
+    <value>مجموعة البنك الدولي</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="LogOn_Legend" xml:space="preserve">
+    <value>يرجى تسجيل الدخول</value>
+  </data>
+  <data name="LogOn_LogIn" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="LogOn_Title" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
+    <value>لم يتم تسجيل الدخول بنجاح. يرجى تصحيح الأخطاء وإعادة المحاولة.</value>
+  </data>
+  <data name="Maintenance_Description" xml:space="preserve">
+    <value>يتم الان ترقية التطبيق إلى إصدار أحدث. هذه العملية يدوية وقد تتطلب قدرا ملحوظا من الوقت. نأسف للإزعاج. بعد اكتمال العملية، سيتم إعادة توجيهك تلقائيا إلى الصفحة التي طلبتها.</value>
+  </data>
+  <data name="Maintenance_RebuildDescription" xml:space="preserve">
+    <value>يتم الان اعادة تشغيل هذا التطبيق، وهذا قد يستغرق فترة تصل إلى 10 دقائق أو أكثر. نأسف للإزعاج. بعد اكتمال العملية، سيتم إعادة توجيهك تلقائيا إلى الصفحة التي طلبتها.</value>
+  </data>
+  <data name="Maintenance_Title" xml:space="preserve">
+    <value>اعمال صيانة</value>
+  </data>
+  <data name="MaintenanceReadSide_Header" xml:space="preserve">
+    <value>تحت الصيانة...</value>
+  </data>
+  <data name="MaintenanceRebuild_Header" xml:space="preserve">
+    <value>إعادة تشغيل...</value>
+  </data>
+  <data name="MapDetails_DelinkUser" xml:space="preserve">
+    <value>إلغاء ربط المستخدم من الخريطة</value>
+  </data>
+  <data name="MapDetails_ImportedOn" xml:space="preserve">
+    <value>المستوردة على</value>
+  </data>
+  <data name="MapDetails_InterviewerName" xml:space="preserve">
+    <value>اسم الباحث</value>
+  </data>
+  <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+    <value>تظهر هذه النظرة العامة المحملة على خريطة العالم</value>
+  </data>
+  <data name="MapDetails_MapTitle" xml:space="preserve">
+    <value>خريطة</value>
+  </data>
+  <data name="MapDetails_MaxScale" xml:space="preserve">
+    <value>الحد الأعلى للمقياس</value>
+  </data>
+  <data name="MapDetails_MinScale" xml:space="preserve">
+    <value>الحد الأدنى للمقياس</value>
+  </data>
+  <data name="MapDetails_Size" xml:space="preserve">
+    <value>حجم</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>لم يتم العثور على نتائج</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>غير موجود</value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>حدث خطاء يرجى المحاولة مرة أخرى فيما بعد</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>العملية فشلت</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>أو</value>
+  </data>
+  <data name="PackagesInfo_DeviceId" xml:space="preserve">
+    <value>هوية الجهاز</value>
+  </data>
+  <data name="PackagesInfo_Header" xml:space="preserve">
+    <value>حزم معلومات الجهاز اللوحي</value>
+  </data>
+  <data name="PackagesInfo_Size" xml:space="preserve">
+    <value>الحجم (بايت)</value>
+  </data>
+  <data name="PackagesInfo_Title" xml:space="preserve">
+    <value>الفهرس</value>
+  </data>
+  <data name="PackagesInfo_UploadDate" xml:space="preserve">
+    <value>تاريخ التحميل</value>
+  </data>
+  <data name="PackagesInfo_UserId" xml:space="preserve">
+    <value>هوية المستخدم</value>
+  </data>
+  <data name="PackagesInfo_UserName" xml:space="preserve">
+    <value>اسم المستخدم </value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>انشاء مستخدم API</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>تعديل الملف الشخصي لمستخدم API: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>مستخدم API</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>مستخدم API &lt;b&gt;{0}&lt;/b&gt; تم انشاءه بنجاح</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>انشىء مقر رئيسي</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>تعديل الملف الشخصي للمقر الرئيسي: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>المقرات الرئيسية</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>انشىء ملف شخصي للباحث</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>تعديل الملف الشخصي للباحث: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>الملف الشخصي للباحث</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>الباحثين</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>انشاء مراقب</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>تعديل الملف الشخصي للمراقب: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>مراقبين</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>إنشاء مشرف</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>تعديل الملف الشخصي للمشرف: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>المشرفين</value>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>تفاصيل التعليمات الشخصية (اختياري) &lt;br&gt; سوف تكون مرئية لمستخدمين المقر الرئيسي فقط</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(الإصدار. {1}) {0}</value>
+  </data>
+  <data name="RejectedByHeadquarters" xml:space="preserve">
+    <value>مرفوض من المقر الرئيسي</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>مرفوض من المشرف</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>البحث</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>اظهر التصفية</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>مدة الحالة</value>
+  </data>
+  <data name="StatusDurationDescription" xml:space="preserve">
+    <value>عدد الايام التي بقيت فيها المهمات والمقابلات في وضعها الحالي</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>هذا الاجراء سوف ينشئ مستخدم فردي بحقوق مشرف,
+        &lt;br&gt;to create several users you can use &lt;a href="{0}" target="_blank"&gt;user batch creation&lt;/a&gt;.</value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>المشرف المؤمن (مربع الفحص) لا يمكنه تسجيل الدخول وتنفيذ أي إجراءات على الخادم.</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>المشرف المعين</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>المشرفين النشطين</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>الأرشيف</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>المشرفين الذين تم أرشفتهم</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>حالة الأرشيف</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>إذا أكمل الباحث المقابلات على الجهاز اللوحي فسيتم فقدان البيانات.</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>اختيار المشرف (المشرفين)</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>إلغاء الأرشفة</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>هل تريد الاستمرار؟</value>
+  </data>
+  <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
+    <value>تم انشاءه للعميل</value>
+  </data>
+  <data name="Survey_HasErrorsTitle" xml:space="preserve">
+    <value>يوحد أخطاء</value>
+  </data>
+  <data name="Survey_Header" xml:space="preserve">
+    <value>مقابلات</value>
+  </data>
+  <data name="Survey_LastUpdateTitle" xml:space="preserve">
+    <value>اخر تحديث</value>
+  </data>
+  <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
+    <value>مستلم من الباحث</value>
+  </data>
+  <data name="Survey_ResponsibleTitle" xml:space="preserve">
+    <value>مسؤول</value>
+  </data>
+  <data name="Survey_Status_Header" xml:space="preserve">
+    <value>الباحثين و الدراسات الاستقصائية</value>
+  </data>
+  <data name="Survey_Status_Title" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="Survey_StatusTitle" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} المقابلات</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>الباحث (الفريق)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>الدراسات الاستقصائية و الحالات</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>مشرف (الافرقة)</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
+    <value>موافق عليه من قبل المقر الرئيسي</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
+    <value>موافق عليه من قبل المشرف</value>
+  </data>
+  <data name="SurveysStatuses_Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="SurveysStatuses_InterviewerAssigned" xml:space="preserve">
+    <value>الباحث المعين</value>
+  </data>
+  <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
+    <value>مرفوض من المقر الرئيسي</value>
+  </data>
+  <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
+    <value>مرفوض من المشرف</value>
+  </data>
+  <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
+    <value>المشرف المعين</value>
+  </data>
+  <data name="SurveysStatuses_SurveyName" xml:space="preserve">
+    <value>اسم الدراسة الاستقصائية</value>
+  </data>
+  <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
+    <value>أعضاء الفريق</value>
+  </data>
+  <data name="SurveysStatuses_Title" xml:space="preserve">
+    <value>الدراسات الاستقصائية و الحالات</value>
+  </data>
+  <data name="SurveysStatuses_Total" xml:space="preserve">
+    <value>المجموع</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>عضو فريق</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>أعضاء الفريق والأوضاع</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>نموذج</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>مجموع</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>إلغاء الأرشفة</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="Upload_Upload" xml:space="preserve">
+    <value>تحميل</value>
+  </data>
+  <data name="Users_API_Instruction1" xml:space="preserve">
+    <value>اضغط على زر API لاضافة API جديد</value>
+  </data>
+  <data name="Users_API_Instruction2" xml:space="preserve">
+    <value>انقر على اسم  تسجيل الدخول لتعديل الملف الشخصي لمستخدم API موجود</value>
+  </data>
+  <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+    <value>اضغط على زر اضافة مقر رئيسي لاضافة مقر رئيسي جديد</value>
+  </data>
+  <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+    <value>انقر على اسم تسجيل الدخول لتعديل الملف الشخصي لمستخدم مقر رئيسي موجود.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+    <value>اضغط على زر اضافة باحث لاضافة باحث جديد.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+    <value>انقر على اسم تسجيل الدخول للاطلاع على معلومات الباحث وتعديل الملف الشخصي له</value>
+  </data>
+  <data name="Users_Observers_Instruction1" xml:space="preserve">
+    <value>اضغط على زر اضافة مراقب لاضافة مراقب جديد</value>
+  </data>
+  <data name="Users_Observers_Instruction2" xml:space="preserve">
+    <value>انقر على اسم تسجيل الدخول لتعديل الملف الشخصي لمراقب موجود.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+    <value>اضغط على زر اضافة مشرف لاضافة مشرف جديد</value>
+  </data>
+  <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+    <value>انقر على اسم تسجيل الدخول لتعديل الملف الشخصي لمشرف موجود.</value>
+  </data>
+  <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+    <value>يحتوي مجلد الموقع على اسم مسار طويل جدا. يرجى نقل الموقع إلى مجلد آخر باسم أقصر.</value>
+  </data>
+  <data name="YesNoQuestion_No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="YesNoQuestion_Yes" xml:space="preserve">
+    <value>نعم</value>
   </data>
 </root>

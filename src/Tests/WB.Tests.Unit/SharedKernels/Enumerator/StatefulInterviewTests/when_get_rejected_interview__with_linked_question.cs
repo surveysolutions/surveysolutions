@@ -29,8 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                         new Tuple<decimal, string>(1m, "1"), 
                         new Tuple<decimal, string>(2m, "2"), 
                         new Tuple<decimal, string>(3m, "3"), 
-                    }, new CommentSynchronizationDto[0]),
-                    new AnsweredQuestionSynchronizationDto(singleLinkedId, new decimal[0], 2m, new CommentSynchronizationDto[0]),     
+                    }, new CommentSynchronizationDto[0], null),
+                    new AnsweredQuestionSynchronizationDto(singleLinkedId, new decimal[0], 2m, new CommentSynchronizationDto[0], null),     
                 })));
             BecauseOf();
         }
