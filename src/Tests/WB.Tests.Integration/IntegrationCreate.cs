@@ -20,6 +20,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -29,7 +30,6 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -377,12 +377,12 @@ namespace WB.Tests.Integration
             => new DesignerEngineVersionService();
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
-            ISessionProvider sessionProvider = null, string idColumnName = "Id")
+            ISessionProvider sessionProvider = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgreReadSideStorage<TEntity>(
                 sessionProvider ?? Mock.Of<ISessionProvider>(),
-                Mock.Of<ILogger>(), idColumnName);
+                Mock.Of<ILogger>());
         }
 
         public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)

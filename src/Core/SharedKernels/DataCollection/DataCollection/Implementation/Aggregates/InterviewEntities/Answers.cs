@@ -152,7 +152,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return null;
         }
-        
+
+        public static CategoricalFixedMultiOptionAnswer FromIntArray(int[] checkedValues)
+            => new CategoricalFixedMultiOptionAnswer(checkedValues);
+
         public static CategoricalFixedMultiOptionAnswer FromDecimalArray(decimal[] checkedValues)
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 
@@ -213,7 +216,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<TextListAnswerRow> Rows { get; set; }
+        public IReadOnlyList<TextListAnswerRow> Rows { get; set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 

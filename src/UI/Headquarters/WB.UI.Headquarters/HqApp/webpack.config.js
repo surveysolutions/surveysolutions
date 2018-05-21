@@ -10,7 +10,7 @@ const config = {
         entry: "./src/hqapp/main.js",
         locales: ["Details", "Pages", "WebInterviewUI",
                   "WebInterview", "DataTables", "Common", "Users", "Assignments",
-                   "Strings", "Reports", "DevicesInterviewers", "UploadUsers", 
+                   "Strings", "Report", "Reports", "DevicesInterviewers", "UploadUsers", 
                    "MainMenu", "WebInterviewSetup", "MapReport"]
     },
     webinterview: {

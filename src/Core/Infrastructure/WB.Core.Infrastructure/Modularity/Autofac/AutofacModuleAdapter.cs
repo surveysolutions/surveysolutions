@@ -57,7 +57,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             return this.ctx.Resolve(type);
         }
 
-        public object GetServiceWithGenericType(Type type, Type genericType)
+        public object GetServiceWithGenericType(Type type, params Type[] genericType)
         {
             return ctx.Resolve(type.MakeGenericType(genericType));
         }
@@ -69,7 +69,13 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             return (Type) targetType?.Value;
         }
+
+        public Type[] GetGenericArguments()
+        {
+            return parameters.OfType<NamedParameter>().Select(np => np.Value).OfType<Type>().ToArray();
+        }
     }
+
     public class AutofacModuleAdapter : Module, IIocRegistry
     {
         private readonly IModule module;
@@ -126,11 +132,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
 
         public bool HasBinding<T>()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void BindToSelfInSingletonScopeWithConstructorArgument(Type[] types, string argumentName, Func<IModuleContext, object> argumentValue)
         {
             throw new NotImplementedException();
         }

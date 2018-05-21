@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAudioDialog audioDialog;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAudioService audioService;
-        public AnsweringViewModel Answering { get; private set; }
+        public AnsweringViewModel Answering { get; }
 
         public AudioQuestionViewModel(
             IPrincipal principal,
@@ -69,6 +69,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.audioDialog = audioDialog;
             this.audioFileStorage = audioFileStorage;
             this.audioService = audioService;
+
+            this.audioService.OnPlaybackCompleted += (sender, args) =>
+            {
+                this.IsPlaying = false;
+            };
+        }
+
+        public bool IsPlaying
+        {
+            get => isPlaying;
+            set
+            {
+                if (value == isPlaying) return;
+                isPlaying = value;
+                RaisePropertyChanged(() => IsPlaying);
+            }
+        }
+
+        public bool CanBePlayed
+        {
+            get => canBePlayed;
+            private set
+            {
+                if (value == canBePlayed) return;
+                canBePlayed = value;
+                RaisePropertyChanged(() => CanBePlayed);
+            }
         }
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -78,6 +105,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public Identity Identity => this.questionIdentity;
 
         private string answer;
+        private bool isPlaying;
+        private bool canBePlayed;
+
         public string Answer
         {
             get => this.answer;
@@ -88,7 +118,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
 
-
+        public IMvxCommand TogglePlayback => new MvxCommand(() =>
+        {
+            if (this.IsPlaying)
+            {
+                this.audioService.Stop();
+                this.IsPlaying = false;
+            }
+            else
+            {
+                this.audioService.Play(this.interviewId, this.questionIdentity, this.GetAudioFileName());
+                this.IsPlaying = true;
+            }
+        });
+        
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             this.questionState.Init(interviewId, entityIdentity, navigationState);
@@ -103,7 +146,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             var answerModel = interview.GetAudioQuestion(entityIdentity);
             if (answerModel.IsAnswered())
+            {
                 this.SetAnswer(answerModel.GetAnswer().Length);
+            }
 
             this.liteEventRegistry.Subscribe(this, interviewId);
         }
@@ -138,12 +183,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private void SetAnswer(TimeSpan duration)
-            => this.Answer = string.Format(UIResources.AudioQuestion_DurationFormat,
+        {
+            this.Answer = string.Format(UIResources.AudioQuestion_DurationFormat,
                 duration.Humanize(maxUnit: TimeUnit.Minute, minUnit: TimeUnit.Second));
+            
+            this.CanBePlayed = this.audioFileStorage.GetInterviewBinaryData(this.interviewId, GetAudioFileName()) != null;
+        }
 
         private async Task RecordAudioAsync()
         {
             if (this.audioService.IsRecording()) return;
+            this.audioService.Stop();
+            this.IsPlaying = false;
 
             try
             {
@@ -198,6 +249,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
+                if(this.IsPlaying) this.TogglePlayback.Execute();
+
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,

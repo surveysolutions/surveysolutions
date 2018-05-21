@@ -225,4 +225,46 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>The Size field must be -1 or more.</value>
   </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Select existing questionnaire to upgrade assignments from</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Existing not completed assignments are going to be upgraded from selected questionnaire and archived. </value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Select questionnaire to upgrade from</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Upgrade</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Upgrading assignments from {{from}} to {{to}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Upgrading {{processed}} of {{totalCount}}</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Waiting for other upgrades to finish </value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Upgrade stopped</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Upgraded successfully: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Not upgraded: {{count}}</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Download list</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Upgrade from {{from}} to {{to}} is finished</value>
+  </data>
 </root>

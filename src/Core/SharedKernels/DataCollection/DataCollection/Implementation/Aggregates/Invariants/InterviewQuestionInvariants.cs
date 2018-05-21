@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             public static readonly string MaxRosterRowCount = "MaxRosterRowCount";
             public static readonly string AvailableRosterVectors = "AvailableRosterVectors";
             public static readonly string ParentValue = "ParentValue";
+            public static readonly string ProtectedAnswer = "ProtectedAnswer";
         }
 
         private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
@@ -72,7 +73,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireTextPreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.Text);
+                .RequireQuestionExists(QuestionType.Text);
 
         public void RequireTextAnswerAllowed()
             => this
@@ -81,22 +82,43 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireNumericIntegerPreloadValueAllowed(int answer)
             => this
-                .RequireQuestionDeclared(QuestionType.Numeric)
+                .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer);
 
-        public void RequireNumericIntegerAnswerAllowed(int answer)
+        public void RequireNumericIntegerAnswerAllowed(int answer, int? protectedAnswer)
             => this
                 .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericIntegerQuestionDeclared()
                 .RequireRosterSizeAnswerNotNegative(answer)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answer)
-                .RequireQuestionEnabled();
+                .RequireQuestionEnabled()
+                .RequireProtectedAnswersNotReduced(answer, protectedAnswer);
+
+        private void RequireProtectedAnswersNotReduced(int answer, int? protectedAnswer)
+        {
+            if (protectedAnswer.HasValue)
+            {
+                if (answer < protectedAnswer)
+                {
+                    throw new InterviewException("Reduce value of protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, answer },
+                            {ExceptionKeys.ProtectedAnswer, protectedAnswer }
+                        }
+                    };
+                }
+            }
+        }
 
         public void RequireNumericRealPreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.Numeric)
+                .RequireQuestionExists(QuestionType.Numeric)
                 .RequireNumericRealQuestionDeclared();
 
         public void RequireNumericRealAnswerAllowed(double answer)
@@ -108,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireDateTimePreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.DateTime);
+                .RequireQuestionExists(QuestionType.DateTime);
 
         public void RequireDateTimeAnswerAllowed()
             => this
@@ -117,7 +139,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireFixedSingleOptionPreloadValueAllowed(decimal selectedValue)
             => this
-                .RequireQuestionDeclared(QuestionType.SingleOption)
+                .RequireQuestionExists(QuestionType.SingleOption)
                 .RequireOptionExists(selectedValue);
 
         public void RequireFixedSingleOptionAnswerAllowed(decimal selectedValue, QuestionnaireIdentity questionnaireIdentity)
@@ -141,14 +163,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireFixedMultipleOptionsPreloadValueAllowed(IReadOnlyCollection<int> selectedValues)
             => this
-                .RequireQuestionDeclared(QuestionType.MultyOption)
+                .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireOptionsExist(selectedValues)
                 .RequireNotYesNoMultipleOptionsQuestion()
                 .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
                 .RequireMaxAnswersCountLimit(selectedValues.Count);
 
-        public void RequireFixedMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues)
+
+        public void RequireFixedMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
             => this
                 .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireOptionsExist(selectedValues)
@@ -156,7 +179,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireRosterSizeAnswerNotNegative(selectedValues.Count)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(selectedValues.Count)
                 .RequireMaxAnswersCountLimit(selectedValues.Count)
-                .RequireQuestionEnabled();
+                .RequireQuestionEnabled()
+                .RequireProtectedAnswersNotRemoved(selectedValues, protectedValues);
+
+        public void RequireProtectedAnswersNotRemoved(IReadOnlyCollection<int> selectedValues, IReadOnlyCollection<int> protectedValues)
+        {
+            var missingProtectedAnswers = protectedValues?.Any(p => !selectedValues.Contains(p)) ?? false;
+            if (missingProtectedAnswers)
+            {
+                throw new InterviewException("Removing protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
+                {
+                    Data =
+                    {
+                        {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                        {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                        {ExceptionKeys.ProvidedAnswerValue, JoinUsingCommas(selectedValues) },
+                        {ExceptionKeys.ProtectedAnswer, JoinUsingCommas(protectedValues)}
+                    }
+                };
+            }
+        }
 
         public void RequireLinkedToListMultipleOptionsAnswerAllowed(IReadOnlyCollection<int> selectedValues)
             => this
@@ -181,7 +223,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             var yesAnswersCount = answer.CheckedOptions.Count(answeredOption => answeredOption.Yes);
 
             this
-                .RequireQuestionDeclared(QuestionType.MultyOption)
+                .RequireQuestionExists(QuestionType.MultyOption)
                 .RequireOptionsExist(selectedValues)
                 .RequireRosterSizeAnswerNotNegative(yesAnswersCount)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(yesAnswersCount)
@@ -204,12 +246,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireTextListPreloadValueAllowed(Tuple<decimal, string>[] answers)
             => this
-                .RequireQuestionDeclared(QuestionType.TextList)
+                .RequireQuestionExists(QuestionType.TextList)
                 .RequireRosterSizeAnswerNotNegative(answers.Length)
                 .RequireRosterSizeAnswerRespectsMaxRosterRowCount(answers.Length)
                 .RequireMaxAnswersCountLimit(answers.Length);
 
-        public void RequireTextListAnswerAllowed(Tuple<decimal, string>[] answers)
+        public void RequireTextListAnswerAllowed(Tuple<decimal, string>[] answers, IReadOnlyList<TextListAnswerRow> protectedAnswers)
             => this
                 .RequireQuestionExists(QuestionType.TextList)
                 .RequireRosterSizeAnswerNotNegative(answers.Length)
@@ -218,11 +260,32 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionEnabled()
                 .RequireUniqueValues(answers)
                 .RequireNotEmptyTexts(answers)
-                .RequireMaxAnswersCountLimit(answers);
+                .RequireMaxAnswersCountLimit(answers)
+                .RequireProtectedAnswersNotRemoved(answers, protectedAnswers);
+
+        private void RequireProtectedAnswersNotRemoved(Tuple<decimal, string>[] selectedValues, IReadOnlyList<TextListAnswerRow> protectedAnswers)
+        {
+            foreach (var protectedAnswer in protectedAnswers)
+            {
+                if (!selectedValues.Any(x => protectedAnswer.Value == x.Item1 && protectedAnswer.Text == x.Item2))
+                {
+                    throw new InterviewException("Removing or modification of protected answer is not allowed", InterviewDomainExceptionType.AnswerNotAccepted)
+                    {
+                        Data =
+                        {
+                            {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
+                            {ExceptionKeys.QuestionId, this.QuestionIdentity.ToString()},
+                            {ExceptionKeys.ProvidedAnswerValue, JoinUsingCommas(selectedValues.Select(x => x.Item1)) },
+                            {ExceptionKeys.ProtectedAnswer, JoinUsingCommas(protectedAnswers.Select(x => x.Value))}
+                        }
+                    };
+                }
+            }
+        }
 
         public void RequireGpsCoordinatesPreloadValueAllowed(GeoPosition answer)
             => this
-                .RequireQuestionDeclared(QuestionType.GpsCoordinates)
+                .RequireQuestionExists(QuestionType.GpsCoordinates)
                 .RequireGpsCoordinatesBeInRange(answer);
 
         public void RequireGpsCoordinatesAnswerAllowed()
@@ -232,7 +295,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         public void RequireQRBarcodePreloadValueAllowed()
             => this
-                .RequireQuestionDeclared(QuestionType.QRBarcode);
+                .RequireQuestionExists(QuestionType.QRBarcode);
 
         public void RequireQRBarcodeAnswerAllowed()
             => this

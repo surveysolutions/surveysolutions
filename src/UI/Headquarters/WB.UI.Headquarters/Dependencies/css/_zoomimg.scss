@@ -2,7 +2,6 @@
     cursor: pointer;
     @include transition(all, 0.3s);
 }
-
 .zoomImg {
 	&:hover, &:focus{
 		@include scale(1.1);

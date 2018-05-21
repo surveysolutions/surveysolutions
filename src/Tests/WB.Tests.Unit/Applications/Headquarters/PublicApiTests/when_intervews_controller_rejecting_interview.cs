@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         public void BecauseOf() 
         {
-            httpResponseMessage = controller.Reject(new StatusChangeApiModel() {Id = interviewId});
+            httpResponseMessage = controller.Reject(interviewId, null);
         }
 
         [NUnit.Framework.Test] public void should_return_OK_status_code () =>

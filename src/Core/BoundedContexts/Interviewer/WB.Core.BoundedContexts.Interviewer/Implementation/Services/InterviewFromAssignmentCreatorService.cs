@@ -13,11 +13,13 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 
@@ -34,6 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewUniqueKeyGenerator keyGenerator;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly ILogger logger;
+        private readonly IAuditLogService auditLogService;
 
         public InterviewFromAssignmentCreatorService(IMvxMessenger messenger,
             ICommandService commandService,
@@ -43,7 +46,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAssignmentDocumentsStorage assignmentsRepository,
             IInterviewUniqueKeyGenerator keyGenerator,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
-            ILogger logger)
+            ILogger logger,
+            IAuditLogService auditLogService)
         {
             this.messenger = messenger;
             this.commandService = commandService;
@@ -54,6 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.keyGenerator = keyGenerator;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.logger = logger;
+            this.auditLogService = auditLogService;
         }
 
         public async Task CreateInterviewAsync(int assignmentId)
@@ -68,15 +73,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 
                 List<InterviewAnswer> answers = this.GetAnswers(assignment.Answers);
+                List<string> protectedVariables = assignment.ProtectedVariables.Select(x => x.Variable).ToList();
 
+                var interviewKey = keyGenerator.Get();
                 ICommand createInterviewCommand = new CreateInterview(interviewId,
                     interviewerIdentity.UserId,
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
                     answers,
+                    protectedVariables,
                     DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
-                    keyGenerator.Get(),
+                    interviewKey,
                     assignment.Id
                 );
 
@@ -86,7 +94,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 var formatGuid = interviewId.FormatGuid();
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
-                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg{InterviewId = interviewId});
+                auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
+                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoaginViewModelArg>(new LoaginViewModelArg{InterviewId = interviewId});
             }
             catch (InterviewException e)
             {
