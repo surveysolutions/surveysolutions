@@ -160,22 +160,22 @@
     <value>Sync completed:</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
-    <value>{0} interviews uploaded</value>
+    <value>{0} interview(s) uploaded</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
-    <value>{0} interviews removed</value>
+    <value>{0} interview(s) removed</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
-    <value>{0} interviews rejected</value>
+    <value>{0} interview(s) rejected</value>
   </data>
   <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
-    <value>{0} new interviews downloaded</value>
+    <value>{0} new interview(s) downloaded</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>{0} new assignments downloaded</value>
+    <value>{0} new assignment(s) downloaded</value>
   </data>
   <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
-    <value>{0} assignments removed</value>
+    <value>{0} assignment(s) removed</value>
   </data>
   <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
     <value>nothing to sync</value>
