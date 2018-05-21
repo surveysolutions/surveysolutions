@@ -6,9 +6,9 @@ using System.Threading;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Main.Core.Entities.SubEntities;
-using WB.Core.Infrastructure.ReadSide;
 using WB.UI.Headquarters.Resources;
 using System.Threading.Tasks;
+using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
@@ -22,17 +22,27 @@ namespace WB.UI.Headquarters.Code
         private HqSignInManager userManager => ServiceLocator.Current.GetInstance<HqSignInManager>();
 
         public bool TreatPasswordAsPlain { get; set; } = false;
+        public bool FallbackToCookieAuth { get; set; } = false;
+
         private readonly UserRoles[] roles;
+        private readonly AuthorizeAttribute basicAuth;
 
         public ApiBasicAuthAttribute(params UserRoles[] roles)
         {
             this.roles = roles;
+            this.basicAuth = new AuthorizeAttribute();
         }
 
         public override async Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             if (actionContext.Request.Headers?.Authorization == null)
             {
+                if (FallbackToCookieAuth)
+                {
+                    await basicAuth.OnAuthorizationAsync(actionContext, cancellationToken);
+                    return;
+                }
+
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
             }

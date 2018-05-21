@@ -9,6 +9,8 @@ using WB.Infrastructure.Native.Storage;
 
 namespace WB.Tests.Abc.Storage
 {
+
+
     public class TestInMemoryWriter<T> : IReadSideRepositoryWriter<T>,
         IReadSideKeyValueStorage<T>,
         IQueryableReadSideRepositoryReader<T>,
@@ -16,7 +18,7 @@ namespace WB.Tests.Abc.Storage
         where T : class, IReadSideRepositoryEntity
     {
         private readonly Dictionary<string, T> storage = new Dictionary<string, T>();
-
+        
         public TestInMemoryWriter(){}
 
         public TestInMemoryWriter(string id, T view)
@@ -71,6 +73,100 @@ namespace WB.Tests.Abc.Storage
         {
             get { return typeof(T); }
         }
+
+        public string GetReadableStatus()
+        {
+            return "Test";
+        }
+
+        public TResult Query<TResult>(Func<IQueryable<T>, TResult> query)
+        {
+            return query.Invoke(this.Dictionary.Values.AsQueryable());
+        }
+
+        public TResult QueryOver<TResult>(Func<IQueryOver<T, T>, TResult> query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<T, T>, IQueryOver<TResult, TResult>> query)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class TestInMemoryWriter<T, TKey> : IReadSideRepositoryWriter<T, TKey>,
+        IReadSideKeyValueStorage<T, TKey>,
+        IQueryableReadSideRepositoryReader<T, TKey>,
+        INativeReadSideStorage<T, TKey>
+        where T : class, IReadSideRepositoryEntity
+    {
+        private readonly Func<TKey, TKey> incrementFunc;
+        private readonly Dictionary<TKey, T> storage = new Dictionary<TKey, T>();
+     
+        public TestInMemoryWriter(Func<TKey, TKey> incrementFunc = null)
+        {
+            this.incrementFunc = incrementFunc;
+        }
+
+        public TestInMemoryWriter(TKey id, T view)
+        {
+            this.Store(view, id);
+        }
+
+        public IReadOnlyDictionary<TKey, T> Dictionary => new ReadOnlyDictionary<TKey, T>(this.storage);
+
+        public int Count() => this.Dictionary.Count;
+
+        public T GetById(TKey id)
+        {
+            this.storage.TryGetValue(id, out var result);
+            return result;
+        }
+
+        public void Remove(TKey id)
+        {
+            this.storage.Remove(id);
+        }
+
+        public void Remove(T view)
+        {
+            var toRemove = this.storage.FirstOrDefault(item => item.Value == view);
+  
+            this.Remove(toRemove.Key);
+        }
+
+        public void Store(T view, TKey id)
+        {
+            if (this.incrementFunc != null)
+            {
+                this.storage[this.incrementFunc(id)] = view;
+            } else 
+            this.storage[id] = view;
+        }
+
+        public void BulkStore(List<Tuple<T, TKey>> bulk)
+        {
+            foreach (var tuple in bulk)
+            {
+                if (this.incrementFunc != null)
+                {
+                    this.Store(tuple.Item1, this.incrementFunc(tuple.Item2));
+                }
+                else
+                {
+                    this.Store(tuple.Item1, tuple.Item2);
+                }
+                
+            }
+        }
+
+        public void Flush()
+        {
+            
+        }
+
+        public Type ViewType => typeof(T);
 
         public string GetReadableStatus()
         {
