@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using MvvmCross.ViewModels;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -34,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewFileStorage imageFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelNavigationService viewModelNavigationService;
         private Guid interviewId;
         private Identity questionIdentity;
         private string variableName;
@@ -47,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireStorage,
             IPictureChooser pictureChooser,
             IUserInteractionService userInteractionService,
+            IViewModelNavigationService viewModelNavigationService,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -61,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public AnsweringViewModel Answering { get; }
@@ -78,6 +80,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public Identity Identity => this.questionIdentity;
         public IMvxAsyncCommand RequestAnswerCommand => new MvxAsyncCommand(this.RequestAnswerAsync);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+
+        public IMvxAsyncCommand ShowPhotoView => new MvxAsyncCommand(async ()=> 
+        {
+            if(!this.questionState.IsAnswered)
+                return;
+
+            await this.viewModelNavigationService.NavigateToAsync<PhotoViewViewModel, PhotoViewViewModelArgs>(
+                new PhotoViewViewModelArgs
+                {
+                    InterviewId = this.interviewId,
+                    FileName = this.GetPictureFileName()
+                });
+        });
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
 

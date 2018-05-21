@@ -581,4 +581,13 @@
     <value>Проверка завершена</value>
     <comment>Проверка завершена</comment>
   </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Список скрытых вопросов</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Вопросы триггеры для ростеров</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Показать список значений для загрузки</value>
+  </data>
 </root>

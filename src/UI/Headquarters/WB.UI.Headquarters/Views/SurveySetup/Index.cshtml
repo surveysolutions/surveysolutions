@@ -26,6 +26,7 @@
 
         var $newInterviewUrl = '@Url.Action("TakeNew", "HQ")';
         var $batchUploadUrl = '@Url.Action("BatchUpload", "SurveySetup")';
+        var $migrateAssignmentsUrl = '@Url.Action("UpgradeAssignments", "SurveySetup")';
         var $cloneQuestionnaireUrl = '@Url.Action("CloneQuestionnaire", "HQ")';
         var $exportQuestionnaireUrl = '@Url.Action("ExportQuestionnaire", "HQ")';
         var $deleteQuestionnaireUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "QuestionnairesApi", action = "DeleteQuestionnaire"})';
@@ -37,7 +38,7 @@
         $(function() {
             var model = new Supervisor.VM.Questionnaires(questionnaireListUrl, notifier, ajax,
                 $newInterviewUrl, $batchUploadUrl, $cloneQuestionnaireUrl,
-                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl);
+                $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl, $migrateAssignmentsUrl);
             model.toLocalDate = function(data) {
                 if (data === null || data === undefined || data === "") return "";
 
@@ -97,13 +98,17 @@
                             <text>
                                 if (!selectedRow.allowCensusMode) {
                                     items["addNew"] = {
-                                        name: "@HttpUtility.JavaScriptStringEncode(Dashboard.NewAssignment)",
+                                        name: "@Html.ToSafeJavascriptMessage(Dashboard.NewAssignment)",
                                         callback: model.addNewInterview
                                     };
                                 }
                                 items["batchUpload"] = {
-                                    name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(Dashboard.UploadAssignments))",
+                                    name: "@Html.ToSafeJavascriptMessage(Dashboard.UploadAssignments)",
                                     callback: model.interviewsBatchUpload
+                                };
+                                items["migrateFromOlderVersion"] = {
+                                    name: "@Html.ToSafeJavascriptMessage(Dashboard.UpgradeAssignments)",
+                                    callback: model.migrateAssignments
                                 };
                             </text>
                         }
@@ -121,7 +126,7 @@
                         <text>
                         if (!selectedRow.isDisabled) {
                             items["webSetup"] = {
-                                name: "@HttpUtility.JavaScriptStringEncode(Dashboard.WebInterviewSetup)",
+                                name: "@Html.ToSafeJavascriptMessage(Dashboard.WebInterviewSetup)",
                                 callback: model.webInterviewSetup
                             }
                         }
@@ -134,19 +139,20 @@
                         <text>
                         items["clone"] =
                         {
-                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.CloneQuestionnaire)",
+                            name: "@Html.ToSafeJavascriptMessage(Dashboard.CloneQuestionnaire)",
                             callback: model.cloneQuestionnaire,
                             disabled: selectedRow.isDisabled
                         };
                         items["delete"] =
                         {
-                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.DeleteQuestionnaire)",
+                            name: "@Html.ToSafeJavascriptMessage(Dashboard.DeleteQuestionnaire)",
                             callback: model.deleteQuestionnaire
                             /*,disabled: selectedRow.isDisabled*/
                         };
                         items["export"] = {
-                            name: "@HttpUtility.JavaScriptStringEncode(Dashboard.ExportQuestionnaire)",
-                            callback: model.exportQuestionnaire
+                            name: "@Html.ToSafeJavascriptMessage(Dashboard.ExportQuestionnaire)",
+                            callback: model.exportQuestionnaire,
+                            disabled: selectedRow.isDisabled
                         }
                         </text>
                     }

@@ -156,4 +156,40 @@
   <data name="ExportAssignmentsTitle" xml:space="preserve">
     <value>您可以下载已创建的、分配给调查员用以传递web关联给受访者的任务列表</value>
   </data>
+  <data name="CustomMessageTooLong" xml:space="preserve">
+    <value>自定义消息不应包含超过{0}个字符（包括html）</value>
+  </data>
+  <data name="CustomText" xml:space="preserve">
+    <value>使用自定义文本</value>
+  </data>
+  <data name="SaveAll" xml:space="preserve">
+    <value>全部保存</value>
+  </data>
+  <data name="TextCustomize" xml:space="preserve">
+    <value>显示给受访者的文本可以自定义</value>
+  </data>
+  <data name="TextsUpdated" xml:space="preserve">
+    <value>文本已更新</value>
+  </data>
+  <data name="WebInterviewUserMessages_FinishInterview_Descr" xml:space="preserve">
+    <value>在问卷完成时显示在最后一页的文字</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation_Descr" xml:space="preserve">
+    <value>在初始页面呈现给用户的邀请文本。％QUESTIONNAIRE％被替换为问卷模板名称</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation_Descr" xml:space="preserve">
+    <value>返回用户在恢复问卷时显示的文本。％QUESTIONNAIRE％被替换为问卷模板名称</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome_Descr" xml:space="preserve">
+    <value>返回用户在恢复问卷前显示的标题文字</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName_Descr" xml:space="preserve">
+    <value>要进行的调查名称。％QUESTIONNAIRE％被替换为问卷模板名称</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader_Descr" xml:space="preserve">
+    <value>问卷完成后显示标题文字</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText_Descr" xml:space="preserve">
+    <value>首页上的标题欢迎文字</value>
+  </data>
 </root>

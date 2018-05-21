@@ -23,12 +23,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public decimal Value { get; set; }
 
         private string title;
+        private bool isProtected;
+
         public string Title
         {
-            get
-            {
-                return this.title;
-            }
+            get => this.title;
             set
             {
                 this.title = value;
@@ -45,5 +44,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void OnItemEdited() => this.ItemEdited?.Invoke(this, EventArgs.Empty);
 
         public string ItemTag => this.QuestionState.Header.Identity + "_Item_" + Value;
+
+        public bool IsProtected
+        {
+            get => isProtected;
+            set
+            {
+                if (value == isProtected) return;
+                isProtected = value;
+                RaisePropertyChanged(() => IsProtected);
+            }
+        }
     }
 }

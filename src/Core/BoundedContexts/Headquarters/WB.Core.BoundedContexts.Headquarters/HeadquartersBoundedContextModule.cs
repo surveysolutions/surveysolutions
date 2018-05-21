@@ -2,6 +2,7 @@
 using System;
 using System.Configuration;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Factories;
@@ -57,6 +58,7 @@ using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
@@ -143,10 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
            
             registry.BindWithConstructorArgument<IPreloadingTemplateService, AssignmentImportTemplateGenerator>("folderPath", this.currentFolderPath);
-            registry.BindAsSingletonWithConstructorArgument<IPreloadedDataRepository, FilebasedPreloadedDataRepository>("folderPath", this.currentFolderPath);
             registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
-            registry.Bind<IQuestionDataParser, QuestionDataParser>();
-            registry.Bind<IPreloadedDataService, ImportDataParsingService>();
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
 
@@ -154,8 +153,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
-            registry.Bind<IRecordsAccessorFactory, CsvRecordsAccessorFactory>();
-            registry.Bind<IPreloadedDataServiceFactory, PreloadedDataServiceFactory>();
             registry.Bind<IBrokenInterviewPackagesViewFactory, BrokenInterviewPackagesViewFactory>();
             registry.Bind<ISynchronizationLogViewFactory, SynchronizationLogViewFactory>();
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
@@ -190,9 +187,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             
-
-            registry.Bind<IInterviewImportDataParsingService, InterviewImportDataParsingService>();
-
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
@@ -294,6 +288,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
+
+            registry.BindAsSingleton<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
+            registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
