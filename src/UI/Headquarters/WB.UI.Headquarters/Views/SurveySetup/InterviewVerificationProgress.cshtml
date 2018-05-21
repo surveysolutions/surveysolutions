@@ -50,7 +50,15 @@
                     'get',
                     {},
                     true,
-                    function(data) {
+                    function (data) {
+                        if (data == null || data.status === /*Import*/3)
+                        {
+                            var verificationFinishedUrl =
+                                '@Url.Action("InterviewImportProgress", "SurveySetup")';
+
+                            window.location.href = verificationFinishedUrl;
+                        }
+
                         self.status.isInProgress(data.verifiedInterviewsCount !== data.totalInterviewsCount);
                         self.status.verifiedCount(data.verifiedInterviewsCount);
                         self.status.totalCount(data.totalInterviewsCount);
@@ -61,15 +69,6 @@
 
                         if (shouldStopRequestUpdates(data) === false) {
                             _.delay(self.updateStatusByInterviewsImport, 3000);
-                        }
-
-
-                        if (!self.status.isInProgress())
-                        {
-                            var verificationFinishedUrl =
-                                '@Url.Action("InterviewImportProgress", "SurveySetup")';
-
-                            window.location.href = verificationFinishedUrl;
                         }
                     });
             };

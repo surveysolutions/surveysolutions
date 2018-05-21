@@ -6,6 +6,7 @@ using NHibernate.Linq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -79,7 +80,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var assignmentToImports = ConcatRosters(assignmentRows, questionnaire);
 
-            this.Save(file.FileInfo.FileName, questionnaireIdentity, assignmentToImports);
+            if (assignmentToImports.Count == 0)
+                yield return new PanelImportVerificationError(@"PL0000", PreloadingVerificationMessages.PL0024_DataWasNotFound);
+            else
+                this.Save(file.FileInfo.FileName, questionnaireIdentity, assignmentToImports);
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
@@ -120,7 +124,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var assignmentsToImport = FixRosterSizeAnswers(answersByAssignments, questionnaire).ToList();
 
-            this.Save(originalFileName, questionnaireIdentity, assignmentsToImport);
+            if (assignmentsToImport.Count == 0)
+                yield return new PanelImportVerificationError(@"PL0000", PreloadingVerificationMessages.PL0024_DataWasNotFound);
+            else
+                this.Save(originalFileName, questionnaireIdentity, assignmentsToImport);
         }
 
         public AssignmentToImport GetAssignmentById(int assignmentId)
