@@ -5,6 +5,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -35,6 +36,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         
         private SampleImportSettings sampleImportSettings => ServiceLocator.Current
             .GetInstance<SampleImportSettings>();
+        private AssignmentsImportTask assignmentsImportTask => ServiceLocator.Current
+            .GetInstance<AssignmentsImportTask>();
 
         private T ExecuteInPlain<T>(Func<T> func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
         private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
@@ -87,7 +90,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     });
 
                 this.ExecuteInPlain(() =>
-                    this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.VerificationCompleted));
+                    this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import));
+
+                assignmentsImportTask.Run();
 
                 sw.Stop();
                 this.logger.Debug($"Assignments verfication job: Finished. Elapsed time: {sw.Elapsed}");

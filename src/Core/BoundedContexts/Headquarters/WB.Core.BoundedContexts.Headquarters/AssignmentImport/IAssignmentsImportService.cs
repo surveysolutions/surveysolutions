@@ -10,13 +10,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     public interface IAssignmentsImportService
     {
-        IEnumerable<PanelImportVerificationError> VerifySimple(PreloadedFile file,
-            IQuestionnaire questionnaire);
+        IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file,
+            Guid defaultResponsibleId, IQuestionnaire questionnaire);
 
-        IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName, PreloadedFile[] allImportedFiles,
-            IQuestionnaire questionnaire);
+        IEnumerable<PanelImportVerificationError> VerifyPanelAndSaveIfNoErrors(string originalFileName, PreloadedFile[] allImportedFiles,
+            Guid defaultResponsibleId, IQuestionnaire questionnaire);
 
-        void ImportAssignment(int assignmentId, IQuestionnaire questionnaire);
+        void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire);
 
         AssignmentToImport GetAssignmentById(int assignmentId);
         int[] GetAllAssignmentIdsToVerify();
