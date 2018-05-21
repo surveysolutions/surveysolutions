@@ -16,7 +16,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public ExportFileType? exportType { get; set; }
         public string ConditionalQuestion { get; set; }
         public int[] Condition { get; set; }
-        public int[] ExcludeCategories { get; set; }
         public bool Pivot { get; set; }
 
         public ReportMode Mode { get; set; }

@@ -202,7 +202,6 @@ namespace WB.UI.Headquarters.API.PublicApi
                     Question = question,
                     TeamLeadId = input.TeamLeadId,
                     ShowTeamMembers = input.DetailedView,
-                    ShowTeamLead = true,
                     Orders = input.ToOrderRequestItems(),
                     PageSize = input.exportType == null ? input.PageSize : int.MaxValue,
                     Page = input.exportType == null ? input.PageIndex : 1,
@@ -210,7 +209,6 @@ namespace WB.UI.Headquarters.API.PublicApi
                     MaxAnswer = input.Max,
                     Condition = input.Condition,
                     ConditionalQuestion = conditionalQuestion,
-                    ExcludeCategories = input.ExcludeCategories,
                     Columns = input.ColummnsList.Select(c => c.Name).ToArray(),
                     Pivot = input.Pivot
                 };
@@ -219,7 +217,6 @@ namespace WB.UI.Headquarters.API.PublicApi
                 {
                     inputModel.TeamLeadId = this.authorizedUser.Id;
                     inputModel.ShowTeamMembers = true;
-                    inputModel.ShowTeamLead = false;
                 }
 
                 var stopwatch = Stopwatch.StartNew();

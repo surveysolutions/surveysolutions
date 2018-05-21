@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
@@ -69,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
                 CreateRowItem(firstTeamLead, interviewerC, answerWashington, 200), // missing answer on rural
             };
 
-            var subject = new CategoricalReportViewBuilder(answers, rows, true, true);
+            var subject = new CategoricalReportViewBuilder(answers, rows);
             this.report = subject.AsReportView();
         }
 
@@ -99,20 +96,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
                 new object[]{ firstTeamLead, interviewerC, 100L, 200L, 0L, 300L },
                 new object[]{ secondTeamLead, interviewerB, 15L, 25L, 35L, 75L }
             );
-        }
-
-        [TestCase(true, true, "TeamLead", "Responsible")]
-        [TestCase(true, false, "TeamLead")]
-        [TestCase(false, true, "Responsible")]
-        public void should_return_teamlead_responsible_columns_as_requested(bool showTeamLead, bool showResponsible, 
-            params string[] columns)
-        {
-            var subject = new CategoricalReportViewBuilder(answers, rows, showTeamLead, showResponsible);
-            var report = subject.AsReportView();
-
-            columns = columns.Concat(new[] {this.answers[0].AsColumnName()}).ToArray();
-
-            Assert.That(report.Columns.Take(columns.Length), Is.EqualTo(columns));
         }
     }
 }

@@ -11,11 +11,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public Guid? TeamLeadId { get; set; }
         public Guid? ConditionVariable { get; set; }
         public int[] Condition { get; set; }
-        public int[] Exclude { get; set; }
 
         public GetCategoricalReportParams(string questionnaireId,
             bool detailed, Guid variable, Guid? teamLeadId = null,
-            Guid? conditionVariable = null, int[] condition = null, int[] exclude = null)
+            Guid? conditionVariable = null, int[] condition = null)
         {
             this.QuestionnaireIdentity = questionnaireId;
             this.Detailed = detailed;
@@ -23,14 +22,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             this.Totals = false;
             this.TeamLeadId = teamLeadId;
             this.ConditionVariable = conditionVariable;
-            this.Condition = condition;
-            this.Exclude = exclude;
+            this.Condition = condition;;
         }
 
         public GetCategoricalReportParams AsTotals()
         {
             return new GetCategoricalReportParams(this.QuestionnaireIdentity, Detailed, Variable, TeamLeadId,
-                ConditionVariable, Condition, Exclude)
+                ConditionVariable, Condition)
             {
                 Detailed = false,
                 Totals = true

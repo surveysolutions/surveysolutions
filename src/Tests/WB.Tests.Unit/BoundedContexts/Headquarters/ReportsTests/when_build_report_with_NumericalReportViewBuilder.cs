@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
-using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
@@ -25,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
             numericalData[0].ResponsibleName = null;
             
             // act
-            var report = new NumericalReportViewBuilder(numericalData, true, true).AsReportView();
+            var report = new NumericalReportViewBuilder(numericalData).AsReportView();
 
             // assert
             Assert.That(report.Totals.Skip(2), Is.EqualTo(ToRow(numericalData[0]).Skip(2)));

@@ -27,11 +27,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                         input.Question.PublicKey,
                         input.TeamLeadId,
                         input.ConditionalQuestion?.PublicKey,
-                        input.Condition,
-                        input.ExcludeCategories)
+                        input.Condition)
                 );
 
-                var catergoricalData = new CategoricalReportViewBuilder(question.Answers, specialValuesData, input.ShowTeamLead, input.ShowTeamMembers);
+                var categoricalData = new CategoricalReportViewBuilder(question.Answers, specialValuesData);
 
                 var numericalData = this.interviewReportDataRepository.GetNumericalReportData(
                     input.QuestionnaireIdentity,
@@ -40,8 +39,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     input.ShowTeamMembers,
                     input.MinAnswer ?? Int32.MinValue, input.MaxAnswer ?? Int32.MaxValue);
 
-                var numericReport = new NumericalReportViewBuilder(numericalData, input.ShowTeamLead, input.ShowTeamMembers);
-                var specialValuesReport = catergoricalData.AsReportView();
+                var numericReport = new NumericalReportViewBuilder(numericalData);
+                var specialValuesReport = categoricalData.AsReportView();
 
                 reportView = numericReport.Merge(specialValuesReport);
             }
@@ -63,10 +62,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                         input.Question.PublicKey,
                         input.TeamLeadId, 
                         input.Condition != null ? input.ConditionalQuestion?.PublicKey : null,
-                        input.Condition,
-                        input.ExcludeCategories));
+                        input.Condition));
 
-                var report = new CategoricalReportViewBuilder(question.Answers, queryResult, input.ShowTeamLead, input.ShowTeamMembers);
+                var report = new CategoricalReportViewBuilder(question.Answers, queryResult);
                 reportView = report.AsReportView();
             }
 
