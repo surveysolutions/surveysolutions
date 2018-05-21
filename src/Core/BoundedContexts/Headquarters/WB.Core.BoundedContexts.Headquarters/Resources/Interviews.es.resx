@@ -120,10 +120,7 @@
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
     <value>Error durante la importación de entrevista con las preguntas de identificación {0}. El supervisor responsable no existe</value>
   </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Error durante la importación de entrevista con las preguntas de identificación {0}. Identificado de entrevista {1}, Cuestionario {2}, Excepción: {3}</value>
-  </data>
-  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+    <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>Archivo de datos es incorrecto</value>
   </data>
   <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">

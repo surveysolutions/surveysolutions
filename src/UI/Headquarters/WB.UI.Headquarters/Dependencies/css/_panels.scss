@@ -1,6 +1,5 @@
 
-.panel-table,
-.panel-details{
+.panel-table{
 	border-radius: 0;
 	margin-bottom: 0;
 }
@@ -32,21 +31,7 @@
 		}
 	}
 }
-.panel-details{
-	border: none;
-	box-shadow: none;
-	position: fixed;
-	top: 70px;
-	left: 12px;
-	right: 0;
-	border-bottom: 4px solid $gray_form;
-	z-index: 3;
-}
-@media (max-width: $screen-md-min){
-	.panel-details{
-		top: 60px;
-	}
-}
+
 @media (max-width: $screen-sm-min){
 	.panel-table{
 		padding: 0 10px;

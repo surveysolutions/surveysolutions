@@ -69,7 +69,7 @@ const paths = {
     'node_modules/angular-ui-router/release/angular-ui-router.js',
     'node_modules/xss/dist/xss.js',
     'node_modules/html5shiv/dist/html5shiv.js',
-    'node_modules/angular-ui-ace/src/ui-ace.js',
+    'details/scripts/modules/ui-ace.js',
     'external/jquery.validate.unobtrusive.bootstrap.js',
     'node_modules/jquery-validation/dist/jquery.validate.js',
     'details/scripts/modules/perfect_scrollbar.js',

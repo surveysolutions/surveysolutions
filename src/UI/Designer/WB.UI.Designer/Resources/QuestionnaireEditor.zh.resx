@@ -954,4 +954,157 @@
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}}个警告</value>
   </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>处理</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>添加注释</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>隐藏注释</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>新注释</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>添加注释</value>
+  </data>
+  <data name="HelpVariableName" xml:space="preserve">
+    <value>变量名和名单ID的长度为{{minLength}}至{{maxLength}}个字符，并且只能包含以下字符：a-z，A-Z，_或0-9。 第一个字符不能是0-9或_，最后一个字符不能是_。</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>添加已处理的注释</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>关闭元数据面板</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>使用签名板</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>是否为</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>注释不能包含超过{1}个字符</value>
+  </data>
+  <data name="ModalInfo" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>添加特殊值</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>选择国家</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>选择数据种类</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>选择数据收集的模式</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>选择研究类型</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}}个评论：</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{count}}个评论：</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>注释</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>您将在这里看到注释</value>
+  </data>
+  <data name="SideBarMacroEmptyLine2" xml:space="preserve">
+    <value>宏是一个命名表达式，可用于启用条件和验证表达式。宏由名称和内容组成。</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>额外的信息</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>同意将此问卷模板公开</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>基本信息</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>顾问：</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>国家：</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>范围：</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>资助：</value>
+  </data>
+  <data name="SideBarMetadataHeader" xml:space="preserve">
+    <value>问卷模板描述和调查信息</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>关键词：</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>数据种类：</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>语言：</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>数据收集模式：</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>注：</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>项目负责人：</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>问卷模板访问</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>研究类型：</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>副标题：</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>调查数据信息</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>调查信息</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>问卷模板描述</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>分析单位：</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>总体：</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>版本识别符：</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>版本注：</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>年：</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>变量名称</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>查看{{count}}已处理的注释</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>查看{{count}}已处理的注释</value>
+  </data>
 </root>

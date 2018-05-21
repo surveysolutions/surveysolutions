@@ -245,7 +245,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.FailedErrors = Enumerable.Empty<FailedValidationCondition>().ToList();
         }
 
-        public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; } = Enumerable.Empty<FailedValidationCondition>().ToReadOnlyCollection();
+        public IReadOnlyList<FailedValidationCondition> FailedWarnings { get; private set; } = Array.Empty<FailedValidationCondition>();
 
         public void MarkPlausible()
             => this.FailedWarnings = new List<FailedValidationCondition>();
@@ -286,6 +286,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public bool IsQRBarcode => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.QRBarcode;
         public bool IsText => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Text;
         public bool IsTextList => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.TextList;
+
+        public bool IsNumericInteger => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Integer;
         public bool IsYesNo => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.YesNo;
         public bool IsDateTime => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.DateTime;
         public bool IsGps => this.InterviewQuestion.InterviewQuestionType == InterviewQuestionType.Gps;
@@ -378,8 +380,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        public string FormatForException() => $"'{this.Title} [{this.VariableName}] ({this.Identity})'";
-
         public override string ToString()
             => $"{GetTypeAsText()} Question {this.Identity} '{this.VariableName}'. " +
                $"{(this.IsAnswered() ? $"Answer = '{this.GetAnswerAsString()}'" : "No answer")}. " +
@@ -466,7 +466,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-
         [Obsolete("use SetAnswer instead")]
         public void SetObjectAnswer(object answer)
         {
@@ -511,6 +510,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
             if (this.IsArea) { ((InterviewTreeAreaQuestion)this.InterviewQuestion).SetAnswer(AreaAnswer.FromArea((Area)answer)); return; }
             if (this.IsAudio) { ((InterviewTreeAudioQuestion)this.InterviewQuestion).SetAnswer((AudioAnswer)answer); return; }
+        }
+
+        public void SetObjectProtectedAnswer(object answer)
+        {
+            if (this.IsInteger) { ((InterviewTreeIntegerQuestion)this.InterviewQuestion).SetProtectedAnswer(NumericIntegerAnswer.FromInt(Convert.ToInt32(answer))); return; }
+            if (this.IsMultiFixedOption) { ((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).SetProtectedAnswer(CategoricalFixedMultiOptionAnswer.FromIntArray((int[])answer)); return; }
+            if (this.IsYesNo) { ((InterviewTreeYesNoQuestion)this.InterviewQuestion).SetProtectedAnswer(YesNoAnswer.FromAnsweredYesNoOptions((AnsweredYesNoOption[])answer)); return; }
+            if (this.IsTextList) { ((InterviewTreeTextListQuestion)this.InterviewQuestion).SetProtectedAnswer(TextListAnswer.FromTupleArray((Tuple<decimal, string>[])answer)); return; }
         }
 
         public string GetAnswerAsString(CultureInfo cultureInfo = null)
@@ -603,6 +610,18 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (question.IsMultiLinkedToList) return ((InterviewTreeMultiOptionLinkedToListQuestion)question.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray();
             if (question.IsArea) return ((InterviewTreeAreaQuestion)question.InterviewQuestion).GetAnswer()?.Value;
             if (question.IsAudio) return ((InterviewTreeAudioQuestion)question.InterviewQuestion).GetAnswer();
+
+            return null;
+        }
+
+        public static object GetProtectedAnswerAsObject(InterviewTreeQuestion question)
+        {
+            if (!question.HasProtectedAnswer()) return null;
+
+            if (question.IsInteger) return ((InterviewTreeIntegerQuestion)question.InterviewQuestion).ProtectedAnswer?.Value;
+            if (question.IsTextList) return ((InterviewTreeTextListQuestion)question.InterviewQuestion).ProtectedAnswer?.ToTupleArray();
+            if (question.IsMultiFixedOption) return ((InterviewTreeMultiOptionQuestion)question.InterviewQuestion).ProtectedAnswer?.ToInts()?.ToArray();
+            if (question.IsYesNo) return ((InterviewTreeYesNoQuestion)question.InterviewQuestion).ProtectedAnswer?.ToAnsweredYesNoOptions()?.ToArray();
 
             return null;
         }
@@ -753,6 +772,36 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void MarkAsReadonly()
         {
             this.IsReadonly = true;
+        }
+
+        public void ProtectAnswer()
+        {
+            if (this.IsMultiFixedOption) this.GetAsInterviewTreeMultiOptionQuestion().ProtectAnswer();
+            else if (this.IsTextList) this.GetAsInterviewTreeTextListQuestion().ProtectAnswer();
+            else if (this.IsNumericInteger) this.GetAsInterviewTreeIntegerQuestion().ProtectAnswer();
+            else if (this.IsYesNo) this.GetAsInterviewTreeYesNoQuestion().ProtectAnswers();
+            else 
+                throw new InvalidOperationException($"Can't protect answers for question of type {InterviewQuestionType}");
+        }
+
+        public bool HasProtectedAnswer()
+        {
+            if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswer?.CheckedValues.Count > 0;
+            if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().ProtectedAnswer?.Rows.Count > 0;
+            if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer != null;
+            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer?.CheckedOptions.Count > 0;
+
+            return false;
+        }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            if (this.IsMultiFixedOption) return this.GetAsInterviewTreeMultiOptionQuestion().IsAnswerProtected(value);
+            if (this.IsTextList) return this.GetAsInterviewTreeTextListQuestion().IsAnswerProtected(value);
+            if (this.IsInteger) return this.GetAsInterviewTreeIntegerQuestion().IsAnswerProtected(value);
+            if (this.IsYesNo) return this.GetAsInterviewTreeYesNoQuestion().IsAnswerProtected(value);
+
+            return false;
         }
     }
 
@@ -942,6 +991,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.answer = answer == null ? null : NumericIntegerAnswer.FromInt(Convert.ToInt32(answer));
         }
 
+        public NumericIntegerAnswer ProtectedAnswer { get; private set; }
+
         public override bool IsAnswered() => this.answer != null;
         public virtual NumericIntegerAnswer GetAnswer() => this.answer;
         public void SetAnswer(NumericIntegerAnswer answer) => this.answer = answer;
@@ -956,6 +1007,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
             questionInvariants.RequireNumericIntegerPreloadValueAllowed(answer.Value);
+        }
+
+        public void ProtectAnswer()
+        {
+            this.ProtectedAnswer = GetAnswer();
+        }
+
+        public void SetProtectedAnswer(NumericIntegerAnswer value)
+        {
+            this.ProtectedAnswer = value;
+        }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswer?.Value == (int) value;
         }
     }
 
@@ -1058,7 +1124,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
         }
 
-        public InterviewTreeYesNoQuestion(object answer): base(InterviewQuestionType.YesNo)
+        public InterviewTreeYesNoQuestion(object answer): this()
         {
             this.answer = YesNoAnswer.FromAnsweredYesNoOptions(answer as AnsweredYesNoOption[]);
         }
@@ -1075,13 +1141,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (interviewTreeYesNoQuestion == null)
                 return false;
 
-            if (interviewTreeYesNoQuestion?.answer == null && this.answer == null)
+            if (interviewTreeYesNoQuestion.answer == null && this.answer == null)
                 return true;
 
-            if (interviewTreeYesNoQuestion?.answer != null && this.answer != null)
+            if (interviewTreeYesNoQuestion.answer != null && this.answer != null)
                 return interviewTreeYesNoQuestion.answer.ToAnsweredYesNoOptions().SequenceEqual(this.answer.ToAnsweredYesNoOptions());
 
             return false;
+        }
+
+        public void ProtectAnswers()
+        {
+            this.ProtectedAnswer = GetAnswer();
+        }
+
+        public void SetProtectedAnswer(YesNoAnswer yesNoAnswer)
+        {
+            this.ProtectedAnswer = yesNoAnswer;
+        }
+
+        public YesNoAnswer ProtectedAnswer { get; private set; }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswer?.CheckedOptions.Any(a => a.Value == (int)value) ?? false;
         }
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeYesNoQuestion) this.MemberwiseClone();
@@ -1101,12 +1184,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeTextListQuestion() : base(InterviewQuestionType.TextList)
         {
+            this.ProtectedAnswer = null;
         }
 
-        public InterviewTreeTextListQuestion(object answer) : base(InterviewQuestionType.TextList)
+        public InterviewTreeTextListQuestion(object answer) : this()
         {
             this.answer = TextListAnswer.FromTupleArray(answer as Tuple<decimal, string>[]);
         }
+
+        public TextListAnswer ProtectedAnswer { get; private set; }
 
         public override bool IsAnswered() => this.answer != null && this.answer.Rows.Count > 0;
         public virtual TextListAnswer GetAnswer() => this.answer;
@@ -1142,6 +1228,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
             questionInvariants.RequireTextListPreloadValueAllowed(answer.ToTupleArray());
+        }
+
+        public void ProtectAnswer()
+        {
+            this.ProtectedAnswer = this.GetAnswer();
+        }
+
+        public void SetProtectedAnswer(TextListAnswer textListAnswer)
+        {
+            this.ProtectedAnswer = textListAnswer;
+        }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswer?.Rows.Any(x => x.Value == value) ?? false;
         }
     }
 
@@ -1190,9 +1291,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public InterviewTreeMultiOptionQuestion() : base(InterviewQuestionType.MultiFixedOption)
         {
+            this.ProtectedAnswer = null;
         }
 
-        public InterviewTreeMultiOptionQuestion(object answer) : base (InterviewQuestionType.MultiFixedOption)
+        public InterviewTreeMultiOptionQuestion(object answer) : this()
         {
             this.answer = CategoricalFixedMultiOptionAnswer.Convert(answer);
         }
@@ -1207,10 +1309,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var interviewTreeMultiOptionQuestion = question as InterviewTreeMultiOptionQuestion;
             if (interviewTreeMultiOptionQuestion == null)
                 return false;
-             if (interviewTreeMultiOptionQuestion?.answer == null && this.answer == null)
+             if (interviewTreeMultiOptionQuestion.answer == null && this.answer == null)
                 return true;
 
-            if (interviewTreeMultiOptionQuestion?.answer != null && this.answer != null)
+            if (interviewTreeMultiOptionQuestion.answer != null && this.answer != null)
                 return interviewTreeMultiOptionQuestion.answer.CheckedValues.SequenceEqual(this.answer.CheckedValues);
 
             return false;
@@ -1223,6 +1325,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
         {
             questionInvariants.RequireFixedMultipleOptionsPreloadValueAllowed(answer.CheckedValues);
+        }
+
+        public void ProtectAnswer()
+        {
+            this.ProtectedAnswer = GetAnswer();
+        }
+
+        public void SetProtectedAnswer(CategoricalFixedMultiOptionAnswer answer)
+        {
+            this.ProtectedAnswer = answer;
+        }
+
+        public CategoricalFixedMultiOptionAnswer ProtectedAnswer { get; private set; }
+
+        public bool IsAnswerProtected(decimal value)
+        {
+            return this.ProtectedAnswer?.CheckedValues.Contains((int) value) ?? false;
         }
     }
 

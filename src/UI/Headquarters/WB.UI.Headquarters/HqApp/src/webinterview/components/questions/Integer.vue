@@ -2,6 +2,15 @@
     <wb-question :question="$me" questionCssClassName="numeric-question">
         <div class="question-unit">
             <div class="options-group">
+                <div class="form-group" v-if="$me.isProtected">
+                    <div class="field locked-option unavailable-option answered">
+                        <input type="number" class="field-to-fill" placeholder="Tap to enter number" :value="$me.protectedAnswer" disabled="">
+                        <button type="submit" class="btn btn-link btn-clear">
+                            <span></span>
+                        </button>
+                        <div class="lock"></div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered }">
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill" 
@@ -11,8 +20,8 @@
                         :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                         :class="{ 'special-value-selected': isSpecialValueSelected }"
                         @blur="answerIntegerQuestion" 
-                        v-numericFormatting="{digitGroupSeparator: groupSeparator, decimalPlaces: 0, decimalPlaces: 0, minimumValue: '-2147483648', maximumValue: '2147483647'}">
-                        <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
+                        v-numericFormatting="{digitGroupSeparator: groupSeparator, decimalPlaces: 0, minimumValue: '-2147483648', maximumValue: '2147483647'}">
+                        <wb-remove-answer v-if="!isSpecialValueSelected && !$me.isProtected" :on-remove="removeAnswer" />
                     </div>
                 </div>
                 <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
@@ -27,7 +36,7 @@
                         <label :for="$me.id + '_' + option.value">
                             <span class="tick"></span> {{option.title}}
                         </label>
-                        <wb-remove-answer :on-remove="removeAnswer" />
+                        <wb-remove-answer :on-remove="removeAnswer" v-if="!$me.isProtected" />
                     </div>
                 </div>
                 <wb-lock />
@@ -94,6 +103,11 @@
 
                     if (answer > 2147483647 || answer < -2147483648 || answer % 1 !== 0) {
                         this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotParse"))
+                        return
+                    }
+
+                    if (this.$me.isProtected && this.$me.protectedAnswer > answer) {
+                        this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.NumberCannotBeLessThanProtected"))
                         return
                     }
 

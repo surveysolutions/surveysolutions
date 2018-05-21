@@ -269,4 +269,75 @@
     <value>Количество дней интервью в Статусе</value>
     <comment>Количество дней интервью в Статусе</comment>
   </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Обновление в процессе</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Обновлено {0}</value>
+    <comment>Обновлено {0}</comment>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Обновить сейчас</value>
+    <comment>Обновить сейчас</comment>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Сводная таблица</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Вопрос</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>Опции просмотра</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Сумма</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Минимум</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Максимум</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Количество</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Выберите уточняющий вопрос</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Выберите вопрос</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Уточняющий вопрос</value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>По командам</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>По членам команд</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Среднее</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Текст вопроса</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Отфильтровать по числовому значению</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Тег вопроса</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Перцентиль 95%</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Перцентиль 50%</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Перцентиль 5%</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Медиана</value>
+  </data>
 </root>

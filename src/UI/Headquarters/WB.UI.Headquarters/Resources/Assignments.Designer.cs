@@ -232,6 +232,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select existing questionnaire to upgrade assignments from.
+        /// </summary>
+        public static string SelectQuestionnaire {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select questionnaire to upgrade from.
+        /// </summary>
+        public static string SelectQuestionnaireToUpgradeFrom {
+            get {
+                return ResourceManager.GetString("SelectQuestionnaireToUpgradeFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select responsible.
         /// </summary>
         public static string SelectResponsible {
@@ -264,6 +282,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string SizeExplanation {
             get {
                 return ResourceManager.GetString("SizeExplanation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop.
+        /// </summary>
+        public static string Stop {
+            get {
+                return ResourceManager.GetString("Stop", resourceCulture);
             }
         }
         
@@ -381,6 +408,105 @@ namespace WB.UI.Headquarters.Resources {
         public static string UpdatedAt {
             get {
                 return ResourceManager.GetString("UpdatedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade.
+        /// </summary>
+        public static string UpgradeBtn {
+            get {
+                return ResourceManager.GetString("UpgradeBtn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade stopped.
+        /// </summary>
+        public static string UpgradeCancelled {
+            get {
+                return ResourceManager.GetString("UpgradeCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing not completed assignments are going to be upgraded from selected questionnaire and archived. .
+        /// </summary>
+        public static string UpgradeDescription {
+            get {
+                return ResourceManager.GetString("UpgradeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download list.
+        /// </summary>
+        public static string UpgradeDownloadFailed {
+            get {
+                return ResourceManager.GetString("UpgradeDownloadFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for other upgrades to finish .
+        /// </summary>
+        public static string UpgradePreparation {
+            get {
+                return ResourceManager.GetString("UpgradePreparation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string UpgradeProgressDone {
+            get {
+                return ResourceManager.GetString("UpgradeProgressDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgraded successfully: {{processed}}.
+        /// </summary>
+        public static string UpgradeProgressDoneCount {
+            get {
+                return ResourceManager.GetString("UpgradeProgressDoneCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade from {{from}} to {{to}} is finished.
+        /// </summary>
+        public static string UpgradeProgressDoneTitle {
+            get {
+                return ResourceManager.GetString("UpgradeProgressDoneTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not upgraded: {{count}}.
+        /// </summary>
+        public static string UpgradeProgressErrorCount {
+            get {
+                return ResourceManager.GetString("UpgradeProgressErrorCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrading {{processed}} of {{totalCount}}.
+        /// </summary>
+        public static string UpgradeProgressNumbers {
+            get {
+                return ResourceManager.GetString("UpgradeProgressNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrading assignments from {{from}} to {{to}}.
+        /// </summary>
+        public static string UpgradeProgressTitle {
+            get {
+                return ResourceManager.GetString("UpgradeProgressTitle", resourceCulture);
             }
         }
     }

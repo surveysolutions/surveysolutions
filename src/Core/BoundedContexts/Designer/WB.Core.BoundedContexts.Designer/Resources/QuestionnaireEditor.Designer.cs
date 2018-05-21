@@ -142,6 +142,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Geography.
+        /// </summary>
+        public static string QuestionTypeGeography {
+            get {
+                return ResourceManager.GetString("QuestionTypeGeography", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GPS.
         /// </summary>
         public static string QuestionTypeGPS {
