@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
@@ -189,7 +188,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             Error<AssignmentIntegerAnswer>(Integer_NotParsed, "PL0018", messages.PL0018_ExpectedIntNotParsed),
             Error<AssignmentDoubleAnswer>(Double_NotParsed, "PL0019", messages.PL0019_ExpectedDecimalNotParsed),
             Error<AssignmentIntegerAnswer>(Integer_IsNegativeRosterSize, "PL0022", messages.PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative),
-            Error<AssignmentResponsible>(Responsible_IsEmpty, "PL0025", messages.PL0025_ResponsibleNameIsEmpty),
             Error<AssignmentResponsible>(Responsible_NotFound, "PL0026", messages.PL0026_ResponsibleWasNotFound),
             Error<AssignmentResponsible>(Responsible_IsLocked, "PL0027", messages.PL0027_ResponsibleIsLocked),
             Error<AssignmentResponsible>(Responsible_HasInvalidRole, "PL0028", messages.PL0028_UserIsNotSupervisorOrInterviewer),
@@ -555,9 +553,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
         private bool Responsible_NotFound(AssignmentResponsible responsible) 
             => !string.IsNullOrWhiteSpace(responsible.Value) && responsible.Responsible == null;
-
-        private bool Responsible_IsEmpty(AssignmentResponsible responsible) 
-            => string.IsNullOrWhiteSpace(responsible.Value);
         
         private bool Quantity_IsNegative(AssignmentQuantity quantity)
             => quantity.Quantity.HasValue && quantity.Quantity < -1;

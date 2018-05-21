@@ -23,8 +23,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
-    public class 
-        AssignmentsImportService : IAssignmentsImportService
+    public class  AssignmentsImportService : IAssignmentsImportService
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
@@ -57,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             this.assignmentsImportFileConverter = assignmentsImportFileConverter;
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifySimple(PreloadedFile file, IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifySimpleAndSaveIfNoErrors(PreloadedFile file, Guid defaultResponsibleId, IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
 
@@ -78,16 +77,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            this.Save(file.FileInfo.FileName, questionnaireIdentity, 
-                assignmentRows.Select(row =>
-                        ToAssignmentToImport(new[] {(RosterVector.Empty, row.Answers.OfType<IAssignmentAnswer>())},
+            this.Save(file.FileInfo.FileName, questionnaireIdentity,
+                defaultResponsibleId, assignmentRows.Select(row =>
+                        ToAssignmentToImport(new[] { (RosterVector.Empty, row.Answers.OfType<IAssignmentAnswer>()) },
                             row.Responsible, row.Quantity, questionnaire))
                     .ToArray());
         }
 
-        public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
-            PreloadedFile[] allImportedFiles,
-            IQuestionnaire questionnaire)
+        public IEnumerable<PanelImportVerificationError> VerifyPanelAndSaveIfNoErrors(string originalFileName,
+            PreloadedFile[] allImportedFiles, Guid defaultResponsibleId, IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
 
@@ -119,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            this.Save(originalFileName, questionnaireIdentity, ConcatRosters(assignmentRows, questionnaire));
+            this.Save(originalFileName, questionnaireIdentity, defaultResponsibleId, ConcatRosters(assignmentRows, questionnaire));
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
@@ -166,7 +164,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 StartedDate = process.StartedDate,
                 ResponsibleName = process.Responsible,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(process.QuestionnaireId),
-                ProcessStatus = process.Status
+                ProcessStatus = process.Status,
+                AssignedTo = process.AssignedTo
             };
 
             if (!this.importAssignmentsRepository.Query(x => x.Any())) return status;
@@ -224,12 +223,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public IEnumerable<string> GetImportAssignmentsErrors()
             => this.importAssignmentsRepository.Query(x => x.Where(_ => _.Error != null).Select(_ => _.Error));
 
-        public void ImportAssignment(int assignmentId, IQuestionnaire questionnaire)
+        public void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
             var assignmentToImport = this.GetAssignmentById(assignmentId);
 
-            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor.Value;
+            var responsibleId = assignmentToImport.Interviewer ?? assignmentToImport.Supervisor ?? defaultResponsible;
             var identifyingQuestionIds = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             var assignment = new Assignment(questionnaireIdentity, responsibleId, assignmentToImport.Quantity);
@@ -264,15 +263,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 .Set(c => c.Status, c => status)
                 .Update();
 
-        private void Save(string fileName, QuestionnaireIdentity questionnaireIdentity, IList<AssignmentToImport> assignments)
+        private void Save(string fileName, QuestionnaireIdentity questionnaireIdentity, Guid defaultResponsible, IList<AssignmentToImport> assignments)
         {
             this.RemoveAllAssignmentsToImport();
 
-            this.SaveProcess(fileName, questionnaireIdentity, assignments);
+            this.SaveProcess(fileName, questionnaireIdentity, defaultResponsible, assignments);
             this.SaveAssignments(assignments);
         }
 
-        private void SaveProcess(string fileName, QuestionnaireIdentity questionnaireIdentity, IList<AssignmentToImport> assignments)
+        private void SaveProcess(string fileName, QuestionnaireIdentity questionnaireIdentity,
+            Guid defaultResponsible, IList<AssignmentToImport> assignments)
         {
             var process = this.importAssignmentsProcessRepository.Query(x => x.FirstOrDefault()) ??
                           new AssignmentsImportProcess();
@@ -283,6 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             process.StartedDate = DateTime.UtcNow;
             process.QuestionnaireId = questionnaireIdentity.ToString();
             process.Status = AssignmentsImportProcessStatus.Verification;
+            process.AssignedTo = defaultResponsible;
 
             this.importAssignmentsProcessRepository.Store(process, process.Id);
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
@@ -19,7 +18,6 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -42,7 +40,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentsImportService assignmentsImportService;
-        private readonly AssignmentsImportTask assignmentsImportTask;
         private readonly AssignmentsVerificationTask assignmentsVerificationTask;
         private readonly IAssignmentsImportReader assignmentsImportReader;
         private readonly IPreloadedDataVerifier dataVerifier;
@@ -59,7 +56,6 @@ namespace WB.UI.Headquarters.Controllers
             IFileSystemAccessor fileSystemAccessor,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentsImportService assignmentsImportService,
-            AssignmentsImportTask assignmentsImportTask,
             AssignmentsVerificationTask assignmentsVerificationTask,
             IAssignmentsImportReader assignmentsImportReader,
             IPreloadedDataVerifier dataVerifier,
@@ -73,7 +69,6 @@ namespace WB.UI.Headquarters.Controllers
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireStorage = questionnaireStorage;
             this.assignmentsImportService = assignmentsImportService;
-            this.assignmentsImportTask = assignmentsImportTask;
             this.assignmentsVerificationTask = assignmentsVerificationTask;
             this.assignmentsImportReader = assignmentsImportReader;
             this.dataVerifier = dataVerifier;
@@ -254,7 +249,7 @@ namespace WB.UI.Headquarters.Controllers
 
                 var allImportedFiles = this.assignmentsImportReader.ReadZipFile(model.File.InputStream).ToArray();
                 var answerErrors = this.assignmentsImportService
-                    .VerifyPanel(model.File.FileName, allImportedFiles, questionnaire).Take(10).ToArray();
+                    .VerifyPanelAndSaveIfNoErrors(model.File.FileName, allImportedFiles, model.ResponsibleId, questionnaire).Take(10).ToArray();
 
                 if (answerErrors.Any())
                 {
@@ -373,7 +368,7 @@ namespace WB.UI.Headquarters.Controllers
                         CreateError(questionnaireIdentity, model.File.FileName, messages.PL0024_DataWasNotFound));
                 }
 
-                var answerErrors = this.assignmentsImportService.VerifySimple(preloadedFile, questionnaire).Take(10).ToArray();
+                var answerErrors = this.assignmentsImportService.VerifySimpleAndSaveIfNoErrors(preloadedFile, model.ResponsibleId, questionnaire).Take(10).ToArray();
                 if (answerErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
@@ -390,68 +385,7 @@ namespace WB.UI.Headquarters.Controllers
                     CreateError(questionnaireIdentity, model.File.FileName, Pages.GlobalSettings_UnhandledExceptionMessage));
             }
 
-            return this.RedirectToAction("InterviewImportConfirmation");
-        }
-
-        [HttpGet]
-        public ActionResult InterviewImportConfirmation()
-        {
-            var status = this.assignmentsImportService.GetImportStatus();
-            if (status == null) return RedirectToAction("Index");
-
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportConfirmation));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
-
-            return this.View(new PreloadedDataConfirmationModel
-            {
-                QuestionnaireId = status.QuestionnaireIdentity.QuestionnaireId,
-                Version = status.QuestionnaireIdentity.Version,
-                QuestionnaireTitle = questionnaireInfo?.Title,
-                FileName = status.FileName,
-                EntitiesCount = status.TotalCount,
-                WasResponsibleProvided = status.AssignedToInterviewersCount + status.AssignedToSupervisorsCount > 0,
-                EnumeratorsCount = status.AssignedToInterviewersCount,
-                SupervisorsCount = status.AssignedToSupervisorsCount
-            });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ObserverNotAllowed]
-        public ActionResult InterviewImportConfirmation(PreloadedDataConfirmationModel model)
-        {
-            this.ViewBag.ActivePage = MenuItem.Questionnaires;
-
-            var status = this.assignmentsImportService.GetImportStatus();
-            if (status == null) return RedirectToAction("Index");
-
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportConfirmation));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-
-            var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.Version);
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
-            if (questionnaireInfo.IsDeleted)
-            {
-                return this.View("InterviewImportVerificationErrors",
-                    CreateError(questionnaireIdentity, null, global::Resources.BatchUpload.Prerequisite_Questionnaire));
-            }
-
-            if (!this.ModelState.IsValid)
-            {
-                model.QuestionnaireTitle = questionnaireInfo.Title;
-                return this.View(model);
-            }
-
-            if (!model.WasResponsibleProvided && model.ResponsibleId.HasValue)
-                this.assignmentsImportService.SetResponsibleToAllImportedAssignments(model.ResponsibleId.Value);
-
-            this.assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
-
-            this.assignmentsImportTask.Run();
-
-            return this.RedirectToAction("InterviewImportProgress");
+            return this.RedirectToAction("InterviewVerificationProgress");
         }
 
         [ObserverNotAllowed]
@@ -498,13 +432,6 @@ namespace WB.UI.Headquarters.Controllers
             });
         }
 
-        [ObserverNotAllowed]
-        public ActionResult CancelImportAssignments(Guid id, long version)
-        {
-            this.assignmentsImportService.RemoveAllAssignmentsToImport();
-            return this.RedirectToAction(nameof(BatchUpload), new {id, version});
-        }
-
         [Localizable(false)]
         private ActionResult GetImportAssignmentsPageToRedirect(AssignmentsImportStatus status, string actionName)
         {
@@ -512,9 +439,8 @@ namespace WB.UI.Headquarters.Controllers
 
             var importAssignmentsPages = new (string actionName, Func<bool> shouldRedirect)[]
             {
-                (nameof(InterviewImportProgress), () => IsAssignmentsImportIsInProgress(status)),
-                (nameof(InterviewVerificationProgress), () => IsAssignmentsVerifying(status)),
-                (nameof(InterviewImportConfirmation), () => IsAssignmentsReadyToImport(status)),
+                (nameof(InterviewImportProgress), () => IsAssignmentsImporting(status)),
+                (nameof(InterviewVerificationProgress), () => IsAssignmentsVerifying(status))
             };
 
             foreach (var importAssignmentsPage in importAssignmentsPages)
@@ -526,13 +452,10 @@ namespace WB.UI.Headquarters.Controllers
             return null;
         }
 
-        private static bool IsAssignmentsReadyToImport(AssignmentsImportStatus status)
-            => status.ProcessStatus == AssignmentsImportProcessStatus.VerificationCompleted;
-
         private static bool IsAssignmentsVerifying(AssignmentsImportStatus status)
             => status.ProcessStatus  == AssignmentsImportProcessStatus.Verification;
 
-        private static bool IsAssignmentsImportIsInProgress(AssignmentsImportStatus status)
+        private static bool IsAssignmentsImporting(AssignmentsImportStatus status)
             => status.ProcessStatus == AssignmentsImportProcessStatus.Import ||
                status.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted;
 

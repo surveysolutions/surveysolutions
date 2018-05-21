@@ -19,5 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
         public long WithErrorsCount { get; set; }
         public long TotalCount { get; set; }
         public AssignmentsImportProcessStatus ProcessStatus { get; set; }
+        public Guid AssignedTo { get; set; }
     }
 }
