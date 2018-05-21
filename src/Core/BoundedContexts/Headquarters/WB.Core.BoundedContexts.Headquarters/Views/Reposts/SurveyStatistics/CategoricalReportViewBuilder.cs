@@ -17,8 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         private readonly IEnumerable<string> headersWithData;
 
         private readonly GetCategoricalReportItem[] rows;
-        private readonly bool showResponsible;
-        private readonly bool showTeamLead;
 
         /// <summary>
         /// Convert into table result of get_categorical_report function
@@ -29,10 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         /// </summary>
         /// <param name="answers"></param>
         /// <param name="rows"></param>
-        /// <param name="showTeamLead"></param>
-        /// <param name="showResponsible"></param>
-        public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows,
-            bool showTeamLead, bool showResponsible)
+        public CategoricalReportViewBuilder(List<Answer> answers, IEnumerable<GetCategoricalReportItem> rows)
         {
             answersIndexMap = GetAnswersMap(answers);
 
@@ -40,8 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             columnsWithData = answers.Select(a => a.AsColumnName());
 
             this.rows = rows?.ToArray() ?? Array.Empty<GetCategoricalReportItem>();
-            this.showTeamLead = showTeamLead;
-            this.showResponsible = showResponsible;
         }
 
         public ReportView AsReportView()
@@ -55,8 +48,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             report.Totals = new object[report.Columns.Length];
             var dataIndex = 0;
 
-            if (showTeamLead) SetRowValue(report.Totals, dataIndex++, Strings.AllTeams);
-            if (showResponsible) SetRowValue(report.Totals, dataIndex++, Strings.AllInterviewers);
+            SetRowValue(report.Totals, dataIndex++, Strings.AllTeams);
+            SetRowValue(report.Totals, dataIndex++, Strings.AllInterviewers);
 
             report.Totals.Clear(0L, dataIndex);
 
@@ -80,8 +73,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 {
                     existingRow = new object[report.Columns.Length];
                     var rowIndex = 0;
-                    if (showTeamLead)    SetRowValue(existingRow, rowIndex++, row.TeamLeadName);
-                    if (showResponsible) SetRowValue(existingRow, rowIndex++, row.ResponsibleName);
+                    SetRowValue(existingRow, rowIndex++, row.TeamLeadName);
+                    SetRowValue(existingRow, rowIndex++, row.ResponsibleName);
 
                     existingRow.Clear(0L, rowIndex);
 
@@ -112,8 +105,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
         private IEnumerable<(string column, string header)> GetColumnData()
         {
-            if (showTeamLead) yield return ("TeamLead", Report.COLUMN_TEAMS);
-            if (showResponsible) yield return ("Responsible", Report.COLUMN_TEAM_MEMBER);
+            yield return ("TeamLead", Report.COLUMN_TEAMS);
+            yield return ("Responsible", Report.COLUMN_TEAM_MEMBER);
 
             foreach (var data in columnsWithData.Zip(headersWithData, (col, head) => (col, head))) yield return data;
 
