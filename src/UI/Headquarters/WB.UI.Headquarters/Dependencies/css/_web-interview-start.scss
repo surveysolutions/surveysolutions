@@ -7,9 +7,9 @@ html body.dynamic-content{
 }
 .start-web-interview{
 	display: table;
-    height: calc(100% - 100px);
+    height: 100%;
 	width: 100%;
-	.content-wrapper{
+	.container-wrapper{
 		display: table-cell;
 		vertical-align: middle;
 	}

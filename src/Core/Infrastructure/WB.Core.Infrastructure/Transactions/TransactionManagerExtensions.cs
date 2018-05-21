@@ -50,7 +50,7 @@ namespace WB.Core.Infrastructure.Transactions
                 }
                 return result;
             }
-            catch(Exception r)
+            catch(Exception)
             {
                 if (shouldStartTransaction)
                 {

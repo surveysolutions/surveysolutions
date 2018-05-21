@@ -21,7 +21,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class InterviewSummaryDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    public class InterviewSummaryDenormalizer : 
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
@@ -37,10 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
-        IUpdateHandler<InterviewSummary, AnswersDeclaredInvalid>,
-        IUpdateHandler<InterviewSummary, AnswersDeclaredValid>,
-        IUpdateHandler<InterviewSummary, StaticTextsDeclaredInvalid>,
-        IUpdateHandler<InterviewSummary, StaticTextsDeclaredValid>,
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
@@ -302,37 +299,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     interview.IsAssignedToInterviewer = false;
                     interview.ReceivedByInterviewer = false;
                 }
-            });
-        }
-
-        
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersDeclaredInvalid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview => {
-                interview.ErrorsCount += @event.Payload.FailedValidationConditions.Count;
-            });
-        }
-
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AnswersDeclaredValid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview => {
-                interview.ErrorsCount -= @event.Payload.Questions.Length;
-                interview.ErrorsCount = Math.Max(interview.ErrorsCount, 0);
-            });
-        }
-
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<StaticTextsDeclaredInvalid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview => {
-                interview.ErrorsCount += @event.Payload.GetFailedValidationConditionsDictionary().Count;
-            });
-        }
-
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<StaticTextsDeclaredValid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview => {
-                interview.ErrorsCount -= @event.Payload.StaticTexts.Length;
-                interview.ErrorsCount = Math.Max(interview.ErrorsCount, 0);
             });
         }
 

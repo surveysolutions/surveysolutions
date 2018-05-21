@@ -259,6 +259,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 variableName: "variable",
                 questionType: QuestionType.Numeric, 
                 answer: 10);
+            question.ProtectAnswer();
 
             //act
             var clonedQuestion = (InterviewTreeQuestion)question.Clone();
@@ -273,6 +274,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.NotNull(clonedQuestion.GetAsInterviewTreeIntegerQuestion());
             Assert.AreEqual(clonedQuestion.GetAsInterviewTreeIntegerQuestion().GetAnswer(), question.GetAsInterviewTreeIntegerQuestion().GetAnswer());
             Assert.That(ReferenceEquals(clonedQuestion.GetAsInterviewTreeIntegerQuestion(), question.GetAsInterviewTreeIntegerQuestion()), Is.False);
+            Assert.AreEqual(clonedQuestion.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer, question.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer);
         }
 
         [Test]
@@ -314,6 +316,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 variableName: "variable",
                 questionType: QuestionType.TextList, 
                 answer: new[] { new Tuple<decimal, string>(1, "1") });
+            question.ProtectAnswer();
 
             //act
             var clonedQuestion = (InterviewTreeQuestion)question.Clone();
@@ -327,6 +330,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.GetAsInterviewTreeTextListQuestion());
             Assert.AreEqual(clonedQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer(), question.GetAsInterviewTreeTextListQuestion().GetAnswer());
+            Assert.AreEqual(clonedQuestion.GetAsInterviewTreeTextListQuestion().ProtectedAnswer, question.GetAsInterviewTreeTextListQuestion().ProtectedAnswer);
             Assert.That(ReferenceEquals(clonedQuestion.GetAsInterviewTreeTextListQuestion(), question.GetAsInterviewTreeTextListQuestion()), Is.False);
         }
 
@@ -422,6 +426,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 variableName: "variable",
                 questionType: QuestionType.MultyOption, 
                 answer: new decimal[] { 5, 7 });
+            question.ProtectAnswer();
 
             //act
             var clonedQuestion = (InterviewTreeQuestion)question.Clone();
@@ -435,6 +440,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.IsDisabled(), question.IsDisabled());
             Assert.NotNull(clonedQuestion.GetAsInterviewTreeMultiOptionQuestion());
             Assert.AreEqual(clonedQuestion.GetAsInterviewTreeMultiOptionQuestion().GetAnswer(), question.GetAsInterviewTreeMultiOptionQuestion().GetAnswer());
+            Assert.AreEqual(clonedQuestion.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswer, question.GetAsInterviewTreeMultiOptionQuestion().ProtectedAnswer);
             Assert.That(ReferenceEquals(clonedQuestion.GetAsInterviewTreeMultiOptionQuestion(), question.GetAsInterviewTreeMultiOptionQuestion()), Is.False);
         }
 
@@ -450,6 +456,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 questionType: QuestionType.MultyOption,
                 answer: new AnsweredYesNoOption[] { new AnsweredYesNoOption(1, true), new AnsweredYesNoOption(4, false) },
                 isYesNo: true);
+            question.ProtectAnswer();
 
             //act
             var clonedQuestion = (InterviewTreeQuestion)question.Clone();
@@ -465,6 +472,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             Assert.AreEqual(clonedQuestion.GetAsInterviewTreeYesNoQuestion().GetAnswer(), question.GetAsInterviewTreeYesNoQuestion().GetAnswer());
             Assert.AreEqual(clonedQuestion.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions.First(), question.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions.First());
             Assert.AreEqual(clonedQuestion.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions.Second(), question.GetAsInterviewTreeYesNoQuestion().GetAnswer().CheckedOptions.Second());
+            Assert.AreEqual(clonedQuestion.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer, question.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer);
+            Assert.AreEqual(clonedQuestion.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer.CheckedOptions.First(), question.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer.CheckedOptions.First());
+            Assert.AreEqual(clonedQuestion.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer.CheckedOptions.Second(), question.GetAsInterviewTreeYesNoQuestion().ProtectedAnswer.CheckedOptions.Second());
             Assert.That(ReferenceEquals(clonedQuestion.GetAsInterviewTreeYesNoQuestion(), question.GetAsInterviewTreeYesNoQuestion()), Is.False);
         }
 

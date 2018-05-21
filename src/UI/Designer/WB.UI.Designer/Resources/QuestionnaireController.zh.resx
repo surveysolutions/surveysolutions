@@ -291,4 +291,19 @@
   <data name="You" xml:space="preserve">
     <value>您</value>
   </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>请选择渲染PDF问卷模板的语言</value>
+  </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>正在为“{0}”创建Html</value>
+  </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>导出为Html</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>导出Html</value>
+  </data>
+  <data name="SharedQuestionnaires" xml:space="preserve">
+    <value>与我分享的问卷模板</value>
+  </data>
 </root>

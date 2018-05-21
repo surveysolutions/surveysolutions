@@ -5,6 +5,11 @@
       <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\**" />
+    <EmbeddedResource Remove="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\**" />
+    <None Remove="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="SharedKernels\DataCollection\InterviewItemIdTests.cs" />
   </ItemGroup>
   <ItemGroup>

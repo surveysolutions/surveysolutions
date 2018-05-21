@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
@@ -17,12 +19,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public SampleUploadViewFactory(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.questionnaires = questionnaires;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public SampleUploadView Load(SampleUploadViewInputModel input)
@@ -35,15 +40,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
             var questionnaireExportStructure =
                 this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
 
-            if (questionnaireExportStructure == null)
-                return null;
-
             var topLevelOfQuestionnaire =
-                questionnaireExportStructure.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0);
+                questionnaireExportStructure?.HeaderToLevelMap.Values.FirstOrDefault(level => level.LevelScopeVector.Count == 0);
             if (topLevelOfQuestionnaire == null)
                 return null;
 
-            var columnListToPreload = new List<FeaturedQuestionItem>();
+            var preloadedQuestions = new List<FeaturedQuestionItem>();
             
             foreach (var featuredQuestionItem in questionnaire.FeaturedQuestions)
             {
@@ -53,10 +55,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
                 var questionExportedColumn = topLevelOfQuestionnaire.HeaderItems[featuredQuestionItem.Id];
                 foreach (var column in questionExportedColumn.ColumnHeaders)
                 {
-                    columnListToPreload.Add(new FeaturedQuestionItem(featuredQuestionItem.Id, featuredQuestionItem.Title, column.Name));
+                    preloadedQuestions.Add(new FeaturedQuestionItem(featuredQuestionItem.Id, featuredQuestionItem.Title, column.Name));
                 }
             }
-            return new SampleUploadView(input.QuestionnaireId, input.Version, columnListToPreload);
+
+            var plainQuestionnaire = this.questionnaireStorage.GetQuestionnaire(questionnaireId, null);
+            var hiddenQuestionVariables = plainQuestionnaire.GetHiddenQuestions()
+                                                            .Select(x => plainQuestionnaire.GetQuestionVariableName(x))
+                                                            .ToList();
+            var rosterSizeQuestions = plainQuestionnaire.GetAllRosterSizeQuestions()
+                                                            .Select(x => plainQuestionnaire.GetQuestionVariableName(x))
+                                                            .ToList();
+
+            return new SampleUploadView(input.QuestionnaireId, input.Version, preloadedQuestions, hiddenQuestionVariables, rosterSizeQuestions);
         }
     }
 }

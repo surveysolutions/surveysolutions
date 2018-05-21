@@ -9,16 +9,17 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -40,7 +41,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuditLog auditLog;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
-        private readonly IInterviewImportService importService;
+        private readonly IPreloadedDataVerifier verifier;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -51,7 +52,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             IAuditLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IInterviewImportService importService) : base(logger)
+            IPreloadedDataVerifier verifier) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -60,7 +61,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireStorage = questionnaireStorage;
             this.auditLog = auditLog;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
-            this.importService = importService;
+            this.verifier = verifier;
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Assignment cannot be found</response>
         [HttpGet]
         [Route("{id:int}")]
-        public AssignmentDetails Details(int id)
+        public FullAssignmentDetails Details(int id)
         {
             Assignment assignment = assignmentsStorage.GetById(id)
                 ?? throw new HttpResponseException(HttpStatusCode.NotFound);
@@ -242,9 +243,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
 
-            var result = importService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
+            var result = verifier.VerifyWithInterviewTree(answers, responsible.Id, questionnaire);
 
-            if (!result.Status)
+            if (result != null)
             {
                 throw new HttpResponseException(Request.CreateResponse(HttpStatusCode.BadRequest, new CreateAssignmentResult
                 {

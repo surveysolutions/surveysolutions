@@ -341,6 +341,7 @@ namespace WB.UI.Headquarters.Controllers
                 interviewer.PublicKey,
                 assignment.QuestionnaireId,
                 assignment.Answers.ToList(),
+                assignment.ProtectedVariables,
                 DateTime.UtcNow,
                 interviewer.Supervisor.Id,
                 interviewer.PublicKey,

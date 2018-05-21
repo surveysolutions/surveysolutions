@@ -77,7 +77,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool IsSpecialValueSelected(decimal? value)
         {
-            return value.HasValue && this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
+            if (!value.HasValue)
+                return false;
+
+            // Double to int conversion can overflow.
+            try
+            {
+               return this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
+            }
+            catch (System.OverflowException)
+            {
+                return false;
+            }
         }
 
         private void RemoveAnswerHandler(object sender, EventArgs e)
