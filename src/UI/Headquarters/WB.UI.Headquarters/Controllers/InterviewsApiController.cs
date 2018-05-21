@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
@@ -54,7 +55,8 @@ namespace WB.UI.Headquarters.Controllers
                 TotalInterviewsCount = status.TotalCount,
                 CreatedInterviewsCount = status.ProcessedCount,
                 VerifiedInterviewsCount = status.VerifiedCount,
-                InterviewsWithError = status.WithErrorsCount
+                InterviewsWithError = status.WithErrorsCount,
+                Status = status.ProcessStatus
             };
         }
 
@@ -94,6 +96,7 @@ namespace WB.UI.Headquarters.Controllers
             public long CreatedInterviewsCount { get; set; }
             public long VerifiedInterviewsCount { get; set; }
             public long InterviewsWithError { get; set; }
+            public AssignmentsImportProcessStatus Status { get; set; }
         }
     }
 }
