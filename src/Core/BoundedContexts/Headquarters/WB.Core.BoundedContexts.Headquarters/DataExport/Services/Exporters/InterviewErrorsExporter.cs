@@ -35,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("message_number", "Numeric index of the validation rule that has fired"),
             new DoExportFileHeader("message", "Text of the error message"),
+            new DoExportFileHeader("roster", "Name of the roster containing the variable"),
             new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
             new DoExportFileHeader("Id2", "Roster ID of the 2nd level of nesting", true),
             new DoExportFileHeader("Id3", "Roster ID of the 3rd level of nesting", true),
@@ -146,6 +147,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public void WriteDoFile(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string basePath)
         {
             var doContent = new DoFile();
+            
+            doContent.BuildInsheet(Path.ChangeExtension(FileName, "tab"));
 
             var headersList = GetHeaders(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
 

@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void BuildInsheet(string fileName)
         {
-            doContent.AppendLine($"insheet using \"{fileName}\", tab case");
+            doContent.AppendLine($"insheet using \"{fileName}\", tab case names");
         }
 
         public void AppendLabelToValuesMatching(string variableName, string labelName)

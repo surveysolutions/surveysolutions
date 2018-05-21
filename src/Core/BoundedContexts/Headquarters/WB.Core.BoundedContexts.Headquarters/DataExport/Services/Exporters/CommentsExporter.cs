@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("Variable", "Variable name for the commented question"),
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("Comment", "Text of the comment"),
+            new DoExportFileHeader("Roster", "Name of the roster containing the variable"),
             new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
             new DoExportFileHeader("Id2", "Roster ID of the 2nd level of nesting", true),
             new DoExportFileHeader("Id3", "Roster ID of the 3rd level of nesting", true),
@@ -75,6 +76,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private void ExportCommentsDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress)
         {
             var doContent = new DoFile();
+
+            doContent.BuildInsheet(Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
 
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);

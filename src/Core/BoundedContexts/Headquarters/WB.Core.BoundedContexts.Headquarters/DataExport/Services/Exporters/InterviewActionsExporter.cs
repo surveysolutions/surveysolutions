@@ -111,6 +111,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var doContent = new DoFile();
 
+            doContent.BuildInsheet(Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
+
             foreach (var actionFileColumn in actionFileColumns)
             {
                 doContent.AppendLabelToVariableMatching(actionFileColumn.Title, actionFileColumn.Description);
