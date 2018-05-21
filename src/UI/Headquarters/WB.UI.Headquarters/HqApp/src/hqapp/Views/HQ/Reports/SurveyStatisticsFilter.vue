@@ -89,13 +89,13 @@ const ReportMode = {
 export default {
    data() {
      return {
-           questionnaires: [],
-           questions: [],
-           selectedAnswers: [],
-           loading: {  
-               questions: false,
-               questionnaire: false
-           }
+        questionnaires: [],
+        questions: [],
+        selectedAnswers: [],
+        loading: {  
+            questions: false,
+            questionnaire: false
+        }
      };
   },
   
@@ -117,6 +117,8 @@ export default {
     }
 
     this.onChange()
+    
+    this.$emit("mounted")
   },
 
   methods: {

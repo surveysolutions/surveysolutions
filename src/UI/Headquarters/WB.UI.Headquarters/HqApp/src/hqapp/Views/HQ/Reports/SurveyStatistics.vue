@@ -13,11 +13,12 @@
         </div>
 
         <Filters slot="filters">
-            <SurveyStatisticsFilter @input="filterChanged"
+            <SurveyStatisticsFilter @input="filterChanged" @mounted="filtersLoaded"
                 :isSupervisor="isSupervisor" />
         </Filters>
        
-        <DataTables ref="table" 
+        <DataTables ref="table"
+            v-if="isFiltersLoaded"
             noSearch exportable multiorder hasTotalRow noSelect
             :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
             :addParamsToRequest="addFilteringParams"        
@@ -43,6 +44,7 @@ export default {
 
     data() {
         return {
+            isFiltersLoaded: false,
             filter: {
                 questionnaire: null,
                 question: null,
@@ -62,10 +64,6 @@ export default {
     },
 
     watch: {
-        "status.lastRefresh"() {
-            this.$refs.table.reload()
-        },
-
         "status.isRunning"(to) {
             if(this.$refs.table == null) return;
             
@@ -85,7 +83,18 @@ export default {
                 this.filter[key] = filter[key]
             })
 
-            this.$refs.table.reload()
+            this.reloadTable()
+        },
+
+        reloadTable() {
+            if(this.isFiltersLoaded)
+            {
+                this.$refs.table.reload()
+            }
+        },
+
+        filtersLoaded() { 
+            this.isFiltersLoaded = true
         },
 
         async refreshStatus() {

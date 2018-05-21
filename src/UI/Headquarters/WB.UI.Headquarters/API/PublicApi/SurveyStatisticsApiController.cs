@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     /// </summary>
     [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     [RoutePrefix(@"api/v1/report/surveyStatistics")]
-    public class SurveyStatisticsReportDataApiController : ApiController
+    public class SurveyStatisticsApiController : ApiController
     {
         private readonly ISurveyStatisticsReport surveyStatisticsReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             @"wb_report_survey_statistics_total", @"Count of report variable by team report",
             @"type");
 
-        public SurveyStatisticsReportDataApiController(ISurveyStatisticsReport surveyStatisticsReport,
+        public SurveyStatisticsApiController(ISurveyStatisticsReport surveyStatisticsReport,
             IQuestionnaireStorage questionnaireStorage,
             IFileSystemAccessor fileSystemAccessor,
             IExportFactory exportFactory,
