@@ -963,6 +963,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New answer to a protected question should be greater or equal to {0}.
+        /// </summary>
+        public static string Interview_Questions_Integer_ProtectedValue {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Integer_ProtectedValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tap to take a photo.
         /// </summary>
         public static string Interview_Questions_Multimedia_TapToTakePhoto {

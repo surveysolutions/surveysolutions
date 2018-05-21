@@ -955,6 +955,15 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
     <EmbeddedResource Include="Resources\Archived.ar.resx" />
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerAuditRecord.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\InterviewerAuditRecord.ru.resx">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Archived.es.resx">
       <DependentUpon>Archived.resx</DependentUpon>
     </EmbeddedResource>
@@ -1738,6 +1747,7 @@
     <Content Include="Views\ControlPanel\RejectedInterviewPackages.cshtml" />
     <Content Include="Views\Interview\InterviewHistory.cshtml" />
     <Content Include="Views\Interview\InterviewAreaFrame.cshtml" />
+    <Content Include="Views\InterviewerAuditLog\Index.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeAssignments.cshtml" />
     <Content Include="Views\Reports\SurveyStatistics.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
@@ -1762,6 +1772,7 @@
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
+    <Compile Include="API\Interviewer\v2\AuditLogApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
@@ -1993,6 +2004,7 @@
     <Compile Include="Code\ValidateFileAttribute.cs" />
     <Compile Include="Code\WriteToSyncLogAttribute.cs" />
     <Compile Include="Controllers\AssignmentsController.cs" />
+    <Compile Include="Controllers\InterviewerAuditLogController.cs" />
     <Compile Include="Controllers\AuditLogController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\InterviewerHqController.cs" />
@@ -2019,6 +2031,8 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
@@ -2034,6 +2048,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201802201015_AddInterviewKeyToPackage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201804031536_MakeUserPreloadingOptionalFields.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805101216_AddProtectedVariables.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -2228,6 +2243,11 @@
     <Compile Include="Models\User\UserBrowseItem.cs" />
     <Compile Include="Models\WebInterview\StartWebInterview.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\InterviewerAuditRecord.Designer.cs">
+      <DependentUpon>InterviewerAuditRecord.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Resources\Archived.Designer.cs">
       <DependentUpon>Archived.resx</DependentUpon>
       <DesignTime>True</DesignTime>

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -87,9 +88,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
             var interviewerIdentity = this.principal.CurrentUserIdentity;
 
             var createInterviewCommand = new CreateInterview(interviewId,
-                interviewerIdentity.UserId, this.questionnaireIdentity, new List<InterviewAnswer>(), DateTime.UtcNow,
+                interviewerIdentity.UserId, this.questionnaireIdentity, 
+                new List<InterviewAnswer>(),
+                new List<string>(),
+                DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
-                interviewerIdentity.UserId, keyGenerator.Get(), null);
+                interviewerIdentity.UserId,
+                keyGenerator.Get(),
+                null);
             await this.commandService.ExecuteAsync(createInterviewCommand);
             await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
         }
