@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
