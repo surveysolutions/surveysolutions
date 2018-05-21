@@ -413,8 +413,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     rosterSizeAnswer.Answer = NumericIntegerAnswer.FromInt(rosterSizeAnsweredOptions.Length);
                     break;
                 case QuestionType.TextList:
-                    var newRosterInstanceIds = oldToNewRosterInstanceIds.Select(x => x.Value).ToArray();
-                    rosterSizeAnswer.Answer = ToRosterSizeListAnswer(newRosterInstanceIds, listRosterTitles, rosterSizeAnswer);
+                    rosterSizeAnswer.Answer = ToRosterSizeListAnswer(oldToNewRosterInstanceIds, listRosterTitles, rosterSizeAnswer);
                     break;
             }
 
@@ -440,13 +439,30 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
         }
 
-        private static TextListAnswer ToRosterSizeListAnswer(int[] rosterSizeAnsweredOptions,
+        private static TextListAnswer ToRosterSizeListAnswer(Dictionary<int, int> oldToNewRosterInstanceIds,
             InterviewAnswer[] listRosterTitles, InterviewAnswer rosterSizeAnswer)
-            => TextListAnswer.FromTupleArray(rosterSizeAnsweredOptions.Select(x => new Tuple<int, string>(x,
-                    ((TextAnswer) listRosterTitles.FirstOrDefault(y =>
-                        y.Identity == Identity.Create(rosterSizeAnswer.Identity.Id,
-                            rosterSizeAnswer.Identity.RosterVector.ExtendWithOneCoordinate(x)))?.Answer)?.Value ?? ""))
-                .ToArray());
+        {
+            var rosterSizeQuestionId = rosterSizeAnswer.Identity.Id;
+            var rosterVector = rosterSizeAnswer.Identity.RosterVector;
+
+            var rosterSizeListItems = oldToNewRosterInstanceIds.Keys
+                .Select(rosterInstanceCode => ToRosterSizeListItem(rosterSizeQuestionId, rosterVector,
+                    rosterInstanceCode, oldToNewRosterInstanceIds[rosterInstanceCode], listRosterTitles))
+                .ToArray();
+
+            return TextListAnswer.FromTupleArray(rosterSizeListItems);
+        }
+
+        private static Tuple<int, string> ToRosterSizeListItem(Guid rosterSizeQuestionId, RosterVector rosterVertor,
+            int oldRosterInstanceCode, int newRosterInstanceCode, InterviewAnswer[] listRosterTitles)
+        {
+            var oldRosterInstanceId = Identity.Create(rosterSizeQuestionId,
+                rosterVertor.ExtendWithOneCoordinate(oldRosterInstanceCode));
+
+            var rosterInstanceTitle = (TextAnswer) listRosterTitles.FirstOrDefault(x => x.Identity == oldRosterInstanceId)?.Answer;
+
+            return new Tuple<int, string>(newRosterInstanceCode, rosterInstanceTitle?.Value ?? "");
+        }
 
         private static AbstractAnswer ToRosterSizeCategoricalAnswer(IQuestionnaire questionnaire, InterviewAnswer rosterSizeAnswer, int[] rosterSizeAnsweredOptions) 
             => questionnaire.IsQuestionYesNo(rosterSizeAnswer.Identity.Id)
