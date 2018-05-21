@@ -337,8 +337,10 @@
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
     <Compile Include="Infrastructure\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
-    <Compile Include="App.cs" />
+    <Compile Include="InterviewerMvxApplication.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
+    <Compile Include="InterviewerApplication.cs" />
+    <Compile Include="InterviewerAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
@@ -359,7 +361,7 @@
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Setup.cs" />
+    <Compile Include="InterviewerSetup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\InterviewViewModel.cs" />
     <Compile Include="ViewModel\PrefilledQuestionsViewModel.cs" />

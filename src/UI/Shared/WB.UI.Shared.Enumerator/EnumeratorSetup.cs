@@ -12,10 +12,12 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
 using MvvmCross.Converters;
+using MvvmCross.Core;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Core;
+using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
@@ -31,7 +33,8 @@ using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
 {
-    public abstract class EnumeratorSetup : MvxAndroidSetup
+    public abstract class EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
+        where TApplication : IMvxApplication, new()
     {
         protected EnumeratorSetup()
         {
@@ -68,7 +71,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            Mvx.Resolve<IMvxLogProvider>().GetLogFor<EnumeratorSetup>().Error(exception, "UncaughtExceptionHandler");
+            Mvx.Resolve<IMvxLogProvider>().GetLogFor("EnumeratorSetup").Error(exception, "UncaughtExceptionHandler");
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
         }
 
