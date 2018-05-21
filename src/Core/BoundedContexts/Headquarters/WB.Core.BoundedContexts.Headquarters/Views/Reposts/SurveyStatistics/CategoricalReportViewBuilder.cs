@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             SetRowValue(report.Totals, dataIndex++, Strings.AllTeams);
             SetRowValue(report.Totals, dataIndex++, Strings.AllInterviewers);
 
-            report.Totals.Clear(0L, dataIndex);
+            report.Totals.SetDefault(0L, dataIndex);
 
             var reportData = new Dictionary<(string, string), object[]>();
             var lastColumnIndex = report.Totals.Length - 1;
@@ -76,7 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     SetRowValue(existingRow, rowIndex++, row.TeamLeadName);
                     SetRowValue(existingRow, rowIndex++, row.ResponsibleName);
 
-                    existingRow.Clear(0L, rowIndex);
+                    existingRow.SetDefault(0L, rowIndex);
 
                     reportData.Add(rowKey, existingRow);
                 }
