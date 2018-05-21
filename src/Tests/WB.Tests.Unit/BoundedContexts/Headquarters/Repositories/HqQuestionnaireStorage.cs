@@ -8,6 +8,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -37,8 +38,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
 
             var fixture = Create.Other.AutoFixture();
 
-            var inmemory = new TestPlainStorage<QuestionnaireCompositeItem>();
-            fixture.Register<IPlainStorageAccessor<QuestionnaireCompositeItem>>(() => inmemory);
+            int id = 0;
+            var inmemory = new TestInMemoryWriter<QuestionnaireCompositeItem, int>(i => i == 0 ? ++id : i);
+            fixture.Register<IReadSideRepositoryWriter<QuestionnaireCompositeItem, int>>(() => inmemory);
             var storage = fixture.Create<HqQuestionnaireStorage>();
 
             // act

@@ -6,11 +6,10 @@
                 <div :class="information">
                     <div class="page-header clearfix" v-if="hasHeader">
                       <slot name="headers">
-                        <h1>
-                            {{title}}
-                        </h1>
+                        <h1>{{title}}</h1>
                         <h3 v-if="subtitle">{{ subtitle }}</h3>
                       </slot>
+                      <slot name="subtitle" />
                     </div>
                     <slot />
                 </div>
