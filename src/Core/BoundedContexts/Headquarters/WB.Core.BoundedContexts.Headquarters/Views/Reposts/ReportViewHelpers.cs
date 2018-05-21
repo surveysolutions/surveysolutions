@@ -66,11 +66,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         /// Set value to all items of array starting from index till arraLength
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="array"></param>
-        /// <param name="value"></param>
-        /// <param name="index"></param>
-        /// <param name="arrayLength"></param>
-        public static void Clear<T>(this object[] array, T value, int index, int? arrayLength = null)
+        /// <param name="array">Array to fill with value</param>
+        /// <param name="value">Value to use as fill value</param>
+        /// <param name="index">From which index to start with</param>
+        /// <param name="arrayLength">Length of array. Default value = is length of <c>array</c></param>
+        public static void SetDefault<T>(this object[] array, T value = default(T), int index = 0, int? arrayLength = null)
         {
             for (int i = index; i < (arrayLength ?? array.Length); i++)
             {
@@ -81,8 +81,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         /// <summary>
         /// Merge two Report Views into one by common index columns
         /// For example
-        /// RV1: (TL, TM, A, B, C)              RV2: (TL, TM, E, D)
-        /// Merge(RV1, RV2, [TL, TM]) => (TL, TM, A, B, C, E, D) 
+        /// <c>RV1: (TL, TM, A, B, C)              RV2: (TL, TM, E, D)</c>
+        /// <c>Merge(RV1, RV2, [TL, TM]) => (TL, TM, A, B, C, E, D) </c>
         /// </summary>
         /// <param name="a">First report view</param>
         /// <param name="b">Second report to merge</param>
