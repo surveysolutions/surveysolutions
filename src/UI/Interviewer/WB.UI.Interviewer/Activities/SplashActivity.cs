@@ -9,7 +9,9 @@ using System.Diagnostics;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -25,6 +27,8 @@ namespace WB.UI.Interviewer.Activities
         {
             var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SplashActivity>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
+            auditLogService.Write(new OpenApplicationAuditLogEntity());
 
             this.BackwardCompatibility();
             var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();

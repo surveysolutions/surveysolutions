@@ -8,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -21,6 +22,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
+        private readonly IAuditLogService auditLogService;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -39,13 +41,15 @@ namespace WB.UI.Interviewer.ViewModel
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
-            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage,
+            IAuditLogService auditLogService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
+            this.auditLogService = auditLogService;
         }
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
@@ -107,6 +111,8 @@ namespace WB.UI.Interviewer.ViewModel
                 commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
             }
 
+            auditLogService.Write(new OpenInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString(), assignmentId));
+
             base.ViewAppeared();
         }
 
@@ -117,6 +123,8 @@ namespace WB.UI.Interviewer.ViewModel
             {
                 commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
             }
+
+            auditLogService.Write(new CloseInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString()));
 
             base.ViewDisappeared();
         }
