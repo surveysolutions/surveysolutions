@@ -21,7 +21,7 @@
     </RelativeLayout>
     <ImageButton style="@style/Dashboard_SearchView_SearchButton"
         local:MvxBind="Click ShowSearchCommand; Visible Not(IsSearchVisible)"
-                 />
+                 local:srcCompat="@drawable/dashboard_search_icon"/>
     <LinearLayout style="@style/Dashboard_SearchView_Container"
                      local:MvxBind="Visible IsSearchVisible;">
       <EditText style="@style/Dashboard_SearchView_FilterInput"

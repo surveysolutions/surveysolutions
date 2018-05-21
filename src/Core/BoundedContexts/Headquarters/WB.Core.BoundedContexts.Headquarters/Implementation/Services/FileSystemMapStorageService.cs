@@ -74,7 +74,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             try
             {
                 var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(tempFile);
-
                 var mapItem = new MapBrowseItem()
                 {
                     Id = mapFile.Name,

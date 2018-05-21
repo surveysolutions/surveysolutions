@@ -682,8 +682,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, @event.Payload.AnswerTimeUtc,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
-                new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length, 
-                @event.Payload.Coordinates, @event.Payload.DistanceToEditor)),
+                new Area(@event.Payload.Geometry, @event.Payload.MapName,@event.Payload.NumberOfPoints, 
+                    @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor)),
             @event.Payload.RosterVector));
 
             return view;

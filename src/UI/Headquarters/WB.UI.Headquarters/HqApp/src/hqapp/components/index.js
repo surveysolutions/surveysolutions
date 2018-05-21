@@ -7,6 +7,9 @@ import Filters from "./Filters"
 import HqLayout from "./HqLayout"
 import ModalFrame from "./ModalFrame"
 import Typeahead from './Typeahead'
+import TextInput from './TextInput'
+import Checkbox from './Checkbox'
+import Radio from './Radio'
 
 Vue.component("Confirm", Confirm)
 Vue.component("DataTables", DataTables)
@@ -15,6 +18,9 @@ Vue.component("Filters", Filters)
 Vue.component("HqLayout", HqLayout)
 Vue.component("ModalFrame", ModalFrame)
 Vue.component("Typeahead", Typeahead)
+Vue.component("TextInput", TextInput)
+Vue.component("Checkbox", Checkbox)
+Vue.component("Radio", Radio)
 
 export default {
     Confirm,
@@ -23,5 +29,8 @@ export default {
     Filters,
     HqLayout,
     ModalFrame,
-    Typeahead
+    Typeahead,
+    TextInput,
+    Checkbox,
+    Radio
 }

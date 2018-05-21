@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), "InterviewId");
+            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
         }
 
         protected static void ExecuteInCommandTransaction(Action action)

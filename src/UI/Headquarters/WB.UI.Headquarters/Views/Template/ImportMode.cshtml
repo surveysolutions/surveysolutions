@@ -1,4 +1,5 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters
+@using WB.Core.BoundedContexts.Headquarters.Resources
 @model WB.UI.Headquarters.Models.ImportModeModel
 
 @{
@@ -7,6 +8,13 @@
 }
 @section scripts
 {
+    <script type="text/javascript">
+        $(function() {
+            $('#ckbUpgradeAssignments').change(function() {
+                $('#templateSelectorBlock').toggle(this.checked);
+            });
+        })
+    </script>
 }
 
 <main>
@@ -77,8 +85,33 @@
                                     </label>
                                 </div>
                             </div>
+                            
                         </div>
+                        @if (Model.QuestionnairesToUpgradeFrom.Count > 0) {
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <input class="checkbox-filter single-checkbox" id="ckbUpgradeAssignments" type="checkbox" value="True" name="ShouldMigrateAssignments">
+                                    <label for="ckbUpgradeAssignments">
+                                        <span class="tick"></span> @QuestionnaireImport.UpgradeAssignments
+                                    </label>
+                                </div>
+                            </div>
+                       
+                            <div class="col-sm-8" id="templateSelectorBlock" style="display: none">
+                                <div class="form-group">
+                                    <select id="templateSelector" data-bind="value: SelectedTemplate" class="selectpicker" name="migrateFrom">
+                                        @foreach (var item in Model.QuestionnairesToUpgradeFrom) {
+                                            <option value='{"templateId": "@item.TemplateId","version": "@item.TemplateVersion"}'>
+                                                @Html.QuestionnaireNameVerstionFirst(item.TemplateName, item.TemplateVersion)
+                                            </option>
+                                        }
+                                    </select>
+
+                                </div>
+                            </div>
+                        }
                     </div>
+
                 }
                 <div class="row flex-row">
                     <div class="col-sm-6">
