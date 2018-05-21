@@ -594,4 +594,12 @@
     <value>Это обязательное поле</value>
     <comment>Это обязательное поле</comment>
   </data>
+    <data name="Select_Responsible" xml:space="preserve">
+    <value>Выберите ответственного (обязательно)</value>
+    <comment>Выберите ответственного (обязательно)</comment>
+  </data>
+    <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Если в файле для назначения нет ответственного, то этот супервизор/интервьювер будет назначен ответственным:</value>
+    <comment>Если в файле для назначения нет ответственного, то этот супервизор/интервьювер будет назначен ответственным:</comment>
+  </data>
 </root>
