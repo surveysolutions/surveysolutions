@@ -7,6 +7,8 @@ namespace WB.UI.Shared.Enumerator.Converters
         NonAnsweredEnabled,
         AnsweredDisabled,
         InvalidDisabled,
-        NonAnsweredDisabled
+        NonAnsweredDisabled,
+        AnsweredProtected,
+        MaxAnswersCountReached
     }
 }

@@ -257,7 +257,7 @@
                                             <!-- /ko -->
                                             <th title="@Interviews.Tooltip_Table_Responsible" data-bind='sortby: "ResponsibleName"'>@Common.Responsible</th>
                                             <th title="@Interviews.Tooltip_Table_LastUpdate" class="date last-update" data-bind='sortby: "UpdateDate"'>@Common.LastUpdate</th>
-                                            <th title="@Interviews.Tooltip_Table_HasErrors" class="errors" data-bind='sortby: "HasErrors"'>@Common.НasErrors</th>
+                                            <th title="@Interviews.Tooltip_Table_ErrorsCount" data-bind='sortby: "ErrorsCount"'>@Interviews.Errors</th>
                                             <th title="@Interviews.Tooltip_Table_Status" class="status" data-bind='sortby: "Status"'>@Common.Status</th>
                                             <th title="@Interviews.Tooltip_Table_ReceivedByInterviewer" class="download-on-device" data-bind='sortby: "ReceivedByInterviewer"'>@Common.ReceivedByInterviewer</th>
                                             <th title="@Interviews.Tooltip_Table_Assignment" data-bind='sortby: "AssignmentId"'>@Common.Assignment</th>
@@ -303,12 +303,12 @@
                                             </td>
                                             <td class="date last-update" data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)">
                                             </td>
-                                            <td class="errors">
-                                                <!-- ko if:HasErrors -->
-                                                @Common.Yes
+                                            <td class="type-numeric" data-bind="css: {'errors': ErrorsCount()}">
+                                                <!-- ko if:ErrorsCount() === 0 -->
+                                                <span>0</span>
                                                 <!-- /ko -->
-                                                <!-- ko ifnot:HasErrors -->
-                                                <span class="empty"></span>
+                                                <!-- ko if:ErrorsCount() > 0 -->
+                                                <ko data-bind="text: ErrorsCount()"></ko>
                                                 <!-- /ko -->
                                             </td>
                                             <td class="status" data-bind="text: GetInterviewStatusString(Status())"></td>
@@ -341,7 +341,7 @@
                                 </label>
                             </div>
                             <ul class="list-unstyled">
-                                <li>@Common.НasErrors:  <span data-bind="text: HasErrors() ? '@Common.Yes' : '@Common.No'"></span></li>
+                                <li>@Interviews.Errors:  <span data-bind="text: ErrorsCount()"></span></li>
                                 <li>@Common.LastUpdate: <span data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></span></li>
                                 <li>@Common.ReceivedByInterviewer: <span data-bind="text: ReceivedByInterviewer() ? '@Common.Yes' : '@Common.No'"></span></li>
                                 <li>@Common.Responsible: <a class="interviewer" data-bind="attr: { href: $surveysUrl + '?interviewerId=' + ResponsibleId() }, text: ResponsibleName"></a></li>

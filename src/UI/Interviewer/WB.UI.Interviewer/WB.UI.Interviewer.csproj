@@ -607,7 +607,6 @@
     <AndroidResource Include="Resources\menu\finish.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_item_default.xml" />
-    <AndroidResource Include="Resources\drawable\location_icon.png" />
     <AndroidResource Include="Resources\drawable\dashboard_remove_icon_pressed.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -719,6 +718,9 @@
     <AndroidResource Include="Resources\menu\maps.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\back_arrow.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

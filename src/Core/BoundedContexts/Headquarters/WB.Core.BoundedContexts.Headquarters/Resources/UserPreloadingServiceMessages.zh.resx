@@ -123,4 +123,13 @@
   <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
     <value>允许的最大记录数为 {0}</value>
   </data>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>提供的文件在第{0}行中有错误，无法解析</value>
+  </data>
+  <data name="FileColumnsMissingFormat" xml:space="preserve">
+    <value>文件‘{0}’没有包含必填的列：{1}</value>
+  </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>请等待至前一批用户导入完成</value>
+  </data>
 </root>

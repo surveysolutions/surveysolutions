@@ -18,8 +18,7 @@
     <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
     <item name="android:layout_gravity">right</item>
-    <item name="android:scaleType">fitCenter</item>
-    <item name="android:background">@drawable/dashboard_search_icon</item>
+    <item name="android:background">?attr/selectableItemBackgroundBorderless</item>>
   </style>
 
   <style name="Dashboard_SearchView_Container">
@@ -50,7 +49,7 @@
     <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
     <item name="android:layout_gravity">center_vertical</item>
     <item name="android:scaleType">fitCenter</item>
-    <item name="android:background">@drawable/delete_button</item>
+    <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
   </style>
 
   <style name="Dashboard_MyQuestionnairesLink" parent="AppTheme">

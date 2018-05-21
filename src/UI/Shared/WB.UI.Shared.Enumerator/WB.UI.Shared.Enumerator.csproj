@@ -322,6 +322,7 @@
     <Compile Include="CustomBindings\EditTextDateBinding.cs" />
     <Compile Include="CustomBindings\EditTextFocusValueChangedBinding.cs" />
     <Compile Include="CustomBindings\EditTextSetFocusBinding.cs" />
+    <Compile Include="CustomBindings\ImageButtonPlaybackToggleBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnFocusOutBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnPartialTextChangedBinding.cs" />
     <Compile Include="CustomBindings\InstantAutoCompleteTextViewOnItemSelectedBinding.cs" />
@@ -400,6 +401,7 @@
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />
     <Compile Include="ValueCombiners\LayoutBackgroundStyleValueCombiner.cs" />
+    <Compile Include="ValueCombiners\LayoutOptionBackgroundStyleValueCombiner.cs" />
     <Compile Include="ValueCombiners\NotValueCombiner.cs" />
     <Compile Include="ValueCombiners\SpannableGroupTitleValueCombiner.cs" />
   </ItemGroup>
@@ -546,11 +548,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\question_option_background.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\question_option_background_answered.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -646,27 +643,27 @@
     <AndroidResource Include="Resources\drawable\theme_blue_light_spinner_background_holo_light.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\group_completed.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\group_completed.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\group_started.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\group_started.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\group_with_invalid_answers.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\group_with_invalid_answers.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\question_input_button.xml">
+    <AndroidResource Include="Resources\drawable-anydpi-v21\question_input_button.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\question_input_button_answered.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\question_input_button_answered.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\sidebar_button.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\sidebar_button.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\sidebar_row.xml">
+    <AndroidResource Include="Resources\drawable-anydpi-v21\sidebar_row.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -699,9 +696,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_holo_light.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_focused_holo_light.png" />
@@ -744,9 +738,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_focused_holo_light.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_holo_light.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_focused_holo_light.png" />
@@ -999,7 +990,9 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_text_list_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\interview_static_text.axml" />
@@ -1130,7 +1123,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question__comments.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_option_rounded_corner.axml">
       <SubType>Designer</SubType>
@@ -1147,7 +1140,9 @@
     <AndroidResource Include="Resources\layout\interview_question_readonly.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\interview_question_audio.axml" />
+    <AndroidResource Include="Resources\layout\interview_question_audio.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_question_audio_dialog.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -1264,13 +1259,13 @@
     <AndroidResource Include="Resources\drawable\to_parent_group_invalid.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\to_parent_group_completed.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\to_parent_group_completed.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\to_parent_group_invalid.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\to_parent_group_invalid.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-v21\to_parent_group_started.xml" />
+    <AndroidResource Include="Resources\drawable-anydpi-v21\to_parent_group_started.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\anim\zoom_in_from_center.xml" />
@@ -1373,6 +1368,34 @@
     <AndroidResource Include="Resources\drawable\question_text_question_no_bottom_corners.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\play_icon.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\stop_icon.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\question_option_background_protected.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_check_off_disabled_holo_light.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-anydpi-v21\theme_blue_light_btn_check_off_disabled_holo_light.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-anydpi-v21\theme_blue_light_btn_radio_off_disabled_holo_light.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\theme_blue_light_btn_radio_off_disabled_holo_light.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

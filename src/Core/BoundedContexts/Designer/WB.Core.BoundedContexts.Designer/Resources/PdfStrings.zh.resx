@@ -300,4 +300,88 @@
   <data name="Variable" xml:space="preserve">
     <value>变量</value>
   </data>
+  <data name="Appendix_SpecialValues" xml:space="preserve">
+    <value>附录{0} {1}特殊值</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>该PDF文件由{0}生成</value>
+  </data>
+  <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>同意将此问卷模板公开</value>
+  </data>
+  <data name="MetadataConsultants" xml:space="preserve">
+    <value>顾问</value>
+  </data>
+  <data name="MetadataCountry" xml:space="preserve">
+    <value>国家</value>
+  </data>
+  <data name="MetadataCoverage" xml:space="preserve">
+    <value>范围</value>
+  </data>
+  <data name="MetadataFunding" xml:space="preserve">
+    <value>资助</value>
+  </data>
+  <data name="MetadataKeywords" xml:space="preserve">
+    <value>关键词</value>
+  </data>
+  <data name="MetadataKindOfData" xml:space="preserve">
+    <value>数据种类</value>
+  </data>
+  <data name="MetadataLanguages" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="MetadataModeOfDataCollection" xml:space="preserve">
+    <value>数据收集模式</value>
+  </data>
+  <data name="MetadataNotes" xml:space="preserve">
+    <value>注</value>
+  </data>
+  <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+    <value>项目负责人</value>
+  </data>
+  <data name="MetadataSectionSubTitle" xml:space="preserve">
+    <value>问卷模板描述</value>
+  </data>
+  <data name="MetadataSectionTitle" xml:space="preserve">
+    <value>调查识别信息</value>
+  </data>
+  <data name="MetadataStudyType" xml:space="preserve">
+    <value>研究类型</value>
+  </data>
+  <data name="MetadataSubtitle" xml:space="preserve">
+    <value>副标题</value>
+  </data>
+  <data name="MetadataTitle" xml:space="preserve">
+    <value>标题</value>
+  </data>
+  <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+    <value>分析单元</value>
+  </data>
+  <data name="MetadataUniverse" xml:space="preserve">
+    <value>总体</value>
+  </data>
+  <data name="MetadataVersionIdentificator" xml:space="preserve">
+    <value>版本识别符</value>
+  </data>
+  <data name="MetadataVersionNotes" xml:space="preserve">
+    <value>版本注</value>
+  </data>
+  <data name="MetadataYear" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>额外信息</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>基本信息</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>调查数据信息</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>调查信息</value>
+  </data>
+  <data name="SpecialValues" xml:space="preserve">
+    <value>特殊值</value>
+  </data>
 </root>
