@@ -32,6 +32,9 @@ namespace WB.UI.Interviewer.ServiceLocation
     {
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<InterviewerMvxApplication>();
+            registry.Bind<InterviewerAppStart>();
+
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
             registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();

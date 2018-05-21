@@ -22,7 +22,6 @@ namespace WB.UI.Tester.Activities
             ClearPlainInterviewStorage();
 
             Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
-            base.InitializationComplete();
         }
 
         private void ClearAttachmentStorage()

@@ -244,7 +244,6 @@
     <Compile Include="Activities\PhotoViewActivity.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
-    <Compile Include="Activities\BaseSplashScreenActivity.cs" />
     <Compile Include="Activities\CompleteInterviewFragment.cs" />
     <Compile Include="Activities\BaseInterviewActivity.cs" />
     <Compile Include="Activities\CoverInterviewFragment.cs" />

@@ -9,7 +9,6 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -41,7 +40,7 @@ using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Interviewer
 {
-    public class Setup : EnumeratorSetup
+    public class InterviewerSetup : EnumeratorSetup<InterviewerMvxApplication>
     {
         protected override void InitializeViewLookup()
         {
@@ -68,11 +67,6 @@ namespace WB.UI.Interviewer
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
             container.AddAll(viewModelViewLookup);
-        }
-
-        protected override IMvxApplication CreateApp()
-        {
-            return new App();
         }
 
         protected override void FillValueConverters(IMvxValueConverterRegistry registry)
@@ -163,7 +157,7 @@ namespace WB.UI.Interviewer
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(Setup).Assembly,
+                typeof(InterviewerSetup).Assembly,
                 typeof(LoginViewModel).Assembly,
 #if !EXCLUDEEXTENSIONS
                 typeof(Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
