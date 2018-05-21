@@ -8636,6 +8636,9 @@ body > .ui-pnotify {
     float: left;
     padding: 5px 12px; }
 
+.dataTables_processing.error {
+  background: rgba(100, 0, 0, 0.1); }
+
 .dataTables_scroll {
   overflow-x: auto; }
   .dataTables_scroll .dataTables_scrollHead .table {
@@ -9488,6 +9491,13 @@ dl dd:after {
 
 .always-visible-scroll {
   overflow-y: scroll; }
+
+.fade-enter-active, .fade-leave-active {
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s; }
+
+.fade-enter, .fade-leave-to {
+  opacity: 0; }
 
 .left-column #log-in {
   text-align: left; }

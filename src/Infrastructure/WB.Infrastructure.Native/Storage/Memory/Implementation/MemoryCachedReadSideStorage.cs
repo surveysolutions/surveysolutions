@@ -7,17 +7,20 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 {
-    internal class MemoryCachedReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>, IReadSideKeyValueStorage<TEntity>, ICacheableRepositoryWriter
+    internal class MemoryCachedReadSideStorage<TEntity, TKey> 
+        :   IReadSideRepositoryWriter<TEntity, TKey>, 
+            IReadSideKeyValueStorage<TEntity, TKey>, 
+            ICacheableRepositoryWriter
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly IReadSideStorage<TEntity> storage;
+        private readonly IReadSideStorage<TEntity, TKey> storage;
         private readonly ReadSideCacheSettings settings;
 
         private bool isCacheEnabled = false;
 
-        protected readonly Dictionary<string, TEntity> cache = new Dictionary<string, TEntity>();
+        protected readonly Dictionary<TKey, TEntity> cache = new Dictionary<TKey, TEntity>();
 
-        public MemoryCachedReadSideStorage(IReadSideStorage<TEntity> storage, ReadSideCacheSettings settings)
+        public MemoryCachedReadSideStorage(IReadSideStorage<TEntity, TKey> storage, ReadSideCacheSettings settings)
         {
             this.storage = storage;
             this.settings = settings;
@@ -45,14 +48,14 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 
         public bool IsCacheEnabled => this.isCacheEnabled;
 
-        public TEntity GetById(string id)
+        public TEntity GetById(TKey id)
         {
             return this.isCacheEnabled
                 ? this.GetByIdUsingCache(id)
                 : this.storage.GetById(id);
         }
 
-        public void Remove(string id)
+        public void Remove(TKey id)
         {
             if (this.isCacheEnabled)
             {
@@ -64,7 +67,7 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             }
         }
 
-        public void Store(TEntity view, string id)
+        public void Store(TEntity view, TKey id)
         {
             if (this.isCacheEnabled)
             {
@@ -76,7 +79,7 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             }
         }
 
-        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public virtual void BulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
             foreach (var item in bulk)
             {
@@ -86,10 +89,10 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
 
         public void Flush()
         {
-            if(!this.isCacheEnabled) this.storage.Flush();
+            if (!this.isCacheEnabled) this.storage.Flush();
         }
 
-        private TEntity GetByIdUsingCache(string id)
+        private TEntity GetByIdUsingCache(TKey id)
         {
             if (this.cache.ContainsKey(id))
                 return this.cache[id];
@@ -103,13 +106,13 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             return entity;
         }
 
-        private void RemoveUsingCache(string id)
+        private void RemoveUsingCache(TKey id)
         {
             this.cache.Remove(id);
             this.storage.Remove(id);
         }
 
-        private void StoreUsingCache(TEntity entity, string id)
+        private void StoreUsingCache(TEntity entity, TKey id)
         {
             this.cache[id] = entity;
 
@@ -130,9 +133,9 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
             this.StoreBulkEntitiesToRepository(bulk);
         }
 
-        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<string> bulk)
+        protected virtual void StoreBulkEntitiesToRepository(IEnumerable<TKey> bulk)
         {
-            var entitiesToStore = new List<Tuple<TEntity, string>>();
+            var entitiesToStore = new List<Tuple<TEntity, TKey>>();
 
             foreach (var entityId in bulk)
             {
@@ -156,6 +159,17 @@ namespace WB.Infrastructure.Native.Storage.Memory.Implementation
         private bool IsCacheLimitReached()
         {
             return this.cache.Count >= this.settings.CacheSizeInEntities;
+        }
+    }
+
+    internal class MemoryCachedReadSideStorage<TEntity> : MemoryCachedReadSideStorage<TEntity, string>, 
+        IReadSideRepositoryWriter<TEntity>,
+        IReadSideKeyValueStorage<TEntity>
+        where TEntity : class, IReadSideRepositoryEntity
+    {
+        public MemoryCachedReadSideStorage(IReadSideStorage<TEntity, string> storage, ReadSideCacheSettings settings) 
+            : base(storage, settings)
+        {
         }
     }
 }
