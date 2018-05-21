@@ -228,4 +228,25 @@
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>问卷模板层级的数据文件丢失。</value>
   </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>预填写的GPS问题要求设置纬度和经度。</value>
+  </data>
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+    <value>多选题的答案不能包含超过 个答案。</value>
+  </data>
+  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <value>Id一列没有包含任何值</value>
+  </data>
+  <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
+    <value>文本列表问题{0}包含非唯一项目：{1}。问卷编号：{2}</value>
+  </data>
+  <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
+    <value>文本列表问题{0}包含非唯一项目编号：{1}。问卷编号：{2}</value>
+  </data>
+  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+    <value>数据文件{0} 包含的记录不一致。数据文件 包含{1}个记录，触发问题{2}包含{3}个记录。问卷编号：{4}</value>
+  </data>
+  <data name="PL0046_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
+    <value>数据文件{0}和问题{1}中的项目列表之间存在不一致。出现在文本列表中但不存在于数据文件中的项目为：{2}。出现在数据文件中但不存在于文本列表中的项目为：{3}。问卷编号：{4}</value>
+  </data>
 </root>

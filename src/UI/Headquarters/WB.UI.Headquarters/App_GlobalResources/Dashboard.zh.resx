@@ -198,4 +198,7 @@
   <data name="UploadAssignments" xml:space="preserve">
     <value>上传任务</value>
   </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>导出问卷</value>
+  </data>
 </root>
