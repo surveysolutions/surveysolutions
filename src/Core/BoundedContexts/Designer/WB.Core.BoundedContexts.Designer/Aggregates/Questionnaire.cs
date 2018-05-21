@@ -1377,7 +1377,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     null,
                     null,
                     null,
-                    new List<ValidationCondition>(),
+                    command.ValidationConditions,
                     null,
                     false);
 

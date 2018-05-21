@@ -40,10 +40,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid interviewId;
         private Identity questionIdentity;
         private Guid userId;
-        private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
         private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private int? maxAllowedAnswers;
+        private string maxAnswersCountMessage;
 
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -105,16 +106,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             IStatefulInterview interview = this.interviewRepository.Get(interviewId.FormatGuid());
 
-            var answerOnMultiOptionQuestion =
+            int[] answerOnMultiOptionQuestion =
                 interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.CheckedValues?.ToArray();
+
+            UpateMaxAnswersCountMessage(answerOnMultiOptionQuestion?.Length ?? 0);
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
+                .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion, interview))
                 .ToList();
 
             this.Options.ForEach(x => x.DisposeIfDisposable());
             this.Options.Clear();
 
             optionViewModels.ForEach(x => this.Options.Add(x));
+
+        }
+
+        private void UpateMaxAnswersCountMessage(int answersCount)
+        {
+            if (this.maxAllowedAnswers.HasValue && this.HasOptions)
+            {
+                this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
+                    answersCount, this.maxAllowedAnswers);
+            }
+        }
+
+        public string MaxAnswersCountMessage
+        {
+            get => maxAnswersCountMessage;
+            set => SetProperty(ref maxAnswersCountMessage, value);
         }
 
         private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
@@ -143,7 +162,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => true;
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, int[] multiOptionAnswer)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, int[] multiOptionAnswer,
+            IStatefulInterview interview)
         {
             var answer = multiOptionAnswer ?? new int[] {};
             var result = new MultiOptionQuestionOptionViewModel(this)
@@ -156,6 +176,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?)null;
             result.QuestionState = this.questionState;
+            result.IsProtected = interview.IsAnswerProtected(this.questionIdentity, result.Value);
+            result.CanBeChecked = result.Checked || !this.maxAllowedAnswers.HasValue || answer.Length < this.maxAllowedAnswers;
 
             return result;
         }
@@ -198,6 +220,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
+
+                if (selectedValues.Length == this.maxAllowedAnswers)
+                {
+                    this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
+                }
+                else
+                {
+                    this.Options.ForEach(o => o.CanBeChecked = true);
+                }
+                
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
@@ -215,20 +247,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.CanBeChecked = true;
                 }
+
+                UpateMaxAnswersCountMessage(0);
             }
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
+            if (@event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
-                this.PutOrderOnOptions(@event);
+                if (this.areAnswersOrdered)
+                {
+                    this.PutOrderOnOptions(@event);
+                }
+                UpateMaxAnswersCountMessage(@event.SelectedValues.Length);
             }
         }
 
         private void PutOrderOnOptions(MultipleOptionsQuestionAnswered @event)
         {
+            var moreOptionCanBeSelected = !this.maxAllowedAnswers.HasValue || @event.SelectedValues.Length < this.maxAllowedAnswers;
+
             foreach (var option in this.Options)
             {
                 var selectedOptionIndex = Array.IndexOf(@event.SelectedValues, option.Value);
@@ -242,6 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     option.Checked = false;
                     option.CheckedOrder = null;
+                    option.CanBeChecked = moreOptionCanBeSelected;
                 }
             }
         }

@@ -3,7 +3,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
-    public class AnswerAreaQuestionCommand : AnswerQuestionCommand
+    public class AnswerGeographyQuestionCommand : AnswerQuestionCommand
     {
         public string Geometry { get; private set; }
         public string MapName { get; private set; }
@@ -12,9 +12,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public double? Length { get; private set; }
         public double? DistanceToEditor { get; private set; }
 
+        public int? NumberOfPoints { set; get; }
 
-        public AnswerAreaQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, 
-            DateTime answerTime, string geometry, string mapName, double? area,string coordinates , double? length, double? distanceToEditor)
+        public AnswerGeographyQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, 
+            DateTime answerTime, string geometry, string mapName, double? area,string coordinates , double? length, double? distanceToEditor, int? numberOfPoints)
             : base(interviewId, userId, questionId, rosterVector, answerTime)
         {
             this.Geometry = geometry;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.Length = length;
             this.Coordinates = coordinates;
             this.DistanceToEditor = distanceToEditor;
+            this.NumberOfPoints = NumberOfPoints;
         }
     }
 }

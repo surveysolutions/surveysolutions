@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Play Icon -->
+    <string name="play_icon_upper_path_data">M 44 32 L 44 64 L 100 64 L 100 64 Z</string>
+    <string name="play_icon_bottom_path_data">M 44 96 L 44 64 L 100 64 L 100 64 Z</string>
+
+
+    <!-- Stop Icon -->
+    <string name="stop_icon_upper_path_data">M 32 32 L 32 64 L 96 64 L 96 32 Z</string>
+    <string name="stop_icon_bottom_path_data">M 32 96 L 32 64 L 96 64 L 96 96 Z</string>
+
+    <!-- Groups -->
+    <string name="play_icon_group_top">upperpart</string>
+    <string name="play_icon_group_bottom">bottompart</string>
+    <string name="play_icon_group_parts">parts</string>
+
+    <!-- Path Name -->
+    <string name="play_icon_top_path_name">upper</string>
+    <string name="play_icon_bottom_path_name">bottom</string>
+
+</resources>

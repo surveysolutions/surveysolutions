@@ -75,6 +75,36 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             }
         }
 
+        public IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream)
+        {
+            inputStream.Seek(0, SeekOrigin.Begin);
+            
+            using (ZipFile zip = ZipFile.Read(inputStream))
+            {
+                foreach (var zipEntry in zip.Entries)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        try
+                        {
+                            zipEntry.Extract(memoryStream);
+                        }
+                        catch (BadPasswordException ex)
+                        {
+                            throw new Core.Infrastructure.FileSystem.ZipException("Password required", ex);
+                        }
+
+                        yield return new ExtractedFile
+                        {
+                            Name = zipEntry.FileName,
+                            Size = zipEntry.UncompressedSize,
+                            Bytes = memoryStream.ToArray()
+                        };
+                    }
+                }
+            }
+        }
+
         public IEnumerable<ExtractedFile> GetFilesFromArchive(byte[] archivedFileAsArray)
         {
             using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
@@ -104,6 +134,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public bool IsZipStream(Stream zipStream)
         {
+            zipStream.Seek(0, SeekOrigin.Begin);
             return ZipFile.IsZipFile(zipStream, false);
         }
 
@@ -127,6 +158,23 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             var result = new Dictionary<string, long>();
             using (MemoryStream archivestream = new MemoryStream(archivedFileAsArray))
             using (ZipFile zips = ZipFile.Read(archivestream))
+            {
+                foreach (var zip in zips)
+                {
+                    if (zip.IsDirectory)
+                        continue;
+                    result.Add(zip.FileName, zip.UncompressedSize);
+                }
+            }
+            return result;
+        }
+
+        public Dictionary<string, long> GetArchivedFileNamesAndSize(Stream inputStream)
+        {
+            inputStream.Seek(0, SeekOrigin.Begin);
+
+            var result = new Dictionary<string, long>();
+            using (ZipFile zips = ZipFile.Read(inputStream))
             {
                 foreach (var zip in zips)
                 {

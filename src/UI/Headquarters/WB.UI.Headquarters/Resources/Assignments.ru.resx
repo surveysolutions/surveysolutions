@@ -223,4 +223,46 @@
   <data name="InvalidSize" xml:space="preserve">
     <value>Количество заданий должно быть -1 или больше</value>
   </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Выберите опросник который следует обновить</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Выберите опросник задания которого следует обновить</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Обновление {{processed}} из {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Обновление заданий из {{from}} в {{to}}</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Существующие незавершенные задания будут обновлены и перемещены в архив.</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Обновление остановлено</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Ожидание завершения других процессов обновления </value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Завершено</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Обновлено успешно: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Не обновлено: {{count}}</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Скачать список</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Обновление заданий из {{from}} в {{to}} завершено</value>
+  </data>
 </root>

@@ -7,7 +7,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
 
@@ -20,7 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires = null, QuestionnaireExportStructure questionnaireExportStructure=null)
         {
             return new SampleUploadViewFactory(questionnaires ?? new InMemoryPlainStorageAccessor<QuestionnaireBrowseItem>(),
-                Mock.Of<IQuestionnaireExportStructureStorage>(_=>_.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireExportStructure));
+                Mock.Of<IQuestionnaireExportStructureStorage>(_=>_.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>())== questionnaireExportStructure),
+                Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.QuestionnaireDocument()));
         }
 
         private SampleUploadViewInputModel CreateSampleUploadViewInputModel(Guid? questionnaireId=null)
@@ -107,8 +110,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.SampleUploadVie
 
             Assert.That(result, Is.Not.Null);
 
-            Assert.That(result.ColumnListToPreload[0].Caption, Is.EqualTo(prefiledQuestionVarName));
-            Assert.That(result.ColumnListToPreload[0].Id, Is.EqualTo(prefilledTxtQuestion.PublicKey));
+            Assert.That(result.IdentifyingQuestions[0].Caption, Is.EqualTo(prefiledQuestionVarName));
+            Assert.That(result.IdentifyingQuestions[0].Id, Is.EqualTo(prefilledTxtQuestion.PublicKey));
         }
     }
 }

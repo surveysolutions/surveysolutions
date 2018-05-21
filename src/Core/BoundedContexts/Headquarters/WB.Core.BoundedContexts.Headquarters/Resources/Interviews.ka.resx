@@ -120,10 +120,7 @@
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
     <value>დაფიქსირდა შეცდომა იდენტიფიცირებულკითხვებიანი {0} ინტერვიუს იმპორტის დროს. პასუხისმგებელი ზედამხედველი არ არსებობს</value>
   </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>დაფიქსირდა შეცდომა იდენტიფიცირებულკითხვებიანი {0} ინტერვიუს იმპორტის დროს.  InterviewerId {1}, QuestionnaireId {2}, Exception: {3}</value>
-  </data>
-  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+    <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>მონაცემთა ფაილი არასწორია</value>
   </data>
 </root>

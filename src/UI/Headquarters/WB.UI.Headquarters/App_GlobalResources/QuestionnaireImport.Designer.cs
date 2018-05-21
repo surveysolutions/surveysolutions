@@ -239,5 +239,14 @@ namespace Resources {
                 return ResourceManager.GetString("SignInToDesignerTitle", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade assignments.
+        /// </summary>
+        internal static string UpgradeAssignments {
+            get {
+                return ResourceManager.GetString("UpgradeAssignments", resourceCulture);
+            }
+        }
     }
 }

@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="PL0002_MoreThenOneLevel" xml:space="preserve">
+    <value>[PL0002] N/A</value>
+  </data>
+  <data name="PL0003_ColumnWasntMappedOnQuestion" xml:space="preserve">
+    <value>لا يمكن تعيين العامود الى أي سؤال في الاستبيان</value>
+  </data>
+  <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
+    <value>لا يمكن تعيين الملف إلى أي لائحة في الاستبيان.</value>
+  </data>
+  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
+    <value>[PL0002] N/A</value>
+  </data>
+  <data name="PL0006_IdDublication" xml:space="preserve">
+    <value>تم العثور على قيم معرف مكرر.</value>
+  </data>
+  <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
+    <value>سجل القائمة ليس لديه الاصل.</value>
+  </data>
+  <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
+    <value>لا يتعارض معرف القائمة مع حجم القائمة.</value>
+  </data>
+  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
+    <value>لا يمكن تحميل الأسئلة المرتبطة مسبقا.</value>
+  </data>
+  <data name="PL0011_GeneralError" xml:space="preserve">
+    <value>حدث خطأ عام.</value>
+  </data>
+  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
+    <value>السؤال الذي تم العثور عليه في الملف (الملفات) التي تم تحميلها والتي لا توجد في الاستبيان</value>
+  </data>
+  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
+    <value>القيمة المقدمة صفر أو فارغة</value>
+  </data>
+  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <value>قيمة السؤال المقدمة غير مسموحة</value>
+  </data>
+  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
+    <value>نوع السؤال غير صحيح</value>
+  </data>
+  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <value>تم إدخال قيمة التاريخ أو الوقت غير صالحة في سؤال التاريخ.</value>
+  </data>
+  <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
+    <value>قيمة نظام تحديد المواقع غير صالحة.</value>
+  </data>
+  <data name="PL0018_ExpectedIntNotParsed" xml:space="preserve">
+    <value>يسمح فقط بعدد صحيح.</value>
+  </data>
+  <data name="PL0019_ExpectedDecimalNotParsed" xml:space="preserve">
+    <value>يسمح فقط بالقيم الحقيقية.</value>
+  </data>
+  <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
+    <value>لا يمكن أن يكون لحجم قائمة السؤال قيم سالبة</value>
+  </data>
+  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
+    <value>لا يمكن اعادة تحميل سؤال الصورة</value>
+  </data>
+  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <value>لم يتم العثور على بيانات التحميل المسبق</value>
+  </data>
+  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
+    <value>الحقل المسؤول لم يقدم لواحد أو أكثر من الملاحظات</value>
+  </data>
+  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>المسؤول غير موجود لواحد أو أكثر من الملاحظات</value>
+  </data>
+  <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
+    <value>المسؤول هو مستخدم مقفل لواحد أو أكثر من الملاحظات</value>
+  </data>
+  <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
+    <value>المستخدم ليس المشرف أو الباحث ل 1 أو أكثر من الملاحظات</value>
+  </data>
+  <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
+    <value>لا يمكن أن تكون الإجابة على سؤال حجم القائمة أكبر من {0}.</value>
+  </data>
+  <data name="PL0030_GpsFieldsRequired" xml:space="preserve">
+    <value>تتطلب أسئلة نظام تحديد المواقع العالمي أعمدة منفصلة لخطوط الطول والعرض</value>
+  </data>
+  <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
+    <value>يتطلب تحديد مسألة نظام تحديد المواقع تحديد خط العرض وخط الطول.</value>
+  </data>
+  <data name="PL0031_ColumnNameDuplicatesFound" xml:space="preserve">
+    <value>عامودين او اكثر لهما نفس الاسم</value>
+  </data>
+  <data name="PL0032_LatitudeMustBeGeaterThenN90AndLessThen90" xml:space="preserve">
+    <value>يجب أن يكون خط العرض أكبر من -90 درجة وأقل من 90 درجة.</value>
+  </data>
+  <data name="PL0033_LongitudeMustBeGeaterThenN180AndLessThen180" xml:space="preserve">
+    <value>يجب أن يكون خط الطول أكبر من -180 درجة وأقل من 180 درجة.</value>
+  </data>
+  <data name="PL0034_CommaSymbolIsNotAllowedInNumericAnswer" xml:space="preserve">
+    <value>فاصل عشري غير صالح. لا يسمح الرمز "،" في إجابات رقمية. الرجاء استخدام "." بدلاً منه</value>
+  </data>
+  <data name="PL0035_QuantityNotParsed" xml:space="preserve">
+    <value>يسمح فقط بعدد صحيح.</value>
+  </data>
+  <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
+    <value>يجب أن تكون الكمية أكبر من أو تساوي -1.</value>
+  </data>
+  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
+    <value>لا يمكن تعيين العامود الى أي سؤال غير محدد</value>
+  </data>
+  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
+    <value>سؤال المنطقة لا يمكن إعادة تحميله</value>
+  </data>
+  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
+    <value>لا يمكن إعادة تحميل السؤال الصوتي</value>
+  </data>
+  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <value>الملف مع البيانات على مستوى الاستبيان مفقود.</value>
+  </data>
+</root>

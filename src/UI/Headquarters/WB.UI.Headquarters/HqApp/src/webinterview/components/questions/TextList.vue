@@ -3,16 +3,17 @@
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group" v-for="(row, index) in $me.rows" :key="row.value">
-                    <div class="field answered">
+                    <div class="field answered"   v-bind:class="{ 'unavailable-option locked-option': row.isProtected }">
                         <input autocomplete="off" type="text" class="field-to-fill" 
                             :value="row.text"
-                            :disabled="!$me.acceptAnswer"
+                            :disabled="!$me.acceptAnswer || row.isProtected"
                             v-blurOnEnterKey 
                             @blur="updateRow($event, row)"/>
                         <button type="submit" class="btn btn-link btn-clear" 
-                            v-if="$me.acceptAnswer"
+                            v-if="$me.acceptAnswer && !row.isProtected"
                             tabindex="-1"
                             @click="confirmAndRemoveRow(index)"><span></span></button>
+                        <div class="lock"></div>
                     </div>
                 </div>
                 <div class="form-group" v-if="canAddNewItem">
