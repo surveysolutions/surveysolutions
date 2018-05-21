@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using Esri.ArcGISRuntime.Mapping;
+using Esri.ArcGISRuntime.Rasters;
+using Esri.ArcGISRuntime.UI.Controls;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.Infrastructure.FileSystem;
 
@@ -73,6 +76,47 @@ namespace WB.UI.Headquarters.Implementation.Maps
                         return properties;
                     }
                     return null;
+                }
+                case ".tif":
+                {
+                    Raster raster = new Raster(pathToMap);
+                    RasterLayer newRasterLayer = new RasterLayer(raster);
+                    try
+                    {
+                        await newRasterLayer.LoadAsync();
+
+                        //add error display
+                        if (!newRasterLayer.SpatialReference.IsProjected)
+                            throw new ArgumentException($"Geotif is not projected. {pathToMap}");
+
+                        var properties = new MapProperties()
+                        {
+                            Wkid = newRasterLayer.SpatialReference.Wkid,
+                            XMax = newRasterLayer.FullExtent.XMax,
+                            XMin = newRasterLayer.FullExtent.XMin,
+
+                            YMax = newRasterLayer.FullExtent.YMax,
+                            YMin = newRasterLayer.FullExtent.YMin,
+
+                            MaxScale = newRasterLayer.MaxScale,
+                            MinScale = newRasterLayer.MinScale
+                        };
+
+                        return properties;
+                    }
+                    finally
+                    {
+                        //temporary soulution
+                        //waiting for fix from Esri
+                        FieldInfo fieldInfo =
+                            raster.GetType().GetField("_coreReference", BindingFlags.NonPublic | BindingFlags.Instance);
+                        (fieldInfo.GetValue(raster) as IDisposable ).Dispose();
+
+
+                        FieldInfo fieldInfoNewRasterLayer =
+                            newRasterLayer.GetType().GetField("_coreReference", BindingFlags.NonPublic | BindingFlags.Instance);
+                        (fieldInfoNewRasterLayer.GetValue(newRasterLayer) as IDisposable).Dispose();
+                    }
                 }
 
                 default:

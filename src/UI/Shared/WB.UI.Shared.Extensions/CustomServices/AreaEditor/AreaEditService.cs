@@ -38,7 +38,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
+        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
             bool is64Bit = IntPtr.Size == 8;
 
@@ -48,19 +48,20 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             await this.permissions.AssureHasPermission(Permission.Location);
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            ArcGISRuntimeEnvironment.SetLicense("runtimebasic,1000,rud000017554,none,4N400PJPXJGH2T8AG192");
+            ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,***REMOVED***");
 
-            return await this.EditArea(area);
+            return await this.EditAreaImplAsync(area, geometryType);
         }
         
-        private async Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
+        private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
             var tcs = new TaskCompletionSource<AreaEditResult>();
 
             await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(new AreaEditorViewModelArgs
             {
                 Geometry = area?.Geometry,
-                MapName = area?.MapName
+                MapName = area?.MapName,
+                RequestedGeometryType = geometryType
             });
 
             AreaEditorActivity.OnAreaEditCompleted += (editResult =>
@@ -76,7 +77,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             Length = editResult.Length,
                             Coordinates = editResult.Coordinates,
                             DistanceToEditor = editResult.DistanceToEditor,
-                            Preview = editResult.Preview
+                            Preview = editResult.Preview,
+                            NumberOfPoints = editResult.NumberOfPoints
                         });
             });
 

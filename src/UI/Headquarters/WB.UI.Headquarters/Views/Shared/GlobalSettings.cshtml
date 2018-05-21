@@ -6,9 +6,8 @@
 @functions{
     public string TokenHeaderValue()
     {
-        string cookieToken, formToken;
-        AntiForgery.GetTokens(null, out cookieToken, out formToken);
-        return cookieToken + ":" + formToken;
+        AntiForgery.GetTokens(null, out var cookieToken, out var formToken);
+        return cookieToken + @":" + formToken;
     }
 }
 
@@ -40,7 +39,7 @@
                         lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
                     },
                     basePath: '@Url.Content("~/")',
-					dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
+                    dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
                 },
                 clientDateTimeFormat: '@Extensions.ClientDateTimeFormat'
             }
@@ -51,14 +50,19 @@
     window.CONFIG = {
         verboseMode: false,
         googleApiKey: '@(WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiKey)',
-		googleMapsApiBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl',
-		googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',
+        googleMapsApiBaseUrl:
+            '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapApiBaseUrl',
+        googleMapsBaseUrl: '@WB.Core.SharedKernels.SurveyManagement.Web.Code.AppSettings.Instance.GoogleMapBaseUrl',
         basePath: '@Url.Content(@"~/")',
         imageGetBase: '@Url.Content("~/api/WebInterviewResources")',
         audioGet: '@Url.Content("~/Resource/AudioRecord")',
         appVersion: '@(ServiceLocator.Current.GetInstance<WB.Core.Infrastructure.Versions.IProductVersion>())',
         dateFormat: '@WB.Core.BoundedContexts.Headquarters.Extensions.ClientDateTimeFormat',
         signalrPath: '@Url.Content("~/signalr/hubs")',
-        supportedTransports: ["webSockets", "longPolling"],
+        supportedTransports: ["webSockets", "longPolling"]
+    }
+
+    if (moment) {
+        moment.locale('@UICulture');
     }
 </script>

@@ -4,12 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Core.ViewModels;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Core;
+using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -51,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
-            this.navigationState = navigationState;
+            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.answerNotifier = answerNotifier;
             this.groupState = groupState;
             this.interviewState = interviewState;
@@ -95,7 +99,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             if (questionnaire == null)
-                throw new Exception("Questionnaire not found. QuestionnaireId: " + interview.QuestionnaireId);
+                throw new QuestionnaireException("Questionnaire not found")
+                {
+                    Data = {{"QuestionnaireId", interview.QuestionnaireId}}
+                };
 
             this.HasNotEmptyNoteFromSupervior = !string.IsNullOrWhiteSpace(interview.GetLastSupervisorComment());
             this.HasCommentsFromSupervior = interview.GetCommentedBySupervisorQuestionsVisibledToInterviewer().Any();
@@ -110,8 +117,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.QuestionnaireTitle = questionnaire.Title;
 
-            var interviewKey = interview.GetInterviewKey()?.ToString();
-            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : String.Format(UIResources.InterviewKey, interviewKey);
+            assignmentId = interview.GetAssignmentId();
+
+            interviewKey = interview.GetInterviewKey();
+            this.InterviewKey = interviewKey == null ? null : String.Format(UIResources.InterviewKey, interviewKey.ToString());
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
@@ -128,6 +137,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.IsVariablesShowed = this.enumeratorSettings.ShowVariables;
             this.IsSuccessfullyLoaded = true;
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            if (this.targetNavigationIdentity != null)
+            {
+                bundle.Data["lastNavigationIdentity"] = JsonConvert.SerializeObject(this.targetNavigationIdentity);
+            }
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            base.ReloadFromBundle(state);
+            if (state.Data.ContainsKey("lastNavigationIdentity"))
+            {
+                var serialized = state.Data["lastNavigationIdentity"];
+                this.targetNavigationIdentity = JsonConvert.DeserializeObject<NavigationIdentity>(serialized);
+            }
         }
 
         protected virtual NavigationIdentity GetDefaultScreenToNavigate(IQuestionnaire questionnaire)
@@ -165,6 +193,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
                     break;
             }
+
+            this.targetNavigationIdentity = new NavigationIdentity
+            {
+                AnchoredElementIdentity = eventArgs.AnchoredElementIdentity,
+                TargetGroup = eventArgs.TargetGroup,
+                TargetScreen = eventArgs.TargetStage
+            };
 
             this.CurrentStage.DisposeIfDisposable();
             this.CurrentStage = this.GetInterviewStageViewModel(eventArgs);
@@ -243,6 +278,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public string InterviewKey { get; set; }
+        protected InterviewKey interviewKey;
+        protected int? assignmentId;
 
         public bool HasPrefilledQuestions { get; set; }
         public bool HasEdiablePrefilledQuestions { get; set; }
@@ -251,6 +288,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public bool HasNotEmptyNoteFromSupervior { get; set; }
 
         public InterviewStageViewModel CurrentStage { get; private set; }
+
         public string Title { get; private set; }
 
         public bool IsVariablesShowed { get; private set; }

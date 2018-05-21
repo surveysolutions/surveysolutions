@@ -91,6 +91,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetPrefilledQuestions();
 
+        ReadOnlyCollection<Guid> GetHiddenQuestions();
+
         IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId);
 
         ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId);
@@ -119,6 +121,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         Guid[] GetRosterSizeSourcesForEntity(Guid entityId);
 
+        IReadOnlyCollection<Guid> GetAllRosterSizeQuestions();
+
         int GetRosterLevelForQuestion(Guid questionId);
 
         int GetRosterLevelForGroup(Guid groupId);
@@ -136,6 +140,9 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         ReadOnlyCollection<Guid> GetAllGroups();
 
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
+
+        IEnumerable<Guid> GetAllUnderlyingQuestionsOutsideRosters(Guid? groupId);
+        IEnumerable<Guid> GetAllUnderlyingVariablesOutsideRosters(Guid? groupId);
 
         IEnumerable<Guid> GetAllUnderlyingStaticTexts(Guid groupId);
 
@@ -240,6 +247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsFixedRoster(Guid id);
         bool IsNumericRoster(Guid id);
 
+        decimal[] GetFixedRosterCodes(Guid rosterId);
         IReadOnlyCollection<string> GetTranslationLanguages();
         string GetDefaultTransation();
         bool IsQuestionIsRosterSizeForLongRoster(Guid questionId);

@@ -30,6 +30,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 cmp.Property(x => x.Version, ptp => ptp.Column("QuestionnaireVersion"));
             });
 
+            this.Property(x => x.ProtectedVariables, m => m.Type<PostgresJson<List<string>>>());
+
             ManyToOne(x => x.Questionnaire, mto =>
             {
                 mto.Column("Questionnaire");

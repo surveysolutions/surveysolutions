@@ -13,19 +13,25 @@ import './components'
 import './compatibility.js'
 import "~/webinterview/componentsRegistry"
 
+import VueTextareaAutosize from 'vue-textarea-autosize'
+ Vue.use(VueTextareaAutosize);
+
 import box from "~/webinterview/components/modal"
 import 'flatpickr/dist/flatpickr.css'
 import "toastr/build/toastr.css"
 import * as poly from "smoothscroll-polyfill"
 poly.polyfill()
 
+import hqApi from "./api"
+
 import { browserLanguage } from "~/shared/helpers"
 moment.locale(browserLanguage);
 
 const i18n = Vuei18n.initialize(browserLanguage)
 
-Vue.use(config);
-Vue.use(http);
+Vue.use(config)
+Vue.use(http)
+Vue.use(hqApi)
 
 const viewsProvider = require("./views").default;
 const Router = require('./router').default;

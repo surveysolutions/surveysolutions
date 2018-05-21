@@ -85,9 +85,6 @@
     <item name="android:layout_marginBottom">@dimen/Interview_Entity_margin_vertical</item>
   </style>
 
-  <style name="Interview_Question_Body" parent="VerticalFullWidthWrappingLayout">
-  </style>
-
   <style name="Interview_Question_Answer">
     <item name="android:layout_width">match_parent</item>
     <item name="android:layout_height">wrap_content</item>
@@ -160,6 +157,13 @@
     <item name="android:background">@drawable/question_text_question</item>
   </style>
   
+    <style name="Interview_Question_ProtectedAnswerIcon">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    </style>
+
   <style name="Interview_Question_Answer_Input_RemoveAnswerWrapper">
     <item name="android:layout_height">fill_parent</item>
     <item name="android:layout_width">wrap_content</item>
@@ -296,14 +300,6 @@
     <item name="android:textStyle">bold</item>
   </style>
 
-  <style name="Interview_Question_Answer_List_DeleteButton">
-    <item name="android:layout_width">@dimen/Interview_Question_List_DeleteButton_width</item>
-    <item name="android:layout_height">@dimen/Interview_Question_List_DeleteButton_height</item>
-    <item name="android:layout_gravity">right</item>
-    <item name="android:scaleType">fitCenter</item>
-    <item name="android:background">@drawable/delete_button</item>
-  </style>
-
   <style name="Interview_Question_Answer_List_NewItem_Editor" parent="Interview_Question_TextEditor">
     <item name="android:maxLines">1</item>
     <item name="android:singleLine">true</item>
@@ -321,7 +317,6 @@
  <style name="Interview_Question_RemoveAnswer">
     <item name="android:layout_width">@dimen/Interview_Question_Text_DeleteButton_width</item>
     <item name="android:layout_height">@dimen/Interview_Question_Text_DeleteButton_height</item>
-    <item name="android:src">@drawable/delete_button</item>
     <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
   </style>
   <style name="Interview_Question_OptionRemoveAnswer" parent="Interview_Question_RemoveAnswer">
@@ -366,25 +361,29 @@
     <item name="android:textColor">@color/recordedAnswerText</item>
     <item name="android:textSize">@dimen/textsize_14</item>
   </style>
+    
+    <style name="Interview_Button" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">Arial</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
+        <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:paddingRight">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+        <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+        <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding_vertical</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+    </style>
 
-  <style name="Interview_Question_InputButton" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
+  <style name="Interview_Question_InputButton" parent="Interview_Button">
     <item name="android:background">@drawable/question_input_button</item>
-    <item name="android:fontFamily">Arial</item>
-    <item name="android:textSize">@dimen/textsize_18</item>
-    <item name="android:textStyle">italic</item>
     <item name="android:textColor">@color/editorHintTextColor</item>
-    <item name="android:minHeight">@dimen/Theme_Button_min_height</item>
-    <item name="android:minWidth">@dimen/Theme_Button_min_width</item>
-    <item name="android:gravity">center_vertical|center_horizontal</item>
-    <item name="android:stateListAnimator">@null</item>
-    <item name="android:paddingRight">@dimen/Interview_Question_InputButton_padding_horizontal</item>
-    <item name="android:paddingLeft">@dimen/Interview_Question_InputButton_padding_horizontal</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_InputButton_padding_vertical</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_InputButton_padding_vertical</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
-    <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_margin_LeftRight</item>
   </style>
 
   <style name="Interview_Question_Errors">

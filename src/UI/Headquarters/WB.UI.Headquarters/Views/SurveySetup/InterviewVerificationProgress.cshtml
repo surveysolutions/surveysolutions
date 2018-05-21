@@ -17,18 +17,14 @@
 
             self.questionnaireId = '@Model.QuestionnaireId';
             self.questionnaireVersion = @Model.Version;
-            self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
-                verifiedCount: ko.observable(@Model.Status.ProcessedCount),
+                verifiedCount: ko.observable(@Model.Status.VerifiedCount),
                 totalCount: ko.observable(@Model.Status.TotalCount),
-                failedVerifications: ko.observable(@Model.Status.State.Errors.Count),
-                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
-                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
+                failedVerifications: ko.observable(@Model.Status.WithErrorsCount),
                 hasErrors: ko.observable(false),
-                isInProgress: ko.observable(true),
-                stage: ko.observable("@AssignmentImportStage.FileVerification.ToString()"),
+                isInProgress: ko.observable(true)
             };
 
             self.isStatusLoaded = ko.observable(false);
@@ -36,13 +32,9 @@
             var countOfRequestsToStopImport = 0;
 
             var shouldStopRequestUpdates = function(data) {
-                if (_.isNull(data.interviewImportProcessId))
-                    countOfRequestsToStopImport++;
-                else if (data.totalCount === 0)
+                if (data.totalCount === 0)
                     countOfRequestsToStopImport++;
                 else if (data.isInProgress === false)
-                    countOfRequestsToStopImport++;
-                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
                     countOfRequestsToStopImport++;
                 else {
                     countOfRequestsToStopImport = 0;
@@ -59,15 +51,12 @@
                     {},
                     true,
                     function(data) {
-                        self.status.isInProgress(data.isInProgress);
-                        self.status.verifiedCount(data.createdInterviewsCount);
+                        self.status.isInProgress(data.verifiedInterviewsCount !== data.totalInterviewsCount);
+                        self.status.verifiedCount(data.verifiedInterviewsCount);
                         self.status.totalCount(data.totalInterviewsCount);
                         self.status.failedVerifications(data.interviewsWithError);
 
-                        self.status.elapsedTime(data.elapsedTime);
-                        self.status.estimatedTime(data.estimatedTime);
-                        self.status.hasErrors(data.hasErrors);
-                        self.status.stage(data.stage);
+                        self.status.hasErrors(data.interviewsWithError > 0);
                         self.isStatusLoaded(true);
 
                         if (shouldStopRequestUpdates(data) === false) {
@@ -75,10 +64,10 @@
                         }
 
 
-                        if (self.status.isInProgress() === false)
+                        if (!self.status.isInProgress())
                         {
                             var verificationFinishedUrl =
-                                '@Url.Action("InterviewImportVerificationCompleted", "SurveySetup")';
+                                '@Url.Action("InterviewImportProgress", "SurveySetup")';
 
                             window.location.href = verificationFinishedUrl;
                         }
@@ -115,25 +104,19 @@
         </div>
         <div class="row">
             <div class="col-sm-7 col-xs-12 action-block">
-                <div class="import-progress" data-bind="if: status.stage() === '@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                <div class="import-progress">
                     <p class="success-text">
                         @BatchUpload.Import_VerificationOfDataFile_Succeeded
                     </p>
                 </div>
                 <div class="import-progress" >
-                    <p data-bind="if: status.stage()=='@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                    <p>
                         @BatchUpload.Import_VerificationOfAssignmentData
                         <span data-bind="if: status.isInProgress">
                             (@Html.Raw(string.Format(BatchUpload.Import_VerificationOfDataFile_Progress, "<span data-bind='text: status.verifiedCount'></span>", "<span data-bind='text: status.totalCount'></span>")))
                         </span>
                     </p>
-                    <p  data-bind="if: status.stage()=='@AssignmentImportStage.FileVerification.ToString()'">
-                        @BatchUpload.Import_VerificationOfDataFile
-                        <span data-bind="if: status.isInProgress">
-                            (@Html.Raw(string.Format(BatchUpload.Import_VerificationOfDataFile_Progress, "<span data-bind='text: status.verifiedCount'></span>", "<span data-bind='text: status.totalCount'></span>")))
-                        </span>
-                    </p>
-                    <p class="success-text" data-bind="if: status.verifiedCount() > 0 && status.stage()=='@AssignmentImportStage.AssignmentDataVerification.ToString()'">
+                    <p class="success-text" data-bind="if: status.verifiedCount() > 0">
                         <!-- ko if: (status.verifiedCount() - status.failedVerifications()) == 1 -->
                         @BatchUpload.Import_Verification_1_AssignmentVerified
                         <!-- /ko -->
@@ -153,7 +136,7 @@
                 </div>
                 <div class="cancelable-progress" data-bind="if: status.isInProgress()">
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.ProcessedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
+                        <div class="progress-bar progress-bar-success" data-bind="style: { width: (100 * status.verifiedCount()/status.totalCount()) + '%' }, attr: {'aria-valuemax': status.totalCount, 'aria-valuenow': status.verifiedCount}" role="progressbar" aria-valuenow="@Model.Status.VerifiedCount" aria-valuemin="0" aria-valuemax="@Model.Status.TotalCount">
                             <span class="sr-only"></span>
                         </div>
                     </div>

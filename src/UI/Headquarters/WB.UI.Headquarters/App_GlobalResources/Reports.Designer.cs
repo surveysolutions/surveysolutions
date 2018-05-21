@@ -79,6 +79,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Average.
+        /// </summary>
+        internal static string Average {
+            get {
+                return ResourceManager.GetString("Average", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter by numeric value.
+        /// </summary>
+        internal static string ByAnswerValue {
+            get {
+                return ResourceManager.GetString("ByAnswerValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
         internal static string Completed {
@@ -93,6 +111,24 @@ namespace Resources {
         internal static string CompletionDate {
             get {
                 return ResourceManager.GetString("CompletionDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Condition Question.
+        /// </summary>
+        internal static string ConditionQuestion {
+            get {
+                return ResourceManager.GetString("ConditionQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        internal static string Count {
+            get {
+                return ResourceManager.GetString("Count", resourceCulture);
             }
         }
         
@@ -160,11 +196,101 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max.
+        /// </summary>
+        internal static string Max {
+            get {
+                return ResourceManager.GetString("Max", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Median.
+        /// </summary>
+        internal static string Median {
+            get {
+                return ResourceManager.GetString("Median", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Min.
+        /// </summary>
+        internal static string Min {
+            get {
+                return ResourceManager.GetString("Min", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percentile 05.
+        /// </summary>
+        internal static string Percentile05 {
+            get {
+                return ResourceManager.GetString("Percentile05", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percentile 50.
+        /// </summary>
+        internal static string Percentile50 {
+            get {
+                return ResourceManager.GetString("Percentile50", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percentile 95.
+        /// </summary>
+        internal static string Percentile95 {
+            get {
+                return ResourceManager.GetString("Percentile95", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pivot table.
+        /// </summary>
+        internal static string PivotView {
+            get {
+                return ResourceManager.GetString("PivotView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question.
+        /// </summary>
+        internal static string Question {
+            get {
+                return ResourceManager.GetString("Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question Label.
+        /// </summary>
+        internal static string QuestionLabel {
+            get {
+                return ResourceManager.GetString("QuestionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Questionnaire.
         /// </summary>
         internal static string Questionnaire {
             get {
                 return ResourceManager.GetString("Questionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Question text.
+        /// </summary>
+        internal static string QuestionText {
+            get {
+                return ResourceManager.GetString("QuestionText", resourceCulture);
             }
         }
         
@@ -394,11 +520,38 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select condition question.
+        /// </summary>
+        internal static string SelectConditionQuestion {
+            get {
+                return ResourceManager.GetString("SelectConditionQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select question.
+        /// </summary>
+        internal static string SelectQuestion {
+            get {
+                return ResourceManager.GetString("SelectQuestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count Days of interview in Status.
         /// </summary>
         internal static string StatusDuration {
             get {
                 return ResourceManager.GetString("StatusDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sum.
+        /// </summary>
+        internal static string Sum {
+            get {
+                return ResourceManager.GetString("Sum", resourceCulture);
             }
         }
         
@@ -439,6 +592,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By Teams.
+        /// </summary>
+        internal static string TeamLeadsOnly {
+            get {
+                return ResourceManager.GetString("TeamLeadsOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Teams and Statuses.
         /// </summary>
         internal static string TeamsAndStatuses {
@@ -457,6 +619,33 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Updated {0}.
+        /// </summary>
+        internal static string Updated {
+            get {
+                return ResourceManager.GetString("Updated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update now.
+        /// </summary>
+        internal static string UpdateNow {
+            get {
+                return ResourceManager.GetString("UpdateNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update in progress.
+        /// </summary>
+        internal static string Updating {
+            get {
+                return ResourceManager.GetString("Updating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Variables.
         /// </summary>
         internal static string Variables {
@@ -471,6 +660,24 @@ namespace Resources {
         internal static string Version {
             get {
                 return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View options.
+        /// </summary>
+        internal static string ViewOptions {
+            get {
+                return ResourceManager.GetString("ViewOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By Team Members.
+        /// </summary>
+        internal static string WithInterviewers {
+            get {
+                return ResourceManager.GetString("WithInterviewers", resourceCulture);
             }
         }
     }

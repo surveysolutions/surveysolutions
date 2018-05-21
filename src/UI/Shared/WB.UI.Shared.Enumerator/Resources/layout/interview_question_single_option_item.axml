@@ -9,5 +9,6 @@
     local:MvxBind="HideKeyboardOnClick .; Text Title; Checked Selected; Bold Selected; Tag ItemTag" />
     
   <ImageButton style="@style/Interview_Question_OptionRemoveAnswer" 
-               local:MvxBind="HideKeyboardOnClick .;Click RemoveAnswerCommand; Visible Selected"/>
+               local:MvxBind="HideKeyboardOnClick .;Click RemoveAnswerCommand; Visible Selected"
+               local:srcCompat="@drawable/delete_button"/>
 </LinearLayout>

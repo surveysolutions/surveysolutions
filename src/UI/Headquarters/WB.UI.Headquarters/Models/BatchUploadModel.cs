@@ -21,5 +21,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
         public HttpPostedFileBase File { get; set; }
         public List<FeaturedQuestionItem> FeaturedQuestions { get; set; }
         public int ClientTimezoneOffset { get; set; }
+        public IList<string> HiddenQuestions { get; set; }
+        public IList<string> RosterSizeQuestions { get; set; }
     }
 }
