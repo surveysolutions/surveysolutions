@@ -5,6 +5,7 @@ import Users from "./Users"
 import Maps from "./Maps"
 import WebInterviewSetup from "./WebInterviewSetup"
 import SurveySetup from "./SurveySetup"
+import Profile from "./Profile"
 
 export default [
     Assignments,
@@ -13,5 +14,6 @@ export default [
     Users,
     Maps,
     WebInterviewSetup,
-    SurveySetup
+    SurveySetup,
+    Profile
 ]
