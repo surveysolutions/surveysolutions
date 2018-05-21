@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.lastCreatedInterviewStorage.Store(formatGuid);
                 logger.Warn($"Created interview {interviewId} from assigment {assignment.Id}({assignment.Title}) at {DateTime.Now}");
                 auditLogService.Write(new CreateInterviewAuditLogEntity(interviewId, assignment.Id, assignment.Title, interviewKey.ToString()));
-                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoaginViewModelArg>(new LoaginViewModelArg{InterviewId = interviewId});
+                await this.viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg{InterviewId = interviewId});
             }
             catch (InterviewException e)
             {
