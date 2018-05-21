@@ -187,7 +187,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} new assignments downloaded.
+        ///   Looks up a localized string similar to {0} new assignment(s) downloaded.
         /// </summary>
         public static string SynchronizationCompleted_AssignmentsDownloaded {
             get {
@@ -196,7 +196,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} assignments removed.
+        ///   Looks up a localized string similar to {0} assignment(s) removed.
         /// </summary>
         public static string SynchronizationCompleted_AssignmentsRemoved {
             get {
@@ -205,7 +205,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} new interviews downloaded.
+        ///   Looks up a localized string similar to {0} new interview(s) downloaded.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsDownloaded {
             get {
@@ -214,7 +214,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews rejected.
+        ///   Looks up a localized string similar to {0} interview(s) rejected.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsRejected {
             get {
@@ -223,7 +223,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews removed.
+        ///   Looks up a localized string similar to {0} interview(s) removed.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsRemoved {
             get {
@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} interviews uploaded.
+        ///   Looks up a localized string similar to {0} interview(s) uploaded.
         /// </summary>
         public static string SynchronizationCompleted_InterviewsUploaded {
             get {

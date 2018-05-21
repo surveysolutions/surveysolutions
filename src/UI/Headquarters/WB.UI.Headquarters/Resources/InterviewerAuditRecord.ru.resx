@@ -173,31 +173,31 @@
   <data name="DownloadCsvLog" xml:space="preserve">
     <value>Загрузить полный лог в CSV формате</value>
   </data>
-    <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
+  <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
     <value>нечего синхронизировать</value>
     <comment>нечего синхронизировать</comment>
   </data>
-    <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
+  <data name="SynchronizationCompleted_AssignmentsRemoved" xml:space="preserve">
     <value>удалено {0} заданий</value>
     <comment>удалено {0} заданий</comment>
   </data>
-    <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
-    <value>скачено {0} новых заданий</value>
+  <data name="SynchronizationCompleted_AssignmentsDownloaded" xml:space="preserve">
+    <value>загружено {0} новых заданий</value>
     <comment>скачено {0} новых заданий</comment>
   </data>
-    <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
-    <value>скачено {0} новых интервью</value>
+  <data name="SynchronizationCompleted_InterviewsDownloaded" xml:space="preserve">
+    <value>загружено {0} новых интервью</value>
     <comment>скачено {0} новых интервью</comment>
   </data>
-    <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
+  <data name="SynchronizationCompleted_InterviewsRejected" xml:space="preserve">
     <value>{0} откланенных интервью </value>
     <comment>{0} откланенных интервью </comment>
   </data>
-    <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
+  <data name="SynchronizationCompleted_InterviewsRemoved" xml:space="preserve">
     <value>удалено {0} интервью</value>
     <comment>удалено {0} интервью</comment>
   </data>
-    <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
+  <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
     <value>отправлено {0} интервью</value>
     <comment>отправлено {0} интервью</comment>
   </data>
