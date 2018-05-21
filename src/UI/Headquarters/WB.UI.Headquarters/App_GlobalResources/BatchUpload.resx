@@ -373,6 +373,9 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>View list of required identifying data</value>
   </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>View list of preloaded values</value>
+  </data>
   <data name="DownloadTabTemplate" xml:space="preserve">
     <value>Download .tab template for this questionnaire</value>
   </data>
@@ -418,7 +421,7 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <value>Back to import</value>
   </data>
   <data name="AssignedToMultipleEnumerators" xml:space="preserve">
-    <value>Assigned to {0} enumerators</value>
+    <value>Assigned to {0} interviewers</value>
     <comment>{0} - count of enumerators (always &gt; 1)</comment>
   </data>
   <data name="AssignedToMultipleSupervisors" xml:space="preserve">
@@ -426,7 +429,7 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <comment>{0} - count of supervisors (always &gt; 1)</comment>
   </data>
   <data name="AssignedToSingleEnumerator" xml:space="preserve">
-    <value>Assigned to 1 enumerator</value>
+    <value>Assigned to 1 interviewer</value>
   </data>
   <data name="AssignedToSingleSupervisor" xml:space="preserve">
     <value>Assigned to 1 supervisor</value>
@@ -565,5 +568,11 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
   </data>
   <data name="Prerequisite_Questionnaire" xml:space="preserve">
     <value>Questionnaire cannot be used for preloading</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>List of hidden questions</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Roster size questions</value>
   </data>
 </root>

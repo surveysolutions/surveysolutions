@@ -80,6 +80,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     question.SetObjectAnswer(answerDto.Answer);
                 }
 
+                if (answerDto.ProtectedAnswer != null)
+                {
+                    question.SetObjectProtectedAnswer(answerDto.ProtectedAnswer);
+                }
+
                 if (answerDto.AllComments != null)
                     question.AnswerComments = answerDto.AllComments.Select(commentDto => ToAnswerComment(answerDto, commentDto)).ToList();
 
@@ -781,7 +786,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 var answeredQuestion = new AnsweredQuestionSynchronizationDto(question.Identity.Id,
                     question.Identity.RosterVector,
                     InterviewTreeQuestion.GetAnswerAsObject(question),
-                    comments);
+                    comments,
+                    InterviewTreeQuestion.GetProtectedAnswerAsObject(question));
 
                 if (question.IsAnswered() || answeredQuestion.HasComments())
                 {

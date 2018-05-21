@@ -98,10 +98,11 @@
                 border-bottom: none;
                 border-top: none;
                 &.date{
-                    font: 14px/16px "TrebuchetMS";
+                    font: 14px/16px $trebuchet;
+                    white-space: nowrap;
                 }
                 &.parameters{
-                    font-family: "TrebuchetMSBold";
+                    font-family: $trebuchet_bold;
                     color: $gray-highlight-font;
                     span{
                         @extend %gray-uppercase;
@@ -256,14 +257,15 @@
         &.sorting_asc{
             color: $blue;
             &:after{
-                border-top-color: $blue;
+                border-top: none;
+                border-bottom: 10px solid $blue;
             }
         }
         &.sorting_desc{
             color: $blue;
             &:after{
-                border-top: none;
-                border-bottom: 10px solid $blue;
+                border-top-color: $blue;
+                
             }
         }
     }
@@ -324,8 +326,6 @@
     thead tr, tbody tr{
         td, th{
             &.checkbox-cell{
-                // min-width: 40px !important;
-                // width: 40px !important;
                 text-align: center;
                 padding: 15px 3px 15px 10px;
                 outline: none;
@@ -420,7 +420,7 @@
         float: right;
         padding-top: 0.755em;
         padding-bottom: 10px;
-        font: 13px/15px "TrebuchetMSBold";
+        font: 13px/15px $trebuchet_bold;
         padding-left: 20px;
         text-align: right;
     }
@@ -458,6 +458,10 @@
     }
 .dataTables_processing{
     @extend %loading-indicator;
+    
+    &.error {
+        background: rgba(100,0,0,0.1);
+    }  
 }
 .dataTables_scroll{
     overflow-x: auto;
@@ -477,11 +481,6 @@
         }
     }
 }
-// .table-wrapper{
-//     .dataTables_filter{
-//         top: -40px;
-//     }
-// }
 @media only screen and (max-width: 1450px){
     .table-ordered{
         thead{
@@ -524,9 +523,6 @@
     .table-ordered thead th.padding-left-slide:first-child{
         padding-left: 265px;
     }
-    // .dataTables_paginate{
-    //     margin-bottom: 30px;
-    // }
     .table-wrapper{
         .dataTables_paginate{
             margin-bottom: 0;
@@ -586,7 +582,7 @@
                 text-align:left;
                 padding-right: 10px;
                 text-transform: uppercase;
-                font-family: "TrebuchetMSBold";
+                font-family: $trebuchet_bold;
                 letter-spacing: 0.5px;
                 float: left;
                 clear: both;
@@ -739,4 +735,23 @@
 	.interviewer, .supervisor{
 		padding-left: 0;
 	}
+}
+.table.timestamps-table{
+    td{
+        vertical-align: top;
+        padding: 5px 10px 5px 0;
+        height: auto;
+        &:first-child{
+            width: 70px;
+        }
+    }
+    .app-oppened{
+        @include gradient-vertical($gray_form, $gray_form);
+        background-size: 250px 1px;
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        &:last-child{
+            background-image: none;
+        }
+    }
 }

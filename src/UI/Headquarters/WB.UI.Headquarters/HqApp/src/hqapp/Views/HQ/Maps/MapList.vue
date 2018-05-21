@@ -70,9 +70,19 @@ export default {
         const uploadingMessage = this.$t("Pages.Map_Uploading");
         const uploadingErrorMessage = this.$t("Pages.Map_UploadingError");
         const uploadingSuccess = this.$t("Pages.Map_UploadingSuccess");
+        const uploadingFileTooBig = this.$t("Pages.Map_UploadingFileTooBig");
 
         const fd = new FormData();
-        fd.append("", this.$refs.uploader.files[0]);
+        var fileToUpload = this.$refs.uploader.files[0];
+        
+        var filesize = ((fileToUpload.size/1024)/1024).toFixed(4);
+
+        if(filesize >= 1024){
+            statusupdater(uploadingFileTooBig);
+            return;
+        }
+
+        fd.append("", fileToUpload);
         
         $.ajax({
                 url: this.$config.model.uploadMapsFileUrl,
@@ -91,7 +101,7 @@ export default {
                     if(!data.isSuccess)
                        statusupdater(uploadingErrorMessage, data.errors);
                     else   
-                        statusupdater(uploadingSuccess);
+                       statusupdater(uploadingSuccess);
                     reloader();                    
                 },
                 error : function(error){
