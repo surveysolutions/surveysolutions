@@ -2,12 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Android.Content;
 using MvvmCross;
-using MvvmCross.Binding.BindingContext;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
-using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -18,17 +15,11 @@ using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.ServiceLocation;
-using Xamarin;
 
 namespace WB.UI.Tester
 {
-    public class Setup : EnumeratorSetup
+    public class TesterSetup : EnumeratorSetup<TesterMvxApplication>
     {
-        protected override IMvxApplication CreateApp()
-        {
-            return new App();
-        }
-
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return IoCAdapterSetup.CreateIocProvider();
@@ -71,7 +62,6 @@ namespace WB.UI.Tester
 #if !EXCLUDEEXTENSIONS
                 typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
 #endif
-
             });
         }
     }
