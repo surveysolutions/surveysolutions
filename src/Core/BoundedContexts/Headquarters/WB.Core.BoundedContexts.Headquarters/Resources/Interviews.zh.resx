@@ -120,10 +120,13 @@
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
     <value>导入访谈失败：{0}。未指定督导员</value>
   </data>
-    <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
+  <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>数据文件不正确</value>
   </data>
   <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
     <value>未找到问卷模板</value>
+  </data>
+  <data name="ImportInterviews_GenericError" xml:space="preserve">
+    <value>导入访谈失败：{0}。InterviewerId{1}, Exception:{2}</value>
   </data>
 </root>

@@ -249,4 +249,10 @@
   <data name="StatusDuration" xml:space="preserve">
     <value>在状态中计算访谈的天数</value>
   </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>导入用户模板</value>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>更新于</value>
+  </data>
 </root>

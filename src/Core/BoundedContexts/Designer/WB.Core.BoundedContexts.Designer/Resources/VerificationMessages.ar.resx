@@ -1,0 +1,643 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="WB0001_NoQuestions" xml:space="preserve">
+    <value>يجب أن يحتوي الاستبيان على سؤال واحد على الأقل.</value>
+  </data>
+  <data name="WB0002_CustomValidationExpressionHasIncorrectSyntax" xml:space="preserve">
+    <value>شرط التحقق به خطا نصي</value>
+  </data>
+  <data name="WB0003_CustomEnablementConditionHasIncorrectSyntax" xml:space="preserve">
+    <value>شرط التمكين به خطا نصي</value>
+  </data>
+  <data name="WB0004_VariableHasEmptyExpression" xml:space="preserve">
+    <value>النمتغير لايمكن ان يحتوي على مقدار فارغ</value>
+  </data>
+  <data name="WB0005_VariableExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>يبلغ طول المقدار المتغير أكثر من {0} حرفا.</value>
+  </data>
+  <data name="WB0006_OnlyOneGpsQuestionCouldBeMarkedAsPrefilled" xml:space="preserve">
+    <value>يمكن تحديد سؤال واحد فقط خاص بنظام تحديد المواقع</value>
+  </data>
+  <data name="WB0007_MultiOptionQuestionYesNoQuestionCantBeLinked" xml:space="preserve">
+    <value>سؤال الخيار المتعدد (نعم/ لا) لا يمكن ربطه</value>
+  </data>
+  <data name="WB0008_SubstitutionsInVariableLableAreProhibited" xml:space="preserve">
+    <value>لا يسمح باستخدام البدائل في صنف المتغير</value>
+  </data>
+  <data name="WB0009_RosterSizeQuestionIsMissing" xml:space="preserve">
+    <value>حجم لائحة السؤال مفقود</value>
+  </data>
+  <data name="WB0011_LinkedQuestionReferencesNotExistingQuestion" xml:space="preserve">
+    <value>السؤال المرتبط يشير الى سؤال غير موجود</value>
+  </data>
+  <data name="WB0012_LinkedQuestionReferencesQuestionOfNotSupportedType" xml:space="preserve">
+    <value>السؤال المرتبط يشير الى سؤال غير مدعوم</value>
+  </data>
+  <data name="WB0013_LinkedQuestionReferencesQuestionNotUnderRosterGroup" xml:space="preserve">
+    <value>السؤال المرتبط يشير الى سؤال غير مدرج باللائحة</value>
+  </data>
+  <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
+    <value>السؤال الذي يحمل عنوان الاستبدال لا يمكن التأشير عليه بمعرف</value>
+  </data>
+  <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
+    <value>السؤال الذي يحمل عنوان الاستبدال لا يمكن ان يشير الى نفسه</value>
+  </data>
+  <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
+    <value>الاستبدال الذي يشير الى سؤال او متغير غير موجود</value>
+  </data>
+  <data name="WB0018_SubstitutionReferencesUnsupportedEntity" xml:space="preserve">
+    <value>الاستبدال الذي يشير الى بند أو عنصر غير مدعوم بالاستبدالات</value>
+  </data>
+  <data name="WB0019_SubstitutionCantReferenceItemWithDeeperRosterLevel" xml:space="preserve">
+    <value>الاستبدال لا يمكن ان يشير الى بند في مستوى اعمق من اللائحه </value>
+  </data>
+  <data name="WB0021_CategoricalMultiAnswersQuestionHasOptionsCountLessThanMaxAllowedAnswersCount" xml:space="preserve">
+    <value>الحد الأقصى لعدد الإجابات أكبر من عدد خيارات الأسئلة.</value>
+  </data>
+  <data name="WB0022_PrefilledQuestionsOfIllegalType" xml:space="preserve">
+    <value>سؤال من هذا نوع لايمكن تعريفه</value>
+  </data>
+  <data name="WB0023_RosterSizeSourceQuestionTypeIsIncorrect" xml:space="preserve">
+    <value>حجم مصدر سؤال اللائحة غير صحيح. فقط رقمي، يمكن استعمال مصنف بمتعدد الخيار أو قائمة الأسئلة النصية </value>
+  </data>
+  <data name="WB0024_LookupHasInvalidName" xml:space="preserve">
+    <value>اسم جدول البحث غير صحيح</value>
+  </data>
+  <data name="WB0025_LookupHasEmptyName" xml:space="preserve">
+    <value>اسم جدول البحث لا يجب ان يكون فارغ </value>
+  </data>
+  <data name="WB0026_ItemsWithTheSameNamesFound" xml:space="preserve">
+    <value>تم إيجاد عناصر بنفس الاسم</value>
+  </data>
+  <data name="WB0027_VariableExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>يحتوي التعبير على خطأ نصي</value>
+  </data>
+  <data name="WB0028_OptionsFilterExpressionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>يتجاوز طول تعبير تصفية الخيارات أكثر من {0} حرفا.</value>
+  </data>
+  <data name="WB0029_QuestionWithOptionsFilterCannotBePrefilled" xml:space="preserve">
+    <value>سؤال مع خيارات تصفية التعبير لا يمكن تحديده</value>
+  </data>
+  <data name="WB0030_PrefilledQuestionCantBeInsideOfRoster" xml:space="preserve">
+    <value>تحديد الأسئلة لا يمكن أن يكون داخل اللائحة.</value>
+  </data>
+  <data name="WB0031_LookupTableHasInvalidHeaders" xml:space="preserve">
+    <value>يحتوي جدول البحث على رؤوس أعمدة غير صالحة.</value>
+  </data>
+  <data name="WB0032_GroupWhereRosterSizeSourceIsQuestionHaveFixedTitles" xml:space="preserve">
+    <value>القائمة حيث لا يمكن أن يكون مصدر حجم الجدول السؤال مجموعة ثابتة من العناصر.</value>
+  </data>
+  <data name="WB0033_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterSizeQuestion" xml:space="preserve">
+    <value>قائمة المجموعة الثابتة من البنود لا يمكن أن تحتوي على لائحة حجم السؤال.</value>
+  </data>
+  <data name="WB0034_GroupWhereRosterSizeSourceIsFixedTitlesHaveRosterTitleQuestion" xml:space="preserve">
+    <value>قائمة المجموعة الثابتة من البنود لا يمكن أن تحتوي على لائحة عنوان السؤال.</value>
+  </data>
+  <data name="WB0035_GroupWhereRosterSizeSourceIsQuestionHasInvalidRosterTitleQuestion" xml:space="preserve">
+    <value>القائمة حيث يكون مصدر حجم القائمة هو سؤال غير صالح في قائمة الجدول.</value>
+  </data>
+  <data name="WB0036_ListAndMultiRostersCantHaveRosterTitleQuestion" xml:space="preserve">
+    <value>القائمة حيث أن مسألة حجم الجدول هي إجابات متعددة أو أسئلة قائمة على فئات لا يمكن أن يكون لها مسألة عنوان القائمة.</value>
+  </data>
+  <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
+    <value>قائمة المجموعة الثابتة من البنود لا يمكن أن تحتوي على عناوين فارغة أو أقل من بندين.</value>
+  </data>
+  <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
+    <value>قائمة المجموعة الثابتة من البنود لا يمكن أن تحتوي على  أكثر من {0} الصفوف.</value>
+  </data>
+  <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
+    <value>سؤال القائمة لا يمكن تحديد.</value>
+  </data>
+  <data name="WB0040_TextListQuestionCannotBeFilledBySupervisor" xml:space="preserve">
+    <value>لا يمكن ملء قائمة السؤال من قبل المشرف.</value>
+  </data>
+  <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
+    <value>يجب أن تكون مجموعة ثابتة من بنود القائمة قيم فريدة من نوعها.</value>
+  </data>
+  <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
+    <value>يجب أن يكون الحد الأقصى لعدد عناصر القائمة في النطاق [{1}، {0}].</value>
+  </data>
+  <data name="WB0043_LookupTableMoreThan11Columns" xml:space="preserve">
+    <value>يحتوي جدول البحث على عدد كبير جدا من الأعمدة</value>
+  </data>
+  <data name="WB0044_LookupTableMoreThan5000Rows" xml:space="preserve">
+    <value>يحتوي جدول البحث على عدد كبير جدا من الصفوف</value>
+  </data>
+  <data name="WB0045_QuestionHasOptionsWithEmptyValue" xml:space="preserve">
+    <value>السؤال لديه خيار (خيارات) بقيمة فارغة.</value>
+  </data>
+  <data name="WB0046_CustomConditionExpressionReferencesQuestionWithDeeperRosterLevel" xml:space="preserve">
+    <value>لا يمكن أن يشير شرط التمكين إلى سؤال من مستوى قائمة أعمق.</value>
+  </data>
+  <data name="WB0047_LookupTableNotUniqueRowcodeValues" xml:space="preserve">
+    <value>جدول بحث له قيم rowcode ليست فريدة من نوعها</value>
+  </data>
+  <data name="WB0048_LookupHasEmptyContent" xml:space="preserve">
+    <value>لا يمكن أن يكون جدول البحث فارغا</value>
+  </data>
+  <data name="WB0049_QRBarcodeQuestionIsSupervisorQuestion" xml:space="preserve">
+    <value>لا يمكن ملء سؤال شيفرة التعرف</value>
+  </data>
+  <data name="WB0050_QRBarcodeQuestionIsPreFilledQuestion" xml:space="preserve">
+    <value>لا يمكن تحديد السؤال الباركود.</value>
+  </data>
+  <data name="WB0051_GroupsCustomConditionExpressionReferencesChildQuestion" xml:space="preserve">
+    <value>لا يمكن أن تحتوي الأقسام الفرعية على شرط تمكين تشير إلى سؤال الطفل.</value>
+  </data>
+  <data name="WB0052_LookupNameIsKeyword" xml:space="preserve">
+    <value>لا يمكن أن يكون اسم جدول البحث كلمة محجوزة.</value>
+  </data>
+  <data name="WB0054_RosterSizeQuestionHasDeeperRosterLevelThanDependentRoster" xml:space="preserve">
+    <value>يجب أن يكون للقائمة نفس العمق أو نفس مستوى لائحة حجم السؤال</value>
+  </data>
+  <data name="WB0055_RosterHasRosterLevelMoreThan4" xml:space="preserve">
+    <value>لا يمكن أن تحتوي القائمة على أكثر من {0} قوائم رئيسية.</value>
+  </data>
+  <data name="WB0056_EntityShouldNotHaveCircularReferences" xml:space="preserve">
+    <value>لا يسمح بالمراجع الدائرية.</value>
+  </data>
+  <data name="WB0058_QuestionHasVariableNameReservedForServiceNeeds" xml:space="preserve">
+    <value>لا يمكن أن يكون اسم المتغير أو معرف القائمة كلمة محجوزة.</value>
+  </data>
+  <data name="WB0059_EntityUsesRostertitleSubstitutionAndNeedsToBePlacedInsideRoster" xml:space="preserve">
+    <value>إذا كان العنصر يستخدم٪ rostertitle٪ الاستبدال فإنه يحتاج إلى أن توضع داخل اللائحة.</value>
+  </data>
+  <data name="WB0060_CategoricalQuestionHasLessThan2Options" xml:space="preserve">
+    <value>السؤال أقل من {0} الخيارات.</value>
+  </data>
+  <data name="WB0061_CategoricalMultiAnswersQuestionHasMaxAllowedAnswersLessThan2" xml:space="preserve">
+    <value>السؤال يحتوي على إجابات كحد أقصى مسموح بها أقل من {0}.</value>
+  </data>
+  <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>تعبير خيار التصفية لديه خطأ نصي</value>
+  </data>
+  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
+    <value>حجم الاستبيان هو تقريبا {0: ميغابايت وهي كبيرة جدا للعمل بشكل صحيح مع Survey Solutions. حاول تقليل كمية البيانات حتى لا تقل عن {1} ميغابايت.</value>
+  </data>
+  <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
+    <value>لا يمكن استخدام السؤال المرتبط بشكل قاطع في حالة التمكين.</value>
+  </data>
+  <data name="WB0065_NameForAttachmentIsNotUnique" xml:space="preserve">
+    <value>مرفق آخر بنفس الاسم موجود بالفعل.</value>
+  </data>
+  <data name="WB0066_QuestionTypeIsNotAllowed" xml:space="preserve">
+    <value>سؤال من هذا نوع غير مدعوم</value>
+  </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>يجب ألا يكون اسم  المتغير أو القائمة فارغا </value>
+  </data>
+  <data name="WB0068_RosterHasMoreThanAllowedChildElements" xml:space="preserve">
+    <value>لا يمكن أن تحتوي القائمة على أكثر من {0} عناصر فرعية</value>
+  </data>
+  <data name="WB0070_RosterHasVariableNameEqualToQuestionnaireTitle" xml:space="preserve">
+    <value>يوجد في القائمة رقم تعريف يساوي عنوان الاستبيان.</value>
+  </data>
+  <data name="WB0071_StaticTextIsEmpty" xml:space="preserve">
+    <value>النص الثابت لا يمكن ان يكون فارغا </value>
+  </data>
+  <data name="WB0072_OptionTitlesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>يجب أن تكون عناوين الخيارات فريدة.</value>
+  </data>
+  <data name="WB0073_OptionValuesMustBeUniqueForCategoricalQuestion" xml:space="preserve">
+    <value>يجب أن تكون قيم الخيار فريدة.</value>
+  </data>
+  <data name="WB0074_CategoricalQuestionHasOptionsAndIsLinked" xml:space="preserve">
+    <value>لا يمكن وجود خيارات وربط السؤال القاطع مع سؤال اخر</value>
+  </data>
+  <data name="WB0075_FilteredComboboxContainsMoreThan5000Options" xml:space="preserve">
+    <value>يحتوي على أكثر من {0} من الخيارات.</value>
+  </data>
+  <data name="WB0076_CategoricalOptionsCountMoreThan200" xml:space="preserve">
+    <value>يحتوي على أكثر من {0} من الخيارات.</value>
+  </data>
+  <data name="WB0077_QuestionHasInvalidVariableName" xml:space="preserve">
+    <value>يحتوي السؤال على اسم متغير غير صالح.</value>
+  </data>
+  <data name="WB0078_MultimediaQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>سؤال الصورة يمكن أن يكون للباحث فقط.</value>
+  </data>
+  <data name="WB0079_MultimediaShouldNotHaveValidationExpression" xml:space="preserve">
+    <value>سؤال الصورة لا يمكن أن يحنتوي على شرط للتحقق من الصحة.</value>
+  </data>
+  <data name="WB0080_LongRosterCannotHaveNestedRosters" xml:space="preserve">
+    <value> القوائم التي تحتوي على أكثر من {0} صفوف لا يمكن أن تحتوي على قوائم متداخلة</value>
+  </data>
+  <data name="WB0081_LongRosterCannotBeNested" xml:space="preserve">
+    <value>لا يمكن تداخل القائمة مع أكثر من {0} صفوف</value>
+  </data>
+  <data name="WB0082_RosterSizeMultiOptionQuestionShouldBeLimited" xml:space="preserve">
+    <value>يجب أن يكون هنالك حد لحجم سؤال الاختيار المتعدد</value>
+  </data>
+  <data name="WB0083_QuestionCannotBeUsedAsRosterTitle" xml:space="preserve">
+    <value>السؤال بهذا النوع الحالي لا يمكن استخدامه كعنوان القائمة.</value>
+  </data>
+  <data name="WB0085_CascadingQuestionWrongParentLevel" xml:space="preserve">
+    <value>السؤال يجب أن يكون أعمق أو نفس مستوى سؤال الأصل.</value>
+  </data>
+  <data name="WB0086_ParentCascadingQuestionShouldExist" xml:space="preserve">
+    <value>مراجع سؤال مربع التحرير و السرد المتتالي مفقود أو نوع السؤال غير معتمد.</value>
+  </data>
+  <data name="WB0087_CascadingQuestionHasCicularReference" xml:space="preserve">
+    <value>المراجع الدائرية في أسئلة مربع التحرير والسرد المتتالية غير مسموح بها.</value>
+  </data>
+  <data name="WB0088_CascadingQuestionShouldHaveAllowedAmountOfAnswers" xml:space="preserve">
+    <value>يجب أن يكون سؤال مربع التحرير والسرد المتتالي أقل من {0} من الخيارات.</value>
+  </data>
+  <data name="WB0089_CascadingQuestionOptionWithParentShouldBeUnique" xml:space="preserve">
+    <value>يجب أن يكون سؤال مربع التحرير والسرد المتتالية قيمة فريدة وقائمة خيارات قيمة الأصل.</value>
+  </data>
+  <data name="WB0090_LinkedQuestionIsInterviewersOnly" xml:space="preserve">
+    <value>السؤال المرتبط يمكن أن يكون الباحثين فقط.</value>
+  </data>
+  <data name="WB0093_RosterSizeListOptionQuestionShouldBeLimit" xml:space="preserve">
+    <value>يجب أن يكون هنالك حد لنص حجم قائمة السؤال</value>
+  </data>
+  <data name="WB0094_ConditionExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>يبلغ طول شرط التمكين أكثر من {0} حرفا.</value>
+  </data>
+  <data name="WB0095_StaticTextRefersAbsentAttachment" xml:space="preserve">
+    <value>يشير النص الثابت لمرفق غير موجود</value>
+  </data>
+  <data name="WB0096_GeneralCompilationError" xml:space="preserve">
+    <value>حدث خطأ أثناء تجميع الاستبيانات.</value>
+  </data>
+  <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
+    <value>يحتوي عنوان الاستبيان على أحرف غير مسموح بها. يسمح ب حروف ال non Unicode  والأرقام والمسافة و _ فقط.</value>
+  </data>
+  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
+    <value>حجم الاستبيان هو تقريبا {0} ميغابايت وهي كبيرة جدا للعمل بشكل صحيح مع Survey Solutions. حاول تقليل كمية البيانات حتى لا تقل عن {1} ميغابايت.</value>
+  </data>
+  <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
+    <value>لا يمكن أن يكون الحد الأقصى لعدد الإجابات عن سؤال حجم السجل أكبر من {0}.</value>
+  </data>
+  <data name="WB0101_GroupHasLevelDepthMoreThan10" xml:space="preserve">
+    <value>لا يمكن أن يحتوي القسم الفرعي على أكثر من {0} من الأقسام الفرعية الرئيسية.</value>
+  </data>
+  <data name="WB0102_QuestionnaireEntitiesShareSameInternalId" xml:space="preserve">
+    <value>بعد استخدام بنود الاستبيان (السؤال / المجموعة / النص الثابت / الخ) استخدم نفس المعرف الداخلي. يرجى حذف واحد منهم.</value>
+  </data>
+  <data name="WB0103_LinkedQuestionReferencesGroupWhichIsNotARoster" xml:space="preserve">
+    <value>القائمة التي مصدرها رابط قائمة، وليس قسما فرعيا.</value>
+  </data>
+  <data name="WB0104_ValidationConditionIsTooLong" xml:space="preserve">
+    <value>شرط التحقق # {0} طويلة .يجب ان لا تكون اكثر من {1} حرف</value>
+  </data>
+  <data name="WB0105_ValidationMessageIsTooLong" xml:space="preserve">
+    <value>رسالة خطأ التحقق {0} طويلة جدا. يجب ألا يزيد عدد الأحرف عن {1}</value>
+  </data>
+  <data name="WB0106_ValidationConditionIsEmpty" xml:space="preserve">
+    <value>شرط التحقق #{0} فارغ</value>
+  </data>
+  <data name="WB0107_ValidationMessageIsEmpty" xml:space="preserve">
+    <value>رسالة خطأ التحقق {0} فارغة.</value>
+  </data>
+  <data name="WB0108_LinkedQuestionFilterExpresssionHasLengthMoreThan10000Characters" xml:space="preserve">
+    <value>يبلغ طول تعبير تصفية السؤال المرتبط أكثر من {0} حرفا.</value>
+  </data>
+  <data name="WB0109_CategoricalLinkedQuestionUsedInLinkedQuestionFilterExpresssion" xml:space="preserve">
+    <value>لا يمكن استخدام السؤال في هل هو مرشح التسمية الخاصة</value>
+  </data>
+  <data name="WB0110_LinkedQuestionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
+    <value>يحتوي تعبير التصفية على خطأ في البنية.</value>
+  </data>
+  <data name="WB0111_AttachmentHasEmptyContent" xml:space="preserve">
+    <value>لا بمكن أن يكون المرفق فارغا</value>
+  </data>
+  <data name="WB0112_VariableHasInvalidName" xml:space="preserve">
+    <value>المتغير له اسم غير فعال</value>
+  </data>
+  <data name="WB0113_VariableHasEmptyVariableName" xml:space="preserve">
+    <value>المتغير لايمكن ان يحوي اسم فارغ </value>
+  </data>
+  <data name="WB0114_CategoricalQuestionSupportsOnlyIntegerPositiveValues" xml:space="preserve">
+    <value>يدعم السؤال القاطع فقط القيم الصحيحة في النطاق من {0} إلى {1}</value>
+  </data>
+  <data name="WB0115_FixRosterSupportsOnlyIntegerTitleValues" xml:space="preserve">
+    <value>تدعم قائمة الإصلاح قيم عنوان صحيح فقط</value>
+  </data>
+  <data name="WB0116_LinkedQuestionReferenceTextListQuestionFromWrongScope" xml:space="preserve">
+    <value>يشير السؤال المرتبط إلى سؤال قائمة من مستوى خاطئ.</value>
+  </data>
+  <data name="WB0117_LinkedToTextListQuestionDoesNotSupportFilters" xml:space="preserve">
+    <value>السؤال المرتبط بقائمة لا يدعم خيارات تصفية</value>
+  </data>
+  <data name="WB0119_QuestionnaireTitleTooLong" xml:space="preserve">
+    <value>لا يمكن أن يحتوي عنوان الاستبيان على أكثر من {0} رمزا.</value>
+  </data>
+  <data name="WB0120_GroupTitleIsEmpty" xml:space="preserve">
+    <value>لا يمكن أن تكون عناوين الأقسام والأقسام الفرعية فارغة أو تحتوي على مسافة فقط.</value>
+  </data>
+  <data name="WB0121_VariableNameTooLong" xml:space="preserve">
+    <value>يجب ألا يزيد اسم هذا العنصر أو معرفه عن {0} حرفا.</value>
+  </data>
+  <data name="WB0122_VariableNameHasSpecialCharacters" xml:space="preserve">
+    <value>يجب أن يحتوي اسم  المتغير الصحيح أوقائمة الهويات على أحرف وأرقام وشرطة سفلية فقط</value>
+  </data>
+  <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
+    <value>يجب ألا يبدأ اسم المتغير أو معرف القائمة برقم أو شرطة سفلية</value>
+  </data>
+  <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
+    <value>اسم المتغير أو معرف قائمة يجب أن لا تنتهي مع شرطة سفلية</value>
+  </data>
+  <data name="WB0125_VariableNameHasConsecutiveUnderscores" xml:space="preserve">
+    <value>يجب ألا يحتوي الاسم المتغير أو معرف القائمة على حرفين متسلسلين متتاليين أو أكثر.</value>
+  </data>
+  <data name="WB0126_VarialbeNameNotUnique" xml:space="preserve">
+    <value>يجب أن يكون اسم المتغير أو معرف القائمة فريدا في نطاق الاستبيان.</value>
+  </data>
+  <data name="WB0127_CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>هناك تكرار واحد على الأقل في العنوان + ازواج قيمة الأصل. يجب ألا تحتوي قائمة الخيارات على أية نسخ مكررة من هذا النوع.</value>
+  </data>
+  <data name="WB0128_CountOfDecimalPlacesIsNotInRange" xml:space="preserve">
+    <value>عدد المنازل العشرية ليس في نطاق من {0} إلى {1}.</value>
+  </data>
+  <data name="WB0129_AnswerTitleIsTooLong" xml:space="preserve">
+    <value>عنوان الخيار فارغ أو طويل جدا. يجب أن يكون طول العنوان في النطاق من {0} إلى {1} رمزا</value>
+  </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>لا يمكنك استخدام الكيانات الفرعية في حالة التمكين للأقسام والقسم الفرعي والقوائم.</value>
+  </data>
+  <data name="WB0200_LargeNumberOfRostersIsCreated" xml:space="preserve">
+    <value>يتم إنشاء عدد كبير من القوائم. قد يكون تصدير هذه الهياكل في ملفات البيانات مشكلة. فكر في تقليل عدد القوائم.</value>
+  </data>
+  <data name="WB0201_LargeNumberOfQuestionsInGroup" xml:space="preserve">
+    <value>يحتوي القسم أو القائمة على أكثر من {0} من الأسئلة، فكر في تقسيمها إلى أقسام فرعية.</value>
+  </data>
+  <data name="WB0202_GroupWithoutQuestions" xml:space="preserve">
+    <value>لا يحتوي القسم على أية أسئلة. فكر في إزالة القسم الفارغ.</value>
+  </data>
+  <data name="WB0203_RosterHasSingleQuestion" xml:space="preserve">
+    <value>مجموعة القائمة تحتوي على سؤال واحد فقط. فكر في تجميعها مع القوائم الأخرى. بالنسبة للقائمة الثابتة، ضع في اعتبارك تقديم مجموعة من الأسئلة المستقلة.</value>
+  </data>
+  <data name="WB0204_EmptyRoster" xml:space="preserve">
+    <value>القائمة فارغة. إلغيها إذا لم تكن هناك حاجة إليها.</value>
+  </data>
+  <data name="WB0205_TooManyQuestions" xml:space="preserve">
+    <value>يحتوي الاستبيان على أكثر من {0} سؤال. وقد يكون من الصعب إدارتها.</value>
+  </data>
+  <data name="WB0206_FewSectionsManyQuestions" xml:space="preserve">
+    <value>يحتوي الاستبيان على أكثر من {0} من الأسئلة ولكنه يحتوي قسم أو قسمين فقط. جمع الأسئلة في أقسام لتبسيط التننقل بينها وتحسين الأداء.</value>
+  </data>
+  <data name="WB0207_FixedRosterContains3OrLessItems" xml:space="preserve">
+    <value>تحتوي القائمة الثابتة على {0} أو أقل من العناصر. فكر في استخدام الأقسام الفرعية وسلسلة من الأسئلة. القوائم تعقد بنية  البيانات المصدرة.</value>
+  </data>
+  <data name="WB0208_MoreThan50PercentsQuestionsWithoutValidationConditions" xml:space="preserve">
+    <value>أكثر من {0}٪ من الأسئلة لا تحتوي على شروط التحقق. إضافة شروط التحقق لتحسين جودة البيانات.</value>
+  </data>
+  <data name="WB0209_LongEnablementCondition" xml:space="preserve">
+    <value>شرط التمكين طويلة. قد يكون من الممكن الحصول على شروط أقصر وأكثر قابلية للقراءة باستخدام وظائف مضمنة (i.e., InList()).</value>
+  </data>
+  <data name="WB0210_CategoricalQuestionHasManyOptions" xml:space="preserve">
+    <value>سؤال الاختيار منفرد يحتوي على فئات كثيرة جدا، فكر في تغيير مربع التحرير والسرد.</value>
+  </data>
+  <data name="WB0211_QuestionnaireHasNoGpsQuestion" xml:space="preserve">
+    <value>الاستبيان لا يحتوي على أسئلة نظام تحديد المواقع GPS. جرب إضافة سؤال لنظام تحديد المواقع (GPS).</value>
+  </data>
+  <data name="WB0212_LongValidationCondition" xml:space="preserve">
+    <value>شرط التحقق # {0} طويلة. قد يكون من الممكن الحصول على شروط أقصر وأكثر قابلية للقراءة باستخدام وظائف مضمنة (i.e., InList()).</value>
+  </data>
+  <data name="WB0213_AttachmentSizeIsMoreThan5Mb" xml:space="preserve">
+    <value>حجم المرفق أكبر من {0} ميغابايت</value>
+  </data>
+  <data name="WB0214_TotalAttachmentsSizeIsMoreThan50Mb" xml:space="preserve">
+    <value>إجمالي حجم المرفقات أكثر من {0} ميجابيت</value>
+  </data>
+  <data name="WB0215_UnusedAttachments" xml:space="preserve">
+    <value>يحتوي الاستبيان على مرفقات غير مستخدمة</value>
+  </data>
+  <data name="WB0216_NoPrefilledQuestions" xml:space="preserve">
+    <value>لم يتم تحديد أي أسئلة تحديد الهوية. حدد سؤالا واحدا على الأقل لتحديد الهوية.</value>
+  </data>
+  <data name="WB0217_VariableLableMoreThan120Characters" xml:space="preserve">
+    <value>التسمية المتغيرة طويلة جدا (أكثر من {0} حرف) وسيتم اقتطاعها في تصدير ملف spss.</value>
+  </data>
+  <data name="WB0218_ConsecutiveQuestionsWithIdenticalEnablementConditions" xml:space="preserve">
+    <value>الأسئلة المتتالية تحتوي على شروط تمكين متطابقة. فكر في وضع قسم فرعي وتعيين شرط للقسم الفرعي.</value>
+  </data>
+  <data name="WB0220_RowIndexInMultiOptionBasedRoster" xml:space="preserve">
+    <value>قد يكون استخدام @{0} مع قائمة متعددة الخيارات غير مستقر. فكر في استخدام @{1} بدلا من ذلك</value>
+  </data>
+  <data name="WB0221_NoCurrentTimeQuestions" xml:space="preserve">
+    <value>لم يتم العثور على أي سؤال في الوقت الحالي. فكر في تسجيل تاريخ المقابلة في الاستبيان الخاص بك.</value>
+  </data>
+  <data name="WB0222_SingleOptionPrefilled" xml:space="preserve">
+    <value> سؤال الاختيار المنفرد يتم تحديده على أنه معرف . فكر في استخدام سؤال نصي.</value>
+  </data>
+  <data name="WB0223_SectionWithLessThan5Questions" xml:space="preserve">
+    <value>يحتوي القسم على أقل من خمسة أسئلة. يمكنك ضمه إلى الأقسام الأخرى.</value>
+  </data>
+  <data name="WB0224_TooManySubsectionsAtOneLevel" xml:space="preserve">
+    <value>عدد كبير جدا من الأقسام الفرعية على مستوى واحد. انظر في التخطيط الهرمي.</value>
+  </data>
+  <data name="WB0225_ComboBoxWithLessThan10Elements" xml:space="preserve">
+    <value>تحتوي القائمة المنسدلة (مربع التحرير والسرد) على أقل من 10 عناصر. النظر في التحول إلى تمثيل اختيار معيار واحد.</value>
+  </data>
+  <data name="WB0226_SameCascadingParentQuestion" xml:space="preserve">
+    <value>أسئلة مربع التحرير والسرد المتتالية لها نفس السؤال الأصل.</value>
+  </data>
+  <data name="WB0227_NotShared" xml:space="preserve">
+    <value>لم تتم مراجعة الاستبيان. فكر في مشاركتها مع مستخدم آخر للحصول على تعليقات.</value>
+  </data>
+  <data name="WB0228_OmittedOptions" xml:space="preserve">
+    <value>سؤال القطاعات له رموز خيار غير متتابعة. تحقق من وجود خيارات محذوفة.</value>
+  </data>
+  <data name="WB0229_SupervisorQuestionInValidation" xml:space="preserve">
+    <value>يتم استخدام سؤال المشرف في التحقق من الصحة. تحقق من حالة حسابات المشرف لعدم الاستجابة أو إرشاد المشرفين على الاستجابة دائما.</value>
+  </data>
+  <data name="WB0231_MultiOptionWithMoreThan20Options" xml:space="preserve">
+    <value>سؤال الاختيار المتعدد يحتوي على عدد كبير جدا من (&gt; {0}) فئات. سيكون من الصعب التنقل على الجهاز اللوحي. انظر في تقسيمه إلى اثنين من اسئلة الاختيار المتعدد إذا كان ذلك ممكنا.</value>
+  </data>
+  <data name="WB0232_FiveOrMoreQuestionsWithSameEnabling" xml:space="preserve">
+    <value>هناك خمسة أسئلة أو أكثر لها نفس شرط التمكين. وضع الأسئلة في مجموعة وتطبيق شرط تمكين واحد لمجموعة لتحسين كفاءة الاستبيان.</value>
+  </data>
+  <data name="WB0234_RosterInRosterWithSameSourceQuestion" xml:space="preserve">
+    <value>تستند المستويات الثانوية في قائمة متداخلة إلى نفس السؤال الرئيسي. حاول إعادة النظر، قد تؤدي هذه القوائم إلى مشاكل في جمع البيانات.
+</value>
+  </data>
+  <data name="WB0235_FewQuestionsWithSameLongEnablement" xml:space="preserve">
+    <value>يتم استخدام نفس شرط التمكين الطويل في العديد من الأسئلة. قد ترغب في إنشاء متغير منطقي لتبسيط إدارة التعليمات البرمجية.</value>
+  </data>
+  <data name="WB0236_FewQuestionsWithSameLongValidation" xml:space="preserve">
+    <value>يتم استخدام نفس شرط التحقق الطويل في عدة أسئلة. قد ترغب في إنشاء متغير منطقي لتبسيط إدارة التعليمات البرمجية.</value>
+  </data>
+  <data name="WB0237_BitwiseAnd" xml:space="preserve">
+    <value>&amp; يستخدم في التعبير. تأكد من فهم الفرق بين &amp; و &amp;&amp; للمشغلين. في معظم الحالات، استخدم &amp;&amp;.</value>
+  </data>
+  <data name="WB0238_BitwiseOr" xml:space="preserve">
+    <value>| يستخدم في التعبير. تأكد من فهم الفرق بين | و || العاملين. في معظم الحالات، استخدم ||.</value>
+  </data>
+  <data name="WB0250_ValidationConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>يشير شرط التحقق {0} إلى سؤال في المستقبل. النظر في عكس النظام.</value>
+  </data>
+  <data name="WB0251_EnablementConditionRefersToAFutureQuestion" xml:space="preserve">
+    <value>يشير شرط التمكين إلى سؤال في المستقبل. فكر في عكس الامر.</value>
+  </data>
+  <data name="WB0253_TooFewVariableLabelsAreDefined" xml:space="preserve">
+    <value>يتم تعريف عدد قليل جدا من التسميات المتغيرة. إضافة تسميات متغيرة لتحسين قابلية استخدام البيانات المصدرة وتوفير مدخلات في البيانات الوصفية لتنسيق مبادرة توثيق البيانات (ddi).</value>
+  </data>
+  <data name="WB0254_UseFunctionIsValidEmailToValidateEmailAddress" xml:space="preserve">
+    <value>استخدام الدالة  IsValidEmail()للتحقق من صحة عنوان البريد الإلكتروني.</value>
+  </data>
+  <data name="WB0255_QuestionIsTooShort" xml:space="preserve">
+    <value>السؤال قصير جدا. قد يكون هذا سؤالا غير كامل.</value>
+  </data>
+  <data name="WB0256_TranslationNameIsInvalid" xml:space="preserve">
+    <value>اسم الترجمة غير فعال</value>
+  </data>
+  <data name="WB0257_TranslationHasEmptyContent" xml:space="preserve">
+    <value>تحتوي الترجمة على مكون فارغ</value>
+  </data>
+  <data name="WB0258_TranslationsHaveDuplicatedNames" xml:space="preserve">
+    <value>الترجمات لها أسماء مكررة</value>
+  </data>
+  <data name="WB0259_QuestionTitleIsTooLong" xml:space="preserve">
+    <value>عنوان السؤال طويل جدا. يجب ألا يزيد عدد الأحرف عن {0}.</value>
+  </data>
+  <data name="WB0260_GroupTitleIsTooLong" xml:space="preserve">
+    <value>العنوان طويل جدا. يجب ألا يزيد عدد الأحرف عن {0}.</value>
+  </data>
+  <data name="WB0261_RosterStructureTooExplosive" xml:space="preserve">
+    <value>يحتوي الاستبيان على لوائح بعدد إجمالي من الحالات التي تتجاوز حدود النظام.</value>
+  </data>
+  <data name="WB0263_FirstChapterHasEnablingCondition" xml:space="preserve">
+    <value>القسم الأول لا يمكن أن يكون شرط التمكين.</value>
+  </data>
+  <data name="WB0264_GpsQuestion" xml:space="preserve">
+    <value>لديك سؤال تحديد الموقع الجغرافي. الاجهزة اللوحية يجب أن تدعم تحديد الموقع الجغرافي لاستخدامها مع هذا الاستبيان.</value>
+  </data>
+  <data name="WB0265_MoreThan30PercentQuestionsAreText" xml:space="preserve">
+    <value>أكثر من {0}٪ من الأسئلة هي أسئلة نصية. من الصعب الاجابة على الأسئلة النصية على الجهاز اللوحي. فكر في استخدام أسئلة مفردة أو متعددة الخيارات بدلا من ذلك.</value>
+  </data>
+  <data name="WB0266_SameTitle" xml:space="preserve">
+    <value>الأسئلة متكررة. (الأسئلة لها نفس العنوان.)</value>
+  </data>
+  <data name="WB0267_QRBarcodeQuestion" xml:space="preserve">
+    <value>لديك سؤال التشفير. يجب أن تدعم الأجهزة اللوحية الضبط التلقائي للصورة مع هذا الاستبيان.</value>
+  </data>
+  <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
+    <value>حاول استخدام استبدال لصيغة غير معتمدة.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>السؤال لا يمكن أن يكون له عنوان خيار فارغ.</value>
+  </data>
+  <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
+    <value>يجب ألا يحتوي القسم على أكثر من {0} من الأسئلة.</value>
+  </data>
+</root>
