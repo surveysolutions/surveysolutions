@@ -33,7 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 new InMemoryPlainStorage<CompanyLogo>(), 
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
-                logger ?? Mock.Of<ILogger>());
+                logger ?? Mock.Of<ILogger>(),
+                Mock.Of<IAuditLogService>());
         }
         
         protected static InterviewerIdentity CreateInterviewerIdentity(string userName, string userPasswordHash = null, string token = null)
