@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
@@ -38,7 +39,11 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();
             registry.Bind<IPermissionsService, PermissionsService>();
             registry.Bind<IVirbationService, VibrationService>();
-
+            registry.Bind<IMvxViewModelTypeFinder, MvxViewModelViewTypeFinder>();
+            registry.Bind<MvxViewModelViewTypeFinder>();
+            registry.Bind<IMvxViewModelByNameLookup, MvxViewModelByNameLookup>();
+            registry.Bind<IMvxNameMapping, MvxViewToViewModelNameMapping>();
+            
             registry.BindAsSingletonWithConstructorArgument<IAudioService, AudioService>("pathToAudioDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("audio"));
             registry.BindAsSingleton<IAudioDialog, AudioDialog>();
             registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
