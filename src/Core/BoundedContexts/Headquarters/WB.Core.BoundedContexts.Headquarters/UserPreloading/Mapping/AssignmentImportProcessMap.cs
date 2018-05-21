@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             this.Property(x => x.StartedDate);
             this.Property(x => x.QuestionnaireId);
             this.Property(x => x.Status);
+            this.Property(x => x.AssignedTo);
         }
     }
 }

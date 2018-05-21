@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
     internal partial class ImportDataVerifierTests
     {
         [Test]
-        public void when_verify_answers_and_empty_responsible_should_return_PL0025_error()
+        public void when_verify_answers_and_empty_responsible_should_return_empty_errors()
         {
             // arrange
             var fileName = "mainfile.tab";
@@ -23,10 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
 
             // assert
-            Assert.That(errors.Length, Is.EqualTo(1));
-            Assert.That(errors[0].Code, Is.EqualTo("PL0025"));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo(""));
-            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+            Assert.That(errors, Is.Empty);
         }
 
         [Test]

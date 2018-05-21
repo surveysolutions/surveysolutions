@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                                 return;
                             }
 
-                            this.ImportAssignment(assignmentId, questionnaire);
+                            this.ImportAssignment(assignmentId, importProcess.AssignedTo, questionnaire);
                             this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentId));
 
                         }
@@ -93,14 +93,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             }
         }
 
-        private void ImportAssignment(int assignmentId, IQuestionnaire questionnaire)
+        private void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
         {
             var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
 
             try
             {
                 transactionManager.BeginCommandTransaction();
-                this.ExecuteInPlain(() => this.importAssignmentsService.ImportAssignment(assignmentId, questionnaire));
+                this.ExecuteInPlain(() => this.importAssignmentsService.ImportAssignment(assignmentId, defaultResponsible, questionnaire));
                 transactionManager.CommitCommandTransaction();
             }
             catch

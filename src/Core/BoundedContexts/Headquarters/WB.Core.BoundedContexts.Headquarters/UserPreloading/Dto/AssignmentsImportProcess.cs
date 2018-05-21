@@ -6,7 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
     {
         NotStarted = 1,
         Verification,
-        VerificationCompleted,
         Import,
         ImportCompleted
     }
@@ -20,5 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual string Responsible { get; set; }
         public virtual DateTime StartedDate { get; set; }
         public virtual AssignmentsImportProcessStatus Status { get; set; }
+        public virtual Guid AssignedTo { get; set; }
     }
 }
