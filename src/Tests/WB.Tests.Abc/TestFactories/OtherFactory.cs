@@ -1,9 +1,13 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
+using System.Text;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -50,5 +54,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public UncommittedEvent UncommittedEvent(Guid? eventSourceId = null, IEvent payload = null, int sequence = 1, int initialVersion = 1)
             => new UncommittedEvent(Guid.NewGuid(), eventSourceId ?? Guid.NewGuid(), sequence, initialVersion, DateTime.Now, payload);
+
+        public Stream TabDelimitedTextStream(string[] headers, params string[][] cells)
+            => new MemoryStream(Encoding.UTF8.GetBytes(string.Join(Environment.NewLine,
+                new[] { headers }.Union(cells).Select(x => string.Join(TabExportFile.Delimiter, x)))));
     }
 }

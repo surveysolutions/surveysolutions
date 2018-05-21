@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>المرفق الذي يحتوي على المعرف {0} مفقود  </value>
+  </data>
+  <data name="Attachments_Unsupported_content" xml:space="preserve">
+    <value>المحتوى الذي تم تحميله غير مدعوم</value>
+  </data>
+  <data name="Attachments_uploaded_file_is_not_image" xml:space="preserve">
+    <value>المحتوى الذي تم تحميله ليس صورة</value>
+  </data>
+  <data name="CantMoveSubsectionInWrongPosition" xml:space="preserve">
+    <value>لا يمكنك الانتقال الى القسم الفرعي {0} لان موضع {1} غير مقبول</value>
+  </data>
+  <data name="CantPasteQuestion" xml:space="preserve">
+    <value>لا يمكن لصق السؤال هنا</value>
+  </data>
+  <data name="CantRemoveLastSectionInQuestionnaire" xml:space="preserve">
+    <value>لا يمكن ازالة القسم الأخير الموجود من الاستبيان</value>
+  </data>
+  <data name="CantRemoveUserFromTheList" xml:space="preserve">
+    <value>تعذر إزالة المستخدم، لأنه غير موجود في قائمة المشاركات</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsEmptyParentValueField" xml:space="preserve">
+    <value>الخيارات في السؤال المتتالي لا يمكن أن تكون فارغة من قيم العامود الأصل.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsCantContainsNotDecimalParentValueField" xml:space="preserve">
+    <value>لا يمكن أن تكون الخيارات في السؤال المتتالي قيمة غير رقمية في قيم العامود الأصل.</value>
+  </data>
+  <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
+    <value>هناك تكرار واحد على الأقل في العنوان + ازواج قيمة الأصل. يجب ألا تحتوي قائمة الخيارات على أية نسخ مكررة من هذا النوع.</value>
+  </data>
+  <data name="ComboboxCannotBeFound" xml:space="preserve">
+    <value>لا يمكن العثور على سؤال مربع التحرير و السرد مع المفتاح العام {0}</value>
+  </data>
+  <data name="FailedToAddGroup" xml:space="preserve">
+    <value>فشل محاولة إضافة المجموعة {0} الى المجموعة {1}. ولكن المجموعة {1} غير موجودة في الوثيقة {2}</value>
+  </data>
+  <data name="ImportOfDeletedQuestionnaire" xml:space="preserve">
+    <value>محاولة استيراد نموذج الاستبيان المحذوف</value>
+  </data>
+  <data name="InvalidFixedTitle" xml:space="preserve">
+    <value>قائمة عناوين غير صالحة</value>
+  </data>
+  <data name="InvalidValueOfFixedTitle" xml:space="preserve">
+    <value>قيمة المجموعة الثابته من قائمة البنود مطلوبة  </value>
+  </data>
+  <data name="ItemWithIdExistsAlready" xml:space="preserve">
+    <value>يوجد عنصر أو أكثر من عناصر الاستبيان بنفس المعرف {0}.</value>
+  </data>
+  <data name="LookupTableAlreadyExist" xml:space="preserve">
+    <value>جدول البحث بهذا المعرف موجود بالفعل</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>جدول البحث بهذا المعرف {0}  فارغ من المحتويات</value>
+  </data>
+  <data name="LookupTableIsAbsent" xml:space="preserve">
+    <value>لا يمكن استخدام السؤال المرتبط بشكل قاطع في التحقق من  الحالة.</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>جدول البحث بهذا المعرف {0} مفقود</value>
+  </data>
+  <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
+    <value>لا يمكن تحميل الملف الذي لا يحتوي على أية بيانات</value>
+  </data>
+  <data name="LookupTables_data_value_cannot_be_parsed" xml:space="preserve">
+    <value>لا يمكن تحليل القيمة {0} كعدد عشري. العمود {1}، الصف {2}.</value>
+  </data>
+  <data name="LookupTables_duplicating_headers_are_not_allowed" xml:space="preserve">
+    <value>الترويسات التي تحمل نفس الاسم غير مسموحة</value>
+  </data>
+  <data name="LookupTables_empty_or_invalid_header_are_not_allowed" xml:space="preserve">
+    <value>الترويسات الفارغه أو الغير صالحة غير مسموحة</value>
+  </data>
+  <data name="LookupTables_rowcode_column_is_mandatory" xml:space="preserve">
+    <value>عامود ال rowcode الالزامي مفقود</value>
+  </data>
+  <data name="LookupTables_rowcode_value_cannot_be_parsed" xml:space="preserve">
+    <value>لا يمكن تحليل القيمة {0} كرقم صحيح طويل. العمود {1}، الصف {2}.</value>
+  </data>
+  <data name="LookupTables_rowcode_values_must_be_unique" xml:space="preserve">
+    <value>يجب ان تكون قيم ال rowcode فريدة</value>
+  </data>
+  <data name="LookupTables_too_many_columns" xml:space="preserve">
+    <value>هناك عدد كبير من الأعمدة في الملف الذي تم تحميله. الحد الأقصى لعدد الأعمدة هو {0}</value>
+  </data>
+  <data name="LookupTables_too_many_rows" xml:space="preserve">
+    <value>تم تجاوز الحد الأقصى لعدد الصفوف ({0} صفوف).</value>
+  </data>
+  <data name="MacroAlreadyExist" xml:space="preserve">
+    <value>الاستدعاء بهذا المعرف مجود بالفعل</value>
+  </data>
+  <data name="MacroIsAbsent" xml:space="preserve">
+    <value>الاستدعاء بهذا المعرف غائب</value>
+  </data>
+  <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
+    <value>هناك سؤال أو أكثر مع نفس المعرف {0} موجود بالفعل: {1} {2}.</value>
+  </data>
+  <data name="MoreThanOneSubSectionWithSameId" xml:space="preserve">
+    <value>يوجد قسم أو أكثر من الأقسام الفرعية بنفس المعرف {0}: {1} {2}.</value>
+  </data>
+  <data name="NoPremissionsToEditQuestionnaire" xml:space="preserve">
+    <value>ليس لديك صلاحيات لتغيير هذا الاستبيان</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>المعرف للمرفق القديم فارغ و الملف للمرفق {0} غير موجود في الاستبيان {1}</value>
+  </data>
+  <data name="OnlyQuestionnaireDocumentsAreSupported" xml:space="preserve">
+    <value>وثائق الاستبيان فقط معتمدة الآن</value>
+  </data>
+  <data name="OptionValuesShouldBeNumbers" xml:space="preserve">
+    <value>يجب أن تحتوي قيمة الخيار على أرقام فقط</value>
+  </data>
+  <data name="QuestionCannotBeFound" xml:space="preserve">
+    <value>لا يمكن العثور على السؤال باستخدام المفتاح العام {0}.</value>
+  </data>
+  <data name="QuestionIsNotCombobox" xml:space="preserve">
+    <value>السؤال {0} ليس مربع تحرير وسرد</value>
+  </data>
+  <data name="QuestionnaireCantBeFound" xml:space="preserve">
+    <value>لا يمكن ايجاد بند الاستبيان بالمعرف {0}.</value>
+  </data>
+  <data name="QuestionnaireRevisionCantBeFound" xml:space="preserve">
+    <value>لا يمكن العثور على الاستبيان {0} من النسخة {1}</value>
+  </data>
+  <data name="QuestionnaireTitleIsEmpty" xml:space="preserve">
+    <value>لا يمكن أن يكون عنوان الاستبيان فارغا أو يحتوي على مسافة بيضاء فقط.</value>
+  </data>
+  <data name="QuestionTypeIsNotSupported" xml:space="preserve">
+    <value>نوع السؤال غير مدعوم: {0}</value>
+  </data>
+  <data name="RosterCantBePaste" xml:space="preserve">
+    <value>لا يمكن لصق القائمة هنا.</value>
+  </data>
+  <data name="SectionCantHaveMoreThan_Items" xml:space="preserve">
+    <value>لا يمكن أن يحتوي القسم على أكثر من {0} عناصر فرعية</value>
+  </data>
+  <data name="StaticTextCantBePaste" xml:space="preserve">
+    <value>لا يمكن لصق النص الثابت هنا.</value>
+  </data>
+  <data name="SubSectionCantBeFound" xml:space="preserve">
+    <value>لا يمكن العثور على القسم الفرعي باستخدام المفتاح العام {0}.</value>
+  </data>
+  <data name="SubSectionDepthLimit" xml:space="preserve">
+    <value>القسم الفرعي أو عمق اللائحة لا يمكن ان تكون اكبر من {0}</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>العثور على أخطاء في ملف اكسل</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} به معرف غير صالح في [{1}]</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} يحتوي على فهرس غير صالح في [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} به نوع غير صالح [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>ملف إكسيل فارغ - لا يحتوي على أوراق عمل</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>فشل استخراج الترجمات من الملف الذي تم تحميله</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>لم يتم العثور على ورقة عمل تحتوي على ترجمات</value>
+  </data>
+  <data name="UnknownTypeCantBePaste" xml:space="preserve">
+    <value>نوع عنصر غير معروف. فشل في اللصق.</value>
+  </data>
+  <data name="UserIsInTheList" xml:space="preserve">
+    <value>المستخدم {0} موجود بالفعل في قائمة المشاركة.</value>
+  </data>
+  <data name="UserIsOwner" xml:space="preserve">
+    <value>المستخدم {0} هو صاحب هذا الاستبيان. الرجاء إدخال عنوان بريد إلكتروني آخر.</value>
+  </data>
+  <data name="ValueOfFixedTitleCantBeParsed" xml:space="preserve">
+    <value>قيمة المجموعة الثابته من قائمة البنود يجب ان تحتوي على أرقام</value>
+  </data>
+  <data name="VariableCantBePaste" xml:space="preserve">
+    <value>لا يمكن لصق المتغير هنا.</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>متغير المعرف {0} غير موجود في الاستبيان {1}</value>
+  </data>
+</root>

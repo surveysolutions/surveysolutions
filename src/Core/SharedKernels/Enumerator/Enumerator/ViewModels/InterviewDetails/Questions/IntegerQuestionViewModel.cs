@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -63,6 +64,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswer);
 
         private readonly QuestionStateViewModel<NumericIntegerQuestionAnswered> questionState;
+        private int? protectedAnswer;
 
         private async Task RemoveAnswer()
         {
@@ -150,21 +152,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answerModel = interview.GetIntegerQuestion(entityIdentity);
             if (answerModel.IsAnswered())
             {
-                this.Answer = answerModel.GetAnswer().Value;
+                var answerValue = answerModel.GetAnswer().Value;
+                this.Answer = answerValue;
                 this.previousAnswer = this.Answer;
             }
 
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
             var isRosterSizeOfLongRoster = questionnaire.IsQuestionIsRosterSizeForLongRoster(entityIdentity.Id);
 
-            if (isRosterSizeOfLongRoster)
-                this.answerMaxValue = Constants.MaxLongRosterRowCount;
-            else
-                this.answerMaxValue = Constants.MaxRosterRowCount;
+            this.answerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
+            this.ProtectedAnswer = answerModel.ProtectedAnswer?.Value;
 
+            InitSpecialValues(interviewId, entityIdentity);
+        }
+
+        public int? ProtectedAnswer
+        {
+            get => protectedAnswer;
+            set => SetProperty(ref protectedAnswer, value);
+        }
+
+        private void InitSpecialValues(string interviewId, Identity entityIdentity)
+        {
             specialValues.Init(interviewId, entityIdentity, this.questionState);
             this.specialValues.SpecialValueChanged += SpecialValueChanged;
             this.specialValues.SpecialValueRemoved += SpecialValueRemoved;
+
+            if (specialValues.SpecialValues.Any(x => x.Selected))
+            {
+                this.Answer = null;
+            }
         }
 
         private async void SpecialValueChanged(object sender, EventArgs eventArgs)
@@ -199,6 +216,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
         {
+            if (ProtectedAnswer.HasValue && answeredOrSelectedValue < protectedAnswer)
+            {
+                var message = string.Format(UIResources.Interview_Questions_Integer_ProtectedValue,
+                    ProtectedAnswer);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(message);
+                return;
+            }
+
             if (this.isRosterSizeQuestion)
             {
                 if (!isSpecialValueSelected && answeredOrSelectedValue < 0)

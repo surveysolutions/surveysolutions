@@ -49,6 +49,8 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             Assignment assignment = Create.Entity.Assignment(questionnaireIdentity: questionnaireIdentity);
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
+            assignment.SetAnswers(null);
+            assignment.SetProtectedVariables(null);
 
             IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(plainPostgresTransactionManager);
 

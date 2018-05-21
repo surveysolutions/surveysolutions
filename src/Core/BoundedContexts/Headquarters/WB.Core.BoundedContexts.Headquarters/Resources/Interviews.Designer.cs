@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. InterviewerId {1}, QuestionnaireId {2}, Exception: {3}.
+        ///   Looks up a localized string similar to Error during import of assignment with answers: {0}. Responsible: {1}, Exception: {2}.
         /// </summary>
         public static string ImportInterviews_GenericError {
             get {

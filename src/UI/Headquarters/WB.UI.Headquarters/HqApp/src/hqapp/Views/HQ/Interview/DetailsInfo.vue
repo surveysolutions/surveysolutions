@@ -1,6 +1,6 @@
 
 <template>
-    <div class="panel panel-details">
+    <div class="panel panel-details" :class="{ 'contains-action-buttons': showRejectButton || showUnapproveButton || showApproveButton, 'contains-tranlation' : canChangeLanguage}">
         <div class="panel-body clearfix">
             <div class="about-questionnaire clearfix">
                 <div class="about-questionnaire-details clearfix">
@@ -36,7 +36,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="questionnaire-details-actions clearfix">
+            <div class="questionnaire-details-actions clearfix" >
                 <SwitchLanguage v-if="canChangeLanguage" :disabled="changeLanguageDisabled"/>
                 <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
                     {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}

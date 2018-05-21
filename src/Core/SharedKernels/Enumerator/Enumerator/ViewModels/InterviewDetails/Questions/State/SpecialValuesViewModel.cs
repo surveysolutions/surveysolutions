@@ -70,14 +70,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.optionsViewModel.Init(interviewId, entityIdentity, 200);
             this.UpdateSpecialValues();
 
-            allSpecialValues = this.SpecialValues.Select(x => x.Value).ToHashSet();
+            allSpecialValues = this.optionsViewModel.GetOptions().Select(x => x.Value).ToHashSet();
             if (this.SpecialValues.Any(x => x.Selected))
                 IsSpecialValue = true;
         }
 
         public bool IsSpecialValueSelected(decimal? value)
         {
-            return value.HasValue && this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
+            if (!value.HasValue)
+                return false;
+
+            // Double to int conversion can overflow.
+            try
+            {
+               return this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
+            }
+            catch (System.OverflowException)
+            {
+                return false;
+            }
         }
 
         private void RemoveAnswerHandler(object sender, EventArgs e)
@@ -107,11 +118,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             RemoveSpecialValues();
-            specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
-            this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+
+            if (specialValuesViewModels.Any(x => x.Selected) || !interview.GetQuestion(this.questionIdentity).IsAnswered())
             {
-                this.RaisePropertyChanged(() => this.SpecialValues);
-            });
+                specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
+                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                {
+                    this.RaisePropertyChanged(() => this.SpecialValues);
+                });
+            }
         }
 
         private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)

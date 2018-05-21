@@ -162,4 +162,25 @@
   <data name="MenuItem_Started" xml:space="preserve">
     <value>已开始</value>
   </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>完成文本</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>欢迎邀请</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>继续邀请</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>继续标题</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>调查名称</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>完成标题</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>欢迎标题</value>
+  </data>
 </root>

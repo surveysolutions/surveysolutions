@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
@@ -54,12 +55,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             questionnaireBrowseItemStorageMock.Setup(x => x.GetById(Moq.It.IsAny<string>()))
                 .Returns(questionnaireBrowseItemQueue.Dequeue);
 
-            var interviewImportService = new Mock<IInterviewImportService>();
-            interviewImportService.Setup(x => x.Status).Returns(
-                new AssignmentImportStatus()
+            var interviewImportService = new Mock<IAssignmentsImportService>();
+            interviewImportService.Setup(x => x.GetImportStatus()).Returns(
+                new AssignmentsImportStatus()
                 {
-                    QuestionnaireId = new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
-                    IsInProgress = true
+                    QuestionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion),
+                    InQueueCount = 1,
+                    WithErrorsCount = 0
                 });
 
             deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock.Object,

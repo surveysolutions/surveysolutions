@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsSuccessfullyLoaded = true;
         }
 
-        public Task NavigateToPreviousViewModelAsync()
+        public virtual Task NavigateToPreviousViewModelAsync()
         {
             return this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
         }

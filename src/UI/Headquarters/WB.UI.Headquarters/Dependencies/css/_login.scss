@@ -33,13 +33,6 @@ img#placeholder {
     }
 }
 .navbar{
-    .retina-world-bank{
-        @extend %retina-world-bank-size;
-        font-size: 0;
-        background: url("#{$assetsPath}/img/wb-logo.png") no-repeat; 
-        margin-top: 20px;
-        @include image-2x("#{$assetsPath}/img/WBG_Horizontal-Grayscale-high.png", 100%, 100%);
-    }
     .flex-row{
         margin: 0 0 0 5px;
         background-color: white;

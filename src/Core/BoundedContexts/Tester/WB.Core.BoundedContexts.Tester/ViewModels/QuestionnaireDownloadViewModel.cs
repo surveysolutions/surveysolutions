@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
@@ -191,6 +192,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionnaireId: questionnaireIdentity,
                 answers: new List<InterviewAnswer>(), 
+                protectedVariables: new List<string>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),

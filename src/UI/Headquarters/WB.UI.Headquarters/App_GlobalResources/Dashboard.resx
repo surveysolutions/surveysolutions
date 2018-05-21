@@ -201,5 +201,7 @@
   <data name="DeleteMapUser" xml:space="preserve">
     <value>Delete map user</value>
   </data>
-
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Upgrade assignments</value>
+  </data>
 </root>

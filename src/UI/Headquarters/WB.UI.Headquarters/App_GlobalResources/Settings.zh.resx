@@ -177,4 +177,19 @@
   <data name="RemoveLogo" xml:space="preserve">
     <value>删除标识</value>
   </data>
+  <data name="InterviewerAutoUpdate" xml:space="preserve">
+    <value>启用自动更新</value>
+  </data>
+  <data name="InterviewerAutoUpdateDisabled" xml:space="preserve">
+    <value>Android应用程序自动更新禁用</value>
+  </data>
+  <data name="InterviewerAutoUpdateEnabled" xml:space="preserve">
+    <value>Android应用程序自动更新启用</value>
+  </data>
+  <data name="InterviewerSettings_Description" xml:space="preserve">
+    <value>调查员应用程序的Android版本的一些具体设置</value>
+  </data>
+  <data name="InterviewerSettings_Title" xml:space="preserve">
+    <value>调查员应用程序设置</value>
+  </data>
 </root>
