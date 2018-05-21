@@ -33,11 +33,11 @@ namespace WB.UI.Interviewer.Activities
 
             if (currentInterviewer == null)
             {
-                viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>().WaitAndUnwrapException();
+                viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>().ConfigureAwait(false);
             }
             else
             {
-                viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
             }
         }
 
