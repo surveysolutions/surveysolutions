@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -87,7 +88,8 @@ namespace WB.UI.Headquarters.Implementation.Services
         }
 
         private void ExecuteCreateInterviewCommand(QuestionnaireIdentity questionnaireIdentity,
-            int assignmentId, Guid responsibleSupervisorId, Guid? responsibleInterviewerId, List<InterviewAnswer> answers)
+            int assignmentId, Guid responsibleSupervisorId, Guid? responsibleInterviewerId,
+            List<InterviewAnswer> answers)
         {
             var userId = this.authorizedUser.Id;
 
@@ -98,6 +100,7 @@ namespace WB.UI.Headquarters.Implementation.Services
                 interviewerId: responsibleInterviewerId,
                 answersTime: DateTime.UtcNow,
                 answers: answers,
+                protectedVariables: new List<string>(),
                 interviewKey: this.interviewKeyGenerator.Get(),
                 assignmentId: assignmentId);
 

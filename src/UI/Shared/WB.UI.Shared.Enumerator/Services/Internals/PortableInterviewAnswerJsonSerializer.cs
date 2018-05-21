@@ -31,9 +31,14 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             return JsonConvert.SerializeObject(item, this.jsonSerializerSettings);
         }
 
+        public object Deserialize(string payload)
+        {
+            return JsonConvert.DeserializeObject(payload, this.jsonSerializerSettings);
+        }
+
         public T Deserialize<T>(string payload)
         {
-            return JsonConvert.DeserializeObject<T>(payload, this.jsonSerializerSettings);
+            return (T) Deserialize(payload);
         }
 
         public class InterviewAnswerSerializationBinder : DefaultSerializationBinder

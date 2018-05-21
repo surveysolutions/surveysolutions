@@ -437,7 +437,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
                 Mock.Of<IAudioFileStorage>(),
                 Mock.Of<ITabletDiagnosticService>(),
-                Mock.Of<IInterviewerSettings>());
+                Mock.Of<IInterviewerSettings>(),
+                Mock.Of<IAuditLogSynchronizer>(),
+                Mock.Of<IAuditLogService>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,

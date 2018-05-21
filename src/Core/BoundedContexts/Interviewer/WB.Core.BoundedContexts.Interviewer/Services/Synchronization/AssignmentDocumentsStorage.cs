@@ -17,12 +17,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
             : base(logger, fileSystemAccessor, settings)
         {
             this.connection.CreateTable<AssignmentDocument.AssignmentAnswer>();
+            this.connection.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }
 
         public AssignmentDocumentsStorage(SQLiteConnectionWithLock storage, ILogger logger)
             : base(storage, logger)
         {
             storage.CreateTable<AssignmentDocument.AssignmentAnswer>();
+            this.connection.CreateTable<AssignmentDocument.AssignmentProtectedVariable>();
         }
 
         public new void Remove(int assignmentId)
@@ -87,6 +89,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                 table.Connection.Table<AssignmentDocument.AssignmentAnswer>().Delete(answer => answer.AssignmentId == entity.Id);
                 table.Connection.InsertAll(entity.Answers);
             }
+
+            if (entity.ProtectedVariables?.Count > 0)
+            {
+                table.Connection.Table<AssignmentDocument.AssignmentProtectedVariable>()
+                                .Delete(variable => variable.AssignmentId == entity.Id);
+                table.Connection.InsertAll(entity.ProtectedVariables);
+            }
         }
 
         /// <summary>
@@ -124,6 +133,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                     .Where(a => a.AssignmentId == document.Id).ToList();
 
                 document.Answers = answers;
+
+                var protectedVariables = documents.Connection.Table<AssignmentDocument.AssignmentProtectedVariable>()
+                    .Where(a => a.AssignmentId == document.Id).ToList();
+                document.ProtectedVariables = protectedVariables;
 
                 return document;
             });
