@@ -149,6 +149,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var doContent = new DoFile();
             
             doContent.BuildInsheet(Path.ChangeExtension(FileName, "tab"));
+            doContent.AppendLine();
 
             var headersList = GetHeaders(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
 
