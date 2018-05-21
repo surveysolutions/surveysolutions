@@ -21,7 +21,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class InterviewSummaryDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    public class InterviewSummaryDenormalizer : 
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
