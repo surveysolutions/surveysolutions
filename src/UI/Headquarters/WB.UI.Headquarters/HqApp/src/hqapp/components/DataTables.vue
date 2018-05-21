@@ -26,6 +26,7 @@
 
 <script>
 
+import Vue from 'vue'
 import 'datatables.net'
 import 'datatables.net-select'
 import 'jquery-contextmenu'
@@ -35,7 +36,8 @@ import './datatable.plugins'
 $.fn.dataTable.ext.errMode = function(a,b,c,d) {
     // swallow all errors for production
     if (process.env.NODE_ENV !== 'production') {
-        console.log(a,b,c,d)
+        if(console != null) console.error(a,b,c,d)
+        else throw { a, b, c, d}
     }
 };
 
@@ -116,11 +118,11 @@ export default {
                 this.table.rows().deselect();
                 this.table.draw();
             }
-        }, this.reloadDebounce),
+        }, 150),
 
         init(shouldDestroy = false) {
-
             var self = this;
+
             var options = $.extend({
                 processing: false,
                 deferLoading: 200,
@@ -199,7 +201,7 @@ export default {
                     }
                 };
                         
-                options.ajax.data = (d) => {
+                options.ajax.data = (d) => {                    
                     this.addParamsToRequest(d);
                     self.errorMessage = null
                     // reducing length of GET request URI
@@ -231,7 +233,7 @@ export default {
                 }
             }
 
-            if(shouldDestroy) {
+            if(shouldDestroy && this.table != null) {
                 this.table.destroy()
                  $(this.$refs.header).empty()
                  $(this.$refs.body).empty();
@@ -247,6 +249,10 @@ export default {
             this.table.on('deselect', (e, dt, type, indexes) => {
                 self.rowsDeselected(e, dt, type, indexes)
             });
+
+            this.table.on('draw', () => {
+                self.$emit("draw")
+            })
 
             this.table.on('click', 'tbody td', ($el) => {
                 const cell = self.table.cell($el.target);
@@ -377,7 +383,7 @@ export default {
     },
 
     mounted() {
-       this.init()
+        this.init()
     }
 }
 </script>
