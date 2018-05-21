@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
         ResponsibleView GetAllResponsibles(int pageSize, string searchBy, bool showLocked = false, bool showArchived = false);
         Guid[] GetInterviewersIds(string searchBy, bool archived, int? apkBuildVersion, Guid? supervisorId, InterviewerFacet facet = InterviewerFacet.None);
+
+        UserToVerify[] GetUsersByUserNames(string[] userNames);
     }
 }

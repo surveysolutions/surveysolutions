@@ -7,6 +7,7 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.Infrastructure.EventBus;
@@ -113,6 +114,44 @@ namespace WB.Tests.Unit
         {
             verificationMessages.Should().NotContain(message
                 => message.Code == code);
+        }
+
+        [DebuggerStepThrough]
+        public static void AssertExactlyOneRowMatch(this object[][] data, params object[] row)
+        {
+            // Assert.That(this.report.Data, Has.One.EqualTo(row)); doesn't work as expected
+            var match = new List<Object[]>();
+
+            foreach (var dataRow in data)
+            {
+                if (dataRow.SequenceEqual(row))
+                    match.Add(dataRow);
+            }
+
+            Assert.That(match, Has.Exactly(1).Items);
+        }
+
+        //[DebuggerStepThrough]
+        public static void AssertEqualInAnyOrder(this object[][] data, params object[][] rows)
+        {
+            Assert.That(data, Has.Length.EqualTo(rows.Length));
+
+            foreach (var item in data)
+            {
+                AssertExactlyOneRowMatch(rows, item);
+            }
+        }
+
+
+        [DebuggerStepThrough]
+        public static void AssertEqual(this object[][] data, params object[][] rows)
+        {
+            Assert.That(data, Has.Length.EqualTo(rows.Length));
+
+            foreach (var item in data.Zip(rows, (d,r) => (d,r)))
+            {
+                Assert.That(item.Item1, Is.EqualTo(item.Item2));
+            }
         }
     }
 }

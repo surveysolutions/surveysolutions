@@ -61,6 +61,8 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public int? AnswerMaxValue { get; set; }
         public bool UseFormatting { get; set; }
         public List<CategoricalOption> Options { get; set; }
+        public bool IsProtected { get; set; }
+        public int? ProtectedAnswer { get; set; }
     }
 
     public class InterviewDoubleQuestion : GenericQuestion
@@ -131,6 +133,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public bool Ordered { get; set; }
         public int[] Answer { get; set; }
         public bool IsRosterSize { get; set; }
+        public int[] ProtectedAnswer { get; set; }
     }
 
     public class InterviewYesNoQuestion : CategoricalQuestion
@@ -145,6 +148,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public int Value { get; set; }
         public bool Yes { get; set; }
+        public bool IsProtected { get; set; }
     }
 
     public class LinkedCategoricalQuestion : GenericQuestion
@@ -172,6 +176,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public decimal Value { get; set; }
         public string Text { get; set; }
+        public bool IsProtected { get; set; }
 
         public override string ToString() => $@"{Value} -> {Text}";
     }

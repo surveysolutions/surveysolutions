@@ -1,5 +1,6 @@
 ﻿Supervisor.VM.Questionnaires = function (listViewUrl, notifier, ajax, $newInterviewUrl,
-    $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl) {
+    $batchUploadUrl, $cloneQuestionnaireUrl, $deleteQuestionnaireUrl, $webInterviewUrl, $exportQuestionnaireUrl,
+    $migrateAssignmentsUrl) {
     Supervisor.VM.Questionnaires.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -65,6 +66,11 @@
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
         window.location.href = $batchUploadUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
     };
+
+    self.migrateAssignments = function(key, opt) {
+        var selectedRow = self.selectRowAndGetData(opt.$trigger);
+        window.location.href = $migrateAssignmentsUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+    }
 
     self.cloneQuestionnaire = function (key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);

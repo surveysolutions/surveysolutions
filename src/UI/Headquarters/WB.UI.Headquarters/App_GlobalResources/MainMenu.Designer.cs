@@ -286,6 +286,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Survey Statistics.
+        /// </summary>
+        internal static string SurveyStatistics {
+            get {
+                return ResourceManager.GetString("SurveyStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team and Roles.
         /// </summary>
         internal static string TeamAndRoles {

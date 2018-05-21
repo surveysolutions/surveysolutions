@@ -1,13 +1,10 @@
 ﻿using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Maps;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
@@ -23,29 +20,16 @@ namespace WB.UI.Headquarters.Controllers
     [AuthorizeOr403(Roles = "Administrator, Headquarter")]
     public class MapsController : BaseController
     {
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IMapStorageService mapStorageService;
-        private readonly IExportFactory exportFactory;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IMapService mapPropertiesProvider;
 
         private readonly IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor;
 
-        private readonly IRecordsAccessorFactory recordsAccessorFactory;
-
         public MapsController(ICommandService commandService, ILogger logger,
-            IFileSystemAccessor fileSystemAccessor, IMapStorageService mapRepository,
-            IExportFactory exportFactory, IRecordsAccessorFactory recordsAccessorFactory,
             IPlainStorageAccessor<MapBrowseItem> mapPlainStorageAccessor,
             IMapService mapPropertiesProvider, IAuthorizedUser authorizedUser) : base(commandService, logger)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.mapStorageService = mapRepository;
-            this.exportFactory = exportFactory;
-            this.recordsAccessorFactory = recordsAccessorFactory;
             this.mapPlainStorageAccessor = mapPlainStorageAccessor;
             this.authorizedUser = authorizedUser;
-            this.mapPropertiesProvider = mapPropertiesProvider;
         }
 
         public ActionResult Index()

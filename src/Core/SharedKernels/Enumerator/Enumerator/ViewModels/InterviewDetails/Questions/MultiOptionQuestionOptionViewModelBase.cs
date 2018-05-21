@@ -1,8 +1,5 @@
-using System;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -10,7 +7,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private string title;
         private bool @checked;
+        private bool canBeChecked = true;
         private int? checkedOrder;
+        private bool isProtected;
 
         public MultiOptionQuestionOptionViewModelBase(IMultiOptionQuestionViewModelToggleable questionViewModel)
         {
@@ -56,11 +55,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public IMvxCommand CheckAnswerCommand
+        public bool IsProtected
+        {
+            get => isProtected;
+            set => SetProperty(ref isProtected, value);
+        }
+
+        public bool CanBeChecked
+        {
+            get => this.canBeChecked;
+            set => SetProperty(ref this.canBeChecked, value);
+        }
+
+        public IMvxAsyncCommand CheckAnswerCommand
         {
             get
             {
-                return new MvxCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this));
+                return new MvxAsyncCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this), () => CanBeChecked);
             }
         }
     }

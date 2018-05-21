@@ -15,6 +15,8 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
@@ -34,11 +36,14 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -46,7 +51,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -95,7 +99,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer,
-                comments ?? new CommentSynchronizationDto[0]);
+                comments ?? new CommentSynchronizationDto[0],
+                null);
 
         public AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
             => new AnsweredYesNoOption(value, answer);
@@ -739,6 +744,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 AnswerText = text ?? $"Option {value}",
                 AnswerCode = value,
+                AnswerValue = value.ToString(),
                 ParentValue = parentValue
             };
 
@@ -779,6 +785,31 @@ namespace WB.Tests.Abc.TestFactories
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
+            };
+
+
+        public AreaQuestion GeographyQuestion(Guid? id = null,
+            string variable = "georgaphy_question",
+            string enablementCondition = null,
+            string validationExpression = null,
+            QuestionScope scope = QuestionScope.Interviewer,
+            bool isPrefilled = false,
+            bool hideIfDisabled = false,
+            bool useFormatting = false,
+            string questionText = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+            => new AreaQuestion
+            {
+                QuestionText = questionText ?? "text",
+                QuestionType = QuestionType.Area,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
+                ValidationExpression = validationExpression,
+                QuestionScope = scope,
+                Featured = isPrefilled,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
             };
 
         public IQuestion Question(
@@ -1524,7 +1555,7 @@ namespace WB.Tests.Abc.TestFactories
             => new FeaturedQuestionItem(id ?? Guid.NewGuid(), title,  caption);
 
         public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
-            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems);
+            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems, null, null);
 
         public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
             => new AnswerNotifier(liteEventRegistry);
@@ -1692,7 +1723,6 @@ namespace WB.Tests.Abc.TestFactories
 
             if(interviewSummary != null)
                 asDynamic.InterviewSummaries = interviewSummary;
-            asDynamic.Answers = null;
 
             return result;
         }
@@ -1846,16 +1876,6 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewTreeVariableDiff(sourceVariable, targetVariable);
         }
 
-        public PreloadedDataByFile PreloadedDataByFile(string id = null, string fileName = null, string[] header = null, string[][] content = null)
-        {
-            var randomstring = Guid.NewGuid().ToString();
-            return new PreloadedDataByFile(
-                id: id ?? randomstring,
-                fileName: fileName ?? "file-" + randomstring,
-                header: header,
-                content: content);
-        }
-
         public DeviceSyncInfo DeviceSyncInfo(Guid interviewerId, string deviceId)
         {
             return new DeviceSyncInfo
@@ -1910,9 +1930,177 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
-        public PreloadedDataByFile[] PreloadedDataByFile(params PreloadedDataByFile[] preloadedDataByFiles)
+        public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
         {
-            return preloadedDataByFiles.ToArray();
+            var columns = rows.SelectMany(x => x.Cells).OfType<PreloadingValue>().Select(x => x.Column).ToArray();
+            return new PreloadedFile
+            {
+                FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName,
+                    columns: columns),
+                Rows = rows
+            };
+        }
+
+        public PreloadedFileInfo PreloadedFileInfo(string[] columns = null, string fileName = null, string questionnaireOrRosterName = null) => new PreloadedFileInfo
+        {
+            Columns = columns,
+            FileName = fileName,
+            QuestionnaireOrRosterName = questionnaireOrRosterName ?? "Questionnaire"
+        };
+
+        public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName,
+            AssignmentResponsible responsible = null, AssignmentQuantity quantity = null,
+            AssignmentRosterInstanceCode[] rosterInstanceCodes = null,
+            AssignmentInterviewId interviewId = null,
+            string questionnaireOrRosterName = null,
+            params BaseAssignmentValue[] answers) => new PreloadingAssignmentRow
+        {
+            FileName = fileName,
+            QuestionnaireOrRosterName = questionnaireOrRosterName ?? "Questionnaire",
+            Responsible = responsible,
+            Quantity = quantity,
+            RosterInstanceCodes = rosterInstanceCodes,
+            InterviewIdValue = interviewId,
+            Answers = answers
+        };
+
+        public AssignmentResponsible AssignmentResponsible(string responsibleName, UserToVerify userInfo = null) => new AssignmentResponsible
+        {
+            Value = responsibleName,
+            Column = ServiceColumns.ResponsibleColumnName,
+            Responsible = userInfo
+        };
+
+        public AssignmentQuantity AssignmentQuantity(string quantity = null, int? parsedQuantity = null) => new AssignmentQuantity
+        {
+            Value = string.IsNullOrEmpty(quantity) ? parsedQuantity?.ToString() ?? "" : quantity,
+            Column = ServiceColumns.AssignmentsCountColumnName,
+            Quantity = parsedQuantity
+        };
+
+        public AssignmentInterviewId AssignmentInterviewId(string interviewId) => new AssignmentInterviewId
+        {
+            Value = interviewId,
+            Column = ServiceColumns.InterviewId
+        };
+
+        public UserToVerify UserToVerify(bool isLocked = false, Guid? interviewerId = null, Guid? supervisorId = null) => new UserToVerify
+        {
+            IsLocked = isLocked,
+            InterviewerId = interviewerId,
+            SupervisorId = supervisorId
+        };
+
+        public AssignmentTextAnswer AssignmentTextAnswer(string column, string value) => new AssignmentTextAnswer
+        {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = value
+        };
+
+        public AssignmentIntegerAnswer AssignmentIntegerAnswer(string
+            column, int? answer = null, string value = null) => new AssignmentIntegerAnswer
+        {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            Answer = answer
+        };
+
+        public AssignmentCategoricalSingleAnswer AssignmentCategoricalSingleAnswer(string
+            column, int? answer = null, string value = null) => new AssignmentCategoricalSingleAnswer
+            {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            OptionCode = answer
+        };
+
+        public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string
+            column, int? answer = null, string value = null, string variable = null) => new AssignmentRosterInstanceCode
+            {
+            Column = column,
+            VariableName = variable ?? column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            Code = answer
+        };
+
+        public AssignmentDoubleAnswer AssignmentDoubleAnswer(string
+            column, double? answer = null, string value = null, string variable = null) => new AssignmentDoubleAnswer
+        {
+            Column = column,
+            VariableName = string.IsNullOrEmpty(variable) ? column.ToLower() : variable,
+            Value = answer.HasValue ? answer.ToString() : value,
+            Answer = answer
+        };
+
+        public AssignmentMultiAnswer AssignmentMultiAnswer(string variable, params AssignmentAnswer[] values) => new AssignmentMultiAnswer
+        {
+            VariableName = variable,
+            Values = values
+        };
+
+        public AssignmentGpsAnswer AssignmentGpsAnswer(string variable, params AssignmentAnswer[] values) => new AssignmentGpsAnswer
+        {
+            VariableName = variable,
+            Values = values
+        };
+
+        public AssignmentDateTimeAnswer AssignmentDateTimeAnswer(string
+            column, DateTime? answer = null, string value = null) => new AssignmentDateTimeAnswer
+        {
+            Column = column,
+            VariableName = column.ToLower(),
+            Value = answer.HasValue ? answer.ToString() : value,
+            Answer = answer
+        };
+
+        public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName, int row, string interviewId,
+            params AssignmentRosterInstanceCode[] rosterInstanceCodes) => new PreloadingAssignmentRow
+        {
+            FileName = fileName,
+            Row = row,
+            InterviewIdValue = string.IsNullOrWhiteSpace(interviewId) ? null : Create.Entity.AssignmentInterviewId(interviewId),
+            RosterInstanceCodes = rosterInstanceCodes
+        };
+
+        public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string column, int code) =>
+            new AssignmentRosterInstanceCode
+            {
+                Column = column,
+                Code = code,
+                Value = code.ToString()
+            };
+
+        public PreloadingRow PreloadingRow(params PreloadingCell[] cells) => new PreloadingRow
+        {
+            Cells = cells
+        };
+
+        public PreloadingValue PreloadingValue(string variableName, string value, string columnName) => new PreloadingValue
+        {
+            VariableOrCodeOrPropertyName = variableName.ToLower(),
+            Value = value,
+            Column = columnName ?? variableName
+        };
+
+        public PreloadingValue PreloadingValue(string variableName, string value)
+            => PreloadingValue(variableName, value, null);
+
+        public PreloadingCompositeValue PreloadingCompositeValue(string variableName, params PreloadingValue[] values) => new PreloadingCompositeValue
+        {
+            VariableOrCodeOrPropertyName = variableName.ToLower(),
+            Values = values
+        };
+
+        public GetReportCategoricalPivotReportItem GetReportCategoricalPivotReportItem(int row, int col, long count)
+        {
+            return new GetReportCategoricalPivotReportItem
+            {
+                RowValue = row,
+                ColValue = col,
+                Count = count
+            };
         }
     }
 }

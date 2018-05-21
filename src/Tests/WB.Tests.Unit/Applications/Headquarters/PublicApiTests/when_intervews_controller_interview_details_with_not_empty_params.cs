@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         public void BecauseOf() 
         {
-            actionResult = controller.InterviewDetails(interviewId);
+            actionResult = controller.Get(interviewId);
         }
 
         [NUnit.Framework.Test] public void should_return_InterviewApiDetails () =>

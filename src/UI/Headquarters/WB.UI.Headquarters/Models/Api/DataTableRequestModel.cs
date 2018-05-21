@@ -6,6 +6,8 @@ namespace WB.UI.Headquarters.Models.Api
 {
     public class DataTableRequest
     {
+        public bool EmptyOnError { get; set; } = false;
+
         public class SortOrder
         {
             public int Column { get; set; }
@@ -28,7 +30,6 @@ namespace WB.UI.Headquarters.Models.Api
         public class ColumnInfo
         {
             public int Title { get; set; }
-            public string Data { get; set; }
             public string Name { get; set; }
             public bool Searchable { get; set; }
             public bool Orderable { get; set; }
@@ -39,7 +40,12 @@ namespace WB.UI.Headquarters.Models.Api
         public int Start { get; set; }
         public int Length { get; set; }
         public List<SortOrder> Order { get; set; }
+
+        public List<ColumnInfo> _C { get; set; }
         public List<ColumnInfo> Columns { get; set; }
+
+        public List<ColumnInfo> ColummnsList => Columns ?? _C;
+
         public SearchInfo Search { get; set; }
         public int PageIndex => 1 + this.Start / this.Length;
         public int PageSize => this.Length;
@@ -50,7 +56,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return string.Empty;
 
-            var columnName = this.Columns[order.Column].Name;
+            var columnName = this.ColummnsList[order.Column].Name;
             var stringifiedOrder = order.Dir == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
 
             return $"{columnName} {stringifiedOrder}";
@@ -62,7 +68,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 
-            var columnName = this.Columns[order.Column].Name;
+            var columnName = this.ColummnsList[order.Column].Name;
 
             return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
         }
@@ -74,7 +80,7 @@ namespace WB.UI.Headquarters.Models.Api
 
             foreach (var order in this.Order)
             {
-                var columnName = this.Columns[order.Column].Name;
+                var columnName = this.ColummnsList[order.Column].Name;
 
                 yield return new OrderRequestItem {Direction = order.Dir, Field = columnName};
             }

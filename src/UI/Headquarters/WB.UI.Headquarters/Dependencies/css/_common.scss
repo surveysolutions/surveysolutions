@@ -1,11 +1,7 @@
 @include fontface(RobotoRegular);
-@include fontface(RobotoItalic);
 @include fontface(RobotoLight);
 @include fontface(RobotoBold);
 @include fontface(TrebuchetMSBold);
-@include fontface(ufonts_com_lucidaconsole);
-@include fontface(TrebuchetMS);
-@include fontface(RobotoMedium);
 input[type=number] { 
   -moz-appearance: textfield;
   appearance: textfield;
@@ -73,6 +69,10 @@ main{
 	.container{
 		margin-left: 0;
 		margin-right: 0;
+		&.center-block{
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 
 }
@@ -241,7 +241,7 @@ h5{
 	color: $blue !important;
 }
 .gray-uppercase{
-	font: 12px/14px "TrebuchetMS" !important;
+	font: 12px/14px $trebuchet !important;
 	text-transform: uppercase;
 	letter-spacing: 0.13em;
 	color: $gray-highlight-font;
@@ -501,7 +501,7 @@ main.hidden.display-block{
 	display: block !important;
 }
 .download-report-as{
-	font: 13px/15px "TrebuchetMSBold";
+	font: 13px/15px $trebuchet_bold;
 	text-align: right;
 	clear: both;
 }
@@ -640,7 +640,7 @@ main.hidden.display-block{
 						&.table-header{
 							padding-left: 0;
 							color: $gray_light;
-							font: 11px/13px "TrebuchetMSBold";
+							font: 11px/13px $trebuchet_bold;
 							letter-spacing: 1px;
 							text-transform: uppercase;
 							background-color: transparent;
@@ -711,7 +711,7 @@ dl{
 .gray-text-row{
 	font-style: normal;
 	text-transform: uppercase;
-	font: 14px/16px "TrebuchetMS";
+	font: 14px/16px $trebuchet;
 	letter-spacing: 1px;
 	color: $gray_light;
 }
