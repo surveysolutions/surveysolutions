@@ -1160,6 +1160,9 @@
   <data name="Map_UploadingError" xml:space="preserve">
     <value>Error occurred during upload</value>
   </data>
+  <data name="Map_UploadingFileTooBig" xml:space="preserve">
+    <value>File is too big</value>
+  </data>
   <data name="Map_UploadingSuccess" xml:space="preserve">
     <value>Maps were succesfuly uploaded</value>
   </data>
