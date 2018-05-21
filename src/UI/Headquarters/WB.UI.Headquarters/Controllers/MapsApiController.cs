@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class MapsApiController : BaseApiController
     {
-        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk" };
+        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;

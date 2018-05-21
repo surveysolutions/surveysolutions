@@ -209,6 +209,21 @@ namespace WB.Tests.Abc.TestFactories
                 newSupervisorId);
         }
 
+        public AnswerGeographyQuestionCommand AnswerGeographyQuestionCommand(Guid interviewId, Guid questionId, Guid? userId = null)
+            => new AnswerGeographyQuestionCommand(
+                interviewId: interviewId,
+                userId: userId ?? Guid.NewGuid(),
+                questionId: questionId,
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                geometry: "",
+                mapName:"",
+                area:0,
+                coordinates:"",
+                length:0,
+                distanceToEditor:0,
+                numberOfPoints:0);
+
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
             return new DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
