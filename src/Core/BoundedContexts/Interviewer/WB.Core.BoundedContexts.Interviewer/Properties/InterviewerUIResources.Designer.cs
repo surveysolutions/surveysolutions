@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This interview is completed. Do you want to restart the interview?.
+        ///   Looks up a localized string similar to This interview is completed. Do you want to reopen the interview?.
         /// </summary>
         public static string Dashboard_Reinitialize_Interview_Message {
             get {
@@ -1595,6 +1595,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Upload_Title_Format {
             get {
                 return ResourceManager.GetString("Synchronization_Upload_Title_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload audit information.
+        /// </summary>
+        public static string Synchronization_UploadAuditLog {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadAuditLog", resourceCulture);
             }
         }
         

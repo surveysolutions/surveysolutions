@@ -16,9 +16,12 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly string mapsLocation;
+        private readonly string shapefilesLocation;
         private readonly ILogger logger;
 
-        string[] filesToSearch = { "*.tpk", "*.mmpk" };
+        string[] mapFilesToSearch = { "*.tpk", "*.mmpk", "*.tif" };
+
+        string[] shapefilesToSearch = { "*.shp"};
 
         string tempSuffix = ".part";
 
@@ -31,6 +34,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.logger = logger;
 
             this.mapsLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/MapCache/");
+            this.shapefilesLocation = fileSystemAccessor.CombinePath(AndroidPathUtils.GetPathToExternalDirectory(), "TheWorldBank/Shared/ShapefileCache");
         }
 
 
@@ -72,7 +76,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 return new List<MapDescription>();
 
             return
-                this.filesToSearch
+                this.mapFilesToSearch
                 .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.mapsLocation, i))
                 .OrderBy(x => x)
                 .Select(x => new MapDescription()
@@ -129,6 +133,23 @@ namespace WB.UI.Shared.Enumerator.Services
             var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
 
             this.fileSystemAccessor.MoveFile(tempFileName, newName);
+        }
+
+        public List<ShapefileDescription> GetAvailableShapefiles()
+        {
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.shapefilesLocation))
+                return new List<ShapefileDescription>();
+
+            return
+                this.shapefilesToSearch
+                    .SelectMany(i => this.fileSystemAccessor.GetFilesInDirectory(this.shapefilesLocation, i))
+                    .OrderBy(x => x)
+                    .Select(x => new ShapefileDescription()
+                    {
+                        FullPath = x,
+                        ShapefileName = this.fileSystemAccessor.GetFileNameWithoutExtension(x)
+
+                    }).ToList();
         }
 
         private string GetTempFileName(string mapName)

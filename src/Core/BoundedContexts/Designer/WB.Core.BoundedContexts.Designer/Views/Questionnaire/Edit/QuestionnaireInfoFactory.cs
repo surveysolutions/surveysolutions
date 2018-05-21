@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.ChapterInfo;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 
 
@@ -67,6 +68,32 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             {
                 Value = VariableType.String.ToString(),
                 Text = "String"
+            }
+        };
+
+        private SelectOption[] GeometryTypeOptions => new[]
+        {
+            new SelectOption
+            {
+                Value = GeometryType.Polygon.ToString(),
+                Text = "Polygon"
+            },
+            new SelectOption
+            {
+                Value = GeometryType.Polyline.ToString(),
+                Text = "Polyline"
+            },
+
+            new SelectOption
+            {
+                Value = GeometryType.Point.ToString(),
+                Text = "Point"
+            },
+
+            new SelectOption
+            {
+                Value = GeometryType.Multipoint.ToString(),
+                Text = "Multipoint"
             }
         };
 
@@ -126,7 +153,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             new SelectOption
             {
                 Value = "Area",
-                Text = QuestionnaireEditor.QuestionTypeArea
+                Text = QuestionnaireEditor.QuestionTypeGeography
             }
         };
 
@@ -234,7 +261,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             result.SourceOfSingleQuestions = this.GetSourcesOfSingleQuestionBriefs(questionnaire, questionId);
             result.QuestionTypeOptions = QuestionTypeOptions;
             result.AllQuestionScopeOptions = AllQuestionScopeOptions;
-            
+            result.GeometryTypeOptions = GeometryTypeOptions;
+
             this.ReplaceGuidsInValidationAndConditionRules(result, questionnaire, questionnaireId);
 
             return result;
@@ -426,6 +454,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 VariableName = question.StataExportCaption,
                 LinkedToEntityId = (question.LinkedToQuestionId ?? question.LinkedToRosterId)?.FormatGuid(),
                 QuestionTypeOptions = question.Answers.Select(a => new SelectOption() { Text = a.AnswerText, Value = a.AnswerValue}).ToArray(),
+                GeometryType = question.Properties?.GeometryType ?? GeometryType.Polygon
             };
             questionView.ValidationConditions.AddRange(question.ValidationConditions);
 

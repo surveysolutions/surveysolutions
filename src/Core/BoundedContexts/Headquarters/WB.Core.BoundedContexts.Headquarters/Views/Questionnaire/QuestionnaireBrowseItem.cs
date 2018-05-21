@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
@@ -81,5 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual bool AllowAssignments { get; set; }
 
         public virtual bool AllowExportVariables { get; set; }
+
+        public virtual QuestionnaireIdentity Identity() => new QuestionnaireIdentity(QuestionnaireId, Version);
     }
 }
