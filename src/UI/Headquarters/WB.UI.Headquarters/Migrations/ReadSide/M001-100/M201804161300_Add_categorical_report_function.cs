@@ -10,7 +10,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_categorical_report(_questionnaireidentity text, detailed boolean, 
-                    totals boolean, _teamleadid uuid, _variable uuid, _condition_var uuid, _condition integer[], _exclude integer[])
+                    totals boolean, _teamleadid uuid, _variable uuid, _condition_var uuid, _condition integer[])
                  RETURNS TABLE(teamleadname text, responsiblename text, answer integer, count bigint)
                  LANGUAGE plpgsql
                 AS $function$
@@ -42,7 +42,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                         v1.entity_id = lookupVariable and
                                     
                                         -- filter by condition variable
-                                        (_exclude is null or array[v1.answer] <@ _exclude = false) and
                                         v2.entity_id = condVariable and array[v2.answer] <@ _condition
                                 ) as agg
                                 group by 1, 2, 3
@@ -62,8 +61,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                     join readside.questionnaire_entities_answers qea on qea.value::int = v1.answer and qea.entity_id = v1.entity_id
                                     where 
                                         (_teamleadid is null or s.teamleadid = _teamleadid) and
-                                        v1.entity_id = lookupVariable and 
-                                        (_exclude is null or array[v1.answer] <@ _exclude = false)
+                                        v1.entity_id = lookupVariable
                                 ) as agg
                                 group by 1, 2, 3
                                 order by 1, 2 ,3;

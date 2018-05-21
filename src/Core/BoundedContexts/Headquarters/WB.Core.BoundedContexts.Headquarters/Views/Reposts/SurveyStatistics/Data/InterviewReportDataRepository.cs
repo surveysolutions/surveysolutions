@@ -63,7 +63,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
 
             const string SqlQuery = @"select teamleadname, responsiblename, answer, count
                     from readside.get_categorical_report(@questionnaireIdentity, @detailed, @totals, @teamLeadId, 
-                        @variable, @conditionVariable, @condition, @exclude)";
+                        @variable, @conditionVariable, @condition)";
 
             var result = connection.Query<GetCategoricalReportItem>(SqlQuery, @params);
             var totals = connection.Query<GetCategoricalReportItem>(SqlQuery, @params.AsTotals());

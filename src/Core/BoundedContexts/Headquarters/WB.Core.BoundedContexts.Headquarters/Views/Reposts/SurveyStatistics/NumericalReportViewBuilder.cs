@@ -8,16 +8,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 {
     public class NumericalReportViewBuilder
     {
-        private readonly bool hasTeamLead;
-        private readonly bool hasTeamMember;
         private readonly List<GetNumericalReportItem> numericalData;
 
-        public NumericalReportViewBuilder(List<GetNumericalReportItem> numericalData, bool hasTeamLead,
-            bool hasTeamMember)
+        public NumericalReportViewBuilder(List<GetNumericalReportItem> numericalData)
         {
             this.numericalData = numericalData ?? new List<GetNumericalReportItem>();
-            this.hasTeamLead = hasTeamLead;
-            this.hasTeamMember = hasTeamMember;
         }
 
         public ReportView AsReportView()
@@ -53,32 +48,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 var row = new object[report.Columns.Length];
                 var rowIndex = 0;
 
+                foreach (var prefix in rowPrefix)
+                {
+                    AppendToRow(prefix);
+                }
+
+                AppendToRow(numeric.Count);
+                AppendToRow(numeric.Average);
+                AppendToRow(numeric.Median);
+                AppendToRow(numeric.Sum);
+                AppendToRow(numeric.Min);
+                AppendToRow(numeric.Percentile05);
+                AppendToRow(numeric.Percentile50);
+                AppendToRow(numeric.Percentile95);
+                AppendToRow(numeric.Max);
+
+                return row;
+
                 void AppendToRow(object value)
                 {
                     row[rowIndex++] = value;
                 }
-
-                if (hasTeamLead) AppendToRow(rowPrefix[0]);
-                if (hasTeamMember) AppendToRow(rowPrefix[1]);
-
-                AppendToRow(numeric?.Count);
-                AppendToRow(numeric?.Average);
-                AppendToRow(numeric?.Median);
-                AppendToRow(numeric?.Sum);
-                AppendToRow(numeric?.Min);
-                AppendToRow(numeric?.Percentile05);
-                AppendToRow(numeric?.Percentile50);
-                AppendToRow(numeric?.Percentile95);
-                AppendToRow(numeric?.Max);
-
-                return row;
             }
         }
 
         private IEnumerable<(string column, string header)> ColumnData()
         {
-            if (hasTeamLead) yield return ("TeamLead", Report.COLUMN_TEAMS);
-            if (hasTeamMember) yield return ("Responsible", Report.COLUMN_TEAM_MEMBER);
+            yield return ("TeamLead", Report.COLUMN_TEAMS);
+            yield return ("Responsible", Report.COLUMN_TEAM_MEMBER);
 
             yield return ("count", "Count");
             yield return ("average", "Average");
@@ -95,8 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
         {
             IEnumerable<string> IndexRows()
             {
-                if (hasTeamLead) yield return "TeamLead";
-                if (hasTeamMember) yield return "Responsible";
+                yield return "TeamLead";
+                yield return "Responsible";
             }
 
             var index = IndexRows().ToArray();

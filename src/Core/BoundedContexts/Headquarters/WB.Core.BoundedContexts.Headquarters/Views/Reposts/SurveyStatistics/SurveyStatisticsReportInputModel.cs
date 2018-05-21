@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
 
         public IQuestion ConditionalQuestion { get; set; }
         public int[] Condition { get; set; }
-        public int[] ExcludeCategories { get; set; }
         public bool Pivot { get; set; }
         public string[] Columns { get; set; }
     }
