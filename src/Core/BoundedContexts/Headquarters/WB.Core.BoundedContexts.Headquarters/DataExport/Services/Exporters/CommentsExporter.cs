@@ -30,6 +30,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
 
+        private readonly DoExportFileHeader[] commentsFileColumns =
+        {
+            new DoExportFileHeader("Order", "Sequential order of the comment"),
+            new DoExportFileHeader("Originator", "Login name of the person leaving the comment"),
+            new DoExportFileHeader("Role", "System role of the person leaving the comment"),
+            new DoExportFileHeader("Date", "Date when the comment was left"),
+            new DoExportFileHeader("Time", "Time when the comment was left"),
+            new DoExportFileHeader("Variable", "Variable name for the commented question"),
+            new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
+            new DoExportFileHeader("Comment", "Text of the comment"),
+            new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
+            new DoExportFileHeader("Id2", "Roster ID of the 2nd level of nesting", true),
+            new DoExportFileHeader("Id3", "Roster ID of the 3rd level of nesting", true),
+            new DoExportFileHeader("Id4", "Roster ID of the 4th level of nesting", true),
+        };
+
         protected CommentsExporter()
         {
         }
@@ -53,7 +69,39 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public void Export(QuestionnaireExportStructure questionnaireExportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
             this.DoExport(questionnaireExportStructure, interviewIdsToExport, basePath, progress);
+            this.ExportCommentsDoFile(questionnaireExportStructure, basePath, progress);
         }
+
+        private void ExportCommentsDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress)
+        {
+            var doContent = new DoFile();
+
+            int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
+            bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
+            var headersList = this.GetHeadersList(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
+
+            foreach (var header in headersList)
+            {
+                var exportFileHeader = commentsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
+                if (exportFileHeader != null)
+                {
+                    if (exportFileHeader.AddCapture)
+                        doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                    else
+                        doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                }
+                else
+                {
+                    doContent.AppendLabelToVariableMatching(header, string.Empty);
+                }
+            }
+
+            var fileName = $"{commentsFileName}.{DoFile.ContentFileNameExtension}";
+            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
+
+            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
+        }
+
 
         private void DoExport(QuestionnaireExportStructure questionnaireExportStructure,
             List<Guid> interviewIdsToExport,
@@ -100,6 +148,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void WriteFileHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string commentsFilePath)
         {
+            var commentsHeader = GetHeadersList(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
+
+            this.csvWriter.WriteData(commentsFilePath, new[] {commentsHeader.ToArray()}, ExportFileSettings.DataFileSeparator.ToString());
+        }
+
+        private List<string> GetHeadersList(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire)
+        {
             var commentsHeader = new List<string> {"Order", "Originator", "Role", "Date", "Time", "Variable"};
 
             if (hasAtLeastOneRoster)
@@ -111,9 +166,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 commentsHeader.Add($"Id{i}");
             }
-            commentsHeader.Add("Comment");
 
-            this.csvWriter.WriteData(commentsFilePath, new[] {commentsHeader.ToArray()}, ExportFileSettings.DataFileSeparator.ToString());
+            commentsHeader.Add("Comment");
+            return commentsHeader;
         }
 
         private List<string[]> QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, 

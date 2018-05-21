@@ -28,7 +28,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly string interviewActionsFileName = "interview__actions";
-        private readonly string[] actionFileColumns = { "interview__id", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" };
+        private readonly DoExportFileHeader[] actionFileColumns =
+        {
+            new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"), 
+            new DoExportFileHeader("Action", "Type of action taken"), 
+            new DoExportFileHeader("Originator", "Login name of the person performing the action"), 
+            new DoExportFileHeader("Role", "System role of the person performing the action"), 
+            new DoExportFileHeader("ResponsibleName", "Login name of the person now responsible for the interview"), 
+            new DoExportFileHeader("ResponsibleRole", "System role of the person now responsible for the interview"), 
+            new DoExportFileHeader("Date", "Date when the action was taken"), 
+            new DoExportFileHeader("Time", "Time when the action was taken")
+        };
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITransactionManagerProvider transactionManager;
@@ -60,6 +70,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public void Export(QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
             this.ExportActionsInTabularFormat(interviewIdsToExport, basePath, progress);
+            this.ExportActionsDoFile(basePath, progress);
         }
 
         private void ExportActionsInTabularFormat(List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
@@ -67,7 +78,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
             var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
-            this.csvWriter.WriteData(actionFilePath, new[] { this.actionFileColumns }, ExportFileSettings.DataFileSeparator.ToString());
+            var fileColumns = this.actionFileColumns.Select(a => a.Title).ToArray();
+            this.csvWriter.WriteData(actionFilePath, new[] { fileColumns }, ExportFileSettings.DataFileSeparator.ToString());
 
             long totalProcessedCount = 0;
             var stopwatch = Stopwatch.StartNew();
@@ -93,6 +105,21 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             stopwatch.Stop();
             this.logger.Info($"Exported interview actions. Processed: {interviewIdsToExport.Count:N0}. Took {stopwatch.Elapsed:g} to complete");
             progress.Report(100);
+        }
+
+        private void ExportActionsDoFile(string basePath, IProgress<int> progress)
+        {
+            var doContent = new DoFile();
+
+            foreach (var actionFileColumn in actionFileColumns)
+            {
+                doContent.AppendLabelToVariableMatching(actionFileColumn.Title, actionFileColumn.Description);
+            }
+
+            var fileName = $"{interviewActionsFileName}.{DoFile.ContentFileNameExtension}";
+            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
+
+            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
         }
 
         private List<string[]> QueryActionsChunkFromReadSide(Expression<Func<InterviewSummary, bool>> queryActions)
