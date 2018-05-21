@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -116,8 +117,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.QuestionnaireTitle = questionnaire.Title;
 
-            var interviewKey = interview.GetInterviewKey()?.ToString();
-            this.InterviewKey = string.IsNullOrEmpty(interviewKey) ? null : String.Format(UIResources.InterviewKey, interviewKey);
+            assignmentId = interview.GetAssignmentId();
+
+            interviewKey = interview.GetInterviewKey();
+            this.InterviewKey = interviewKey == null ? null : String.Format(UIResources.InterviewKey, interviewKey.ToString());
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
@@ -275,6 +278,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public SideBarSectionsViewModel Sections { get; set; }
         public string QuestionnaireTitle { get; set; }
         public string InterviewKey { get; set; }
+        protected InterviewKey interviewKey;
+        protected int? assignmentId;
 
         public bool HasPrefilledQuestions { get; set; }
         public bool HasEdiablePrefilledQuestions { get; set; }
