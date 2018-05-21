@@ -294,4 +294,7 @@
   <data name="ShowStatusHistory" xml:space="preserve">
     <value>显示状态历史</value>
   </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>全部GPS问题</value>
+  </data>
 </root>
