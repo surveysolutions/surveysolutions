@@ -590,4 +590,8 @@
   <data name="ViewListPreloadedData" xml:space="preserve">
     <value>Показать список значений для загрузки</value>
   </data>
+    <data name="RequiredField" xml:space="preserve">
+    <value>Это обязательное поле</value>
+    <comment>Это обязательное поле</comment>
+  </data>
 </root>
