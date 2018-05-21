@@ -997,6 +997,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field is mandatory.
+        /// </summary>
+        internal static string RequiredField {
+            get {
+                return ResourceManager.GetString("RequiredField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The responsible user will be assigned automatically.
         /// </summary>
         internal static string ResponsibleSupervisorWillBeAssigned {
@@ -1074,6 +1083,24 @@ namespace Resources {
         internal static string SelectResponsibleToAssign {
             get {
                 return ResourceManager.GetString("SelectResponsibleToAssign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select default responsible (required).
+        /// </summary>
+        internal static string Select_Responsible {
+            get {
+                return ResourceManager.GetString("Select_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If no responsible assigned in batch file use this supervisor/interviewer account:.
+        /// </summary>
+        internal static string Select_Responsible_Description {
+            get {
+                return ResourceManager.GetString("Select_Responsible_Description", resourceCulture);
             }
         }
         
