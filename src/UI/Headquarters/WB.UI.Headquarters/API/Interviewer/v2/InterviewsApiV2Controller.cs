@@ -61,8 +61,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
             {
                 AnswersOnPrefilledQuestions = interviewMetaInfo?.FeaturedQuestionsMeta
                     .Select(prefilledQuestion => new AnsweredQuestionSynchronizationDto(prefilledQuestion.PublicKey, 
-                                                                                        new decimal[0], prefilledQuestion.Value, 
-                                                                                        new CommentSynchronizationDto[0]))
+                        new decimal[0], 
+                        prefilledQuestion.Value, 
+                        new CommentSynchronizationDto[0],
+                        null))
                     .ToArray(),
                 Details = this.synchronizationSerializer.Serialize(interviewDetails)
             });

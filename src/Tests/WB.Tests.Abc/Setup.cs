@@ -19,16 +19,13 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Abc
@@ -53,34 +50,6 @@ namespace WB.Tests.Abc
                 .Returns(Mock.Of<T>());
         }
 
-        public static IReadSideKeyValueStorage<TEntity> ReadSideKeyValueStorageWithSameEntityForAnyGet<TEntity>(TEntity entity) where TEntity : class, IReadSideRepositoryEntity
-            => Mock.Of<IReadSideKeyValueStorage<TEntity>>(_ => _.GetById(It.IsAny<string>()) == entity);
-
-        public static IQueryableReadSideRepositoryReader<TEntity> QueryableReadSideRepositoryReaderByQueryResultType<TEntity, TResult>(IEnumerable<TEntity> entities)
-            where TEntity : class, IReadSideRepositoryEntity
-        {
-            var repositoryReader = Mock.Of<IQueryableReadSideRepositoryReader<TEntity>>();
-
-            Mock.Get(repositoryReader)
-                .Setup(reader => reader.Query(It.IsAny<Func<IQueryable<TEntity>, TResult>>()))
-                .Returns<Func<IQueryable<TEntity>, TResult>>(query => query.Invoke(entities.AsQueryable()));
-
-            return repositoryReader;
-        }
-
-        public static void SelfCloningInterviewExpressionStateStubWithProviderToMockedServiceLocator(
-            Guid questionnaireId, Expression<Func<IInterviewExpressionState, bool>> expressionStateMoqPredicate)
-        {
-            var expressionState = Mock.Of<IInterviewExpressionState>(expressionStateMoqPredicate);
-
-            Mock.Get(expressionState).Setup(_ => _.Clone()).Returns(() => expressionState);
-
-            var interviewExpressionStatePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(_
-                => _.GetExpressionState(questionnaireId, It.IsAny<long>()) == expressionState);
-
-            Setup.InstanceToMockedServiceLocator<IInterviewExpressionStatePrototypeProvider>(interviewExpressionStatePrototypeProvider);
-        }
-
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(Guid questionnaireId, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(questionnaireMoqPredicate);
@@ -103,9 +72,6 @@ namespace WB.Tests.Abc
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
             => Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
-        public static IEventHandler FailingFunctionalEventHandler()
-            => FailingFunctionalEventHandlerHavingUniqueType<object>();
-
         public static IEventHandler FailingFunctionalEventHandlerHavingUniqueType<TUniqueType>()
         {
             var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
@@ -118,11 +84,6 @@ namespace WB.Tests.Abc
             return eventHandlerMock.Object;
         }
 
-        public static IEventHandler FailingOldSchoolEventHandler()
-        {
-            return FailingOldSchoolEventHandlerHavingUniqueType<object>();
-        }
-
         public static IEventHandler FailingOldSchoolEventHandlerHavingUniqueType<TUniqueType>()
         {
             var uniqueEventHandlerMock = new Mock<IEnumerable<TUniqueType>>();
@@ -133,14 +94,6 @@ namespace WB.Tests.Abc
                 .Throws<Exception>();
 
             return eventHandlerMock.Object;
-        }
-
-        public static IStatefulInterviewRepository StatefulInterviewRepositoryWithInterviewsWithAllGroupsEnabledAndExisting()
-        {
-            return Setup.StatefulInterviewRepository(
-                Mock.Of<IStatefulInterview>(_
-                    => _.HasGroup(It.IsAny<Identity>()) == true
-                    && _.IsEnabled(It.IsAny<Identity>()) == true));
         }
 
         public static IStatefulInterviewRepository StatefulInterviewRepository(IStatefulInterview interview)

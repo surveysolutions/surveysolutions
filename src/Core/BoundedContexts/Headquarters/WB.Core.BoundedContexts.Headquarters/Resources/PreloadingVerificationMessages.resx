@@ -232,10 +232,10 @@
   <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>File with questionnaire level data is missing.</value>
   </data>
-    <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
+  <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
     <value>Answered options count to multiple choice question can't be more than max allowed answers count</value>
   </data>
-    <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
+  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
     <value>Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}</value>
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
@@ -250,10 +250,19 @@
   <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
     <value>Text list question {0} has non-unique item codes: {1}. Interview id: {2}</value>
   </data>
-    <data name="HasAssignmentsToImport" xml:space="preserve">
+  <data name="HasAssignmentsToImport" xml:space="preserve">
     <value>Please, wait until previous import of assignments is completed</value>
   </data>
-    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
     <value>Password-protected archives are not supported</value>
+  </data>
+  <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
+    <value>Required column {0} is missing</value>
+  </data>
+  <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
+    <value>Protected variable is not found in provided questionnaire</value>
+  </data>
+  <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
+    <value>Variable has type that does not support protection</value>
   </data>
 </root>

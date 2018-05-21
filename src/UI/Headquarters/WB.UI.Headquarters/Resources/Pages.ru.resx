@@ -1220,4 +1220,8 @@
   </data>
   <data name="UpgradeAssignmentsTitle" xml:space="preserve">
     <value>Обновление заданий</value></data>
+  <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+    <value>Показать действия пользователя</value>
+    <comment>Показать действия пользователя</comment>
+  </data>
 </root>

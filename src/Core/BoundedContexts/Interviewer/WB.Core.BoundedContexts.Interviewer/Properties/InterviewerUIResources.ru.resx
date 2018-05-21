@@ -755,4 +755,8 @@
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Выйти из поиска</value>
   </data>
+    <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Загрузка на хедквотер аудин информации</value>
+    <comment>Загрузка на хедквотер аудин информации</comment>
+  </data>
 </root>
