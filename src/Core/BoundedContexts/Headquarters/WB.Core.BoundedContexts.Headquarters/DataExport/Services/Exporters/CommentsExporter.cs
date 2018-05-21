@@ -78,6 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var doContent = new DoFile();
 
             doContent.BuildInsheet(Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
+            doContent.AppendLine();
 
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
