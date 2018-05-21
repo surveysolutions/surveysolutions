@@ -51,25 +51,53 @@
                 <p>@BatchUpload.EmptySupervisorDescription</p>
             </div>
         </div>
-@if (Model != null && Model.FeaturedQuestions != null)
+@if (Model?.FeaturedQuestions != null || Model.HiddenQuestions.Count > 0 || Model.RosterSizeQuestions.Count > 0)
 {
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info">
-                <a href="#" class="list-required-prefilled-data">@BatchUpload.ViewListPrefilledData</a>
+                <a href="javascript:void(0)" class="list-required-prefilled-data">@BatchUpload.ViewListPreloadedData</a>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info" style="display: none;">
-                <h3>@BatchUpload.PrefilledRequiredData</h3>
+                @if (Model?.FeaturedQuestions.Count > 0)
+                {
+                    <h3>@BatchUpload.PrefilledRequiredData</h3>
+
+                    <ul class="list-unstyled prefilled-data">
+                        @foreach (var item in Model.FeaturedQuestions)
+                        {
+                            <li>@Html.DisplayFor(modelItem => item.Caption)</li>
+                        }
+                    </ul>
+                }
+                @if (Model.HiddenQuestions.Count > 0)
+                {
+                    <h3>
+                        @BatchUpload.HiddenQuestions
+                    </h3>
+                    <ul class="list-unstyled prefilled-data">
+                        @foreach (var item in Model.HiddenQuestions)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                }
+                @if (Model.RosterSizeQuestions.Count > 0)
+                {
+                    <h3>
+                        @BatchUpload.RosterSizeQuestions
+                    </h3>
+                    <ul class="list-unstyled prefilled-data">
+                        @foreach (var item in Model.RosterSizeQuestions)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                }
                 <p>
-                    @BatchUpload.DownloadDescListRequiredPreffiledData
-                    <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadLinkTitleListRequiredPreffiledData</a>
+                    <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">
+                        @BatchUpload.DownloadTabTemplate
+                    </a>
                 </p>
-                <ul class="list-unstyled prefilled-data">
-                    @foreach (var item in Model.FeaturedQuestions)
-                    {
-                        <li>@Html.DisplayFor(modelItem => item.Caption)</li>
-                    }
-                </ul>
-                <a href="#" class="hide-list-of-required-prefilled-data">@BatchUpload.HideListPrefilledData</a>
             </div>
             <script type="text/javascript">
                     $(function() {

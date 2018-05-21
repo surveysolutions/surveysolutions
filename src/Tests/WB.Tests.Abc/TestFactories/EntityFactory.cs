@@ -97,7 +97,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer,
-                comments ?? new CommentSynchronizationDto[0]);
+                comments ?? new CommentSynchronizationDto[0],
+                null);
 
         public AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
             => new AnsweredYesNoOption(value, answer);
@@ -1527,7 +1528,7 @@ namespace WB.Tests.Abc.TestFactories
             => new FeaturedQuestionItem(id ?? Guid.NewGuid(), title,  caption);
 
         public SampleUploadView SampleUploadView(Guid? questionnaireId = null, int? version = null, List<FeaturedQuestionItem> featuredQuestionItems = null) 
-            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems);
+            => new SampleUploadView(questionnaireId ?? Guid.NewGuid(), version ?? 1, featuredQuestionItems, null, null);
 
         public AnswerNotifier AnswerNotifier(LiteEventRegistry liteEventRegistry)
             => new AnswerNotifier(liteEventRegistry);
@@ -1902,11 +1903,16 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
-        public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows) => new PreloadedFile
+        public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
         {
-            FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName),
-            Rows = rows
-        };
+            var columns = rows.SelectMany(x => x.Cells).OfType<PreloadingValue>().Select(x => x.Column).ToArray();
+            return new PreloadedFile
+            {
+                FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName,
+                    columns: columns),
+                Rows = rows
+            };
+        }
 
         public PreloadedFileInfo PreloadedFileInfo(string[] columns = null, string fileName = null, string questionnaireOrRosterName = null) => new PreloadedFileInfo
         {

@@ -1,6 +1,8 @@
-﻿using MvvmCross.Plugins.Messenger;
+﻿using Moq;
+using MvvmCross.Plugins.Messenger;
 using NSubstitute;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -36,7 +38,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
                     .With(Substitute.For<IInterviewerInterviewAccessor>())
                 .Object;
 
-            return new InterviewDashboardItemViewModel(serviceLocator);
+
+            return new InterviewDashboardItemViewModel(serviceLocator, Mock.Of<IAuditLogService>());
         }
     }
 }
