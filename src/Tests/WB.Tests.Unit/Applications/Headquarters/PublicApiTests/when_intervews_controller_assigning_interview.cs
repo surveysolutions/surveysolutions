@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 
         public void BecauseOf() 
         {
-            httpResponseMessage = controller.PostAssign(new AssignChangeApiModel() {Id = interviewId, ResponsibleId = responsibleId});
+            httpResponseMessage = controller.Assign(interviewId, new AssignChangeApiModel {ResponsibleId = responsibleId});
         }
 
         [NUnit.Framework.Test] public void should_return_OK_status_code () =>

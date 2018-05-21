@@ -120,4 +120,97 @@
   <data name="SurveySetup" xml:space="preserve">
     <value>إعداد المسح</value>
   </data>
+  <data name="ApiUsers" xml:space="preserve">
+    <value>مستخدم API</value>
+  </data>
+  <data name="Assignments" xml:space="preserve">
+    <value>مهام</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>انشاء جديد</value>
+  </data>
+  <data name="CumulativeChart" xml:space="preserve">
+    <value>مخطط المقابلة التراكمي</value>
+  </data>
+  <data name="DataExport" xml:space="preserve">
+    <value>تصدير البيانات</value>
+  </data>
+  <data name="DevicesInterviewers" xml:space="preserve">
+    <value>الأجهزة/الباحثين</value>
+  </data>
+  <data name="Headquarters" xml:space="preserve">
+    <value>المقرات الرئيسية</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>مساعدة</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>الباحثين</value>
+  </data>
+  <data name="Interviews" xml:space="preserve">
+    <value>مقابلات</value>
+  </data>
+  <data name="MapReport" xml:space="preserve">
+    <value>تقرير الخريطة</value>
+  </data>
+  <data name="Maps" xml:space="preserve">
+    <value>خرائط</value>
+  </data>
+  <data name="Observers" xml:space="preserve">
+    <value>المراقبين</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>كمية</value>
+  </data>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>الاستبيانات</value>
+  </data>
+  <data name="QueueSizeTitle" xml:space="preserve">
+    <value>عدد المقابلات التي تمت مزامنتها ولكن لم تتم معالجتها بعد</value>
+  </data>
+  <data name="Rejected" xml:space="preserve">
+    <value>مرفوض</value>
+  </data>
+  <data name="Reports" xml:space="preserve">
+    <value>تقارير</value>
+  </data>
+  <data name="Speed" xml:space="preserve">
+    <value>سرعة</value>
+  </data>
+  <data name="Started" xml:space="preserve">
+    <value>بدأت</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>بقاء الحالة</value>
+  </data>
+  <data name="Supervisors" xml:space="preserve">
+    <value>المشرفين</value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>الدراسات الاستقصائية والحالات</value>
+  </data>
+  <data name="TeamAndRoles" xml:space="preserve">
+    <value>الفريق والادوار</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>اعضاء الفريق  والادوار</value>
+  </data>
+  <data name="TeamsAndRoles" xml:space="preserve">
+    <value>المجموعات والادوار</value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>المجموعات والحالات</value>
+  </data>
+  <data name="Troubleshooting" xml:space="preserve">
+    <value>استكشاف الأخطاء وإصلاحها</value>
+  </data>
+  <data name="UserBatchUpload" xml:space="preserve">
+    <value>تحميل دفعة المستخدم</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>المستخدمين</value>
+  </data>
 </root>

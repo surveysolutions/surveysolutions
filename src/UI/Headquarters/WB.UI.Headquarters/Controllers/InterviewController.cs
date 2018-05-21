@@ -94,6 +94,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             ViewBag.SpecificPageCaption = interviewSummary.Key;
             ViewBag.AlwaysScroll = true;
+            ViewBag.ExcludeMarkupSpecific = true;
 
             return View(new InterviewReviewModel(this.GetApproveReject(interviewSummary))
             {

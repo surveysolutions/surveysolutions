@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -124,9 +125,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Answer = doubleQuestion.GetAnswer().Value;
             }
 
+            InitSpecialValues(interviewId, entityIdentity);
+        }
+
+        private void InitSpecialValues(string interviewId, Identity entityIdentity)
+        {
             specialValues.Init(interviewId, entityIdentity, this.questionState);
             this.specialValues.SpecialValueChanged += SpecialValueChanged;
             this.specialValues.SpecialValueRemoved += SpecialValueRemoved;
+
+            if (specialValues.SpecialValues.Any(x => x.Selected))
+            {
+                this.Answer = null;
+            }
         }
 
         private async void SpecialValueChanged(object sender, EventArgs eventArgs)

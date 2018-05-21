@@ -1137,4 +1137,61 @@
   <data name="Users_Supervisors_Instruction2" xml:space="preserve">
     <value>请点击登录名以修改已有的督导员用户资料。</value>
   </data>
+  <data name="InterviewerProfile_Relinked" xml:space="preserve">
+    <value>重新链接</value>
+  </data>
+  <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+    <value>已完成但有错误。请稍后重试。如果问题依旧，请联系支持。</value>
+  </data>
+  <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+    <value>调查员{0}将被转移到督导员{1}的团队。</value>
+  </data>
+  <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+    <value>调查员{0}在督导员{1}的团队中。没有进行任何操作。</value>
+  </data>
+  <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+    <value>将调查员及其任务及问卷一起转移到督导员{0}的团队。</value>
+  </data>
+  <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+    <value>选择要转移到的团队{0}</value>
+  </data>
+  <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+    <value>转移到另外的团队</value>
+  </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>已经转移完成</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>正在转移</value>
+  </data>
+  <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+    <value>{0}和{1}</value>
+  </data>
+  <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+    <value>{0}和{1}更多</value>
+  </data>
+  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+    <value>使原督导员仍负责已转移调查员现有的任务和问卷。</value>
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>文件已上传。正在处理。</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>正在上传</value>
+  </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>上传过程中发生错误</value>
+  </data>
+  <data name="Map_UploadingSuccess" xml:space="preserve">
+    <value>成功上传了地图</value>
+  </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>用户地图</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>用户地图</value>
+  </data>
 </root>

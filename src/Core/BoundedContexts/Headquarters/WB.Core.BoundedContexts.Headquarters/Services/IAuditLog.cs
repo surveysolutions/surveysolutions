@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void AssignmentSizeChanged(int id, int? quantity);
         void ExportEncriptionChanged(bool enabled);
         void UserMovedToAnotherTeam(string interviewerName, string newSupervisorName, string previousSupervisorName);
+        void AssignmentsUpgradeStarted(string title, long fromVersion, long toVersion);
     }
 }

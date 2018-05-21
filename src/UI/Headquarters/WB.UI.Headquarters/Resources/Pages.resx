@@ -393,6 +393,9 @@
   <data name="InterviewerProfile_Info" xml:space="preserve">
     <value>Edit personal info</value>
   </data>
+  <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+    <value>Show audit log</value>
+  </data>
   <data name="InterviewerProfile_Interviewers" xml:space="preserve">
     <value>Interviewers</value>
   </data>
@@ -702,7 +705,7 @@
     <value>Not all points were loaded</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
-    <value>There is no any information about geolocation points.</value>
+    <value>This questionnaire contains no GPS coordinates to show on the map for selected variable.</value>
   </data>
   <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
     <value>No markers were added</value>
@@ -1017,10 +1020,10 @@
     <value>Open</value>
   </data>
   <data name="InterviewerHq_RestartInterview" xml:space="preserve">
-    <value>Restart</value>
+    <value>Reopen</value>
   </data>
   <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
-    <value>Please provide a comment if needed to restart an interview</value>
+    <value>Please provide a comment if needed to reopen an interview</value>
   </data>
   <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
     <value>Are You sure that You want to discard interview data?</value>
@@ -1201,5 +1204,8 @@
   </data>
   <data name="MapList_UserMapsTitle" xml:space="preserve">
     <value>User Maps</value>
+  </data>
+  <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+    <value>Upgrade assignments</value>
   </data>
 </root>

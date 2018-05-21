@@ -10,6 +10,7 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 
         T Deserialize<T>(byte[] payload);
         T Deserialize<T>(string payload);
+        T Deserialize<T>(string payload, Type payloadType);
         object DeserializeFromStream(Stream stream, Type type);
     }
 }

@@ -44,9 +44,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         private readonly QuestionnaireDocument innerDocument;
 
+        private IReadOnlyCollection<Guid> allRosterSizeQuestionsCache;
         private Dictionary<Guid, IVariable> variablesCache = null;
         private Dictionary<Guid, IStaticText> staticTextsCache = null;
         private Dictionary<Guid, IQuestion> questionsCache = null;
+        private Dictionary<string, IQuestion> questionsByVariableCache = null;
         private Dictionary<Guid, IGroup> groupsCache = null;
         private Dictionary<Guid, IComposite> entitiesCache = null;
         private ReadOnlyCollection<Guid> sectionsCache = null;
@@ -65,6 +67,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private readonly ConcurrentDictionary<Guid, IEnumerable<Guid>> cacheOfRostersAffectedByRosterTitleQuestion = new ConcurrentDictionary<Guid, IEnumerable<Guid>>();
 
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
+        private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildVariables = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildEntities = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfChildInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
         private readonly ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>> cacheOfUnderlyingInterviewerQuestions = new ConcurrentDictionary<Guid, ReadOnlyCollection<Guid>>();
@@ -148,6 +151,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                             question => question));
             }
         }
+
+        private Dictionary<string, IQuestion> QuestionsByVariableCache
+            => this.questionsByVariableCache ?? (this.questionsByVariableCache
+                   = this.innerDocument.Find<IQuestion>(_ => true)
+                       .ToDictionary(question => question.VariableName.ToLower(), question => question));
 
         private Dictionary<Guid, IGroup> GroupCache
         {
@@ -278,6 +286,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
                 case QuestionType.Multimedia:
                     return AnswerType.FileName;
+                case QuestionType.Area:
+                    return AnswerType.String;
+                case QuestionType.Audio:
+                    return AnswerType.FileName;
             }
 
             throw new ArgumentException($"Question of unknown type was found. Question id: {questionId}");
@@ -305,7 +317,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public Guid? GetQuestionIdByVariable(string variable)
         {
-            return this.QuestionCache.Values.FirstOrDefault(x => x.StataExportCaption == variable)?.PublicKey;
+            variable = variable.ToLower();
+
+            return this.QuestionsByVariableCache.ContainsKey(variable)
+                ? this.QuestionsByVariableCache[variable].PublicKey
+                : (Guid?) null;
         }
 
         public Guid GetVariableIdByVariableName(string variableName)
@@ -498,6 +514,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Select(question => question.PublicKey)
                 .ToReadOnlyCollection();
 
+        public ReadOnlyCollection<Guid> GetHiddenQuestions()
+            => this
+                .QuestionnaireDocument
+                .Find<IQuestion>(question => question.QuestionScope == QuestionScope.Hidden)
+                .Select(question => question.PublicKey)
+                .ToReadOnlyCollection();
+        
+
         public IEnumerable<Guid> GetAllParentGroupsForQuestion(Guid questionId) => this.GetAllParentGroupsForQuestionStartingFromBottom(questionId);
 
         public ReadOnlyCollection<Guid> GetParentsStartingFromTop(Guid entityId)
@@ -626,11 +650,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .ToList();
         }
 
-        private readonly ConcurrentDictionary<Guid, Guid[]> _getRosterSizeSourcesCache = new ConcurrentDictionary<Guid, Guid[]>();
+        public IReadOnlyCollection<Guid> GetAllRosterSizeQuestions()
+            => this.allRosterSizeQuestionsCache ?? (this.allRosterSizeQuestionsCache = this.innerDocument
+                   .Find<IQuestion>(x => this.IsRosterSizeQuestion(x.PublicKey)).Select(x => x.PublicKey)
+                   .ToReadOnlyCollection());
 
+        private readonly ConcurrentDictionary<Guid, Guid[]> getRosterSizeSourcesCache = new ConcurrentDictionary<Guid, Guid[]>();
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            return _getRosterSizeSourcesCache.GetOrAdd(entityId, id =>
+            return getRosterSizeSourcesCache.GetOrAdd(entityId, id =>
             {
                 var entity = GetEntityOrThrow(entityId);
                 var rosterSizes = new List<Guid>();
@@ -737,6 +765,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             }
 
             return this.cacheOfChildQuestions[groupId];
+        }
+
+        private ReadOnlyCollection<Guid> GetChildVariables(Guid groupId)
+        {
+            if (!this.cacheOfChildVariables.ContainsKey(groupId))
+            {
+                this.cacheOfChildVariables[groupId] = new ReadOnlyCollection<Guid>(
+                    this.GetGroupOrThrow(groupId)
+                        .Children.OfType<IVariable>()
+                        .Select(variable => variable.PublicKey)
+                        .ToList());
+            }
+
+            return this.cacheOfChildVariables[groupId];
         }
 
         public IReadOnlyCollection<Guid> GetChildEntityIds(Guid groupId)
@@ -1008,10 +1050,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.QuestionVariableNamesCache.Contains(variableName);
         }
 
-        public bool HasRoster(string variableName)
-        {
-            return this.RosterVariableNamesCache.Contains(variableName);
-        }
+        public bool HasRoster(string variableName) => this.RosterVariableNamesCache.Contains(variableName?.ToLower());
 
         public bool IsTimestampQuestion(Guid questionId) => (this.GetQuestion(questionId) as DateTimeQuestion)?.IsTimestamp ?? false;
         public bool IsSupportFilteringForOptions(Guid questionId)
@@ -1024,6 +1063,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             var @group = this.GetGroup(id);
             return @group != null && @group.RosterSizeSource == RosterSizeSourceType.FixedTitles;
         }
+
+        public decimal[] GetFixedRosterCodes(Guid rosterId) =>
+            this.GetGroup(rosterId)?.FixedRosterTitles?.Select(x => x.Value)?.ToArray() ?? Array.Empty<decimal>();
 
         public bool IsNumericRoster(Guid id)
         {
@@ -1293,10 +1335,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.AllVariables.Select(x => x.Name).ToHashSet();
         }
 
-        private HashSet<string> GetRosterNamesCache()
-        {
-            return this.AllGroups.Where(x => x.IsRoster).Select(x => x.VariableName).ToHashSet();
-        }
+        private HashSet<string> GetRosterNamesCache() =>
+            this.AllGroups.Where(x => x.IsRoster).Select(x => x.VariableName.ToLower()).ToHashSet();
 
         private Dictionary<string, HashSet<Guid>> GetSubstitutionReferencedEntities(IEnumerable<IComposite> entities)
         {
@@ -1445,7 +1485,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                 .Find<IQuestion>(_ => true)
                 .Select(question => question.PublicKey)
                 .ToList();
-
+        
         private IEnumerable<Guid> GetAllUnderlyingGroupsAndRostersImpl(Guid groupId)
             => this
                 .GetGroupOrThrow(groupId)
@@ -1598,7 +1638,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IQuestion question = GetQuestion(questions, questionId);
 
             if (question == null)
-                throw new QuestionnaireException($"Question with id '{questionId}' is not found.");
+                throw new QuestionnaireException("Question is not found.")
+                {
+                    Data = {{"QuestionId", questionId}}
+                };
 
             return question;
         }
@@ -1608,7 +1651,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             IComposite entity = GetEntity(entities, entityId);
 
             if (entity == null)
-                throw new QuestionnaireException($"Entity with id '{entityId}' is not found.");
+                throw new QuestionnaireException($"Entity is not found.")
+                {
+                    Data = {{"entityId", entityId}}
+                };
 
             return entity;
         }
@@ -1680,6 +1726,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var options = this.GetOptionsForQuestion(cascadingQuestionId, selectedParentValue, string.Empty);
             return options.Any();
+        }
+
+        public IEnumerable<Guid> GetAllUnderlyingQuestionsOutsideRosters(Guid? groupId)
+        {
+            var groupOrQuestionnaireId = groupId ?? this.QuestionnaireId;
+            foreach (var questionId in this.GetChildQuestions(groupOrQuestionnaireId))
+                yield return questionId;
+
+            foreach (var subGroupId in this.GetAllUnderlyingChildGroups(groupOrQuestionnaireId))
+            foreach (var questionId in this.GetAllUnderlyingQuestionsOutsideRosters(subGroupId))
+                yield return questionId;
+        }
+
+        public IEnumerable<Guid> GetAllUnderlyingVariablesOutsideRosters(Guid? groupId)
+        {
+            var groupOrQuestionnaireId = groupId ?? this.QuestionnaireId;
+
+            foreach (var variableId in this.GetChildVariables(groupOrQuestionnaireId))
+                yield return variableId;
+
+            foreach (var subGroupId in this.GetAllUnderlyingChildGroups(groupOrQuestionnaireId))
+            foreach (var variableId in this.GetAllUnderlyingVariablesOutsideRosters(subGroupId))
+                yield return variableId;
         }
     }
 }
