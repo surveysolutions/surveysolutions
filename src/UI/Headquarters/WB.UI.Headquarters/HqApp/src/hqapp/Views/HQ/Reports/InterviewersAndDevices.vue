@@ -1,6 +1,6 @@
 <template>
     <HqLayout :title="$t('Pages.InterviewersAndDevicesTitle')">
-        <DataTables ref="table" :tableOptions="tableOptions" exportable></DataTables>
+        <DataTables ref="table" :tableOptions="tableOptions" exportable hasTotalRow></DataTables>
     </HqLayout>
 </template>
 
@@ -145,15 +145,9 @@ export default {
                 },
                 responsive: false,
                 order: [[0, 'asc']],
-                sDom: 'rf<"table-with-scroll"t>ip',
-                createdRow: function(row, data, dataIndex){
-                    if (dataIndex === 0){
-                          $(row).addClass('total-row');
-                    }
-                }
+                sDom: 'rf<"table-with-scroll"t>ip'
             }
         }
-    },
-
+    }
 }
 </script>
