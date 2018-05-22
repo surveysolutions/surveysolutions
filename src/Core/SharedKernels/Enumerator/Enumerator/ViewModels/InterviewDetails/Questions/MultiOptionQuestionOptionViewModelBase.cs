@@ -71,7 +71,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             get
             {
-                return new MvxAsyncCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this), () => CanBeChecked);
+                return new MvxAsyncCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this), () => CanBeChecked && !IsProtected);
             }
         }
     }
