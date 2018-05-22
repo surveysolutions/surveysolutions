@@ -103,8 +103,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                     case InterviewQuestionType.Text:
                         {
-                            InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
-                            result = this.autoMapper.Map<InterviewTextQuestion>(textQuestion);
+                            result = this.autoMapper.Map<InterviewTextQuestion>(question);
                             var textQuestionMask = questionnaire.GetTextQuestionMask(identity.Id);
                             if (!string.IsNullOrEmpty(textQuestionMask))
                             {
@@ -114,8 +113,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         break;
                     case InterviewQuestionType.Integer:
                         {
-                            InterviewTreeQuestion integerQuestion = callerInterview.GetQuestion(identity);
-                            var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(integerQuestion);
+                            var interviewIntegerQuestion = this.autoMapper.Map<InterviewIntegerQuestion>(question);
                             var callerQuestionnaire = questionnaire;
 
                             interviewIntegerQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
@@ -128,13 +126,22 @@ namespace WB.Enumerator.Native.WebInterview.Services
                                 interviewIntegerQuestion.AnswerMaxValue = isRosterSizeOfLongRoster ? Constants.MaxLongRosterRowCount : Constants.MaxRosterRowCount;
                             }
                             interviewIntegerQuestion.Options = callerInterview.GetTopFilteredOptionsForQuestion(identity, null, null, 200);
+
+                            if (interviewIntegerQuestion.Answer.HasValue)
+                            {
+                                var hasProtectedAnswer = question.HasProtectedAnswer();
+                                interviewIntegerQuestion.IsProtected = hasProtectedAnswer;
+
+                                if (hasProtectedAnswer)
+                                    interviewIntegerQuestion.ProtectedAnswer = question.GetAsInterviewTreeIntegerQuestion().ProtectedAnswer.Value;
+                            }
+
                             result = interviewIntegerQuestion;
                         }
                         break;
                     case InterviewQuestionType.Double:
                         {
-                            InterviewTreeQuestion textQuestion = callerInterview.GetQuestion(identity);
-                            var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(textQuestion);
+                            var interviewDoubleQuestion = this.autoMapper.Map<InterviewDoubleQuestion>(question);
                             var callerQuestionnaire = questionnaire;
                             interviewDoubleQuestion.CountOfDecimalPlaces = callerQuestionnaire.GetCountOfDecimalPlacesAllowedByQuestion(identity.Id);
                             interviewDoubleQuestion.UseFormatting = callerQuestionnaire.ShouldUseFormatting(identity.Id);
@@ -153,6 +160,9 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             typedResult.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             typedResult.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
+                            typedResult.ProtectedAnswer = typedResult.Answer
+                                .Where(i => question.IsAnswerProtected(i))
+                                .ToArray();
                         }
                         break;
                     case InterviewQuestionType.MultiLinkedOption:
@@ -182,6 +192,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             var callerQuestionnaire = questionnaire;
                             typedResult.MaxAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id) ?? 200;
                             typedResult.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
+                            foreach (var textListAnswerRowDto in typedResult.Rows)
+                            {
+                                textListAnswerRowDto.IsProtected = question.IsAnswerProtected(textListAnswerRowDto.Value);
+                            }
                         }
                         break;
                     case InterviewQuestionType.YesNo:
@@ -193,6 +207,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                             interviewYesNoQuestion.Ordered = callerQuestionnaire.ShouldQuestionRecordAnswersOrder(identity.Id);
                             interviewYesNoQuestion.MaxSelectedAnswersCount = callerQuestionnaire.GetMaxSelectedAnswerOptions(identity.Id);
                             interviewYesNoQuestion.IsRosterSize = callerQuestionnaire.IsRosterSizeQuestion(identity.Id);
+                            foreach (var answerRowDto in interviewYesNoQuestion.Answer)
+                            {
+                                answerRowDto.IsProtected = question.IsAnswerProtected(answerRowDto.Value);
+                            }
 
                             result = interviewYesNoQuestion;
                         }
@@ -211,19 +229,16 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         result = this.Map<InterviewMultimediaQuestion>(question);
                         break;
                     case InterviewQuestionType.QRBarcode:
-                        InterviewTreeQuestion barcodeQuestion = callerInterview.GetQuestion(identity);
-                        result = this.autoMapper.Map<InterviewBarcodeQuestion>(barcodeQuestion);
+                        result = this.autoMapper.Map<InterviewBarcodeQuestion>(question);
                         break;
                     case InterviewQuestionType.Audio:
-                        InterviewTreeQuestion audioQuestion = callerInterview.GetQuestion(identity);
-                        result = this.autoMapper.Map<InterviewAudioQuestion>(audioQuestion);
+                        result = this.autoMapper.Map<InterviewAudioQuestion>(question);
                         break;
                     default:
                         result = this.Map<StubEntity>(question);
                         break;
                     case InterviewQuestionType.Area:
-                        InterviewTreeQuestion areaQuestion = callerInterview.GetQuestion(identity);
-                        result = this.Map<InterviewAreaQuestion>(areaQuestion);
+                        result = this.Map<InterviewAreaQuestion>(question);
                         break;
                 }
 

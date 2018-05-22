@@ -4,7 +4,8 @@
     {
         public Area(){}
 
-        public Area(string geometry, string mapName, double? areaSize, double? length, string coordinates, double? distanceToEditor)
+        public Area(string geometry, string mapName, int? numberOfPoints, double? areaSize, 
+            double? length, string coordinates, double? distanceToEditor)
         {
             this.Geometry = geometry;
             this.MapName = mapName;
@@ -12,6 +13,7 @@
             this.Length = length;
             this.DistanceToEditor = distanceToEditor;
             this.Coordinates = coordinates;
+            this.NumberOfPoints = numberOfPoints;
         }
 
         public string Geometry { set; get; }
@@ -22,6 +24,7 @@
 
         public double? DistanceToEditor { set; get; }
 
+        public int? NumberOfPoints { set; get; }
 
         public override string ToString()
         {

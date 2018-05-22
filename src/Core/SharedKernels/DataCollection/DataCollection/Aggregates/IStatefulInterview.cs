@@ -197,5 +197,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int? GetAssignmentId();
         bool IsParentOf(Identity parentIdentity, Identity childIdentity);
 
+        bool IsAnswerProtected(Identity questionIdentity, decimal value);
     }
 }

@@ -3,12 +3,13 @@
         <button class="section-blocker" disabled="disabled" v-if="$me.fetching"></button>
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
-                <div class="form-group" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
-                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" :disabled="!$me.acceptAnswer" v-model="answer" v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer}">
+                <div class="form-group" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value"  v-bind:class="{ 'unavailable-option locked-option': isProtected(option.value) }">
+                    <input class="wb-checkbox" type="checkbox" :id="$me.id + '_' + option.value" :name="$me.id" :value="option.value" :disabled="!$me.acceptAnswer" v-model="answer" v-disabledWhenUnchecked="{maxAnswerReached: allAnswersGiven, answerNotAllowed: !$me.acceptAnswer, forceDisabled: isProtected(option.value) }">
                     <label :for="$me.id + '_' + option.value">
                         <span class="tick"></span> {{option.title}}
                     </label>
                     <div class="badge" v-if="$me.ordered">{{ getAnswerOrder(option.value) }}</div>
+                    <div class="lock"></div>
                 </div>
                 <button type="button" class="btn btn-link btn-horizontal-hamburger" @click="toggleOptions" v-if="shouldShowAnsweredOptionsOnly && !showAllOptions">
                     <span></span>
@@ -63,6 +64,12 @@
         methods: {
             toggleOptions(){
                 this.showAllOptions = !this.showAllOptions;
+            },
+            isProtected(answerValue) {
+                if (!this.$me.protectedAnswer) return false;
+                
+                var answerIndex = this.$me.protectedAnswer.indexOf(answerValue)
+                return answerIndex > -1;
             },
             getAnswerOrder(answerValue) {
                 var answerIndex = this.$me.answer.indexOf(answerValue)

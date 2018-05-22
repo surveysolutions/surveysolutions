@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
 
             // Act
             interview.CreateInterview(
-                Create.Command.CreateInterview(answersToIdentifyingQuestions: answers));
+                Create.Command.CreateInterview(answers: answers));
 
             // Assert
             Assert.That(interview.GetTextQuestion(identity).GetAnswer().Value, Is.EqualTo(textQuestionAnswer));
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
 
             // Act
             interview.CreateInterview(
-                Create.Command.CreateInterview(answersToIdentifyingQuestions: answers));
+                Create.Command.CreateInterview(answers: answers));
 
             // Assert
             Assert.That(interview.GetTextQuestion(identity).GetAnswer().Value, Is.EqualTo(textQuestionAnswer));

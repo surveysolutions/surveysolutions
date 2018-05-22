@@ -34,6 +34,7 @@
         SurveyAndStatuses = 30,
         AuditLog = 31,
         Maps = 32,
-        TeamMembersAndStatuses = 33
+        TeamMembersAndStatuses = 33,
+        SurveyStatistics = 34
     }
 }

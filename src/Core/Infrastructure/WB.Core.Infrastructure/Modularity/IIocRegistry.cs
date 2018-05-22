@@ -27,7 +27,6 @@ namespace WB.Core.Infrastructure.Modularity
         void BindGeneric(Type implementation);
         void Unbind<T>();
         bool HasBinding<T>();
-        void BindToSelfInSingletonScopeWithConstructorArgument(Type[] types, string argumentName, Func<IModuleContext, object> argumentValue);
         void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>();
     }
 }

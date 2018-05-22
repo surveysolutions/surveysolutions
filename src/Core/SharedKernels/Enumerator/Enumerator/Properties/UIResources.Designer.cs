@@ -151,6 +151,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your location is out of boundaries of the map.
+        /// </summary>
+        public static string AreaMap_LocationOutOfBoundaries {
+            get {
+                return ResourceManager.GetString("AreaMap_LocationOutOfBoundaries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map.
         /// </summary>
         public static string AreaMap_MapTitle {
@@ -959,6 +968,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Questions_Gps_SaveAnswer {
             get {
                 return ResourceManager.GetString("Interview_Questions_Gps_SaveAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New answer to a protected question should be greater or equal to {0}.
+        /// </summary>
+        public static string Interview_Questions_Integer_ProtectedValue {
+            get {
+                return ResourceManager.GetString("Interview_Questions_Integer_ProtectedValue", resourceCulture);
             }
         }
         

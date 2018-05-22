@@ -91,6 +91,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? AnswerCheckedOrder { get; set; }
 
+        public bool IsProtected { get; set; }
+
         public bool YesCanBeChecked
         {
             get => yesCanBeChecked;

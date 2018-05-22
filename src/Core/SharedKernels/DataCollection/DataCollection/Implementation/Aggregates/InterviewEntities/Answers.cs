@@ -216,7 +216,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<TextListAnswerRow> Rows { get; set; }
+        public IReadOnlyList<TextListAnswerRow> Rows { get; set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
@@ -350,6 +350,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
         public override string ToString() => Value.ToString();
+
+        public Georgaphy ToGeorgaphy()
+        {
+            return new Georgaphy
+            {
+                Area = Value.AreaSize ?? 0,
+                Length = Value.Length ?? 0,
+                PointsCount = Value.NumberOfPoints ?? 0
+            };
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]

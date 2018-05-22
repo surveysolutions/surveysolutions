@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.Controllers
     [Authorize(Roles = "Administrator, Headquarter")]
     public class MapsApiController : BaseApiController
     {
-        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk" };
+        private readonly string[] permittedMapFileExtensions = { ".tpk", ".mmpk", ".tif" };
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IMapBrowseViewFactory mapBrowseViewFactory;
@@ -342,7 +342,7 @@ namespace WB.UI.Headquarters.Controllers
 
             var reportView = mapStorageService.GetAllMapUsersReportView();
             
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(reportView.Headers, reportView.Data));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(reportView));
 
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 

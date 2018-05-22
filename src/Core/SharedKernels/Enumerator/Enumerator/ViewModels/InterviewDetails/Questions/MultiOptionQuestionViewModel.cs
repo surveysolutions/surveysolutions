@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             UpateMaxAnswersCountMessage(answerOnMultiOptionQuestion?.Length ?? 0);
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
-                .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion))
+                .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion, interview))
                 .ToList();
 
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -162,7 +162,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool HasOptions => true;
 
-        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, int[] multiOptionAnswer)
+        private MultiOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, int[] multiOptionAnswer,
+            IStatefulInterview interview)
         {
             var answer = multiOptionAnswer ?? new int[] {};
             var result = new MultiOptionQuestionOptionViewModel(this)
@@ -175,7 +176,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             result.CheckedOrder = this.areAnswersOrdered && indexOfAnswer >= 0 ? indexOfAnswer + 1 : (int?)null;
             result.QuestionState = this.questionState;
-            result.CanBeChecked = result.Checked || answer.Length < this.maxAllowedAnswers;
+            result.IsProtected = interview.IsAnswerProtected(this.questionIdentity, result.Value);
+            result.CanBeChecked = result.Checked || !this.maxAllowedAnswers.HasValue || answer.Length < this.maxAllowedAnswers;
 
             return result;
         }

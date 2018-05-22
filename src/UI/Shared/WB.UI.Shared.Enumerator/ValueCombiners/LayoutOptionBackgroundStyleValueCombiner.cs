@@ -16,10 +16,19 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             if (!canBeChecked)
                 return QuestionStateStyle.MaxAnswersCountReached;
 
-            if (isProtected)
-                return QuestionStateStyle.AnsweredProtected;
+            var state = base.GetValue(values);
 
-            return base.GetValue(values);
+            if (state == QuestionStateStyle.InvalidEnabled || state == QuestionStateStyle.InvalidDisabled)
+            {
+                return state;
+            }
+
+            if (isProtected)
+            {
+                return QuestionStateStyle.AnsweredProtected;
+            }
+
+            return state;
         }
     }
 }

@@ -82,17 +82,39 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
         };
 
-        public PreloadedFile ReadTextFile(Stream inputStream, string fileName) => new PreloadedFile
+        public PreloadedFile ReadTextFile(Stream inputStream, string fileName)
         {
-            FileInfo = new PreloadedFileInfo
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+            return new PreloadedFile
             {
-                FileName = fileName,
-                QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
-                Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
-            },
-            Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                .Select((record, rowIndex) => (PreloadingRow)this.ToRow(rowIndex + 1, record)).ToArray()
-        };
+                FileInfo = new PreloadedFileInfo
+                {
+                    FileName = fileName,
+                    QuestionnaireOrRosterName = fileNameWithoutExtension,
+                    Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+                },
+                Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
+                    .Select((record, rowIndex) =>
+                        fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase)
+                            ? (PreloadingRow) this.ToProtectedVariablesRow(rowIndex + 1, record)
+                            : (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
+            };
+        }
+
+        private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record)
+        {
+            return new PreloadingRow
+            {
+                Cells = record.Where(x => x.Key.Equals(ServiceColumns.ProtectedVariableNameColumn, StringComparison.OrdinalIgnoreCase))
+                    .Select(x => new PreloadingValue
+                    {
+                        VariableOrCodeOrPropertyName = x.Key.ToLower(),
+                        Column = x.Key,
+                        Row = rowIndex,
+                        Value = (string) x.Value
+                    }).ToArray()
+            };
+        }
 
         public IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream)
         {
@@ -133,9 +155,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             foreach (var file in this.archiveUtils.GetFilesFromArchive(inputStream))
             {
                 var allowedExtension = permittedFileExtensions.Contains(Path.GetExtension(file.Name));
-                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(Path.GetFileNameWithoutExtension(file.Name));
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.Name);
+                var isSystemFile = ServiceFiles.AllSystemFiles.Contains(fileNameWithoutExtension);
 
-                if (allowedExtension && !isSystemFile)
+                if (allowedExtension && !isSystemFile && !fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables))
                     yield return this.ReadTextFileInfo(new MemoryStream(file.Bytes), file.Name);
             }
         }

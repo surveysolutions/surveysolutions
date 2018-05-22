@@ -378,4 +378,30 @@
   <data name="Yes" xml:space="preserve">
     <value>是</value>
   </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>注意！这份问卷有损坏的数据，&lt;br /&gt;
+只有早期的问卷版本可用。&lt;br /&gt;
+联系支持获取帮助。</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>错误：问卷已损坏</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>正在加载问卷模板。请稍等…</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>重新加载问卷模板</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>在地图上显示</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>会话已结束</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>请关闭页面。您可以回到问卷设计网站打开新页面。</value>
+  </data>
 </root>

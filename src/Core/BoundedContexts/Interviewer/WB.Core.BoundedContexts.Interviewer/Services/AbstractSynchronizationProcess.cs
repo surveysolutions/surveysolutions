@@ -12,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -29,6 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IAuditLogService auditLogService;
 
         protected bool remoteLoginRequired;
         protected bool shouldUpdatePasswordOfInterviewer;
@@ -46,7 +48,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerPrincipal principal,
             IPasswordHasher passwordHasher, 
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
-            IPlainStorage<InterviewView> interviewViewRepository)
+            IPlainStorage<InterviewView> interviewViewRepository,
+            IAuditLogService auditLogService)
         {
             this.logger = logger;
             this.synchronizationService = synchronizationService;
@@ -56,6 +59,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
+            this.auditLogService = auditLogService;
         }
 
 
@@ -195,6 +199,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             var statistics = new SynchronizationStatistics();
             try
             {
+                auditLogService.Write(new SynchronizationStartedAuditLogEntity());
+
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
 
@@ -302,12 +308,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     Statistics = statistics
                 });
 
+                auditLogService.Write(new SynchronizationCanceledAuditLogEntity());
+
                 return;
             }
             catch (SynchronizationException ex)
             {
                 var errorTitle = InterviewerUIResources.Synchronization_Fail_Title;
                 var errorDescription = ex.Message;
+
+                auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
 
                 switch (ex.Type)
                 {
@@ -365,6 +375,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 });
 
                 await this.TrySendUnexpectedExceptionToServerAsync(ex, cancellationToken);
+
+                auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+
                 this.logger.Error("Synchronization. Unexpected exception", ex);
             }
 
