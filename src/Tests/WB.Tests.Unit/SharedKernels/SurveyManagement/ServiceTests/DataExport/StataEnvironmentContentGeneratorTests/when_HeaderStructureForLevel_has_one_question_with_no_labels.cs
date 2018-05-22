@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     default(CancellationToken));//stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath);
 
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName));
+            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName));
 
         [NUnit.Framework.Test] public void should_contain_stata_variable_on_title_mapping () =>
            stataGeneratedContent.Should().Contain(string.Format("label variable {0} `\"{1}\"'",questionsVariableName,questionsTitle));

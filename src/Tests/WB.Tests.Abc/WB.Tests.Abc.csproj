@@ -43,6 +43,7 @@
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
+    <PackageReference Include="NUnit.framework" Version="2.63.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />
     <PackageReference Include="ReflectionMagic" Version="3.1.0" />
     <PackageReference Include="Remotion.Linq" Version="2.1.2" />
@@ -57,5 +58,4 @@
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
   </ItemGroup>
-  <ItemGroup />
 </Project>

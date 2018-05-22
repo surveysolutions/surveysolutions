@@ -1,7 +1,11 @@
 using System;
 using MvvmCross.Plugin.Messenger;
+using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -14,7 +18,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class InterviewerCompleteInterviewViewModel : CompleteInterviewViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-           
+        private readonly IAuditLogService auditLogService;
+
         public InterviewerCompleteInterviewViewModel(
             IViewModelNavigationService viewModelNavigationService, 
             ICommandService commandService,
@@ -23,11 +28,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IStatefulInterviewRepository interviewRepository,
             InterviewStateViewModel interviewState,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
+            DynamicTextViewModel dynamicTextViewModel,
             ILastCompletionComments lastCompletionComments,
-            DynamicTextViewModel dynamicTextViewModel)
+            IAuditLogService auditLogService)
             : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel)
         {
             this.interviewRepository = interviewRepository;
+            this.auditLogService = auditLogService;
         }
 
         public override void Configure(string interviewId, NavigationState navigationState)
@@ -47,6 +54,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.CompleteComment = statefulInterview.InterviewerCompleteComment;
             }
+        }
+
+        protected override Task CloseInterviewAfterComplete()
+        {
+            var statefulInterview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            auditLogService.Write(new CompleteInterviewAuditLogEntity(this.interviewId, statefulInterview.GetInterviewKey().ToString()));
+            return base.CloseInterviewAfterComplete();
         }
     }
 }

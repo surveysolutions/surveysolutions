@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
@@ -42,11 +38,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private void CreateContentOfAdditionalFile(QuestionnaireLevelLabels questionnaireLevelLabels, string dataFileName, string basePath)
         {
-            var doContent = new StringBuilder();
-            
-            BuildInsheet(dataFileName, doContent);
+            var doContent = new DoFile();
 
-            this.BuildLabelsForLevel(questionnaireLevelLabels, doContent);
+            doContent.BuildInsheet(dataFileName);
+
+            this.BuildLabelsForLevel(doContent, questionnaireLevelLabels);
 
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath,
                 this.GetEnvironmentContentFileName(questionnaireLevelLabels.LevelName));
@@ -56,17 +52,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private string GetEnvironmentContentFileName(string levelName)
         {
-            return $"{levelName}.{this.ContentFileNameExtension}";
+            return $"{levelName}.{DoFile.ContentFileNameExtension}";
         }
 
-        private string ContentFileNameExtension => "do";
-
-        private static void BuildInsheet(string fileName, StringBuilder doContent)
-        {
-            doContent.AppendLine($"insheet using \"{fileName}\", tab case");
-        }
-
-        protected void BuildLabelsForLevel(QuestionnaireLevelLabels questionnaireLevelLabels, StringBuilder doContent)
+        protected void BuildLabelsForLevel(DoFile doContent, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
             foreach (var variableLabel in questionnaireLevelLabels.LabeledVariable)
             {
@@ -75,60 +64,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 {
                     string labelName = this.CreateLabelName(variableLabel.VariableName);
 
-                    this.AppendLabel(doContent, labelName, variableLabel.VariableValueLabels);
-               
-                    this.AppendLabelToValuesMatching(doContent, variableLabel.VariableName, labelName);
+                    doContent.AppendLabel(labelName, variableLabel.VariableValueLabels);
+
+                    doContent.AppendLabelToValuesMatching(variableLabel.VariableName, labelName);
                 }
 
-                doContent.AppendLine($"label variable {variableLabel.VariableName} `\"{this.RemoveNotAllowedChars(variableLabel.Label)}\"'");
+                doContent.AppendLabelToVariableMatching(variableLabel.VariableName, variableLabel.Label);
             }
-        }
-
-        private void AppendLabelToValuesMatching(StringBuilder doContent,string columnName, string labelName)
-        {
-            doContent.AppendLine($"label values {columnName} {labelName}");
-        }
-
-        private void AppendLabel(StringBuilder doContent, string labelName, IEnumerable<VariableValueLabel> labels)
-        {
-            //stata allows only int values less 2,147,483,620 to be labeled
-            //stata doesn't allow to declare empty dictionaries
-            int limitValue = 2147483620;
-            var localBuilder = new StringBuilder();
-            bool hasValidValue = false;
-
-            foreach (var label in labels)
-            {
-                decimal value;
-                if (decimal.TryParse(label.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value) && value < limitValue && (value % 1) == 0)
-                {
-                    localBuilder.Append($"{label.Value } `\"{this.RemoveNotAllowedChars(label.Label)}\"' ");
-                    hasValidValue = true;
-                }
-                else
-                    localBuilder.Append($"/*{label.Value} `\"{this.RemoveNotAllowedChars(label.Label)}\"'*/ ");
-            }
-
-            doContent.AppendFormat(hasValidValue ? "label define {0} " : "/*label define {0}*/ ", labelName);
-
-            doContent.Append(localBuilder);
-
-            doContent.AppendLine();
         }
 
         protected string CreateLabelName(string columnName)
         {
             return columnName;
-        }
-
-        private string RemoveNotAllowedChars(string s)
-        {
-            if (string.IsNullOrEmpty(s))
-                return string.Empty;
-
-            //var onlyUnicode = Regex.Replace(s, @"[^\u0020-\u007E]", string.Empty);
-
-            return Regex.Replace(s, @"\t|\n|\r|`|'", string.Empty);
         }
     }
 }

@@ -6,9 +6,8 @@
 @functions{
     public string TokenHeaderValue()
     {
-        string cookieToken, formToken;
-        AntiForgery.GetTokens(null, out cookieToken, out formToken);
-        return cookieToken + ":" + formToken;
+        AntiForgery.GetTokens(null, out var cookieToken, out var formToken);
+        return cookieToken + @":" + formToken;
     }
 }
 
@@ -40,7 +39,7 @@
                         lengthUrl: '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ControlPanelApi", action = "GetIncomingPackagesQueueLength"})'
                     },
                     basePath: '@Url.Content("~/")',
-					dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
+                    dataTableTranslationsUrl: '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "DataTableTranslations" })'
                 },
                 clientDateTimeFormat: '@Extensions.ClientDateTimeFormat'
             }
@@ -63,7 +62,7 @@
         supportedTransports: ["webSockets", "longPolling"]
     }
 
-    if (moment) {
+    if (typeof moment !== 'undefined') {
         moment.locale('@UICulture');
     }
 </script>

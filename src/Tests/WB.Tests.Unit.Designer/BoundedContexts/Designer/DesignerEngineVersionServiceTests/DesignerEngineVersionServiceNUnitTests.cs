@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionServiceTests
 {
-    [TestFixture]
+    /*[TestFixture]
     internal class DesignerEngineVersionServiceNUnitTests
     {
         private DesignerEngineVersionService CreateDesignerEngineVersionService()
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
         public void GetListOfNewFeaturesForClient_When_client_version_is_greater_then_10_Then_should_be_empty()
         {
 
-            var designerEngineVersionService =this.CreateDesignerEngineVersionService();
+            var designerEngineVersionService = this.CreateDesignerEngineVersionService();
 
             var result = designerEngineVersionService.GetListOfNewFeaturesForClient(Create.QuestionnaireDocument(), 11);
 
@@ -131,5 +131,5 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DesignerEngineVersionS
 
             Assert.That(contentVersion, Is.EqualTo(22));
         }
-    }
+    }*/
 }

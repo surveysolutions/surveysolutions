@@ -458,6 +458,10 @@
     }
 .dataTables_processing{
     @extend %loading-indicator;
+    
+    &.error {
+        background: rgba(100,0,0,0.1);
+    }  
 }
 .dataTables_scroll{
     overflow-x: auto;

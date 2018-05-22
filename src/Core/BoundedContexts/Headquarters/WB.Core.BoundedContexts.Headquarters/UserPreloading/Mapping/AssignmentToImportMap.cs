@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Mapping
             {
                 mapper.Type<PostgresJson<List<InterviewAnswer>>>();
             });
+            this.Property(x => x.ProtectedVariables, m => m.Type<PostgresJson<List<string>>>());
         }
     }
 }

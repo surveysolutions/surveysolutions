@@ -26,6 +26,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private const string interviewerApiUrl = "api/interviewer/";
         private static readonly string applicationUrl = string.Concat(interviewerApiUrl, apiVersion);
 
+        private readonly string auditLogController = string.Concat(interviewerApiUrl, apiVersion, "/auditlog");
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
@@ -111,6 +112,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
             => this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<bool>(url: autoUpdateUrl, credentials: this.restCredentials, token: token));
+
+        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView entities, CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.auditLogController}",
+                request: entities,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
 
         #endregion
 

@@ -13,11 +13,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         protected override IReadSideStorage<TEntity> GetPostgresReadSideStorage<TEntity>(IModuleContext context)
             => (IReadSideStorage<TEntity>) context.GetServiceWithGenericType(typeof(PostgresReadSideKeyValueStorage<>), typeof(TEntity));
 
+        protected override IReadSideStorage<TEntity, TKey> GetPostgresReadSideStorage<TEntity, TKey>(IModuleContext context)
+        {
+            return (IReadSideStorage<TEntity, TKey>)context.GetServiceWithGenericType(typeof(PostgresReadSideKeyValueStorage<>), typeof(TEntity), typeof(TKey));
+        }
+
         public override void Load(IIocRegistry registry)
         {
             base.Load(registry);
 
             registry.BindToMethodInSingletonScope(typeof(IReadSideKeyValueStorage<>), this.GetReadSideStorageWrappedWithCache);
+            registry.BindToMethodInSingletonScope(typeof(IReadSideKeyValueStorage<,>), this.GetGenericReadSideStorageWrappedWithCache);
 
             registry.BindAsSingleton(typeof(IPlainKeyValueStorage<>), typeof(PostgresPlainKeyValueStorage<>));
 

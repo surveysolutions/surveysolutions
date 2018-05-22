@@ -42,8 +42,8 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Esri.ArcGISRuntime, Version=100.0.0.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Esri.ArcGISRuntime.Xamarin.Android.100.0.0\lib\MonoAndroid10\Esri.ArcGISRuntime.dll</HintPath>
+    <Reference Include="Esri.ArcGISRuntime, Version=100.2.1.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Esri.ArcGISRuntime.Xamarin.Android.100.2.1\lib\MonoAndroid10\Esri.ArcGISRuntime.dll</HintPath>
     </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
@@ -185,9 +185,17 @@
       <Project>{44762e2d-1380-441b-b924-7caeafaf5955}</Project>
       <Name>WB.Core.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj">
+      <Project>{89B14B50-5305-45E2-9835-7A05BD0B97A9}</Project>
+      <Name>WB.Core.SharedKernels.DataCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj">
       <Project>{0F1DDEFE-DF5C-4856-A89C-241F3BD41B5F}</Project>
       <Name>WB.Core.SharedKernels.Enumerator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj">
+      <Project>{d6616c1d-7c3a-4576-b82b-098721cd4417}</Project>
+      <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.UI.Shared.Enumerator\WB.UI.Shared.Enumerator.csproj">
       <Project>{5DAA7EAF-9A68-4302-AE74-EF0DAA0BD169}</Project>

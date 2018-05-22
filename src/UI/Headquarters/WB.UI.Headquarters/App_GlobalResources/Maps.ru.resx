@@ -166,6 +166,6 @@
     <value>Произошла ошибка. Архив содержит файлы, которые не являются картами</value>
   </data>
   <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>Неверный файл {0}</value>
+    <value>Файл '{0}' содержит данные, которые не могут быть обработаны.</value>
   </data>
 </root>

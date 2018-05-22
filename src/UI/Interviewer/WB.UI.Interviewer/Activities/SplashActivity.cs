@@ -2,6 +2,8 @@ using Android.App;
 using Android.Content.PM;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Platforms.Android.Views;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -15,6 +17,8 @@ namespace WB.UI.Interviewer.Activities
         public override void InitializationComplete()
         {
             base.InitializationComplete();
+            var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
+            auditLogService.Write(new OpenApplicationAuditLogEntity());
 
         }
     }

@@ -10,7 +10,8 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    internal class InterviewStatusTimeSpanDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    internal class InterviewStatusTimeSpanDenormalizer : 
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCompleted>,
         IUpdateHandler<InterviewSummary, InterviewApprovedByHQ>,
         IUpdateHandler<InterviewSummary, UnapprovedByHeadquarters>,

@@ -489,7 +489,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, 
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.NumberOfPoints,
                 evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor), evnt.Payload.AnswerTimeUtc);
         }
 

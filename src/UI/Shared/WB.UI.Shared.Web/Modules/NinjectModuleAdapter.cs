@@ -226,14 +226,6 @@ namespace WB.UI.Shared.Web.Modules
             return this.Kernel.GetBindings(typeof(T)).Any();
         }
 
-        public void BindToSelfInSingletonScopeWithConstructorArgument(Type[] types, string argumentName, Func<IModuleContext, object> argumentValueFunc)
-        {
-            this.Kernel.Bind(types)
-                .ToSelf()
-                .InSingletonScope()
-                .WithConstructorArgument(argumentName, c => argumentValueFunc(new NinjectModuleContext(c)));
-        }
-
         public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>()
         {
             InIsolatedThreadScopeOrRequestScopeOrThreadScope(this.Kernel.Bind<T>().ToSelf());
