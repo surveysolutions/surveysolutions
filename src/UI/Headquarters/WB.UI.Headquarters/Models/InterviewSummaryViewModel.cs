@@ -6,4 +6,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
     {
         public Guid InterviewId { get; set; }
     }
+
+    public class InterviewSummaryForMapPointsViewModel
+    {
+        public Guid[] InterviewIds { get; set; }
+    }
 }

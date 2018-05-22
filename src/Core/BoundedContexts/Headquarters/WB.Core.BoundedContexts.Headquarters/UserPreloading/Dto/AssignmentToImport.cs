@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
         public virtual string Error { get; set; }
         public virtual List<InterviewAnswer> Answers { get; set; }
         public virtual bool Verified { get; set; }
+        public virtual List<string> ProtectedVariables { get; set; }
     }
 }

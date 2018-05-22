@@ -84,11 +84,26 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var interviewer = await this.userManager.FindByIdAsync(userId);
             if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
-            var interviewerProfileModel = await interviewerProfileFactory.GetInterviewerProfileAsync(userId);
+            InterviewerProfileModel interviewerProfileModel = await interviewerProfileFactory.GetInterviewerProfileAsync(userId);
 
             if (interviewerProfileModel == null) throw new HttpException(404, string.Empty);
-           
+
             return this.View(interviewerProfileModel);
+        }
+
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
+        [CamelCase]
+        public async Task<ActionResult> InterviewerPoints(Guid? id)
+        {
+            var userId = id ?? this.authorizedUser.Id;
+            var interviewer = await this.userManager.FindByIdAsync(userId);
+            if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
+
+            var points = interviewerProfileFactory.GetInterviewerCheckinPoints(userId).ToList();
+
+            if (points.Count == 0) return this.HttpNotFound("No points");
+
+            return this.Json(points, JsonRequestBehavior.AllowGet);
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]

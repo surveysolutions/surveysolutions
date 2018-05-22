@@ -165,22 +165,25 @@
   <data name="Speed" xml:space="preserve">
     <value>Speed</value>
   </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Survey Statistics</value>
+  </data>
   <data name="StatusDuration" xml:space="preserve">
     <value>Status Duration</value>
   </data>
   <data name="Supervisors" xml:space="preserve">
     <value>Supervisors</value>
   </data>
-  <data name="CreateNew">
+  <data name="CreateNew" xml:space="preserve">
     <value>Create new</value>
   </data>
-  <data name="Started">
+  <data name="Started" xml:space="preserve">
     <value>Started</value>
   </data>
-  <data name="Completed">
+  <data name="Completed" xml:space="preserve">
     <value>Completed</value>
   </data>
-  <data name="Rejected">
+  <data name="Rejected" xml:space="preserve">
     <value>Rejected</value>
   </data>
   <data name="SurveysAndStatuses" xml:space="preserve">

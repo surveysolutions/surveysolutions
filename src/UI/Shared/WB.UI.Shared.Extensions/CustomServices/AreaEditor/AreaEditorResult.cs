@@ -8,7 +8,7 @@
         public double? Length { set; get; }
         public string Coordinates { set; get; }
 
-
+        public int? NumberOfPoints { set; get; }
         public double? DistanceToEditor { set; get; }
         public byte[] Preview { set; get; }
     }

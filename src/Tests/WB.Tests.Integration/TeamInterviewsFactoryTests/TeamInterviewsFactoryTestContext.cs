@@ -30,8 +30,8 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            reader = new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), "InterviewId");
-            featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>(), "Questionid");
+            reader = new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
+            featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>());
 
             return new TeamInterviewsFactory(
                 reader ?? CreateInterviewSummaryRepository());
@@ -44,7 +44,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), "InterviewId");
+            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
         }
 
         protected static PostgreReadSideStorage<QuestionAnswer> CreateQuestionAnswerRepository()
@@ -55,7 +55,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>(), "Questionid");
+            return new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>());
         }
 
         protected static void ExecuteInCommandTransaction(Action action)
