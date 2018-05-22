@@ -43,9 +43,7 @@
 
                     var map = new Map({
                         basemap: "hybrid",
-                        extent: startExtent,
-                        maxScale: @Model.MaxScale,
-                        minScale: @Model.MinScale
+                        extent: startExtent
                     });
 
                     var polygon = Polygon.fromExtent(startExtent);
@@ -62,9 +60,9 @@
                         symbol: fillSymbol
                     });
                     var view = new MapView({
+                        spatialReference: startExtent.spatialReference,
                         container: "viewDiv",
                         map: map
-                        
                     });
 
                     view.graphics.addMany([polygonGraphic]);

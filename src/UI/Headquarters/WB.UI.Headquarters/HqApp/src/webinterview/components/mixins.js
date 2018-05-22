@@ -53,13 +53,13 @@ export const entityDetails = {
     props: ["id"],
 
     mounted() {
-        this.fetch()
+    //    this.fetch()
     },
     
     watch: {
         id(to, from) {
             this.$store.dispatch("cleanUpEntity", from)
-            this.fetch(to)
+         //   this.fetch(to)
         }
     },
     destroyed() {

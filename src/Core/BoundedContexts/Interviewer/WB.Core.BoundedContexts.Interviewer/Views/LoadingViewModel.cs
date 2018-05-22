@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class LoadingViewModel : BaseViewModel<LoaginViewModelArg>, IDisposable
+    public class LoadingViewModel : BaseViewModel<LoadingViewModelArg>, IDisposable
     {
         protected Guid interviewId;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
         }
 
-        public override void Prepare(LoaginViewModelArg arg)
+        public override void Prepare(LoadingViewModelArg arg)
         {
             this.interviewId = arg.InterviewId;
         }

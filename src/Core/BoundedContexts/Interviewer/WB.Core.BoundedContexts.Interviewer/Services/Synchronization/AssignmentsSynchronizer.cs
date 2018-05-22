@@ -96,7 +96,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
                         LocationQuestionId = remote.LocationQuestionId,
                         LocationLatitude = remote.LocationLatitude,
                         LocationLongitude = remote.LocationLongitude,
-                        ReceivedDateUtc = remote.CreatedAtUtc
+                        ReceivedDateUtc = remote.CreatedAtUtc,
+                        ProtectedVariables = remote.ProtectedVariables?.Select(x => new AssignmentDocument.AssignmentProtectedVariable
+                        {
+                            Variable = x,
+                            AssignmentId = remote.Id
+                        }).ToList() ?? new List<AssignmentDocument.AssignmentProtectedVariable>()
                     };
 
                     this.FillAnswers(remote, questionnaire, local);

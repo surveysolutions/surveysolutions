@@ -473,5 +473,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
                 return ResourceManager.GetString("PL0046_HasDifferentTextsInListAndRosterTitles", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required column {0} is missing.
+        /// </summary>
+        public static string PL0047_ProtectedVariables_MissingColumn {
+            get {
+                return ResourceManager.GetString("PL0047_ProtectedVariables_MissingColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protected variable is not found in provided questionnaire.
+        /// </summary>
+        public static string PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire {
+            get {
+                return ResourceManager.GetString("PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable has type that does not support protection.
+        /// </summary>
+        public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
+            get {
+                return ResourceManager.GetString("PL0049_ProtectedVariables_VariableNotSupportsProtection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Negative value is not allowed for Categorical Multi select question.
+        /// </summary>
+        public static string PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1 {
+            get {
+                return ResourceManager.GetString("PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1", resourceCulture);
+            }
+        }
     }
 }

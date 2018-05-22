@@ -136,4 +136,7 @@
     <value>В выбраном опроснике нет GPS вопросов</value>
     <comment>В выбраном опроснике нет GPS вопросов</comment>
   </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Задание</value>
+  </data>
 </root>

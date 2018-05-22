@@ -61,6 +61,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assignment.
+        /// </summary>
+        internal static string Assignment {
+            get {
+                return ResourceManager.GetString("Assignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to details.
         /// </summary>
         internal static string details {
@@ -106,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View interview content.
+        ///   Looks up a localized string similar to View interview details.
         /// </summary>
         internal static string ViewInterviewContent {
             get {

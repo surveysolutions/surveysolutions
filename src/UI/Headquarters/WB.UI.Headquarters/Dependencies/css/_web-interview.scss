@@ -633,7 +633,7 @@
 	width: 27px;
 	height: 27px;
 }
-.readonly {
+.readonly{
 	input[type="text"]:disabled,
 	.field label,
 	.radio .field,
@@ -644,6 +644,31 @@
 		&:hover, &:focus, &:active{
 			box-shadow: none;
 		}
+	}
+}
+.unavailable-option{
+	background: rgba(248, 248, 248, 0.8);
+	border-radius: 5px;
+	&:hover, &:focus, &:active{
+		box-shadow: none;
+	}
+	label, input[type="text"]:disabled, input[type="number"]:disabled,{
+		background: rgba(248, 248, 248, 0.8);
+		border-radius: 5px;
+		&:hover, &:focus, &:active{
+			box-shadow: none;
+		}
+	}
+}
+.locked-option{
+	.lock{
+		display: block;
+		background-size: 18px 18px;
+		top: calc(50% - 9px);
+		left: auto;
+		right: 9px;
+		width: 18px;
+		height: 18px;
 	}
 }
 .audio-question{
@@ -732,7 +757,7 @@
 .readonly .dropdown-toggle:disabled{
 	background: rgba(248, 248, 248, 0.8);
 }
-.readonly {
+.readonly, .unavailable-option{
 	.btn:disabled,
 	.btn.disabled{
 		background: rgba(248, 248, 248, 1);
@@ -741,6 +766,7 @@
 		display: none;
 	}
 }
+
 @media only screen and (max-width: 1525px){
 	.content{
 		width: $content-width-small;
@@ -895,6 +921,11 @@
 			left: -25px;
 		}
 	}
+	.locked-option{
+		.lock{
+			left: auto;
+		}
+	}
 }
 @media (max-width: $screen-xs){
 	.web-interview{
@@ -919,6 +950,11 @@
 		}	
 		.lock{
 			left: -17px;
+		}
+	}
+	.locked-option{
+		.lock{
+			left: auto;
 		}
 	}
 }

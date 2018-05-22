@@ -36,6 +36,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -97,7 +99,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionId ?? Guid.NewGuid(),
                 rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
                 answer,
-                comments ?? new CommentSynchronizationDto[0]);
+                comments ?? new CommentSynchronizationDto[0],
+                null);
 
         public AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool answer)
             => new AnsweredYesNoOption(value, answer);
@@ -782,6 +785,31 @@ namespace WB.Tests.Abc.TestFactories
                 StataExportCaption = variable,
                 QuestionScope = scope,
                 Featured = preFilled
+            };
+
+
+        public AreaQuestion GeographyQuestion(Guid? id = null,
+            string variable = "georgaphy_question",
+            string enablementCondition = null,
+            string validationExpression = null,
+            QuestionScope scope = QuestionScope.Interviewer,
+            bool isPrefilled = false,
+            bool hideIfDisabled = false,
+            bool useFormatting = false,
+            string questionText = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+            => new AreaQuestion
+            {
+                QuestionText = questionText ?? "text",
+                QuestionType = QuestionType.Area,
+                PublicKey = id ?? Guid.NewGuid(),
+                StataExportCaption = variable,
+                ConditionExpression = enablementCondition,
+                HideIfDisabled = hideIfDisabled,
+                ValidationExpression = validationExpression,
+                QuestionScope = scope,
+                Featured = isPrefilled,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
             };
 
         public IQuestion Question(
@@ -1902,11 +1930,16 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
-        public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows) => new PreloadedFile
+        public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
         {
-            FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName),
-            Rows = rows
-        };
+            var columns = rows.SelectMany(x => x.Cells).OfType<PreloadingValue>().Select(x => x.Column).ToArray();
+            return new PreloadedFile
+            {
+                FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName,
+                    columns: columns),
+                Rows = rows
+            };
+        }
 
         public PreloadedFileInfo PreloadedFileInfo(string[] columns = null, string fileName = null, string questionnaireOrRosterName = null) => new PreloadedFileInfo
         {
@@ -2059,5 +2092,15 @@ namespace WB.Tests.Abc.TestFactories
             VariableOrCodeOrPropertyName = variableName.ToLower(),
             Values = values
         };
+
+        public GetReportCategoricalPivotReportItem GetReportCategoricalPivotReportItem(int row, int col, long count)
+        {
+            return new GetReportCategoricalPivotReportItem
+            {
+                RowValue = row,
+                ColValue = col,
+                Count = count
+            };
+        }
     }
 }

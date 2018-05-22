@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Filtering
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 assignmentId: 5,
-                interviewId: Id.gA, answersToIdentifyingQuestions: new List<InterviewAnswer>()
+                interviewId: Id.gA, answers: new List<InterviewAnswer>()
                 {
                     Create.Entity.InterviewAnswer(Create.Identity(prefilledReadonlyQuestionId), Create.Entity.NumericIntegerAnswer(5))
                 }));

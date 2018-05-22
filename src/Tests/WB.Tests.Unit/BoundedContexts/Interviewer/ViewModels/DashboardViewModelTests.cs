@@ -58,7 +58,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
                     completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
                     rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(), 
-                    interviewsRepository: interviewsRepository ?? Substitute.For<IPlainStorage<InterviewView>>());
+                    interviewsRepository: interviewsRepository ?? Substitute.For<IPlainStorage<InterviewView>>(),
+                    auditLogService: Mock.Of<IAuditLogService>()
+                );
         }
 
         private static CreateNewViewModel DashboardQuestionnairesViewModel()
