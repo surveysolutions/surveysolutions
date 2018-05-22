@@ -62,7 +62,7 @@
         supportedTransports: ["webSockets", "longPolling"]
     }
 
-    if (moment) {
+    if (!_.isUndefined(moment)) {
         moment.locale('@UICulture');
     }
 </script>
