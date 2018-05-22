@@ -22,6 +22,7 @@ module.exports = merge(shared(packageName, devMode), {
             "jquery",
             "moment",
             "scriptjs",
+            "fuse.js",
             "signalr",
             "smoothscroll-polyfill",
             "toastr",

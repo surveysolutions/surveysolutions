@@ -437,7 +437,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
                 Mock.Of<IAudioFileStorage>(),
                 Mock.Of<ITabletDiagnosticService>(),
-                Mock.Of<IInterviewerSettings>());
+                Mock.Of<IInterviewerSettings>(),
+                Mock.Of<IAuditLogSynchronizer>(),
+                Mock.Of<IAuditLogService>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -612,13 +614,15 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewerProfileFactory InterviewerProfileFactory(TestHqUserManager userManager = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository = null,
             IDeviceSyncInfoRepository deviceSyncInfoRepository = null,
-            IInterviewerVersionReader interviewerVersionReader = null)
+            IInterviewerVersionReader interviewerVersionReader = null,
+            IInterviewFactory interviewFactory = null)
         {
             return new InterviewerProfileFactory(
                 userManager ?? Mock.Of<HqUserManager>(),
                 interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
-                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>());
+                interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
+                interviewFactory ?? Mock.Of<IInterviewFactory>());
         }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -20,18 +21,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IAuditLogService auditLogService;
         private const string StateKey = "interviewerIdentity";
 
         public RelinkDeviceViewModel(
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             ISynchronizationService synchronizationService,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage)
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+            IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
+            this.auditLogService = auditLogService;
         }
 
         protected override bool IsAuthenticationRequired => false;
@@ -104,6 +108,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 this.interviewersPlainStorage.Store(this.userIdentityToRelink);
                 this.Principal.SignIn(this.userIdentityToRelink.Id, true);
+                auditLogService.Write( new RelinkAuditLogEntity());
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)

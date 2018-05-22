@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.ReportTests
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-           return new PostgreReadSideStorage<InterviewSummary>(transactionManager, Mock.Of<ILogger>(), "InterviewId");
+           return new PostgreReadSideStorage<InterviewSummary>(transactionManager, Mock.Of<ILogger>());
         }
 
         internal class SvReport

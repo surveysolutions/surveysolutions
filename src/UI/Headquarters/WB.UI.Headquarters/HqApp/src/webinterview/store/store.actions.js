@@ -21,6 +21,7 @@ export default {
     fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
         const details = await Vue.$api.call(api => api.getEntitiesDetails(uniq(map(ids, "id"))))
         dispatch("fetch", { ids, done: true })
+
         commit("SET_ENTITIES_DETAILS", {
             entities: details,
             lastActivityTimestamp: new Date()
@@ -154,7 +155,7 @@ export default {
 
         const id = sectionId
         const isPrefilledSection = id === undefined
-
+        
         if (isPrefilledSection) {
             const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
             if (!prefilledPageData.hasAnyQuestions) {
@@ -171,8 +172,17 @@ export default {
                 commit("SET_SECTION_DATA", prefilledPageData.entities)
             }
         } else {
+            commit("SET_LOADING_PROGRESS", true)
             const section = await Vue.$api.call(api => api.getSectionEntities(id))
+            const ids = uniq(map(section, "identity"))
+            const details = await Vue.$api.call(api => api.getEntitiesDetails(ids))
+
             commit("SET_SECTION_DATA", section)
+            commit("SET_ENTITIES_DETAILS", {
+                entities: details,
+                lastActivityTimestamp: new Date()
+            })
+            commit("SET_LOADING_PROGRESS", false)
         }
     }, 200),
 

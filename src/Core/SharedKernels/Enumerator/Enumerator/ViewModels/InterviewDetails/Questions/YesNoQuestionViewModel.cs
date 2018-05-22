@@ -7,10 +7,12 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -122,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var checkedYesNoAnswerOptions = answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.ToArray() ?? Array.Empty<AnsweredYesNoOption>();
 
             var newOptions = this.filteredOptionsViewModel.GetOptions()
-                .Select(model => this.ToViewModel(model, checkedYesNoAnswerOptions))
+                .Select(model => this.ToViewModel(model, checkedYesNoAnswerOptions, answerModel))
                 .ToList();
             
             this.Options.ForEach(x => x.DisposeIfDisposable());
@@ -141,7 +143,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model, AnsweredYesNoOption[] checkedYesNoAnswerOptions)
+        private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model,
+            AnsweredYesNoOption[] checkedYesNoAnswerOptions, 
+            InterviewTreeYesNoQuestion treeQuestion)
         {
             var isExistAnswer = checkedYesNoAnswerOptions != null && checkedYesNoAnswerOptions.Any(a => a.OptionValue == model.Value);
             bool? isSelected = isExistAnswer 
@@ -161,6 +165,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Selected = isSelected,
                 YesAnswerCheckedOrder = yesAnswerCheckedOrder,
                 AnswerCheckedOrder = answerCheckedOrder,
+                IsProtected = treeQuestion.IsAnswerProtected(model.Value),
                 YesCanBeChecked = isSelected.GetValueOrDefault() || !maxAllowedAnswers.HasValue || checkedYesNoAnswerOptions.Count(x => x.Yes) < maxAllowedAnswers
             };
 

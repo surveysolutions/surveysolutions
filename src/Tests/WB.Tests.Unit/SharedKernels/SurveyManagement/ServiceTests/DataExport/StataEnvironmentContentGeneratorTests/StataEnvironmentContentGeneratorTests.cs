@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
                 default(CancellationToken));
 
-            Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName)));
+            Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
             Assert.That(stataGeneratedContent.Contains("label values Id Id"));
             Assert.That(stataGeneratedContent.Contains("/*label define Id*/ /*c1 `\"t1\"'*/ /*c2 `\"t2\"'*/"));
         }
@@ -64,7 +64,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
              stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
                         default(CancellationToken));
 
-            Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName)));
+            Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
             Assert.That(stataGeneratedContent.Contains(string.Format("label values Id Id")));
             Assert.That(stataGeneratedContent.Contains(string.Format("label define Id 1 `\"t1\"' 2 `\"t2\"'")));
         }
@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             
             stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "", default(CancellationToken))/*.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath)*/;
 
-            Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName)));
+            Assert.That(stataGeneratedContent.Contains(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
             Assert.That(stataGeneratedContent.Contains(string.Format("label variable {0} `\"{1}\"'", questionsVariableName, questionsTitle)));
             Assert.That(stataGeneratedContent.Contains(string.Format("label values {0} {0}", questionsVariableName)));
             Assert.That(stataGeneratedContent.Contains($"label define {questionsVariableName} 1 `\"t1\"' 2 `\"t2\"'"));

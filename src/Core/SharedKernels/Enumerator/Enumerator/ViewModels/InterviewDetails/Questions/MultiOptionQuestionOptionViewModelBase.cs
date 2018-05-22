@@ -10,6 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private bool @checked;
         private bool canBeChecked = true;
         private int? checkedOrder;
+        private bool isProtected;
 
         public MultiOptionQuestionOptionViewModelBase(IMultiOptionQuestionViewModelToggleable questionViewModel)
         {
@@ -55,6 +56,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public bool IsProtected
+        {
+            get => isProtected;
+            set => SetProperty(ref isProtected, value);
+        }
+
         public bool CanBeChecked
         {
             get => this.canBeChecked;
@@ -65,7 +72,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             get
             {
-                return new MvxAsyncCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this), () => CanBeChecked);
+                return new MvxAsyncCommand(async () => await this.QuestionViewModel.ToggleAnswerAsync(this), () => CanBeChecked && !IsProtected);
             }
         }
     }

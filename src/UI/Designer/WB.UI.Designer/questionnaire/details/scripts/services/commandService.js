@@ -218,7 +218,8 @@
                         hideIfDisabled: question.hideIfDisabled,
                         instructions: question.instructions,
                         hideInstructions: question.hideInstructions,
-                        optionsFilterExpression: question.optionsFilterExpression
+                        optionsFilterExpression: question.optionsFilterExpression,
+                        geometryType: question.geometryType
                     }
                 };
 

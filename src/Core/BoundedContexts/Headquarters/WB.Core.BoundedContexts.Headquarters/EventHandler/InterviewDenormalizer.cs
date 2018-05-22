@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     Id = evnt.Payload.QuestionId,
                     RosterVector = evnt.Payload.RosterVector.ToIntArray(),
                     AsArea = new Area(
-                        evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.AreaSize,
+                        evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.NumberOfPoints, evnt.Payload.AreaSize,
                         evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor)
                 });
 

@@ -135,6 +135,9 @@
   <data name="QuestionTypeArea" xml:space="preserve">
     <value>Area</value>
   </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>Geography</value>
+  </data>
   <data name="QuestionTypeAudio" xml:space="preserve">
     <value>Audio</value>
   </data>

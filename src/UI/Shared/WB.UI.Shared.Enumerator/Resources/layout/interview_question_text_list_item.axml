@@ -13,4 +13,8 @@
                local:MvxBind="Visible Not(IsProtected); HideKeyboardOnClick .;Click DeleteListItemCommand;"
                local:srcCompat="@drawable/delete_button"
                />
+    
+    <ImageView style="@style/Interview_Question_ProtectedAnswerIcon"
+               local:MvxBind="Visible IsProtected" 
+               local:srcCompat="@drawable/lock_icon" />
 </LinearLayout>
