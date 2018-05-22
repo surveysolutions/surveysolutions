@@ -46,6 +46,12 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Autofac.4.6.2\lib\netstandard1.1\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="FFImageLoading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.FFImageLoading.2.3.6\lib\MonoAndroid10\FFImageLoading.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.FFImageLoading.2.3.6\lib\MonoAndroid10\FFImageLoading.Platform.dll</HintPath>
+    </Reference>
     <Reference Include="HockeySDK, Version=5.0.6585.25315, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\HockeySDK.Xamarin.5.1.2\lib\MonoAndroid403\HockeySDK.dll</HintPath>
     </Reference>
@@ -304,10 +310,8 @@
     <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
     <Compile Include="CustomBindings\ViewTagBinding.cs" />
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
-    <Compile Include="CustomControls\DynamicImageView.cs" />
     <Compile Include="CustomControls\DatePickerDialogFragment.cs" />
     <Compile Include="CustomControls\FlowLayout.cs" />
-    <Compile Include="CustomControls\HttpImageView.cs" />
     <Compile Include="CustomControls\InstantAutoComplete.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
     <Compile Include="CustomControls\InterviewTemplateSelector.cs" />
