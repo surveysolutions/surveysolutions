@@ -29,6 +29,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                         .ToList();
 
                 logger?.Info($"Got {questionnaireList.Count} questionnaires to update");
+                int processed = 0;
+
                 foreach (var questionnaireId in questionnaireList)
                 {
                     var questionnaireJson = db.QuerySingleOrDefault<string>(
@@ -39,6 +41,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     var questions = ExtractEntities(json, null);
 
                     action(db, questionnaireId, questions.ToList());
+
+                    logger?.Info($"There is {questionnaireList.Count - (++processed)} questionnaires left");
                 }
             });
         }

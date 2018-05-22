@@ -42,7 +42,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             ExecuteForQuestionnaire((db, questionnaireId, questions) =>
             {
                 List<Answer> answersToInsert = new List<Answer>();
-                logger.Info($"Processing {questions.Count} questions for quetionnaire: {questionnaireId}");
+                logger.Info($"Processing {questions.Count} questions for questionnaire: {questionnaireId}");
 
                 foreach (var question in questions)
                 {
