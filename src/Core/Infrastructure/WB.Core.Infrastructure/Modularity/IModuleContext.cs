@@ -14,9 +14,10 @@ namespace WB.Core.Infrastructure.Modularity
         T Get<T>(string name);
         object Get(Type type);
 
-        object GetServiceWithGenericType(Type type, Type genericType);
+        object GetServiceWithGenericType(Type type, params Type[] genericType);
 
         Type GetGenericArgument();
+        Type[] GetGenericArguments();
     }
 
     public interface IConstructorContext
