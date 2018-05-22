@@ -132,7 +132,8 @@ namespace WB.Tests.Abc.TestFactories
 
             public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
             {
-                throw new NotImplementedException();
+                action();
+                return true;
             }
         }
 
