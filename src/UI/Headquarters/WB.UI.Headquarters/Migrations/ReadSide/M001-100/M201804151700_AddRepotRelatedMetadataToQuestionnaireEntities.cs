@@ -7,6 +7,8 @@ using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
@@ -14,6 +16,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     [Migration(201804151700)]
     public class M201804151700_AddRepotRelatedMetadataToQuestionnaireEntities : QuestionnaireEntityMigration
     {
+        private ILogger logger;
+
         public override void Up()
         {
             Alter.Table("questionnaire_entities")
@@ -33,9 +37,12 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("answer_code").AsDecimal().Nullable()
                 .WithColumn("parent_code").AsDecimal().Nullable();
 
+            this.logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetForType(this.GetType());
+
             ExecuteForQuestionnaire((db, questionnaireId, questions) =>
             {
                 List<Answer> answersToInsert = new List<Answer>();
+                logger.Info($"Processing {questions.Count} questions for quetionnaire: {questionnaireId}");
 
                 foreach (var question in questions)
                 {
@@ -46,7 +53,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     {
                         entity.QuestionType = QuestionType.SingleOption;
                     }
-
+                    
                     db.Execute($@"UPDATE readside.questionnaire_entities
                                 SET 
                                     question_type = @{nameof(Question.QuestionType)},
@@ -86,12 +93,13 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 {
                     InsertAnswers(answersToInsert, db);
                 }
-            });
+            }, this.logger);
         }
 
         private void InsertAnswers(List<Answer> answers, IDbConnection db)
         {
-            db.Execute($"-- inserting {answers.Count} answers");
+            logger?.Info($"Storing {answers.Count} answers");
+
             db.Execute($@"insert into readside.questionnaire_entities_answers 
                                     (entity_id, text,value,parent,answer_code,parent_code)
                                 values(

@@ -6,13 +6,14 @@ using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json.Linq;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {
     public abstract class QuestionnaireEntityMigration : Migration
     {
         [Localizable(false)]
-        protected void ExecuteForQuestionnaire(Action<IDbConnection, string, IEnumerable<(JObject item, JObject parent)>> action)
+        protected void ExecuteForQuestionnaire(Action<IDbConnection, string, List<(JObject item, JObject parent)>> action, ILogger logger = null)
         {
             Execute.WithConnection((db, dt) =>
             {
@@ -24,8 +25,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairedocuments')::text")))
                     return;
 
-                var questionnaireList = db.Query<string>("select id from plainstore.questionnairebrowseitems where isdeleted = false").ToList();
+                var questionnaireList = db.Query<string>("select id from plainstore.questionnairebrowseitems where isdeleted = false")
+                        .ToList();
 
+                logger?.Info($"Got {questionnaireList.Count} questionnaires to update");
                 foreach (var questionnaireId in questionnaireList)
                 {
                     var questionnaireJson = db.QuerySingleOrDefault<string>(
@@ -35,7 +38,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
                     var questions = ExtractEntities(json, null);
 
-                    action(db, questionnaireId, questions);
+                    action(db, questionnaireId, questions.ToList());
                 }
             });
         }
