@@ -10,8 +10,7 @@
 
   <CheckBox 
     style="@style/Interview_Question_Answer_Option_Input"
-    local:MvxBind="Enabled And(CanBeChecked, Not(IsProtected));
-                   HideKeyboardOnClick .; 
+    local:MvxBind="HideKeyboardOnClick .; 
                    Text Title; 
                    Checked Checked;
                    Click CheckAnswerCommand;
