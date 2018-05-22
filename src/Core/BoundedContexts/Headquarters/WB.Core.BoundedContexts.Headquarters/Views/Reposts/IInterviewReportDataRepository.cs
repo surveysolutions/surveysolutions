@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
         List<GetNumericalReportItem> GetNumericalReportData(QuestionnaireIdentity questionnaireIdentity,
             Guid questionId,
             Guid? teamLeadId,
-            bool detailedView, int minAnswer = Int32.MinValue, int maxAnswer = Int32.MaxValue);
+            bool detailedView, long minAnswer = Int64.MinValue, long maxAnswer = Int64.MaxValue);
 
         List<GetReportCategoricalPivotReportItem> GetCategoricalPivotData(Guid? teamLeadId,
             QuestionnaireIdentity questionnaire,

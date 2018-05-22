@@ -7,7 +7,7 @@
     {
         public string ResponsibleName { get; set; }
         public string TeamLeadName { get; set; }
-        public int Answer { get; set; }
+        public long Answer { get; set; }
         public long Count { get; set; }
         public string AnswerText { get; set; }
 

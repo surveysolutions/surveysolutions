@@ -11,7 +11,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_categorical_report(_questionnaireidentity text, detailed boolean, 
                     totals boolean, _teamleadid uuid, _variable uuid, _condition_var uuid, _condition integer[])
-                 RETURNS TABLE(teamleadname text, responsiblename text, answer integer, count bigint)
+                 RETURNS TABLE(teamleadname text, responsiblename text, answer bigint, count bigint)
                  LANGUAGE plpgsql
                 AS $function$
                     declare
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                     join readside.report_tabulate_data v2  on v1.interview_id = v2.interview_id
                                     join readside.interviews_id id on id.id = v1.interview_id
                                     join readside.interviewsummaries s on s.interviewid = id.interviewid
-                                    join readside.questionnaire_entities_answers qea on qea.value::int = v1.answer and qea.entity_id = v1.entity_id
+                                    join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
                                     where 
                                         (_teamleadid is null or s.teamleadid = _teamleadid) and
                                         v1.entity_id = lookupVariable and
@@ -58,7 +58,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                     from readside.report_tabulate_data v1
                                     join readside.interviews_id id on id.id = v1.interview_id
                                     join readside.interviewsummaries s on s.interviewid = id.interviewid
-                                    join readside.questionnaire_entities_answers qea on qea.value::int = v1.answer and qea.entity_id = v1.entity_id
+                                    join readside.questionnaire_entities_answers qea on qea.value::bigint = v1.answer and qea.entity_id = v1.entity_id
                                     where 
                                         (_teamleadid is null or s.teamleadid = _teamleadid) and
                                         v1.entity_id = lookupVariable
