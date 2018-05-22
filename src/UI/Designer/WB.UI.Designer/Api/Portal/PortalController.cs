@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Security;
+using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
+using WB.Core.BoundedContexts.Designer.Views.AllowedAddresses;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Api.Attributes;
@@ -17,18 +20,17 @@ namespace WB.UI.Designer.Api.Portal
     [ApiBasicAuth(onlyAllowedAddresses: false)]
     public class PortalController : ApiController
     {
-        private readonly IQuestionnaireListViewFactory viewFactory;
         private readonly IAccountRepository accountRepository;
         private readonly IQuestionnaireHelper questionnaireHelper;
+        private readonly IAllowedAddressService allowedAddressService;
 
-        public PortalController(
-            IQuestionnaireListViewFactory viewFactory, 
-            IAccountRepository accountRepository, 
-            IQuestionnaireHelper questionnaireHelper)
+        public PortalController(IAccountRepository accountRepository, 
+            IQuestionnaireHelper questionnaireHelper,
+            IAllowedAddressService allowedAddressService)
         {
-            this.viewFactory = viewFactory;
             this.accountRepository = accountRepository;
             this.questionnaireHelper = questionnaireHelper;
+            this.allowedAddressService = allowedAddressService;
         }
 
         [Route("user/{userId}")]
@@ -85,6 +87,29 @@ namespace WB.UI.Designer.Api.Portal
                         Title = questionnaireListItem.Title
                     }).ToList()
             };
+        }
+
+        [Route("{userId}/headquarters")]
+        [HttpGet]
+        public IEnumerable<AllowedAddress> GetHeadquarters() => this.allowedAddressService.GetAddresses();
+
+        [Route("{userId}/headquarters/add")]
+        [HttpPost]
+        public void AddHeadquarters(string ipAddress, string description)
+            => this.allowedAddressService.Add(new AllowedAddress
+            {
+                Description = description,
+                Address = IPAddress.Parse(ipAddress)
+            });
+
+        [Route("{userId}/headquarters/delete")]
+        [HttpPost]
+        public void DeleteHeadquarters(string ipAddress)
+        {
+            var parsedAddress = IPAddress.Parse(ipAddress);
+            var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, parsedAddress));
+            if (address != null)
+                this.allowedAddressService.Remove(address.Id);
         }
     }
 }
