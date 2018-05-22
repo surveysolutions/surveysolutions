@@ -8,15 +8,14 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using FFImageLoading.Cross;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
 using MvvmCross.Converters;
-using MvvmCross.Core;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Logging;
-using MvvmCross.Platforms.Android.Core;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -174,7 +173,8 @@ namespace WB.UI.Shared.Enumerator
                 typeof (FlowLayout).Assembly,
                 typeof (MvxRecyclerView).Assembly,
                 typeof (DrawerLayout).Assembly,
-                typeof (SwitchCompat).Assembly
+                typeof (SwitchCompat).Assembly,
+                typeof (MvxCachedImageView).Assembly
             });
 
         public override IEnumerable<Assembly> GetViewModelAssemblies()
