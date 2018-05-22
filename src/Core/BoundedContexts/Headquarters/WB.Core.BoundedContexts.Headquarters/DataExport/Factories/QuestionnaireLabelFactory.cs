@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Uinque 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Flag =1 if the interview has errors, =0 if no errors", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
             }
             else
             {
