@@ -57,29 +57,32 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         {
             var tcs = new TaskCompletionSource<AreaEditResult>();
 
+            void AreaEditorActivityOnOnAreaEditCompleted(AreaEditorResult editResult)
+            {
+                AreaEditorActivity.OnAreaEditCompleted -= (AreaEditorActivityOnOnAreaEditCompleted);
+
+                tcs.TrySetResult(editResult == null
+                    ? null
+                    : new AreaEditResult
+                    {
+                        Geometry = editResult.Geometry,
+                        MapName = editResult.MapName,
+                        Area = editResult.Area,
+                        Length = editResult.Length,
+                        Coordinates = editResult.Coordinates,
+                        DistanceToEditor = editResult.DistanceToEditor,
+                        Preview = editResult.Preview,
+                        NumberOfPoints = editResult.NumberOfPoints
+                    });
+            }
+
+            AreaEditorActivity.OnAreaEditCompleted += (AreaEditorActivityOnOnAreaEditCompleted);
+
             await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(new AreaEditorViewModelArgs
             {
                 Geometry = area?.Geometry,
                 MapName = area?.MapName,
                 RequestedGeometryType = geometryType
-            });
-
-            AreaEditorActivity.OnAreaEditCompleted += (editResult =>
-            {
-                tcs.TrySetResult(
-                    editResult == null
-                        ? null
-                        : new AreaEditResult
-                        {
-                            Geometry = editResult.Geometry,
-                            MapName = editResult.MapName,
-                            Area = editResult.Area,
-                            Length = editResult.Length,
-                            Coordinates = editResult.Coordinates,
-                            DistanceToEditor = editResult.DistanceToEditor,
-                            Preview = editResult.Preview,
-                            NumberOfPoints = editResult.NumberOfPoints
-                        });
             });
 
             return await tcs.Task;
