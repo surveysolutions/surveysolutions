@@ -5,6 +5,7 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -73,6 +74,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.BindAsSingleton<IAuditLogService, AuditLogService>();
 
             registry.BindAsSingleton<IInterviewerEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IInterviewerEventStorage>();

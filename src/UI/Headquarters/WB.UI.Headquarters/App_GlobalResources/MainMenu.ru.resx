@@ -218,4 +218,7 @@
     <value>Длительность статусов</value>
     <comment>Длительность статусов</comment>
   </data>
+  <data name="SurveyStatistics" xml:space="preserve">
+    <value>Статистика обследования</value>
+  </data>
 </root>
