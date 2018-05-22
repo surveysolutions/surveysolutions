@@ -2368,7 +2368,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentittiesWithRemovedAnswer = diffByQuestions.Select(x => x.SourceNode.Identity).ToArray();
 
             if (questionIdentittiesWithRemovedAnswer.Any())
-                this.ApplyEvent(new AnswersRemoved(questionIdentittiesWithRemovedAnswer));
+                this.ApplyEvent(new AnswersRemoved(questionIdentittiesWithRemovedAnswer, DateTime.UtcNow));
         }
 
         private void ApplyRosterEvents(InterviewTreeRosterDiff[] diff)
