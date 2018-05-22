@@ -30,6 +30,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         [Ignore]
         public List<AssignmentAnswer> IdentifyingAnswers { get; set; } = new List<AssignmentAnswer>();
 
+        [Ignore]
+        public List<AssignmentProtectedVariable> ProtectedVariables { get; set; } = new List<AssignmentProtectedVariable>();
+
         public class AssignmentAnswer
         {
             [PrimaryKey, AutoIncrement]
@@ -54,6 +57,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             public string Question { get; set; }
 
             public string AnswerAsString { get; set; }
+        }
+
+        public class AssignmentProtectedVariable
+        {
+            [PrimaryKey, AutoIncrement]
+            public long? Id { get; set; }
+
+            public string Variable { get; set; }
+
+            [Indexed(Unique = false)]
+            public int AssignmentId { get; set; }
         }
     }
 }

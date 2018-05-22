@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         protected PlainPostgresTransactionManager plainTransactionManager;
         private string connectionString;
         protected PostgreReadSideStorage<InterviewSummary> interviewSummaryRepository;
-        protected PostgresPlainStorageRepository<QuestionnaireCompositeItem> questionnaireItemsRepository;
+        protected PostgreReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsRepository;
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
         private PostgresPlainStorageRepository<QuestionnaireCompositeItem> compositeItemsRepository;
@@ -62,8 +62,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AudioAnswer>>(new EntitySerializer<AudioAnswer>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<Area>>(new EntitySerializer<Area>());
 
-            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>(), "summaryid");
-            this.questionnaireItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.plainTransactionManager);
+            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>());
+            this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.plainTransactionManager, Mock.Of<ILogger>());
             this.compositeItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.plainTransactionManager);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),

@@ -232,7 +232,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             public virtual Guid UserId { get; set; }
             public virtual string UserName { get; set; }
-            public virtual string CreationDate { get; set; }
+            public virtual DateTime CreationDate { get; set; }
             public virtual string Email { get; set; }
             public virtual bool IsLocked { get; set; }
             public virtual bool IsArchived { get; set; }
@@ -387,7 +387,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var exportFile = this.exportFactory.CreateExportFile(type);
 
-            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report.Headers, report.Data));
+            Stream exportFileStream = new MemoryStream(exportFile.GetFileBytes(report));
             var result = new ProgressiveDownload(this.Request).ResultMessage(exportFileStream, exportFile.MimeType);
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")

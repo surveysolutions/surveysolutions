@@ -118,9 +118,132 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="LogOnModel_Password" xml:space="preserve">
-    <value>كلمه السر</value>
+    <value>كلمة المرور</value>
   </data>
   <data name="PasswordFieldName" xml:space="preserve">
-    <value>كلمه السر</value>
+    <value>كلمة المرور</value>
+  </data>
+  <data name="BatchUploadModel_FileName" xml:space="preserve">
+    <value>ملف CSV</value>
+  </data>
+  <data name="BatchUploadModel_Required" xml:space="preserve">
+    <value>يجب اختيار ملف للتحميل</value>
+  </data>
+  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
+    <value>يرجى اختيار ملف</value>
+  </data>
+  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
+    <value>تعذر تحديث معلومات المستخدم لأن المستخدم الحالي غير موجود</value>
+  </data>
+  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
+    <value>تعذر تحديث معلومات المستخدم لأنه تم أرشفة المستخدم الحالي</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
+    <value>عنوان الاستبيان مطلوب</value>
+  </data>
+  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
+    <value>عنوان</value>
+  </data>
+  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
+    <value>تأكيد كلمة المرور الجديدة</value>
+  </data>
+  <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
+    <value>كلمة المرور وكلمة مرور التأكيد لا تتطابقان</value>
+  </data>
+  <data name="ConfirmPasswordFieldName" xml:space="preserve">
+    <value>تأكيد كلمة المرور</value>
+  </data>
+  <data name="ConfirmPasswordRequired" xml:space="preserve">
+    <value>مطلوب تأكيد كلمة المرور</value>
+  </data>
+  <data name="EmailErrorMessage" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني غير صالح</value>
+  </data>
+  <data name="EmailFieldName" xml:space="preserve">
+    <value>عنوان البريد الإلكتروني</value>
+  </data>
+  <data name="InvalidUser" xml:space="preserve">
+    <value>مستخدم غير صالح</value>
+  </data>
+  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
+    <value> مؤمن من قبل المشرف</value>
+  </data>
+  <data name="IsLockedFieldName" xml:space="preserve">
+    <value> مؤمن من قبل المدير أو المقر الرئيسي</value>
+  </data>
+  <data name="LogOnModel_UserName" xml:space="preserve">
+    <value>اسم المستخدم</value>
+  </data>
+  <data name="NewPasswordFieldName" xml:space="preserve">
+    <value>كلمة مرور جديدة</value>
+  </data>
+  <data name="OldPasswordErrorMessage" xml:space="preserve">
+    <value>تغيير كلمة المرور توفر كلمة مرور موجودة صالحة</value>
+  </data>
+  <data name="OldPasswordFieldName" xml:space="preserve">
+    <value>كلمه مرور القديمة</value>
+  </data>
+  <data name="PasswordErrorMessage" xml:space="preserve">
+    <value>يجب أن تحتوي كلمة المرور على رقم واحد على الأقل، وحرف واحد من الأحرف الكبيرة، وحرف واحد من الأحرف الصغيرة</value>
+  </data>
+  <data name="PasswordLengthMessage" xml:space="preserve">
+    <value>يجب ألا يقل طول كلمة المرور عن {2} رمز</value>
+  </data>
+  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
+    <value>يحتوي اسم الشخص على أحرف غير صالحة. يسمح فقط الحروف والنقاط والمسافات، والفواصل العليا</value>
+  </data>
+  <data name="PersonNameErrorMessage" xml:space="preserve">
+    <value>لا يمكن أن يحتوي اسم الشخص على أكثر من {1} رمز</value>
+  </data>
+  <data name="PersonNameFieldName" xml:space="preserve">
+    <value>الاسم الكامل</value>
+  </data>
+  <data name="PhoneErrorLength" xml:space="preserve">
+    <value>لا يمكن أن يحتوي رقم الهاتف على أكثر من {1} رمز</value>
+  </data>
+  <data name="PhoneErrorMessage" xml:space="preserve">
+    <value>رقم الهاتف غير صحيح</value>
+  </data>
+  <data name="PhoneNumberFieldName" xml:space="preserve">
+    <value>رقم الهاتف</value>
+  </data>
+  <data name="RequiredEmailErrorMessage" xml:space="preserve">
+    <value>البريد الالكتروني مطلوب</value>
+  </data>
+  <data name="RequiredPasswordErrorMessage" xml:space="preserve">
+    <value>كلمة المرور مطلوبة</value>
+  </data>
+  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
+    <value>المشرف مطلوب</value>
+  </data>
+  <data name="RequiredUserNameErrorMessage" xml:space="preserve">
+    <value>اسم المستخدم مطلوب</value>
+  </data>
+  <data name="SupervisorFieldName" xml:space="preserve">
+    <value>مشرف</value>
+  </data>
+  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
+    <value>الرجاء إدخال GUID صالح في شكل XXXXXXXXXXXX-XXXXXXXX-XXXXXXXXXXXX التالية</value>
+  </data>
+  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
+    <value>ملف CSV</value>
+  </data>
+  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
+    <value>يجب اختيار ملف لتحميله</value>
+  </data>
+  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
+    <value>الرجاء تحديد الملف</value>
+  </data>
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>تم تأمين المستخدم من قبل المقر الرئيسي</value>
+  </data>
+  <data name="UserName_Taken" xml:space="preserve">
+    <value>يرجى اختيار اسم مستخدم آخر</value>
+  </data>
+  <data name="UserNameErrorMessage" xml:space="preserve">
+    <value>يجب أن يكون الاسم بين 3 و 15 حرفا، وقد يحتوي على أحرف وأرقام ورمز شرطة سفلية فقط</value>
+  </data>
+  <data name="UserNameFieldName" xml:space="preserve">
+    <value>اسم المستخدم</value>
   </data>
 </root>

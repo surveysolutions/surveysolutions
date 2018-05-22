@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = Identity.Create(@event.QuestionId, @event.RosterVector);
             this.SetStartDateOnFirstAnswerSet(questionIdentity, @event.AnswerTimeUtc);
 
-            this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.AreaSize,
+            this.Tree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(new Area(@event.Geometry, @event.MapName, @event.NumberOfPoints, @event.AreaSize,
                 @event.Length, @event.Coordinates, @event.DistanceToEditor)));
         }
 
@@ -472,6 +472,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             foreach (var questionIdentity in @event.Questions)
                 this.Tree.GetQuestion(questionIdentity)?.MarkAsReadonly();
+        }
+
+        public virtual void Apply(AnswersMarkedAsProtected @event)
+        {
+            foreach (var protectedAnswer in @event.Questions)
+                this.Tree.GetQuestion(protectedAnswer).ProtectAnswer();
         }
 
         public virtual void Apply(StaticTextsEnabled @event)
@@ -1062,7 +1068,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireNumericIntegerAnswerAllowed(answer);
+                .RequireNumericIntegerAnswerAllowed(answer, this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeIntegerQuestion()?.ProtectedAnswer?.Value);
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -1176,7 +1182,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            var isLinkedToList = this.Tree.GetQuestion(questionIdentity).IsLinkedToListQuestion;
+            var answeredQuestion = this.Tree.GetQuestion(questionIdentity);
+            var isLinkedToList = answeredQuestion.IsLinkedToListQuestion;
 
             if (isLinkedToList)
             {
@@ -1185,8 +1192,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
+                var protectedValues = answeredQuestion.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswer?.CheckedValues;
                 new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                    .RequireFixedMultipleOptionsAnswerAllowed(selectedValues);
+                    .RequireFixedMultipleOptionsAnswerAllowed(selectedValues, protectedValues);
             }
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1265,11 +1273,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
-                .RequireTextListAnswerAllowed(answers);
+                .RequireTextListAnswerAllowed(answers, 
+                    this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeTextListQuestion()?.ProtectedAnswer?.Rows ?? Array.Empty<TextListAnswerRow>());
 
             var changedInterviewTree = this.Tree.Clone();
+            var interviewTreeQuestion = changedInterviewTree.GetQuestion(questionIdentity);
 
-            changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(TextListAnswer.FromTupleArray(answers));
+            interviewTreeQuestion.SetAnswer(TextListAnswer.FromTupleArray(answers));
 
             changedInterviewTree.ActualizeTree();
 
@@ -1323,7 +1333,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
-        public void AnswerAreaQuestion(AnswerAreaQuestionCommand command)
+        public void AnswerAreaQuestion(AnswerGeographyQuestionCommand command)
         {
             new InterviewPropertiesInvariants(this.properties).RequireAnswerCanBeChanged();
 
@@ -1336,7 +1346,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             var changedInterviewTree = this.Tree.Clone();
 
-            var answer = new Area(command.Geometry, command.MapName, command.Area, command.Length, command.Coordinates, command.DistanceToEditor);
+            var answer = new Area(command.Geometry, command.MapName, command.NumberOfPoints, command.Area, command.Length, command.Coordinates, command.DistanceToEditor);
             changedInterviewTree.GetQuestion(questionIdentity).SetAnswer(AreaAnswer.FromArea(answer));
 
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, questionIdentity);
@@ -1390,6 +1400,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyEvents(treeDifference, userId);
         }
 
+        public bool IsAnswerProtected(Identity questionIdentity, decimal value)
+        {
+            var question = this.Tree.GetQuestion(questionIdentity);
+            return question.IsAnswerProtected(value);
+        }
+
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTime removeTime)
         {
             new InterviewPropertiesInvariants(this.properties)
@@ -1402,6 +1418,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireQuestionExists()
                 .RequireQuestionEnabled();
+
+            var targetQuestion = this.tree.GetQuestion(questionIdentity);
+            if (targetQuestion.HasProtectedAnswer())
+            {
+                throw new InterviewException("Removing protected answer is not allowed",
+                    InterviewDomainExceptionType.AnswerNotAccepted)
+                {
+                    Data =
+                    {
+                        { InterviewQuestionInvariants.ExceptionKeys.InterviewId, this.EventSourceId },
+                        { InterviewQuestionInvariants.ExceptionKeys.QuestionId, questionIdentity.ToString() }
+                    }
+                };
+            }
 
             var changedInterviewTree = this.Tree.Clone();
 
@@ -1445,6 +1475,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             InterviewTree changedInterviewTree = this.Tree.Clone();
 
             this.PutAnswers(changedInterviewTree, command.Answers, command.AssignmentId);
+            this.ProtectAnswers(changedInterviewTree, command.ProtectedVariables);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             this.UpdateTreeWithDependentChanges(changedInterviewTree, questionnaire, entityIdentity: null);
@@ -1479,6 +1510,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (defaultTranslation != null)
             {
                 this.SwitchTranslation(new SwitchTranslation(this.EventSourceId, defaultTranslation, command.UserId));
+            }
+        }
+
+        private void ProtectAnswers(InterviewTree changedInterviewTree, List<string> protectedAnswers)
+        {
+            if (protectedAnswers?.Count > 0)
+            {
+                foreach (var treeQuestion in changedInterviewTree.AllNodes.OfType<InterviewTreeQuestion>())
+                {
+                    if (protectedAnswers.Any(x =>
+                        treeQuestion.VariableName.Equals(x, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        treeQuestion.ProtectAnswer();
+                    }
+                }
             }
         }
 
@@ -2010,6 +2056,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
             this.ApplySubstitutionEvents(diff);
             this.ApplyReadonlyStateEvents(diff);
+            this.ApplyProtectedAnswers(diff);
         }
 
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
@@ -2181,6 +2228,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             if (readonlyQuestions.Any()) this.ApplyEvent(new QuestionsMarkedAsReadonly(readonlyQuestions));
         }
 
+        private void ApplyProtectedAnswers(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
+        {
+            var allNotNullableNodes = diff.Where(x => x.ChangedNode != null)
+                                          .OfType<InterviewTreeQuestionDiff>()
+                                          .Where(x => x.AnswersMarkedAsProtected)
+                                          .Select(x => x.ChangedNode)
+                                          .ToList();
+            if (allNotNullableNodes.Count > 0)
+            {
+                var @event = new AnswersMarkedAsProtected(allNotNullableNodes.Select(x => x.Identity).ToArray());
+                this.ApplyEvent(@event);
+            }
+        }
+
         private void ApplyUpdateAnswerEvents(InterviewTreeQuestionDiff[] diffByQuestions, Guid responsibleId)
         {
             foreach (var diffByQuestion in diffByQuestions)
@@ -2288,7 +2349,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     var answer = changedQuestion.GetAsInterviewTreeAreaQuestion().GetAnswer().Value;
                     this.ApplyEvent(new AreaQuestionAnswered(responsibleId, changedQuestion.Identity.Id,
                         changedQuestion.Identity.RosterVector, DateTime.UtcNow, answer.Geometry, answer.MapName, answer.AreaSize, answer.Length,
-                        answer.Coordinates, answer.DistanceToEditor));
+                        answer.Coordinates, answer.DistanceToEditor, answer.NumberOfPoints));
                 }
 
                 else if (changedQuestion.IsAudio)

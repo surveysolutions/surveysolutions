@@ -482,11 +482,13 @@
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
+    <Content Include="questionnaire\details\views\question-details\Area-template.html" />
     <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
     <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />
     <Content Include="Scripts\custom\bootstrap3-unobtrusive-hack.js" />
     <Content Include="Scripts\components\moment-duration-format.js" />
+    <EmbeddedResource Include="Resources\AccountResources.ar.resx" />
     <EmbeddedResource Include="Resources\AccountResources.es.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
@@ -503,6 +505,7 @@
     <EmbeddedResource Include="Resources\AccountResources.zh.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ar.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.es.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -515,6 +518,7 @@
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\FindReplaceResources.ar.resx" />
     <EmbeddedResource Include="Resources\FindReplaceResources.es.resx">
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </EmbeddedResource>
@@ -527,6 +531,7 @@
     <EmbeddedResource Include="Resources\FindReplaceResources.zh.resx">
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\NotificationResources.ar.resx" />
     <EmbeddedResource Include="Resources\NotificationResources.es.resx">
       <DependentUpon>NotificationResources.resx</DependentUpon>
     </EmbeddedResource>
@@ -539,6 +544,7 @@
     <EmbeddedResource Include="Resources\NotificationResources.zh.resx">
       <DependentUpon>NotificationResources.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Paging.ar.resx" />
     <EmbeddedResource Include="Resources\Paging.es.resx">
       <DependentUpon>Paging.resx</DependentUpon>
     </EmbeddedResource>
@@ -551,6 +557,7 @@
     <EmbeddedResource Include="Resources\Paging.zh.resx">
       <DependentUpon>Paging.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\PdfMessages.ar.resx" />
     <EmbeddedResource Include="Resources\PdfMessages.es.resx">
       <DependentUpon>PdfMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -563,6 +570,7 @@
     <EmbeddedResource Include="Resources\PdfMessages.zh.resx">
       <DependentUpon>PdfMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireController.ar.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireController.es.resx">
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </EmbeddedResource>
@@ -576,6 +584,7 @@
     <EmbeddedResource Include="Resources\QuestionnaireController.zh.resx">
       <DependentUpon>QuestionnaireController.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireEditor.ar.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireEditor.es.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
     </EmbeddedResource>
@@ -585,6 +594,7 @@
     <EmbeddedResource Include="Resources\QuestionnaireEditor.zh.resx">
       <DependentUpon>QuestionnaireEditor.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.ar.resx" />
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.es.resx">
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </EmbeddedResource>

@@ -14,7 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             IQuestionnaire questionnaire);
 
         IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName, PreloadedFile[] allImportedFiles,
-            IQuestionnaire questionnaire);
+            PreloadedFile protectedVariablesFile, IQuestionnaire questionnaire);
 
         void ImportAssignment(int assignmentId, IQuestionnaire questionnaire);
 

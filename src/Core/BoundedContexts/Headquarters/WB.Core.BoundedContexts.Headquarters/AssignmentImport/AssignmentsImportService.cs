@@ -24,7 +24,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
-    public class  AssignmentsImportService : IAssignmentsImportService
+    public class AssignmentsImportService : IAssignmentsImportService
     {
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
@@ -88,6 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public IEnumerable<PanelImportVerificationError> VerifyPanel(string originalFileName,
             PreloadedFile[] allImportedFiles,
+            PreloadedFile protectedVariablesFile,
             IQuestionnaire questionnaire)
         {
             bool hasErrors = false;
@@ -120,7 +121,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version);
 
-            var answersByAssignments = this.ConcatRosters(assignmentRows, questionnaire);
+            var protectedVariables = protectedVariablesFile?
+                .Rows?
+                .Where(x => x.Cells.Length > 0)?
+                .Select(x => ((PreloadingValue) x.Cells[0]).Value)?
+                .ToList();
+
+            var answersByAssignments = this.ConcatRosters(assignmentRows, questionnaire, protectedVariables);
 
             var assignmentsToImport = FixRosterSizeAnswers(answersByAssignments, questionnaire).ToList();
 
@@ -226,6 +233,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(assignmentToImport.Answers);
+            assignment.SetProtectedVariables(assignmentToImport.ProtectedVariables);
 
             this.assignmentsStorage.Store(assignment, null);
 
@@ -280,15 +288,16 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
-            IQuestionnaire questionnaire)
+            IQuestionnaire questionnaire, List<string> protectedVariables = null)
             => assignmentRows
                 .GroupBy(assignmentRow => assignmentRow.InterviewIdValue?.Value ??
                                           /*for single/anvanced preloading with main file only without interview ids*/
                                           Guid.NewGuid().ToString())
-                .Select(x => ToAssignmentToImport(x, questionnaire))
+                .Select(x => ToAssignmentToImport(x, questionnaire, protectedVariables))
                 .ToList();
 
-        private AssignmentToImport ToAssignmentToImport(IGrouping<string, PreloadingAssignmentRow> assignment, IQuestionnaire questionnaire)
+        private AssignmentToImport ToAssignmentToImport(IGrouping<string, PreloadingAssignmentRow> assignment,
+            IQuestionnaire questionnaire, List<string> protectedQuestions)
         {
             var quantity = assignment.Select(_ => _.Quantity).FirstOrDefault(_ => _ != null)?.Quantity;
             var responsible = assignment.Select(_ => _.Responsible).FirstOrDefault(_ => _ != null)?.Responsible;
@@ -302,6 +311,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 Interviewer = responsible?.InterviewerId,
                 Supervisor = responsible?.SupervisorId,
                 Verified = false,
+                ProtectedVariables = protectedQuestions
             };
         }
 

@@ -11,16 +11,21 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
         string GetReadableStatus();
     }
 
-    public interface IReadSideStorage<TEntity> : IReadSideStorage
+    public interface IReadSideStorage<TEntity> : IReadSideStorage<TEntity, string>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        TEntity GetById(string id);
+    }
 
-        void Remove(string id);
+    public interface IReadSideStorage<TEntity, TKey> : IReadSideStorage
+        where TEntity : class, IReadSideRepositoryEntity
+    {
+        TEntity GetById(TKey id);
 
-        void Store(TEntity view, string id);
+        void Remove(TKey id);
 
-        void BulkStore(List<Tuple<TEntity, string>> bulk);
+        void Store(TEntity view, TKey id);
+
+        void BulkStore(List<Tuple<TEntity, TKey>> bulk);
         void Flush();
     }
 }
