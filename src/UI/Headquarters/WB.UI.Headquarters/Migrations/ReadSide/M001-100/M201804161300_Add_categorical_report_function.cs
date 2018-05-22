@@ -10,7 +10,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_categorical_report(_questionnaireidentity text, detailed boolean, 
-                    totals boolean, _teamleadid uuid, _variable uuid, _condition_var uuid, _condition integer[])
+                    totals boolean, _teamleadid uuid, _variable uuid, _condition_var uuid, _condition bigint[])
                  RETURNS TABLE(teamleadname text, responsiblename text, answer bigint, count bigint)
                  LANGUAGE plpgsql
                 AS $function$
