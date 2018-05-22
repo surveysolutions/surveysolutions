@@ -1,4 +1,6 @@
-﻿namespace WB.Core.Infrastructure.PlainStorage
+﻿using WB.Core.GenericSubdomains.Portable.Services;
+
+namespace WB.Core.Infrastructure.PlainStorage
 {
     public interface IEntitySerializer<TEntity> where TEntity: class
     {

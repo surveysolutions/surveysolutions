@@ -1,28 +1,18 @@
-import InterviewersAndDevices from "./InterviewersAndDevices"
-import StatusDuration from "./StatusDuration"
-import MapReport from "./MapReport"
+import InterviewersAndDevices from "./InterviewersAndDevices";
+import StatusDuration from "./StatusDuration";
+import MapReport from "./MapReport";
+import SurveyStatistics from "./SurveyStatistics";
 
 const store = {
     state: {
-        exportUrls: {
-            excel: "",
-            csv: "",
-            tab: ""
-        }
+        
     },
     actions: {
-        setExportUrls(context, urls) {
-            context.commit("SET_EXPORT_URLS", urls);
-        }
+        
     },
     mutations: {
-        SET_EXPORT_URLS(state, urls) {
-            state.exportUrls.excel = urls.excel;
-            state.exportUrls.csv = urls.csv;
-            state.exportUrls.tab = urls.tab;
-        }
     }
-}
+};
 
 export default class ReportComponent {
     constructor(rootStore) {
@@ -30,15 +20,35 @@ export default class ReportComponent {
     }
 
     get routes() {
-        return [{
-            path: '/Reports/InterviewersAndDevices', component: InterviewersAndDevices
-        }, {
-            path: '/Reports/StatusDuration', component: StatusDuration
-        },
-        {
-            path: '/Reports/MapReport', component: MapReport
-        }]
+        return [
+            {
+                path: "/Reports/InterviewersAndDevices",
+                component: InterviewersAndDevices
+            },
+            {
+                path: "/Reports/StatusDuration",
+                component: StatusDuration
+            },
+            {
+                path: "/Reports/MapReport",
+                component: MapReport
+            },
+            {
+                name: "surveyStatistics",
+                path: "/Reports/surveyStatistics",
+                component: SurveyStatistics,
+                props: (route) => ({ 
+                    questionnaireId: route.query.questionnaire,
+                    min: parseInt(route.query.min),
+                    max: parseInt(route.query.max),
+                    questionId: route.query.question,
+                    detailedView: String(route.query.detailedView).toLowerCase() === 'true'
+                 })
+            }
+        ];
     }
 
-    get modules() { return { reports: store }}
+    get modules() {
+        return { reports: store };
+    }    
 }

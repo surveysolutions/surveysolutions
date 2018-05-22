@@ -133,7 +133,7 @@ export default {
               self.selectGpsQuestion(self.gpsQuestions[0]);
             }
           } else {
-            toastr.error(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
+            toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
           }
         });
     },

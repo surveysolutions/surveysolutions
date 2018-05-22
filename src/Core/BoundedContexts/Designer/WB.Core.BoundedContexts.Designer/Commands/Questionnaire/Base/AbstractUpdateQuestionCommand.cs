@@ -19,7 +19,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base
             this.Instructions = CommandUtils.SanitizeHtml(commonQuestionParameters.Instructions, removeAllTags: true);
             this.Properties = new QuestionProperties(commonQuestionParameters.HideInstructions, false)
             {
-                OptionsFilterExpression = commonQuestionParameters.OptionsFilterExpression
+                OptionsFilterExpression = commonQuestionParameters.OptionsFilterExpression,
+                GeometryType = commonQuestionParameters.GeometryType
             };
         }
 
