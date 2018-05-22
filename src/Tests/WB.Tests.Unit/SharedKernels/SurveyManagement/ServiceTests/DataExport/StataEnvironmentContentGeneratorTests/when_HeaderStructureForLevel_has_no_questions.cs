@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     default(CancellationToken)); //stataEnvironmentContentService.CreateContentOfAdditionalFile(emptyHeaderStructureForLevel,dataFileName, contentFilePath);
 
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            stataGeneratedContent.Should().Contain($"insheet using \"{dataFileName}.tab\", tab case\r\n");
+            stataGeneratedContent.Should().Contain($"insheet using \"{dataFileName}.tab\", tab case names\r\n");
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel emptyHeaderStructureForLevel;
