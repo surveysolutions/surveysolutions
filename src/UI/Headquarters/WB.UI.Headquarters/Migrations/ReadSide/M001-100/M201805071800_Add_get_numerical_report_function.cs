@@ -44,9 +44,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             Execute.Sql("create unique index if not exists report_tabulate_numerical_unq_idx ON readside.report_tabulate_numerical (entity_id, rostervector, interview_id, answer)");
 
-            Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_numerical_report(_entityid uuid, _questionnaireidentity text, _teamleadid uuid, detailed boolean, minanswer bigint, maxanswer bigint)
+            Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_numerical_report(_entityid uuid, _questionnaireidentity text, 
+                        _teamleadid uuid, detailed boolean, minanswer bigint, maxanswer bigint)
                  RETURNS TABLE(teamleadname text, responsiblename text, count bigint, 
-                    avg numeric, median numeric, min bigint, max bigint, sum bigint, 
+                    avg numeric, median numeric, min bigint, max bigint, sum numeric, 
                     percentile_05 double precision, percentile_50 double precision, percentile_95 double precision)
                  LANGUAGE plpgsql
                 AS $function$
