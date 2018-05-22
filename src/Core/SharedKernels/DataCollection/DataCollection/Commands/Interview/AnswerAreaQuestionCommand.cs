@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.Length = length;
             this.Coordinates = coordinates;
             this.DistanceToEditor = distanceToEditor;
-            this.NumberOfPoints = NumberOfPoints;
+            this.NumberOfPoints = numberOfPoints;
         }
     }
 }
