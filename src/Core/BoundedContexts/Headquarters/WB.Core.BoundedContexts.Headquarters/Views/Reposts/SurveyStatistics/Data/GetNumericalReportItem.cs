@@ -10,8 +10,8 @@
         public long Count { get; set; }
         public double Average { get; set; }
         public double Median { get; set; }
-        public int Max { get; set; }
-        public int Min { get; set; }
+        public long Max { get; set; }
+        public long Min { get; set; }
         public long Sum { get; set; }
         public double Percentile05 { get; set; }
         public double Percentile50 { get; set; }

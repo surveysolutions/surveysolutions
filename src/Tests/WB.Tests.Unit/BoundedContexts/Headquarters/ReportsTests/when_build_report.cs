@@ -87,7 +87,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.ReportsTests
                 It.IsAny<Guid>(),
                 It.IsAny<Guid?>(),
                 It.IsAny<bool>(),
-                It.IsAny<int>(), It.IsAny<int>()
+                It.IsAny<long>(), It.IsAny<long>()
             ), Times.Once);
         }
 

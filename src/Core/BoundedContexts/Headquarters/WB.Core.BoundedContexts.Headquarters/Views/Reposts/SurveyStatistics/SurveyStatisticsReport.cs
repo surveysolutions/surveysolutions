@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                     input.Question.PublicKey,
                     input.TeamLeadId,
                     input.ShowTeamMembers,
-                    input.MinAnswer ?? Int32.MinValue, input.MaxAnswer ?? Int32.MaxValue);
+                    input.MinAnswer ?? Int64.MinValue, input.MaxAnswer ?? Int64.MaxValue);
 
                 var numericReport = new NumericalReportViewBuilder(numericalData);
                 var specialValuesReport = categoricalData.AsReportView();
