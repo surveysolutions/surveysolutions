@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
+    [DebuggerDisplay("{VariableName} {Label}")]
     internal class DataExportVariable
     {
         private readonly Dictionary<string, VariableValueLabel> variableValueLabels;
