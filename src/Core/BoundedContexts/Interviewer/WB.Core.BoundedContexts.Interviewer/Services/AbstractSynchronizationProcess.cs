@@ -317,8 +317,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 var errorTitle = InterviewerUIResources.Synchronization_Fail_Title;
                 var errorDescription = ex.Message;
 
-                auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
-
                 switch (ex.Type)
                 {
                     case SynchronizationExceptionType.RequestCanceledByUser:
@@ -329,7 +327,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Status = SynchronizationStatus.Canceled,
                             Statistics = statistics
                         });
-
+                        auditLogService.Write(new SynchronizationCanceledAuditLogEntity());
                         break;
                     case SynchronizationExceptionType.Unauthorized:
                         this.shouldUpdatePasswordOfInterviewer = true;
@@ -343,6 +341,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
                     case SynchronizationExceptionType.UnacceptableSSLCertificate:
                         progress.Report(new SyncProgressInfo
@@ -352,6 +351,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
                     default:
                         progress.Report(new SyncProgressInfo
@@ -361,6 +361,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
                 }
             }
