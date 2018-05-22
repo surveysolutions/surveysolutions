@@ -12,15 +12,19 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     public abstract class QuestionnaireEntityMigration : Migration
     {
         [Localizable(false)]
-        protected void ExecuteForQuestionnaireItem(Action<IDbConnection, string, JObject, JObject> action)
+        protected void ExecuteForQuestionnaire(Action<IDbConnection, string, IEnumerable<(JObject item, JObject parent)>> action)
         {
             Execute.WithConnection((db, dt) =>
             {
                 if (string.IsNullOrWhiteSpace(
+                    db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairebrowseitems')::text")))
+                    return;
+
+                if (string.IsNullOrWhiteSpace(
                     db.QuerySingle<string>("SELECT to_regclass('plainstore.questionnairedocuments')::text")))
                     return;
 
-                var questionnaireList = db.Query<string>("select id from plainstore.questionnairedocuments").ToList();
+                var questionnaireList = db.Query<string>("select id from plainstore.questionnairebrowseitems where isdeleted = false").ToList();
 
                 foreach (var questionnaireId in questionnaireList)
                 {
@@ -31,10 +35,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
                     var questions = ExtractEntities(json, null);
 
-                    foreach (var question in questions)
-                    {
-                        action(db, questionnaireId, question.item, question.parent);
-                    }
+                    action(db, questionnaireId, questions);
                 }
             });
         }
