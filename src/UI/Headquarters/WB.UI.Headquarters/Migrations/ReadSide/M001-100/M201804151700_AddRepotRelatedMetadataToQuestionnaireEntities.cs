@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Dapper;
 using FluentMigrator;
 using Newtonsoft.Json;
@@ -29,18 +32,22 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 .WithColumn("parent").AsString().Nullable()
                 .WithColumn("answer_code").AsDecimal().Nullable()
                 .WithColumn("parent_code").AsDecimal().Nullable();
-            
-            ExecuteForQuestionnaireItem((db, questionnaireId, item, parent) =>
+
+            ExecuteForQuestionnaire((db, questionnaireId, questions) =>
             {
-                var entity = JsonConvert.DeserializeObject<Question>(item.ToString());
-                entity.QuestionnaireIdentity = questionnaireId;
+                List<Answer> answersToInsert = new List<Answer>();
 
-                if (entity.QuestionType == null && item.Value<string>("$type") == "SingleQuestion")
+                foreach (var question in questions)
                 {
-                    entity.QuestionType = QuestionType.SingleOption;
-                }
+                    var entity = JsonConvert.DeserializeObject<Question>(question.item.ToString());
+                    entity.QuestionnaireIdentity = questionnaireId;
 
-                db.Execute($@"UPDATE readside.questionnaire_entities
+                    if (entity.QuestionType == null && question.item.Value<string>("$type") == "SingleQuestion")
+                    {
+                        entity.QuestionType = QuestionType.SingleOption;
+                    }
+
+                    db.Execute($@"UPDATE readside.questionnaire_entities
                                 SET 
                                     question_type = @{nameof(Question.QuestionType)},
                                     is_filtered_combobox = @{nameof(Question.IsFilteredCombobox)},
@@ -54,19 +61,38 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                     AND entityid = @{nameof(Question.PublicKey)};
                             ", entity);
 
-                var entityId = db.QuerySingle<int>($@"select id from readside.questionnaire_entities 
+                    var entityId = db.QuerySingle<int>($@"select id from readside.questionnaire_entities 
                                 WHERE questionnaireidentity = @{nameof(Question.QuestionnaireIdentity)}
                                     AND entityid = @{nameof(Question.PublicKey)} ", entity);
 
-                //db.Execute("delete from readside.questionnaire_entities_answers where entity_id = " + entityId);
+                    foreach (var answer in entity.Answers ?? Array.Empty<Answer>())
+                    {
+                        answer.Id = entityId;
+                    }
 
-                foreach (var answer in entity.Answers ?? Array.Empty<Answer>())
-                {
-                    answer.Id = entityId;
+                    if (entity.Answers != null)
+                    {
+                        answersToInsert.AddRange(entity.Answers);
+
+                        if (answersToInsert.Count > 5000)
+                        {
+                           InsertAnswers(answersToInsert, db);
+                           answersToInsert.Clear();
+                        }
+                    }
                 }
-                
-                if(entity.Answers != null)
-                db.Execute($@"insert into readside.questionnaire_entities_answers 
+
+                if (answersToInsert.Any())
+                {
+                    InsertAnswers(answersToInsert, db);
+                }
+            });
+        }
+
+        private void InsertAnswers(List<Answer> answers, IDbConnection db)
+        {
+            db.Execute($"-- inserting {answers.Count} answers");
+            db.Execute($@"insert into readside.questionnaire_entities_answers 
                                     (entity_id, text,value,parent,answer_code,parent_code)
                                 values(
                                     @{nameof(Answer.Id)},
@@ -74,8 +100,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                     @{nameof(Answer.AnswerValue)},
                                     @{nameof(Answer.ParentValue)},
                                     @{nameof(Answer.AnswerCode)},
-                                    @{nameof(Answer.ParentCode)})", entity.Answers);
-            });
+                                    @{nameof(Answer.ParentCode)})", answers);
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -87,7 +112,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         {
             public string QuestionnaireIdentity { get; set; }
             public Guid PublicKey { get; set; }
-            public bool IsFilteredCombobox { get; set;}
+            public bool IsFilteredCombobox { get; set; }
             public Guid? CascadeFromQuestionId { get; set; }
             public Guid? LinkedToRosterId { get; set; }
             public Guid? LinkedToQuestionId { get; set; }
