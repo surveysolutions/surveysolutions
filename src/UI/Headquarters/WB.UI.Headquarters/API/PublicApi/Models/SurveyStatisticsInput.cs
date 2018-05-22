@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         public int? Max { get; set; }
         public ExportFileType? exportType { get; set; }
         public string ConditionalQuestion { get; set; }
-        public int[] Condition { get; set; }
+        public long[] Condition { get; set; }
         public bool Pivot { get; set; }
 
         public ReportMode Mode { get; set; }
