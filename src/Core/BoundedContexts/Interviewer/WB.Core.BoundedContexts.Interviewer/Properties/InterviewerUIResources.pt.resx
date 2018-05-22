@@ -433,4 +433,17 @@ Favor a digitar sua senha atualizada. Se fazer isso não se resolve o problema, 
   <data name="DashboardItem_AssignedOn" xml:space="preserve">
     <value>Concluído em {0}</value>
   </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Entrevistas que foram iniciadas mas não concluídas 
+Você precisa completá-lo para ser sincronizado</value>
+  </data>
+    <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Criar novas entrevistas usando tarefas</value>
+  </data>
+    <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Iniciar nova entrevista</value>
+  </data>
+    <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Crie um novo</value>
+  </data>
 </root>
