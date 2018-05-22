@@ -10,11 +10,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public bool Totals { get;  set; }
         public Guid? TeamLeadId { get; set; }
         public Guid? ConditionVariable { get; set; }
-        public int[] Condition { get; set; }
+        public long[] Condition { get; set; }
 
         public GetCategoricalReportParams(string questionnaireId,
             bool detailed, Guid variable, Guid? teamLeadId = null,
-            Guid? conditionVariable = null, int[] condition = null)
+            Guid? conditionVariable = null, long[] condition = null)
         {
             this.QuestionnaireIdentity = questionnaireId;
             this.Detailed = detailed;
