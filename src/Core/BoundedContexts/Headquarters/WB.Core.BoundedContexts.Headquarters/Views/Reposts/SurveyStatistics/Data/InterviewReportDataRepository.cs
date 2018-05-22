@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
         public List<GetNumericalReportItem> GetNumericalReportData(QuestionnaireIdentity questionnaireIdentity,
             Guid questionId,
             Guid? teamLeadId,
-            bool detailedView, int minAnswer = Int32.MinValue, int maxAnswer = Int32.MaxValue)
+            bool detailedView, long minAnswer = long.MinValue, long maxAnswer = long.MaxValue)
         {
             var session = this.sessionProvider.GetSession();
             var result = session.Connection.Query<GetNumericalReportItem>(@"

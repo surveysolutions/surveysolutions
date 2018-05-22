@@ -98,14 +98,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             return report;
         }
 
-        private Dictionary<int, (int index, string text)> GetAnswersIndex(IQuestion question)
+        private Dictionary<long, (int index, string text)> GetAnswersIndex(IQuestion question)
         {
-            var rowIndexMap = new Dictionary<int, (int index, string text)>();
+            var rowIndexMap = new Dictionary<long, (int index, string text)>();
 
             for (var index = 0; index < question.Answers.Count; index++)
             {
                 var answer = question.Answers[index];
-                rowIndexMap.Add((int) answer.GetParsedValue(), (index, answer.AnswerText));
+                rowIndexMap.Add((long) answer.GetParsedValue(), (index, answer.AnswerText));
             }
 
             return rowIndexMap;

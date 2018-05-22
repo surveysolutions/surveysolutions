@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                 from (
                  select qe.id as entity_id, i.rostervector, i.interviewid, 
                     case when i.asintarray is null 
-                        then array[coalesce(i.asint, i.asdouble::int4)]
+                        then array[coalesce(i.asint, i.asdouble::bigint)]
                         else i.asintarray
                     end answer
                  from readside.interviews i

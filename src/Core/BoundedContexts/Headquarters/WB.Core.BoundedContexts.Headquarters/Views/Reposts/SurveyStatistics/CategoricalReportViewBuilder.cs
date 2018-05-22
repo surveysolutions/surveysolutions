@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
     public class CategoricalReportViewBuilder
     {
         // map answer value into its position in answers list of question
-        private readonly Dictionary<int, int> answersIndexMap;
+        private readonly Dictionary<long, int> answersIndexMap;
 
         private readonly IEnumerable<string> columnsWithData;
         private readonly IEnumerable<string> headersWithData;
@@ -90,14 +90,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
             return report;
         }
 
-        private Dictionary<int, int> GetAnswersMap(List<Answer> answers)
+        private Dictionary<long, int> GetAnswersMap(List<Answer> answers)
         {
-            var result = new Dictionary<int, int>();
+            var result = new Dictionary<long, int>();
 
             for (var index = 0; index < answers.Count; index++)
             {
                 var answer = answers[index];
-                result.Add((int) answer.GetParsedValue(), index);
+                result.Add((long) answer.GetParsedValue(), index);
             }
 
             return result;

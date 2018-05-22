@@ -8,7 +8,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Execute.Sql(@"CREATE OR REPLACE FUNCTION readside.get_report_categorical_pivot(_teamleadid uuid, _questionnaireid text, _a uuid, _b uuid)
-                 RETURNS TABLE(a integer, b integer, count bigint)
+                 RETURNS TABLE(a bigint, b bigint, count bigint)
                  LANGUAGE sql
                 AS $function$	
                   with
