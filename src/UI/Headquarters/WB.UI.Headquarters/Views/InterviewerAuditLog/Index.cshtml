@@ -1,4 +1,5 @@
-﻿@using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog
+﻿@using System.Globalization
+@using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog
 @model WB.UI.Headquarters.Controllers.InterviewerAuditLogModel
 
 @{
@@ -53,7 +54,7 @@
                             @foreach (var record in dateRecords.RecordsByDate)
                             {
                                 <tr>
-                                    <td class="gray-text date">@record.Time.ToShortTimeString()</td>
+                                    <td class="gray-text date">@record.Time.ToString("HH:mm", CultureInfo.InvariantCulture)</td>
                                     <td><span class="@GetMessageCssClass(record.Type)">@record.Message</span></td>
                                 </tr>
                             }
