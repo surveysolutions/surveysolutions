@@ -907,12 +907,11 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Object.
+        ///   Looks up a localized string similar to Required identifying data.
         /// </summary>
-        internal static object PrefilledRequiredData {
+        internal static string PrefilledRequiredData {
             get {
-                object obj = ResourceManager.GetObject("PrefilledRequiredData", resourceCulture);
-                return ((object)(obj));
+                return ResourceManager.GetString("PrefilledRequiredData", resourceCulture);
             }
         }
         
