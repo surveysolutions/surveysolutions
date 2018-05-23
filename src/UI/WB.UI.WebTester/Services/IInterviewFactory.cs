@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -55,6 +56,7 @@ namespace WB.UI.WebTester.Services
                 questionnaireId: questionnaire,
                 answers: new List<InterviewAnswer>(),
                 answersTime: DateTime.UtcNow,
+                protectedVariables: new List<string>(),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: new InterviewKey(new Random().Next(99999999)),

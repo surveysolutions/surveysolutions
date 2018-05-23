@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Answers = new List<InterviewAnswer>();
             this.IdentifyingData = new List<IdentifyingAnswer>();
             this.InterviewSummaries = new HashSet<InterviewSummary>();
+            this.ProtectedVariables = new List<string>();
         }
 
         public Assignment(QuestionnaireIdentity questionnaireId, Guid responsibleId, int? quantity) : this()
@@ -52,6 +53,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual ISet<InterviewSummary> InterviewSummaries { get; protected set; }
 
+        public virtual List<string> ProtectedVariables { get; protected set; }
+
         public virtual int InterviewsProvided =>
             InterviewSummaries.Count(i => i.Status == InterviewStatus.InterviewerAssigned ||
                                           i.Status == InterviewStatus.Completed ||
@@ -62,6 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             : null;
 
         public virtual bool IsCompleted => this.InterviewsNeeded <= 0;
+
 
         public virtual void Archive()
         {
@@ -74,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             this.Quantity = quantity == -1 ? null : quantity;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
-        
+
         public virtual void Reassign(Guid responsibleId)
         {
             this.ResponsibleId = responsibleId;
@@ -96,6 +100,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void Unarchive()
         {
             this.Archived = false;
+            this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void SetProtectedVariables(List<string> protectedVariables)
+        {
+            this.ProtectedVariables = protectedVariables;
             this.UpdatedAtUtc = DateTime.UtcNow;
         }
     }

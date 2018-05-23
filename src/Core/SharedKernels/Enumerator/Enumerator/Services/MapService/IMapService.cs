@@ -11,5 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapService
         MapDescription PrepareAndGetDefaultMap();
         Stream GetTempMapSaveStream(string mapName);
         void MoveTempMapToPermanent(string mapName);
+
+        List<ShapefileDescription> GetAvailableShapefiles();
     }
 }

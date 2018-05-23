@@ -917,5 +917,92 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Column, Is.EqualTo(columnName));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
         }
+
+        [Test]
+        public void when_verify_answers_on_mustiselect_question_less_than_1_should_return_PL0050_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "ric";
+
+            var questionId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultipleOptionsQuestion(questionId, variable: variableName, answers: new []{1,2,3})));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                answers: new[]
+                {
+                    Create.Entity.AssignmentMultiAnswer(variableName, 
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__1", 1),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__2", -1),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__3", 20),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__4", null),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__5", -20),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__6", 0)
+                        )
+                });
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(2));
+
+            Assert.That(errors[0].Code, Is.EqualTo("PL0050"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo((-1).ToString()));
+            Assert.That(errors[0].References.First().Column, Is.EqualTo($"{variableName}[2]"));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+
+            Assert.That(errors[1].Code, Is.EqualTo("PL0050"));
+            Assert.That(errors[1].References.First().Content, Is.EqualTo((-20).ToString()));
+            Assert.That(errors[1].References.First().Column, Is.EqualTo($"{variableName}[5]"));
+            Assert.That(errors[1].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
+        public void when_verify_answers_on_yesno_question_less_than_0_should_return_PL0050_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "ric";
+            var columnName = $"{variableName}__id";
+
+            var questionId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultipleOptionsQuestion(questionId, isYesNo: true, variable: variableName, answers: new []{1,2,3})));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                answers: new[]
+                {
+                    Create.Entity.AssignmentMultiAnswer(variableName, 
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__1", 1),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__2", -1),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__3", 20),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__4", -20),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__5", null),
+                        Create.Entity.AssignmentIntegerAnswer($"{variableName}__6", 0)
+                        )
+                });
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(2));
+
+            Assert.That(errors[0].Code, Is.EqualTo("PL0050"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo((-1).ToString()));
+            Assert.That(errors[0].References.First().Column, Is.EqualTo($"{variableName}[2]"));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+
+            Assert.That(errors[1].Code, Is.EqualTo("PL0050"));
+            Assert.That(errors[1].References.First().Content, Is.EqualTo((-20).ToString()));
+            Assert.That(errors[1].References.First().Column, Is.EqualTo($"{variableName}[4]"));
+            Assert.That(errors[1].References.First().DataFile, Is.EqualTo(fileName));
+        }
     }
 }
