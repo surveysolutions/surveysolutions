@@ -111,7 +111,7 @@ export default {
             data.max = this.filter.max
 
             if(this.filter.condition != null) {
-                data.ConditionalQuestion = this.filter.condition.PublicKey
+                data.ConditionalQuestion = this.filter.condition.Id
                 data.pivot = this.filter.pivot
 
                 if(!data.pivot || this.filter.conditionAnswers.length > 0) {
@@ -213,7 +213,7 @@ export default {
                 return [{
                         data: "variable",
                         name: "variable",
-                        title: this.filter.condition.Label || this.filter.condition.StataExportCaption,
+                        title: this.filter.condition.Label || this.filter.condition.VariableName,
                         orderable: true
                     }
                 ]

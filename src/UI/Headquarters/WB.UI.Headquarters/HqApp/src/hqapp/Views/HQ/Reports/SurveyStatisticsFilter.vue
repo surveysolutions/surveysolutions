@@ -77,10 +77,6 @@
 
 <script>
 
-function formatGuid(val) {
-    return val.split("-").join("")
-}
-
 const ReportMode = {
     TeamLeads: "TeamLeads",
     WithInterviewers: "WithInterviewers"
@@ -300,7 +296,7 @@ export default {
             .orderBy(['Title', 'Version'],['asc', 'asc'])
             .map(q => {
                 return {
-                    key: formatGuid(q.QuestionnaireId) + "$" + q.Version,
+                    key: q.Identity,
                     value: `(ver. ${q.Version}) ${q.Title}`
                 };
         }).value();
@@ -308,7 +304,7 @@ export default {
 
     questionsList() {
         function getValue(question) {
-            let result = `[${question.StataExportCaption}]`
+            let result = `[${question.VariableName}]`
 
             if(question.Label) {
                 result += ' ' + question.Label + '\r\n' + question.QuestionText
@@ -322,9 +318,8 @@ export default {
 
         return _.chain(this.questions).map(q => {
             return {
-                key: q.PublicKey,
-                pivotable: q.Pivotable,
-                name: q.StataExportCaption,
+                key: q.Id,
+                name: q.VariableName,
                 supportConditions: q.SupportConditions,
                 value: getValue(q),
                 breadcrumbs: q.Breadcrumbs
@@ -344,7 +339,7 @@ export default {
 
             const questionnaire = _.find(this.questionnaires, q => 
             { 
-                const key = formatGuid(q.QuestionnaireId) + "$" + q.Version               
+                const key = q.Identity
                 return key == this.selectedQuestionnaire.key 
             })
             return questionnaire
@@ -356,7 +351,7 @@ export default {
     question() {
         if(this.selectedQuestion != null) {
             return _.find(this.questions, 
-            { PublicKey : this.selectedQuestion.key })
+            { Id : this.selectedQuestion.key })
         }
 
         return null
@@ -365,7 +360,7 @@ export default {
     condition() {
         if(this.selectedCondition == null) return null
 
-        return _.find(this.questions, { PublicKey: this.selectedCondition.key })
+        return _.find(this.questions, { Id: this.selectedCondition.key })
     },
 
     conditionAnswers() {
