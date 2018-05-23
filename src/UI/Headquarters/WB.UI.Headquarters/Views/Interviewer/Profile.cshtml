@@ -149,23 +149,25 @@
         </div>
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" style='@(Model.HasAnyGpsAnswerForInterviewer ? "" : "display: none;")'>
     <div class="row">
         <div class="col-sm-9 map">
             @Html.RenderHqConfig(new
-       {
-           InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
-           Api = new
-           {
-               InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
-               InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints" }),
-               InterviewDetailsUrl = Url.RouteUrl("Default", new { httproute = "", controller = "Interview", action = "Review" })
-           }
-       })
+            {
+                ShowMap = Model.HasAnyGpsAnswerForInterviewer,
+                InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
+                Api = new
+                {
+                    InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
+                    InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints"}),
+                    InterviewDetailsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Interview", action = "Review"})
+                }
+            })
             <div id="vueApp"></div>
         </div>
     </div>
 </div>
+
     @if (Model.HasDeviceInfo)
     {
         <div class="container-fluid">

@@ -198,6 +198,8 @@
                     });
             },
             initializeMap() {
+                if (!this.model.showMap) return;
+
                 var self = this;
                 var mapOptions = {
                     zoom: 9,
