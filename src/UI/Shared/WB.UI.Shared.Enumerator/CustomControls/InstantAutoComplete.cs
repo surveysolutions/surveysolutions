@@ -9,7 +9,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using MvvmCross.Binding.Attributes;
-using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Platforms.Android.Binding.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {

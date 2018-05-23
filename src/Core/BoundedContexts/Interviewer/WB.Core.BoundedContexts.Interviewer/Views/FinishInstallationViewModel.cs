@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using Newtonsoft.Json;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;

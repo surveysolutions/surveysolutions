@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using MvvmCross.Binding;
-using MvvmCross.Platform.Droid.WeakSubscription;
+using MvvmCross.WeakSubscription;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

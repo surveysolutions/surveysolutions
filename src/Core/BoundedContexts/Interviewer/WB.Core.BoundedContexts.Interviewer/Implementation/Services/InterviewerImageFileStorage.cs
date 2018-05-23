@@ -1,5 +1,4 @@
-﻿using System;
-using WB.Core.BoundedContexts.Interviewer.Views;
+﻿using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 

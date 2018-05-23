@@ -3,10 +3,10 @@ using System.Windows.Input;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using MvvmCross;
 using MvvmCross.Binding;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Commands;
+using MvvmCross.Platforms.Android;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -71,7 +71,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             {
                 return;
             }
-            if (this.command is IMvxCommand<string> typedGenericCommand && !typedGenericCommand.CanExecute(this.Target.Text))
+            if (this.command is IMvxCommand typedGenericCommand && !typedGenericCommand.CanExecute(this.Target.Text))
             {
                 return;
             }

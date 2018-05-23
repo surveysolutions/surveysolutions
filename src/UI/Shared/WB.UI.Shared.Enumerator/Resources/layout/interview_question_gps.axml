@@ -10,12 +10,13 @@
     <TableLayout style="@style/FullWidthWrappingLayout"
           android:stretchColumns="0">
       <TableRow local:MvxBind="Visible And(QuestionState.IsAnswered, ShowLocationOnMap);">
-        <DynamicImageView local:MvxBind="HttpImageUrl ToGoogleMapUrl(Answer, ShowLocationOnMap);"
-          android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height"
-          android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
-          android:adjustViewBounds="true"
-          android:scaleType="centerCrop"
-          style="@style/Interview_Question_GPS_Map"/>
+          <ffimageloading.cross.MvxCachedImageView
+              local:MvxBind="ImagePath ToGoogleMapUrl(Answer, ShowLocationOnMap);"
+              android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height"
+              android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
+              android:adjustViewBounds="true"
+              android:scaleType="centerCrop"
+              style="@style/Interview_Question_GPS_Map"/>
       </TableRow>
       <TableRow local:MvxBind="Visible QuestionState.IsAnswered">
         <TextView style="@style/Interview_Question_RecordedAnswer"

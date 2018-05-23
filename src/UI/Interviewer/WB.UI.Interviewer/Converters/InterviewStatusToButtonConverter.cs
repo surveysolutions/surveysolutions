@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using MvvmCross.Platform.Converters;
+using MvvmCross.Converters;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 
 namespace WB.UI.Interviewer.Converters

@@ -4,7 +4,6 @@ using System.Linq;
 using Moq;
 using Ncqrs.Spec;
 using NUnit.Framework;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;

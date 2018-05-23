@@ -3,7 +3,7 @@ using System.Threading;
 using Android.OS;
 using Android.App;
 using Android.Content;
-using MvvmCross.Platform;
+using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;

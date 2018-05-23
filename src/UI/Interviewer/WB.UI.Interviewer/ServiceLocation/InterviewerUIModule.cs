@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -33,6 +32,9 @@ namespace WB.UI.Interviewer.ServiceLocation
     {
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<InterviewerMvxApplication>();
+            registry.Bind<InterviewerAppStart>();
+
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
             registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();

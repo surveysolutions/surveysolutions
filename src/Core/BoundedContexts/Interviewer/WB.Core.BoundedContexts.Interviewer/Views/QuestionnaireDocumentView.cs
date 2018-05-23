@@ -1,5 +1,5 @@
 ﻿using Main.Core.Documents;
-using MvvmCross.Platform;
+using MvvmCross;
 using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;

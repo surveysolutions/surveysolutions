@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Plugin.Permissions.Abstractions;
-using WB.Core.BoundedContexts.Interviewer.Views;
+﻿using WB.Core.BoundedContexts.Interviewer.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {

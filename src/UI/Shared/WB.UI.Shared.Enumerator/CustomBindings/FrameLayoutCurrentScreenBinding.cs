@@ -1,10 +1,10 @@
 ﻿using System;
 using Android.Support.V4.App;
 using Android.Widget;
-using MvvmCross.Core.Views;
+using MvvmCross;
 using MvvmCross.Droid.Support.V4;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
+using MvvmCross.Views;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 

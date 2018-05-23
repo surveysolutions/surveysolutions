@@ -1,8 +1,8 @@
 using System;
 using Android.Views;
+using MvvmCross;
 using MvvmCross.Binding;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
