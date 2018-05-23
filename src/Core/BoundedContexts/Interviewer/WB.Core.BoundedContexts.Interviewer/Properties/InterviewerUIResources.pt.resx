@@ -446,4 +446,7 @@ Você precisa completá-lo para ser sincronizado</value>
     <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
     <value>Crie um novo</value>
   </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Criar novas entrevistas usando modelos</value>
+  </data>
 </root>
