@@ -71,17 +71,17 @@ namespace WB.UI.Headquarters.Controllers
                 sb.AppendLine(interviewImportError);
             }
 
-            var invalidInterviewsFileName = "invalid-interviews";
+            var invalidAssignmentsFileName = @"invalid-assignments";
 
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
-                Content = new StreamContent(new MemoryStream(this.archiver.CompressStringToByteArray($"{invalidInterviewsFileName}.tab", sb.ToString())))
+                Content = new StreamContent(new MemoryStream(this.archiver.CompressStringToByteArray($"{invalidAssignmentsFileName}.tab", sb.ToString())))
             };
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
             {
-                FileName = $"{invalidInterviewsFileName}.zip"
+                FileName = $"{invalidAssignmentsFileName}.zip"
             };
 
             return response;
