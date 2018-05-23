@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog
         public AuditLogResult GetLastExisted7DaysRecords(Guid responsibleId, DateTime dateTime)
         {
             var last8Days = storageAccessor.Query(_ => _.Where(r => r.ResponsibleId == responsibleId && r.TimeUtc.Date <= dateTime)
-                .Select(r => r.TimeUtc.Date)
+                .Select(r => r.Time.Date)
                 .GroupBy(r => r.Date)
                 .Select(r => r.Key)
                 .OrderByDescending(r => r)
