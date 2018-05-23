@@ -28,7 +28,7 @@
                     {},
                     true,
                     function (data) {
-                        if (data == null || data.status === "Import")
+                        if (data == null || data.status === "Import" || data.status === "ImportCompleted")
                         {
                             var verificationFinishedUrl =
                                 '@Url.Action("InterviewImportProgress", "SurveySetup")';
