@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Main.Core.Entities.SubEntities;
-using MvvmCross.Core.ViewModels;
-using WB.Core.Infrastructure.EventBus.Lite;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 

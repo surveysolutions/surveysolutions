@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Android.Content;
 using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using FFImageLoading.Cross;
+using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
-using MvvmCross.Core.Views;
-using MvvmCross.Droid.Platform;
+using MvvmCross.Converters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Logging;
+using MvvmCross.Logging;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -32,9 +32,10 @@ using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
 {
-    public abstract class EnumeratorSetup : MvxAndroidSetup
+    public abstract class EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
+        where TApplication : IMvxApplication, new()
     {
-        protected EnumeratorSetup(Context applicationContext) : base(applicationContext)
+        protected EnumeratorSetup()
         {
             //restart the app to avoid incorrect state
             TaskScheduler.UnobservedTaskException += (sender, args) =>
@@ -69,7 +70,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            Mvx.Resolve<IMvxLogProvider>().GetLogFor<EnumeratorSetup>().Error(exception, "UncaughtExceptionHandler");
+            Mvx.Resolve<IMvxLogProvider>().GetLogFor("EnumeratorSetup").Error(exception, "UncaughtExceptionHandler");
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
         }
 
@@ -172,10 +173,11 @@ namespace WB.UI.Shared.Enumerator
                 typeof (FlowLayout).Assembly,
                 typeof (MvxRecyclerView).Assembly,
                 typeof (DrawerLayout).Assembly,
-                typeof (SwitchCompat).Assembly
+                typeof (SwitchCompat).Assembly,
+                typeof (MvxCachedImageView).Assembly
             });
 
-        protected override IEnumerable<Assembly> GetViewModelAssemblies()
+        public override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return new[]
             {

@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services

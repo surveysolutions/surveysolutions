@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using MvvmCross.Test.Core;
 using Moq;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
+using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;

@@ -1,5 +1,5 @@
 using System;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 

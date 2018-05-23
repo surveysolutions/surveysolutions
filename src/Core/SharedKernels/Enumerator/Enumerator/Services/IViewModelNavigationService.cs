@@ -1,6 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Services

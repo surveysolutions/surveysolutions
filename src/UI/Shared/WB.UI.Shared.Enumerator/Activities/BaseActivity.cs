@@ -1,9 +1,10 @@
 using Android.OS;
 using HockeyApp.Android;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Droid.Platform;
+using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using MvvmCross.Platform;
+using MvvmCross.Logging;
+using MvvmCross.Platforms.Android.Core;
+using MvvmCross.ViewModels;
 using Plugin.CurrentActivity;
 using Plugin.Permissions;
 using WB.UI.Shared.Enumerator.Services;
@@ -58,9 +59,11 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             try
             {
-                Mvx.Error(message + System.Environment.NewLine);
-                Mvx.Error($"RAM: {AndroidInformationUtils.GetRAMInformation()} {System.Environment.NewLine}");
-                Mvx.Error($"Disk: {AndroidInformationUtils.GetDiskInformation()} {System.Environment.NewLine}");
+                var mvxLogProvider = Mvx.Resolve<IMvxLogProvider>();
+                var log = mvxLogProvider.GetLogFor(this.GetType().Name);
+                log.Error(message + System.Environment.NewLine);
+                log.Error($"RAM: {AndroidInformationUtils.GetRAMInformation()} {System.Environment.NewLine}");
+                log.Error($"Disk: {AndroidInformationUtils.GetDiskInformation()} {System.Environment.NewLine}");
             }
             catch
             {

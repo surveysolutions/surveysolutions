@@ -1,8 +1,8 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;

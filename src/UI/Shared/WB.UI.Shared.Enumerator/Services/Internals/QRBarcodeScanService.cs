@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using MWBarcodeScanner;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;

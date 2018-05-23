@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.SharedKernels.Enumerator.Properties;

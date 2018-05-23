@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Test.Core;
 using Moq;
+using MvvmCross.Tests;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;

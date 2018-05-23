@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views

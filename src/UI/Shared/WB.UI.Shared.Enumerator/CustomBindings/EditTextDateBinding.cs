@@ -1,10 +1,10 @@
 ﻿using System;
 using Android.App;
 using Android.Widget;
-using MvvmCross.Binding.Droid.Target;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross;
+using MvvmCross.Commands;
+using MvvmCross.Platforms.Android;
+using MvvmCross.Platforms.Android.Binding.Target;
 using WB.UI.Shared.Enumerator.CustomControls;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

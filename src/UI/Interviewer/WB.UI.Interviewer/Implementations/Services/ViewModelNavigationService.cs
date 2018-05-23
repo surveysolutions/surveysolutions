@@ -1,9 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.Infrastructure.CommandBus;

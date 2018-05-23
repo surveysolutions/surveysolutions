@@ -2,8 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.WebBrowser;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.WebBrowser;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
