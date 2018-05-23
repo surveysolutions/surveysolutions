@@ -18,11 +18,11 @@
         <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
             <div class="options-group" >
                 <Radio :label="$t('Reports.TeamLeadsOnly')" 
-                    radioGroup="TeamLeads" name="mode" 
-                    :value="query.mode" @input="radioChanged" />           
+                    radioGroup="false" name="expandTeams" 
+                    :value="query.expandTeams" @input="radioChanged" />           
                 <Radio :label="$t('Reports.WithInterviewers')" 
-                    radioGroup="WithInterviewers" name="mode"                     
-                    :value="query.mode" @input="radioChanged" />
+                    radioGroup="true" name="expandTeams"                     
+                    :value="query.expandTeams" @input="radioChanged" /> 
             </div>
         </FilterBlock>        
                 
@@ -76,11 +76,6 @@
 </template>
 
 <script>
-
-const ReportMode = {
-    TeamLeads: "TeamLeads",
-    WithInterviewers: "WithInterviewers"
-}
 
 export default {
    data() {
@@ -164,13 +159,9 @@ export default {
                 query.conditionId = null
             } else {
                 query.conditionId = null
-                query.mode = this.getDefaultMode()
+                query.expandTeams = false
             }
         })
-    },
-
-    getDefaultMode() {
-        return ReportMode.TeamLeads 
     },
 
     selectCondition(id) {
@@ -274,7 +265,7 @@ export default {
             questionId: this.query.questionId,
             conditionId: this.query.conditionId,
             ans: this.condition != null ? this.selectedAnswers : null,
-            mode: this.query.mode || this.getDefaultMode(),
+            expandTeams: (this.query.expandTeams == 'true')|| false,
             pivot: this.query.pivot,
             min: this.min,
             max: this.max
