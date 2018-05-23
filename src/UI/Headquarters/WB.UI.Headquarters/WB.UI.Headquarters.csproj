@@ -1777,7 +1777,7 @@
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
-    <Compile Include="API\PublicApi\SurveyStatisticsApiController.cs" />
+    <Compile Include="API\PublicApi\StatisticsController.cs" />
     <Compile Include="API\PublicApi\Models\SurveyStatisticsInput.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
