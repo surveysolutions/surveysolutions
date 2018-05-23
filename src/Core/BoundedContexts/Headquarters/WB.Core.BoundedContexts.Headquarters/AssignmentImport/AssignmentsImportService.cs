@@ -393,9 +393,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                     var rosterSizeAnswer = GetRosterSizeAnswerByRosterAnswers(questionnaire, rosterSizeType,
                         rosterSizeQuestionRosterVector, listRosterTitles, rosterSizeQuestionId,
-                        rosterSizeAnsweredOptions, oldToNewRosterInstanceIds);
+                        rosterSizeAnsweredOptions);
                     
-                    if (new []{ QuestionType.TextList, QuestionType.Numeric }.Contains(rosterSizeType))
+                    if (rosterSizeType == QuestionType.Numeric)
                         FixRosterVectors(answersGroupedByRosterInstanceId, oldToNewRosterInstanceIds, rosterSizeLevel);
 
                     calculatedRosterSizeAnswers.Add(rosterSizeAnswer);
@@ -415,7 +415,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private static InterviewAnswer GetRosterSizeAnswerByRosterAnswers(IQuestionnaire questionnaire,
             QuestionType rosterSizeType, RosterVector rosterSizeRosterVector, InterviewAnswer[] listRosterTitles,
-            Guid rosterSizeQuestionId, int[] rosterSizeAnsweredOptions, Dictionary<int, int> oldToNewRosterInstanceIds)
+            Guid rosterSizeQuestionId, int[] rosterSizeAnsweredOptions)
         {
             var rosterSizeAnswer = new InterviewAnswer
             {
@@ -431,7 +431,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     rosterSizeAnswer.Answer = NumericIntegerAnswer.FromInt(rosterSizeAnsweredOptions.Length);
                     break;
                 case QuestionType.TextList:
-                    rosterSizeAnswer.Answer = ToRosterSizeListAnswer(oldToNewRosterInstanceIds, listRosterTitles, rosterSizeAnswer);
+                    rosterSizeAnswer.Answer = ToRosterSizeListAnswer(rosterSizeAnsweredOptions, listRosterTitles, rosterSizeAnswer);
                     break;
             }
 
@@ -457,29 +457,29 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             }
         }
 
-        private static TextListAnswer ToRosterSizeListAnswer(Dictionary<int, int> oldToNewRosterInstanceIds,
+        private static TextListAnswer ToRosterSizeListAnswer(int[] rosterInstanceCodes,
             InterviewAnswer[] listRosterTitles, InterviewAnswer rosterSizeAnswer)
         {
             var rosterSizeQuestionId = rosterSizeAnswer.Identity.Id;
             var rosterVector = rosterSizeAnswer.Identity.RosterVector;
 
-            var rosterSizeListItems = oldToNewRosterInstanceIds.Keys
+            var rosterSizeListItems = rosterInstanceCodes
                 .Select(rosterInstanceCode => ToRosterSizeListItem(rosterSizeQuestionId, rosterVector,
-                    rosterInstanceCode, oldToNewRosterInstanceIds[rosterInstanceCode], listRosterTitles))
+                    rosterInstanceCode, listRosterTitles))
                 .ToArray();
 
             return TextListAnswer.FromTupleArray(rosterSizeListItems);
         }
 
         private static Tuple<int, string> ToRosterSizeListItem(Guid rosterSizeQuestionId, RosterVector rosterVertor,
-            int oldRosterInstanceCode, int newRosterInstanceCode, InterviewAnswer[] listRosterTitles)
+            int rosterInstanceCode, InterviewAnswer[] listRosterTitles)
         {
-            var oldRosterInstanceId = Identity.Create(rosterSizeQuestionId,
-                rosterVertor.ExtendWithOneCoordinate(oldRosterInstanceCode));
+            var rosterInstanceId = Identity.Create(rosterSizeQuestionId,
+                rosterVertor.ExtendWithOneCoordinate(rosterInstanceCode));
 
-            var rosterInstanceTitle = (TextAnswer) listRosterTitles.FirstOrDefault(x => x.Identity == oldRosterInstanceId)?.Answer;
+            var rosterInstanceTitle = (TextAnswer) listRosterTitles.FirstOrDefault(x => x.Identity == rosterInstanceId)?.Answer;
 
-            return new Tuple<int, string>(newRosterInstanceCode, rosterInstanceTitle?.Value ?? "");
+            return new Tuple<int, string>(rosterInstanceCode, rosterInstanceTitle?.Value ?? "");
         }
 
         private static AbstractAnswer ToRosterSizeCategoricalAnswer(IQuestionnaire questionnaire, InterviewAnswer rosterSizeAnswer, int[] rosterSizeAnsweredOptions) 
