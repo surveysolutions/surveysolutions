@@ -511,7 +511,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List of hidden questions.
+        ///   Looks up a localized string similar to Hidden questions.
         /// </summary>
         internal static string HiddenQuestions {
             get {
@@ -525,6 +525,15 @@ namespace Resources {
         internal static string HideListPrefilledData {
             get {
                 return ResourceManager.GetString("HideListPrefilledData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying questions.
+        /// </summary>
+        internal static string IdentifyingQuestions {
+            get {
+                return ResourceManager.GetString("IdentifyingQuestions", resourceCulture);
             }
         }
         
@@ -898,11 +907,12 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Required identifying data.
+        ///   Looks up a localized resource of type System.Object.
         /// </summary>
-        internal static string PrefilledRequiredData {
+        internal static object PrefilledRequiredData {
             get {
-                return ResourceManager.GetString("PrefilledRequiredData", resourceCulture);
+                object obj = ResourceManager.GetObject("PrefilledRequiredData", resourceCulture);
+                return ((object)(obj));
             }
         }
         
@@ -1015,7 +1025,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster size questions.
+        ///   Looks up a localized string similar to Roster source questions.
         /// </summary>
         internal static string RosterSizeQuestions {
             get {

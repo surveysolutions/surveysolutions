@@ -389,7 +389,10 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <value>Hide list of required identifying data</value>
   </data>
   <data name="PrefilledRequiredData" xml:space="preserve">
-    <value>Required identifying data</value>
+    
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Identifying questions</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>Verification of the uploaded file failed</value>
@@ -570,10 +573,10 @@ Specify usernames for supervisors or enumerators to make batch assignments.</val
     <value>Questionnaire cannot be used for preloading</value>
   </data>
   <data name="HiddenQuestions" xml:space="preserve">
-    <value>List of hidden questions</value>
+    <value>Hidden questions</value>
   </data>
   <data name="RosterSizeQuestions" xml:space="preserve">
-    <value>Roster size questions</value>
+    <value>Roster source questions</value>
   </data>
   <data name="Select_Responsible" xml:space="preserve">
     <value>Select default responsible (required)</value>
