@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -115,13 +116,13 @@ namespace WB.UI.Headquarters.Controllers
                 using (StreamWriter streamWriter = new StreamWriter(memoryStream))
                 using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
                 {
-                    csvWriter.WriteField("Time");
+                    csvWriter.WriteField("Timestamp");
                     csvWriter.WriteField("Message");
                     csvWriter.NextRecord();
 
                     foreach (var record in records)
                     {
-                        csvWriter.WriteField(record.Time);
+                        csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
                         csvWriter.WriteField(GetUserMessage(record));
                         csvWriter.NextRecord();
                     }
