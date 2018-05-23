@@ -36,8 +36,8 @@ namespace WB.UI.Headquarters.API.PublicApi
     /// Provides a methods for managing report related actions
     /// </summary>
     [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-    [RoutePrefix(@"api/v1/report/surveyStatistics")]
-    public class SurveyStatisticsApiController : ApiController
+    [RoutePrefix(@"api/v1/report/statistics")]
+    public class StatisticsController : ApiController
     {
         private readonly ISurveyStatisticsReport surveyStatisticsReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -56,7 +56,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             @"wb_report_survey_statistics_total", @"Count of report variable by team report",
             @"type");
 
-        public SurveyStatisticsApiController(ISurveyStatisticsReport surveyStatisticsReport,
+        public StatisticsController(ISurveyStatisticsReport surveyStatisticsReport,
             IQuestionnaireStorage questionnaireStorage,
             IFileSystemAccessor fileSystemAccessor,
             IExportFactory exportFactory,
