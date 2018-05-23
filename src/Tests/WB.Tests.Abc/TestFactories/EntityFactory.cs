@@ -1540,6 +1540,10 @@ namespace WB.Tests.Abc.TestFactories
             => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
                     .NumericIntegerAnswer.FromInt(i);
 
+        public YesNoAnswer YesNoAnswer(IEnumerable<AnsweredYesNoOption> answer)
+            => Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers
+                    .YesNoAnswer.FromAnsweredYesNoOptions(answer);
+
         public PreloadedLevelDto PreloadedLevelDto(RosterVector rosterVector, params PreloadedAnswer[] answeres)
         {
             return new PreloadedLevelDto(rosterVector, answeres.ToDictionary(answer => answer.Id, answer => answer.Answer));

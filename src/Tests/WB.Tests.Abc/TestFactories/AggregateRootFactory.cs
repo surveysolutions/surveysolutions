@@ -87,7 +87,11 @@ namespace WB.Tests.Abc.TestFactories
             if (questionnaire != null)
             {
                 questionnaire.IsUsingExpressionStorage = true;
-                questionnaire.ExpressionsPlayOrder = Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(questionnaire.AsReadOnly());
+                var playOrderProvider = Create.Service.ExpressionsPlayOrderProvider();
+                var readOnlyQuestionnaireDocument = questionnaire.AsReadOnly();
+                questionnaire.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
+                questionnaire.DependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
+                questionnaire.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
             }
 
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire ?? 

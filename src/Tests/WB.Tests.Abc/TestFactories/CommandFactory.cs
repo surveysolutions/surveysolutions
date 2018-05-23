@@ -314,7 +314,9 @@ namespace WB.Tests.Abc.TestFactories
             Guid? supervisorId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            List<InterviewAnswer> answers = null)
+            List<InterviewAnswer> answers = null,
+            List<string> protectedAnswers = null
+            )
         {
             return this.CreateInterview(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(), 
@@ -325,7 +327,8 @@ namespace WB.Tests.Abc.TestFactories
                 supervisorId ?? Guid.NewGuid(),
                 userId,
                 interviewKey, 
-                assignmentId);
+                assignmentId,
+                protectedAnswers);
         }
 
         public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 
