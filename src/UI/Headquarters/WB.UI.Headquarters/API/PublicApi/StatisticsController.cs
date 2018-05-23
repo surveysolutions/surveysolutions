@@ -76,6 +76,14 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
+        /// <summary>
+        /// Get questions list
+        /// </summary>
+        /// <remarks>
+        /// Gets a questions list for specified questionnaire identity. Only questions that have data are shown
+        /// </remarks>
+        /// <param name="questionnaireId">Questionnaire Identity</param>
+        /// <returns>List of questions</returns>
         [Route(@"questions")]
         public List<QuestionDto> GetQuestions(string questionnaireId)
         {
@@ -101,14 +109,14 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return questions
-                .Select(id => questionnaire.Find<AbstractQuestion>(id))
+                .Select(id => questionnaire.Find<IQuestion>(id))
                 .Select(q => new QuestionDto
                 {
                     Answers = q.Answers.Select(a => new QuestionAnswerView
                     {
                         Answer = (int)a.GetParsedValue(),
                         Text = a.AnswerText,
-                        Data = a.AsColumnName()
+                        Column = a.AsColumnName()
                     }).ToList(),
                     Breadcrumbs = GetBreadcrumbs(q),
                     Id = q.PublicKey,
@@ -158,13 +166,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         /// <summary>
-        /// Generate response of selected type with report for single select question
+        /// Generate report report based on provided query paramters.
         /// </summary>
         /// <param name="query">input data</param>
-        /// <returns>Report view of proper type</returns>
+        /// <returns>Report view of selected type (JSON by default)</returns>
         [Localizable(false)]
         [HttpGet]
-
         [Route(@"")]
         public HttpResponseMessage Report([FromUri] SurveyStatisticsQuery query)
         {
@@ -205,8 +212,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 {
                     QuestionnaireIdentity = questionnaireIdentity,
                     Question = question,
-                    TeamLeadId = query.TeamLeadId,
-                    ShowTeamMembers = query.DetailedView,
+                    ShowTeamMembers = query.ExpandTeams,
                     Orders = query.ToOrderRequestItems(),
                     PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
                     Page = query.exportType == null ? query.PageIndex : 1,
@@ -214,7 +220,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     MaxAnswer = query.Max,
                     Condition = query.Condition,
                     ConditionalQuestion = conditionalQuestion,
-                    Columns = query.ColummnsList.Select(c => c.Name).ToArray(),
+                    Columns = query?.ColummnsList.Select(c => c.Name).ToArray(),
                     Pivot = query.Pivot
                 };
 
@@ -249,9 +255,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     $"{questionnaire.Title} (ver. {questionnaireIdentity.Version}) {question.StataExportCaption}");
             }
 
-            if (query.EmptyOnError) return ReturnEmptyResult();
-            throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                $"Cannot find questionnaire entity with variable name or Id: {query.Question}"));
+            return ReturnEmptyResult();
         }
 
         [HttpPost]

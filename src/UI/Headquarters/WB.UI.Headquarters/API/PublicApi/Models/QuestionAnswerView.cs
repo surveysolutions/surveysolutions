@@ -8,6 +8,6 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
         /// <summary>
         /// Column name in API
         /// </summary>
-        public string Data { get; set; }
+        public string Column { get; set; }
     }
 }
