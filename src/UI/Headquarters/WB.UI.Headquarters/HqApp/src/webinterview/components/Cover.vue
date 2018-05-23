@@ -51,11 +51,10 @@
                     </p>
                 </div>
             </div>
-            <component v-else :key="question.identity" v-bind:is="question.type" v-bind:id="question.identity"></component>
-
+            <component v-else :key="question.identity" v-bind:is="question.type" v-bind:id="question.identity" fetchOnMount></component>
         </template>
 
-        <NavigationButton id="NavigationButton" :target="firstSectionId"></NavigationButton>
+        <NavigationButton id="NavigationButton" :target="firstSectionId" fetchOnMount></NavigationButton>
     </div>
 </template>
 
@@ -75,12 +74,15 @@ export default {
             default: true
         }
     },
+    
     beforeMount() {
         this.fetch()
     },
+
     mounted() {
         window.scroll({ top: 0, behavior: "smooth" })
     },
+
     computed: {
         title() {
             return this.$store.state.webinterview.questionnaireTitle
