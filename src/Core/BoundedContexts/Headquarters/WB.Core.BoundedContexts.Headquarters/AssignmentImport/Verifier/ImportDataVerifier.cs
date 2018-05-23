@@ -493,8 +493,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             return false;
         }
 
-        private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer)
-            => !string.IsNullOrWhiteSpace(answer.Value) && !answer.Code.HasValue;
+        private bool RosterInstanceCode_NoParsed(AssignmentRosterInstanceCode answer) => !answer.Code.HasValue;
 
         private bool CategoricalSingle_OptionNotFound(AssignmentCategoricalSingleAnswer answer, IQuestionnaire questionnaire)
             => !string.IsNullOrWhiteSpace(answer.Value) &&

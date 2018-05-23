@@ -789,6 +789,35 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_answers_and_roster_instance_code_is_empty_should_return_PL0009_error()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string variableName = "ric__id";
+            var code = "";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter());
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName,
+                answers: new[]
+                {
+                    Create.Entity.AssignmentRosterInstanceCode(variableName, value: code)
+                });
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0009"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(code));
+            Assert.That(errors[0].References.First().Column, Is.EqualTo(variableName));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(fileName));
+        }
+
+        [Test]
         public void when_verify_answers_and_roster_instance_code_by_fixed_roster_doesnot_exist_in_fixed_roster_codes_should_return_PL0009_error()
         {
             // arrange
