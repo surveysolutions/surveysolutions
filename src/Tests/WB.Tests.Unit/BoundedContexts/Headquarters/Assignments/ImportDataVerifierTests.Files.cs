@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -132,6 +134,41 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].Code, Is.EqualTo("PL0040"));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(arhiveFileName));
             Assert.That(errors[0].References.First().Content, Is.EqualTo("Questionnaire.tab"));
+        }
+
+        [Test]
+        public void when_verify_columns_and_roster_file_without_roster_size_text_list_column_should_return_PL0052_error()
+        {
+            // arrange
+            var roster = "myroster";
+            Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
+            string textListQuestionVariable = "listrostersize";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextListQuestion(rosterSizeId, variable: textListQuestionVariable),
+                    Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion()
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, $"{roster}__id"
+                }, fileName: roster, questionnaireOrRosterName: roster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles("original.zip", new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0052"));
+            Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(textListQuestionVariable));
         }
     }
 }

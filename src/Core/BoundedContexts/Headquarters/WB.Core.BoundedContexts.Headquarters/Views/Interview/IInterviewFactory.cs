@@ -25,5 +25,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire, List<InterviewEntity> interviewEntities);
         void Save(InterviewState interviewState);
+        InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId);
     }
 }

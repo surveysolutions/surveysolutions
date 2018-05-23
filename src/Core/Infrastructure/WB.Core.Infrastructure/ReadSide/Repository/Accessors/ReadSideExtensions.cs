@@ -2,15 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
 {
     public static class ReadSideExtensions
     {
-
         public static T GetById<T>(this IReadSideStorage<T> writer, Guid? id)
+            where T : class, IReadSideRepositoryEntity
+        {
+            return writer.GetById(id.FormatGuid());
+        }
+
+        public static T GetById<T>(this IReadSideStorage<T, string> writer, Guid? id)
             where T : class, IReadSideRepositoryEntity
         {
             return writer.GetById(id.FormatGuid());
@@ -22,13 +26,32 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
             writer.Remove(id.FormatGuid());
         }
 
+        public static void Remove<T>(this IReadSideStorage<T, string> writer, Guid? id)
+            where T : class, IReadSideRepositoryEntity
+        {
+            writer.Remove(id.FormatGuid());
+        }
+
+
         public static void Store<T>(this IReadSideStorage<T> writer, T view, Guid? id)
             where T : class, IReadSideRepositoryEntity
         {
             writer.Store(view, id.FormatGuid());
         }
 
+        public static void Store<T>(this IReadSideStorage<T, string> writer, T view, Guid? id)
+            where T : class, IReadSideRepositoryEntity
+        {
+            writer.Store(view, id.FormatGuid());
+        }
+
         public static T GetById<T>(this IReadSideRepositoryReader<T> reader, Guid id)
+            where T : class, IReadSideRepositoryEntity
+        {
+            return reader.GetById(id.FormatGuid());
+        }
+
+        public static T GetById<T>(this IReadSideRepositoryReader<T, string> reader, Guid id)
             where T : class, IReadSideRepositoryEntity
         {
             return reader.GetById(id.FormatGuid());
@@ -49,6 +72,12 @@ namespace WB.Core.Infrastructure.ReadSide.Repository.Accessors
                 skipResults = result.Count;
             }
             return result;
+        }
+
+        public static void Store<TEntity, TKey>(this IReadSideRepositoryWriter<TEntity, TKey> repo, TEntity entity)
+            where TEntity : class, IReadSideRepositoryEntity
+        {
+            repo.Store(entity, default(TKey));
         }
     }
 }

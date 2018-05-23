@@ -4,9 +4,11 @@ using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -19,6 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
+        private readonly IAuditLogService auditLogService;
 
         private readonly MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
         private readonly MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
@@ -36,10 +39,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             StartedInterviewsViewModel startedInterviewsViewModel,
             CompletedInterviewsViewModel completedInterviewsViewModel,
             RejectedInterviewsViewModel rejectedInterviewsViewModel,
-            IPlainStorage<InterviewView> interviewsRepository): base (principal, viewModelNavigationService)
+            IPlainStorage<InterviewView> interviewsRepository,
+            IAuditLogService auditLogService): base (principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewsRepository = interviewsRepository;
+            this.auditLogService = auditLogService;
             this.Synchronization = synchronization;
             this.Synchronization.SyncCompleted += this.Refresh;
 
@@ -188,6 +193,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private Task SignOut()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
+            var userName = this.Principal.CurrentUserIdentity.Name;
+            this.auditLogService.Write(new LogoutAuditLogEntity(userName));
             return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
         }
 

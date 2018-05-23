@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier

@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
@@ -183,7 +184,8 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
         {
             return new InterviewErrorsExporter(
                 csvWriter ??  Create.Service.CsvWriter(dataInCsvFile), 
-                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IFileSystemAccessor>());
         }
     }
 }

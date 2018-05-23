@@ -1528,6 +1528,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show audit log.
+        /// </summary>
+        public static string InterviewerProfile_ShowAuditLog {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ShowAuditLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Signal strength.
         /// </summary>
         public static string InterviewerProfile_SignalStrength {
@@ -2172,6 +2181,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Map_UploadingError {
             get {
                 return ResourceManager.GetString("Map_UploadingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File is too big.
+        /// </summary>
+        public static string Map_UploadingFileTooBig {
+            get {
+                return ResourceManager.GetString("Map_UploadingFileTooBig", resourceCulture);
             }
         }
         

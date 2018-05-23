@@ -110,6 +110,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
 
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
+            this.errorsExporter.WriteDoFile(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, basePath);
 
             var errorsExportFilePath = Path.Combine(basePath, InterviewErrorsExporter.FileName);
             errorsExportFilePath = Path.ChangeExtension(errorsExportFilePath, dataFileExtension);

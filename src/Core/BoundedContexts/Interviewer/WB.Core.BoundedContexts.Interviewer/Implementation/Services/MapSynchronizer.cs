@@ -27,9 +27,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public MapSyncProvider(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger,
             IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IInterviewerPrincipal principal,
             IPasswordHasher passwordHasher, IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
-            IPlainStorage<InterviewView> interviewViewRepository) : base(synchronizationService, logger,
+            IPlainStorage<InterviewView> interviewViewRepository, IAuditLogService auditLogService) 
+            : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
-            interviewViewRepository)
+            interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;

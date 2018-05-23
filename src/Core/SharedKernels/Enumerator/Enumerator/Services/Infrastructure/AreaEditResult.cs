@@ -9,6 +9,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         public string Coordinates { set; get; }
 
         public double? DistanceToEditor { set; get; }
+
+        public int? NumberOfPoints { set; get; }
         public byte[] Preview { set; get; }
     }
 }
