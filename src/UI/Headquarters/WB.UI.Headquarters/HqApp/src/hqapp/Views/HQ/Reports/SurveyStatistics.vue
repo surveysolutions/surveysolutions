@@ -50,7 +50,7 @@ export default {
                 question: null,
                 answers: null,
                 condition: null,
-                mode: 'TeamLeads',
+                expandTeams: false,
                 min: this.min,
                 max: this.max,
                 pivot: false
@@ -105,8 +105,7 @@ export default {
         addFilteringParams(data) {
             data.questionnaireId = this.filter.questionnaireId
             data.question = this.filter.questionId
-            data.emptyOnError = true
-            data.mode = this.filter.mode
+            data.expandTeams = this.filter.expandTeams
             data.min = this.filter.min
             data.max = this.filter.max
 
@@ -132,12 +131,6 @@ export default {
 
         infoMessage() {
             return this.$t("Reports.Updated").replace("{0}", moment(this.status.lastRefresh).fromNow())
-        },
-
-        detailedView() { 
-            if(this.filter.mode == null) return false
-
-            return this.filter.mode.toLowerCase() == 'withinterviewers' 
         },
 
         isPivot() {
@@ -202,8 +195,8 @@ export default {
             return answers == null ? [] : answers.map(a => ({
                     class: "type-numeric",
                     title: a.Text,
-                    data: a.Data,
-                    name: a.Data,
+                    data: a.Column,
+                    name: a.Column,
                     orderable: true
             }))
         },
@@ -231,7 +224,7 @@ export default {
                 })
             }
 
-            if(this.isSupervisor || this.detailedView){
+            if(this.isSupervisor || this.filter.expandTeams){
                 columns.push({
                     data: "Responsible",
                     name: "Responsible",
