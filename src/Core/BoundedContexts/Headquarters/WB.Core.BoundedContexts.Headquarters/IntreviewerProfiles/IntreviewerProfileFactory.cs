@@ -20,6 +20,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid interviewerId);
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
+
+        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -28,17 +30,73 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IInterviewFactory interviewFactory;
 
         public InterviewerProfileFactory(
             HqUserManager userManager,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
-            IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader)
+            IDeviceSyncInfoRepository deviceSyncInfoRepository, 
+            IInterviewerVersionReader interviewerVersionReader, 
+            IInterviewFactory interviewFactory)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.interviewFactory = interviewFactory;
         }
+
+        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
+        {
+            InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
+
+            var statusMap = new Dictionary<Guid, InterviewStatus>();
+            foreach (var point in points)
+            {
+                if (statusMap.ContainsKey(point.InterviewId))
+                    continue;
+                statusMap[point.InterviewId] = point.Status;
+            }
+
+            var checkinPoints = points
+                .GroupBy(x => new { x.Latitude, x.Longitude })
+                .Select(x => new InterviewerPoint
+                {
+                    Latitude = x.Key.Latitude,
+                    Longitude = x.Key.Longitude,
+                    Timestamp = x.Min(p => p.Timestamp),
+                    InterviewIds = x.Select(point => point.InterviewId).Distinct().ToList(),
+                    Colors = x.Select(point => point.Status).Select(StatusToColor).Distinct().OrderBy(c => c).ToArray()
+                })
+                .OrderBy(x => x.Timestamp)
+                .ToArray();
+
+
+            for (var index = 0; index < checkinPoints.Length; index++)
+            {
+                checkinPoints[index].Index = index + 1;
+            }
+
+            return checkinPoints;
+        }
+
+        private string StatusToColor(InterviewStatus status)
+        {
+            switch (status)
+            {
+                case InterviewStatus.RejectedByHeadquarters:
+                case InterviewStatus.RejectedBySupervisor:
+                    return "red";
+
+                case InterviewStatus.Completed:
+                case InterviewStatus.ApprovedBySupervisor:
+                case InterviewStatus.ApprovedByHeadquarters:
+                    return "green";
+                default:
+                    return "blue";
+            }
+        }
+
 
         public async Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid userId)
         {

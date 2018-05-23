@@ -464,6 +464,7 @@
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
     <Content Include="questionnaire\content\i\icons3.png" />
+    <Content Include="questionnaire\content\i\logo-designer.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
     <Content Include="questionnaire\details\scripts\controllers\comments.js" />
     <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
@@ -482,6 +483,7 @@
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
+    <Content Include="questionnaire\details\views\question-details\Area-template.html" />
     <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
     <Content Include="questionnaire\details\views\comments.html" />
     <Content Include="RecaptchaNet.Readme.txt" />

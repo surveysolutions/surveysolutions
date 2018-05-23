@@ -506,6 +506,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_NoChangesInfo" xml:space="preserve">
     <value>No changes we made to be saved.</value>
   </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Your location is out of boundaries of the map</value>
+  </data>
   <data name="AreaMap_NoMapsFound" xml:space="preserve">
     <value>No maps were found. Please update maps</value>
   </data>
@@ -586,6 +589,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Store signature</value>
+  </data>
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>New answer to a protected question should be greater or equal to {0}</value>
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} out of {1} options selected</value>

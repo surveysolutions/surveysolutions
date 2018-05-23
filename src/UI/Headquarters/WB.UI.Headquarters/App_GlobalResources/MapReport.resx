@@ -121,7 +121,7 @@
     <value>Not all markers were loaded for current zoom level. Please zoom in and reload markers.</value>
   </data>
   <data name="ViewInterviewContent" xml:space="preserve">
-    <value>View interview content</value>
+    <value>View interview details</value>
   </data>
   <data name="details" xml:space="preserve">
     <value>details</value>
@@ -134,5 +134,8 @@
   </data>
   <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
     <value>There are no any Geo Locations in chosen questionnaire</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Assignment</value>
   </data>
 </root>
