@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using MvvmCross.Platform;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {

@@ -3,9 +3,9 @@ using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using MvvmCross;
 using MvvmCross.Binding;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

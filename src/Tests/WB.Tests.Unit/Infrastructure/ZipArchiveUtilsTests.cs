@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using FluentAssertions;
 using Ionic.Zip;
 using NUnit.Framework;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;

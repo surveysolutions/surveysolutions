@@ -1,6 +1,6 @@
 ﻿using System;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {

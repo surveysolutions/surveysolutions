@@ -14,7 +14,9 @@ using Esri.ArcGISRuntime.Rasters;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.Navigation;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -42,19 +44,22 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         private readonly IUserInteractionService userInteractionService;
 
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IMvxNavigationService navigationService;
 
         public AreaEditorViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMapService mapService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IFileSystemAccessor fileSystemAccessor)
+            IFileSystemAccessor fileSystemAccessor,
+            IMvxNavigationService navigationService)
             : base(principal, viewModelNavigationService)
         {
             this.userInteractionService = userInteractionService;
             this.mapService = mapService;
             this.logger = logger;
             this.fileSystemAccessor = fileSystemAccessor;
+            this.navigationService = navigationService;
         }
 
         public override async Task Initialize()
@@ -282,11 +287,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             }
         });
 
-        public IMvxCommand CancelCommand => new MvxCommand(() =>
+        public IMvxCommand CancelCommand => new MvxAsyncCommand(async () =>
         {
             var handler = this.OnAreaEditCompleted;
             handler?.Invoke(null);
-            Close(this);
+            await this.navigationService.Close(this);
         });
 
 
@@ -322,7 +327,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 logger.Error("Error on shapefile loading", e);
             }
-
         });
 
         public IMvxCommand SwitchLocatorCommand => new MvxCommand(() =>
@@ -484,7 +488,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             {
                 this.IsEditing = false;
                 this.MapView.LocationDisplay.LocationChanged -= LocationDisplayOnLocationChanged;
-                Close(this);
+                await this.navigationService.Close(this);
             }
         }
 

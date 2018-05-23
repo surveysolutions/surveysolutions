@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueVectorTests
 {
