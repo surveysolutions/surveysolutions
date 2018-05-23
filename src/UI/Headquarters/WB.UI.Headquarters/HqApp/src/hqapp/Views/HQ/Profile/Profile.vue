@@ -135,7 +135,9 @@
                             point.Longitude,
                         ),
                         label: {text: point.Index === -1 ? "": point.Index + "", color: "white"},
-                        map: self.map
+                        map: self.map,
+                        opacity: 1,
+                        zIndex: point.Index === -1 ? 1000 : 1000 + point.Index 
                     });
 
                     google.maps.event.addListener(marker,  "click",
