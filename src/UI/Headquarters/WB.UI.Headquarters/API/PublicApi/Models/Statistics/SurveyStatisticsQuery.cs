@@ -2,9 +2,9 @@
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.UI.Headquarters.Models.Api;
 
-namespace WB.UI.Headquarters.API.PublicApi.Models
+namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics
 {
-    public class SurveyStatisticsInput : DataTableRequest
+    public class SurveyStatisticsQuery : DataTableRequest
     {
         public string QuestionnaireId { get; set; }
         public string Question { get; set; }

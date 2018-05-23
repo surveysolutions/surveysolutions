@@ -27,7 +27,7 @@ class QuestionnaireApi {
 
 class SurveyStatistics {
     constructor(http) {
-        this.reportPath = "report/surveyStatistics"
+        this.reportPath = "statistics"
         this.http = http         
     }
 
