@@ -2056,7 +2056,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyLinkedToListOptionsChangesEvents(questionsWithChangedLinkedToListOptionsSet);
             this.ApplySubstitutionEvents(diff);
             this.ApplyReadonlyStateEvents(diff);
-            this.ApplyProtectedAnswers(diff);
         }
 
         protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
@@ -2088,6 +2087,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 }
             }
             this.ApplyRemoveAnswerEvents(questionsWithRemovedAnswer);
+            this.ApplyProtectedAnswers(diff);
             this.ApplyPassiveEvents(diff); 
         }
 
