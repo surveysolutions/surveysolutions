@@ -51,20 +51,17 @@ export const entityDetails = {
         }
     },
     props: ["id"],
-
-    mounted() {
-    //    this.fetch()
-    },
     
     watch: {
         id(to, from) {
             this.$store.dispatch("cleanUpEntity", from)
-         //   this.fetch(to)
         }
     },
+    
     destroyed() {
         this.$store.dispatch("cleanUpEntity", this.id)
     },
+
     methods: {
         sendAnswer(callback) {
             if (this.acceptAnswer) {

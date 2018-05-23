@@ -121,7 +121,7 @@ export default {
     },
 
     shutDownInterview({ state, commit }) {
-        if(!state.interviewShutdown){
+        if (!state.interviewShutdown) {
             commit("SET_INTERVIEW_SHUTDOWN")
             window.close();
         }
@@ -136,8 +136,8 @@ export default {
         })
 
         dispatch("refreshSectionState", null)
-        
-        if(getters.isReviewMode)
+
+        if (getters.isReviewMode)
             dispatch("refreshSearchResults")
     },
 
@@ -155,7 +155,7 @@ export default {
 
         const id = sectionId
         const isPrefilledSection = id === undefined
-        
+
         if (isPrefilledSection) {
             const prefilledPageData = await Vue.$api.call(api => api.getPrefilledEntities())
             if (!prefilledPageData.hasAnyQuestions) {
@@ -172,17 +172,19 @@ export default {
                 commit("SET_SECTION_DATA", prefilledPageData.entities)
             }
         } else {
-            commit("SET_LOADING_PROGRESS", true)
-            const section = await Vue.$api.call(api => api.getSectionEntities(id))
-            const ids = uniq(map(section, "identity"))
-            const details = await Vue.$api.call(api => api.getEntitiesDetails(ids))
+            try {
+                commit("SET_LOADING_PROGRESS", true)
 
-            commit("SET_SECTION_DATA", section)
-            commit("SET_ENTITIES_DETAILS", {
-                entities: details,
-                lastActivityTimestamp: new Date()
-            })
-            commit("SET_LOADING_PROGRESS", false)
+                const section = await Vue.$api.call(api => api.getFullSectionInfo(id))
+
+                commit("SET_SECTION_DATA", section.entities)
+                commit("SET_ENTITIES_DETAILS", {
+                    entities: section.details,
+                    lastActivityTimestamp: new Date()
+                })
+            } finally {
+                commit("SET_LOADING_PROGRESS", false)
+            }
         }
     }, 200),
 
@@ -234,7 +236,7 @@ export default {
 
         commit("COMPLETE_INTERVIEW");
 
-        Vue.$api.call(api => api.completeInterview(comment))        
+        Vue.$api.call(api => api.completeInterview(comment))
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {
