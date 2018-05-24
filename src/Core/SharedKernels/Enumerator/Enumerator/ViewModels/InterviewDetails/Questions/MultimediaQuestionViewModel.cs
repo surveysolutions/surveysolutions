@@ -83,16 +83,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public IMvxAsyncCommand ShowPhotoView => new MvxAsyncCommand(async ()=> 
         {
-            if(!this.questionState.IsAnswered)
-                return;
-
             await this.viewModelNavigationService.NavigateToAsync<PhotoViewViewModel, PhotoViewViewModelArgs>(
                 new PhotoViewViewModelArgs
                 {
                     InterviewId = this.interviewId,
                     FileName = this.GetPictureFileName()
                 });
-        });
+        }, () => this.Answer?.Length > 0);
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
