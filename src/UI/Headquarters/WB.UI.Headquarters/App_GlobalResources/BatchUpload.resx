@@ -362,7 +362,7 @@
   </data>
   <data name="UploadDescription" xml:space="preserve">
     <value>Upload a file with identifying data to create new assignments.
-Specify usernames for supervisors or enumerators to make batch assignments.</value>
+Specify usernames for supervisors or interviewers to make batch assignments.</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
     <value>Upload .tab file</value>
