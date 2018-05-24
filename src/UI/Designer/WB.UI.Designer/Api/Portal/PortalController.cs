@@ -89,22 +89,22 @@ namespace WB.UI.Designer.Api.Portal
             };
         }
 
-        [Route("{userId}/headquarters")]
+        [Route("servers")]
         [HttpGet]
-        public IEnumerable<AllowedAddress> GetHeadquarters() => this.allowedAddressService.GetAddresses();
+        public IEnumerable<AllowedAddress> GetServers() => this.allowedAddressService.GetAddresses();
 
-        [Route("{userId}/headquarters/add")]
+        [Route("servers/add")]
         [HttpPost]
-        public void AddHeadquarters(string ipAddress, string description)
+        public void AddServer(string ipAddress, string description)
             => this.allowedAddressService.Add(new AllowedAddress
             {
                 Description = description,
                 Address = IPAddress.Parse(ipAddress)
             });
 
-        [Route("{userId}/headquarters/delete")]
+        [Route("servers/delete")]
         [HttpPost]
-        public void DeleteHeadquarters(string ipAddress)
+        public void DeleteServer(string ipAddress)
         {
             var parsedAddress = IPAddress.Parse(ipAddress);
             var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, parsedAddress));
