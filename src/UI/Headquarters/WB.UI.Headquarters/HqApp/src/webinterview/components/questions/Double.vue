@@ -11,7 +11,12 @@
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
-                            v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',maximumValue:'99999999999999.99999999999999',digitGroupSeparator: groupSeparator,decimalCharacter:decimalSeparator, decimalPlaces: decimalPlacesCount, allowDecimalPadding: false}">
+                            v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',
+                                                 maximumValue:'99999999999999.99999999999999',
+                                                 digitGroupSeparator: groupSeparator,
+                                                 decimalCharacter:decimalSeparator, 
+                                                 decimalPlaces: decimalPlacesCount, 
+                                                 allowDecimalPadding: false}">
                             <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
                     </div>
                 </div>
@@ -90,7 +95,7 @@
             },
             decimalPlacesCount(){
                 if (this.$me.countOfDecimalPlaces == null || this.$me.countOfDecimalPlaces == undefined)
-                    return 0;
+                    return 15;
                 
                 return this.$me.countOfDecimalPlaces    
             },

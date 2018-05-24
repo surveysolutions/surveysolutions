@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Sanitizer;
 using WB.UI.Headquarters.API.PublicApi.Models;
+using WB.UI.Headquarters.API.PublicApi.Models.Statistics;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
@@ -36,7 +37,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     /// Provides a methods for managing report related actions
     /// </summary>
     [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-    [RoutePrefix(@"api/v1/report/statistics")]
+    [RoutePrefix(@"api/v1/statistics")]
     public class StatisticsController : ApiController
     {
         private readonly ISurveyStatisticsReport surveyStatisticsReport;
@@ -75,8 +76,16 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
         }
 
+        /// <summary>
+        /// Get questions list
+        /// </summary>
+        /// <remarks>
+        /// Gets a questions list for specified questionnaire identity. Only questions that have data are shown
+        /// </remarks>
+        /// <param name="questionnaireId">Questionnaire Identity</param>
+        /// <returns>List of questions</returns>
         [Route(@"questions")]
-        public List<QuestionApiView> GetQuestions(string questionnaireId)
+        public List<QuestionDto> GetQuestions(string questionnaireId)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
@@ -87,11 +96,11 @@ namespace WB.UI.Headquarters.API.PublicApi
             string[] GetBreadcrumbs(IComposite entity)
             {
                 List<IGroup> parents = new List<IGroup>();
-                var parent = (IGroup) entity.GetParent();
+                var parent = (IGroup)entity.GetParent();
                 while (parent != null && parent != questionnaire)
                 {
                     parents.Add(parent);
-                    parent = (IGroup) parent.GetParent();
+                    parent = (IGroup)parent.GetParent();
                 }
 
                 parents.Reverse();
@@ -100,31 +109,30 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return questions
-                .Select(id => questionnaire.Find<AbstractQuestion>(id))
-                .Select(q => new QuestionApiView
+                .Select(id => questionnaire.Find<IQuestion>(id))
+                .Select(q => new QuestionDto
                 {
                     Answers = q.Answers.Select(a => new QuestionAnswerView
                     {
-                        Answer = (int) a.GetParsedValue(),
+                        Answer = (int)a.GetParsedValue(),
                         Text = a.AnswerText,
-                        Data = a.AsColumnName()
+                        Column = a.AsColumnName()
                     }).ToList(),
                     Breadcrumbs = GetBreadcrumbs(q),
-                    PublicKey = q.PublicKey,
+                    Id = q.PublicKey,
                     Type = q.QuestionType.ToString(),
-                    StataExportCaption = q.StataExportCaption,
+                    VariableName = q.StataExportCaption,
                     Label = q.VariableLabel,
-                    HasTotal = q.QuestionType == QuestionType.SingleOption 
+                    HasTotal = q.QuestionType == QuestionType.SingleOption
                                || q.QuestionType == QuestionType.MultyOption,
                     SupportConditions = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
-                    Pivotable = q.QuestionType == QuestionType.SingleOption || q.QuestionType == QuestionType.MultyOption,
                     QuestionText = q.QuestionText.RemoveHtmlTags().Replace(@"%rostertitle%", @"[...]")
                 })
                 .ToList();
         }
 
         [Route(@"questionnaires")]
-        public List<QuestionnaireApiItem> GetQuestionnairesList()
+        public List<QuestionnaireDto> GetQuestionnairesList()
         {
             var allQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel());
 
@@ -138,8 +146,13 @@ namespace WB.UI.Headquarters.API.PublicApi
                 new HashSet<QuestionnaireIdentity>(this.interviewReportDataRepository.QuestionnairesWithData(teamLeadId));
 
             return allQuestionnaires.Items.Where(q => questionnairesWithData.Contains(q.Identity()))
-                .Select(q => new QuestionnaireApiItem(q.QuestionnaireId, q.Version, q.Title, q.LastEntryDate))
-                .ToList();
+                .OrderByDescending(q => q.LastEntryDate)
+                .Select(q => new QuestionnaireDto
+                {
+                    Identity = q.Id,
+                    Title = q.Title,
+                    Version = q.Version
+                }).ToList();
         }
 
         private HttpResponseMessage ReturnEmptyResult()
@@ -153,22 +166,21 @@ namespace WB.UI.Headquarters.API.PublicApi
         }
 
         /// <summary>
-        /// Generate response of selected type with report for single select question
+        /// Generate report report based on provided query paramters.
         /// </summary>
-        /// <param name="input">input data</param>
-        /// <returns>Report view of proper type</returns>
+        /// <param name="query">input data</param>
+        /// <returns>Report view of selected type (JSON by default)</returns>
         [Localizable(false)]
         [HttpGet]
-        
         [Route(@"")]
-        public HttpResponseMessage Report([FromUri] SurveyStatisticsInput input)
+        public HttpResponseMessage Report([FromUri] SurveyStatisticsQuery query)
         {
-            if (input.QuestionnaireId == null)
+            if (query.QuestionnaireId == null)
             {
                 return ReturnEmptyResult();
             }
 
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(input.QuestionnaireId);
+            var questionnaireIdentity = QuestionnaireIdentity.Parse(query.QuestionnaireId);
             var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
 
             if (questionnaire == null)
@@ -183,7 +195,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     : questionnaire.Find<IQuestion>(q => q.StataExportCaption == inputVar).FirstOrDefault();
             }
 
-            var question = GetQuestionByGuidOrStataCaption(input.Question);
+            var question = GetQuestionByGuidOrStataCaption(query.Question);
 
             if (question != null)
             {
@@ -194,23 +206,22 @@ namespace WB.UI.Headquarters.API.PublicApi
                         $"Cannot build report for Single Question that linked to roster or other questions"));
                 }
 
-                var conditionalQuestion = GetQuestionByGuidOrStataCaption(input.ConditionalQuestion);
+                var conditionalQuestion = GetQuestionByGuidOrStataCaption(query.ConditionalQuestion);
 
                 var inputModel = new SurveyStatisticsReportInputModel
                 {
                     QuestionnaireIdentity = questionnaireIdentity,
                     Question = question,
-                    TeamLeadId = input.TeamLeadId,
-                    ShowTeamMembers = input.DetailedView,
-                    Orders = input.ToOrderRequestItems(),
-                    PageSize = input.exportType == null ? input.PageSize : int.MaxValue,
-                    Page = input.exportType == null ? input.PageIndex : 1,
-                    MinAnswer = input.Min,
-                    MaxAnswer = input.Max,
-                    Condition = input.Condition,
+                    ShowTeamMembers = query.ExpandTeams,
+                    Orders = query.ToOrderRequestItems(),
+                    PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
+                    Page = query.exportType == null ? query.PageIndex : 1,
+                    MinAnswer = query.Min,
+                    MaxAnswer = query.Max,
+                    Condition = query.Condition,
                     ConditionalQuestion = conditionalQuestion,
-                    Columns = input.ColummnsList.Select(c => c.Name).ToArray(),
-                    Pivot = input.Pivot
+                    Columns = query?.ColummnsList.Select(c => c.Name).ToArray(),
+                    Pivot = query.Pivot
                 };
 
                 if (this.authorizedUser.IsSupervisor)
@@ -232,21 +243,19 @@ namespace WB.UI.Headquarters.API.PublicApi
                     .Labels(reportTimeToMonitor)
                     .Set(stopwatch.Elapsed.TotalSeconds);
 
-                if (input.exportType == null)
+                if (query.exportType == null)
                 {
                     var response = Request.CreateResponse(HttpStatusCode.OK);
-                    var reportJson = report.AsDataTablesJson(input.Draw);
+                    var reportJson = report.AsDataTablesJson(query.Draw);
                     response.Content = new StringContent(reportJson.ToString(), Encoding.UTF8, "application/json");
                     return response;
                 }
 
-                return CreateReportResponse(input.exportType.Value, report,
+                return CreateReportResponse(query.exportType.Value, report,
                     $"{questionnaire.Title} (ver. {questionnaireIdentity.Version}) {question.StataExportCaption}");
             }
 
-            if (input.EmptyOnError) return ReturnEmptyResult();
-            throw new HttpResponseException(Request.CreateErrorResponse(HttpStatusCode.NotFound,
-                $"Cannot find questionnaire entity with variable name or Id: {input.Question}"));
+            return ReturnEmptyResult();
         }
 
         [HttpPost]
@@ -269,7 +278,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         public HttpResponseMessage ForceRefresh()
         {
             this.refreshReportsTask.ForceRefresh();
-            
+
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 

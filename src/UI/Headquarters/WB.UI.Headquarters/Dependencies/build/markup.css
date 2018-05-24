@@ -8655,7 +8655,7 @@ body > .ui-pnotify {
   .table-ordered thead tr th:after {
     border-top: 8px solid #dbdfe2; }
   .table-ordered thead tr th.sorting_desc:after {
-    border-bottom: 8px solid #2a81cb; }
+    border-top: 8px solid #2a81cb; }
   .table {
     font-size: 14px;
     line-height: 16px; }
