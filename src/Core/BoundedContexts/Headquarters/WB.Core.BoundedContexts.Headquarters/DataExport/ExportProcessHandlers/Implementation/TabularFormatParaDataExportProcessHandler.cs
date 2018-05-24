@@ -126,10 +126,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
                             writer.WriteField(evnt.OriginatorName);
                             writer.WriteField(evnt.OriginatorRole);
                             writer.WriteField(evnt.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
-                            foreach (var value in evnt.Parameters.Values)
-                            {
-                                writer.WriteField(Utils.RemoveNewLine(value));
-                            }
+
+                            writer.WriteField(String.Join("||",
+                                evnt.Parameters.Values.Select(Utils.RemoveNewLine)));
+                            
                             writer.NextRecord();
                         }
 
