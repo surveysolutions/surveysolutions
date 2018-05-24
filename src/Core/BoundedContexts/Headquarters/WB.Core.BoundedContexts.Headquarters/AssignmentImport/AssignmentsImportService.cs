@@ -499,117 +499,50 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             if (!questionId.HasValue) return null;
 
             var questionType = questionnaire.GetQuestionType(questionId.Value);
-            
-            var interviewAnswer = new InterviewAnswer { Identity = Identity.Create(questionId.Value, rosterVector) };
-
+            var isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(questionId.Value);
             var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId.Value);
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId.Value);
 
-            var isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(questionId.Value);
-            // magic for text list question only
-            if (isRosterSizeQuestion && value is AssignmentTextAnswer)
+            var interviewAnswer = new InterviewAnswer { Identity = Identity.Create(questionId.Value, rosterVector) };
+
+            switch (value)
             {
-                interviewAnswer.Answer = TextAnswer.FromString(((AssignmentTextAnswer) value)?.Value);
-                return interviewAnswer;
-            }
-            //------------------------------------------------------------------------------
-
-            switch (questionType)
-            {
-                case QuestionType.SingleOption:
-                    if (!isLinkedToQuestion && !isLinkedToRoster)
-                    {
-                        var assignmentInt = ((AssignmentCategoricalSingleAnswer)value).OptionCode;
-                        if (assignmentInt.HasValue)
-                            interviewAnswer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(assignmentInt.Value);
-                    }
+                case AssignmentAnswer answer when string.IsNullOrWhiteSpace(answer.Value):
+                case AssignmentAnswers answers when answers.Values?.All(x => string.IsNullOrWhiteSpace(x.Value)) ?? true:
                     break;
-                case QuestionType.MultyOption:
-                    {
-                        var assignmentCategoricalMulti = ((AssignmentMultiAnswer)value)?.Values
-                            ?.OfType<AssignmentIntegerAnswer>()
-                            .Where(x => x.Answer.HasValue)
-                            ?.Select(x => new { code = Convert.ToInt32(x.VariableName), answer = x.Answer })
-                            .ToArray();
-
-                        if (assignmentCategoricalMulti?.Length > 0)
-                        {
-                            if (questionnaire.IsQuestionYesNo(questionId.Value))
-                            {
-                                var orderedAnswers = assignmentCategoricalMulti
-                                    .Where(x => x.answer > -1)
-                                    .OrderBy(x => x.answer)
-                                    .Select(x => new AnsweredYesNoOption(x.code, x.answer != 0))
-                                    .ToArray();
-
-                                interviewAnswer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(orderedAnswers);
-                            }
-                            else if (!isLinkedToQuestion && !isLinkedToRoster)
-                            {
-                                var orderedAnswers = assignmentCategoricalMulti
-                                    .Where(x => x.answer > 0)
-                                    .OrderBy(x => x.answer)
-                                    .Select(x => x.code)
-                                    .Distinct()
-                                    .ToArray();
-
-                                interviewAnswer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(orderedAnswers);
-                            }
-                        }
-                    }
+                // magic for text list question only
+                case AssignmentTextAnswer textListRosterTitle when isRosterSizeQuestion:
+                    interviewAnswer.Answer = TextAnswer.FromString(textListRosterTitle.Value);
                     break;
-                case QuestionType.DateTime:
-                    var assignmentDateTime = ((AssignmentDateTimeAnswer)value).Answer;
-                    if (assignmentDateTime.HasValue)
-                        interviewAnswer.Answer = DateTimeAnswer.FromDateTime(assignmentDateTime.Value);
+                case AssignmentTextAnswer textAnswer when questionType == QuestionType.Text:
+                    interviewAnswer.Answer = TextAnswer.FromString(textAnswer.Value);
                     break;
-                case QuestionType.GpsCoordinates:
-                    var assignmentGpsValues = ((AssignmentGpsAnswer)value)?.Values;
-                    if (assignmentGpsValues != null)
-                    {
-                        var doubleAnswers = assignmentGpsValues.OfType<AssignmentDoubleAnswer>();
-                        var longitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
-                        var latitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
-                        var altitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Altitude).ToLower())?.Answer;
-                        var accuracy = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Accuracy).ToLower())?.Answer;
-                        var timestamp = assignmentGpsValues.OfType<AssignmentDateTimeAnswer>().FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Timestamp).ToLower())?.Answer;
-
-                        interviewAnswer.Answer = GpsAnswer.FromGeoPosition(new GeoPosition(latitude ?? 0, longitude ?? 0,
-                            accuracy ?? 0, altitude ?? 0, timestamp ?? DateTimeOffset.MinValue));
-                    }
+                case AssignmentTextAnswer qrBarcodeAnswer when questionType == QuestionType.QRBarcode:
+                    interviewAnswer.Answer = QRBarcodeAnswer.FromString(qrBarcodeAnswer.Value);
                     break;
-                case QuestionType.Numeric:
-                    if (questionnaire.IsQuestionInteger(questionId.Value))
-                    {
-                        var assignmentInt = ((AssignmentIntegerAnswer)value).Answer;
-                        if (assignmentInt.HasValue)
-                            interviewAnswer.Answer = NumericIntegerAnswer.FromInt(assignmentInt.Value);
-                    }
-                    else
-                    {
-                        var assignmentDouble = ((AssignmentDoubleAnswer)value).Answer;
-                        if (assignmentDouble.HasValue)
-                            interviewAnswer.Answer = NumericRealAnswer.FromDouble(assignmentDouble.Value);
-                    }
+                case AssignmentCategoricalSingleAnswer categoricalSingleAnswer when !isLinkedToQuestion && !isLinkedToRoster && categoricalSingleAnswer.OptionCode.HasValue:
+                    interviewAnswer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(categoricalSingleAnswer.OptionCode.Value);
                     break;
-                case QuestionType.QRBarcode:
-                    interviewAnswer.Answer = QRBarcodeAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
+                case AssignmentDateTimeAnswer dateTimeAnswer when dateTimeAnswer.Answer.HasValue:
+                    interviewAnswer.Answer = DateTimeAnswer.FromDateTime(dateTimeAnswer.Answer.Value);
                     break;
-                case QuestionType.Text:
-                    interviewAnswer.Answer = TextAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
+                case AssignmentIntegerAnswer integerAnswer when integerAnswer.Answer.HasValue:
+                    interviewAnswer.Answer = NumericIntegerAnswer.FromInt(integerAnswer.Answer.Value);
                     break;
-                case QuestionType.TextList:
-                    {
-                        var textListAnswers = ((AssignmentMultiAnswer)value)?.Values
-                            ?.OfType<AssignmentTextAnswer>()
-                            ?.Where(x => !string.IsNullOrWhiteSpace(x.Value))
-                            ?.Select(x => new Tuple<decimal, string>(Convert.ToDecimal(x.VariableName), x.Value))
-                            ?.OrderBy(x => x.Item1)
-                            ?.ToArray();
-
-                        interviewAnswer.Answer = TextListAnswer.FromTupleArray(textListAnswers);
-
-                    }
+                case AssignmentDoubleAnswer doubleAnswer when doubleAnswer.Answer.HasValue:
+                    interviewAnswer.Answer = NumericRealAnswer.FromDouble(doubleAnswer.Answer.Value);
+                    break;
+                case AssignmentGpsAnswer gpsAnswer:
+                    interviewAnswer.Answer = gpsAnswer.ToInterviewAnswer();
+                    break;
+                case AssignmentMultiAnswer textListAnswer when questionType == QuestionType.TextList:
+                    interviewAnswer.Answer = textListAnswer.ToInterviewTextListAnswer();
+                    break;
+                case AssignmentMultiAnswer yesNoAnswer when questionnaire.IsQuestionYesNo(questionId.Value):
+                    interviewAnswer.Answer = yesNoAnswer.ToInterviewYesNoAnswer();
+                    break;
+                case AssignmentMultiAnswer categoricalMultiAnswer when questionType == QuestionType.MultyOption && !isLinkedToQuestion && !isLinkedToRoster:
+                    interviewAnswer.Answer = categoricalMultiAnswer.ToInterviewCategoricalMultiAnswer();
                     break;
             }
 
