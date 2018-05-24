@@ -248,18 +248,12 @@ export default {
 
     applyChanges(changes) {
         let data = {}
-        if(changes.length > 1) console.log('lot of changes')
+        
+        // apply accumulated changes to query
         changes.forEach(change => change(data))
 
         const state = Object.assign(_.clone(this.queryString), data)       
-
-        // if(state.min != null 
-        //     && state.max != null 
-        //     && state.min > state.max) return false
-
-        if(data != null) {
-            this.updateRoute(state)
-        }
+        this.updateRoute(state)
     },
 
     updateRoute(newQuery) {
