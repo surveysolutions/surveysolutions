@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -106,9 +107,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
                 var assignmentsImportStatus = plainTransactionManager.ExecuteInPlainTransaction(() => this.importService.GetImportStatus());
 
-                var isAssignmentImportIsGoing = assignmentsImportStatus != null && 
-                                                assignmentsImportStatus.InQueueCount > assignmentsImportStatus.WithErrorsCount &&
-                                                assignmentsImportStatus.QuestionnaireIdentity.Equals(questionnaireIdentity);
+                var isAssignmentImportIsGoing = assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
+                                                assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
 
                 if (!isAssignmentImportIsGoing)
                 {
