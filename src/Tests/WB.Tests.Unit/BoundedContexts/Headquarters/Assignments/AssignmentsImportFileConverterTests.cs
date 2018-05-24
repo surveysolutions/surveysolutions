@@ -594,7 +594,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_getting_assignment_row_with_empty_answer_by_text_question_should_return_row_without_answers()
+        public void when_getting_assignment_row_with_empty_answer_by_text_question_should_return_row_with_answer_with_empty_value()
         {
             //arrange
             var variable = "questionId";
@@ -610,11 +610,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
             //assert
             Assert.That(assignmentRows, Has.One.Items);
-            Assert.That(assignmentRows[0].Answers, Is.Empty);
+            Assert.That(assignmentRows[0].Answers, Has.One.Items);
+            Assert.That(((AssignmentTextAnswer)assignmentRows[0].Answers[0]).Value, Is.Empty);
         }
 
         [Test]
-        public void when_getting_assignment_row_with_empty_answers_by_categorical_multi_question_should_return_row_without_answers()
+        public void when_getting_assignment_row_with_2_empty_answers_by_categorical_multi_question_should_return_row_with_categorical_multi_answer_with_2_empty_values()
         {
             //arrange
             var variable = "questionId";
@@ -640,7 +641,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
             //assert
             Assert.That(assignmentRows, Has.One.Items);
-            Assert.That(assignmentRows[0].Answers, Is.Empty);
+            Assert.That(assignmentRows[0].Answers, Has.One.Items);
+            Assert.That(((AssignmentMultiAnswer)assignmentRows[0].Answers[0]).Values, Has.Exactly(2).Items);
+            Assert.That(((AssignmentMultiAnswer)assignmentRows[0].Answers[0]).Values[0].Value, Is.Empty);
+            Assert.That(((AssignmentMultiAnswer)assignmentRows[0].Answers[0]).Values[1].Value, Is.Empty);
         }
     }
 }
