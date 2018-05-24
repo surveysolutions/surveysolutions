@@ -56,6 +56,9 @@
     <EmbeddedResource Update="Properties\InterviewerUIResources.ru.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
+	<EmbeddedResource Update="Properties\InterviewerUIResources.ro.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\InterviewerUIResources.th-TH.resx">
       <DependentUpon>InterviewerUIResources.resx</DependentUpon>
     </EmbeddedResource>
