@@ -126,6 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;
             profile.SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId);
             profile.RegistredDevicesCount = registredDeviceCount;
+            profile.HasAnyGpsAnswerForInterviewer = interviewFactory.HasAnyGpsAnswerForInterviewer(userId);
 
             return profile;
         }

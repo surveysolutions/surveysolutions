@@ -244,6 +244,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return result;
         }
 
+        public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId)
+        {
+            var result = sessionProvider.GetSession().Connection.Query<int>(
+                $@"         select 1
+                            from
+                                readside.interviews_view i
+                            join readside.interviewsummaries s on
+                                s.interviewid = i.interviewid
+                            join readside.questionnaire_entities e on
+                                e.entityid = i.entityid
+                            where
+                                i.asgps is not null
+                                and s.responsibleid = @interviewerId
+                                and i.isenabled = true
+                                and e.question_scope = 0;",
+                new
+                {
+                    interviewerId
+                })
+            .ToArray();
+            return result.Length > 0;
+        }
+
         public void Save(InterviewState state)
         {
             var rows = GetInterviewEntities(state.Id);
