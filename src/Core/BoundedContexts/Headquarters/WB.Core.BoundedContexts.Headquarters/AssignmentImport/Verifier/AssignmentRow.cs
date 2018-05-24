@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
@@ -28,7 +32,23 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
     }
 
     public class AssignmentTextAnswer : AssignmentAnswer { }
-    public class AssignmentGpsAnswer : AssignmentAnswers { }
+
+    public class AssignmentGpsAnswer : AssignmentAnswers
+    {
+        public GpsAnswer ToInterviewAnswer()
+        {
+            var doubleAnswers = this.Values.OfType<AssignmentDoubleAnswer>();
+            var longitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Longitude).ToLower())?.Answer;
+            var latitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Latitude).ToLower())?.Answer;
+            var altitude = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Altitude).ToLower())?.Answer;
+            var accuracy = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Accuracy).ToLower())?.Answer;
+            var timestamp = this.Values.OfType<AssignmentDateTimeAnswer>()
+                .FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Timestamp).ToLower())?.Answer;
+
+            return GpsAnswer.FromGeoPosition(new GeoPosition(latitude ?? 0, longitude ?? 0,
+                accuracy ?? 0, altitude ?? 0, timestamp ?? DateTimeOffset.MinValue));
+        }
+    }
 
     public class AssignmentIntegerAnswer : AssignmentAnswer
     {
@@ -51,6 +71,47 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentMultiAnswer : AssignmentAnswers
     {
+        public TextListAnswer ToInterviewTextListAnswer()
+        {
+            var textListAnswers = this.Values
+                .OfType<AssignmentTextAnswer>()
+                .Where(x => !string.IsNullOrWhiteSpace(x.Value))
+                .Select(x => new Tuple<int, string>(Convert.ToInt32(x.VariableName), x.Value))
+                .OrderBy(x => x.Item1)
+                .ToArray();
+
+            return TextListAnswer.FromTupleArray(textListAnswers);
+
+        }
+
+        public YesNoAnswer ToInterviewYesNoAnswer()
+        {
+            var ynOrderedAnswers = this.Values
+                .OfType<AssignmentIntegerAnswer>()
+                .Where(x => x.Answer.HasValue)
+                .Select(x => new { code = Convert.ToInt32(x.VariableName), answer = x.Answer })
+                .Where(x => x.answer > -1)
+                .OrderBy(x => x.answer)
+                .Select(x => new AnsweredYesNoOption(x.code, x.answer != 0))
+                .ToArray();
+
+            return YesNoAnswer.FromAnsweredYesNoOptions(ynOrderedAnswers);
+        }
+
+        public CategoricalFixedMultiOptionAnswer ToInterviewCategoricalMultiAnswer()
+        {
+            var orderedAnswers = this.Values
+                .OfType<AssignmentIntegerAnswer>()
+                .Where(x => x.Answer.HasValue)
+                .Select(x => new { code = Convert.ToInt32(x.VariableName), answer = x.Answer })
+                .Where(x => x.answer > 0)
+                .OrderBy(x => x.answer)
+                .Select(x => x.code)
+                .Distinct()
+                .ToArray();
+
+            return CategoricalFixedMultiOptionAnswer.FromIntArray(orderedAnswers);
+        }
     }
 
     public interface IAssignmentAnswer
