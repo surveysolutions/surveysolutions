@@ -284,8 +284,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         private void SaveAssignments(IList<AssignmentToImport> assignments)
         {
+            AssignmentToImport GetAssignmentWithoutEmptyAnswers(AssignmentToImport assignmentToImport)
+            {
+                assignmentToImport.Answers = assignmentToImport.Answers.Where(x => x.Answer != null).ToList();
+                return assignmentToImport;
+            }
+
             this.importAssignmentsRepository.Store(assignments.Select(x =>
-                new Tuple<AssignmentToImport, object>(x, x.Id)));
+                new Tuple<AssignmentToImport, object>(GetAssignmentWithoutEmptyAnswers(x), x.Id)));
         }
 
         private List<AssignmentToImport> ConcatRosters(List<PreloadingAssignmentRow> assignmentRows,
@@ -308,7 +314,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return new AssignmentToImport
             {
                 Quantity = quantity.HasValue ? (quantity > -1 ? quantity : null) : 1,
-                Answers = answers.Where(y => y?.Answer != null).ToList(),
+                Answers = answers.ToList(),
                 Interviewer = responsible?.InterviewerId,
                 Supervisor = responsible?.SupervisorId,
                 Verified = false,
@@ -494,7 +500,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             var questionType = questionnaire.GetQuestionType(questionId.Value);
             
-            var answer = new InterviewAnswer { Identity = Identity.Create(questionId.Value, rosterVector) };
+            var interviewAnswer = new InterviewAnswer { Identity = Identity.Create(questionId.Value, rosterVector) };
 
             var isLinkedToQuestion = questionnaire.IsQuestionLinked(questionId.Value);
             var isLinkedToRoster = questionnaire.IsQuestionLinkedToRoster(questionId.Value);
@@ -503,8 +509,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             // magic for text list question only
             if (isRosterSizeQuestion && value is AssignmentTextAnswer)
             {
-                answer.Answer = TextAnswer.FromString(((AssignmentTextAnswer) value)?.Value);
-                return answer;
+                interviewAnswer.Answer = TextAnswer.FromString(((AssignmentTextAnswer) value)?.Value);
+                return interviewAnswer;
             }
             //------------------------------------------------------------------------------
 
@@ -515,7 +521,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     {
                         var assignmentInt = ((AssignmentCategoricalSingleAnswer)value).OptionCode;
                         if (assignmentInt.HasValue)
-                            answer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(assignmentInt.Value);
+                            interviewAnswer.Answer = CategoricalFixedSingleOptionAnswer.FromInt(assignmentInt.Value);
                     }
                     break;
                 case QuestionType.MultyOption:
@@ -523,7 +529,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         var assignmentCategoricalMulti = ((AssignmentMultiAnswer)value)?.Values
                             ?.OfType<AssignmentIntegerAnswer>()
                             .Where(x => x.Answer.HasValue)
-                            ?.Select(x => new { code = Convert.ToInt32(x.VariableName), answer = Convert.ToInt32(x.Answer) })
+                            ?.Select(x => new { code = Convert.ToInt32(x.VariableName), answer = x.Answer })
                             .ToArray();
 
                         if (assignmentCategoricalMulti?.Length > 0)
@@ -536,7 +542,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                                     .Select(x => new AnsweredYesNoOption(x.code, x.answer != 0))
                                     .ToArray();
 
-                                answer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(orderedAnswers);
+                                interviewAnswer.Answer = YesNoAnswer.FromAnsweredYesNoOptions(orderedAnswers);
                             }
                             else if (!isLinkedToQuestion && !isLinkedToRoster)
                             {
@@ -547,7 +553,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                                     .Distinct()
                                     .ToArray();
 
-                                answer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(orderedAnswers);
+                                interviewAnswer.Answer = CategoricalFixedMultiOptionAnswer.FromIntArray(orderedAnswers);
                             }
                         }
                     }
@@ -555,7 +561,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 case QuestionType.DateTime:
                     var assignmentDateTime = ((AssignmentDateTimeAnswer)value).Answer;
                     if (assignmentDateTime.HasValue)
-                        answer.Answer = DateTimeAnswer.FromDateTime(assignmentDateTime.Value);
+                        interviewAnswer.Answer = DateTimeAnswer.FromDateTime(assignmentDateTime.Value);
                     break;
                 case QuestionType.GpsCoordinates:
                     var assignmentGpsValues = ((AssignmentGpsAnswer)value)?.Values;
@@ -568,7 +574,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         var accuracy = doubleAnswers.FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Accuracy).ToLower())?.Answer;
                         var timestamp = assignmentGpsValues.OfType<AssignmentDateTimeAnswer>().FirstOrDefault(x => x.VariableName == nameof(GeoPosition.Timestamp).ToLower())?.Answer;
 
-                        answer.Answer = GpsAnswer.FromGeoPosition(new GeoPosition(latitude ?? 0, longitude ?? 0,
+                        interviewAnswer.Answer = GpsAnswer.FromGeoPosition(new GeoPosition(latitude ?? 0, longitude ?? 0,
                             accuracy ?? 0, altitude ?? 0, timestamp ?? DateTimeOffset.MinValue));
                     }
                     break;
@@ -577,20 +583,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                     {
                         var assignmentInt = ((AssignmentIntegerAnswer)value).Answer;
                         if (assignmentInt.HasValue)
-                            answer.Answer = NumericIntegerAnswer.FromInt(assignmentInt.Value);
+                            interviewAnswer.Answer = NumericIntegerAnswer.FromInt(assignmentInt.Value);
                     }
                     else
                     {
                         var assignmentDouble = ((AssignmentDoubleAnswer)value).Answer;
                         if (assignmentDouble.HasValue)
-                            answer.Answer = NumericRealAnswer.FromDouble(assignmentDouble.Value);
+                            interviewAnswer.Answer = NumericRealAnswer.FromDouble(assignmentDouble.Value);
                     }
                     break;
                 case QuestionType.QRBarcode:
-                    answer.Answer = QRBarcodeAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
+                    interviewAnswer.Answer = QRBarcodeAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
                     break;
                 case QuestionType.Text:
-                    answer.Answer = TextAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
+                    interviewAnswer.Answer = TextAnswer.FromString(((AssignmentTextAnswer)value)?.Value);
                     break;
                 case QuestionType.TextList:
                     {
@@ -601,14 +607,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                             ?.OrderBy(x => x.Item1)
                             ?.ToArray();
 
-                        answer.Answer = TextListAnswer.FromTupleArray(textListAnswers);
+                        interviewAnswer.Answer = TextListAnswer.FromTupleArray(textListAnswers);
 
                     }
                     break;
-                default: return null;
             }
 
-            return answer;
+            return interviewAnswer;
         }
     }
 }

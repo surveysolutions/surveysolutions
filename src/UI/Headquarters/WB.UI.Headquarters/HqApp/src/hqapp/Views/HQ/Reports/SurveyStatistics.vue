@@ -50,7 +50,7 @@ export default {
                 question: null,
                 answers: null,
                 condition: null,
-                mode: 'TeamLeads',
+                expandTeams: false,
                 min: this.min,
                 max: this.max,
                 pivot: false
@@ -87,7 +87,7 @@ export default {
         },
 
         reloadTable() {
-            if(this.isFiltersLoaded)
+            if(this.isFiltersLoaded && this.$refs.table != null)
             {
                 this.$refs.table.reload()
             }
@@ -105,13 +105,12 @@ export default {
         addFilteringParams(data) {
             data.questionnaireId = this.filter.questionnaireId
             data.question = this.filter.questionId
-            data.emptyOnError = true
-            data.mode = this.filter.mode
+            data.expandTeams = this.filter.expandTeams
             data.min = this.filter.min
             data.max = this.filter.max
 
             if(this.filter.condition != null) {
-                data.ConditionalQuestion = this.filter.condition.PublicKey
+                data.ConditionalQuestion = this.filter.condition.Id
                 data.pivot = this.filter.pivot
 
                 if(!data.pivot || this.filter.conditionAnswers.length > 0) {
@@ -132,12 +131,6 @@ export default {
 
         infoMessage() {
             return this.$t("Reports.Updated").replace("{0}", moment(this.status.lastRefresh).fromNow())
-        },
-
-        detailedView() { 
-            if(this.filter.mode == null) return false
-
-            return this.filter.mode.toLowerCase() == 'withinterviewers' 
         },
 
         isPivot() {
@@ -202,8 +195,8 @@ export default {
             return answers == null ? [] : answers.map(a => ({
                     class: "type-numeric",
                     title: a.Text,
-                    data: a.Data,
-                    name: a.Data,
+                    data: a.Column,
+                    name: a.Column,
                     orderable: true
             }))
         },
@@ -213,7 +206,7 @@ export default {
                 return [{
                         data: "variable",
                         name: "variable",
-                        title: this.filter.condition.Label || this.filter.condition.StataExportCaption,
+                        title: this.filter.condition.Label || this.filter.condition.VariableName,
                         orderable: true
                     }
                 ]
@@ -231,7 +224,7 @@ export default {
                 })
             }
 
-            if(this.isSupervisor || this.detailedView){
+            if(this.isSupervisor || this.filter.expandTeams){
                 columns.push({
                     data: "Responsible",
                     name: "Responsible",

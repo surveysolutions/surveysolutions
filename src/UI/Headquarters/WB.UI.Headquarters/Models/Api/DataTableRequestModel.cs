@@ -4,10 +4,11 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Models.Api
 {
+    /// <summary>
+    /// Datatable specific
+    /// </summary>
     public class DataTableRequest
     {
-        public bool EmptyOnError { get; set; } = false;
-
         public class SortOrder
         {
             public int Column { get; set; }
@@ -20,8 +21,8 @@ namespace WB.UI.Headquarters.Models.Api
 
             public string Value
             {
-                get { return this.value?.Trim(); }
-                set { this.value = value; }
+                get => this.value?.Trim();
+                set => this.value = value;
             }
 
             public bool Regex { get; set; }
@@ -36,17 +37,41 @@ namespace WB.UI.Headquarters.Models.Api
             public SearchInfo Search { get; set; }
         }
 
+        /// <summary>
+        /// Datatables specific
+        /// </summary>
         public int Draw { get; set; }
-        public int Start { get; set; }
-        public int Length { get; set; }
-        public List<SortOrder> Order { get; set; }
 
+        /// <summary>
+        /// Paging - Start row
+        /// </summary>
+        public int Start { get; set; }
+
+        /// <summary>
+        /// How many rows per page 
+        /// </summary>
+        public int Length { get; set; }
+
+        /// <summary>
+        /// order of output
+        /// </summary>
+        public List<SortOrder> Order { get; set; }
+        
+        /// <summary>
+        /// This is shorthand for <c>Columns</c> property. DataTable works via Get requests
+        /// </summary>
         public List<ColumnInfo> _C { get; set; }
+
+        /// <summary>
+        /// List of columns that need to be outputed. Leave null for default values
+        /// </summary>
         public List<ColumnInfo> Columns { get; set; }
 
         public List<ColumnInfo> ColummnsList => Columns ?? _C;
 
         public SearchInfo Search { get; set; }
+
+
         public int PageIndex => 1 + this.Start / this.Length;
         public int PageSize => this.Length;
 

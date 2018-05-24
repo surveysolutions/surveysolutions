@@ -4,7 +4,8 @@ import AutoNumeric from "autonumeric/dist/autonumeric.min"
 
 const defaults = {
     digitGroupSeparator: "",
-    decimalPlaces: 0
+    decimalPlaces: 0,
+    selectOnFocus: false
 }
 
 Vue.directive("numericFormatting",{ 

@@ -68,8 +68,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics
                 reportView = report.AsReportView();
             }
 
+            if (input.Columns != null)
+            {
+                reportView = reportView.SelectColumns(input.Columns);
+            }
+
             return reportView
-                .SelectColumns(input.Columns)
                 .ApplyOrderAndPaging(input.Orders, input.Page, input.PageSize);
         }
     }
