@@ -2,17 +2,7 @@ import InterviewersAndDevices from "./InterviewersAndDevices";
 import StatusDuration from "./StatusDuration";
 import MapReport from "./MapReport";
 import SurveyStatistics from "./SurveyStatistics";
-
-const store = {
-    state: {
-        
-    },
-    actions: {
-        
-    },
-    mutations: {
-    }
-};
+import Vue from 'vue'
 
 export default class ReportComponent {
     constructor(rootStore) {
@@ -20,20 +10,16 @@ export default class ReportComponent {
     }
 
     get routes() {
-        return [
-            {
+        return [{
                 path: "/Reports/InterviewersAndDevices",
                 component: InterviewersAndDevices
-            },
-            {
+            }, {
                 path: "/Reports/StatusDuration",
                 component: StatusDuration
-            },
-            {
+            }, {
                 path: "/Reports/MapReport",
                 component: MapReport
-            },
-            {
+            }, {
                 name: "surveyStatistics",
                 path: "/Reports/surveyStatistics",
                 component: SurveyStatistics,
@@ -45,10 +31,11 @@ export default class ReportComponent {
                     detailedView: String(route.query.detailedView).toLowerCase() === 'true'
                  })
             }
-        ];
+        ]
     }
 
-    get modules() {
-        return { reports: store };
+    initialize() {
+        const VeeValidate = require('vee-validate');
+        Vue.use(VeeValidate);
     }    
 }

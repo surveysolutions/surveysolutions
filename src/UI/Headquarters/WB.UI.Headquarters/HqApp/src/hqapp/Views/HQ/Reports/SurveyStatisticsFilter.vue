@@ -30,24 +30,29 @@
                 v-if="question && question.Type == 'Numeric'">
             <div class="row">
                 <div class="col-xs-6">
-                    <div class="form-group">
+                    <div class="form-group" v-bind:class="{'has-error': errors.has('min')}" :title="errors.first('min')">
                         <label for="min">{{ $t("Reports.Min") }}</label>
                         <input type="number" class="form-control input-sm" name="min"
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange" 
+                            v-validate.initial="{ max_value: max }"
                             :value="min">
                     </div>        
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group">
+                    <div class="form-group" v-bind:class="{'has-error': errors.has('max')}"
+                        :title="errors.first('max')"
+                        >
                         <label for="max">{{ $t("Reports.Max") }}</label>
                         <input type="number" class="form-control input-sm" 
-                            :placeholder="$t('Reports.Max')"                                
+                            :placeholder="$t('Reports.Max')"                            
+                            v-validate.initial="{ min_value: min }"
                             name="max" @input="inputChange" 
-                            :value="max">
-                    </div>        
+                            :value="max">                     
+                    </div>
                 </div>
             </div>
+            
         </FilterBlock>            
 
         <template v-if="question != null && question.SupportConditions">
@@ -77,12 +82,15 @@
 
 <script>
 
+import Vue from 'vue'
+
 export default {
    data() {
      return {
         questionnaires: [],
         questions: [],
         selectedAnswers: [],
+        changesQueue: [],
         loading: {  
             questions: false,
             questionnaire: false
@@ -97,17 +105,26 @@ export default {
    watch: {
        filter(filter) {
            this.$emit("input", filter)
-       }
+       },
+
+       "query.questionnaireId"(to) {
+           if(this.selectedQuestion == null){
+               this.loadQuestions(to)
+           }
+       }           
    },
 
   async mounted() {      
     await this.loadQuestionnaires();
 
     if(this.selectedQuestionnaire == null && this.questionnaireList.length > 0) {
-        this.selectQuestionnaire(this.questionnaireList[this.questionnaireList.length - 1])
-    }
+        const questionnaire = this.questionnaireList[this.questionnaireList.length - 1]
 
-    await this.loadQuestions();
+        this.selectQuestionnaire(questionnaire)
+        await this.loadQuestions(questionnaire.key);
+    } else {
+        await this.loadQuestions();
+    }    
 
     if(this.question == null && this.questionsList.length > 0) {
         this.selectQuestion(this.questionsList[0])
@@ -129,15 +146,17 @@ export default {
         }
     },
 
-    async loadQuestions() {
-        if(this.query.questionnaireId == null)
+    async loadQuestions(questionnaireId = null) {
+        if(questionnaireId == null && this.query.questionnaireId == null)
             return
+        const id = questionnaireId || this.query.questionnaireId
         
         this.loading.questions = true
+
         try {   
             this.questions = await this.$hq
                 .Report.SurveyStatistics
-                .Questions(this.query.questionnaireId); 
+                .Questions(id); 
         } finally {
             this.loading.questions = false
         }
@@ -148,13 +167,15 @@ export default {
 
         if(id == null) {
             this.selectQuestion(null)
+            this.selectCondition(null)
+            return
         }
         
+        await this.loadQuestions(id.key)
+
         this.selectCondition(null)
         this.onChange(q => q.questionnaireId = questionnaireId )
 
-        await this.loadQuestions()
-        
         const question = _.find(this.questionsList, 'key', this.query.questionId)
         this.selectQuestion(question)
     },
@@ -208,16 +229,33 @@ export default {
         })
     },
 
+    // recieve function that manipulate query string
     onChange(change) {
-        let data = {}
+        // handle changes queue to reduce history navigations
+        const wereEmpty = this.changesQueue.length === 0
+        this.changesQueue.push(change)
+        const self = this
+        
+        if(wereEmpty) {            
+            Vue.nextTick(() => {
+                const changes = self.changesQueue
+                self.changesQueue = []
 
-        change(data)       
+                self.applyChanges(changes)
+            })
+        }        
+    },
+
+    applyChanges(changes) {
+        let data = {}
+        if(changes.length > 1) console.log('lot of changes')
+        changes.forEach(change => change(data))
 
         const state = Object.assign(_.clone(this.queryString), data)       
 
-        if(state.min != null 
-            && state.max != null 
-            && state.min > state.max) return false
+        // if(state.min != null 
+        //     && state.max != null 
+        //     && state.min > state.max) return false
 
         if(data != null) {
             this.updateRoute(state)
@@ -233,7 +271,7 @@ export default {
                 query[key] = newQuery[key]
             }
         })
-
+        
         this.$router.push({ query });
     },
 
