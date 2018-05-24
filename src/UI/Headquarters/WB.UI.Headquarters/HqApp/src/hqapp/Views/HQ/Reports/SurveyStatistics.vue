@@ -87,7 +87,7 @@ export default {
         },
 
         reloadTable() {
-            if(this.isFiltersLoaded)
+            if(this.isFiltersLoaded && this.$refs.table != null)
             {
                 this.$refs.table.reload()
             }

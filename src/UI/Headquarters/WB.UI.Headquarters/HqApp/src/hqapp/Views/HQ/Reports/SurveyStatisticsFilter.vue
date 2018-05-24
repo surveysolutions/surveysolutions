@@ -8,7 +8,7 @@
                 @selected="selectQuestionnaire" />
         </FilterBlock>        
         <FilterBlock :title="$t('Reports.Question')">
-            <Typeahead :placeholder="$t('Reports.SelectQuestion')" fuzzy 
+            <Typeahead :placeholder="$t('Common.Loading')" fuzzy noClear
                 :forceLoadingState="loading.questions"
                 :values="questionsList"
                 :value="selectedQuestion"                
@@ -18,11 +18,11 @@
         <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
             <div class="options-group" >
                 <Radio :label="$t('Reports.TeamLeadsOnly')" 
-                    radioGroup="false" name="expandTeams" 
-                    :value="query.expandTeams" @input="radioChanged" />           
+                    :radioGroup="false" name="expandTeams" 
+                    :value="expandTeams" @input="radioChanged" />           
                 <Radio :label="$t('Reports.WithInterviewers')" 
-                    radioGroup="true" name="expandTeams"                     
-                    :value="query.expandTeams" @input="radioChanged" /> 
+                    :radioGroup="true" name="expandTeams"                     
+                    :value="expandTeams" @input="radioChanged" /> 
             </div>
         </FilterBlock>        
                 
@@ -94,6 +94,12 @@ export default {
      isSupervisor: false
    },
 
+   watch: {
+       filter(filter) {
+           this.$emit("input", filter)
+       }
+   },
+
   async mounted() {      
     await this.loadQuestionnaires();
 
@@ -107,8 +113,6 @@ export default {
         this.selectQuestion(this.questionsList[0])
     }
 
-    this.onChange()
-    
     this.$emit("mounted")
   },
 
@@ -139,16 +143,20 @@ export default {
         }
     },
 
-    selectQuestionnaire(id) {
+    async selectQuestionnaire(id) {
         const questionnaireId = id == null ? null : id.key
 
         if(id == null) {
             this.selectQuestion(null)
         }
+        
         this.selectCondition(null)
-        this.onChange({ questionnaireId })
+        this.onChange(q => q.questionnaireId = questionnaireId )
 
-        this.loadQuestions()
+        await this.loadQuestions()
+        
+        const question = _.find(this.questionsList, 'key', this.query.questionId)
+        this.selectQuestion(question)
     },
 
     selectQuestion(id) {
@@ -175,14 +183,14 @@ export default {
     },
 
     checkedChange(ev) {
-        this.onChange({
-            [ev.name]: ev.checked
+        this.onChange(q => {
+            q[ev.name] = ev.checked
         })
     },
 
     radioChanged(ev) {
-        this.onChange({
-            [ev.name]: ev.selected
+        this.onChange(q => {
+            q[ev.name] = ev.selected
         })
     },
 
@@ -195,22 +203,15 @@ export default {
             value = _.isNaN(intValue) ? null : intValue
         }
 
-        return this.onChange({
-            [source.name]: value
+        return this.onChange(q => {
+            q[source.name] = value
         })
     },
 
-    onChange(options = null) {
+    onChange(change) {
         let data = {}
 
-        if(typeof(options) == 'function') {
-            const result = options(data)
-            if(result != null){
-                data = result
-            }
-        } else {
-            data = options
-        }
+        change(data)       
 
         const state = Object.assign(_.clone(this.queryString), data)       
 
@@ -221,13 +222,6 @@ export default {
         if(data != null) {
             this.updateRoute(state)
         }
-
-        this.$emit("input", Object.assign({
-            questionnaire: this.questionnaire,
-            question: this.question,
-            condition: this.condition,
-            conditionAnswers: this.conditionAnswers
-        }, state))
     },
 
     updateRoute(newQuery) {
@@ -249,12 +243,23 @@ export default {
 
     selectConditionAnswer(answer) {
         this.selectedAnswers = _.xor(this.selectedAnswers, [ answer ])
-
-        this.onChange({})
     }
   },
 
-  computed: {      
+  computed: {
+    filter() {
+        const state = this.queryString
+
+        const filter = Object.assign({
+            questionnaire: this.questionnaire,
+            question: this.question,
+            condition: this.condition,
+            conditionAnswers: this.conditionAnswers
+        }, state)
+
+        return filter
+    },   
+
     query() {
         return this.$store.state.route.query
     },
@@ -265,7 +270,7 @@ export default {
             questionId: this.query.questionId,
             conditionId: this.query.conditionId,
             ans: this.condition != null ? this.selectedAnswers : null,
-            expandTeams: (this.query.expandTeams == 'true')|| false,
+            expandTeams: this.expandTeams,
             pivot: this.query.pivot,
             min: this.min,
             max: this.max
@@ -273,12 +278,16 @@ export default {
     },    
 
     max() {
-        const result = parseInt(this.$route.query.max)
+        const result = parseInt(this.query.max)
         return _.isNaN(result) ? null : result;
+    },
+
+    expandTeams() {
+        return this.query.expandTeams === true || this.query.expandTeams === 'true'
     },
     
     min() {
-        const result =  parseInt(this.$route.query.min)
+        const result =  parseInt(this.query.min)
         return _.isNaN(result) ? null : result;
     },
     
@@ -326,48 +335,34 @@ export default {
     },
 
     questionnaire() {
-        if(this.selectedQuestionnaire != null) {
-
-            const questionnaire = _.find(this.questionnaires, q => 
-            { 
-                const key = q.Identity
-                return key == this.selectedQuestionnaire.key 
-            })
-            return questionnaire
-        }
-
-        return null
+        if(this.selectedQuestionnaire == null) return null
+        
+        return _.find(this.questionnaires, q => 
+        { 
+            const key = q.Identity
+            return key == this.selectedQuestionnaire.key 
+        })
     },
 
     question() {
-        if(this.selectedQuestion != null) {
-            return _.find(this.questions, 
-            { Id : this.selectedQuestion.key })
-        }
-
-        return null
+        if(this.selectedQuestion == null) return null
+        return _.find(this.questions, { Id : this.selectedQuestion.key })        
     },
 
     condition() {
         if(this.selectedCondition == null) return null
-
         return _.find(this.questions, { Id: this.selectedCondition.key })
     },
 
     conditionAnswers() {
         if(this.condition == null) return []
-
-        return _.filter(this.condition.Answers, 
-            ans => this.isSelectedAnswer(ans.Answer))            
+        return _.filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer))            
     },
 
     // drop down
     selectedQuestionnaire() {
-        if(this.query.questionnaireId != null) {
-            return _.find(this.questionnaireList, { key : this.query.questionnaireId })
-        }
-
-        return null
+        if(this.query.questionnaireId == null) return null        
+        return _.find(this.questionnaireList, { key : this.query.questionnaireId })
     },
 
     // drop down
