@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     /// Provides a methods for managing report related actions
     /// </summary>
     [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
-    [RoutePrefix(@"api/v1/report/statistics")]
+    [RoutePrefix(@"api/v1/statistics")]
     public class StatisticsController : ApiController
     {
         private readonly ISurveyStatisticsReport surveyStatisticsReport;
