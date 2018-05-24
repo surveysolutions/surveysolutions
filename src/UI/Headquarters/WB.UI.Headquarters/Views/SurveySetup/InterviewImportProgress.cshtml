@@ -1,4 +1,5 @@
-﻿@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
+﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.InterviewsImport_ImportingProgressPageTitle;
@@ -7,7 +8,7 @@
 @section scripts
 {
     @Scripts.Render("~/js/responsibles-selector")
-    <script type="text/javascript">
+<script type="text/javascript">
         var InterviewCreationProgressModel = function(ajax) {
             var $importInterviewsStatusUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
@@ -19,10 +20,18 @@
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
-                createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
+                @if (Model.Status.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                {
+                    <text>createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
+                isInProgress: ko.observable(true),</text>
+                }
+                @if (Model.Status.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted)
+                {
+                    <text>createdInterviewsCount: ko.observable(@Model.Status.TotalCount),
+                        isInProgress: ko.observable(false),</text>
+                }
                 totalInterviewsCount: ko.observable(@Model.Status.TotalCount),
-                interviewsWithError: ko.observable(@Model.Status.WithErrorsCount),
-                isInProgress: ko.observable(true)
+                interviewsWithError: ko.observable(@Model.Status.WithErrorsCount)
             };
             self.status.hasErrors = ko.computed(function() {
                     return this.interviewsWithError() > 0;
@@ -52,7 +61,7 @@
                     {},
                     true,
                     function(data) {
-                        if (data == null || (data.createdInterviewsCount + data.interviewsWithError === data.totalInterviewsCount)) {
+                        if (data.status === "ImportCompleted") {
                             self.status.isInProgress(false);
                             self.status.createdInterviewsCount(self.status.totalInterviewsCount());
                         } else {
@@ -76,7 +85,7 @@
             var model = new InterviewCreationProgressModel(new Ajax(new Notifier()));
             ko.applyBindings(model);
         });
-    </script>
+</script>
 }
 <main>
     <div class="container">

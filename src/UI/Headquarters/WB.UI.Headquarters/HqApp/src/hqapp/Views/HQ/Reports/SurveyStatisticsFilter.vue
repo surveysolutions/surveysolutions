@@ -8,7 +8,7 @@
                 @selected="selectQuestionnaire" />
         </FilterBlock>        
         <FilterBlock :title="$t('Reports.Question')">
-            <Typeahead :placeholder="$t('Reports.SelectQuestion')" fuzzy 
+            <Typeahead :placeholder="$t('Common.Loading')" fuzzy noClear
                 :forceLoadingState="loading.questions"
                 :values="questionsList"
                 :value="selectedQuestion"                
@@ -18,11 +18,11 @@
         <FilterBlock :title="$t('Reports.ViewOptions')" v-if="!isSupervisor && this.question != null">
             <div class="options-group" >
                 <Radio :label="$t('Reports.TeamLeadsOnly')" 
-                    radioGroup="TeamLeads" name="mode" 
-                    :value="query.mode" @input="radioChanged" />           
+                    :radioGroup="false" name="expandTeams" 
+                    :value="expandTeams" @input="radioChanged" />           
                 <Radio :label="$t('Reports.WithInterviewers')" 
-                    radioGroup="WithInterviewers" name="mode"                     
-                    :value="query.mode" @input="radioChanged" />
+                    :radioGroup="true" name="expandTeams"                     
+                    :value="expandTeams" @input="radioChanged" /> 
             </div>
         </FilterBlock>        
                 
@@ -30,24 +30,29 @@
                 v-if="question && question.Type == 'Numeric'">
             <div class="row">
                 <div class="col-xs-6">
-                    <div class="form-group">
+                    <div class="form-group" v-bind:class="{'has-error': errors.has('min')}" :title="errors.first('min')">
                         <label for="min">{{ $t("Reports.Min") }}</label>
                         <input type="number" class="form-control input-sm" name="min"
                             :placeholder="$t('Reports.Min')"
                             @input="inputChange" 
+                            v-validate.initial="{ max_value: max }"
                             :value="min">
                     </div>        
                 </div>
                 <div class="col-xs-6">
-                    <div class="form-group">
+                    <div class="form-group" v-bind:class="{'has-error': errors.has('max')}"
+                        :title="errors.first('max')"
+                        >
                         <label for="max">{{ $t("Reports.Max") }}</label>
                         <input type="number" class="form-control input-sm" 
-                            :placeholder="$t('Reports.Max')"                                
+                            :placeholder="$t('Reports.Max')"                            
+                            v-validate.initial="{ min_value: min }"
                             name="max" @input="inputChange" 
-                            :value="max">
-                    </div>        
+                            :value="max">                     
+                    </div>
                 </div>
             </div>
+            
         </FilterBlock>            
 
         <template v-if="question != null && question.SupportConditions">
@@ -77,14 +82,7 @@
 
 <script>
 
-function formatGuid(val) {
-    return val.split("-").join("")
-}
-
-const ReportMode = {
-    TeamLeads: "TeamLeads",
-    WithInterviewers: "WithInterviewers"
-}
+import Vue from 'vue'
 
 export default {
    data() {
@@ -92,6 +90,7 @@ export default {
         questionnaires: [],
         questions: [],
         selectedAnswers: [],
+        changesQueue: [],
         loading: {  
             questions: false,
             questionnaire: false
@@ -103,21 +102,34 @@ export default {
      isSupervisor: false
    },
 
+   watch: {
+       filter(filter) {
+           this.$emit("input", filter)
+       },
+
+       "query.questionnaireId"(to) {
+           if(this.selectedQuestion == null){
+               this.loadQuestions(to)
+           }
+       }           
+   },
+
   async mounted() {      
     await this.loadQuestionnaires();
 
     if(this.selectedQuestionnaire == null && this.questionnaireList.length > 0) {
-        this.selectQuestionnaire(this.questionnaireList[this.questionnaireList.length - 1])
-    }
+        const questionnaire = this.questionnaireList[this.questionnaireList.length - 1]
 
-    await this.loadQuestions();
+        this.selectQuestionnaire(questionnaire)
+        await this.loadQuestions(questionnaire.key);
+    } else {
+        await this.loadQuestions();
+    }    
 
     if(this.question == null && this.questionsList.length > 0) {
         this.selectQuestion(this.questionsList[0])
     }
 
-    this.onChange()
-    
     this.$emit("mounted")
   },
 
@@ -134,30 +146,38 @@ export default {
         }
     },
 
-    async loadQuestions() {
-        if(this.query.questionnaireId == null)
+    async loadQuestions(questionnaireId = null) {
+        if(questionnaireId == null && this.query.questionnaireId == null)
             return
+        const id = questionnaireId || this.query.questionnaireId
         
         this.loading.questions = true
+
         try {   
             this.questions = await this.$hq
                 .Report.SurveyStatistics
-                .Questions(this.query.questionnaireId); 
+                .Questions(id); 
         } finally {
             this.loading.questions = false
         }
     },
 
-    selectQuestionnaire(id) {
+    async selectQuestionnaire(id) {
         const questionnaireId = id == null ? null : id.key
 
         if(id == null) {
             this.selectQuestion(null)
+            this.selectCondition(null)
+            return
         }
-        this.selectCondition(null)
-        this.onChange({ questionnaireId })
+        
+        await this.loadQuestions(id.key)
 
-        this.loadQuestions()
+        this.selectCondition(null)
+        this.onChange(q => q.questionnaireId = questionnaireId )
+
+        const question = _.find(this.questionsList, 'key', this.query.questionId)
+        this.selectQuestion(question)
     },
 
     selectQuestion(id) {
@@ -168,13 +188,9 @@ export default {
                 query.conditionId = null
             } else {
                 query.conditionId = null
-                query.mode = this.getDefaultMode()
+                query.expandTeams = false
             }
         })
-    },
-
-    getDefaultMode() {
-        return ReportMode.TeamLeads 
     },
 
     selectCondition(id) {
@@ -188,14 +204,14 @@ export default {
     },
 
     checkedChange(ev) {
-        this.onChange({
-            [ev.name]: ev.checked
+        this.onChange(q => {
+            q[ev.name] = ev.checked
         })
     },
 
     radioChanged(ev) {
-        this.onChange({
-            [ev.name]: ev.selected
+        this.onChange(q => {
+            q[ev.name] = ev.selected
         })
     },
 
@@ -208,39 +224,36 @@ export default {
             value = _.isNaN(intValue) ? null : intValue
         }
 
-        return this.onChange({
-            [source.name]: value
+        return this.onChange(q => {
+            q[source.name] = value
         })
     },
 
-    onChange(options = null) {
-        let data = {}
+    // recieve function that manipulate query string
+    onChange(change) {
+        // handle changes queue to reduce history navigations
+        const wereEmpty = this.changesQueue.length === 0
+        this.changesQueue.push(change)
+        const self = this
+        
+        if(wereEmpty) {            
+            Vue.nextTick(() => {
+                const changes = self.changesQueue
+                self.changesQueue = []
 
-        if(typeof(options) == 'function') {
-            const result = options(data)
-            if(result != null){
-                data = result
-            }
-        } else {
-            data = options
-        }
+                self.applyChanges(changes)
+            })
+        }        
+    },
+
+    applyChanges(changes) {
+        let data = {}
+        
+        // apply accumulated changes to query
+        changes.forEach(change => change(data))
 
         const state = Object.assign(_.clone(this.queryString), data)       
-
-        if(state.min != null 
-            && state.max != null 
-            && state.min > state.max) return false
-
-        if(data != null) {
-            this.updateRoute(state)
-        }
-
-        this.$emit("input", Object.assign({
-            questionnaire: this.questionnaire,
-            question: this.question,
-            condition: this.condition,
-            conditionAnswers: this.conditionAnswers
-        }, state))
+        this.updateRoute(state)
     },
 
     updateRoute(newQuery) {
@@ -252,7 +265,7 @@ export default {
                 query[key] = newQuery[key]
             }
         })
-
+        
         this.$router.push({ query });
     },
 
@@ -262,12 +275,23 @@ export default {
 
     selectConditionAnswer(answer) {
         this.selectedAnswers = _.xor(this.selectedAnswers, [ answer ])
-
-        this.onChange({})
     }
   },
 
-  computed: {      
+  computed: {
+    filter() {
+        const state = this.queryString
+
+        const filter = Object.assign({
+            questionnaire: this.questionnaire,
+            question: this.question,
+            condition: this.condition,
+            conditionAnswers: this.conditionAnswers
+        }, state)
+
+        return filter
+    },   
+
     query() {
         return this.$store.state.route.query
     },
@@ -278,7 +302,7 @@ export default {
             questionId: this.query.questionId,
             conditionId: this.query.conditionId,
             ans: this.condition != null ? this.selectedAnswers : null,
-            mode: this.query.mode || this.getDefaultMode(),
+            expandTeams: this.expandTeams,
             pivot: this.query.pivot,
             min: this.min,
             max: this.max
@@ -286,12 +310,16 @@ export default {
     },    
 
     max() {
-        const result = parseInt(this.$route.query.max)
+        const result = parseInt(this.query.max)
         return _.isNaN(result) ? null : result;
+    },
+
+    expandTeams() {
+        return this.query.expandTeams === true || this.query.expandTeams === 'true'
     },
     
     min() {
-        const result =  parseInt(this.$route.query.min)
+        const result =  parseInt(this.query.min)
         return _.isNaN(result) ? null : result;
     },
     
@@ -300,7 +328,7 @@ export default {
             .orderBy(['Title', 'Version'],['asc', 'asc'])
             .map(q => {
                 return {
-                    key: formatGuid(q.QuestionnaireId) + "$" + q.Version,
+                    key: q.Identity,
                     value: `(ver. ${q.Version}) ${q.Title}`
                 };
         }).value();
@@ -308,7 +336,7 @@ export default {
 
     questionsList() {
         function getValue(question) {
-            let result = `[${question.StataExportCaption}]`
+            let result = `[${question.VariableName}]`
 
             if(question.Label) {
                 result += ' ' + question.Label + '\r\n' + question.QuestionText
@@ -322,9 +350,8 @@ export default {
 
         return _.chain(this.questions).map(q => {
             return {
-                key: q.PublicKey,
-                pivotable: q.Pivotable,
-                name: q.StataExportCaption,
+                key: q.Id,
+                name: q.VariableName,
                 supportConditions: q.SupportConditions,
                 value: getValue(q),
                 breadcrumbs: q.Breadcrumbs
@@ -340,48 +367,34 @@ export default {
     },
 
     questionnaire() {
-        if(this.selectedQuestionnaire != null) {
-
-            const questionnaire = _.find(this.questionnaires, q => 
-            { 
-                const key = formatGuid(q.QuestionnaireId) + "$" + q.Version               
-                return key == this.selectedQuestionnaire.key 
-            })
-            return questionnaire
-        }
-
-        return null
+        if(this.selectedQuestionnaire == null) return null
+        
+        return _.find(this.questionnaires, q => 
+        { 
+            const key = q.Identity
+            return key == this.selectedQuestionnaire.key 
+        })
     },
 
     question() {
-        if(this.selectedQuestion != null) {
-            return _.find(this.questions, 
-            { PublicKey : this.selectedQuestion.key })
-        }
-
-        return null
+        if(this.selectedQuestion == null) return null
+        return _.find(this.questions, { Id : this.selectedQuestion.key })        
     },
 
     condition() {
         if(this.selectedCondition == null) return null
-
-        return _.find(this.questions, { PublicKey: this.selectedCondition.key })
+        return _.find(this.questions, { Id: this.selectedCondition.key })
     },
 
     conditionAnswers() {
         if(this.condition == null) return []
-
-        return _.filter(this.condition.Answers, 
-            ans => this.isSelectedAnswer(ans.Answer))            
+        return _.filter(this.condition.Answers, ans => this.isSelectedAnswer(ans.Answer))            
     },
 
     // drop down
     selectedQuestionnaire() {
-        if(this.query.questionnaireId != null) {
-            return _.find(this.questionnaireList, { key : this.query.questionnaireId })
-        }
-
-        return null
+        if(this.query.questionnaireId == null) return null        
+        return _.find(this.questionnaireList, { key : this.query.questionnaireId })
     },
 
     // drop down

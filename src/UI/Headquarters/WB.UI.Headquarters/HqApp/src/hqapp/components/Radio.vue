@@ -16,8 +16,7 @@
 
 export default {
     props: {
-        radioGroup: {
-            type: String,
+        radioGroup: {            
             default: null
         },
 
