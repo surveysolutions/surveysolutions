@@ -73,16 +73,9 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                             ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
                         }
                     });
-                
-                this.ExecuteInPlain(() =>
-                {
-                    importProcess = this.importAssignmentsService.GetImportStatus();
 
-                    if (importProcess.WithErrorsCount == 0)
-                        this.importAssignmentsService.RemoveAllAssignmentsToImport();
-                    else
-                        this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
-                });
+                this.ExecuteInPlain(() => this.importAssignmentsService.SetImportProcessStatus(
+                    AssignmentsImportProcessStatus.ImportCompleted));
 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
