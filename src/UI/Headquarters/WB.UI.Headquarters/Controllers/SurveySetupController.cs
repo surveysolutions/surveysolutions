@@ -91,14 +91,10 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var prevImportFinishedWithErrors =
-                status?.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted && status.WithErrorsCount > 0;
-
-            if (!prevImportFinishedWithErrors)
-            {
-                var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(BatchUpload));
-                if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-            }
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                return RedirectToAction(nameof(InterviewVerificationProgress));
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                return RedirectToAction(nameof(InterviewImportProgress));
 
             SampleUploadView sampleUploadView = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version));
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
@@ -189,14 +185,10 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var prevImportFinishedWithErrors =
-                status?.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted && status.WithErrorsCount > 0;
-
-            if (!prevImportFinishedWithErrors)
-            {
-                var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(PanelBatchUploadAndVerify));
-                if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-            }
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                return RedirectToAction(nameof(InterviewVerificationProgress));
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                return RedirectToAction(nameof(InterviewImportProgress));
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -301,14 +293,10 @@ namespace WB.UI.Headquarters.Controllers
 
             var status = this.assignmentsImportService.GetImportStatus();
 
-            var prevImportFinishedWithErrors =
-                status?.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted && status.WithErrorsCount > 0;
-
-            if (!prevImportFinishedWithErrors)
-            {
-                var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(AssignmentsBatchUploadAndVerify));
-                if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
-            }
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                return RedirectToAction(nameof(InterviewVerificationProgress));
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                return RedirectToAction(nameof(InterviewImportProgress));
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -415,8 +403,9 @@ namespace WB.UI.Headquarters.Controllers
             var status = this.assignmentsImportService.GetImportStatus();
             if (status == null) return RedirectToAction("Index");
 
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewVerificationProgress));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            if (status.ProcessStatus == AssignmentsImportProcessStatus.Import ||
+                status.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted)
+                return RedirectToAction(nameof(InterviewImportProgress));
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
 
@@ -437,8 +426,8 @@ namespace WB.UI.Headquarters.Controllers
             var status = this.assignmentsImportService.GetImportStatus();
             if (status == null) return RedirectToAction("Index");
 
-            var assignmentsPageToRedirect = this.GetImportAssignmentsPageToRedirect(status, nameof(InterviewImportProgress));
-            if (assignmentsPageToRedirect != null) return assignmentsPageToRedirect;
+            if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                return RedirectToAction(nameof(InterviewVerificationProgress));
 
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(status.QuestionnaireIdentity);
 
@@ -450,33 +439,6 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireTitle = questionnaireInfo.Title,
             });
         }
-
-        [Localizable(false)]
-        private ActionResult GetImportAssignmentsPageToRedirect(AssignmentsImportStatus status, string actionName)
-        {
-            if (status == null) return null;
-
-            var importAssignmentsPages = new (string actionName, Func<bool> shouldRedirect)[]
-            {
-                (nameof(InterviewImportProgress), () => IsAssignmentsImporting(status)),
-                (nameof(InterviewVerificationProgress), () => IsAssignmentsVerifying(status))
-            };
-
-            foreach (var importAssignmentsPage in importAssignmentsPages)
-            {
-                if (importAssignmentsPage.shouldRedirect.Invoke() && importAssignmentsPage.actionName != actionName)
-                    return RedirectToAction(importAssignmentsPage.actionName);
-            }
-
-            return null;
-        }
-
-        private static bool IsAssignmentsVerifying(AssignmentsImportStatus status)
-            => status.ProcessStatus  == AssignmentsImportProcessStatus.Verification;
-
-        private static bool IsAssignmentsImporting(AssignmentsImportStatus status)
-            => status.ProcessStatus == AssignmentsImportProcessStatus.Import ||
-               status.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted;
 
         private ImportDataParsingErrorsView CreateError(QuestionnaireIdentity questionnaireIdentity,
             string fileName, string error = null, PanelImportVerificationError[] errors = null)
