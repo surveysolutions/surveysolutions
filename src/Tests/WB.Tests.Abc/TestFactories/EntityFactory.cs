@@ -2068,6 +2068,16 @@ namespace WB.Tests.Abc.TestFactories
             RosterInstanceCodes = rosterInstanceCodes
         };
 
+        public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName, int row, string interviewId, string questionnaireOrRosterName,
+            params AssignmentRosterInstanceCode[] rosterInstanceCodes) => new PreloadingAssignmentRow
+        {
+            FileName = fileName,
+            Row = row,
+            InterviewIdValue = string.IsNullOrWhiteSpace(interviewId) ? null : Create.Entity.AssignmentInterviewId(interviewId),
+            RosterInstanceCodes = rosterInstanceCodes,
+            QuestionnaireOrRosterName = questionnaireOrRosterName
+            };
+
         public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string column, int code) =>
             new AssignmentRosterInstanceCode
             {

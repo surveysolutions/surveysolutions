@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -88,6 +91,49 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].References.First().Row, Is.EqualTo(1));
             Assert.That(errors[0].References.First().Column, Is.EqualTo(parentRosterColumn));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(nestedRoster));
+        }
+
+        [Test]
+        public void when_verify_main_file_with_orphan_nested_roster_should_return_PL0008_error()
+        {
+            // arrange
+            var fileName = "Questionnaire.tab";
+            var roster = "hhroster";
+            var textInSection = "textInSection";
+            var textInRoster = "textInRoster";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                {
+                    Create.Entity.TextQuestion(variable: textInSection),
+                    Create.Entity.FixedRoster(variable: roster, fixedTitles: Create.Entity.FixedTitles(1, 2), children: new []
+                    {
+                        Create.Entity.TextQuestion(variable: textInRoster),
+                    })
+                })
+            );
+
+            var allRowsByAllFiles = new List<PreloadingAssignmentRow>
+            {
+                Create.Entity.PreloadingAssignmentRow(fileName, 1, "interviewId1", "Questionnaire"),
+                Create.Entity.PreloadingAssignmentRow(roster, 1, "interviewId2", "roster",
+                    Create.Entity.AssignmentRosterInstanceCode(ServiceColumns.IdSuffixFormat.FormatString(roster), 2)
+                ),
+            };
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRosters(allRowsByAllFiles, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+
+            var reference = errors[0].References.First();
+            Assert.That(reference.Content, Is.EqualTo("interviewId2"));
+            Assert.That(reference.Row, Is.EqualTo(1));
+            Assert.That(reference.Column, Is.EqualTo(ServiceColumns.InterviewId));
+            Assert.That(reference.DataFile, Is.EqualTo(roster));
         }
 
         [Test]
