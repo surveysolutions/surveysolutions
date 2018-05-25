@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterview)]
-        public HttpResponseMessage Details(Guid id)
+        public virtual HttpResponseMessage Details(Guid id)
         {
             var interviewDetails = this.interviewsFactory.GetInProgressInterviewDetails(id);
             if (interviewDetails == null)

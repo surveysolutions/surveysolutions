@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -225,6 +227,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         {
             statistics.TotalNewInterviewsCount = interviews.Count(interview => !interview.IsRejected);
             statistics.TotalRejectedInterviewsCount = interviews.Count(interview => interview.IsRejected);
+            var eventBus = ServiceLocator.Current.GetInstance<IEventBus>();
 
             foreach (var interview in interviews)
                 try
@@ -251,7 +254,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         continue;
                     }
 
-                    await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails);
+                    eventBus.Publish(interviewDetails);
+
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
                     if (interview.IsRejected)
