@@ -7,8 +7,15 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
 {
@@ -20,9 +27,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         {
             return new StataEnvironmentContentService(fileSystemAccessor, 
                 new QuestionnaireLabelFactory(),
-                new InterviewActionsExporter(null, fileSystemAccessor, null, null, null, null, null),
-                new CommentsExporter(null, fileSystemAccessor, null, null, null, null),
-                new InterviewErrorsExporter(null, null, fileSystemAccessor));
+                new InterviewActionsExporter(Mock.Of<InterviewDataExportSettings>(), 
+                    fileSystemAccessor, 
+                    Mock.Of<ICsvWriter>(),
+                    Mock.Of<ITransactionManagerProvider>(),
+                    Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                    Mock.Of<ILogger>(),
+                    Mock.Of<ISessionProvider>()),
+                new CommentsExporter(Mock.Of<InterviewDataExportSettings>(),
+                    fileSystemAccessor,
+                    Mock.Of<ICsvWriter>(),
+                    Mock.Of<IQueryableReadSideRepositoryReader<InterviewCommentaries>>(),
+                    Mock.Of<ITransactionManagerProvider>(),
+                    Mock.Of<ILogger>()),
+                new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), fileSystemAccessor));
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
