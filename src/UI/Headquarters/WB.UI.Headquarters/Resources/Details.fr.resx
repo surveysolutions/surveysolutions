@@ -142,18 +142,18 @@
     <value>Aucun élément trouvé</value>
   </data>
   <data name="Questionnaire" xml:space="preserve">
-    <value>Questionnaire: {{name}}</value>
+    <value>Questionnaire: {{ name }}</value>
   </data>
   <data name="Responsible" xml:space="preserve">
     <value>Responsable</value>
   </data>
   <data name="SearchResult_Count" xml:space="preserve">
-    <value>{{count}} élément trouvé:</value>
+    <value>{{ count }} élément trouvé:</value>
   </data>
   <data name="SearchResult_Count_plural" xml:space="preserve">
-    <value>{{count}} éléments trouvés:</value>
+    <value>{{ count }} éléments trouvés:</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Statut: {{nom}}</value>
+    <value>Statut: {{ name }}</value>
   </data>
 </root>
