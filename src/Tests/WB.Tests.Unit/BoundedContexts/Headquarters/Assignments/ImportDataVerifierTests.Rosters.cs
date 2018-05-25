@@ -27,6 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             
             var allRowsByAllFiles = new List<PreloadingAssignmentRow>
             {
+                Create.Entity.PreloadingAssignmentRow("main", 1, "interview1", "Questionnaire"),
                 Create.Entity.PreloadingAssignmentRow(roster, 1, "interview1", Create.Entity.AssignmentRosterInstanceCode(rosterInstanceColumn, 1)),
                 Create.Entity.PreloadingAssignmentRow(roster, 2, "interview1", Create.Entity.AssignmentRosterInstanceCode(rosterInstanceColumn, 2)),
                 Create.Entity.PreloadingAssignmentRow(roster, 3, "interview1", Create.Entity.AssignmentRosterInstanceCode(rosterInstanceColumn, 1))
@@ -74,9 +75,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var allRowsByAllFiles = new List<PreloadingAssignmentRow>
             {
-                Create.Entity.PreloadingAssignmentRow(parentRoster, 1, "interview1", Create.Entity.AssignmentRosterInstanceCode(parentRosterColumn, 1)),
-                Create.Entity.PreloadingAssignmentRow(nestedRoster, 1, "interview1", Create.Entity.AssignmentRosterInstanceCode(parentRosterColumn, 2),
-                    Create.Entity.AssignmentRosterInstanceCode(nestedRosterColumn, 2)),
+                Create.Entity.PreloadingAssignmentRow("main", 1, "interview1", "Questionnaire"),
+                Create.Entity.PreloadingAssignmentRow(parentRoster, 1, "interview1", 
+                    Create.Entity.AssignmentRosterInstanceCode(parentRosterColumn, 1)
+                ),
+                Create.Entity.PreloadingAssignmentRow(nestedRoster, 1, "interview1", 
+                    Create.Entity.AssignmentRosterInstanceCode(parentRosterColumn, 2),
+                    Create.Entity.AssignmentRosterInstanceCode(nestedRosterColumn, 2)
+                ),
             };
 
             var verifier = Create.Service.ImportDataVerifier();
