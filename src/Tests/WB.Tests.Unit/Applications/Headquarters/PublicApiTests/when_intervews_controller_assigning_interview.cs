@@ -28,7 +28,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 Mock.Of<IUserViewFactory>(
                     c =>
                         c.GetUser(Moq.It.IsAny<UserViewInputModel>()) ==
-                        new UserView() {PublicKey = responsibleId, Roles = new HashSet<UserRoles>() {UserRoles.Interviewer}});
+                        new UserView() {PublicKey = responsibleId, 
+                            Roles = new HashSet<UserRoles>() {UserRoles.Interviewer},
+                            Supervisor = new UserLight(Id.g1, "supr")
+                        });
 
             commandService = new Mock<ICommandService>();
 
@@ -45,7 +48,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
             httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
 
         [NUnit.Framework.Test] public void should_execute_AssignInterviewerCommand_with_specified_UserId () =>
-            commandService.Verify(command => command.Execute(Moq.It.Is<AssignInterviewerCommand>(cp => cp.InterviewerId == responsibleId), Moq.It.IsAny<string>()));
+            commandService.Verify(command => command.Execute(Moq.It.Is<AssignResponsibleCommand>(cp => cp.InterviewerId == responsibleId), Moq.It.IsAny<string>()));
 
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static Guid responsibleId = Guid.Parse("22111111111111111111111111111111");

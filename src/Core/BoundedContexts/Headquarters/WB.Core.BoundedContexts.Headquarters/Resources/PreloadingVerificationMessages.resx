@@ -271,4 +271,7 @@
   <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
     <value>Variable has type that does not support protection</value>
   </data>
+    <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
+    <value>Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances</value>
+  </data>
 </root>

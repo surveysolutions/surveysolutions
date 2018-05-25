@@ -1528,7 +1528,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show audit log.
+        ///   Looks up a localized string similar to Show actions log.
         /// </summary>
         public static string InterviewerProfile_ShowAuditLog {
             get {
