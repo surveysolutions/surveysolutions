@@ -69,12 +69,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         public void Export(QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
-            this.ExportActionsInTabularFormat(interviewIdsToExport, basePath, progress);
-            this.ExportActionsDoFile(basePath, progress);
-        }
-
-        private void ExportActionsInTabularFormat(List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
-        {
             var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
             var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
@@ -107,7 +101,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             progress.Report(100);
         }
 
-        private void ExportActionsDoFile(string basePath, IProgress<int> progress)
+        public void ExportActionsDoFile(string basePath)
         {
             var doContent = new DoFile();
 

@@ -119,6 +119,7 @@ namespace ASP
                 case MenuItem.Assignments: return MainMenu.Assignments;
                 case MenuItem.AuditLog: return AuditLog.PageTitle;
                 case MenuItem.Maps: return MainMenu.Maps;
+                case MenuItem.SurveyStatistics: return MainMenu.SurveyStatistics;
                 default: return String.Empty;
             }
         }
