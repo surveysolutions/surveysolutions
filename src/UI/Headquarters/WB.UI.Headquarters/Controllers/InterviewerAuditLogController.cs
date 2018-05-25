@@ -86,9 +86,9 @@ namespace WB.UI.Headquarters.Controllers
             var hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
                                          interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
 
-            model.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
-            model.DeviceId = lastSuccessDeviceInfo.DeviceId;
-            model.DeviceModel = lastSuccessDeviceInfo.DeviceModel;
+            model.InterviewerAppVersion = lastSuccessDeviceInfo?.AppVersion;
+            model.DeviceId = lastSuccessDeviceInfo?.DeviceId;
+            model.DeviceModel = lastSuccessDeviceInfo?.DeviceModel;
             model.HasUpdateForInterviewerApp = hasUpdateForInterviewerApp;
 
             return View(model);
