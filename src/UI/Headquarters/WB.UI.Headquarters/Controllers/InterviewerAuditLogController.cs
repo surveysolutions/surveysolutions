@@ -86,10 +86,11 @@ namespace WB.UI.Headquarters.Controllers
             var hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
                                          interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
 
-            model.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
-            model.DeviceId = lastSuccessDeviceInfo.DeviceId;
-            model.DeviceModel = lastSuccessDeviceInfo.DeviceModel;
+            model.InterviewerAppVersion = lastSuccessDeviceInfo?.AppVersion;
+            model.DeviceId = lastSuccessDeviceInfo?.DeviceId;
+            model.DeviceModel = lastSuccessDeviceInfo?.DeviceModel;
             model.HasUpdateForInterviewerApp = hasUpdateForInterviewerApp;
+            model.HasDeviceInfo = lastSuccessDeviceInfo != null;
 
             return View(model);
         }
@@ -212,6 +213,7 @@ namespace WB.UI.Headquarters.Controllers
         public string DeviceId { get; set; }
         public string DeviceModel { get; set; }
         public bool HasUpdateForInterviewerApp { get; set; }
+        public bool HasDeviceInfo { get; set; }
     }
 
     public class InterviewerAuditLogDateRecordsModel

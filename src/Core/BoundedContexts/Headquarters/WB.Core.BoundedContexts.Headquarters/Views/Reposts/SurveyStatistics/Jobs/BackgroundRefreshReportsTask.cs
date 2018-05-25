@@ -34,6 +34,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
 
         private void ScheduleDelayedReportsRefresh()
         {
+            var trigger = this.scheduler.GetTrigger(refreshTriggerKey);
+            if (trigger != null)
+            {
+                if (!trigger.JobDataMap.ContainsKey("force"))
+                {
+                    this.scheduler.UnscheduleJob(this.refreshTriggerKey);
+                }
+                else
+                {
+                    return;
+                }
+            }
+            
             this.scheduler.ScheduleJob(TriggerBuilder.Create()
                 .WithIdentity(refreshTriggerKey)
                 .ForJob(RefreshReportJobKey)

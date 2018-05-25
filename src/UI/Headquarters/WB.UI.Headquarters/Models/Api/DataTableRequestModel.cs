@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.Models.Api
         {
             public int Column { get; set; }
             public OrderDirection Dir { get; set; }
+            public string Name { get; set; }
         }
 
         public class SearchInfo
@@ -105,7 +106,7 @@ namespace WB.UI.Headquarters.Models.Api
 
             foreach (var order in this.Order)
             {
-                var columnName = this.ColummnsList[order.Column].Name;
+                var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
 
                 yield return new OrderRequestItem {Direction = order.Dir, Field = columnName};
             }
