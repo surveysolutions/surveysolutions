@@ -213,15 +213,15 @@ namespace WB.UI.Headquarters.API.PublicApi
                     QuestionnaireIdentity = questionnaireIdentity,
                     Question = question,
                     ShowTeamMembers = query.ExpandTeams,
-                    Orders = query.ToOrderRequestItems(),
                     PageSize = query.exportType == null ? query.PageSize : int.MaxValue,
                     Page = query.exportType == null ? query.PageIndex : 1,
                     MinAnswer = query.Min,
                     MaxAnswer = query.Max,
                     Condition = query.Condition,
                     ConditionalQuestion = conditionalQuestion,
-                    Columns = query?.ColummnsList.Select(c => c.Name).ToArray(),
-                    Pivot = query.Pivot
+                    Columns = query?.ColummnsList?.Select(c => c.Name)?.ToArray(),
+                    Pivot = query.Pivot,
+                    Orders = query.ToOrderRequestItems()
                 };
 
                 if (this.authorizedUser.IsSupervisor)
