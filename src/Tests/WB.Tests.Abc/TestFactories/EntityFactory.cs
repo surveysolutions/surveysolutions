@@ -2084,6 +2084,7 @@ namespace WB.Tests.Abc.TestFactories
             new AssignmentRosterInstanceCode
             {
                 Column = column,
+                VariableName = column,
                 Code = code,
                 Value = code.ToString()
             };
