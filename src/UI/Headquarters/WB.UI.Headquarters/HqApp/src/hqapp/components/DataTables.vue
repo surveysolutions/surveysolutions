@@ -26,7 +26,6 @@
 
 <script>
 
-import Vue from 'vue'
 import 'datatables.net'
 import 'datatables.net-select'
 import 'jquery-contextmenu'
@@ -211,7 +210,13 @@ export default {
                         delete (column.data);
                         delete (column.searchable);
                     });
-                    d._c = d.columns // aliasing columns arg name
+                                    
+                    // put column name into order
+                    for(let index = 0; index < d.order.length; index++) {
+                        const order = d.order[index]
+                        order.name = d.columns[order.column].name
+                    }
+                    
                     delete d.columns
 
                     const requestUrl = this.table.ajax.url() + '?' + decodeURIComponent($.param(d));
