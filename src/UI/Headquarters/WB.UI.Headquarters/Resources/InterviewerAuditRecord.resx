@@ -132,11 +132,14 @@
   <data name="DetailedActionLog" xml:space="preserve">
     <value>Detailed action log</value>
   </data>
+  <data name="PageTitle" xml:space="preserve">
+    <value>Action log</value>
+  </data>
   <data name="DownloadCsvLog" xml:space="preserve">
     <value>Download complete log in CSV format</value>
   </data>
   <data name="RocordsMissing" xml:space="preserve">
-    <value>Audit log records are missing</value>
+    <value>Action log records are missing</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>User {0} logged in application</value>
