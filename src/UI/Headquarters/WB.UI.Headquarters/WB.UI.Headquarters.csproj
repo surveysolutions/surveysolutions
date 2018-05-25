@@ -1144,6 +1144,7 @@
     <EmbeddedResource Include="Resources\AuditLog.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.ru.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>

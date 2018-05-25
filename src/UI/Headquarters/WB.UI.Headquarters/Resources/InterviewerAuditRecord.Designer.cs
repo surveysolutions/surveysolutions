@@ -151,6 +151,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action log.
+        /// </summary>
+        public static string PageTitle {
+            get {
+                return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User relinked to new tablet.
         /// </summary>
         public static string Relink {
@@ -160,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audit log records are missing.
+        ///   Looks up a localized string similar to Action log records are missing.
         /// </summary>
         public static string RocordsMissing {
             get {
