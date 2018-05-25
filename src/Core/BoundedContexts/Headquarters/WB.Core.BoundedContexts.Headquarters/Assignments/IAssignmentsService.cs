@@ -20,5 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         AssignmentApiDocument MapAssignment(Assignment assignment);
 
         void Reassign(int assignmentId, Guid responsibleId);
+
+        bool HasAssignmentWithProtectedVariables(Guid responsibleId);
     }
 }
