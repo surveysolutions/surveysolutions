@@ -8656,6 +8656,8 @@ body > .ui-pnotify {
     border-top: 8px solid #dbdfe2; }
   .table-ordered thead tr th.sorting_desc:after {
     border-top: 8px solid #2a81cb; }
+  .table-ordered thead tr th.sorting_asc:after {
+    border-bottom-width: 8px; }
   .table {
     font-size: 14px;
     line-height: 16px; }
@@ -8783,7 +8785,9 @@ body > .ui-pnotify {
     border-width: 4px;
     border-top: 6px solid #dbdfe2; }
   .table-ordered thead tr th.sorting_desc:after {
-    border-bottom: 6px solid #2a81cb; } }
+    border-top: 6px solid #2a81cb; }
+  .table-ordered thead tr th.sorting_asc:after {
+    border-bottom-width: 6px; } }
 
 .table.history td .comment {
   padding-top: 10px; }

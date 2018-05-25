@@ -635,6 +635,7 @@
 }
 .readonly{
 	input[type="text"]:disabled,
+	textarea:disabled,
 	.field label,
 	.radio .field,
 	.options-group input,

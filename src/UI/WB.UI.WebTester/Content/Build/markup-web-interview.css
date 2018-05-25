@@ -852,6 +852,7 @@ span.image-zoom-box, span.image-option {
       background-size: 27px 27px; } }
 
 .readonly input[type="text"]:disabled,
+.readonly textarea:disabled,
 .readonly .field label,
 .readonly .radio .field,
 .readonly .options-group input,
@@ -859,6 +860,9 @@ span.image-zoom-box, span.image-option {
   background: rgba(248, 248, 248, 0.8);
   border-radius: 5px; }
   .readonly input[type="text"]:disabled:hover, .readonly input[type="text"]:disabled:focus, .readonly input[type="text"]:disabled:active,
+  .readonly textarea:disabled:hover,
+  .readonly textarea:disabled:focus,
+  .readonly textarea:disabled:active,
   .readonly .field label:hover,
   .readonly .field label:focus,
   .readonly .field label:active,
