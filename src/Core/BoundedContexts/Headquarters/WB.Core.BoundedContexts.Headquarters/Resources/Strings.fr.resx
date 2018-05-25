@@ -136,7 +136,7 @@
     <value>Approuvé par le Quartier Général</value>
   </data>
   <data name="InterviewStatus_ApprovedBySupervisor" xml:space="preserve">
-    <value>APPROUVÉ PAR LE CHEF D'EQUIPE</value>
+    <value>Approuvé par le Chef d'Equipe</value>
   </data>
   <data name="InterviewStatus_Completed" xml:space="preserve">
     <value>Achevé</value>
@@ -157,7 +157,7 @@
     <value>Rejeté par le Quartier Général</value>
   </data>
   <data name="InterviewStatus_RejectedBySupervisor" xml:space="preserve">
-    <value>REJETÉ PAR LE CHEF D'ÉQUIPE</value>
+    <value>Rejeté par le Chef d'Equipe</value>
   </data>
   <data name="InterviewStatus_Restarted" xml:space="preserve">
     <value>Redémarré</value>
@@ -169,7 +169,7 @@
     <value>Envoyé à CAPI</value>
   </data>
   <data name="InterviewStatus_SupervisorAssigned" xml:space="preserve">
-    <value>AFFECTÉ AU CHEF D'ÉQUIPE</value>
+    <value>Affecté au Chef d'Equipe</value>
   </data>
   <data name="ObserverNotAllowed" xml:space="preserve">
     <value>L'Observateur n'est pas autorisé à effectuer cette action</value>
@@ -224,5 +224,8 @@
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total</value>
+  </data>
+  <data name="WithErrors" xml:space="preserve">
+    <value>Avec erreur</value>
   </data>
 </root>
