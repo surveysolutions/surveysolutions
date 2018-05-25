@@ -148,7 +148,7 @@
     <value>Le site Designer n'est pas accessible en ce moment. Veuillez vérifiez votre connexion ou réessayez plus tard</value>
   </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
-    <value>Masques</value>
+    <value>Masques du questionnaire</value>
   </data>
   <data name="MenuItem_Title_Settings" xml:space="preserve">
     <value>Paramètres</value>
@@ -212,5 +212,11 @@
   </data>
   <data name="ReloadInterviewErrorMessage" xml:space="preserve">
     <value>Réponses ne peuvent pas être appliquées à la nouvelle version du masque. Nous allons ouvrir un nouvel entretien vide</value>
+  </data>
+  <data name="Prefs_ShowAnswerTime" xml:space="preserve">
+    <value>Montrer le temps écoule par réponse</value>
+  </data>
+  <data name="Prefs_ShowAnswerTimeSummary" xml:space="preserve">
+    <value>Mesure l'activation, la validation et le temps de propagation de la liste. La réception de données GPS ou la prise de photos ne sont pas incluses.</value>
   </data>
 </root>

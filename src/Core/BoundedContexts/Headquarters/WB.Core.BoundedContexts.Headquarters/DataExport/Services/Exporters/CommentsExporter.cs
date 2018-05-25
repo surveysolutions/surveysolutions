@@ -67,47 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.logger = logger;
         }
 
-        public void Export(QuestionnaireExportStructure questionnaireExportStructure, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
-        {
-            this.DoExport(questionnaireExportStructure, interviewIdsToExport, basePath, progress);
-            this.ExportCommentsDoFile(questionnaireExportStructure, basePath, progress);
-        }
-
-        private void ExportCommentsDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath, IProgress<int> progress)
-        {
-            var doContent = new DoFile();
-
-            doContent.BuildInsheet(Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
-            doContent.AppendLine();
-
-            int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
-            bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
-            var headersList = this.GetHeadersList(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
-
-            foreach (var header in headersList)
-            {
-                var exportFileHeader = commentsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
-                if (exportFileHeader != null)
-                {
-                    if (exportFileHeader.AddCapture)
-                        doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
-                    else
-                        doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
-                }
-                else
-                {
-                    doContent.AppendLabelToVariableMatching(header, string.Empty);
-                }
-            }
-
-            var fileName = $"{commentsFileName}.{DoFile.ContentFileNameExtension}";
-            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
-
-            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
-        }
-
-
-        private void DoExport(QuestionnaireExportStructure questionnaireExportStructure,
+        public void Export(QuestionnaireExportStructure questionnaireExportStructure,
             List<Guid> interviewIdsToExport,
             string basePath,
             IProgress<int> progress)
@@ -148,6 +108,39 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             stopwatch.Stop();
             this.logger.Info($"Exported all interview comments. Took {stopwatch.Elapsed:g} to export {interviewIdsToExport.Count:N0} interviews");
             progress.Report(100);
+        }
+
+        public void ExportCommentsDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
+        {
+            var doContent = new DoFile();
+
+            doContent.BuildInsheet(Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
+            doContent.AppendLine();
+
+            int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
+            bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
+            var headersList = this.GetHeadersList(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
+
+            foreach (var header in headersList)
+            {
+                var exportFileHeader = commentsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
+                if (exportFileHeader != null)
+                {
+                    if (exportFileHeader.AddCapture)
+                        doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                    else
+                        doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                }
+                else
+                {
+                    doContent.AppendLabelToVariableMatching(header, string.Empty);
+                }
+            }
+
+            var fileName = $"{commentsFileName}.{DoFile.ContentFileNameExtension}";
+            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
+
+            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
         }
 
         private void WriteFileHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string commentsFilePath)

@@ -256,6 +256,8 @@ namespace WB.Core.BoundedContexts.Headquarters
          
             registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
             registry.Bind<IInterviewErrorsExporter, InterviewErrorsExporter>();
+            registry.Bind<CommentsExporter>();
+            registry.Bind<InterviewActionsExporter>();
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
