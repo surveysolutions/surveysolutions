@@ -994,7 +994,7 @@
     <value>{{count}} Fil de commentaires:</value>
   </data>
   <data name="SideBarCommentsCounter_plural" xml:space="preserve">
-    <value>{{Count}} fils de commentaires:</value>
+    <value>{{count}} fils de commentaires:</value>
   </data>
   <data name="SideBarCommentsTitle" xml:space="preserve">
     <value>commentaires</value>

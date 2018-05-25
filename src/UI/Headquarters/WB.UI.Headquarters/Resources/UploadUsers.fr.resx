@@ -148,7 +148,7 @@
     <value>Email</value>
   </data>
   <data name="EstimatedTime" xml:space="preserve">
-    <value>Environ {{estiméTime}} à gauche</value>
+    <value>Environ {{estimatedTime}} à gauche</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Nom complet</value>
