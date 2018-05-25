@@ -28,19 +28,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             return new StataEnvironmentContentService(fileSystemAccessor, 
                 new QuestionnaireLabelFactory(),
                 new InterviewActionsExporter(Mock.Of<InterviewDataExportSettings>(), 
-                    fileSystemAccessor, 
+                    Mock.Of<IFileSystemAccessor>(), 
                     Mock.Of<ICsvWriter>(),
                     Mock.Of<ITransactionManagerProvider>(),
                     Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                     Mock.Of<ILogger>(),
                     Mock.Of<ISessionProvider>()),
                 new CommentsExporter(Mock.Of<InterviewDataExportSettings>(),
-                    fileSystemAccessor,
+                    Mock.Of<IFileSystemAccessor>(),
                     Mock.Of<ICsvWriter>(),
                     Mock.Of<IQueryableReadSideRepositoryReader<InterviewCommentaries>>(),
                     Mock.Of<ITransactionManagerProvider>(),
                     Mock.Of<ILogger>()),
-                new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), fileSystemAccessor));
+                new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), Mock.Of<IFileSystemAccessor>()));
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
