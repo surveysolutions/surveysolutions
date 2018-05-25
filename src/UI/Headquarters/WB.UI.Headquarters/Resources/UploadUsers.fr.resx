@@ -117,133 +117,115 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BatchUploadModel_FileName" xml:space="preserve">
-    <value>Fichier CSV</value>
+  <data name="AllAccountsCreated" xml:space="preserve">
+    <value>Tous les comptes {{total}} ont été créés avec succès:</value>
   </data>
-  <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Vous devez choisir un fichier à importer</value>
+  <data name="AssignedTo" xml:space="preserve">
+    <value>Superviseur</value>
   </data>
-  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
-    <value>Veuillez sélectionner un fichier</value>
+  <data name="AssignedToDescription" xml:space="preserve">
+    <value>requis pour les intervieweurs, contient le nom d'utilisateur du superviseur auquel cet interviewer sera affecté</value>
   </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>Le titre du questionnaire est requis</value>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Retour à l'importation de l'utilisateur</value>
   </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
-    <value>Titre</value>
+  <data name="Cancel" xml:space="preserve">
+    <value>Annuler</value>
   </data>
-  <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
-    <value>Le mot de passe et le mot de passe de confirmation ne sont pas conformes</value>
+  <data name="Column" xml:space="preserve">
+    <value>colonne</value>
   </data>
-  <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Confirmez le mot de passe</value>
+  <data name="CompleteDescription" xml:space="preserve">
+    <value>Les affectations pour ces équipes peuvent être faites dans la section "questionnaires". Les affectations peuvent également être créées en mode batch</value>
   </data>
-  <data name="EmailErrorMessage" xml:space="preserve">
-    <value>N'est pas une adresse e-mail valide</value>
+  <data name="Description" xml:space="preserve">
+    <value>Créer plusieurs utilisateurs en téléchargeant un fichier avec toutes les informations nécessaires pour les utilisateurs. Vous pouvez créer des comptes superviseur et enquêteur dans ce fichier.</value>
   </data>
-  <data name="EmailFieldName" xml:space="preserve">
-    <value>Adresse e-mail</value>
+  <data name="DownloadTemplateLink" xml:space="preserve">
+    <value>Téléchargez le template .tab</value>
   </data>
-  <data name="InvalidUser" xml:space="preserve">
-    <value>Utilisateur invalide</value>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
   </data>
-  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Est verrouillé par le Chef d'équipe</value>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Environ {{estimatedTime}} à gauche</value>
   </data>
-  <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Est verrouillé par l'Administrateur ou le Quartier Général</value>
-  </data>
-  <data name="LogOnModel_Password" xml:space="preserve">
-    <value>Mot de passe</value>
-  </data>
-  <data name="LogOnModel_UserName" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
-  </data>
-  <data name="PasswordErrorMessage" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule</value>
-  </data>
-  <data name="PasswordFieldName" xml:space="preserve">
-    <value>Mot de passe</value>
-  </data>
-  <data name="PasswordLengthMessage" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins {2} caractères</value>
-  </data>
-  <data name="PersonNameFieldName" xml:space="preserve">
+  <data name="FullName" xml:space="preserve">
     <value>Nom complet</value>
   </data>
-  <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Numéro de téléphone invalide</value>
+  <data name="ImportingUserInfo" xml:space="preserve">
+    <value>Importation d'informations utilisateur à partir de</value>
   </data>
-  <data name="PhoneNumberFieldName" xml:space="preserve">
+  <data name="InterviewersAndSupervisorsCount" xml:space="preserve">
+    <value>Les superviseurs {{supervisorsCount}} et les enquêteurs {{interviewersCount}}</value>
+  </data>
+  <data name="Line" xml:space="preserve">
+    <value>ligne</value>
+  </data>
+  <data name="ManualInterviewerCreateLink" xml:space="preserve">
+    <value>interviewer</value>
+  </data>
+  <data name="ManualSupervisorCreateLink" xml:space="preserve">
+    <value>interviewer</value>
+  </data>
+  <data name="NoCreatedUsers" xml:space="preserve">
+    <value>Aucun compte d'utilisateur n'a été créé</value>
+  </data>
+  <data name="OptionalInformation" xml:space="preserve">
+    <value>Informations personnelles facultatives</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>ou</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="PasswordDescription" xml:space="preserve">
+    <value>le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
     <value>Numéro de téléphone</value>
   </data>
-  <data name="RequiredEmailErrorMessage" xml:space="preserve">
-    <value>Le mail est requis</value>
+  <data name="Profile" xml:space="preserve">
+    <value>profil manuellement</value>
   </data>
-  <data name="RequiredPasswordErrorMessage" xml:space="preserve">
-    <value>Mot de passe requis</value>
+  <data name="Questionnaires" xml:space="preserve">
+    <value>Questionnaires</value>
   </data>
-  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Le Chef d'équipe est requis</value>
+  <data name="RequiredData" xml:space="preserve">
+    <value>Données requises pour la création d'enquêteurs et de superviseurs</value>
   </data>
-  <data name="RequiredUserNameErrorMessage" xml:space="preserve">
-    <value>Nom d'utilisateur est nécessaire</value>
+  <data name="ReUploadTabFile" xml:space="preserve">
+    <value>Fichier à recharger .tab</value>
   </data>
-  <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Chef d'Equipe</value>
+  <data name="Role" xml:space="preserve">
+    <value>Rôle</value>
   </data>
-  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
-    <value>Veuillez entrer un GUID valide au format suivant xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+  <data name="TimeDetermination" xml:space="preserve">
+    <value>détermination du temps</value>
   </data>
-  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
-    <value>Fichier CSV</value>
+  <data name="Title" xml:space="preserve">
+    <value>Création de plusieurs utilisateurs par téléchargement groupé</value>
   </data>
-  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
+  <data name="UploadBtn" xml:space="preserve">
+    <value>Télécharger le fichier .tab</value>
   </data>
-  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
-    <value>Veuillez sélectionner le fichier</value>
+  <data name="Uploading" xml:space="preserve">
+    <value>Importation de {{importedUsersCount}} sur {{totalUsersToImportCount}}</value>
   </data>
-  <data name="UserNameErrorMessage" xml:space="preserve">
-    <value>Le nom doit comporter entre 3 et 15 caractères et peut contenir uniquement des lettres, des chiffres et le symbole de soulignement.</value>
+  <data name="UploadInProgress" xml:space="preserve">
+    <value>Attention: un autre téléchargement par "{{userName}}" est en cours.</value>
   </data>
-  <data name="UserNameFieldName" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
+  <data name="UploadInProgressDescription" xml:space="preserve">
+    <value>Vous serez disponible pour cette tâche lorsque celle en cours est terminée.</value>
   </data>
-  <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Le nom de la personne ne peut pas contenir plus de {1} caractères</value>
+  <data name="UserName" xml:space="preserve">
+    <value>S'identifier</value>
   </data>
-  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
-    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel n'existe pas</value>
+  <data name="UserNameDescription" xml:space="preserve">
+    <value>nom d'utilisateur, doit comporter entre 3 et 15 caractères et contenir uniquement des lettres, des chiffres et un symbole de soulignement</value>
   </data>
-  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
-    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel est archivé</value>
-  </data>
-  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
-    <value>Confirmer le nouveau mot de passe</value>
-  </data>
-  <data name="ConfirmPasswordRequired" xml:space="preserve">
-    <value>Confirmer le mot de passe est requis</value>
-  </data>
-  <data name="NewPasswordFieldName" xml:space="preserve">
-    <value>Nouveau mot de passe</value>
-  </data>
-  <data name="OldPasswordErrorMessage" xml:space="preserve">
-    <value>Pour changer le mot de passe, fournir un mot de passe existant valide</value>
-  </data>
-  <data name="OldPasswordFieldName" xml:space="preserve">
-    <value>Ancien mot de passe</value>
-  </data>
-  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>Le nom de la personne a des caractères invalides. Seules les lettres, les points, les espaces et les apostrophes sont autorisés</value>
-  </data>
-  <data name="PhoneErrorLength" xml:space="preserve">
-    <value>Le numéro de téléphone ne peut pas contenir plus de {1} caractères</value>
-  </data>
-  <data name="UserName_Taken" xml:space="preserve">
-    <value>Veuillez choisir un autre nom d'utilisateur</value>
-  </data>
-  <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>L'utilisateur est verrouillé par le Siège</value>
+  <data name="VerificationFailed" xml:space="preserve">
+    <value>Échec de la vérification</value>
   </data>
 </root>

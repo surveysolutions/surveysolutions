@@ -136,7 +136,7 @@
     <value>(filtré à partir des entrées totales _MAX_)</value>
   </data>
   <data name="InfoThousands" xml:space="preserve">
-    <value>,</value>
+    <value>.</value>
   </data>
   <data name="LengthMenu" xml:space="preserve">
     <value>Afficher _MENU_entrées</value>

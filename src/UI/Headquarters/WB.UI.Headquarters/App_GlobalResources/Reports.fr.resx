@@ -246,4 +246,13 @@
   <data name="TemplateVersion" xml:space="preserve">
     <value>Version du questionnaire</value>
   </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Importer un modèle d'utilisateurs</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Enquêteurs</value>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Mis à jour le</value>
+  </data>
 </root>

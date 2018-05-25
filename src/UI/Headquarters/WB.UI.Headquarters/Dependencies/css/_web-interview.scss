@@ -9,6 +9,9 @@
 		word-wrap: break-word;
     	overflow-wrap: break-word;
 	}
+	.panel-details{
+		z-index: 7;
+	}
 }
 .reset-filters{
 	font-size: 14px;
