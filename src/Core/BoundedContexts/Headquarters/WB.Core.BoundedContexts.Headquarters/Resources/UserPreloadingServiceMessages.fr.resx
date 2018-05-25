@@ -120,4 +120,16 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>Le fichier '{0}' contient les colonnes suivantes qui ne peuvent être mappées à aucune propriété utilisateur (par exemple, nom complet, numéro de téléphone, etc.): {1}</value>
   </data>
+  <data name="CannotParseIncomingFile" xml:space="preserve">
+    <value>Le fichier fournit a une erreur dans la ligne {0} et ne peut etre execute</value>
+  </data>
+  <data name="FileColumnsMissingFormat" xml:space="preserve">
+    <value>Le fichier '{0}' ne contient pas les colonnes requises :{1}</value>
+  </data>
+  <data name="HasUsersToImport" xml:space="preserve">
+    <value>S'il vous plait, attendre jusqu'a ce que l'importation de la presente base d'utilisateur soit complete</value>
+  </data>
+  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
+    <value>La base de données contient {0} enregistrements, mais le nombre maximal autorisé d'enregistrements.</value>
+  </data>
 </root>

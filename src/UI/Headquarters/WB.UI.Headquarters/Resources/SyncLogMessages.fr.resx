@@ -181,19 +181,19 @@
     <value>Lier l'enquêteur à l'appareil</value>
   </data>
   <data name="NoNewInterviewPackagesToDownload" xml:space="preserve">
-    <value>Aucun nouveaux paquet à télécharger</value>
+    <value>Pas de nouveaux paquets d'entretiens à télécharger</value>
   </data>
   <data name="QuestionnaireAssemblyProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Assemblage du questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}] traité avec succès&lt;/font&gt;</value>
+    <value>&lt;font color = "green" '&gt; L'assemblage du questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] a bien été traité &lt;/ font&gt;</value>
   </data>
   <data name="QuestionnaireProcessed" xml:space="preserve">
-    <value>&lt;font color="green" '=""&gt;Questionnaire &lt;b&gt;{0}&lt;/b&gt; [{1}] traité avec succès&lt;/font&gt;</value>
+    <value>&lt;font color = "green" '&gt; Questionnaire &lt;b&gt; {0} &lt;/ b&gt; [{1}] traité avec succès &lt;/ font&gt;</value>
   </data>
   <data name="UpdateInterviewPackage" xml:space="preserve">
-    <value>&lt;li&gt;Mise à jour de l'entretien : &lt;a href="{3}"&gt;{0}&lt;/a&gt;, Paquet : {1}, Indice de tri : {2}&lt;/li&gt;</value>
+    <value>&lt;li&gt; Mettre à jour l'entretien: &lt;a href="{3}"&gt; {0} &lt;/a&gt;, package: {1}, index de tri: {2} &lt;/ li&gt;</value>
   </data>
   <data name="PostPackage" xml:space="preserve">
-    <value>Importer l'entretien: {0}</value>
+    <value>Télécharger l'entretien: {0}</value>
   </data>
   <data name="GetAssignmentFormat" xml:space="preserve">
     <value>Télécharger l'affectation ({0}) &lt;/ br&gt;</value>
@@ -209,5 +209,26 @@
   </data>
   <data name="InterviewerLoggedIn" xml:space="preserve">
     <value>Enquêteur connecté et a besoin d'un AuthToken</value>
+  </data>
+  <data name="ApkRequested" xml:space="preserve">
+    <value>Nouveau fichier d'application demandé</value>
+  </data>
+  <data name="ExtendedApkRequested" xml:space="preserve">
+    <value>Nouveau fichier d'application étendue demandé</value>
+  </data>
+  <data name="ExtendedPatchRequestedFormat" xml:space="preserve">
+    <value>Fichier de correctif requis pour la version étendue {0}</value>
+  </data>
+  <data name="GetMap" xml:space="preserve">
+    <value>Télécharger la carte: {0}</value>
+  </data>
+  <data name="GetMaps" xml:space="preserve">
+    <value>Télécharger la liste des cartes. &lt;/ br&gt; &lt;ul&gt; {0} &lt;/ ul&gt;</value>
+  </data>
+  <data name="NoMapsForUser" xml:space="preserve">
+    <value>Aucune carte à télécharger</value>
+  </data>
+  <data name="PatchRequestedFormat" xml:space="preserve">
+    <value>Fichier de correctif requis pour la version {0}</value>
   </data>
 </root>

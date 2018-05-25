@@ -117,133 +117,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BatchUploadModel_FileName" xml:space="preserve">
-    <value>Fichier CSV</value>
+  <data name="PLU0001" xml:space="preserve">
+    <value>Le nom d'utilisateur  n'est pas unique</value>
   </data>
-  <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Vous devez choisir un fichier à importer</value>
+  <data name="PLU0001Description" xml:space="preserve">
+    <value>Un utilisateur '{0}' existe déjà</value>
   </data>
-  <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
-    <value>Veuillez sélectionner un fichier</value>
+  <data name="PLU0002" xml:space="preserve">
+    <value>Dupliquer</value>
   </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Error_Required" xml:space="preserve">
-    <value>Le titre du questionnaire est requis</value>
+  <data name="PLU0002Description" xml:space="preserve">
+    <value>Il y a des utilisateurs en doublon avec le login '{0}' dans le fichier</value>
   </data>
-  <data name="CloneQuestionnaireModel_NewTitle_Label" xml:space="preserve">
-    <value>Titre</value>
+  <data name="PLU0003" xml:space="preserve">
+    <value>Mauvaise équipe</value>
   </data>
-  <data name="ConfirmPasswordErrorMassage" xml:space="preserve">
-    <value>Le mot de passe et le mot de passe de confirmation ne sont pas conformes</value>
+  <data name="PLU0003Description" xml:space="preserve">
+    <value>L'utilisateur '{0}' est archivé et appartient à une autre équipe</value>
   </data>
-  <data name="ConfirmPasswordFieldName" xml:space="preserve">
-    <value>Confirmez le mot de passe</value>
+  <data name="PLU0003Recomendation" xml:space="preserve">
+    <value>L'utilisateur archivé ne peut pas être réutilisé car il appartient à une autre équipe</value>
   </data>
-  <data name="EmailErrorMessage" xml:space="preserve">
-    <value>N'est pas une adresse e-mail valide</value>
+  <data name="PLU0004" xml:space="preserve">
+    <value>Mauvais rôle</value>
   </data>
-  <data name="EmailFieldName" xml:space="preserve">
-    <value>Adresse e-mail</value>
+  <data name="PLU0004Description" xml:space="preserve">
+    <value>L'utilisateur '{0}' est archivé et a un autre rôle</value>
   </data>
-  <data name="InvalidUser" xml:space="preserve">
-    <value>Utilisateur invalide</value>
+  <data name="PLU0004Recomendation" xml:space="preserve">
+    <value>L'utilisateur archivé ne peut pas être réutilisé car il existe dans un autre rôle</value>
   </data>
-  <data name="IsLockedBySupervisorFieldName" xml:space="preserve">
-    <value>Est verrouillé par le Chef d'équipe</value>
+  <data name="PLU0005" xml:space="preserve">
+    <value>Mauvais format de connexion</value>
   </data>
-  <data name="IsLockedFieldName" xml:space="preserve">
-    <value>Est verrouillé par l'Administrateur ou le Quartier Général</value>
+  <data name="PLU0005Description" xml:space="preserve">
+    <value>Le nom d'utilisateur '{0}' n'a pas la bonne longueur ou contient des caractères non valides.</value>
   </data>
-  <data name="LogOnModel_Password" xml:space="preserve">
-    <value>Mot de passe</value>
+  <data name="PLU0005Recomendation" xml:space="preserve">
+    <value>Il doit comporter entre 3 et 15 caractères et ne peut contenir que des lettres, des chiffres et le symbole de soulignement.</value>
   </data>
-  <data name="LogOnModel_UserName" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
+  <data name="PLU0006" xml:space="preserve">
+    <value>Mauvais format de mot de passe</value>
   </data>
-  <data name="PasswordErrorMessage" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins un chiffre, un caractère majuscule et un caractère minuscule</value>
+  <data name="PLU0006Description" xml:space="preserve">
+    <value>Le mot de passe '{0}' n'a pas la bonne longueur ou contient des caractères non valides.</value>
   </data>
-  <data name="PasswordFieldName" xml:space="preserve">
-    <value>Mot de passe</value>
+  <data name="PLU0006Recomendation" xml:space="preserve">
+    <value>Il doit comporter au moins un chiffre, une lettre en majuscule, et une lettre en miniscule. La longeur doit être entre 10 et 100 caractères.*</value>
   </data>
-  <data name="PasswordLengthMessage" xml:space="preserve">
-    <value>Le mot de passe doit contenir au moins {2} caractères</value>
+  <data name="PLU0007" xml:space="preserve">
+    <value>Le format de l'adresse courriel est invalide</value>
   </data>
-  <data name="PersonNameFieldName" xml:space="preserve">
-    <value>Nom complet</value>
+  <data name="PLU0007Description" xml:space="preserve">
+    <value>L'adresse courriel '{0}' suit un format invalide.</value>
   </data>
-  <data name="PhoneErrorMessage" xml:space="preserve">
-    <value>Numéro de téléphone invalide</value>
+  <data name="PLU0008" xml:space="preserve">
+    <value>Le format du numéro de téléphone est invalide.</value>
   </data>
-  <data name="PhoneNumberFieldName" xml:space="preserve">
-    <value>Numéro de téléphone</value>
+  <data name="PLU0008Description" xml:space="preserve">
+    <value>Le numéro de téléphone '{0}' suit un format invalide.</value>
   </data>
-  <data name="RequiredEmailErrorMessage" xml:space="preserve">
-    <value>Le mail est requis</value>
+  <data name="PLU0009" xml:space="preserve">
+    <value>Rôle invalide.</value>
   </data>
-  <data name="RequiredPasswordErrorMessage" xml:space="preserve">
-    <value>Mot de passe requis</value>
+  <data name="PLU0009Description" xml:space="preserve">
+    <value>Le rôle '{0}' est invalide.</value>
   </data>
-  <data name="RequiredSupervisorErrorMessage" xml:space="preserve">
-    <value>Le Chef d'équipe est requis</value>
+  <data name="PLU0009Recomendation" xml:space="preserve">
+    <value>Seuls les rôles "chef d'équipe" ou "enquêteur" sont permis.</value>
   </data>
-  <data name="RequiredUserNameErrorMessage" xml:space="preserve">
-    <value>Nom d'utilisateur est nécessaire</value>
+  <data name="PLU0010" xml:space="preserve">
+    <value>Erreur de dépendance.</value>
   </data>
-  <data name="SupervisorFieldName" xml:space="preserve">
-    <value>Chef d'Equipe</value>
+  <data name="PLU0010Description" xml:space="preserve">
+    <value>Chef d'équipe '{0}' n'a pas été retrouvé.</value>
   </data>
-  <data name="TroubleshootModel_InterviewId_ErrorMessage" xml:space="preserve">
-    <value>Veuillez entrer un GUID valide au format suivant xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</value>
+  <data name="PLU0011" xml:space="preserve">
+    <value>Erreur de dépendance.</value>
   </data>
-  <data name="UserBatchUploadModel_File_CSV_File" xml:space="preserve">
-    <value>Fichier CSV</value>
+  <data name="PLU0011Description" xml:space="preserve">
+    <value>La colonne 'supervisor' doit être laissée vide pour les comptes de chef d'équipe.</value>
   </data>
-  <data name="UserBatchUploadModel_Required_ErrorMessage" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
+  <data name="PLU0012" xml:space="preserve">
+    <value>La longeur du nom complet dépasse le nombre caractères permis.</value>
   </data>
-  <data name="UserBatchUploadModel_Validation_ErrorMessage" xml:space="preserve">
-    <value>Veuillez sélectionner le fichier</value>
+  <data name="PLU0012Description" xml:space="preserve">
+    <value>Le nom complet '{0}' suit le mauvais format.</value>
   </data>
-  <data name="UserNameErrorMessage" xml:space="preserve">
-    <value>Le nom doit comporter entre 3 et 15 caractères et peut contenir uniquement des lettres, des chiffres et le symbole de soulignement.</value>
+  <data name="PLU0012Recomendation" xml:space="preserve">
+    <value>Il ne devrait pas dépasser 100 caractères.</value>
   </data>
-  <data name="UserNameFieldName" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
+  <data name="PLU0013" xml:space="preserve">
+    <value>La longeur du numéro de téléphone dépasse le nombre de caractères permis.</value>
   </data>
-  <data name="PersonNameErrorMessage" xml:space="preserve">
-    <value>Le nom de la personne ne peut pas contenir plus de {1} caractères</value>
+  <data name="PLU0013Description" xml:space="preserve">
+    <value>Le numéro de téléphone '{0}' suit un format invalide.</value>
   </data>
-  <data name="CannotUpdate_CurrentUserDoesNotExists" xml:space="preserve">
-    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel n'existe pas</value>
+  <data name="PLU0013Recomendation" xml:space="preserve">
+    <value>Il ne devrait pas dépasser 15 caractères.</value>
   </data>
-  <data name="CannotUpdate_CurrentUserIsArchived" xml:space="preserve">
-    <value>Impossible de mettre à jour les informations utilisateur car l'utilisateur actuel est archivé</value>
+  <data name="PLU0014" xml:space="preserve">
+    <value>Mauvais format pour le nom complet.</value>
   </data>
-  <data name="ConfirmNewPasswordFieldName" xml:space="preserve">
-    <value>Confirmer le nouveau mot de passe</value>
+  <data name="PLU0014Description" xml:space="preserve">
+    <value>Le nom complet '{0}' contient des caractères invalides.</value>
   </data>
-  <data name="ConfirmPasswordRequired" xml:space="preserve">
-    <value>Confirmer le mot de passe est requis</value>
-  </data>
-  <data name="NewPasswordFieldName" xml:space="preserve">
-    <value>Nouveau mot de passe</value>
-  </data>
-  <data name="OldPasswordErrorMessage" xml:space="preserve">
-    <value>Pour changer le mot de passe, fournir un mot de passe existant valide</value>
-  </data>
-  <data name="OldPasswordFieldName" xml:space="preserve">
-    <value>Ancien mot de passe</value>
-  </data>
-  <data name="PersonNameAllowedCharactersErrorMessage" xml:space="preserve">
-    <value>Le nom de la personne a des caractères invalides. Seules les lettres, les points, les espaces et les apostrophes sont autorisés</value>
-  </data>
-  <data name="PhoneErrorLength" xml:space="preserve">
-    <value>Le numéro de téléphone ne peut pas contenir plus de {1} caractères</value>
-  </data>
-  <data name="UserName_Taken" xml:space="preserve">
-    <value>Veuillez choisir un autre nom d'utilisateur</value>
-  </data>
-  <data name="UserIsLockedByHq" xml:space="preserve">
-    <value>L'utilisateur est verrouillé par le Siège</value>
+  <data name="PLU0014Recomendation" xml:space="preserve">
+    <value>Seuls sont permis les lettres, les points, les espaces, et les apostrophes.</value>
   </data>
 </root>

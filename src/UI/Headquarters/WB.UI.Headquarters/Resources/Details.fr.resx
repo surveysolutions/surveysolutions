@@ -120,4 +120,40 @@
   <data name="ChooseResponsibleInterviewer" xml:space="preserve">
     <value>L'entretien n'a aucun responsable. S'il vous plaît, choisissez un enquêteur responsable</value>
   </data>
+  <data name="Area_ShowCoordinates" xml:space="preserve">
+    <value>Afficher les coordonnées</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Durée</value>
+  </data>
+  <data name="FlagTitleFlagged" xml:space="preserve">
+    <value>Marqué</value>
+  </data>
+  <data name="FlagTitleUnflagged" xml:space="preserve">
+    <value>Non marqué</value>
+  </data>
+  <data name="LastUpdated" xml:space="preserve">
+    <value>Actualisé</value>
+  </data>
+  <data name="NoAnswer" xml:space="preserve">
+    <value>Non répondu</value>
+  </data>
+  <data name="NoSearchResults" xml:space="preserve">
+    <value>Aucun élément trouvé</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Questionnaire: {{name}}</value>
+  </data>
+  <data name="Responsible" xml:space="preserve">
+    <value>Responsable</value>
+  </data>
+  <data name="SearchResult_Count" xml:space="preserve">
+    <value>{{count}} élément trouvé:</value>
+  </data>
+  <data name="SearchResult_Count_plural" xml:space="preserve">
+    <value>{{count}} éléments trouvés:</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Statut: {{nom}}</value>
+  </data>
 </root>
