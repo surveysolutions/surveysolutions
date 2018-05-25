@@ -77,8 +77,22 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
         public static bool ContainsOnly(this int[] multichoice, params int[] valuesList) => 
             multichoice?.Length == valuesList.Length && valuesList.All(multichoice.Contains);
 
+        /// <summary>
+        /// For a single choice question checks that the selection is not mentioned in the specified list of values.
+        /// </summary>
+        /// <param name="singlechoice">single choice variable.</param>
+        /// <param name="valuesList">list of values (blacklist).</param>
+        /// <returns>True if the selection is not mentioned in the specified list of values.</returns>
+        public static bool IsNoneOf(this int? singlechoice, params int[] valuesList)
+        {
+            if (valuesList == null) return true;
+            if (valuesList.Length == 0) return true;
+            if (singlechoice.HasValue == false) return true;
+            return !valuesList.ContainsAny(singlechoice.Value);
+        }
+
         #region March 2016 functions
-        
+
         public static bool ContainsAnyOtherThan(this int[] multichoice, params int[] valuesList)
         {
             if (multichoice == null) return false;
