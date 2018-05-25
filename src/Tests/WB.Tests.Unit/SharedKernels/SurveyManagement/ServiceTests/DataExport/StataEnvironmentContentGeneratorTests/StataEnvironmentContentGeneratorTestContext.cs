@@ -5,6 +5,7 @@ using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -17,7 +18,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         protected static StataEnvironmentContentService CreateStataEnvironmentContentGenerator(
             IFileSystemAccessor fileSystemAccessor)
         {
-            return new StataEnvironmentContentService(fileSystemAccessor, new QuestionnaireLabelFactory());
+            return new StataEnvironmentContentService(fileSystemAccessor, 
+                new QuestionnaireLabelFactory(),
+                Mock.Of<InterviewActionsExporter>(),
+                Mock.Of<CommentsExporter>(),
+                Mock.Of<IInterviewErrorsExporter>());
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
