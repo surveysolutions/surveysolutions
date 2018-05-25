@@ -230,7 +230,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             Error(OrphanNestedRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
             Error(OrphanFirstLevelRoster, "PL0008", messages.PL0008_OrphanRosterRecord),
-            Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication)
+            Error(DuplicatedRosterInstances, "PL0006", messages.PL0006_IdDublication),
+            Error(InconsistentNumericRosterInstanceCodes, "PL0053", messages.PL0053_InconsistentNumericRosterInstanceCodes)
         };
 
         private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> ColumnVerifiers => new[]
@@ -330,6 +331,46 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                                 groupedRow.row.Row, PreloadedDataVerificationReferenceType.Cell,
                                 string.Join(", ", parentRosterVactor.Select(x => x.ToString())),
                                 groupedRow.row.FileName);
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<InterviewImportReference> InconsistentNumericRosterInstanceCodes(
+            List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
+        {
+            var numericRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions().Where(questionnaire.IsQuestionInteger).ToArray();
+            if(numericRosterSizeQuestions.Length == 0)
+                yield break;
+
+            var rosterNamesByNumericRosters = numericRosterSizeQuestions
+                .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
+                .Select(questionnaire.GetRosterVariableName)
+                .ToArray();
+
+            var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
+                .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
+
+            foreach (var rowsByNumericRoster in rowsByNumericRosters)
+            {
+                var rosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, rowsByNumericRoster.Key.ToLower());
+                var rowsByInterviews = rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value);
+                foreach (var rowsByInterview in rowsByInterviews)
+                {
+                    var valueTuples = rowsByInterview
+                        .OrderBy(x => x.RosterInstanceCodes.FirstOrDefault(y => y.VariableName == rosterColumnId).Code)
+                        .Select((x, i) => (row: x, expectedCode: i + 1));
+
+                    foreach (var valueTuple in valueTuples)
+                    {
+                        var rosterInstanceCode =
+                            valueTuple.row.RosterInstanceCodes.FirstOrDefault(y => y.VariableName == rosterColumnId);
+                        if (rosterInstanceCode.Code != valueTuple.expectedCode)
+                        {
+                            yield return new InterviewImportReference(rosterInstanceCode.Column,
+                                valueTuple.row.Row, PreloadedDataVerificationReferenceType.Cell,
+                                rosterInstanceCode.Code.ToString(), valueTuple.row.FileName);
                         }
                     }
                 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
@@ -11,6 +12,48 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 {
     internal partial class ImportDataVerifierTests
     {
+        [Test]
+        public void when_verify_numeric_roster_with_roster_instance_codes_out_of_order_should_return_PL0053_error()
+        {
+            // arrange
+            var numericRosterSize = Guid.NewGuid();
+            var numericRoster = "hhroster";
+            var numericRosterColumn = $"{numericRoster}__id";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(numericRosterSize),
+                    Create.Entity.NumericRoster(variable: numericRoster, rosterSizeQuestionId: numericRosterSize,
+                        children: new[] {Create.Entity.TextQuestion()})
+                }));
+
+
+            var allRowsByAllFiles = new List<PreloadingAssignmentRow>
+            {
+                Create.Entity.PreloadingAssignmentRow("Questionnaire", 1, "interview1"),
+                Create.Entity.PreloadingAssignmentRow(numericRoster, 1, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 1)),
+                Create.Entity.PreloadingAssignmentRow(numericRoster, 2, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 3)),
+                Create.Entity.PreloadingAssignmentRow(numericRoster, 3, "interview1", Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 4))
+            };
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRosters(allRowsByAllFiles, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Has.One.Items);
+            Assert.That(errors[0].Code, Is.EqualTo("PL0053"));
+            Assert.That(errors[0].References, Has.Exactly(2).Items);
+            Assert.That(errors[0].References.ElementAt(0).Column, Is.EqualTo(numericRosterColumn));
+            Assert.That(errors[0].References.ElementAt(0).Row, Is.EqualTo(2));
+            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("3"));
+            Assert.That(errors[0].References.ElementAt(1).Column, Is.EqualTo(numericRosterColumn));
+            Assert.That(errors[0].References.ElementAt(1).Row, Is.EqualTo(3));
+            Assert.That(errors[0].References.ElementAt(1).Content, Is.EqualTo("4"));
+        }
+
         [Test]
         public void when_verify_rosters_with_duplicated_roster_instances_should_return_PL0006_error()
         {

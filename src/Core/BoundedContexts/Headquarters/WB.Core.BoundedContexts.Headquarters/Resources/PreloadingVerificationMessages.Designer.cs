@@ -475,14 +475,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roster by list question should have column for text list answers.
-        /// </summary>
-        public static string PL0052_ColumnByTextListRosterSizeAnswerNotFound {
-            get {
-                return ResourceManager.GetString("PL0052_ColumnByTextListRosterSizeAnswerNotFound", resourceCulture);
-            }
-        }
-        /// <summary>
         ///   Looks up a localized string similar to Required column {0} is missing.
         /// </summary>
         public static string PL0047_ProtectedVariables_MissingColumn {
@@ -515,6 +507,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1 {
             get {
                 return ResourceManager.GetString("PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster by list question should have column for text list answers.
+        /// </summary>
+        public static string PL0052_ColumnByTextListRosterSizeAnswerNotFound {
+            get {
+                return ResourceManager.GetString("PL0052_ColumnByTextListRosterSizeAnswerNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances.
+        /// </summary>
+        public static string PL0053_InconsistentNumericRosterInstanceCodes {
+            get {
+                return ResourceManager.GetString("PL0053_InconsistentNumericRosterInstanceCodes", resourceCulture);
             }
         }
     }
