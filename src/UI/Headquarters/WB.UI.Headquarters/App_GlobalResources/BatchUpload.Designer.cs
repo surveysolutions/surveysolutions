@@ -1214,7 +1214,7 @@ namespace Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Upload a file with identifying data to create new assignments.
-        ///Specify usernames for supervisors or enumerators to make batch assignments..
+        ///Specify usernames for supervisors or interviewers to make batch assignments..
         /// </summary>
         internal static string UploadDescription {
             get {

@@ -24,10 +24,12 @@
                                class="field-to-fill"
                                :placeholder="noAnswerWatermark"
                                :value="$me.answer"
+                               :important="true"
                                :disabled="!$me.acceptAnswer"
                                v-blurOnEnterKey
                                @blur.native="answerTextQuestion"
-                               @blur="answerTextQuestion"></textarea-autosize>
+                               @blur="answerTextQuestion">
+                        </textarea-autosize>
                         <wb-remove-answer />
                     </div>                    
                 </div>    

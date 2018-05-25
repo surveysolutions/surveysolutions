@@ -491,6 +491,9 @@
                 &.sorting_desc:after{
                     border-top: 8px solid $blue;
                 } 
+                &.sorting_asc:after{
+                    border-bottom-width: 8px;
+                }
             }
         }
     }
@@ -704,8 +707,11 @@
                 border-top: 6px solid $gray_form;
             }
             &.sorting_desc:after{
-                border-bottom: 6px solid $blue;
+                border-top: 6px solid $blue;
             } 
+            &.sorting_asc:after{
+                border-bottom-width: 6px;
+            }
         }
     }
 }
