@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public const string UnknownExceptionType = "Unexpected";
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
+        private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ICommandService commandService;
@@ -42,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
+            IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
@@ -53,6 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
+            this.packagesTracker = packagesTracker;
             this.logger = logger;
             this.serializer = serializer;
             this.commandService = commandService;
@@ -218,8 +221,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 }
 
                 existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
-                var serializedEvents = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(interview.Events)
+                var aggregateRootEvents = this.serializer
+                    .Deserialize<AggregateRootEvent[]>(interview.Events);
+
+                AssertPackageNotDuplicated(aggregateRootEvents);
+
+                var serializedEvents = aggregateRootEvents
                     .Select(e => e.Payload)
                     .ToArray();
 
@@ -246,6 +253,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
                 ), this.syncSettings.Origin);
 
+                RecordProcessedPackageInfo(aggregateRootEvents);
+
                 if (startedOwnTransaction)
                 {
                     this.transactionManager.CommitCommandTransaction();
@@ -254,7 +263,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             catch (Exception exception)
             {
                 this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
-                
 
                 this.transactionManager.RollbackCommandTransaction();
 
@@ -286,6 +294,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
 
             innerwatch.Stop();
+        }
+
+        private void RecordProcessedPackageInfo(AggregateRootEvent[] aggregateRootEvents)
+        {
+            if (aggregateRootEvents.Length > 0)
+            {
+                this.packagesTracker.Store(new ReceivedPackageLogEntry
+                {
+                    FirstEventId = aggregateRootEvents[0].EventIdentifier,
+                    FirstEventTimestamp = aggregateRootEvents[0].EventTimeStamp,
+                    LastEventId = aggregateRootEvents.Last().EventIdentifier,
+                    LastEventTimestamp = aggregateRootEvents.Last().EventTimeStamp
+                }, null);
+            }
+        }
+
+        private void AssertPackageNotDuplicated(AggregateRootEvent[] aggregateRootEvents)
+        {
+            if (aggregateRootEvents.Length > 0)
+            {
+                var firstEvent = aggregateRootEvents[0];
+                var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
+
+                var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
+                    _.FirstOrDefault(x => x.FirstEventId == firstEvent.EventIdentifier &&
+                                          x.FirstEventTimestamp == firstEvent.EventTimeStamp &&
+                                          x.LastEventId == lastEvent.EventIdentifier &&
+                                          x.LastEventTimestamp == lastEvent.EventTimeStamp));
+
+                if (existingReceivedPackageLog != null)
+                {
+                    throw new InterviewException("Package already received and processed",
+                        InterviewDomainExceptionType.DuplicateSyncPackage);
+                }
+            }
         }
 
         private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid interviewerId,
