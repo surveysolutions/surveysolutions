@@ -160,6 +160,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audit log records are missing.
+        /// </summary>
+        public static string RocordsMissing {
+            get {
+                return ResourceManager.GetString("RocordsMissing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show previous 7 active days.
         /// </summary>
         public static string ShowPrevious7Days {

@@ -201,4 +201,8 @@
     <value>отправлено {0} интервью</value>
     <comment>отправлено {0} интервью</comment>
   </data>
+    <data name="RocordsMissing" xml:space="preserve">
+    <value>Аудит записи для интервьювера не найдены</value>
+    <comment>Аудин записи не найдены</comment>
+  </data>
 </root>
