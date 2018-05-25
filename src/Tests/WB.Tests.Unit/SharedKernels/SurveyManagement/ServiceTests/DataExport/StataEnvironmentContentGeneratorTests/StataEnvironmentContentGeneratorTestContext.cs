@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         {
             return new StataEnvironmentContentService(fileSystemAccessor, 
                 new QuestionnaireLabelFactory(),
-                Mock.Of<InterviewActionsExporter>(),
-                Mock.Of<CommentsExporter>(),
-                Mock.Of<IInterviewErrorsExporter>());
+                new InterviewActionsExporter(null, fileSystemAccessor, null, null, null, null, null),
+                new CommentsExporter(null, fileSystemAccessor, null, null, null, null),
+                new InterviewErrorsExporter(null, null, fileSystemAccessor));
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
