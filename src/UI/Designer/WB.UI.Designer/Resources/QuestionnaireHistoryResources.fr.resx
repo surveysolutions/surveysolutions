@@ -166,7 +166,7 @@
     <value>Question {0} ajoutée</value>
   </data>
   <data name="Question_Clone" xml:space="preserve">
-    <value>Question {0} clonée à partir de la question {1}</value>
+    <value>Question {0} copiée à partir de la question {1}</value>
   </data>
   <data name="Question_Delete" xml:space="preserve">
     <value>Question {0} supprimée</value>
@@ -220,7 +220,7 @@
     <value>Roster {0} ajouté</value>
   </data>
   <data name="Roster_Clone" xml:space="preserve">
-    <value>Roster {0} cloné à partir du Roster {1}</value>
+    <value>Roster {0} copié à partir du Roster {1}</value>
   </data>
   <data name="Roster_Delete" xml:space="preserve">
     <value>Roster {0} supprimé</value>
@@ -241,7 +241,7 @@
     <value>Section {0} ajoutée</value>
   </data>
   <data name="Section_Clone" xml:space="preserve">
-    <value>Section {0} clonée à partir de la section {1}</value>
+    <value>Section {0} copiée à partir de la section {1}</value>
   </data>
   <data name="Section_Delete" xml:space="preserve">
     <value>Section {0} supprimée</value>
@@ -262,7 +262,7 @@
     <value>Texte statique {0} ajouté</value>
   </data>
   <data name="StaticText_Clone" xml:space="preserve">
-    <value>Texte statique {0} cloné à partir du texte statique {1}</value>
+    <value>Texte statique {0} copié à partir du texte statique {1}</value>
   </data>
   <data name="StaticText_Delete" xml:space="preserve">
     <value>Texte statique {0} supprimé</value>
@@ -283,7 +283,7 @@
     <value>Cette liste ne contient aucun enregistrement</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
-    <value>Timestamp</value>
+    <value>Horodatage</value>
   </data>
   <data name="Translation_Delete" xml:space="preserve">
     <value>Traduction {0} supprimée</value>
@@ -314,5 +314,14 @@
   </data>
   <data name="Variable_Update" xml:space="preserve">
     <value>La variable {0} a été mise à jour</value>
+  </data>
+  <data name="Metadata_Update" xml:space="preserve">
+    <value>Métadonnées du questionnaire {0} mises à jour</value>
+  </data>
+  <data name="Translation_DefaultTranslationSet" xml:space="preserve">
+    <value>La traduction par défaut est définie sur {0}</value>
+  </data>
+  <data name="Translation_Original" xml:space="preserve">
+    <value>Original</value>
   </data>
 </root>

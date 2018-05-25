@@ -403,7 +403,7 @@
     <value>Afficher / masquer ce menu d'aide</value>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Se connecter</value>
+    <value>Se déconnecter</value>
   </data>
   <data name="ModalConfirm" xml:space="preserve">
     <value>Confirmation</value>
@@ -844,10 +844,10 @@
     <value>Nom de la pièce jointe</value>
   </data>
   <data name="ToggleDropdown" xml:space="preserve">
-    <value>Toggle Liste Déroulante</value>
+    <value>Basculer en Liste Déroulante</value>
   </data>
   <data name="ToggleSearch" xml:space="preserve">
-    <value>Toggle Recherche</value>
+    <value>Basculer en Recherche</value>
   </data>
   <data name="TranslationsObtained" xml:space="preserve">
     <value>Obtient {0} ligne à partir du fichier de traduction</value>
@@ -923,5 +923,188 @@
   </data>
   <data name="WarningsCounter_plural" xml:space="preserve">
     <value>{{count}} avertissements</value>
+  </data>
+  <data name="CommentEditorResolve" xml:space="preserve">
+    <value>Résoudre</value>
+  </data>
+  <data name="EditorAddComment" xml:space="preserve">
+    <value>Ajouter commentaire</value>
+  </data>
+  <data name="EditorHideComment" xml:space="preserve">
+    <value>Cacher commentaire</value>
+  </data>
+  <data name="EntityComment" xml:space="preserve">
+    <value>Nouveau commentaire</value>
+  </data>
+  <data name="EntryWasNotFound" xml:space="preserve">
+    <value>Entrée n'a pas été trouvé dans le questionnaire, s'il vous plaît choisir un autre.</value>
+  </data>
+  <data name="HelpNewComment" xml:space="preserve">
+    <value>Ajouter un commentaire</value>
+  </data>
+  <data name="HideResolvedComments" xml:space="preserve">
+    <value>Masquer les commentaires résolus</value>
+  </data>
+  <data name="HotkeysCloseMetadata" xml:space="preserve">
+    <value>Ajouter le panneau de metadata</value>
+  </data>
+  <data name="IncorrectRosterTitle" xml:space="preserve">
+    <value>Question du titre de roster incorrecte</value>
+  </data>
+  <data name="IsSignature" xml:space="preserve">
+    <value>Utilisez le tampon de signature</value>
+  </data>
+  <data name="IsWarning" xml:space="preserve">
+    <value>C'est avertissement</value>
+  </data>
+  <data name="MarkAsDefault" xml:space="preserve">
+    <value>Marquer comme langue par défaut</value>
+  </data>
+  <data name="MaxCommentLengthErrorMessage" xml:space="preserve">
+    <value>Le commentaire ne peut pas contenir plus de {1} caractères</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>S'il vous plait attendez</value>
+  </data>
+  <data name="QuestionAddSpecialValues" xml:space="preserve">
+    <value>Ajouter une valeur speciale</value>
+  </data>
+  <data name="RequestFailedUnexpectedly" xml:space="preserve">
+    <value>La demande a échoué de manière inattendue.</value>
+  </data>
+  <data name="SelectCountry" xml:space="preserve">
+    <value>Sélectionner le pays</value>
+  </data>
+  <data name="SelectedInvalidItem" xml:space="preserve">
+    <value>élément non valide sélectionné. Corrige-le.</value>
+  </data>
+  <data name="SelectItemFromTheList" xml:space="preserve">
+    <value>Sélectionnez un élément de la liste</value>
+  </data>
+  <data name="SelectKindOfData" xml:space="preserve">
+    <value>Sélectionnez un type de données</value>
+  </data>
+  <data name="SelectModeOfDataCollection" xml:space="preserve">
+    <value>Sélectionnez un mode de collecte de données</value>
+  </data>
+  <data name="SelectStudyType" xml:space="preserve">
+    <value>Sélectionner un type d'étude</value>
+  </data>
+  <data name="SideBarCommentsCounter" xml:space="preserve">
+    <value>{{count}} Fil de commentaires:</value>
+  </data>
+  <data name="SideBarCommentsCounter_plural" xml:space="preserve">
+    <value>{{Count}} fils de commentaires:</value>
+  </data>
+  <data name="SideBarCommentsTitle" xml:space="preserve">
+    <value>commentaires</value>
+  </data>
+  <data name="SideBarEmptyCommentsLine" xml:space="preserve">
+    <value>Vous verrez des commentaires ici</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>information additionnelle</value>
+  </data>
+  <data name="SideBarMetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Accepter de rendre ce questionnaire public</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Informations de base</value>
+  </data>
+  <data name="SideBarMetadataConsultants" xml:space="preserve">
+    <value>Consultants:</value>
+  </data>
+  <data name="SideBarMetadataCountry" xml:space="preserve">
+    <value>Pays:</value>
+  </data>
+  <data name="SideBarMetadataCoverage" xml:space="preserve">
+    <value>Couverture:</value>
+  </data>
+  <data name="SideBarMetadataFunding" xml:space="preserve">
+    <value>Financement:</value>
+  </data>
+  <data name="SideBarMetadataHeader" xml:space="preserve">
+    <value>Description du questionnaire et informations de l'enquête</value>
+  </data>
+  <data name="SideBarMetadataKeywords" xml:space="preserve">
+    <value>Mots clés:</value>
+  </data>
+  <data name="SideBarMetadataKindOfData" xml:space="preserve">
+    <value>Type de données:</value>
+  </data>
+  <data name="SideBarMetadataLanguages" xml:space="preserve">
+    <value>Langues:</value>
+  </data>
+  <data name="SideBarMetadataModeOfDataCollection" xml:space="preserve">
+    <value>Mode de collecte de données:</value>
+  </data>
+  <data name="SideBarMetadataNotes" xml:space="preserve">
+    <value>Remarques:</value>
+  </data>
+  <data name="SideBarMetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Chercheur principal:</value>
+  </data>
+  <data name="SideBarMetadataQuestionnaireAccess" xml:space="preserve">
+    <value>Accès au questionnaire</value>
+  </data>
+  <data name="SideBarMetadataStudyTypes" xml:space="preserve">
+    <value>Types d'étude:</value>
+  </data>
+  <data name="SideBarMetadataSubtitle" xml:space="preserve">
+    <value>Sous-titre:</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Données de l'enquête</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Informations d'enquête</value>
+  </data>
+  <data name="SideBarMetadataTitle" xml:space="preserve">
+    <value>Description du questionnaire</value>
+  </data>
+  <data name="SideBarMetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unité d'analyse:</value>
+  </data>
+  <data name="SideBarMetadataUniverse" xml:space="preserve">
+    <value>Univers:</value>
+  </data>
+  <data name="SideBarMetadataVersionIdentificator" xml:space="preserve">
+    <value>Identificateur de version:</value>
+  </data>
+  <data name="SideBarMetadataVersionNotes" xml:space="preserve">
+    <value>Notes de version:</value>
+  </data>
+  <data name="SideBarMetadataYear" xml:space="preserve">
+    <value>Année:</value>
+  </data>
+  <data name="Test" xml:space="preserve">
+    <value>Tester</value>
+  </data>
+  <data name="UnMarkAsDefault" xml:space="preserve">
+    <value>A ne pas utiliser par défaut</value>
+  </data>
+  <data name="UntitledGroupOrRoster" xml:space="preserve">
+    <value>Sous-section ou roster sans titre</value>
+  </data>
+  <data name="UntitledRoster" xml:space="preserve">
+    <value>Tableau sans titre</value>
+  </data>
+  <data name="UntitledSection" xml:space="preserve">
+    <value>Section sans titre</value>
+  </data>
+  <data name="UntitledStaticText" xml:space="preserve">
+    <value>Texte statique sans titre</value>
+  </data>
+  <data name="UntitledVariable" xml:space="preserve">
+    <value>Variable sans titre</value>
+  </data>
+  <data name="VariableVariableName" xml:space="preserve">
+    <value>Nom de variable</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter" xml:space="preserve">
+    <value>Afficher tout {{count}} commentaire résolu</value>
+  </data>
+  <data name="ViewResolvedCommentsCounter_plural" xml:space="preserve">
+    <value>Afficher tous les {{count}} commentaires résolus</value>
   </data>
 </root>

@@ -172,7 +172,7 @@
     <value>Commentaire de l'enquêteur</value>
   </data>
   <data name="CommentPost" xml:space="preserve">
-    <value>Enregister</value>
+    <value>Enregistrer</value>
   </data>
   <data name="CommentSupervisor" xml:space="preserve">
     <value>Commentaire du chef d'équipe</value>
@@ -235,7 +235,7 @@
     <value>Valeur renseignée dépasse le nombre de caractères attendu. N'admettre que 15 caractères.</value>
   </data>
   <data name="Disconnected" xml:space="preserve">
-    <value>Déconnté</value>
+    <value>Déconnecté</value>
   </data>
   <data name="Done" xml:space="preserve">
     <value>Achevé</value>
@@ -277,7 +277,7 @@
     <value>Afficher les instruction</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Chargement en cours...</value>
+    <value>Chargement en cours. Veuillez patienter</value>
   </data>
   <data name="LoadingWait" xml:space="preserve">
     <value>Chargement en cours. Veuillez patienter</value>
@@ -310,7 +310,7 @@
     <value>Modalités seront disponibles après avoir renseignée la question référenciée</value>
   </data>
   <data name="PhotoIsNotImage" xml:space="preserve">
-    <value>Seuls les fichiers image sont autoriser à être importé</value>
+    <value>Seuls les fichiers de type image sont autorisés à être importé</value>
   </data>
   <data name="PhotoTooBig" xml:space="preserve">
     <value>Image trop grande pour être importée. Veuillez choisir une image de moins de 30 Mo</value>
@@ -368,5 +368,40 @@
   </data>
   <data name="ToggleNavigation" xml:space="preserve">
     <value>Navigation</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Modifier la superficie</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>En cours d'enregistrement</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Attention! Cet entretien contient des données corrompues. &lt;br /&gt;
+Seulement une version antérieure de cet entretien est disponible. &lt;br /&gt;
+Veuillez vous approcher de l'équipe d'appui pour l'assistance.</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Erreur: Cet entretien sont corrompu</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Cet entretien a été reçu par l'enquêteur et, de ce fait, ne peut pas être modifié</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Chargement du questionnaire en cours. Veuillez patienter</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Actualiser le questionnaier</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Montrer sur la carte</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Avertissements</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Fin de la séance de test</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Veuillez fermer cette fenêtre. Vous pouvez relancer Tester à partir du site Designer.</value>
   </data>
 </root>
