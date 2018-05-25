@@ -82,7 +82,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return string.Empty;
 
-            var columnName = this.ColummnsList[order.Column].Name;
+            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
             var stringifiedOrder = order.Dir == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
 
             return $"{columnName} {stringifiedOrder}";
