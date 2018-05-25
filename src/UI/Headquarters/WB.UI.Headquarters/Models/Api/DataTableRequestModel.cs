@@ -94,7 +94,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 
-            var columnName = this.ColummnsList[order.Column].Name;
+            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
 
             return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
         }
