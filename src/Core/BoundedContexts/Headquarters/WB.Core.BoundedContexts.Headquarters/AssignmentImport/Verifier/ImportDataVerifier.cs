@@ -347,7 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var rosterNamesByNumericRosters = numericRosterSizeQuestions
                 .SelectMany(questionnaire.GetRosterGroupsByRosterSizeQuestion)
                 .Select(questionnaire.GetRosterVariableName)
-                .ToArray();
+                .ToHashSet();
 
             var rowsByNumericRosters = allRowsByAllFiles.GroupBy(z => z.QuestionnaireOrRosterName)
                 .Where(x => rosterNamesByNumericRosters.Contains(x.Key));
@@ -358,19 +358,19 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 var rowsByInterviews = rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value);
                 foreach (var rowsByInterview in rowsByInterviews)
                 {
-                    var valueTuples = rowsByInterview
-                        .OrderBy(x => x.RosterInstanceCodes.FirstOrDefault(y => y.VariableName == rosterColumnId).Code)
+                    var orderedRosterInstanceRows = rowsByInterview
+                        .OrderBy(x => x.RosterInstanceCodes.First(y => y.VariableName == rosterColumnId).Code)
                         .Select((x, i) => (row: x, expectedCode: i + 1));
 
-                    foreach (var valueTuple in valueTuples)
+                    foreach (var rosterInstanceRow in orderedRosterInstanceRows)
                     {
                         var rosterInstanceCode =
-                            valueTuple.row.RosterInstanceCodes.FirstOrDefault(y => y.VariableName == rosterColumnId);
-                        if (rosterInstanceCode.Code != valueTuple.expectedCode)
+                            rosterInstanceRow.row.RosterInstanceCodes.First(y => y.VariableName == rosterColumnId);
+                        if (rosterInstanceCode.Code != rosterInstanceRow.expectedCode)
                         {
                             yield return new InterviewImportReference(rosterInstanceCode.Column,
-                                valueTuple.row.Row, PreloadedDataVerificationReferenceType.Cell,
-                                rosterInstanceCode.Code.ToString(), valueTuple.row.FileName);
+                                rosterInstanceRow.row.Row, PreloadedDataVerificationReferenceType.Cell,
+                                rosterInstanceCode.Code.ToString(), rosterInstanceRow.row.FileName);
                         }
                     }
                 }
