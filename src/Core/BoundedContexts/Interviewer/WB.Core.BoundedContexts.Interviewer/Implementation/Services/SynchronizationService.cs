@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -29,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string auditLogController = string.Concat(interviewerApiUrl, apiVersion, "/auditlog");
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
-        private readonly string interviewsController = string.Concat(interviewerApiUrl, apiVersion, "/interviews");
+        private readonly string interviewsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
         
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
@@ -317,12 +318,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: this.restCredentials));
         }
 
-        public Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             try
             {
                 return this.TryGetRestResponseOrThrowAsync(
-                    () => this.restService.GetAsync<InterviewerInterviewApiView>(
+                    () => this.restService.GetAsync<List<CommittedEvent>>(
                         url: string.Concat(this.interviewsController, "/", interviewId),
                         credentials: this.restCredentials,
                         onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
@@ -332,7 +333,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
                 if (httpStatusCode == HttpStatusCode.NotFound)
-                    return Task.FromResult<InterviewerInterviewApiView>(null);
+                    return Task.FromResult(new List<CommittedEvent>());
 
                 this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
                 throw;

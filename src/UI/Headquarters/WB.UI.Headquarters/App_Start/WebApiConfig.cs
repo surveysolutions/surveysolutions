@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.API.Interviewer.v2;
+using WB.UI.Headquarters.API.Interviewer.v3;
 using WB.UI.Shared.Web.Compression;
 using WB.UI.Shared.Web.Filters;
 
@@ -118,16 +119,9 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/attachments",
                 c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/interviews", c => c.Action<InterviewsApiV2Controller>(x => x.Get()));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV2Controller>(x => x.Details(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/logstate",
-                c => c.Action<InterviewsApiV2Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV2Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image",
-                c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
-            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/audio",
-                c => c.Action<InterviewsApiV2Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+
+            MapInterviewsApiController(config);
+
             config.TypedRoute("api/interviewer/v2/attachments/{id}",
                 c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
             config.TypedRoute("api/interviewer/v2/assignments", 
@@ -139,6 +133,32 @@ namespace WB.UI.Headquarters
                 c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));
             config.TypedRoute("api/interviewer/v2/auditlog",
                 c => c.Action<AuditLogApiV2Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
+        }
+
+        private static void MapInterviewsApiController(HttpConfiguration config)
+        {
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV2Controller>(x => x.Details(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/logstate",
+                c => c.Action<InterviewsApiV2Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV2Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/image",
+                c => c.Action<InterviewsApiV2Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/audio",
+                c => c.Action<InterviewsApiV2Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+
+
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV3Controller>(x => x.Details(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/logstate",
+                c => c.Action<InterviewsApiV3Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV3Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/image",
+                c => c.Action<InterviewsApiV3Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/audio",
+                c => c.Action<InterviewsApiV3Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
         }
 #pragma warning restore 4014
     }
