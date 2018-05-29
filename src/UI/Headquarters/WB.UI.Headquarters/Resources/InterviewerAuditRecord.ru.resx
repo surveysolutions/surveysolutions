@@ -170,8 +170,8 @@
   <data name="DetailedActionLog" xml:space="preserve">
     <value>Детальный лог действий</value>
   </data>
-  <data name="DownloadCsvLog" xml:space="preserve">
-    <value>Загрузить полный лог в CSV формате</value>
+  <data name="DownloadTabLog" xml:space="preserve">
+    <value>Загрузить полный лог в Tab формате</value>
   </data>
   <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
     <value>нечего синхронизировать</value>
