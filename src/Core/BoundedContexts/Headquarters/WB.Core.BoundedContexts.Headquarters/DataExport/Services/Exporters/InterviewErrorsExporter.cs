@@ -18,7 +18,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
     {
         List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath);
         void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath);
-        void WriteDoFile(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string basePath);
+        void WriteDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath);
     }
 
     internal class InterviewErrorsExporter : IInterviewErrorsExporter
@@ -144,12 +144,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.csvWriter.WriteData(filePath, new[] { headers.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
         }
 
-        public void WriteDoFile(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string basePath)
+        public void WriteDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
         {
             var doContent = new DoFile();
             
             doContent.BuildInsheet(Path.ChangeExtension(FileName, "tab"));
             doContent.AppendLine();
+
+            bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
+            var maxRosterDepthInQuestionnaire = questionnaireExportStructure.MaxRosterDepth;
 
             var headersList = GetHeaders(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire);
 
@@ -173,7 +176,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
-
         }
 
         private static List<string> GetHeaders(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire)

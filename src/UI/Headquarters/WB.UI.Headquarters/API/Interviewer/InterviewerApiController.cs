@@ -234,16 +234,17 @@ namespace WB.UI.Headquarters.API.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
-            var interviewerAssignments = this.assignmentsService.GetAssignments(this.authorizedUser.Id);
-            if (deviceSyncProtocolVersion < SyncProtocolVersionProvider.ProtectedVariablesIntroduced 
-                && interviewerAssignments.Any(x => x.ProtectedVariables?.Count > 0))
+            if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
             {
-                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                if (deviceSyncProtocolVersion < SyncProtocolVersionProvider.ProtectedVariablesIntroduced
+                    && this.assignmentsService.HasAssignmentWithProtectedVariables(this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
             }
-
-            if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/ 
-                || deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
+            else if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
             {
+                var interviewerAssignments = this.assignmentsService.GetAssignments(this.authorizedUser.Id);
                 var assignedQuestionarries = this.questionnaireBrowseViewFactory.GetByIds(interviewerAssignments.Select(ia => ia.QuestionnaireId).ToArray());
 
                 if (assignedQuestionarries.Any(aq => aq.AllowAssignments))

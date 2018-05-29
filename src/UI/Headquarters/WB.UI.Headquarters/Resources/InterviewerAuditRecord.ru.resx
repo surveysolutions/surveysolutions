@@ -170,8 +170,8 @@
   <data name="DetailedActionLog" xml:space="preserve">
     <value>Детальный лог действий</value>
   </data>
-  <data name="DownloadCsvLog" xml:space="preserve">
-    <value>Загрузить полный лог в CSV формате</value>
+  <data name="DownloadTabLog" xml:space="preserve">
+    <value>Загрузить полный лог в Tab формате</value>
   </data>
   <data name="SynchronizationCompleted_NothingToSync" xml:space="preserve">
     <value>нечего синхронизировать</value>
@@ -200,5 +200,13 @@
   <data name="SynchronizationCompleted_InterviewsUploaded" xml:space="preserve">
     <value>отправлено {0} интервью</value>
     <comment>отправлено {0} интервью</comment>
+  </data>
+    <data name="RocordsMissing" xml:space="preserve">
+    <value>Аудит записи для интервьювера не найдены</value>
+    <comment>Аудин записи не найдены</comment>
+  </data>
+    <data name="PageTitle" xml:space="preserve">
+    <value>Лог действий</value>
+    <comment>Лог действий</comment>
   </data>
 </root>

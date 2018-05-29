@@ -187,9 +187,18 @@
     <value>Cliquez sur un questionnaire dans la liste pour créer des affectations d'entretien</value>
   </data>
   <data name="UploadAssignments" xml:space="preserve">
-    <value>Télécharger des affectations</value>
+    <value>Importer des affectations</value>
   </data>
   <data name="WebInterviewSetup" xml:space="preserve">
     <value>Configuration de L'entretien Web</value>
+  </data>
+  <data name="DeleteMap" xml:space="preserve">
+    <value>Supprimer la carte</value>
+  </data>
+  <data name="DeleteMapUser" xml:space="preserve">
+    <value>Supprimer l'utilisateur de la carte</value>
+  </data>
+  <data name="ExportQuestionnaire" xml:space="preserve">
+    <value>Exporter le questionnaire</value>
   </data>
 </root>

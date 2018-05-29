@@ -148,7 +148,7 @@
     <value>Aucun nouveau entretien</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
-    <value>Cet entretien est terminé. Vous voulez le rouvrir afin d'y apporter des changements?</value>
+    <value>Cet entretien est terminé. Vous voulez le réinitialiser afin d'y apporter des changements ?</value>
   </data>
   <data name="Dashboard_RejectedLinkText" xml:space="preserve">
     <value>Rejeté(s) ({0})</value>
@@ -507,22 +507,22 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>{0} entertien(s)</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Toutes les données receuillies sur cet appareil seront stockées dans un fichier de sauvegarde. </value>
+    <value>Toutes les données receuillies sur cet appareil seront stockées dans un fichier de sauvegarde.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
     <value>Sauvegarder toutes les informations collectées</value>
   </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
-    <value>Date : </value>
+    <value>Date :</value>
   </data>
   <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
-    <value>Répertoire : </value>
+    <value>Répertoire :</value>
   </data>
   <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
     <value>Fichier de sauvegarde créé</value>
   </data>
   <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
-    <value>Taille : </value>
+    <value>Taille :</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
     <value>&lt;font color="red"&gt;Aucune connexion internet&lt;/font&gt;</value>
@@ -537,10 +537,10 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>&lt;font color="red"&gt;Aucune connexion avec le serveur&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
-    <value>Type de connexion : </value>
+    <value>Type de connexion :</value>
   </data>
   <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
-    <value>Nom du réseau : </value>
+    <value>Nom du réseau :</value>
   </data>
   <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
     <value>Ping :</value>
@@ -561,7 +561,7 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Une nouvelle version existe. Voulez-vous la télécharger et mettre à jour l'appli Interviewer sur cet appareil ?</value>
   </data>
   <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
-    <value>Numéro de version : </value>
+    <value>Numéro de version :</value>
   </data>
   <data name="Diagnostics_No" xml:space="preserve">
     <value>Non</value>
@@ -585,7 +585,7 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Compiler et envoyer vers Headquarters toutes les données sur cet appareil</value>
   </data>
   <data name="Diagnostics_ServerUrl" xml:space="preserve">
-    <value>L'URL du serveur : </value>
+    <value>L'URL du serveur :</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
     <value>Toutes les informations techniques seront mis dans un fichier texte simple qui pourrait être envoyée par courriel, Google Hangouts, ou tout autre appli de messagerie</value>
@@ -597,10 +597,10 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
     <value>Fichier d'archive disponible</value>
   </data>
   <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
-    <value>Taille : </value>
+    <value>Taille :</value>
   </data>
   <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
-    <value>Fichier crée : </value>
+    <value>Fichier crée :</value>
   </data>
   <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
     <value>Mesure la vitesse de connexion à partir de la communication entre l'appareil et le serveur</value>
@@ -679,5 +679,59 @@ Veuillez composer votre mot de passe à nouveau. Si cela ne résout pas le probl
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Echec de vérification de l'URL ou du certificat de sécurité. Veuillez vérifiquer que l'adresse du serveur est valide, et que la date et heure sur la tablette sonte correctes.</value>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Exécuter la recherche pour afficher les résultats</value>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Aucun element trouvé</value>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Annuler la recherche</value>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>{0} élément trouvé</value>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Saisir le text a rechercher</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Synchroniser pou avoir le resume des cartes. Contacter votre chef d'equipe pour plus d'instruction</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Toutes les cartes sont synchronisees</value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Cartes</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Control des cartes sur le serveur</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Erreur de synchronisation des cartes</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Synchronisation des cartes reussie</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Manipulation de cartes {0}, {1} sur {2}. Telechargement {3}%</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Cartes</value>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Recherche</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Partager l'information avec…</value>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Vérifier les mises à jour des logiciels </value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Téléchargement des mise à jour des applications</value>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Reçu {0} sur {1} a {2} ({3}%)</value>
   </data>
 </root>

@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Humanizer
+@using WB.Core.SharedKernels.DataCollection.Exceptions
+@{
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
     this.ViewBag.Title = "Control Panel: Broken interview packages";
 }
@@ -16,8 +18,21 @@
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Interviewers" })';
         var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Questionnaires" })';
         var reprocessSelectedUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "ReprocessSelectedBrokenPackages" })';
+        var setExceptionTypeUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "MarkReasonAsKnown" })';
+        var downloadPackageUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "DownloadSyncPackage" })';
+        var knownReasons = [
+            @foreach (InterviewDomainExceptionType val in Enum.GetValues(typeof(InterviewDomainExceptionType)))
+            {
+                <text>
+                    { text: '@(val.Humanize())', value: '@((int)val)'},
+                </text>
+            }
+        ];
+
+
         $(function () {
-            var viewModel = new Supervisor.VM.ControlPanel.BrokenInterviewPackages(brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, null, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl);
+            var viewModel = new Supervisor.VM.ControlPanel.BrokenInterviewPackages(brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, 
+                null, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl, setExceptionTypeUrl, knownReasons);
             viewModel.load();
             ko.applyBindings(viewModel);
         });

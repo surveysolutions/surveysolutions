@@ -229,7 +229,7 @@
     <value>Réessayer l'exportation en PDF</value>
   </data>
   <data name="SelectTabFile" xml:space="preserve">
-    <value>Choisissez le fichier tab-separateur tabulation à télécharger, s'il vous plaît</value>
+    <value>Choisissez le fichier tab-separateur tabulation à importer, s'il vous plaît</value>
   </data>
   <data name="SuccessDeleteMessage" xml:space="preserve">
     <value>Le questionnaire "{0}" a bien été supprimé</value>
@@ -242,5 +242,65 @@
   </data>
   <data name="You" xml:space="preserve">
     <value>vous</value>
+  </data>
+  <data name="Assign" xml:space="preserve">
+    <value>Attribuer</value>
+  </data>
+  <data name="AssignFolder" xml:space="preserve">
+    <value>Attribuer un fichier/dossier</value>
+  </data>
+  <data name="AssignFolderText" xml:space="preserve">
+    <value>S'il vous plait, attribuer dossier pour "{0}" questionnaire</value>
+  </data>
+  <data name="Assigning" xml:space="preserve">
+    <value>Attribution</value>
+  </data>
+  <data name="ChooseLanguage" xml:space="preserve">
+    <value>Annuler la recherche</value>
+  </data>
+  <data name="ChooseLanguageTitle" xml:space="preserve">
+    <value>S'il vous plait, choisir la traduction</value>
+  </data>
+  <data name="CreateSubFolder" xml:space="preserve">
+    <value>Créer un sous dossier</value>
+  </data>
+  <data name="CreatingHtml" xml:space="preserve">
+    <value>Creation de Html pour "{0}"</value>
+  </data>
+  <data name="DeleteFolderConfirmation" xml:space="preserve">
+    <value>Etes-vous sûr de vouloir supprimer le dossier {0}?</value>
+  </data>
+  <data name="ExportAsHtml" xml:space="preserve">
+    <value>Exporter en Html</value>
+  </data>
+  <data name="FoldersDescription" xml:space="preserve">
+    <value>Vous pouvez configurer la structure des dossiers pour la page des questionnaires publics.Pour cela, cliquez sur le dossier par le bouton droit, puis utilisez l'une des opérations:
+&lt;br/&gt; - " Créer un sous-dossier " pour créer un sous-dossier
+&lt;br/&gt; - " Renommer " pour renommer le nom du dossier
+&lt;br/&gt; - " Supprimer " pour supprimer le dossier avec sous-dossiers </value>
+  </data>
+  <data name="GeneratePdf" xml:space="preserve">
+    <value>Generer un pdf</value>
+  </data>
+  <data name="GetHtml" xml:space="preserve">
+    <value>Exporter Html</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Emplacement</value>
+  </data>
+  <data name="NewFolder" xml:space="preserve">
+    <value>Nouveau dossier</value>
+  </data>
+  <data name="QuestionnaireTreeFolders" xml:space="preserve">
+    <value>Dossier</value>
+  </data>
+  <data name="Rename" xml:space="preserve">
+    <value>Renommer</value>
+  </data>
+  <data name="SharedQuestionnaires" xml:space="preserve">
+    <value>Questionnaires partagés avec moi</value>
+  </data>
+  <data name="Untitled" xml:space="preserve">
+    <value>Non-titre</value>
   </data>
 </root>
