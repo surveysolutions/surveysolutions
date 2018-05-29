@@ -118,7 +118,6 @@ namespace WB.UI.Headquarters
                         x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/questionnaires/{id:guid}/{version:int}/attachments",
                 c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
-            config.TypedRoute("api/interviewer/v2/interviews", c => c.Action<InterviewsApiV2Controller>(x => x.Get()));
 
             MapInterviewsApiController(config);
 
@@ -137,6 +136,8 @@ namespace WB.UI.Headquarters
 
         private static void MapInterviewsApiController(HttpConfiguration config)
         {
+            config.TypedRoute("api/interviewer/v2/interviews", c => c.Action<InterviewsApiV2Controller>(x => x.Get()));
+
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}",
                 c => c.Action<InterviewsApiV2Controller>(x => x.Details(Param.Any<Guid>())));
             config.TypedRoute("api/interviewer/v2/interviews/{id:guid}/logstate",
@@ -150,15 +151,7 @@ namespace WB.UI.Headquarters
 
 
             config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV3Controller>(x => x.Details(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/logstate",
-                c => c.Action<InterviewsApiV3Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
-            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV3Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
-            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/image",
-                c => c.Action<InterviewsApiV3Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
-            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/audio",
-                c => c.Action<InterviewsApiV3Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+                c => c.Action<InterviewsApiV3Controller>(x => x.DetailsV3(Param.Any<Guid>())));
         }
 #pragma warning restore 4014
     }

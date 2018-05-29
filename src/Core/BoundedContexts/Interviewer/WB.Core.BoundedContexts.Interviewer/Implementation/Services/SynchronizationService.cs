@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -30,7 +31,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string auditLogController = string.Concat(interviewerApiUrl, apiVersion, "/auditlog");
         private readonly string devicesController = string.Concat(interviewerApiUrl, apiVersion, "/devices");
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
-        private readonly string interviewsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
+        private readonly string interviewsController = string.Concat(interviewerApiUrl, "v2", "/interviews");
+        private readonly string interviewDetailsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
         
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
@@ -324,13 +326,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             {
                 return this.TryGetRestResponseOrThrowAsync(
                     () => this.restService.GetAsync<List<CommittedEvent>>(
-                        url: string.Concat(this.interviewsController, "/", interviewId),
+                        url: string.Concat(this.interviewDetailsController, "/", interviewId),
                         credentials: this.restCredentials,
                         onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                         token: token));
             }
             catch (SynchronizationException exception)
             {
+                Mvx.Resolve<ILoggerProvider>().GetFor<SynchronizationService>().Error("GetInterviewDetailsAsync error", exception);
                 var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
                 if (httpStatusCode == HttpStatusCode.NotFound)
                     return Task.FromResult(new List<CommittedEvent>());
