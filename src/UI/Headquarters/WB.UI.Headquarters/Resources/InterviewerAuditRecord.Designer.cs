@@ -106,11 +106,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download complete log in CSV format.
+        ///   Looks up a localized string similar to Download complete log in Tab format.
         /// </summary>
-        public static string DownloadCsvLog {
+        public static string DownloadTabLog {
             get {
-                return ResourceManager.GetString("DownloadCsvLog", resourceCulture);
+                return ResourceManager.GetString("DownloadTabLog", resourceCulture);
             }
         }
         

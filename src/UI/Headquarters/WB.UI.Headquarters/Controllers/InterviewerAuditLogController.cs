@@ -46,11 +46,11 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        public ActionResult Index(Guid id, DateTime? startDateTime)
+        public ActionResult Index(Guid id, DateTime? startDateTime = null)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || !userView.IsInterviewer())
-                throw new InvalidOperationException($"Interviewer with id: {id} not fpund");
+                throw new InvalidOperationException($"Interviewer with id: {id} don't found");
 
             if (!startDateTime.HasValue)
                 startDateTime = DateTime.UtcNow.AddDays(1);
@@ -95,11 +95,11 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        public FileResult DownloadCsvLog(Guid id)
+        public FileResult DownloadTabLog(Guid id)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || !userView.IsInterviewer())
-                throw new InvalidOperationException($"Interviewer with id: {id} not fpund");
+                throw new InvalidOperationException($"Interviewer with id: {id} don't found");
 
             var records = auditLogFactory.GetRecords(id);
 
@@ -118,7 +118,7 @@ namespace WB.UI.Headquarters.Controllers
                 using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
                 {
                     csvWriter.WriteField("Timestamp");
-                    csvWriter.WriteField("Message");
+                    csvWriter.WriteField("Action");
                     csvWriter.NextRecord();
 
                     foreach (var record in records)
@@ -132,7 +132,7 @@ namespace WB.UI.Headquarters.Controllers
                     streamWriter.Flush();
 
                     var fileContent = memoryStream.ToArray();
-                    return File(fileContent, "text/csv", $"actions_log_{userView.UserName}.csv");
+                    return File(fileContent, "text/csv", $"actions_log_{userView.UserName}.tab");
                 }
             }
         }
