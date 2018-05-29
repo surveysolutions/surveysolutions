@@ -231,4 +231,10 @@
   <data name="PeriodUnit" xml:space="preserve">
     <value>Durée</value>
   </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>La durée moyenne entre le moment où la première réponse est enregistrée sur une tablette et le moment où l'enquêteur marque le questionnaire comme terminé.</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>Pendant le dernier</value>
+  </data>
 </root>

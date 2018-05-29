@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl) {
+﻿Supervisor.VM.ControlPanel.BrokenInterviewPackages = function (brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl, markReasonAsKnownUrl, knownReasons) {
     Supervisor.VM.ControlPanel.BrokenInterviewPackages.superclass.constructor.apply(this, arguments);
 
     var dateFormat = "YYYY-MM-DD";
@@ -157,5 +157,24 @@
             }
         });
     };
+
+    self.putReasonOnPackages = function () {
+        bootbox.prompt({
+            title: "Put a reason for selected packages",
+            inputType: 'select',
+            inputOptions: knownReasons,
+            callback:
+                function (result) {
+                    if (result) {
+                        var request = {
+                            packageIds: _.map(self.SelectedItems(), function (package) { return package.Id(); }),
+                            errorType: result
+                        };
+
+                        self.SendRequest(markReasonAsKnownUrl, request, function () { self.search(); }, true, false);
+                    }
+                }
+        });
+    }
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ControlPanel.BrokenInterviewPackages, Supervisor.VM.ListView);

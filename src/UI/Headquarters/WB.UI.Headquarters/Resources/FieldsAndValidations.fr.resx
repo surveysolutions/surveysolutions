@@ -121,7 +121,7 @@
     <value>Fichier CSV</value>
   </data>
   <data name="BatchUploadModel_Required" xml:space="preserve">
-    <value>Vous devez choisir un fichier à télécharger</value>
+    <value>Vous devez choisir un fichier à importer</value>
   </data>
   <data name="BatchUploadModel_ValidationErrorMessage" xml:space="preserve">
     <value>Veuillez sélectionner un fichier</value>
@@ -242,5 +242,8 @@
   </data>
   <data name="UserName_Taken" xml:space="preserve">
     <value>Veuillez choisir un autre nom d'utilisateur</value>
+  </data>
+  <data name="UserIsLockedByHq" xml:space="preserve">
+    <value>L'utilisateur est verrouillé par le Siège</value>
   </data>
 </root>

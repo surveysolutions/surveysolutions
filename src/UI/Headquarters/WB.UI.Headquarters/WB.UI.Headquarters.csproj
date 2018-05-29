@@ -1049,6 +1049,7 @@
     <EmbeddedResource Include="Resources\ReviewInterview.es.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ReviewInterview.fr.resx" />
     <EmbeddedResource Include="Resources\ReviewInterview.zh.resx">
       <DependentUpon>ReviewInterview.resx</DependentUpon>
     </EmbeddedResource>
@@ -1070,11 +1071,13 @@
     <EmbeddedResource Include="Resources\Troubleshooting.fr.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UploadUsers.fr.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ar.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.es.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.fr.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ru.resx">
       <DependentUpon>UserPreloadingVerificationMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -1144,6 +1147,7 @@
     <EmbeddedResource Include="Resources\AuditLog.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AuditLog.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AuditLog.ru.resx">
       <DependentUpon>AuditLog.resx</DependentUpon>
@@ -2087,6 +2091,8 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201804201634_RemoveHasErrorsPropery.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201805071800_Add_get_numerical_report_function.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201805121700_Add_categorical_pivot.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201805141156_AddIndexForInterviewStatusChangeHistory.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />

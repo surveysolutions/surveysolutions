@@ -147,7 +147,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Point de synchronisation</value>
   </data>
   <data name="EndpointText" xml:space="preserve">
-    <value>Point du service web : </value>
+    <value>Point du service web :</value>
   </data>
   <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
     <value>Votre compte d'utilisateur est verrouillé. Veuillez contacter l'équipe de soutien à support@mysurvey.solutions.</value>
@@ -378,13 +378,13 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Aller à 'écran de résumé</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
-    <value>CARTE ACTIVE : </value>
+    <value>Carte active :</value>
   </data>
   <data name="AreaMap_AreaFormat" xml:space="preserve">
-    <value>Superficie : </value>
+    <value>Superficie :</value>
   </data>
   <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
-    <value>CARES DISPONIBLES SUR L'APPAREIL</value>
+    <value>Cartes disponibles sur l'appareil</value>
   </data>
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Annuler</value>
@@ -396,7 +396,7 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Modifier</value>
   </data>
   <data name="AreaMap_LengthFormat" xml:space="preserve">
-    <value>Périmètre : </value>
+    <value>Périmètre :</value>
   </data>
   <data name="AreaMap_Location" xml:space="preserve">
     <value>Emplacement</value>
@@ -459,16 +459,16 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
     <value>Premières {0} questions avec des commentaires</value>
   </data>
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Questions avec des commentaires du chef d'équipe : </value>
+    <value>Questions avec des commentaires du chef d'équipe :</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Page de garde</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Remarque du chef d'équipe : </value>
+    <value>Remarque du chef d'équipe :</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Commentaire de la coordination : </value>
+    <value>Commentaire de la coordination :</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Montrer l'instruction</value>
@@ -565,5 +565,26 @@ Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Surve
   </data>
   <data name="Version_Not_Supports" xml:space="preserve">
     <value>Votre appareil ne prend pas en charge cette fonctionnalité</value>
+  </data>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Réponse acceptée. A pris {0} pour traiter</value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Rejeter</value>
+  </data>
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Effacer</value>
+  </data>
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Signez ici</value>
+  </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>signature du magasin</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Attention</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Avertissements</value>
   </data>
 </root>

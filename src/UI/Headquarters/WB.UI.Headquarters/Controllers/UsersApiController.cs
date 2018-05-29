@@ -316,6 +316,7 @@ namespace WB.UI.Headquarters.Controllers
         [Authorize(Roles = "Administrator, Headquarter")]
         [CamelCase]
         [ApiNoCache]
+        [ObserverNotAllowedApi]
         public IHttpActionResult ImportUsers(ImportUsersRequest request)
         {
             if (request?.File?.FileBytes == null)

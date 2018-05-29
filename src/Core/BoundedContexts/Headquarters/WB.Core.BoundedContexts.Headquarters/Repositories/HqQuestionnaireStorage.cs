@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         {
             base.StoreQuestionnaire(id, version, questionnaireDocument);
 
+            if (questionnaireDocument.IsDeleted) return;
+
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, version).ToString();
             
             foreach (var composite in questionnaireDocument.Children.TreeToEnumerable(d => d.Children))

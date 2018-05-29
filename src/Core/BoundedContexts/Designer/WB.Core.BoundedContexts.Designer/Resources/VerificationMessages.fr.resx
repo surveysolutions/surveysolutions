@@ -226,10 +226,10 @@
     <value>Roster dont la question source est une question à réponses multiples ne pourrait pas avoir une autre question qui dicte les éléments du roster.</value>
   </data>
   <data name="WB0037_GroupWhereRosterSizeSourceIsFixedTitlesHaveEmptyTitles" xml:space="preserve">
-    <value>Un roster fixes ne peut pas contenir des éléménts à titre vide ou moins de deux éléments.</value>
+    <value>Un ensemble d'éléments fixes de roster ne peuvent pas contenir de titre vide ou moins de deux éléments.</value>
   </data>
   <data name="WB0038_RosterFixedTitlesHaveMoreThan200Items" xml:space="preserve">
-    <value>Un roster fixe ne peut pas contenir plus de {0} lignes.</value>
+    <value>Un ensemble d'éléments fixes de roster ne peuvent pas avoir plus de {0} lignes</value>
   </data>
   <data name="WB0039_TextListQuestionCannotBePrefilled" xml:space="preserve">
     <value>La question de type liste ne peut pas être une question d'identification.</value>
@@ -238,7 +238,7 @@
     <value>La question de type liste ne peut pas être remplie par le chef d'équipe</value>
   </data>
   <data name="WB0041_GroupWhereRosterSizeSourceIsFixedTitlesHaveDuplicateValues" xml:space="preserve">
-    <value>Les valeurs du roster fixe doit être unique.</value>
+    <value>Les valeurs d'un ensemble d'éléments fixes du roster fixe doivent être uniques.</value>
   </data>
   <data name="WB0042_TextListQuestionMaxAnswerInRange1And200" xml:space="preserve">
     <value>Le nombre maximum d'éléments de liste doit être compris dans la plage [{1}, {0}].</value>
@@ -397,7 +397,7 @@
     <value>Une erreur s'est produite lors de la compilation du questionnaire.</value>
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
-    <value>Le titre du questionnaire contient des caractères qui ne sont pas autorisés. Seules les lettres, chiffres, espaces et _ sont autorisés.</value>
+    <value>Le titre du questionnaire contient des caractères qui ne sont pas autorisés. Seules les lettres, chiffres,  espaces et _ sont autorisés.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
     <value>La taille du questionnaire est d'environ {0: 0. ##}Mo et est trop grande pour fonctionner correctement avec Survey Solutions. Essayez de réduire la quantité de données jusqu'à ce qu'elle soit au moins inférieure à {1} Mo.</value>
@@ -472,7 +472,7 @@
     <value>Une variable valide ou un nom d'ID de la liste ne doit contenir que des lettres, des chiffres et un symbole de tiret de huit</value>
   </data>
   <data name="WB0123_VariableNameStartWithDigitOrUnderscore" xml:space="preserve">
-    <value>Le nom de la variable ou l'ID de la liste ne doit pas commencer par un chiffre ou un tiret du huit</value>
+    <value>Le nom de la variable ou l'ID du roter ne doit pas commencer par un chiffre ou un tiret du huit</value>
   </data>
   <data name="WB0124_VariableNameEndWithUnderscore" xml:space="preserve">
     <value>Le nom de la variable ou l'ID du roster ne doit pas se terminer par un tiret du huit</value>
@@ -665,5 +665,56 @@
   </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>La section ne doit pas contenir plus de {0} questions.</value>
+  </data>
+  <data name="WB0067_VariableNameIsEmpty" xml:space="preserve">
+    <value>la variable concernée ou le nom de l'ID du roster ne devra pas etre vide</value>
+  </data>
+  <data name="WB0130_SubsectionOrRosterReferenceChildrendInCondition" xml:space="preserve">
+    <value>Vous ne pouvez pas utiliser des entités fils dans des conditions d'activation pour les sections, sous-sections et listes.</value>
+  </data>
+  <data name="WB0131_SpecialValuesHasNonIntegerOptionsValues" xml:space="preserve">
+    <value>Les valeurs spéciales ne prennent en charge que les valeurs entières comprises entre {0} et {1}.</value>
+  </data>
+  <data name="WB0132_SpecialValuesHasOptionsWithLongTexts" xml:space="preserve">
+    <value>Le titre de valeur spéciale est vide ou trop long. La longueur du titre doit être comprise entre {0} et {1} caractères.</value>
+  </data>
+  <data name="WB0133_SpecialValuesMustBeUniqueForNumericlQuestion" xml:space="preserve">
+    <value>Les valeurs spéciales doivent être uniques.</value>
+  </data>
+  <data name="WB0134_SpecialValuesCountMoreThanMaxOptionCount" xml:space="preserve">
+    <value>Contient plus de {0} valeurs spéciales.</value>
+  </data>
+  <data name="WB0135_SpecialValuesForRosterSizeQuestionsCantBeMoreThanRosterLimit" xml:space="preserve">
+    <value>La question contient une valeur spéciale, qui est trop grande et ne peut pas être utilisée dans cette question car elle détermine la taille d'un tableau</value>
+  </data>
+  <data name="WB0136_SpecialValuesHaveOptionsWithEmptyValue" xml:space="preserve">
+    <value>La question a une valeur spéciale avec une valeur vide.</value>
+  </data>
+  <data name="WB0137_SpecialValuesTitlesMustBeUnique" xml:space="preserve">
+    <value>Les titres de valeur spéciale doivent être uniques.</value>
+  </data>
+  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
+    <value>La question ne peut pas avoir de texte vide.</value>
+  </data>
+  <data name="WB0271_MacroHasEmptyContent" xml:space="preserve">
+    <value>La macro ne peut pas être vide.</value>
+  </data>
+  <data name="WB0272_ConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>La condition d’activation utilise un type interdit.</value>
+  </data>
+  <data name="WB0273_ValidationConditionUsingForbiddenClasses" xml:space="preserve">
+    <value>La condition de validation utilise un type interdit.</value>
+  </data>
+  <data name="WB0274_VariableUsingForbiddenClasses" xml:space="preserve">
+    <value>La variable utilise un type interdit.</value>
+  </data>
+  <data name="WB0275_FilterExpressionIsUsingForbiddenClasses" xml:space="preserve">
+    <value>L'expression de filtre utilise un type interdit.</value>
+  </data>
+  <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
+    <value>La variable @rowname n'est plus prise en charge.</value>
+  </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>Le titre du questionnaire ne doit pas comporter deux caractères de soulignement consécutifs ou plus.</value>
   </data>
 </root>

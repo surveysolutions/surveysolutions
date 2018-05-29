@@ -121,67 +121,67 @@
     <value>Android 4.4 ou inférieur</value>
   </data>
   <data name="COLUMN_APPROVED_BY_HQ" xml:space="preserve">
-    <value>APPROUVÉ PAR LE QG</value>
+    <value>Approuvé par le HQ</value>
   </data>
   <data name="COLUMN_APPROVED_BY_SUPERVISOR" xml:space="preserve">
-    <value>APPROUVÉ PAR LE CHEF D'EQUIPE</value>
+    <value>Approuvé par le Chef d'Equipe</value>
   </data>
   <data name="COLUMN_AVERAGE" xml:space="preserve">
-    <value>MOYENNE</value>
+    <value>Moyenne</value>
   </data>
   <data name="COLUMN_COMPLETED" xml:space="preserve">
-    <value>ACHEVÉ</value>
+    <value>Achevé</value>
   </data>
   <data name="COLUMN_DAYS" xml:space="preserve">
-    <value>JOURS</value>
+    <value>Jours</value>
   </data>
   <data name="COLUMN_INTERVIEWER_ASSIGNED" xml:space="preserve">
-    <value>AFFECTÉ A L'ENQUETEUR</value>
+    <value>Affecté à l'Enquêteur</value>
   </data>
   <data name="COLUMN_LESS_THAN_100MB_FREE_SPACE" xml:space="preserve">
     <value>Moins de 100 Mo d'espace libre</value>
   </data>
   <data name="COLUMN_NEVER_SYNCHED" xml:space="preserve">
-    <value>JAMAIS SYNCHRONISÉ</value>
+    <value>Jamais synchronisé</value>
   </data>
   <data name="COLUMN_NEVER_UPLOADED" xml:space="preserve">
-    <value>JAMAIS TÉLÉCHARGÉ</value>
+    <value>Jamais téléchargé</value>
   </data>
   <data name="COLUMN_NO_ASSIGNMENTS_RECEIVED" xml:space="preserve">
-    <value>AUCUNE AFFECTATION REÇUE</value>
+    <value>Aucune affectation reçue</value>
   </data>
   <data name="COLUMN_OLD_VERSION" xml:space="preserve">
-    <value>ANCIENNE VERSION</value>
+    <value>Ancienne version</value>
   </data>
   <data name="COLUMN_QUESTIONNAIRE_TEMPLATE" xml:space="preserve">
-    <value>TITRE DU QUESTIONNAIRE</value>
+    <value>Titre du questionnaire</value>
   </data>
   <data name="COLUMN_REJECTED_BY_HQ" xml:space="preserve">
-    <value>REJETÉ PAR LE QG</value>
+    <value>Rejeté par le HQ</value>
   </data>
   <data name="COLUMN_REJECTED_BY_SUPERVISOR" xml:space="preserve">
-    <value>REJETÉ PAR LE CHEF D'ÉQUIPE</value>
+    <value>Rejeté par le Chef d'Equipe</value>
   </data>
   <data name="COLUMN_SUPERVISOR_ASSIGNED" xml:space="preserve">
-    <value>AFFECTÉ AU CHEF D'ÉQUIPE</value>
+    <value>Affecté au Chef d'Equipe</value>
   </data>
   <data name="COLUMN_TABLET_REASSIGNED" xml:space="preserve">
-    <value>TABLETTE REAFFECTÉE</value>
+    <value>Tablette réaffectée</value>
   </data>
   <data name="COLUMN_TEAM_MEMBER" xml:space="preserve">
-    <value>MEMBRE D'ÉQUIPE</value>
+    <value>Membre d'équipe</value>
   </data>
   <data name="COLUMN_TEAMS" xml:space="preserve">
-    <value>ÉQUIPES</value>
+    <value>Equipes</value>
   </data>
   <data name="COLUMN_TEMPLATE_VERSION" xml:space="preserve">
-    <value>VERSION DU QUESTIONNAIRE</value>
+    <value>Version du questionnaire</value>
   </data>
   <data name="COLUMN_TOTAL" xml:space="preserve">
-    <value>TOTAL</value>
+    <value>Total</value>
   </data>
   <data name="COLUMN_WRONG_TIME_ON_TABLET" xml:space="preserve">
-    <value>HEURE ERRONÉE SUR LA TABLETTE</value>
+    <value>Heure erronée sur la tablette</value>
   </data>
   <data name="TOTAL" xml:space="preserve">
     <value>Total</value>

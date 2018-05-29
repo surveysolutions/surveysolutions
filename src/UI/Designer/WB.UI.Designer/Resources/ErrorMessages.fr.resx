@@ -243,4 +243,7 @@
   <data name="YourQuestionnaire_0_ContainsNewFunctionalityWhichIsNotSupportedByYourInstallationPleaseUpdate" xml:space="preserve">
     <value>Votre questionnaire "{0}" contient une nouvelle fonctionnalité: {1}. Les nouvelles fonctionnalités ne sont pas supportées par votre installation. Veuillez mettre à jour.</value>
   </data>
+  <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
+    <value>L'identifiant du questionnaire n'était pas fournit pour valider le questionnaire</value>
+  </data>
 </root>

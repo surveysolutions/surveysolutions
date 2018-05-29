@@ -210,7 +210,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// Assigns interview to interviewer
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
-        /// <param name="request"></param>
+        /// <param name="request">Responsible id or responsible name</param>
         /// <response code="200">Interview was reassigned</response>
         /// <response code="404">Interview was not found</response>
         /// <response code="406">Target responsible was not found or it is not an interviewer</response>
@@ -228,7 +228,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
             
-            return this.TryExecuteCommand(new AssignInterviewerCommand(id, this.authorizedUser.Id, userInfo.PublicKey, DateTime.UtcNow));
+            return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id, DateTime.UtcNow));
         }
 
         /// <summary>
