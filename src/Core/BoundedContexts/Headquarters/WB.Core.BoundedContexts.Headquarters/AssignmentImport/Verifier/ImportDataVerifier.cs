@@ -355,10 +355,30 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var rowsByNumericRoster in rowsByNumericRosters)
             {
                 var rosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, rowsByNumericRoster.Key.ToLower());
-                var rowsByInterviews = rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value);
-                foreach (var rowsByInterview in rowsByInterviews)
+
+                var rosterId = questionnaire.GetRosterIdByVariableName(rowsByNumericRoster.Key, true);
+                var parentRosterId = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value)
+                    .Where(x => x != rosterId)?.LastOrDefault();
+
+                IEnumerable<PreloadingAssignmentRow[]> rowsByInterviewsAndParentRoster = null;
+
+                if (!parentRosterId.HasValue)
+                    rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value).Select(x => x.ToArray());
+                else
                 {
-                    var orderedRosterInstanceRows = rowsByInterview
+                    var parentRosterVariable = questionnaire.GetRosterVariableName(parentRosterId.Value).ToLower();
+                    var parentRosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, parentRosterVariable);
+
+                    rowsByInterviewsAndParentRoster = rowsByNumericRoster.GroupBy(x => new
+                    {
+                        x.InterviewIdValue.Value,
+                        x.RosterInstanceCodes.FirstOrDefault(y => y.VariableName == parentRosterColumnId)?.Code
+                    }).Select(x => x.ToArray());
+                }
+
+                foreach (var rowsByInterviewAndParentRoster in rowsByInterviewsAndParentRoster)
+                {
+                    var orderedRosterInstanceRows = rowsByInterviewAndParentRoster
                         .OrderBy(x => x.RosterInstanceCodes.First(y => y.VariableName == rosterColumnId).Code)
                         .Select((x, i) => (row: x, expectedCode: i + 1));
 
