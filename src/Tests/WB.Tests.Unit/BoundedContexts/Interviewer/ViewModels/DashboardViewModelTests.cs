@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                 Substitute.For<IPlainStorage<QuestionnaireView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
                 Substitute.For<IAssignmentDocumentsStorage>(),
-                Substitute.For<AssignmentDocumentsStorage>(),
+                Substitute.For<IAssignmentDocumentsStorage>(),
                 Mock.Of<IViewModelNavigationService>()
             );
 
