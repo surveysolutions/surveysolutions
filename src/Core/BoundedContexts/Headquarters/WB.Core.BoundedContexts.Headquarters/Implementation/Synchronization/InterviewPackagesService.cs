@@ -127,6 +127,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             });
         }
 
+        public void PutReason(int[] packageIds, InterviewDomainExceptionType requestErrorType)
+        {
+            packageIds.ForEach(packageId =>
+            {
+                var brokenInterviewPackage = this.brokenInterviewPackageStorage.GetById(packageId);
+                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
+                brokenInterviewPackage.ExceptionType = requestErrorType.ToString();
+                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Inc();
+            });
+        }
+
         public virtual IReadOnlyCollection<string> GetAllPackagesInterviewIds()
         {
             var count = int.MaxValue;

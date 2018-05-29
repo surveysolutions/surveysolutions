@@ -46,7 +46,7 @@
             <div class="col-sm-7 ">
                 @if (Model.RecordsByDate.Length > 0)
                 {
-                    <a href="@Url.Action("DownloadCsvLog", new {Id = Model.InterviewerId})">@InterviewerAuditRecord.DownloadCsvLog</a>
+                    <a href="@Url.Action("DownloadTabLog", new {Id = Model.InterviewerId})">@InterviewerAuditRecord.DownloadTabLog</a>
                 }
                 else
                 {
