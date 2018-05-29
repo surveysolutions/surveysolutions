@@ -17,5 +17,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         AssignmentDocument GetById(int assignmentId);
 
         int Count(Expression<Func<AssignmentDocument, bool>> predicate);
+
+        int Count();
     }
 }
