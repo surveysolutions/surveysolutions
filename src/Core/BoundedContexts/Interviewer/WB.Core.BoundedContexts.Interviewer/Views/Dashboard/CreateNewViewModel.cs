@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly AssignmentDocumentsStorage assignmentViewRepository;
+        private readonly IAssignmentDocumentsStorage assignmentViewRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private SynchronizationViewModel synchronization;
 
@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IAssignmentDocumentsStorage assignmentsRepository,
-            AssignmentDocumentsStorage assignmentViewRepository,
+            IAssignmentDocumentsStorage assignmentViewRepository,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;

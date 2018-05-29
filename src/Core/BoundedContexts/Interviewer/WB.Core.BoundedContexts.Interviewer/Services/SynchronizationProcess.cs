@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IHttpStatistician httpStatistician;
-        private readonly AssignmentDocumentsStorage assignmentsStorage;
+        private readonly IAssignmentDocumentsStorage assignmentsStorage;
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly ITabletDiagnosticService diagnosticService;
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
-            AssignmentDocumentsStorage assignmentsStorage,
+            IAssignmentDocumentsStorage assignmentsStorage,
             IAudioFileStorage audioFileStorage,
             ITabletDiagnosticService diagnosticService,
             IInterviewerSettings interviewerSettings,
