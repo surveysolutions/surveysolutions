@@ -435,7 +435,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentsSynchronizer>(),
                 Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                Mock.Of<IPlainStorage<AssignmentDocument, int>>(),
+                Mock.Of<AssignmentDocumentsStorage>(),
                 Mock.Of<IAudioFileStorage>(),
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<IInterviewerSettings>(),
