@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Appendix_Conditions" xml:space="preserve">
+    <value>Annexe {0} {1} conditions d'activation</value>
+  </data>
+  <data name="Appendix_Instructions" xml:space="preserve">
+    <value>Annexe {0} {1} instructions</value>
+  </data>
+  <data name="Appendix_OptionFilters" xml:space="preserve">
+    <value>Annexe {0} {1} filtres d'options</value>
+  </data>
+  <data name="Appendix_Options" xml:space="preserve">
+    <value>Annexe {0} {1} options</value>
+  </data>
+  <data name="Appendix_SpecialValues" xml:space="preserve">
+    <value>Annexe {0} {1} valeurs spéciales</value>
+  </data>
+  <data name="Appendix_Validations" xml:space="preserve">
+    <value>Annexe {0} {1} conditions de validation et messages</value>
+  </data>
+  <data name="Appendix_Variables" xml:space="preserve">
+    <value>Annexe {0} {1} variables</value>
+  </data>
+  <data name="AppendixLink" xml:space="preserve">
+    <value>Et {0} autres symboles [{1}]</value>
+  </data>
+  <data name="CreatedBy" xml:space="preserve">
+    <value>Questionnaire créé par {0}</value>
+  </data>
+  <data name="EnablementCondition" xml:space="preserve">
+    <value>Condition d'activation:</value>
+  </data>
+  <data name="GeneratedBy" xml:space="preserve">
+    <value>Généré par {0}</value>
+  </data>
+  <data name="LastEdited" xml:space="preserve">
+    <value>{0} Dernière modification {1}</value>
+  </data>
+  <data name="LastModifiedBy" xml:space="preserve">
+    <value>Dernière modification par {0}</value>
+  </data>
+  <data name="Legend" xml:space="preserve">
+    <value>Légende</value>
+  </data>
+  <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
+    <value>Accepter de rendre ce questionnaire public</value>
+  </data>
+  <data name="MetadataConsultants" xml:space="preserve">
+    <value>Consultants</value>
+  </data>
+  <data name="MetadataCountry" xml:space="preserve">
+    <value>Pays</value>
+  </data>
+  <data name="MetadataCoverage" xml:space="preserve">
+    <value>Couverture</value>
+  </data>
+  <data name="MetadataFunding" xml:space="preserve">
+    <value>Financement</value>
+  </data>
+  <data name="MetadataKeywords" xml:space="preserve">
+    <value>Mots clés</value>
+  </data>
+  <data name="MetadataKindOfData" xml:space="preserve">
+    <value>Genre de données</value>
+  </data>
+  <data name="MetadataLanguages" xml:space="preserve">
+    <value>Langues</value>
+  </data>
+  <data name="MetadataModeOfDataCollection" xml:space="preserve">
+    <value>Mode de collecte des données</value>
+  </data>
+  <data name="MetadataNotes" xml:space="preserve">
+    <value>Remarques</value>
+  </data>
+  <data name="MetadataPrimaryInvestigator" xml:space="preserve">
+    <value>Enquêteur principal</value>
+  </data>
+  <data name="MetadataSectionSubTitle" xml:space="preserve">
+    <value>Description du questionnaire</value>
+  </data>
+  <data name="MetadataSectionTitle" xml:space="preserve">
+    <value>Informations d'identification de l'enquête</value>
+  </data>
+  <data name="MetadataStudyType" xml:space="preserve">
+    <value>Type d'étude</value>
+  </data>
+  <data name="MetadataSubtitle" xml:space="preserve">
+    <value>Sous-titre</value>
+  </data>
+  <data name="MetadataTitle" xml:space="preserve">
+    <value>Titre</value>
+  </data>
+  <data name="MetadataUnitOfAlalysis" xml:space="preserve">
+    <value>Unité d'analyse</value>
+  </data>
+  <data name="MetadataUniverse" xml:space="preserve">
+    <value>Univers</value>
+  </data>
+  <data name="MetadataVersionIdentificator" xml:space="preserve">
+    <value>Identifiant de version</value>
+  </data>
+  <data name="MetadataVersionNotes" xml:space="preserve">
+    <value>Notes de version</value>
+  </data>
+  <data name="MetadataYear" xml:space="preserve">
+    <value>Année</value>
+  </data>
+  <data name="NeverEdited" xml:space="preserve">
+    <value>{0} (jamais modifié)</value>
+  </data>
+  <data name="NotShared" xml:space="preserve">
+    <value>Pas partagé avec quelqu'un</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options:</value>
+  </data>
+  <data name="PdfLegend" xml:space="preserve">
+    <value>Légende</value>
+  </data>
+  <data name="QuestionScope_Hidden" xml:space="preserve">
+    <value>caché</value>
+  </data>
+  <data name="QuestionScope_Identifying" xml:space="preserve">
+    <value>identifier</value>
+  </data>
+  <data name="QuestionScope_Supervisor" xml:space="preserve">
+    <value>superviseur</value>
+  </data>
+  <data name="QuestionType_Area" xml:space="preserve">
+    <value>superficie</value>
+  </data>
+  <data name="QuestionType_Audio" xml:space="preserve">
+    <value>audio</value>
+  </data>
+  <data name="QuestionType_Barcode" xml:space="preserve">
+    <value>code  barre</value>
+  </data>
+  <data name="QuestionType_Cascading" xml:space="preserve">
+    <value>en cascade</value>
+  </data>
+  <data name="QuestionType_Combobox" xml:space="preserve">
+    <value>boîte combo</value>
+  </data>
+  <data name="QuestionType_CurrentTime" xml:space="preserve">
+    <value>date: heure actuelle</value>
+  </data>
+  <data name="QuestionType_Date" xml:space="preserve">
+    <value>date </value>
+  </data>
+  <data name="QuestionType_Decimal" xml:space="preserve">
+    <value>décimal</value>
+  </data>
+  <data name="QuestionType_GPS" xml:space="preserve">
+    <value>GPS</value>
+  </data>
+  <data name="QuestionType_Integer" xml:space="preserve">
+    <value>entier</value>
+  </data>
+  <data name="QuestionType_Linked" xml:space="preserve">
+    <value>lié</value>
+  </data>
+  <data name="QuestionType_List" xml:space="preserve">
+    <value>liste</value>
+  </data>
+  <data name="QuestionType_MultiSelect" xml:space="preserve">
+    <value>choix multiple</value>
+  </data>
+  <data name="QuestionType_Numeric" xml:space="preserve">
+    <value>numérique:</value>
+  </data>
+  <data name="QuestionType_Ordered" xml:space="preserve">
+    <value>ordonné</value>
+  </data>
+  <data name="QuestionType_Picture" xml:space="preserve">
+    <value>image</value>
+  </data>
+  <data name="QuestionType_SingleSelect" xml:space="preserve">
+    <value>choix unique</value>
+  </data>
+  <data name="QuestionType_Text" xml:space="preserve">
+    <value>texte</value>
+  </data>
+  <data name="QuestionType_YesNo" xml:space="preserve">
+    <value>Oui / Non</value>
+  </data>
+  <data name="Roster" xml:space="preserve">
+    <value>Tableau:</value>
+  </data>
+  <data name="Roster_GeneretedByFixedList" xml:space="preserve">
+    <value>généré par une liste fixe</value>
+  </data>
+  <data name="Roster_GeneretedByQuestion" xml:space="preserve">
+    <value>généré par {0} question {1}</value>
+  </data>
+  <data name="RosterType_List" xml:space="preserve">
+    <value>liste</value>
+  </data>
+  <data name="RosterType_Multi" xml:space="preserve">
+    <value>choix multiple</value>
+  </data>
+  <data name="RosterType_Numeric" xml:space="preserve">
+    <value>numérique</value>
+  </data>
+  <data name="Scope" xml:space="preserve">
+    <value>Champ d'application: {0}</value>
+  </data>
+  <data name="SharedWith" xml:space="preserve">
+    <value>Partagé avec:</value>
+  </data>
+  <data name="SideBarMetadataAdditionalInfo" xml:space="preserve">
+    <value>information additionnelle</value>
+  </data>
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+    <value>Informations de base</value>
+  </data>
+  <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">
+    <value>Données de l'enquête</value>
+  </data>
+  <data name="SideBarMetadataSurveyInfo" xml:space="preserve">
+    <value>Informations d'enquête</value>
+  </data>
+  <data name="SpecialValues" xml:space="preserve">
+    <value>Valeurs spéciales</value>
+  </data>
+  <data name="Stat_NoQuestions" xml:space="preserve">
+    <value>Pas de questions</value>
+  </data>
+  <data name="Stat_NoRosters" xml:space="preserve">
+    <value>Pas de tableaux</value>
+  </data>
+  <data name="Stat_NoSubsections" xml:space="preserve">
+    <value>Pas de sous-sections</value>
+  </data>
+  <data name="Stat_Questions" xml:space="preserve">
+    <value>Questions: {0}</value>
+  </data>
+  <data name="Stat_QuestionsWithConditions" xml:space="preserve">
+    <value>Questions avec des conditions d'activation: {0}</value>
+  </data>
+  <data name="Stat_QuestionsWithValidation" xml:space="preserve">
+    <value>Questions avec des conditions de validation: {0}</value>
+  </data>
+  <data name="Stat_Rosters" xml:space="preserve">
+    <value>Tableaux: {0}</value>
+  </data>
+  <data name="Stat_Sections" xml:space="preserve">
+    <value>Sections: {0}</value>
+  </data>
+  <data name="Stat_StaticTexts" xml:space="preserve">
+    <value>Textes statiques: {0}</value>
+  </data>
+  <data name="Stat_Subsections" xml:space="preserve">
+    <value>Sous-sections: {0}</value>
+  </data>
+  <data name="Stat_Variables" xml:space="preserve">
+    <value>Variables: {0}</value>
+  </data>
+  <data name="StaticText" xml:space="preserve">
+    <value>Texte statique</value>
+  </data>
+  <data name="ValidationCondition" xml:space="preserve">
+    <value>Condition de validation:</value>
+  </data>
+  <data name="ValidationMessage" xml:space="preserve">
+    <value>Message de validation:</value>
+  </data>
+  <data name="Variable" xml:space="preserve">
+    <value>Variable</value>
+  </data>
+</root>

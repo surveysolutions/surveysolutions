@@ -193,7 +193,7 @@
     <value>L'autre processus d'importation d'affectations est en cours d'exécution. Un seul processus d'importation d'affectations à la fois est autorisé. Attendez la fin du processus en cours, puis téléchargez un nouveau fichier exemplaire. Suivez le lien si vous souhaitez obtenir des informations de progression plus détaillées sur l'autre processus d'importation.</value>
   </data>
   <data name="ImportInterviews_ChooseFile" xml:space="preserve">
-    <value>Choisissez un fichier à télécharger</value>
+    <value>Choisissez un fichier à importer</value>
   </data>
   <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
     <value>Sélectionner</value>
@@ -208,7 +208,7 @@
     <value>est en cours de vérification, vérifié</value>
   </data>
   <data name="IsInvalid" xml:space="preserve">
-    <value>est invalide. S'il vous plaît corriger les erreurs ci-dessous et télécharger à nouveau.</value>
+    <value>est invalide. S'il vous plaît corriger les erreurs ci-dessous et importer à nouveau.</value>
   </data>
   <data name="LastUpdateDate" xml:space="preserve">
     <value>Dernière date mise à jour</value>
@@ -271,7 +271,7 @@
     <value>Date d'importation</value>
   </data>
   <data name="Uploaded" xml:space="preserve">
-    <value>Importé </value>
+    <value>Importé</value>
   </data>
   <data name="UploadNewData" xml:space="preserve">
     <value>Importer de nouvelles données</value>
@@ -280,13 +280,13 @@
     <value>Importer un nouveau fichier</value>
   </data>
   <data name="UploadSample" xml:space="preserve">
-    <value>Télécharger un échantillon</value>
+    <value>Importer un échantillon</value>
   </data>
   <data name="UploadSampleDescription" xml:space="preserve">
-    <value>Pour télécharger l'échantillon à enquêter, veuillez préparer un fichier (taille jusqu'à 300 Mo) avec des valeurs séparées par des tabulations (fichier de format  ".tab") correspondant au modèle ci-dessous, contenant les valeurs des variables de votre questionnaire marquées comme variables d'identification.</value>
+    <value>Pour importer l'échantillon à enquêter, veuillez préparer un fichier (taille jusqu'à 300 Mo) avec des valeurs séparées par des tabulations (fichier de format  ".tab") correspondant au modèle ci-dessous, contenant les valeurs des variables de votre questionnaire marquées comme variables d'identification.</value>
   </data>
   <data name="UploadUsers" xml:space="preserve">
-    <value>Téléchargement d'utilisateurs par lots</value>
+    <value>Importation d'utilisateurs par lots</value>
   </data>
   <data name="UploadUsers_Title" xml:space="preserve">
     <value>Liste des fichiers avec des utilisateurs préchargés</value>
@@ -295,7 +295,7 @@
     <value>Préparez un fichier avec des valeurs séparées par des tabulations (fichier .tab) correspondant à un modèle ci-dessous. Les colonnes marquées d'un (*) sont obligatoires. Seuls les termes «supervisor» ou «interviewer» sont autorisés dans la colonne «rôle».</value>
   </data>
   <data name="UserBatchUploads" xml:space="preserve">
-    <value>Téléchargement d'utilisateurs par lots</value>
+    <value>Importation d'utilisateurs par lots</value>
   </data>
   <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
     <value>Le processus de préchargement de l'utilisateur est manquant</value>
@@ -343,7 +343,7 @@
     <value>Retour à l'importation</value>
   </data>
   <data name="BatchDescription" xml:space="preserve">
-    <value>Téléchargez l'archive avec le fichier d'identification tab et les données collectées.</value>
+    <value>Importer l'archive avec le fichier d'identification tab et les données collectées.</value>
   </data>
   <data name="BatchFileVerificationFailed" xml:space="preserve">
     <value>La vérification du fichier téléchargé a échoué</value>
@@ -508,7 +508,7 @@
     <value>Sélectionnez le responsable de ce lot</value>
   </data>
   <data name="SimpleDescription" xml:space="preserve">
-    <value>Télécharger le fichier séparé .tab avec les données d'identification nécessaires. De façon facultative, spécifiez les noms d'utilisateur des superviseurs ou des enquêteurs dans la colonne _responsable, dans la colonne _quantity vous pouvez spécifier la capacité d'affectation.</value>
+    <value>Importer le fichier séparé .tab avec les données d'identification nécessaires. De façon facultative, spécifiez les noms d'utilisateur des superviseurs ou des enquêteurs dans la colonne _responsible, dans la colonne _quantity vous pouvez spécifier la capacité d'affectation.</value>
   </data>
   <data name="SimpleTitle" xml:space="preserve">
     <value>Identification des données uniquement</value>
@@ -532,21 +532,24 @@
     <value>Le superviseur ou L'Enquêteur doit être sélectionné</value>
   </data>
   <data name="UploadDescription" xml:space="preserve">
-    <value>Importer un fichier avec des données d'identification pour créer de nouvelles affectations. Spécifiez les noms d'utilisateur pour les superviseurs ou les enquêteurs afin d'effectuer des affectations par lots. </value>
+    <value>Importer un fichier avec des données d'identification pour créer de nouvelles affectations. Spécifiez les noms d'utilisateur pour les superviseurs ou les enquêteurs afin d'effectuer des affectations par lots.</value>
   </data>
   <data name="UploadTabFile" xml:space="preserve">
-    <value>Télécharger le fichier .tab</value>
+    <value>Importer le fichier .tab</value>
   </data>
   <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
-    <value>Seuls les fichiers avec les extensions {0} et {1} sont autorisés pour le téléchargement.</value>
+    <value>Seuls les fichiers avec les extensions {0} et {1} sont autorisés pour l'importation.</value>
   </data>
   <data name="UploadZipFile" xml:space="preserve">
-    <value>Télécharger le fichier .zip</value>
+    <value>Importer le fichier .zip</value>
   </data>
   <data name="VerificationCompleted" xml:space="preserve">
     <value>Vérification terminée</value>
   </data>
   <data name="ViewListPrefilledData" xml:space="preserve">
     <value>Afficher la liste des données d'identification requises</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importation d'entretiens</value>
   </data>
 </root>

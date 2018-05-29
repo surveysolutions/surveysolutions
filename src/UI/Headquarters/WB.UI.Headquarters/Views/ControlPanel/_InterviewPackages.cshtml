@@ -7,6 +7,9 @@
                     <button type="submit" class="btn btn-primary inline-inputs" data-bind="click: reprocessSelected, visible: !IsNothingSelected()">
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; Reprocess selected
                     </button>
+                    <button type="submit" class="btn btn-primary inline-inputs" data-bind="click: putReasonOnPackages, visible: !IsNothingSelected()">
+                        <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; Put reason
+                    </button>
                 </div>
             </div>
         </div>
@@ -84,7 +87,10 @@
                     </td>
                     <td data-bind="text: IncomingDate" nowrap></td>
                     <td data-bind="text: ProcessingDate" nowrap></td>
-                    <td data-bind="text: $root.formatBytes(PackageSize())" nowrap style="text-align: right"></td>
+                    <td nowrap style="text-align: right">
+                        <a data-bind="text: $root.formatBytes(PackageSize()), attr: {href: downloadPackageUrl + '/' + Id()}" target="_blank" >
+                        </a>
+                    </td>
                     <td data-bind="text: ExceptionType" nowrap></td>
                     <td>
                         <div class="accordion-group accordion-caret" style="max-width: 700px">

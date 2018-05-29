@@ -379,6 +379,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Common.fr.resx" />
     <EmbeddedResource Include="Resources\Common.ru.resx" />
     <EmbeddedResource Include="Resources\Common.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -12,13 +13,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
+        private readonly InterviewActionsExporter interviewActionsExporter;
+        private readonly CommentsExporter commentsExporter;
+        private readonly IInterviewErrorsExporter interviewErrorsExporter;
 
         public StataEnvironmentContentService(
             IFileSystemAccessor fileSystemAccessor, 
-            IQuestionnaireLabelFactory questionnaireLabelFactory)
+            IQuestionnaireLabelFactory questionnaireLabelFactory,
+            InterviewActionsExporter interviewActionsExporter,
+            CommentsExporter commentsExporter,
+            IInterviewErrorsExporter interviewErrorsExporter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
+            this.interviewActionsExporter = interviewActionsExporter;
+            this.commentsExporter = commentsExporter;
+            this.interviewErrorsExporter = interviewErrorsExporter;
         }
 
 
@@ -34,6 +44,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 this.CreateContentOfAdditionalFile(questionnaireLevelLabels,
                     ExportFileSettings.GetContentFileName(questionnaireLevelLabels.LevelName), folderPath);
             }
+
+            interviewActionsExporter.ExportActionsDoFile(folderPath);
+            commentsExporter.ExportCommentsDoFile(questionnaireExportStructure, folderPath);
+            interviewErrorsExporter.WriteDoFile(questionnaireExportStructure, folderPath);
         }
 
         private void CreateContentOfAdditionalFile(QuestionnaireLevelLabels questionnaireLevelLabels, string dataFileName, string basePath)

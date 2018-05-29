@@ -13,6 +13,7 @@ namespace WB.UI.Headquarters.Models.Api
         {
             public int Column { get; set; }
             public OrderDirection Dir { get; set; }
+            public string Name { get; set; }
         }
 
         public class SearchInfo
@@ -81,7 +82,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return string.Empty;
 
-            var columnName = this.ColummnsList[order.Column].Name;
+            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
             var stringifiedOrder = order.Dir == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
 
             return $"{columnName} {stringifiedOrder}";
@@ -93,7 +94,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 
-            var columnName = this.ColummnsList[order.Column].Name;
+            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
 
             return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
         }
@@ -105,7 +106,7 @@ namespace WB.UI.Headquarters.Models.Api
 
             foreach (var order in this.Order)
             {
-                var columnName = this.ColummnsList[order.Column].Name;
+                var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
 
                 yield return new OrderRequestItem {Direction = order.Dir, Field = columnName};
             }

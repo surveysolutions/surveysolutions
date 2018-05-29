@@ -106,11 +106,11 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download complete log in CSV format.
+        ///   Looks up a localized string similar to Download complete log in Tab format.
         /// </summary>
-        public static string DownloadCsvLog {
+        public static string DownloadTabLog {
             get {
-                return ResourceManager.GetString("DownloadCsvLog", resourceCulture);
+                return ResourceManager.GetString("DownloadTabLog", resourceCulture);
             }
         }
         
@@ -151,11 +151,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Action log.
+        /// </summary>
+        public static string PageTitle {
+            get {
+                return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User relinked to new tablet.
         /// </summary>
         public static string Relink {
             get {
                 return ResourceManager.GetString("Relink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Action log records are missing.
+        /// </summary>
+        public static string RocordsMissing {
+            get {
+                return ResourceManager.GetString("RocordsMissing", resourceCulture);
             }
         }
         

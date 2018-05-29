@@ -213,4 +213,7 @@
   <data name="Tooltip_Table_Status" xml:space="preserve">
     <value>Etat de l'entretien dans le flux de travail d'enquête. Cliquez sur l'icône de tri pour ordonner par état.</value>
   </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Erreurs</value>
+  </data>
 </root>

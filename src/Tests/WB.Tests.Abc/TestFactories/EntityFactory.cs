@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -2065,13 +2066,25 @@ namespace WB.Tests.Abc.TestFactories
             FileName = fileName,
             Row = row,
             InterviewIdValue = string.IsNullOrWhiteSpace(interviewId) ? null : Create.Entity.AssignmentInterviewId(interviewId),
-            RosterInstanceCodes = rosterInstanceCodes
+            RosterInstanceCodes = rosterInstanceCodes,
+            QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName)
         };
+
+        public PreloadingAssignmentRow PreloadingAssignmentRow(string fileName, int row, string interviewId, string questionnaireOrRosterName,
+            params AssignmentRosterInstanceCode[] rosterInstanceCodes) => new PreloadingAssignmentRow
+        {
+            FileName = fileName,
+            Row = row,
+            InterviewIdValue = string.IsNullOrWhiteSpace(interviewId) ? null : Create.Entity.AssignmentInterviewId(interviewId),
+            RosterInstanceCodes = rosterInstanceCodes,
+            QuestionnaireOrRosterName = questionnaireOrRosterName
+            };
 
         public AssignmentRosterInstanceCode AssignmentRosterInstanceCode(string column, int code) =>
             new AssignmentRosterInstanceCode
             {
                 Column = column,
+                VariableName = column,
                 Code = code,
                 Value = code.ToString()
             };

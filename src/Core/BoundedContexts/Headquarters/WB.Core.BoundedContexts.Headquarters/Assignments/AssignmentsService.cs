@@ -45,6 +45,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return this.assignmentsAccessor.GetById(id);
         }
 
+        public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
+        {
+            bool result = this.assignmentsAccessor.Query(_ => _.Any(assigment =>
+                assigment.ResponsibleId == responsibleId
+                && !assigment.Archived
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity) &&
+                assigment.ProtectedVariables.Count > 0));
+            return result;
+        }
+
         public List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
         {
             var assignmentsReadyForWebInterview = this.assignmentsAccessor.Query(_ => _

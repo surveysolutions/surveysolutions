@@ -122,14 +122,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             });
         }
 
-        public BrokenInterviewPackage GetLastInterviewBrokenPackage(Guid interviewId)
+        public BrokenInterviewPackage GetPackage(int id)
         {
-            return this.plainStorageAccessor
-                .Query(queryable => queryable.Where(x => x.InterviewId == interviewId)
-                    .OrderByDescending(x => x.IncomingDate)
-                    .Take(1)
-                    .ToList())
-                .SingleOrDefault();
+            return this.plainStorageAccessor.GetById(id);
         }
     }
 }
