@@ -46,11 +46,11 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        public ActionResult Index(Guid id, DateTime? startDateTime)
+        public ActionResult Index(Guid id, DateTime? startDateTime = null)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || !userView.IsInterviewer())
-                throw new InvalidOperationException($"Interviewer with id: {id} not fpund");
+                throw new InvalidOperationException($"Interviewer with id: {id} don't found");
 
             if (!startDateTime.HasValue)
                 startDateTime = DateTime.UtcNow.AddDays(1);
@@ -99,7 +99,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || !userView.IsInterviewer())
-                throw new InvalidOperationException($"Interviewer with id: {id} not found");
+                throw new InvalidOperationException($"Interviewer with id: {id} don't found");
 
             var records = auditLogFactory.GetRecords(id);
 
