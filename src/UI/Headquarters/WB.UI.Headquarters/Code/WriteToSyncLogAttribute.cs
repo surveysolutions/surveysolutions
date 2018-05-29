@@ -241,8 +241,8 @@ namespace WB.UI.Headquarters.Code
 
         private static string GetInterviewLink(Guid interviewId)
         {
-            var interviewLink = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext).Action("Details",
-                new { controller = "Interview", action = "Details", id = interviewId });
+            var interviewLink = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext).Action("Review",
+                new { controller = "Interview", action = "Review", id = interviewId });
 
             return $"<a href=\"{interviewLink}\">{interviewId:N}</a>";
         }
