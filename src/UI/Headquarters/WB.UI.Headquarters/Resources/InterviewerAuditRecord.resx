@@ -139,7 +139,7 @@
     <value>Download complete log in Tab format</value>
   </data>
   <data name="RocordsMissing" xml:space="preserve">
-    <value>Action log records are missing</value>
+    <value>No records yet</value>
   </data>
   <data name="Login" xml:space="preserve">
     <value>User {0} logged in application</value>

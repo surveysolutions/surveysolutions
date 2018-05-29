@@ -82,15 +82,16 @@ namespace WB.UI.Headquarters.Controllers
             }).OrderByDescending(i => i.Date).ToArray();
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(id);
-            int? interviewerApkVersion = interviewerVersionReader.Version;
-            var hasUpdateForInterviewerApp = interviewerApkVersion.HasValue &&
-                                         interviewerApkVersion.Value > lastSuccessDeviceInfo.AppBuildVersion;
-
-            model.InterviewerAppVersion = lastSuccessDeviceInfo?.AppVersion;
-            model.DeviceId = lastSuccessDeviceInfo?.DeviceId;
-            model.DeviceModel = lastSuccessDeviceInfo?.DeviceModel;
-            model.HasUpdateForInterviewerApp = hasUpdateForInterviewerApp;
-            model.HasDeviceInfo = lastSuccessDeviceInfo != null;
+            if (lastSuccessDeviceInfo != null)
+            {
+                int? interviewerApkVersion = interviewerVersionReader.Version;
+                var hasUpdateForInterviewerApp = interviewerApkVersion > lastSuccessDeviceInfo.AppBuildVersion;
+                model.InterviewerAppVersion = lastSuccessDeviceInfo.AppVersion;
+                model.DeviceId = lastSuccessDeviceInfo.DeviceId;
+                model.DeviceModel = lastSuccessDeviceInfo.DeviceModel;
+                model.HasUpdateForInterviewerApp = hasUpdateForInterviewerApp;
+                model.HasDeviceInfo = true;
+            }
 
             return View(model);
         }
