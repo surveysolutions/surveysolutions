@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Formatting;
+using System.Web;
 using System.Web.Http;
+using System.Web.Http.Results;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Enumerator.Native.WebInterview;
@@ -121,6 +130,15 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         [HttpPost]
         public void ReprocessSelectedBrokenPackages(ReprocessSelectedBrokenPackagesRequestView request) 
             => this.interviewBrokenPackagesService.ReprocessSelectedBrokenPackages(request.PackageIds);
+
+        [HttpGet]
+        [ApiNoCache]
+        public IHttpActionResult DownloadSyncPackage(int id)
+        {
+            BrokenInterviewPackage interviewPackage = this.brokenInterviewPackagesViewFactory.GetPackage(id);
+
+            return Content(HttpStatusCode.OK, interviewPackage.Events);
+        }
 
         public class ReprocessSelectedBrokenPackagesRequestView
         {
