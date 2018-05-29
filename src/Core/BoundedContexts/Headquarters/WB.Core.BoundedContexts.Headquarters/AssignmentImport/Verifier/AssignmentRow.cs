@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
@@ -8,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 {
+    [DebuggerDisplay("{ToString()}")]
     public class PreloadingAssignmentRow
     {
         public BaseAssignmentValue[] Answers { get; set; }
@@ -18,6 +20,9 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentResponsible Responsible { get; set; }
         public string FileName { get; set; }
         public string QuestionnaireOrRosterName { get; set; }
+
+        public override string ToString() =>
+            $"{InterviewIdValue?.Value}[{string.Join("_", RosterInstanceCodes.Select(x => x.Value))}]";
     }
 
     public abstract class BaseAssignmentValue
@@ -121,11 +126,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
     public class AssignmentAnswer : AssignmentValue, IAssignmentAnswer { }
 
+    [DebuggerDisplay("{Code}")]
     public class AssignmentRosterInstanceCode : AssignmentAnswer
     {
         public int? Code { get; set; }
     }
 
+    [DebuggerDisplay("{Value}")]
     public class AssignmentInterviewId : AssignmentValue { }
 
     public class AssignmentAnswers : BaseAssignmentValue, IAssignmentAnswer
@@ -133,11 +140,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         public AssignmentAnswer[] Values { get; set; }
     }
 
+    [DebuggerDisplay("{Responsible.InterviewerId?.ToString() ?? Responsible.SupervsorId?.ToString ?? \"No responsible\"}")]
     public class AssignmentResponsible : AssignmentValue
     {
         public UserToVerify Responsible { get; set; }
     }
 
+    [DebuggerDisplay("{Quantity}")]
     public class AssignmentQuantity : AssignmentValue
     {
         public int? Quantity { get; set; }

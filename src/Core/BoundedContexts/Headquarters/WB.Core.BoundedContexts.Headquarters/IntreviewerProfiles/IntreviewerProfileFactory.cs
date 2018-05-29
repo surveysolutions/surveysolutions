@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -21,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
 
-        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
+        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId, IAuthorizedUser currentUser);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -46,19 +48,12 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             this.interviewFactory = interviewFactory;
         }
 
-        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
+        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId, IAuthorizedUser currentUser)
         {
             InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
 
-            var statusMap = new Dictionary<Guid, InterviewStatus>();
-            foreach (var point in points)
-            {
-                if (statusMap.ContainsKey(point.InterviewId))
-                    continue;
-                statusMap[point.InterviewId] = point.Status;
-            }
-
             var checkinPoints = points
+                .Where(p => HasAccessToInterview(currentUser, p))
                 .GroupBy(x => new { x.Latitude, x.Longitude })
                 .Select(x => new InterviewerPoint
                 {
@@ -71,13 +66,33 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                 .OrderBy(x => x.Timestamp)
                 .ToArray();
 
-
             for (var index = 0; index < checkinPoints.Length; index++)
             {
                 checkinPoints[index].Index = index + 1;
             }
 
             return checkinPoints;
+        }
+
+        private bool HasAccessToInterview(IAuthorizedUser currentUser, InterviewGpsAnswerWithTimeStamp answer)
+        {
+            if (currentUser.IsHeadquarter || currentUser.IsAdministrator)
+                return true;
+
+            var isSupervisor = currentUser.IsSupervisor;
+            if (isSupervisor && HasSupervisorAccessToInterview(answer.Status))
+                return true;
+
+            return false;
+        }
+
+        private bool HasSupervisorAccessToInterview(InterviewStatus status)
+        {
+            return status == InterviewStatus.InterviewerAssigned
+                || status == InterviewStatus.SupervisorAssigned
+                || status == InterviewStatus.Completed
+                || status == InterviewStatus.RejectedBySupervisor
+                || status == InterviewStatus.RejectedByHeadquarters;
         }
 
         private string StatusToColor(InterviewStatus status)

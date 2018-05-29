@@ -211,5 +211,55 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors, Is.Empty);
         }
+
+        [Test]
+        public void when_verify_nested_numeric_roster_with_roster_instance_codes_out_of_order_should_return_PL0053_error()
+        {
+            // arrange
+            var interviewId = "interview1";
+
+            var roster = "myroster";
+            var nestedNumericRoster = "hhroster";
+
+            var numericRosterSize = Guid.NewGuid();
+            var rosterColumn = $"{roster}__id";
+            var numericRosterColumn = $"{nestedNumericRoster}__id";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                {
+                    Create.Entity.FixedRoster(variable: roster, fixedTitles: Create.Entity.FixedTitles(10, 20), children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion(numericRosterSize),
+                        Create.Entity.NumericRoster(variable: nestedNumericRoster, rosterSizeQuestionId: numericRosterSize,
+                            children: new[] {Create.Entity.TextQuestion()})
+                    })
+                }));
+
+
+            var allRowsByAllFiles = new List<PreloadingAssignmentRow>
+            {
+                Create.Entity.PreloadingAssignmentRow("Questionnaire", 1, interviewId),
+                Create.Entity.PreloadingAssignmentRow(roster, 1, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 10)),
+                Create.Entity.PreloadingAssignmentRow(roster, 2, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 20)),
+                Create.Entity.PreloadingAssignmentRow(nestedNumericRoster, 1, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 10),
+                    Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 1)),
+                Create.Entity.PreloadingAssignmentRow(nestedNumericRoster, 2, interviewId, Create.Entity.AssignmentRosterInstanceCode(rosterColumn, 20), 
+                    Create.Entity.AssignmentRosterInstanceCode(numericRosterColumn, 3))
+            };
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyRosters(allRowsByAllFiles, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Has.One.Items);
+            Assert.That(errors[0].Code, Is.EqualTo("PL0053"));
+            Assert.That(errors[0].References, Has.One.Items);
+            Assert.That(errors[0].References.ElementAt(0).Column, Is.EqualTo(numericRosterColumn));
+            Assert.That(errors[0].References.ElementAt(0).Row, Is.EqualTo(2));
+            Assert.That(errors[0].References.ElementAt(0).Content, Is.EqualTo("3"));
+        }
     }
 }

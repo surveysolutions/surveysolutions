@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Api.Portal
 
         [Route("servers")]
         [HttpGet]
-        public IEnumerable<AllowedAddress> GetServers() => this.allowedAddressService.GetAddresses();
+        public IEnumerable<ServerAddress> GetServers() => this.allowedAddressService.GetAddresses().Select(ToAllowedAddress);
 
         [Route("servers/add")]
         [HttpPost]
@@ -110,6 +110,21 @@ namespace WB.UI.Designer.Api.Portal
             var address = this.allowedAddressService.GetAddresses().FirstOrDefault(x => Equals(x.Address, parsedAddress));
             if (address != null)
                 this.allowedAddressService.Remove(address.Id);
+        }
+
+        private ServerAddress ToAllowedAddress(AllowedAddress address)
+            => new ServerAddress
+            {
+                Id = address.Id,
+                Description = address.Description,
+                Address = address.Address.ToString()
+            };
+
+        public class ServerAddress
+        {
+            public int Id { get; set; }
+            public string Description { get; set; }
+            public string Address { get; set; }
         }
     }
 }
