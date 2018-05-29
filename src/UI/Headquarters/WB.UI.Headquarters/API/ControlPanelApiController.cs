@@ -3,20 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Formatting;
-using System.Web;
 using System.Web.Http;
-using System.Web.Http.Results;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Shared.Web.Attributes;
@@ -140,9 +135,23 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             return Content(HttpStatusCode.OK, interviewPackage.Events);
         }
 
+        [System.Web.Http.HttpPost]
+        public HttpResponseMessage MarkReasonAsKnown(MarkKnownReasonRequest request)
+        {
+            this.interviewBrokenPackagesService.PutReason(request.PackageIds, request.ErrorType);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
+
         public class ReprocessSelectedBrokenPackagesRequestView
         {
             public int[] PackageIds { get; set; }
+        }
+
+        public class MarkKnownReasonRequest
+        {
+            public int[] PackageIds { get; set; }
+
+            public InterviewDomainExceptionType ErrorType { get; set; }
         }
 
         public class QuestionnaireView
