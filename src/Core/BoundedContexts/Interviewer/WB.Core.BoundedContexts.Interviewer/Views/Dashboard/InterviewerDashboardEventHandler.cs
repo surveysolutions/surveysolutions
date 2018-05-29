@@ -316,7 +316,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
         {
-            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
+            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted || status == InterviewStatus.RejectedBySupervisor;
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
