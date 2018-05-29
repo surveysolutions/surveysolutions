@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -14,6 +16,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -227,7 +230,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         {
             statistics.TotalNewInterviewsCount = interviews.Count(interview => !interview.IsRejected);
             statistics.TotalRejectedInterviewsCount = interviews.Count(interview => interview.IsRejected);
-            var eventBus = ServiceLocator.Current.GetInstance<IEventBus>();
+            var eventBus = ServiceLocator.Current.GetInstance<ILiteEventBus>();
+            var eventStore = ServiceLocator.Current.GetInstance<IInterviewerEventStorage>();
 
             foreach (var interview in interviews)
                 try
@@ -243,7 +247,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                     await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics);
 
-                    var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
+                    List<CommittedEvent> interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
                         interview.Id,
                         (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                         cancellationToken);
@@ -254,7 +258,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         continue;
                     }
 
-                    eventBus.Publish(interviewDetails);
+                    eventBus.PublishCommittedEvents(interviewDetails);
+                    eventStore.StoreEvents(new CommittedEventStream(interview.Id, interviewDetails));
 
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 

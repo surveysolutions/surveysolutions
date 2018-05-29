@@ -1776,8 +1776,8 @@
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\Interviewer\v2\AuditLogApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
+    <Compile Include="API\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />

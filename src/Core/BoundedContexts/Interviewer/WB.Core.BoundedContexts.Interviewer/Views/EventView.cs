@@ -9,7 +9,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public Guid EventId { get; set; }
 
         [Unique(Name = "Unique AR sequence")]
-        [Indexed]
         public Guid EventSourceId { get; set; }
 
         [Unique(Name = "Unique AR sequence")]
