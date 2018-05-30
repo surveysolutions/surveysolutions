@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetApkPatch,
         GetExtendedApkPatch,
         GetExtendedApk,
-        GetApk
+        GetApk,
+        GetInterviewV3,
+        PostInterviewV3
     }
 }

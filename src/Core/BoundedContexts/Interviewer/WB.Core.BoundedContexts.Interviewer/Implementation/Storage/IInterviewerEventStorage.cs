@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
     {
         void RemoveEventSourceById(Guid interviewId);
         void StoreEvents(CommittedEventStream events);
+        List<CommittedEvent> GetPendingEvents(Guid interviewId);
     }
 }

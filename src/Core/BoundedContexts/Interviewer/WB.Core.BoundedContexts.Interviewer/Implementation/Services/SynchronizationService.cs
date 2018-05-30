@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, "v2", "/interviews");
         private readonly string interviewDetailsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
+        private readonly string interviewUploadController = string.Concat(interviewerApiUrl, "v3");
         
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
@@ -346,7 +347,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: string.Concat(this.interviewsController, "/", interviewId),
+                url: string.Concat(this.interviewUploadController, "/", interviewId),
                 request: completedInterview,
                 credentials: this.restCredentials,
                 token: token));
