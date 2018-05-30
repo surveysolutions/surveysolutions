@@ -50,8 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             bool result = this.assignmentsAccessor.Query(_ => _.Where(assigment =>
                 assigment.ResponsibleId == responsibleId
                 && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)).ToList())
-                    .Any(x => x.ProtectedVariables.Count > 0);
+                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)).Select(x => x.ProtectedVariables).ToList())
+                    .Any(x => x.Count > 0);
             return result;
         }
 
