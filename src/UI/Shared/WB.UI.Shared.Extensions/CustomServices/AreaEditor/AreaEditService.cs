@@ -38,6 +38,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
+        public static void RegisterLicence()
+        {
+            ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,***REMOVED***");
+        }
+
         public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
             bool is64Bit = IntPtr.Size == 8;
@@ -47,8 +52,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             await this.permissions.AssureHasPermission(Permission.Location);
             await this.permissions.AssureHasPermission(Permission.Storage);
-
-            ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,***REMOVED***");
 
             return await this.EditAreaImplAsync(area, geometryType);
         }
