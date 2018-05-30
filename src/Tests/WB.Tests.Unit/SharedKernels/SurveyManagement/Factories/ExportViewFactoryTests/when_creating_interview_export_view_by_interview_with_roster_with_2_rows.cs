@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -35,18 +36,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             };
 
             propagationScopeKey = Guid.Parse("10000000000000000000000000000000");
-            questionnaire = CreateQuestionnaireDocumentWith1PropagationLevel();
+            questionnaireDocument = CreateQuestionnaireDocumentWith1PropagationLevel();
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
             BecauseOf();
         }
 
         public void BecauseOf() =>
-            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                CreateInterviewDataWith2PropagatedLevels());
+            result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1)),
+                CreateInterviewDataWith2PropagatedLevels(), questionnaire);
 
         [NUnit.Framework.Test] public void should_records_count_equals_4 () =>
            GetLevel(result, new[] { propagationScopeKey }).Records.Length.Should().Be(2);
@@ -105,7 +107,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static Guid secondQuestionId;
         private static Guid firstQuestionId;
         private static int levelCount;
-        private static QuestionnaireDocument questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
+        private static IQuestionnaire questionnaire;
         private static ExportViewFactory exportViewFactory;
     }
 }

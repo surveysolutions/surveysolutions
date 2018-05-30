@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             rosterSizeQuestionId = Guid.Parse("10000000000000000000000000000000");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new TextListQuestion()
                 {
                     PublicKey = rosterSizeQuestionId,
@@ -54,15 +55,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 });
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
             BecauseOf();
         }
 
         public void BecauseOf() =>
-             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                CreateInterviewDataWith2PropagatedLevels());
+             result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1)),
+                CreateInterviewDataWith2PropagatedLevels(), questionnaire);
 
         [NUnit.Framework.Test] public void should_records_count_equals_4 () =>
            GetLevel(result, new[] { rosterSizeQuestionId }).Records.Length.Should().Be(2);
@@ -137,7 +139,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static Guid rosterSizeQuestionId;
         private static Guid questionInsideRosterGroupId;
         private static int levelCount;
-        private static QuestionnaireDocument questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
+        private static IQuestionnaire questionnaire;
         private static string someAnswer = "some answer";
         private static int maxAnswerCount = 5;
         private static ExportViewFactory exportViewFactory;

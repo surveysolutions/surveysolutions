@@ -9,6 +9,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
@@ -25,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
 
             linkedQuestionId = Guid.Parse("10000000000000000000000000000000");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new SingleQuestion()
                 {
                     PublicKey = linkedQuestionId,
@@ -57,8 +58,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             textListQuestion.Answer = new decimal[] { 0.1m , 0.4m };
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
             BecauseOf();
         }
@@ -67,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         {
             result =
                 exportViewFactory.CreateInterviewDataExportView(
-                    exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)), interview);
+                    exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1)), interview, questionnaire);
         }
 
         [NUnit.Framework.Test] public void should_linked_question_have_one_answer () =>
@@ -80,7 +82,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static Guid rosterId;
         private static Guid linkedQuestionId;
         private static Guid linkedQuestionSourceId;
-        private static QuestionnaireDocument questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
+        private static IQuestionnaire questionnaire;
         private static InterviewData interview;
         private static ExportViewFactory exportViewFactory;
     }
