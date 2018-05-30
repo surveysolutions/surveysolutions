@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             var interviewer = await this.userManager.FindByIdAsync(userId);
             if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
 
-            var points = interviewerProfileFactory.GetInterviewerCheckinPoints(userId, this.authorizedUser).ToList();
+            var points = interviewerProfileFactory.GetInterviewerCheckinPoints(userId).ToList();
 
             if (points.Count == 0) return this.HttpNotFound("No points");
 

@@ -623,7 +623,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
-                interviewFactory ?? Mock.Of<IInterviewFactory>());
+                interviewFactory ?? Mock.Of<IInterviewFactory>(),
+                Mock.Of<IAuthorizedUser>());
         }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()
