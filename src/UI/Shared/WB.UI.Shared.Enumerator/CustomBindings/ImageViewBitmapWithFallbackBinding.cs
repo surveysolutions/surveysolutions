@@ -50,7 +50,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected virtual void SetDefaultImage(ImageView control)
         {
-            control.SetImageResource(Resource.Drawable.no_image_found);
+            control.SetImageResource(Resource.Drawable.img_placeholder);
         }
 
         private static void SetupPaddingForImageView(ImageView control, DisplayMetrics displayMetrics, BitmapFactory.Options boundsOptions)

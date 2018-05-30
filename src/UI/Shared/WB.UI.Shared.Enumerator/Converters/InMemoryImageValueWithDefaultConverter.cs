@@ -26,7 +26,7 @@ namespace WB.UI.Shared.Enumerator.Converters
             }
 
             var mvxAndroidCurrentTopActivity = ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>();
-            return BitmapFromVectorDrawable(mvxAndroidCurrentTopActivity.Activity, Resource.Drawable.no_image_found);
+            return BitmapFromVectorDrawable(mvxAndroidCurrentTopActivity.Activity, Resource.Drawable.img_placeholder);
         }
 
         private static Bitmap BitmapFromVectorDrawable(Context context, int drawableId) 
