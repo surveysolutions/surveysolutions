@@ -7,7 +7,7 @@
                     <button type="submit" class="btn btn-primary inline-inputs" data-bind="click: reprocessSelected, visible: !IsNothingSelected()">
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; Reprocess selected
                     </button>
-                    <button type="submit" class="btn btn-primary inline-inputs" data-bind="click: putReasonOnPackages, visible: !IsNothingSelected()">
+                    <button type="submit" class="btn btn-primary inline-inputs" data-bind="click: putReasonOnPackages, visible: !IsNothingSelected() && setExceptionTypeUrl">
                         <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> &nbsp; Put reason
                     </button>
                 </div>
