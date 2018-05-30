@@ -169,7 +169,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Action log records are missing.
+        ///   Looks up a localized string similar to No records yet.
         /// </summary>
         public static string RocordsMissing {
             get {
