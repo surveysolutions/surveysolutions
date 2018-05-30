@@ -31,6 +31,9 @@ namespace WB.UI.Tester.ServiceLocation
 
         public Task Init(IServiceLocator serviceLocator)
         {
+#if !EXCLUDEEXTENSIONS
+            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
+#endif
             return Task.CompletedTask;
         }
     }
