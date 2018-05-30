@@ -111,6 +111,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private async Task CompleteInterviewAsync()
         {
+            if (this.wasThisInterviewCompleted)
+                return;
+
             this.wasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
