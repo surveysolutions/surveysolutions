@@ -137,9 +137,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.Read(interviewId, 0).ToList();
-
-            this.ThrowIfEventSequenceIsBroken(storedEvents, interviewId);
+            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
 
             var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
 
@@ -148,22 +146,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 .ToArray();
 
             return eventsToSend;
-        }
-
-        private void ThrowIfEventSequenceIsBroken(List<CommittedEvent> events, Guid interviewId)
-        {
-            for (int index = 0; index < events.Count; index++)
-            {
-                CommittedEvent @event = events[index];
-                int expectedEventSequence = index + 1;
-
-                if (expectedEventSequence != @event.EventSequence)
-                {
-                    var message = $"Expected event sequence {expectedEventSequence} is missing. Event stream is not full. Interview ID: {interviewId.FormatGuid()}.";
-                    this.logger.Error(message);
-                    throw new ArgumentException(message);
-                }
-            }
         }
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)

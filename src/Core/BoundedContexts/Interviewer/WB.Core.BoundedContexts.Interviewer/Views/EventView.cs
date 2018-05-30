@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         [Unique(Name = "Unique AR sequence")]
         public Guid EventSourceId { get; set; }
-         
+
         [Unique(Name = "Unique AR sequence")]
         public int EventSequence { get; set; }
 
@@ -21,5 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string JsonEvent { get; set; }
 
         public string EventType { get; set; }
+
+        public bool ExistsOnHq { get; set; }
     }
 }
