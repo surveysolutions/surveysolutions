@@ -183,6 +183,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
         }
 
+        public List<CommittedEvent> GetPendingEvents(Guid interviewId)
+        {
+            IEnumerable<CommittedEvent> events = null;
+
+            var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
+            if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
+            {
+                var connection = this.GetOrCreateConnection(interviewId);
+                
+                using (connection.Lock())
+                {
+                    var committedEvents = connection
+                        .Table<EventView>()
+                        .Where(eventView
+                            => eventView.EventSourceId == interviewId
+                               && !eventView.ExistsOnHq)
+                        .OrderBy(x => x.EventSequence)
+                        .ToList()
+                        .Select(x => ToCommitedEvent(x, eventSerializer))
+                        .ToList();
+                    return committedEvents;
+                }
+            }
+
+            return new List<CommittedEvent>();
+        }
+
         public void Dispose()
         {
             this.DisposeEventStoreInSingleFile();
@@ -490,7 +517,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
                 JsonEvent = serializer.Serialize(evt.Payload),
-                EventType = evt.Payload.GetType().Name
+                EventType = evt.Payload.GetType().Name,
+                ExistsOnHq = true
             };
         }
 
