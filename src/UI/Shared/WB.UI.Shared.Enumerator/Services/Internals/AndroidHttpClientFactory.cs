@@ -3,11 +3,11 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
-    public class ModernHttpClientFactory : DefaultHttpClientFactory
+    public class AndroidHttpClientFactory : DefaultHttpClientFactory
     {
         public override HttpMessageHandler CreateMessageHandler()
         {
-            return new ModernHttpClient.NativeMessageHandler();
+            return new Xamarin.Android.Net.AndroidClientHandler();
         }
     }
 }
