@@ -79,7 +79,7 @@
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
     <PackageReference Include="Owin" Version="1.0" />
-    <PackageReference Include="Plugin.Permissions" Version="2.1.0" />
+    <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="prometheus-net" Version="1.3.5" />
     <PackageReference Include="protobuf-net" Version="2.0.0.668" />
     <PackageReference Include="Quartz" Version="2.6.1" />

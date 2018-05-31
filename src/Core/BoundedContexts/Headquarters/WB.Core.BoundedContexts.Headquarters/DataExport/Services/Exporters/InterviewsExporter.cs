@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
                 InterviewId = interviewToExport.Id
             };
-            InterviewDataExportView interviewDataExportView = exportViewFactory.CreateInterviewDataExportView(exportStructure, interviewData);
+            InterviewDataExportView interviewDataExportView = exportViewFactory.CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
             var dataFileSeparator = ExportFileSettings.DataFileSeparator.ToString();
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x => string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
