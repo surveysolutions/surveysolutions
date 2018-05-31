@@ -152,6 +152,9 @@ namespace WB.UI.Headquarters
 
             config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
                 c => c.Action<InterviewsApiV3Controller>(x => x.DetailsV3(Param.Any<Guid>())));
+
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV3Controller>(x => x.PostV3(Param.Any<InterviewPackageApiView>())));
         }
 #pragma warning restore 4014
     }
