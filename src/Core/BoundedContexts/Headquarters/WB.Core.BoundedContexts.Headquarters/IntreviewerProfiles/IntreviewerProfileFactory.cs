@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
 
-        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId, IAuthorizedUser currentUser);
+        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -33,27 +33,30 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IInterviewFactory interviewFactory;
+        private readonly IAuthorizedUser currentUser;
 
         public InterviewerProfileFactory(
             HqUserManager userManager,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
             IDeviceSyncInfoRepository deviceSyncInfoRepository, 
             IInterviewerVersionReader interviewerVersionReader, 
-            IInterviewFactory interviewFactory)
+            IInterviewFactory interviewFactory,
+            IAuthorizedUser currentUser)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
             this.interviewFactory = interviewFactory;
+            this.currentUser = currentUser;
         }
 
-        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId, IAuthorizedUser currentUser)
+        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
         {
             InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
 
             var checkinPoints = points
-                .Where(p => HasAccessToInterview(currentUser, p))
+                .Where(p => HasAccessToInterview(p))
                 .GroupBy(x => new { x.Latitude, x.Longitude })
                 .Select(x => new InterviewerPoint
                 {
@@ -74,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             return checkinPoints;
         }
 
-        private bool HasAccessToInterview(IAuthorizedUser currentUser, InterviewGpsAnswerWithTimeStamp answer)
+        private bool HasAccessToInterview(InterviewGpsAnswerWithTimeStamp answer)
         {
             if (currentUser.IsHeadquarter || currentUser.IsAdministrator)
                 return true;
