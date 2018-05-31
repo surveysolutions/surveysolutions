@@ -1,14 +1,14 @@
 <template>
     <div>
         <FilterBlock :title="$t('Reports.Questionnaire')">
-            <Typeahead :placeholder="$t('Common.Loading')" fuzzy noClear
+            <Typeahead :placeholder="selectedQuestionnairePlaceholder" fuzzy noClear
                 :values="questionnaireList"
                 :value="selectedQuestionnaire"                
                 :forceLoadingState="loading.questionnaire"
                 @selected="selectQuestionnaire" />
         </FilterBlock>        
         <FilterBlock :title="$t('Reports.Question')">
-            <Typeahead :placeholder="$t('Common.Loading')" fuzzy noClear
+            <Typeahead :placeholder="selectedQuestionPlaceholder" fuzzy noClear
                 :forceLoadingState="loading.questions"
                 :values="questionsList"
                 :value="selectedQuestion"                
@@ -407,6 +407,14 @@ export default {
     selectedCondition() {
         if(this.query.conditionId == null) return null
         return _.find(this.questionsList, { name: this.query.conditionId })
+    },
+
+    selectedQuestionnairePlaceholder() {
+        return this.loading.questionnaire ? this.$t('Common.Loading') : this.$t('Common.NothingSelected');
+    },
+
+    selectedQuestionPlaceholder() {
+        return this.loading.questions ? this.$t('Common.Loading') : this.$t('Common.NothingSelected');
     }
   }
 };
