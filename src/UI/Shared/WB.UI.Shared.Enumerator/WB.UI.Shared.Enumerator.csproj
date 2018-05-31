@@ -63,9 +63,6 @@
     </Reference>
     <Reference Include="Java.Interop" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="ModernHttpClient, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\modernhttpclient.2.4.2\lib\MonoAndroid\ModernHttpClient.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="MvvmCross, Version=6.0.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -326,12 +323,12 @@
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Services\AutoSendingCrashListener.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
+    <Compile Include="Services\Internals\AndroidHttpClientFactory.cs" />
     <Compile Include="Services\Internals\CrashReporting.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
     <Compile Include="Services\Logging\NLogLogger.cs" />
     <Compile Include="Services\Logging\NLogLoggerProvider.cs" />
-    <Compile Include="Services\Internals\ModernHttpClientFactory.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />
     <Compile Include="Services\Internals\PortableInterviewAnswerJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableJsonAllTypesSerializer.cs" />
