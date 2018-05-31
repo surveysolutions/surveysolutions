@@ -56,7 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export
                     rowIndex++;
                 }
                 
-                worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+                if (worksheet.Dimension != null)
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
                 for (int columnIndex = 0; columnIndex < headers.Length; columnIndex++)
                 {
