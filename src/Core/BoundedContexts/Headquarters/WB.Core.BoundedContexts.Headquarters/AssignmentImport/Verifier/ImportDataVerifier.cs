@@ -340,6 +340,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<InterviewImportReference> InconsistentNumericRosterInstanceCodes(
             List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
         {
+            // if only main file without interview id column in zip 
+            // this verification should be skipped
+            if (allRowsByAllFiles.Any(x => x.InterviewIdValue == null)) yield break;
+
             var numericRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions().Where(questionnaire.IsQuestionInteger).ToArray();
             if(numericRosterSizeQuestions.Length == 0)
                 yield break;
@@ -357,16 +361,17 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 var rosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, rowsByNumericRoster.Key.ToLower());
 
                 var rosterId = questionnaire.GetRosterIdByVariableName(rowsByNumericRoster.Key, true);
-                var parentRosterId = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value)
-                    .Where(x => x != rosterId)?.LastOrDefault();
+                var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value)
+                    .Where(x => x != rosterId).ToArray();
 
-                IEnumerable<PreloadingAssignmentRow[]> rowsByInterviewsAndParentRoster = null;
+                IEnumerable<PreloadingAssignmentRow[]> rowsByInterviewsAndParentRoster;
 
-                if (!parentRosterId.HasValue)
-                    rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value).Select(x => x.ToArray());
+                if (parentRosterIds.Length == 0)
+                    rowsByInterviewsAndParentRoster = rowsByNumericRoster.GroupBy(x => x.InterviewIdValue.Value).Select(x => x.ToArray());
                 else
                 {
-                    var parentRosterVariable = questionnaire.GetRosterVariableName(parentRosterId.Value).ToLower();
+                    var parentRosterId = parentRosterIds.Last();
+                    var parentRosterVariable = questionnaire.GetRosterVariableName(parentRosterId).ToLower();
                     var parentRosterColumnId = string.Format(ServiceColumns.IdSuffixFormat, parentRosterVariable);
 
                     rowsByInterviewsAndParentRoster = rowsByNumericRoster.GroupBy(x => new

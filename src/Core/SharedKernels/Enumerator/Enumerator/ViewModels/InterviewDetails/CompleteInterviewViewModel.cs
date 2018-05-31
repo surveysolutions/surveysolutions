@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get
             {
                 return this.completeInterviewCommand ?? 
-                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !wasThisInterviewCompleted));
+                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted));
             }
         }
 
@@ -108,11 +108,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         private bool wasThisInterviewCompleted = false;
+        public bool WasThisInterviewCompleted
+        {
+            get => this.wasThisInterviewCompleted;
+            set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
+        }
+
         private string completeComment;
 
         private async Task CompleteInterviewAsync()
         {
-            this.wasThisInterviewCompleted = true;
+            if (this.WasThisInterviewCompleted)
+                return;
+
+            this.WasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
             var completeInterview = new CompleteInterviewCommand(
