@@ -133,19 +133,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
                 else
                 {
-                    var numericRosterSizeQuestions = dataByLevel.ScopeVectors
-                        .Select(x => x.Key[0])
-                        .Select(x => questionnaire.IsQuestion(x) && questionnaire.IsQuestionInteger(x))
+                    var rosterIndexAjustment = dataByLevel.ScopeVectors
+                        .SelectMany(x => x.Key)
+                        .Select(x => (questionnaire.IsQuestion(x) && questionnaire.IsQuestionInteger(x)) ? 1 : 0)
                         .ToArray();
                     
-                    recordId = (dataByLevel.RosterVector.Last() + (numericRosterSizeQuestions.Last() ? 1 : 0))
+                    recordId = (dataByLevel.RosterVector.Last() + rosterIndexAjustment.Last())
                         .ToString(CultureInfo.InvariantCulture);
 
                     parentRecordIds[0] = interview.InterviewId.FormatGuid();
-                    for (int i = 0; i < dataByLevel.RosterVector.Length - 1; i++)
+                    for (int i = 0; i < vectorLength - 1; i++)
                     {
-                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] +
-                                                 (numericRosterSizeQuestions[i] ? 1 : 0)).ToString(CultureInfo.InvariantCulture);
+                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAjustment[i]).ToString(CultureInfo.InvariantCulture);
                     }
 
                     parentRecordIds = parentRecordIds.Reverse().ToArray();
