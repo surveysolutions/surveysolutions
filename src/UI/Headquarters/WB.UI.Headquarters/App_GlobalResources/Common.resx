@@ -297,4 +297,7 @@
   <data name="Archived" xml:space="preserve">
     <value>Archived</value>
   </data>
+  <data name="NothingSelected" xml:space="preserve">
+    <value>Nothing selected</value>
+  </data>
 </root>

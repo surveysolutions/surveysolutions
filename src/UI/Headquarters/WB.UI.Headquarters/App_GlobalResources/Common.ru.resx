@@ -303,4 +303,8 @@
     <value>Доступна новая версия:</value>
     <comment>Доступна новая версия:</comment>
   </data>
+    <data name="NothingSelected" xml:space="preserve">
+    <value>Ничего не выбрано</value>
+    <comment>Ничего не выбрано</comment>
+  </data>
 </root>

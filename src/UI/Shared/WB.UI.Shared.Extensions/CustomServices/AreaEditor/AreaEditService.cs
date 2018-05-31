@@ -40,14 +40,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public static void RegisterLicence()
         {
-            ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,***REMOVED***");
+            var isSupportedDevice = IsSupportedDevice();
+            if (isSupportedDevice)
+                ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,***REMOVED***");
         }
 
         public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
-            bool is64Bit = IntPtr.Size == 8;
-
-            if (is64Bit)
+            var isSupportedDevice = IsSupportedDevice();
+            if (!isSupportedDevice)
                 throw new NotSupportedException("This functionality is not available for this device");
 
             await this.permissions.AssureHasPermission(Permission.Location);
@@ -55,7 +56,13 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             return await this.EditAreaImplAsync(area, geometryType);
         }
-        
+
+        private static bool IsSupportedDevice()
+        {
+            bool is64Bit = IntPtr.Size == 8;
+            return !is64Bit;
+        }
+
         private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
             var tcs = new TaskCompletionSource<AreaEditResult>();
