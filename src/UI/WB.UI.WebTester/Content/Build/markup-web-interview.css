@@ -348,6 +348,8 @@ span.image-zoom-box, span.image-option {
   .web-interview * {
     word-wrap: break-word;
     overflow-wrap: break-word; }
+  .web-interview .panel-details {
+    z-index: 7; }
 
 .reset-filters {
   font-size: 14px;
