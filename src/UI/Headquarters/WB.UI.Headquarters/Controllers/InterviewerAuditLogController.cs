@@ -23,7 +23,6 @@ using WB.UI.Headquarters.Resources;
 namespace WB.UI.Headquarters.Controllers
 {
     [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]
-    [ObserverNotAllowed]
     [LimitsFilter]
     public class InterviewerAuditLogController : BaseController
     {
