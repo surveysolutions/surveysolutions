@@ -155,14 +155,29 @@ namespace WB.UI.Headquarters.API.PublicApi
                 }).ToList();
         }
 
-        private HttpResponseMessage ReturnEmptyResult()
+        private HttpResponseMessage ReturnEmptyResult(SurveyStatisticsQuery query)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, new
+            if (!query.exportType.HasValue)
             {
-                data = new string[0],
-                recordsTotal = 0,
-                recordsFiltered = 0
-            }, new JsonMediaTypeFormatter());
+                return Request.CreateResponse(HttpStatusCode.OK, new
+                {
+                    data = new string[0],
+                    recordsTotal = 0,
+                    recordsFiltered = 0
+                }, new JsonMediaTypeFormatter());
+            }
+            else
+            {
+                return CreateReportResponse(query.exportType.Value, new ReportView()
+                {
+                    Columns = new string[0],
+                    Data = new object[0][],
+                    Headers = new string[0],
+                    Name = "report",
+                    TotalCount = 0,
+                    Totals = new object[0]
+                }, "survey-statistics");
+            }
         }
 
         /// <summary>
@@ -177,7 +192,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             if (query.QuestionnaireId == null)
             {
-                return ReturnEmptyResult();
+                return ReturnEmptyResult(query);
             }
 
             var questionnaireIdentity = QuestionnaireIdentity.Parse(query.QuestionnaireId);
@@ -185,7 +200,7 @@ namespace WB.UI.Headquarters.API.PublicApi
 
             if (questionnaire == null)
             {
-                return ReturnEmptyResult();
+                return ReturnEmptyResult(query);
             }
 
             IQuestion GetQuestionByGuidOrStataCaption(string inputVar)
@@ -255,7 +270,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                     $"{questionnaire.Title} (ver. {questionnaireIdentity.Version}) {question.StataExportCaption}");
             }
 
-            return ReturnEmptyResult();
+            return ReturnEmptyResult(query);
         }
 
         [HttpPost]
