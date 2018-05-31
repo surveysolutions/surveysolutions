@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
-        private readonly ILogger logger;
+        private readonly ILiteEventRegistry eventRegistry;
 
         public InterviewerInterviewAccessor(
             IPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -51,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
-            ILogger logger)
+            ILiteEventRegistry eventRegistry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.snapshotStoreWithCache = snapshotStoreWithCache;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
-            this.logger = logger;
+            this.eventRegistry = eventRegistry;
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -77,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
+            this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
         }
 
         private void RemoveInterviewImages(Guid interviewId)

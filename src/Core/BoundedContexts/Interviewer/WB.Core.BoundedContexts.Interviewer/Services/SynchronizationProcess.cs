@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
+using MvvmCross;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
@@ -438,6 +439,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     statistics.FailedToUploadInterviwesCount++;
                     await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken);
+
+                    Mvx.Resolve<ILoggerProvider>().GetFor<SynchronizationProcess>().Error("exception", syncException);
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }
             }

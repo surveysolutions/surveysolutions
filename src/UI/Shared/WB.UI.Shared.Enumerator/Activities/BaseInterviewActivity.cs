@@ -108,9 +108,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnStop();
 
-            var messenger = Mvx.Resolve<IMvxMessenger>();
-            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<InterviewCompletedMessage>(interviewCompleteActivityToken);
+            sectionChangeSubscriptionToken.Dispose();
+            interviewCompleteActivityToken.Dispose();
             Mvx.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
         }
 
