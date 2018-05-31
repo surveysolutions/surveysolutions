@@ -341,7 +341,8 @@ namespace WB.Core.Infrastructure.CommandBus
 
             configurer.Invoke(configuration);
 
-            var commandName = typeof(TCommand).Name;
+            var commandType = typeof(TCommand);
+            var commandName = commandType.Name;
             if (Handlers.ContainsKey(commandName))
             {
                 Handlers[commandName].AppendValidators(configuration.GetValidators());
@@ -354,7 +355,8 @@ namespace WB.Core.Infrastructure.CommandBus
                     var registeredExistingCommand = commandDescriptor.Handler.Target.GetType().GetGenericArguments().FirstOrDefault();
                     if(registeredExistingCommand != null)
                     {
-                        if(typeof(TCommand).IsAssignableFrom(registeredExistingCommand))
+                        if(!configuration.GetSkipCommands().Contains(registeredExistingCommand) &&
+                           commandType.IsAssignableFrom(registeredExistingCommand))
                         {
                             commandDescriptor.AppendValidators(configuration.GetValidators());
                         }

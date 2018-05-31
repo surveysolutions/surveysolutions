@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string usersController = string.Concat(interviewerApiUrl, apiVersion, "/users");
         private readonly string interviewsController = string.Concat(interviewerApiUrl, "v2", "/interviews");
         private readonly string interviewDetailsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
-        private readonly string interviewUploadController = string.Concat(interviewerApiUrl, "v3");
+        private readonly string interviewUploadController = string.Concat(interviewerApiUrl, "v3", "/interviews");
         
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");

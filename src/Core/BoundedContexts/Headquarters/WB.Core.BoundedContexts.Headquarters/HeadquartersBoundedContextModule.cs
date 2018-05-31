@@ -356,7 +356,6 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<RejectInterviewFromHeadquartersCommand>(command => command.InterviewId, (command, aggregate) => aggregate.RejectInterviewFromHeadquarters(command.UserId, command.SupervisorId, command.InterviewerId, command.InterviewDto, command.SynchronizationTime))
                 .Handles<RestartInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restart(command.UserId, command.Comment, command.RestartTime))
                 .Handles<RestoreInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.Restore(command.UserId))
-                //.Handles<SynchronizeInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.SynchronizeInterview(command.UserId, command.SynchronizedInterview))
                 .Handles<CompleteInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CompleteWithoutFirePassiveEvents(command.UserId, command.Comment, command.CompleteTime))
                 .Handles<SwitchTranslation>(command => command.InterviewId, aggregate => aggregate.SwitchTranslation)
                 .Handles<PauseInterviewCommand>(cmd => cmd.InterviewId, a => a.Pause)
@@ -365,7 +364,9 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor)
                 ;
 
-            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration.ValidatedBy<InterviewReceivedByInterviewerCommandValidator>());
+            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration.ValidatedBy<InterviewReceivedByInterviewerCommandValidator>()
+                    .SkipValidationFor<SynchronizeInterviewEventsCommand>()
+                    .SkipValidationFor<MarkInterviewAsReceivedByInterviewer>());
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 

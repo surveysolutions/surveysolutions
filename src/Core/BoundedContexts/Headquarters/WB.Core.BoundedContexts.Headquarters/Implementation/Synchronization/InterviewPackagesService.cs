@@ -220,6 +220,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void ProcessPackage(InterviewPackage interview)
         {
+            // TODO validate event stream versions for no gaps inside
             Stopwatch innerwatch = Stopwatch.StartNew();
             string existingInterviewKey = null;
             try
