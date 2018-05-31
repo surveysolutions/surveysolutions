@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             var setup = MvxAndroidSetupSingleton.EnsureSingletonAvailable(ApplicationContext);
             setup.EnsureInitialized();
-            CrossCurrentActivity.Current.Activity = this;
+            CrossCurrentActivity.Current.Init(this, bundle);
             base.OnCreate(bundle);
         }
 
@@ -28,13 +28,12 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             CrashManager.Register(this, new AutoSendingCrashListener());
             base.OnResume();
-            CrossCurrentActivity.Current.Activity = this;
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Android.Content.PM.Permission[] grantResults)
         {
-            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         protected override void OnViewModelSet()
