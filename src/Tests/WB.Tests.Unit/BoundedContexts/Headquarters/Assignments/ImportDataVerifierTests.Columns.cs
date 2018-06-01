@@ -950,5 +950,74 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(column));
         }
+
+        [Test]
+        public void when_verify_columns_and_sort_index_by_text_list_question_is_invalid_should_return_PL0003_error()
+        {
+            // arrange
+            var variable = "list";
+            var invalidTextListColumn = $"{variable}__1aaa";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.TextListQuestion(variable: variable)}));
+
+            var preloadedFile = Create.Entity.PreloadedFileInfo(new[] { $"{variable}__1", invalidTextListColumn });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { preloadedFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[1aaa]"));
+        }
+
+        [Test]
+        public void when_verify_columns_from_2_rosters_with_same_roster_triger_should_not_return_PL0003_error()
+        {
+            // arrange
+            var rosterTriget = Guid.NewGuid();
+
+            var rosterTriger = "rosterTriger";
+            var roster1 = "roster1";
+            var roster2 = "roster2";
+            var textInRoster1 = "textInRoster1";
+            var textInRoster2 = "textInRoster2";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterTriget, variable: rosterTriger),
+                    Create.Entity.Roster(variable: roster1, rosterSizeQuestionId: rosterTriget,
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion(variable: textInRoster1)
+                        }),
+                    Create.Entity.Roster(variable: roster2, rosterSizeQuestionId: rosterTriget,
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion(variable: textInRoster2)
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId,
+                    string.Format(ServiceColumns.IdSuffixFormat, roster1),
+                    textInRoster1,
+                    textInRoster2
+                }, fileName: roster1, questionnaireOrRosterName: roster1);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile }, questionnaire).ToArray();
+
+            // assert
+            var hasAnyPL0003error = errors.Any(e => e.Code == "PL0003");
+            Assert.That(hasAnyPL0003error, Is.False);
+        }
     }
 }
