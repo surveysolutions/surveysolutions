@@ -334,7 +334,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
             catch (SynchronizationException exception)
             {
-                Mvx.Resolve<ILoggerProvider>().GetFor<SynchronizationService>().Error("GetInterviewDetailsAsync error", exception);
                 var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
                 if (httpStatusCode == HttpStatusCode.NotFound)
                     return Task.FromResult(new List<CommittedEvent>());
