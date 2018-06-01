@@ -50,7 +50,7 @@
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NHibernate" Version="5.1.0" />
+    <PackageReference Include="NHibernate" Version="5.1.2" />
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Npgsql" Version="3.2.7" />
     <PackageReference Include="NUnit" Version="3.10.1" />
