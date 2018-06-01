@@ -237,6 +237,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<Func<PreloadedFileInfo, string, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> ColumnVerifiers => new[]
         {
             Error(UnknownColumn, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
+            Error(TextListQuestion_InvalidSortIndex, "PL0003", messages.PL0003_ColumnWasntMappedOnQuestion),
             Error(CategoricalMultiQuestion_OptionNotFound, "PL0014", messages.PL0014_ParsedValueIsNotAllowed)
         };
 
@@ -549,7 +550,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (!hasLongitude || !hasLatitude) yield return gpsVariableName;
             }
         }
-        
+
+        private bool TextListQuestion_InvalidSortIndex(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
+        {
+            var compositeColumn = columnName.Split(new[] { ServiceColumns.ColumnDelimiter },
+                StringSplitOptions.RemoveEmptyEntries);
+
+            if (compositeColumn.Length < 2) return false;
+
+            var questionVariable = compositeColumn[0];
+            var sortIndex = compositeColumn[1];
+
+            var question = questionnaire.GetQuestionByVariable(questionVariable);
+
+            return question?.QuestionType == QuestionType.TextList && !int.TryParse(sortIndex, out _);
+        }
+
         private bool CategoricalMultiQuestion_OptionNotFound(PreloadedFileInfo file, string columnName, IQuestionnaire questionnaire)
         {
             var compositeColumn = columnName.Split(new[] { ServiceColumns.ColumnDelimiter},
