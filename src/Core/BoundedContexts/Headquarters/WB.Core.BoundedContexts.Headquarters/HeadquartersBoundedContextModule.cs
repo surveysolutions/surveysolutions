@@ -366,7 +366,11 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration.ValidatedBy<InterviewReceivedByInterviewerCommandValidator>()
                     .SkipValidationFor<SynchronizeInterviewEventsCommand>()
-                    .SkipValidationFor<MarkInterviewAsReceivedByInterviewer>());
+                    .SkipValidationFor<MarkInterviewAsReceivedByInterviewer>()
+                    .SkipValidationFor<AssignInterviewerCommand>()
+                    .SkipValidationFor<AssignResponsibleCommand>()
+                    .SkipValidationFor<AssignSupervisorCommand>()
+            );
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 

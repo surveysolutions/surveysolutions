@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<InterviewSynchronized>,
                                          ILitePublishedEventHandler<InterviewStatusChanged>,
                                          ILitePublishedEventHandler<InterviewHardDeleted>,
+                                         ILitePublishedEventHandler<InterviewerAssigned>,
+                                         
 
                                          ILitePublishedEventHandler<TextQuestionAnswered>,
                                          ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
@@ -506,6 +508,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public void Handle(IPublishedEvent<AudioQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Length, evnt.Payload.AnswerTimeUtc);
+        }
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.ResponsibleId = @event.Payload.InterviewerId.GetValueOrDefault();
+            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

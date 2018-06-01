@@ -663,7 +663,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
                 transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
                 userRepository: userRepository ?? userRepositoryMock.Object,
-                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>());
+                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
+                eventStore: Mock.Of<IHeadquartersEventStore>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
