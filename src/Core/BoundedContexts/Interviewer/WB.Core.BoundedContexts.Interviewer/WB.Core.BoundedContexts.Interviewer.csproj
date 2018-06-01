@@ -6,7 +6,7 @@
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.2" />
+    <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="MvvmCross.Plugin.File" Version="6.0.1" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.0.1" />
     <PackageReference Include="MvvmCross.Plugin.Network" Version="6.0.1" />
