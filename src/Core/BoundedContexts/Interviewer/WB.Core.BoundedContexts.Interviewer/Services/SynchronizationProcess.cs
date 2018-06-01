@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
-using MvvmCross;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
@@ -15,7 +14,6 @@ using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -36,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly ITabletDiagnosticService diagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IAuditLogSynchronizer auditLogSynchronizer;
-        private readonly IEventBus eventBus;
+        private readonly ILiteEventBus eventBus;
         private readonly IInterviewerEventStorage eventStore;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
@@ -71,7 +69,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IInterviewerSettings interviewerSettings,
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
-            IEventBus eventBus,
+            ILiteEventBus eventBus,
             IInterviewerEventStorage eventStore) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
             interviewViewRepository, auditLogService)
