@@ -90,17 +90,9 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             var status = this.assignmentsImportService.GetImportStatus();
-            bool isExistsImportForCurrentQuestionnaire = status?.QuestionnaireIdentity.Equals(new QuestionnaireIdentity(id, version)) ?? false;
 
-            if (isExistsImportForCurrentQuestionnaire)
-            {
-                if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
-                    return RedirectToAction(nameof(InterviewVerificationProgress));
-                if (status.ProcessStatus == AssignmentsImportProcessStatus.Import)
-                    return RedirectToAction(nameof(InterviewImportProgress));
-            }
-            else if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
-                     || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
+                || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
             {
                 return RedirectToAction(nameof(InterviewImportIsInProgress), new { questionnaireId = id, version = version });
             }
@@ -193,17 +185,9 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction(nameof(BatchUpload), new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
 
             var status = this.assignmentsImportService.GetImportStatus();
-            bool isExistsImportForCurrentQuestionnaire = status?.QuestionnaireIdentity.Equals(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion)) ?? false;
 
-            if (isExistsImportForCurrentQuestionnaire)
-            {
-                if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
-                    return RedirectToAction(nameof(InterviewVerificationProgress));
-                if (status.ProcessStatus == AssignmentsImportProcessStatus.Import)
-                    return RedirectToAction(nameof(InterviewImportProgress));
-            }
-            else if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
-                     || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
+               || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
             {
                 return RedirectToAction(nameof(InterviewImportIsInProgress), new { questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
@@ -310,17 +294,9 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction(nameof(BatchUpload), new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
 
             var status = this.assignmentsImportService.GetImportStatus();
-            bool isExistsImportForCurrentQuestionnaire = status?.QuestionnaireIdentity.Equals(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion)) ?? false;
 
-            if (isExistsImportForCurrentQuestionnaire)
-            {
-                if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
-                    return RedirectToAction(nameof(InterviewVerificationProgress));
-                if (status.ProcessStatus == AssignmentsImportProcessStatus.Import)
-                    return RedirectToAction(nameof(InterviewImportProgress));
-            }
-            else if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
-                     || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
+                || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
             {
                 return RedirectToAction(nameof(InterviewImportIsInProgress), new { questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
             }
@@ -473,6 +449,8 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
 
+            var status = this.assignmentsImportService.GetImportStatus();
+
             return this.View(new PreloadedDataInProgressModel
             {
                 Questionnaire = new PreloadedDataQuestionnaireModel
@@ -480,7 +458,8 @@ namespace WB.UI.Headquarters.Controllers
                     Id = questionnaireId,
                     Version = version,
                     Title = questionnaireInfo?.Title
-                }
+                },
+                ProcessStatus = status?.ProcessStatus
             });
         }
 

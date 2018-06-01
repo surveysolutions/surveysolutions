@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 
 namespace WB.UI.Headquarters.Models
 {
@@ -18,6 +19,7 @@ namespace WB.UI.Headquarters.Models
     public class PreloadedDataInProgressModel
     {
         public PreloadedDataQuestionnaireModel Questionnaire { get; set; }
+        public AssignmentsImportProcessStatus? ProcessStatus { get; set; }
     }
 
     public class PreloadedDataConfirmationModel : IValidatableObject
