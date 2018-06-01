@@ -453,30 +453,38 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
 
             var questionOrVariableName = compositeColumnValues[0].ToLower();
 
-            var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
-            if (rosterId.HasValue && !questionnaire.IsFixedRoster(rosterId.Value))
+            var rosterIdByVariable = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
+            var rosterIds = new HashSet<Guid?>() { rosterIdByVariable };
+
+            if (rosterIdByVariable.HasValue && !questionnaire.IsFixedRoster(rosterIdByVariable.Value))
             {
-                var rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterId.Value);
+                var rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(rosterIdByVariable.Value);
 
                 if (questionnaire.GetQuestionType(rosterSizeQuestionId) == QuestionType.TextList &&
                     questionnaire.GetQuestionVariableName(rosterSizeQuestionId).ToLower() == questionOrVariableName) return false;
+
+                rosterIds.Clear();
+                questionnaire.GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId).ForEach(r => rosterIds.Add(r));
             }
 
-            foreach (var variableId in questionnaire.GetAllUnderlyingVariablesOutsideRosters(rosterId))
-                if (questionnaire.GetVariableName(variableId).ToLower() == questionOrVariableName) return false;
-
-            foreach (var questionId in questionnaire.GetAllUnderlyingQuestionsOutsideRosters(rosterId))
+            foreach (var rosterId in rosterIds)
             {
-                var questionVariable = questionnaire.GetQuestionVariableName(questionId).ToLower();
+                foreach (var variableId in questionnaire.GetAllUnderlyingVariablesOutsideRosters(rosterId))
+                    if (questionnaire.GetVariableName(variableId).ToLower() == questionOrVariableName) return false;
 
-                if (questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates)
+                foreach (var questionId in questionnaire.GetAllUnderlyingQuestionsOutsideRosters(rosterId))
                 {
-                    if(GeoPosition.PropertyNames.Select(x => $"{questionVariable}{ServiceColumns.ColumnDelimiter}{x.ToLower()}")
-                        .Contains(columnName)) return false;
-                }
-                else
-                {
-                    if (questionVariable == questionOrVariableName) return false;
+                    var questionVariable = questionnaire.GetQuestionVariableName(questionId).ToLower();
+
+                    if (questionnaire.GetQuestionType(questionId) == QuestionType.GpsCoordinates)
+                    {
+                        if (GeoPosition.PropertyNames.Select(x => $"{questionVariable}{ServiceColumns.ColumnDelimiter}{x.ToLower()}")
+                            .Contains(columnName)) return false;
+                    }
+                    else
+                    {
+                        if (questionVariable == questionOrVariableName) return false;
+                    }
                 }
             }
 
