@@ -36,6 +36,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly ITabletDiagnosticService diagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IAuditLogSynchronizer auditLogSynchronizer;
+        private readonly IEventBus eventBus;
+        private readonly IInterviewerEventStorage eventStore;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -68,7 +70,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             ITabletDiagnosticService diagnosticService,
             IInterviewerSettings interviewerSettings,
             IAuditLogSynchronizer auditLogSynchronizer,
-            IAuditLogService auditLogService) : base(synchronizationService, logger,
+            IAuditLogService auditLogService,
+            IEventBus eventBus,
+            IInterviewerEventStorage eventStore) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
             interviewViewRepository, auditLogService)
         {
@@ -90,6 +94,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.diagnosticService = diagnosticService;
             this.interviewerSettings = interviewerSettings;
             this.auditLogSynchronizer = auditLogSynchronizer;
+            this.eventBus = eventBus;
+            this.eventStore = eventStore;
         }
 
         
@@ -231,8 +237,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         {
             statistics.TotalNewInterviewsCount = interviews.Count(interview => !interview.IsRejected);
             statistics.TotalRejectedInterviewsCount = interviews.Count(interview => interview.IsRejected);
-            var eventBus = ServiceLocator.Current.GetInstance<ILiteEventBus>();
-            var eventStore = ServiceLocator.Current.GetInstance<IInterviewerEventStorage>();
 
             foreach (var interview in interviews)
                 try
@@ -440,7 +444,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     statistics.FailedToUploadInterviwesCount++;
                     await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken);
 
-                    Mvx.Resolve<ILoggerProvider>().GetFor<SynchronizationProcess>().Error("exception", syncException);
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }
             }

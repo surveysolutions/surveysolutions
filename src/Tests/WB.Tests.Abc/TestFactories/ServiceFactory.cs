@@ -432,7 +432,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogSynchronizer>(),
-                Mock.Of<IAuditLogService>());
+                Mock.Of<IAuditLogService>(),
+                Mock.Of<IEventBus>(),
+                Mock.Of<IInterviewerEventStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
