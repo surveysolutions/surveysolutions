@@ -1,0 +1,50 @@
+﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@model WB.UI.Headquarters.Models.PreloadedDataInProgressModel
+@{
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewBag.Title = BatchUpload.VerifySampleData;
+}
+
+@section scripts
+{
+}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li>@Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")</li>
+                    <li>@Html.ActionLink(BatchUpload.BreadCrumbs_CreatingMultipleInterviews, "BatchUpload", "SurveySetup", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })</li>
+                </ol>
+                <h1>@BatchUpload.ImportAssignments_PageTitle</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7">
+                <h3>
+                    @string.Format(BatchUpload.ImportFrom, "", Html.QuestionnaireName(Model.Questionnaire.Title, Model.Questionnaire.Version))
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-7 col-xs-12 action-block">
+                <div class="import-progress">
+                    <p class="error-text">@BatchUpload.ImportInProgress</p>
+                    <p>
+                        @if (Model.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                        {
+                            @Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewVerificationProgress", "SurveySetup", new { }, new { })
+                        }
+                        @if (Model.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                        {
+                            @Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewImportProgress", "SurveySetup", new { }, new { })
+                        }
+                    </p>
+                </div>
+                <div class="action-buttons">
+                    @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })
+                </div>
+            </div>
+        </div>
+    </div> 
+</main>
