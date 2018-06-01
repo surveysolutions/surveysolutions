@@ -90,11 +90,20 @@ namespace WB.UI.Headquarters.Controllers
             this.ViewBag.ActivePage = MenuItem.Questionnaires;
 
             var status = this.assignmentsImportService.GetImportStatus();
+            bool isExistsImportForCurrentQuestionnaire = status?.QuestionnaireIdentity.Equals(new QuestionnaireIdentity(id, version)) ?? false;
 
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification)
-                return RedirectToAction(nameof(InterviewVerificationProgress));
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
-                return RedirectToAction(nameof(InterviewImportProgress));
+            if (isExistsImportForCurrentQuestionnaire)
+            {
+                if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                    return RedirectToAction(nameof(InterviewVerificationProgress));
+                if (status.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                    return RedirectToAction(nameof(InterviewImportProgress));
+            }
+            else if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
+                     || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+            {
+                return RedirectToAction(nameof(InterviewImportIsInProgress), new { questionnaireId = id, version = version });
+            }
 
             SampleUploadView sampleUploadView = this.sampleUploadViewFactory.Load(new SampleUploadViewInputModel(id, version));
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
@@ -184,11 +193,20 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction(nameof(BatchUpload), new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
 
             var status = this.assignmentsImportService.GetImportStatus();
+            bool isExistsImportForCurrentQuestionnaire = status?.QuestionnaireIdentity.Equals(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion)) ?? false;
 
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification)
-                return RedirectToAction(nameof(InterviewVerificationProgress));
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
-                return RedirectToAction(nameof(InterviewImportProgress));
+            if (isExistsImportForCurrentQuestionnaire)
+            {
+                if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                    return RedirectToAction(nameof(InterviewVerificationProgress));
+                if (status.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                    return RedirectToAction(nameof(InterviewImportProgress));
+            }
+            else if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
+                     || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+            {
+                return RedirectToAction(nameof(InterviewImportIsInProgress), new { questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
+            }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -292,11 +310,20 @@ namespace WB.UI.Headquarters.Controllers
                 return this.RedirectToAction(nameof(BatchUpload), new { id = model.QuestionnaireId, version = model.QuestionnaireVersion });
 
             var status = this.assignmentsImportService.GetImportStatus();
+            bool isExistsImportForCurrentQuestionnaire = status?.QuestionnaireIdentity.Equals(new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion)) ?? false;
 
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification)
-                return RedirectToAction(nameof(InterviewVerificationProgress));
-            if (status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
-                return RedirectToAction(nameof(InterviewImportProgress));
+            if (isExistsImportForCurrentQuestionnaire)
+            {
+                if (status.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                    return RedirectToAction(nameof(InterviewVerificationProgress));
+                if (status.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                    return RedirectToAction(nameof(InterviewImportProgress));
+            }
+            else if (status?.ProcessStatus == AssignmentsImportProcessStatus.Verification
+                     || status?.ProcessStatus == AssignmentsImportProcessStatus.Import)
+            {
+                return RedirectToAction(nameof(InterviewImportIsInProgress), new { questionnaireId = model.QuestionnaireId, version = model.QuestionnaireVersion });
+            }
 
             var questionnaireIdentity = new QuestionnaireIdentity(model.QuestionnaireId, model.QuestionnaireVersion);
             var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
@@ -437,6 +464,23 @@ namespace WB.UI.Headquarters.Controllers
                 QuestionnaireId = questionnaireInfo.QuestionnaireId,
                 Version = questionnaireInfo.Version,
                 QuestionnaireTitle = questionnaireInfo.Title,
+            });
+        }
+
+        [HttpGet]
+        public ActionResult InterviewImportIsInProgress(Guid questionnaireId, long version)
+        {
+            this.ViewBag.ActivePage = MenuItem.Questionnaires;
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(questionnaireId, version));
+
+            return this.View(new PreloadedDataInProgressModel
+            {
+                Questionnaire = new PreloadedDataQuestionnaireModel
+                {
+                    Id = questionnaireId,
+                    Version = version,
+                    Title = questionnaireInfo?.Title
+                }
             });
         }
 
