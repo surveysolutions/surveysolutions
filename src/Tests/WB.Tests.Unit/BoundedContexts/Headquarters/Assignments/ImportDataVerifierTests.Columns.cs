@@ -950,5 +950,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(column));
         }
+
+        [Test]
+        public void when_verify_columns_and_sort_index_by_text_list_question_is_invalid_should_return_PL0003_error()
+        {
+            // arrange
+            var variable = "list";
+            var invalidTextListColumn = $"{variable}__1aaa";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.TextListQuestion(variable: variable)}));
+
+            var preloadedFile = Create.Entity.PreloadedFileInfo(new[] { $"{variable}__1", invalidTextListColumn });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { preloadedFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors.Length, Is.EqualTo(1));
+            Assert.That(errors[0].Code, Is.EqualTo("PL0003"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo($"{variable}[1aaa]"));
+        }
     }
 }
