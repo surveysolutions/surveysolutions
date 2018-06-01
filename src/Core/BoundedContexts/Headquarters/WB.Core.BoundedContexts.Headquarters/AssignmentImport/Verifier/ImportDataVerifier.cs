@@ -673,17 +673,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                 if (assignmentAnswer.Answer < 0) yield return assignmentAnswer;
         }
         
-        private IEnumerable<AssignmentAnswer> YesNo_AnswerMustBeGreaterOrEqualThen0(AssignmentMultiAnswer answer, IQuestionnaire questionnaire)
-        {
-            var questionId = questionnaire.GetQuestionIdByVariable(answer.VariableName);
-            if (!questionId.HasValue) yield break;
-
-            if (!questionnaire.IsQuestionYesNo(questionId.Value)) yield break;
-
-            foreach (var assignmentAnswer in answer.Values.OfType<AssignmentIntegerAnswer>())
-                if (assignmentAnswer.Answer < 0) yield return assignmentAnswer;
-        }
-        
         private IEnumerable<AssignmentAnswer> Gps_CommaSymbolIsNotAllowed(AssignmentGpsAnswer answer)
             => answer.Values.OfType<AssignmentDoubleAnswer>().Where(answerValue =>
                 !string.IsNullOrWhiteSpace(answerValue.Value) && answerValue.Value.Contains(","));
@@ -790,22 +779,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private IEnumerable<(string oldName, string newName)> GetRosterInstanceIdColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {
             var rosterId = questionnaire.GetRosterIdByVariableName(file.QuestionnaireOrRosterName, true);
-            if(!rosterId.HasValue) yield break;
+            if (!rosterId.HasValue) yield break;
 
-            var parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value).ToArray();
-
-            var rosterSizeQuestionsByRosterIds = parentRosterIds.ToDictionary(x => x,
-                x => questionnaire.IsFixedRoster(x) ? x : questionnaire.GetRosterSizeQuestion(x));
-
-            var trimmedRostersByRosterSizeQuestionIds = rosterSizeQuestionsByRosterIds
-                .GroupBy(x => /*by roster size question id*/x.Value)
-                .Select(x => /*each root parent roster by roster size question*/x.First().Key)
-                .ToArray();
-
-            for (int i = 0; i < trimmedRostersByRosterSizeQuestionIds.Length; i++)
+            int indexOfRosterSizeSource = 1;
+            foreach (var parentRosterId in questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value))
             {
-                var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(trimmedRostersByRosterSizeQuestionIds[i]).ToLower());
-                var oldName = $"{ServiceColumns.ParentId}{i + 1}".ToLower();
+                var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterId).ToLower());
+                var oldName = $"{ServiceColumns.ParentId}{indexOfRosterSizeSource}".ToLower();
+
                 yield return (oldName, newName);
             }
         }
