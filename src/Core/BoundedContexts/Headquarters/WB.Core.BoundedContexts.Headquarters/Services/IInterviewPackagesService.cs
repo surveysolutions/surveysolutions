@@ -6,8 +6,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 {
     public interface IInterviewPackagesService
     {
-        [Obsolete("Since v 5.7")]
-        void StoreOrProcessPackage(string item);
         void StoreOrProcessPackage(InterviewPackage interview);
         int QueueLength { get; }
         IReadOnlyCollection<string> GetTopPackageIds(int count);
