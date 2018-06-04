@@ -62,7 +62,6 @@
                 var offset = $(element).offset();
                 var x = event.pageX - offset.left;
                 var y = event.pageY - offset.top;
-                console.log("x: " + x + ", y: " + y);
 
                 element.addClass('draggable').parents().on('mousemove', function (e) {
                     $('.draggable').offset({
