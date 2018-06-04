@@ -92,15 +92,6 @@ namespace WB.UI.Headquarters.API
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-        public HttpResponseMessage PostPackage(PostPackageRequest request)
-        {
-            this.incomingSyncPackagesQueue.StoreOrProcessPackage(item: request.SynchronizationPackage);
-
-            return this.Request.CreateResponse(HttpStatusCode.OK);
-        }
-
         [HttpGet]
         [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
