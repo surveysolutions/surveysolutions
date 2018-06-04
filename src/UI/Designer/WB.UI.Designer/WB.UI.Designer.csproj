@@ -143,6 +143,9 @@
     <Reference Include="StackExchange.Exceptional.Shared, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.Shared.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.Shared.dll</HintPath>
     </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Collections.Immutable.1.4.0\lib\netstandard2.0\System.Collections.Immutable.dll</HintPath>
@@ -213,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
+    <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="Api\Designer\CommentsController.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
@@ -224,6 +228,7 @@
     <Compile Include="Api\WebTester\WebTesterController.cs" />
     <Compile Include="Api\WebTester\ReloadController.cs" />
     <Compile Include="App_Start\NinjectWebCommonModule.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
@@ -278,6 +283,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M017_AddQuestionnaireListViewFolderTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201806041250_RemoveObsoleteTables.cs" />
     <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />

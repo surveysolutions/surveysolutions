@@ -16,7 +16,7 @@
                     <router-link class="logo" :to="toCoverPage" v-if="hqLink == null"></router-link>
                     <a :href="hqLink" v-if="hqLink != null" class="logo"></a>
                 </div>  
-                <button v-if="this.$config.inWebTesterMode" type="button" class="btn btn-default btn-link btn-icon" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
+                <button v-if="this.$config.inWebTesterMode" type="button" class="btn btn-default btn-link btn-icon" @click="reloadQuestionnaire" :title="$t('WebInterviewUI.ReloadQuestionnaire')">
                     <span class="glyphicon glyphicon-sort"></span>
                 </button>
             </div>

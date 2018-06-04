@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
@@ -169,6 +170,135 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors[0].Code, Is.EqualTo("PL0052"));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(roster));
             Assert.That(errors[0].References.First().Content, Is.EqualTo(textListQuestionVariable));
+        }
+
+        [Test]
+        public void when_verify_files_in_zip_file_with_roster_and_nested_roster_files_which_triggered_by_1_roster_size_question_and_nested_roster_file_dont_have_roster_id_column_should_return_PL0007_error()
+        {
+            // arrange
+            var roster = "myroster";
+            var nestedRoster = "nestedroster";
+            Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeId),
+                    Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
+                        children: new IComposite[]
+                        {
+                            Create.Entity.Roster(variable: nestedRoster, rosterSizeQuestionId: rosterSizeId,
+                                children: new[]
+                                {
+                                    Create.Entity.TextQuestion()
+                                })
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster)
+                }, fileName: roster, questionnaireOrRosterName: roster);
+            var nestedRosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, string.Format(ServiceColumns.IdSuffixFormat, roster)
+                }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles("main.zip", new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Has.One.Items);
+            Assert.That(errors[0].Code, Is.EqualTo("PL0007"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo(string.Format(ServiceColumns.IdSuffixFormat, nestedRoster)));
+        }
+
+        [Test]
+        public void when_verify_files_in_zip_file_with_roster_and_nested_roster_files_which_triggered_by_1_roster_size_question_should_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            var nestedRoster = "nestedroster";
+            Guid rosterSizeId = Guid.Parse("11111111111111111111111111111111");
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeId),
+                    Create.Entity.Roster(variable: roster, rosterSizeQuestionId: rosterSizeId,
+                        children: new IComposite[]
+                        {
+                            Create.Entity.Roster(variable: nestedRoster, rosterSizeQuestionId: rosterSizeId,
+                                children: new[]
+                                {
+                                    Create.Entity.TextQuestion()
+                                })
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId,
+                    string.Format(ServiceColumns.IdSuffixFormat, roster)
+
+                }, fileName: roster, questionnaireOrRosterName: roster);
+            var nestedRosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId,
+                    string.Format(ServiceColumns.IdSuffixFormat, roster),
+                    string.Format(ServiceColumns.IdSuffixFormat, nestedRoster)
+
+                }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyColumns(new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
+        public void when_verify_files_in_zip_file_with_roster_and_nested_roster_files_with_old_roster_code_column_names_should_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            var nestedRoster = "nestedroster";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.FixedRoster(variable: roster, fixedTitles: Create.Entity.FixedTitles(10,20),
+                        children: new IComposite[]
+                        {
+                            Create.Entity.TextQuestion(),
+                            Create.Entity.FixedRoster(variable: nestedRoster, fixedTitles: Create.Entity.FixedTitles(100, 200),
+                                children: new[]
+                                {
+                                    Create.Entity.TextQuestion()
+                                })
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, "ParentId1"
+                }, fileName: roster, questionnaireOrRosterName: roster);
+            var nestedRosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, "parentid1", "parentiD2"
+                }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles("main.zip", new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
         }
     }
 }
