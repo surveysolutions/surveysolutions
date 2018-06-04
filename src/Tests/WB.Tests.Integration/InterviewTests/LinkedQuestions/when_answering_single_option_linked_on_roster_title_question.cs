@@ -34,7 +34,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 
         public void BecauseOf() =>
             interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                 answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVector: Abc.Create.RosterVector(0));
+                originDate: DateTimeOffset.Now, rosterVector: RosterVector.Empty, selectedRosterVector: Abc.Create.RosterVector(0));
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {

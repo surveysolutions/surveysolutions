@@ -7,8 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public decimal SelectedValue { get; private set; }
 
-        public SingleOptionQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTimeUtc, decimal selectedValue)
-            : base(userId, questionId, rosterVector, answerTimeUtc)
+        public SingleOptionQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
+            DateTimeOffset originDate, decimal selectedValue)
+            : base(userId, questionId, rosterVector, originDate)
         {
             this.SelectedValue = selectedValue;
         }

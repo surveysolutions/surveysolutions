@@ -5,7 +5,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 {
     public class InterviewHistoricalRecordView
     {
-        public InterviewHistoricalRecordView(long index, InterviewHistoricalAction action, string originatorName, string originatorRole, Dictionary<string, string> parameters, DateTime? timestamp)
+        public InterviewHistoricalRecordView(long index, InterviewHistoricalAction action, string originatorName, 
+            string originatorRole, Dictionary<string, string> parameters, DateTime? timestamp, TimeSpan? offset)
         {
             this.Index = index;
             this.Action = action;
@@ -13,6 +14,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             this.OriginatorRole = originatorRole;
             this.Parameters = parameters;
             this.Timestamp = timestamp;
+            this.Offset = offset;
         }
         public long  Index { get; private set; }
         public InterviewHistoricalAction Action { get; private set; }
@@ -20,5 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
         public string OriginatorRole { get; private set; }
         public Dictionary<string, string> Parameters { get; private set; }
         public DateTime? Timestamp { get; private set; }
+        public TimeSpan? Offset { get; set; }
     }
 }

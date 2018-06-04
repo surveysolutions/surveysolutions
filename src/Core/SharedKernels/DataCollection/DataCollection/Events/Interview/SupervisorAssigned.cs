@@ -8,11 +8,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public Guid SupervisorId { get; }
         public DateTime? AssignTime { get; }
 
-        public SupervisorAssigned(Guid userId, Guid supervisorId, DateTime? assignTime = null)
-            : base(userId)
+        public SupervisorAssigned(Guid userId, Guid supervisorId, DateTimeOffset originDate)
+            : base(userId, originDate)
         {
             this.SupervisorId = supervisorId;
-            this.AssignTime = assignTime;
+            this.AssignTime = originDate.UtcDateTime;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     ));
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, "", DateTimeOffset.Now));
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
 
             command = Create.Command.SynchronizeInterviewEventsCommand(

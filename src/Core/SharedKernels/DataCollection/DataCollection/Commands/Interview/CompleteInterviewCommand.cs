@@ -5,14 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
     public class CompleteInterviewCommand : InterviewCommand
     {
-        public CompleteInterviewCommand(Guid interviewId, Guid userId, string comment, DateTime completeTime)
+        public CompleteInterviewCommand(Guid interviewId, Guid userId, string comment)
             : base(interviewId, userId)
         {
-            this.CompleteTime = completeTime;
             this.Comment = comment;
         }
 
         public string Comment { get; set; }
-        public DateTime CompleteTime { get; private set; }
     }
 }

@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignSupervisor(supervisorId, supervisorId2);
+            interview.AssignSupervisor(supervisorId, supervisorId2, DateTimeOffset.Now);
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
@@ -114,7 +114,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignSupervisor(headquarterId, supervisorId2);
+            interview.AssignSupervisor(headquarterId, supervisorId2, DateTimeOffset.Now);
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignSupervisor(headquarterId, supervisorId2);
+            interview.AssignSupervisor(headquarterId, supervisorId2, DateTimeOffset.Now);
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
@@ -154,7 +154,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignSupervisor(headquarterId, supervisorId2);
+            interview.AssignSupervisor(headquarterId, supervisorId2, DateTimeOffset.Now);
 
             // assert
             eventContext.AssertThatContainsEvent<SupervisorAssigned>();
@@ -217,7 +217,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId2));
 
             // assert
             eventContext.ShouldContainEvent<InterviewerAssigned>();
@@ -238,7 +238,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2));
 
             // assert
             eventContext.ShouldContainEvent<SupervisorAssigned>();
@@ -259,7 +259,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: null, assignTime: DateTime.UtcNow));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: null));
 
             // assert
             eventContext.ShouldContainEvent<SupervisorAssigned>();
@@ -277,7 +277,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2, assignTime: DateTime.UtcNow));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId2, interviewerId: interviewerId2));
 
             // assert
             eventContext.ShouldContainEvent<SupervisorAssigned>();
@@ -296,7 +296,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null, assignTime: DateTime.UtcNow));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null));
 
             // assert
             eventContext.ShouldContainEvent<SupervisorAssigned>();
@@ -315,7 +315,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             // act
             void AssignResponsible () => 
-                interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null, assignTime: DateTime.UtcNow));
+                interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: null));
 
             // assert
             Assert.Throws(Is.TypeOf<InterviewException>().And.Message.EqualTo($"Interview has assigned on this supervisor already"), AssignResponsible);
@@ -335,7 +335,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             SetupEventContext();
 
             // act
-            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId, assignTime: DateTime.UtcNow));
+            interview.AssignResponsible(Create.Command.AssignResponsibleCommand(supervisorId: supervisorId, interviewerId: interviewerId));
 
             // assert
             eventContext.ShouldContainEvent<InterviewRejected>();

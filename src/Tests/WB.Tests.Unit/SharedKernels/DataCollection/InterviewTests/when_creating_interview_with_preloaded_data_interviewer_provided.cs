@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-            interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto.Answers, answersTime, supervisorId, interviewerId, null, null));
+            interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto.Answers, supervisorId, interviewerId, null, null));
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {

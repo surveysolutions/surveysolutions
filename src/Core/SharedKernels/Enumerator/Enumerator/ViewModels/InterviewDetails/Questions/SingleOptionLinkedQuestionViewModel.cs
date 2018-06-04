@@ -145,8 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
-                        this.Identity,
-                        DateTime.UtcNow));
+                        this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
@@ -165,7 +164,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
-                DateTime.UtcNow,
                 selectedOption.RosterVector);
 
             try

@@ -38,7 +38,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
                     var interview = SetupStatefullInterview(questionnaireDocument);
 
-                    var command = Create.Command.CreateInterview(Guid.Empty, Guid.NewGuid(), questionnaireIdentity, DateTime.Now,
+                    var command = Create.Command.CreateInterview(Guid.Empty, Guid.NewGuid(), questionnaireIdentity, 
                         Guid.NewGuid(), null, null, null);
                     interview.CreateInterview(command);
 

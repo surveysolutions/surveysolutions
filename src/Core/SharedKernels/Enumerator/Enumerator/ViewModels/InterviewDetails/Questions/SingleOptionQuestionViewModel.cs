@@ -123,7 +123,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
-                DateTime.UtcNow,
                 selectedOption.Value);
 
             try
@@ -173,8 +172,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
-                        this.questionIdentity,
-                        DateTime.UtcNow));
+                        this.questionIdentity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)

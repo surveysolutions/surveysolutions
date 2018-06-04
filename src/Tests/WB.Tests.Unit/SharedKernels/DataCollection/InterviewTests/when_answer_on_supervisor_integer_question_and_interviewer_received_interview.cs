@@ -28,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewReceivedByInterviewer());
+            interview.Apply(new InterviewReceivedByInterviewer(DateTimeOffset.Now));
             eventContext = new EventContext();
             BecauseOf();
         }

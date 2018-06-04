@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         {
             Guid interviewId = Id.g1;
             
-            var command = Create.Command.CreateInterview(interviewId, Id.g2, Id.g3, 1, new List<InterviewAnswer>(), DateTime.Now, Id.g4, Id.g5, null, null);
+            var command = Create.Command.CreateInterview(interviewId, Id.g2, Id.g3, 1, new List<InterviewAnswer>(), Id.g4, Id.g5, null, null);
 
             var interview = Create.AggregateRoot.StatefulInterview(shouldBeInitialized: false, interviewId: interviewId, questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
             using (EventContext eventContext = new EventContext())

@@ -55,7 +55,6 @@ namespace WB.UI.WebTester.Services
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 questionnaireId: questionnaire,
                 answers: new List<InterviewAnswer>(),
-                answersTime: DateTime.UtcNow,
                 protectedVariables: new List<string>(),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),

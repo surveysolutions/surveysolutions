@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Answers
             {
                 var length = TimeSpan.FromSeconds(54);
                 var fileName = "audio.wav";
-                interview.AnswerAudioQuestion(Id.g2, audioQuestionid, RosterVector.Empty, DateTime.Now, fileName, length);
+                interview.AnswerAudioQuestion(Id.g2, audioQuestionid, RosterVector.Empty, DateTimeOffset.Now, fileName, length);
 
                 eventContext.ShouldContainEvent<AudioQuestionAnswered>(x => x.QuestionId == audioQuestionid && x.FileName == fileName && x.Length == length);
             }

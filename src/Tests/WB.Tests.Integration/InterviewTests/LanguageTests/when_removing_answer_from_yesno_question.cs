@@ -38,14 +38,13 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
-                    answeredOptions: new[] { Create.Entity.AnsweredYesNoOption(11m, true)},
-                    answerTime: DateTime.UtcNow));
+                    answeredOptions: new[] { Create.Entity.AnsweredYesNoOption(11m, true)}
+                    ));
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(
                     questionId: questionId,
                     rosterVector: RosterVector.Empty,
-                    answeredOptions: new AnsweredYesNoOption[] {},
-                    answerTime: DateTime.UtcNow));
+                    answeredOptions: new AnsweredYesNoOption[] {}));
 
                 return (long) interview.GetVariableValueByOrDeeperRosterLevel(variableId, RosterVector.Empty);
             });
