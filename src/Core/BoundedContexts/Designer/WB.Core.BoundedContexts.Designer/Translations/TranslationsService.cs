@@ -146,8 +146,13 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         {
                             this.translations.Store(translationInstance, translationInstance);
                         }
+
                         this.translations.Flush();
                     }
+                }
+                catch (InvalidDataException e)
+                {
+                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
                 }
                 catch (COMException e)
                 {
