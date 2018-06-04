@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var aggregateRootEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events);
 
-                if (eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(aggregateRootEvents.First().EventSequence - 1, 
+                if (eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(aggregateRootEvents.FirstOrDefault()?.EventSequence ?? 0 - 1, 
                     interview.InterviewId,
                     EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
