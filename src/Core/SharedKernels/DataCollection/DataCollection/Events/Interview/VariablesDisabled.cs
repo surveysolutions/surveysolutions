@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
+﻿using System;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
@@ -6,7 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public Identity[] Variables { get; private set; }
 
-        public VariablesDisabled(Identity[] variables)
+        public VariablesDisabled(Identity[] variables, DateTimeOffset originDate)
+            : base(originDate)
         {
             this.Variables = variables;
         }

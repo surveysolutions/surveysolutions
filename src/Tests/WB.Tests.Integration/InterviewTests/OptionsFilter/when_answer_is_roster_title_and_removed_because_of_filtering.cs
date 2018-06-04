@@ -58,7 +58,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 interview.AnswerNumericIntegerQuestion(userId, numericQuestionId, RosterVector.Empty, DateTime.Today, 1);
                 interview.AnswerSingleOptionQuestion(userId, rosterTitleQuestionIdentity.Id, rosterTitleQuestionIdentity.RosterVector, DateTime.Today, 1);
                 interview.AnswerMultipleOptionsQuestion(userId, multioptionsQuestionId, Create.RosterVector(0), DateTime.Today, new[] {1});
-                interview.AnswerYesNoQuestion(new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Create.RosterVector(0), DateTime.Today, new List<AnsweredYesNoOption> { new AnsweredYesNoOption(1, true) }));
+                interview.AnswerYesNoQuestion(new AnswerYesNoQuestion(interview.EventSourceId, userId, yesNoQuestionId, Create.RosterVector(0), new List<AnsweredYesNoOption> { new AnsweredYesNoOption(1, true) }));
 
                 var result = new InvokeResults();
                 using (var eventContext = new EventContext())

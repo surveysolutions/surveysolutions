@@ -29,8 +29,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-             exception = NUnit.Framework.Assert.Throws<Exception>(() =>interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, 
-                 answerTime: DateTime.Now, rosterVector: new decimal[0], answer: answer));
+             exception = NUnit.Framework.Assert.Throws<Exception>(() =>interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId,
+                 originDate: DateTimeOffset.Now, rosterVector: new decimal[0], answer: answer));
 
         [NUnit.Framework.Test] public void should_raise_InterviewException () =>
            exception.Should().BeOfType<InterviewException>();

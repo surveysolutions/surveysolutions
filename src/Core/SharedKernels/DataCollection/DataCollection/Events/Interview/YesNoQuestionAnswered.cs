@@ -8,8 +8,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public AnsweredYesNoOption[] AnsweredOptions { get; private set; }
 
-        public YesNoQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTimeUtc, AnsweredYesNoOption[] answeredOptions)
-            : base(userId, questionId, rosterVector, answerTimeUtc)
+        public YesNoQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector,
+            DateTimeOffset originDate, AnsweredYesNoOption[] answeredOptions)
+            : base(userId, questionId, rosterVector, originDate)
         {
             this.AnsweredOptions = answeredOptions;
         }

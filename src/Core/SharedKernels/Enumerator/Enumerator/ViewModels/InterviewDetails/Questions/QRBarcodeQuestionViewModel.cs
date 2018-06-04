@@ -116,7 +116,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         userId: this.userId,
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
-                        answerTime: DateTime.UtcNow,
                         answer: scanCode.Code);
 
                     await this.Answering.SendAnswerQuestionCommandAsync(command);
@@ -149,8 +148,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         await this.Answering.SendRemoveAnswerCommandAsync(
                             new RemoveAnswerCommand(this.interviewId,
                                 this.userId, 
-                                this.questionIdentity,
-                                DateTime.UtcNow));
+                                this.questionIdentity));
 
                         this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }

@@ -21,17 +21,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId));
 
-            interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
+            interview.AssignInterviewer(supervisorId, userId, DateTimeOffset.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
-            interview.Approve(userId, string.Empty, DateTime.Now);
-            interview.HqApprove(userId, string.Empty);
+            interview.Approve(userId, string.Empty, DateTimeOffset.Now);
+            interview.HqApprove(userId, string.Empty, DateTimeOffset.Now);
 
             eventContext = new EventContext();
             BecauseOf();
         }
 
         public void BecauseOf() =>
-            interview.UnapproveByHeadquarters(userId, string.Empty);
+            interview.UnapproveByHeadquarters(userId, string.Empty, DateTimeOffset.Now);
 
         [NUnit.Framework.Test] public void should_raise_two_events () =>
             eventContext.Events.Count().Should().Be(2);

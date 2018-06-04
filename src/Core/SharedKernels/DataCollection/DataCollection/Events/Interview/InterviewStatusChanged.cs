@@ -11,12 +11,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public string Comment { get; private set; }
         public DateTime? UtcTime { get; private set; }
 
-        public InterviewStatusChanged(InterviewStatus status, string comment, InterviewStatus? previousStatus = null, DateTime? utcTime = null)
+        public InterviewStatusChanged(InterviewStatus status, string comment, DateTimeOffset originDate, 
+            InterviewStatus? previousStatus = null): base (originDate)
         {
             this.PreviousStatus = previousStatus;
             this.Status = status;
             this.Comment = comment;
-            this.UtcTime = utcTime;
         }
     }
 }

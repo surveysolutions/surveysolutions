@@ -7,8 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public decimal[][] SelectedRosterVectors { get; private set; }
 
-        public MultipleOptionsLinkedQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTimeUtc, decimal[][] selectedRosterVectors)
-            : base(userId, questionId, rosterVector, answerTimeUtc)
+        public MultipleOptionsLinkedQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
+            DateTimeOffset originDate, decimal[][] selectedRosterVectors)
+            : base(userId, questionId, rosterVector, originDate)
         {
             this.SelectedRosterVectors = selectedRosterVectors;
         }

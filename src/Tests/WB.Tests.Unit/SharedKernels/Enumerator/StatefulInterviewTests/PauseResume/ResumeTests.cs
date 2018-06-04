@@ -23,13 +23,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.PauseRes
         {
             Guid interviewId = Id.g1;
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: interviewId);
-            interview.Apply(new InterviewStatusChanged(status, null));
+            interview.Apply(new InterviewStatusChanged(status, null, DateTimeOffset.Now));
 
             if (AllowedStatuses.Contains(status))
             {
                 using (var context = new EventContext())
                 {
-                    interview.Resume(new ResumeInterviewCommand(interviewId, Id.g2, DateTime.Now, DateTime.UtcNow));
+                    interview.Resume(new ResumeInterviewCommand(interviewId, Id.g2));
                     if (AllowedStatuses.Contains(status))
                     {
                         context.ShouldContainEvent<InterviewResumed>();

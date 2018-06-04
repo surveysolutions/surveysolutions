@@ -11,8 +11,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public int? AssignmentId { get; }
         public bool UsesExpressionStorage { get; set; }
 
-        public InterviewOnClientCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, int? assignmentId, bool usesExpressionStorage = false)
-            : base(userId)
+        public InterviewOnClientCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
+            int? assignmentId, DateTimeOffset originDate, bool usesExpressionStorage = false)
+            : base(userId, originDate)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;

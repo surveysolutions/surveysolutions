@@ -159,7 +159,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 
             var interviewSummaryEventHandler = CreateInterviewSummaryEventHandlerFunctional(questionnaire);
 
-            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId, 1, InterviewStatus.Created, featuredQuestionsMeta, false, null, null, null);
+            var synchronizationMetadataApplied = new SynchronizationMetadataApplied(userId, questionnaireId, 1, InterviewStatus.Created, featuredQuestionsMeta, 
+                false, null, null, null, DateTimeOffset.Now);
 
             var updatedInterviewSummary = this.CallUpdateMethod(interviewSummaryEventHandler, savedInterviewSummary,
                 synchronizationMetadataApplied);
@@ -182,7 +183,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     return new TextQuestionAnswered(Guid.NewGuid(), questionId, new decimal[0], DateTime.Now, (string)answer);
                 case QuestionType.QRBarcode:
                     return new QRBarcodeQuestionAnswered(userId: Guid.NewGuid(), questionId: questionId, rosterVector: new decimal[0],
-                        answerTimeUtc: DateTime.Now, answer: (string) answer);
+                        originDate: DateTimeOffset.Now, answer: (string) answer);
             }
             return null;
         }

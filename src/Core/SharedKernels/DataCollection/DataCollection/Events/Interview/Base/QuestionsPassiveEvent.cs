@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
@@ -6,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
     {
         public Identity[] Questions { get; private set; }
 
-        protected QuestionsPassiveEvent(Identity[] questions)
+        protected QuestionsPassiveEvent(Identity[] questions, DateTimeOffset originDate) : base(originDate)
         {
             this.Questions = questions?.ToArray() ?? new Identity[] {};
         }

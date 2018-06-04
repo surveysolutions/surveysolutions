@@ -222,7 +222,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
-                DateTime.UtcNow,
                 selectedValuesWithJustChanged);
 
             try

@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId ?? new Guid("F000F000F000F000F000F000F000F000"), 
                 questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"), 1,
-                answersToFeaturedQuestions ?? new List<InterviewAnswer>(), answersTime ?? new DateTime(2012, 12, 20), 
+                answersToFeaturedQuestions ?? new List<InterviewAnswer>(),  
                 supervisorId ?? new Guid("D222D222D222D222D222D222D222D222"), null, Create.Entity.InterviewKey()));
 
             return interview;

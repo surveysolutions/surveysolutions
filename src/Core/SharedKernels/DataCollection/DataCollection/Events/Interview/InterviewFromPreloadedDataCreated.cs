@@ -5,8 +5,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewFromPreloadedDataCreated : InterviewActiveEvent
     {
-        public InterviewFromPreloadedDataCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, int? assignmentId, bool usesExpressionStorage = false)
-            : base(userId)
+        public InterviewFromPreloadedDataCreated(Guid userId, Guid questionnaireId, 
+            long questionnaireVersion, int? assignmentId, DateTimeOffset originDate,
+            bool usesExpressionStorage = false)
+            : base(userId, originDate)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;

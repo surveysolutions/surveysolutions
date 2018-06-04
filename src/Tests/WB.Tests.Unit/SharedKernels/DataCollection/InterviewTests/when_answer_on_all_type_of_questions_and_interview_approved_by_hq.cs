@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             () => interview.AnswerQRBarcodeQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, string.Empty),
             () => interview.AnswerSingleOptionQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, 1),
             () => interview.AnswerSingleOptionLinkedQuestion(userId, questionId, RosterVector.Empty, DateTime.Now, new decimal[0]),
-            () => interview.AnswerYesNoQuestion(new AnswerYesNoQuestion(interview.EventSourceId, userId, questionId, RosterVector.Empty, DateTime.UtcNow, new AnsweredYesNoOption[0])),
+            () => interview.AnswerYesNoQuestion(new AnswerYesNoQuestion(interview.EventSourceId, userId, questionId, RosterVector.Empty, new AnsweredYesNoOption[0])),
         };
         
         private static readonly List<InterviewException> exceptions = new List<InterviewException>();

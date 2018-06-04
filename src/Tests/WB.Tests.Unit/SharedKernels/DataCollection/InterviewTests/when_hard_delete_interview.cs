@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-                interview.HardDelete(userId);
+                interview.HardDelete(userId, DateTimeOffset.Now);
 
         [NUnit.Framework.Test] public void should_raise_one_events () =>
             eventContext.Events.Count().Should().Be(1);

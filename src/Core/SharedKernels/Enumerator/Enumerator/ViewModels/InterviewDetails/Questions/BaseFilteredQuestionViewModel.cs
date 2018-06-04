@@ -159,7 +159,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.principal.CurrentUserIdentity.UserId,
                     this.Identity.Id,
                     this.Identity.RosterVector,
-                    DateTime.UtcNow,
                     selectedOption.Value)).ConfigureAwait(false);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -200,8 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,
-                        this.Identity,
-                        DateTime.UtcNow));
+                        this.Identity));
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }

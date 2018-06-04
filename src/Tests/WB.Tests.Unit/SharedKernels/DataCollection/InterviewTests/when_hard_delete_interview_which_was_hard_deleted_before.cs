@@ -16,14 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             questionnaireId = Guid.Parse("33333333333333333333333333333333");
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
-            interview.Apply(new InterviewHardDeleted(userId));
+            interview.Apply(new InterviewHardDeleted(userId, DateTimeOffset.Now));
 
             eventContext = new EventContext();
             BecauseOf();
         }
 
         public void BecauseOf() =>
-                interview.HardDelete(userId);
+                interview.HardDelete(userId, DateTimeOffset.Now);
 
         [NUnit.Framework.Test] public void should_raise_zero_events () =>
             eventContext.Events.Count().Should().Be(0);

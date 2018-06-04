@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewReceivedByInterviewer());
+            interview.Apply(new InterviewReceivedByInterviewer(DateTimeOffset.Now));
             BecauseOf();
         }
 

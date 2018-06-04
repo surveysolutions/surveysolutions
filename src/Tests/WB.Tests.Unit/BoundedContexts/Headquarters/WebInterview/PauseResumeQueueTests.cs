@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [Test]
         public void when_pause_command_arrived_just_after_resume_Should_cancel_resume()
         {
-            var firstCommandDate = new DateTime(2007, 10, 17, 10, 0, 0);
+            var firstCommandDate = new DateTimeOffset(new DateTime(2007, 10, 17, 10, 0, 0));
 
             var now = firstCommandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(10);
             var clock = Mock.Of<IClock>(x => x.UtcNow() == now);

@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
             statefulInterview.CreateInterview(Create.Command.CreateInterview(
                 statefulInterview.EventSourceId, responsibleId, questionnaire.PublicKey, 1,
-                new List<InterviewAnswer>(), DateTime.UtcNow, suervisorId, null, Create.Entity.InterviewKey(), null));
+                new List<InterviewAnswer>(), suervisorId, null, Create.Entity.InterviewKey(), null));
 
             statefulInterview.AnswerTextQuestion(responsibleId, prefilledQuestionId, RosterVector.Empty, DateTime.UtcNow, "prefilled text");
             statefulInterview.AnswerTextQuestion(responsibleId, questionId, RosterVector.Empty, DateTime.UtcNow, "regular text");

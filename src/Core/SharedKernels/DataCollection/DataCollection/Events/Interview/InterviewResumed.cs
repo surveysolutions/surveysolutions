@@ -5,13 +5,21 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewResumed : InterviewActiveEvent
     {
-        public InterviewResumed(Guid userId, DateTime localTime, DateTime utcTime) : base(userId)
+        public InterviewResumed(Guid userId, DateTimeOffset originDate, DateTime? localTime = null, DateTime? utcTime = null) 
+            : base(userId, originDate)
         {
-            LocalTime = localTime;
-            UtcTime = utcTime;
+            if (localTime != null && localTime != default(DateTime))
+            {
+                this.LocalTime = localTime;
+            }
+
+            if (utcTime != null && utcTime != default(DateTime))
+            {
+                this.UtcTime = utcTime;
+            }
         }
 
-        public DateTime LocalTime { get; set; }
-        public DateTime UtcTime { get; set; }
+        public DateTime? LocalTime { get; set; }
+        public DateTime? UtcTime { get; set; }
     }
 }

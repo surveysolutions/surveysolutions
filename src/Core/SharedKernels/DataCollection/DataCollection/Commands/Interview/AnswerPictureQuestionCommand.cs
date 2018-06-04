@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public string PictureFileName { get; private set; }
 
-        public AnswerPictureQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, string pictureFileName)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+        public AnswerPictureQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, string pictureFileName)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.PictureFileName = pictureFileName;
         }

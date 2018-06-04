@@ -80,7 +80,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 }));
             var statefulInterview = Create.AggregateRoot.StatefulInterview(questionnaireRepository: plainQuestionnaireRepository);
             statefulInterview.Apply(Create.Event.TextQuestionAnswered(questionIdentity.Id, questionIdentity.RosterVector, "test"));
-            statefulInterview.Apply(Create.Event.QuestionsMarkedAsReadonly(questionIdentity));
+            statefulInterview.Apply(Create.Event.QuestionsMarkedAsReadonly(DateTimeOffset.Now, questionIdentity));
 
             // act
             statefulInterview.Apply(Create.Event.AnswersDeclaredInvalid(new[] { questionIdentity }));

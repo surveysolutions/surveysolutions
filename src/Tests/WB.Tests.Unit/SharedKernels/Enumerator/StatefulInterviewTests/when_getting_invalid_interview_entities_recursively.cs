@@ -28,9 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(Create.Entity.Identity(staticText1Id)));
-            interview.Apply(Create.Event.StaticTextsDeclaredValid(Create.Entity.Identity(staticText2Id)));
-            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(Create.Entity.Identity(staticText2Id)));
+            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTexts:Create.Entity.Identity(staticText1Id)));
+            interview.Apply(Create.Event.StaticTextsDeclaredValid(staticTexts:Create.Entity.Identity(staticText2Id)));
+            interview.Apply(Create.Event.StaticTextsDeclaredInvalid(staticTexts:Create.Entity.Identity(staticText2Id)));
             interview.Apply(Create.Event.AnswersDeclaredInvalid(new[] {Create.Entity.Identity(questionId), Create.Entity.Identity(disabledQuestionId) }));
             interview.Apply(Create.Event.QuestionsDisabled(new[] { Create.Entity.Identity(disabledQuestionId) }));
 

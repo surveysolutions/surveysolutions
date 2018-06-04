@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             });
 
             interview = Setup.StatefulInterview(questionnaireMock);
-            interview.Apply(Create.Event.VariablesChanged(new[]
+            interview.Apply(Create.Event.VariablesChanged(DateTimeOffset.Now, new[]
             {
                 new ChangedVariable(substitutedVariable1Identity,  new DateTime(2016, 1, 31)),
                 new ChangedVariable(substitutedVariable2Identity,  7.77m),

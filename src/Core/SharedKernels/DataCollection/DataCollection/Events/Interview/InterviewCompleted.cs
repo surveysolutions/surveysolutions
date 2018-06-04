@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewCompleted : InterviewActiveEvent
     {
-        public InterviewCompleted(Guid userId, DateTime? completeTime, string comment)
-            : base(userId)
+        public InterviewCompleted(Guid userId, DateTimeOffset originDate, string comment)
+            : base(userId, originDate)
         {
-            Comment = comment;
-            if (completeTime != default(DateTime))
-            {
-                this.CompleteTime = completeTime;
-            }
+            this.Comment = comment;
+            this.CompleteTime = originDate.UtcDateTime;
+            
         }
 
         public DateTime? CompleteTime { get; private set; }

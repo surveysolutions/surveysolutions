@@ -127,8 +127,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var completeInterview = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                comment: this.CompleteComment,
-                completeTime: DateTime.UtcNow);
+                comment: this.CompleteComment);
 
             await this.commandService.ExecuteAsync(completeInterview);
             this.lastCompletionComments.Remove(interviewId);

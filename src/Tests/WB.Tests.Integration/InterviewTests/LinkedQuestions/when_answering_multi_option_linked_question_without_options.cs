@@ -32,7 +32,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var interview = SetupInterview(questionnaireDocument: questionnaireDocument);
 
             var exception = Assert.Throws<InterviewException>(() => interview.AnswerMultipleOptionsLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
-                answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: answer));
+                originDate: DateTimeOffset.Now, rosterVector: RosterVector.Empty, selectedRosterVectors: answer));
 
             Assert.That(exception, Has.Property(nameof(exception.Message)).EqualTo("Answer on linked categorical question cannot be saved. Specified option is absent"));
         }

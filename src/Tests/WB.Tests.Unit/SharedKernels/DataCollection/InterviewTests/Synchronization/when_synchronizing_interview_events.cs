@@ -20,8 +20,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 => _.Version == questionnaireVersion);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
-            interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, "", DateTimeOffset.Now));
+            interview.Apply(new InterviewerAssigned(userId, userId, DateTimeOffset.Now));
 
             command = Create.Command.SynchronizeInterviewEventsCommand(
                userId: userId,
@@ -51,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         static Interview interview;
 
-        static readonly IEvent[] eventsToPublish = new IEvent[] {new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0])};
+        static readonly IEvent[] eventsToPublish = new IEvent[] {new AnswersDeclaredInvalid(new Identity[0], DateTimeOffset.Now), new GroupsEnabled(new Identity[0], DateTimeOffset.Now) };
         static SynchronizeInterviewEventsCommand command;
     }
 }

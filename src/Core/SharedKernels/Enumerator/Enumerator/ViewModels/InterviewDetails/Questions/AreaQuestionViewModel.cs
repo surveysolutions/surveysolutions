@@ -130,7 +130,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         userId: this.userId,
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
-                        answerTime: DateTime.UtcNow,
                         geometry: answerArea.Geometry,
                         mapName: answerArea.MapName,
                         area: answerArea.Area,
@@ -179,8 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             new RemoveAnswerCommand(
                                 Guid.Parse(this.interviewId),
                                 this.userId, 
-                                this.questionIdentity,
-                                DateTime.UtcNow));
+                                this.questionIdentity));
 
                         this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }

@@ -372,7 +372,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
             {
-                LogInterviewTotalInterviewingTime(interview, @event.Payload.UtcTime);
+                LogInterviewTotalInterviewingTime(interview, @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.UtcTime.Value);
             });
         }
 
