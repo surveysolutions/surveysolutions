@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -231,6 +232,11 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
             }
             catch (InvalidExcelFileException e)
+            {
+                this.logger.Error($"Error on command of type ({commandType}) handling ", e);
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
+            }
+            catch (InvalidDataException e)
             {
                 this.logger.Error($"Error on command of type ({commandType}) handling ", e);
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, e.Message);
