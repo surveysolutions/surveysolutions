@@ -785,7 +785,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             foreach (var parentRosterId in questionnaire.GetRostersFromTopToSpecifiedGroup(rosterId.Value))
             {
                 var newName = string.Format(ServiceColumns.IdSuffixFormat, questionnaire.GetRosterVariableName(parentRosterId).ToLower());
-                var oldName = $"{ServiceColumns.ParentId}{indexOfRosterSizeSource}".ToLower();
+                var oldName = $"{ServiceColumns.ParentId}{indexOfRosterSizeSource++}".ToLower();
 
                 yield return (oldName, newName);
             }

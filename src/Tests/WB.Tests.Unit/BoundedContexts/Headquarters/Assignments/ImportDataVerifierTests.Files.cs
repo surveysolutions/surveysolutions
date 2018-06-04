@@ -260,5 +260,45 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             // assert
             Assert.That(errors, Is.Empty);
         }
+
+        [Test]
+        public void when_verify_files_in_zip_file_with_roster_and_nested_roster_files_with_old_roster_code_column_names_should_return_empty_errors()
+        {
+            // arrange
+            var roster = "myroster";
+            var nestedRoster = "nestedroster";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.FixedRoster(variable: roster, fixedTitles: Create.Entity.FixedTitles(10,20),
+                        children: new IComposite[]
+                        {
+                            Create.Entity.TextQuestion(),
+                            Create.Entity.FixedRoster(variable: nestedRoster, fixedTitles: Create.Entity.FixedTitles(100, 200),
+                                children: new[]
+                                {
+                                    Create.Entity.TextQuestion()
+                                })
+                        })));
+
+            var mainFile = Create.Entity.PreloadedFileInfo(new[] { ServiceColumns.InterviewId });
+            var rosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, "ParentId1"
+                }, fileName: roster, questionnaireOrRosterName: roster);
+            var nestedRosterFile = Create.Entity.PreloadedFileInfo(
+                new[]
+                {
+                    ServiceColumns.InterviewId, "parentid1", "parentiD2"
+                }, fileName: nestedRoster, questionnaireOrRosterName: nestedRoster);
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles("main.zip", new[] { mainFile, rosterFile, nestedRosterFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
     }
 }
