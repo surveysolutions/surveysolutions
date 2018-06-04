@@ -13,9 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var denormalizer = CreateDenormalizer();
 
             // Act
-            var creationTime = new DateTime(2010, 1, 1);
-            var updatedModel = denormalizer.Update(null, Create.Event.InterviewCreated(creationTime: creationTime).ToPublishedEvent());
-            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewPaused(utcTime: creationTime.AddHours(1)).ToPublishedEvent());
+            var creationTime = new DateTimeOffset(new DateTime(2010, 1, 1));
+            var updatedModel = denormalizer.Update(null, Create.Event.InterviewCreated(originDate: creationTime).ToPublishedEvent());
+            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewPaused(originDate: creationTime.AddHours(1)).ToPublishedEvent());
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
@@ -28,9 +28,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var denormalizer = CreateDenormalizer();
 
             // Act
-            var creationTime = new DateTime(2010, 1, 1);
-            var updatedModel = denormalizer.Update(null, Create.Event.InterviewCreated(creationTime: creationTime).ToPublishedEvent());
-            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewStatusChanged(InterviewStatus.Completed, utcTime: creationTime.AddHours(1)).ToPublishedEvent());
+            var creationTime = new DateTimeOffset(new DateTime(2010, 1, 1));
+            var updatedModel = denormalizer.Update(null, Create.Event.InterviewCreated(originDate: creationTime).ToPublishedEvent());
+            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewStatusChanged(InterviewStatus.Completed, originDate: creationTime.AddHours(1)).ToPublishedEvent());
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
@@ -44,9 +44,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var summary = Create.Entity.InterviewSummary();
 
             // Act
-            var creationTime = new DateTime(2010, 1, 1);
-            var updatedModel = denormalizer.Update(summary, Create.Event.InterviewResumed(utcTime: creationTime).ToPublishedEvent());
-            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewPaused(utcTime: creationTime.AddHours(1)).ToPublishedEvent());
+            var creationTime = new DateTimeOffset(new DateTime(2010, 1, 1));
+            var updatedModel = denormalizer.Update(summary, Create.Event.InterviewResumed(originDate: creationTime).ToPublishedEvent());
+            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewPaused(originDate: creationTime.AddHours(1)).ToPublishedEvent());
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);
@@ -60,9 +60,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
             var summary = Create.Entity.InterviewSummary();
 
             // Act
-            var creationTime = new DateTime(2010, 1, 1);
-            var updatedModel = denormalizer.Update(summary, Create.Event.InterviewResumed(utcTime: creationTime).ToPublishedEvent());
-            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewStatusChanged(InterviewStatus.Completed, utcTime: creationTime.AddHours(1)).ToPublishedEvent());
+            var creationTime = new DateTimeOffset(new DateTime(2010, 1, 1));
+            var updatedModel = denormalizer.Update(summary, Create.Event.InterviewResumed(originDate: creationTime).ToPublishedEvent());
+            updatedModel = denormalizer.Update(updatedModel, Create.Event.InterviewStatusChanged(InterviewStatus.Completed, originDate: creationTime.AddHours(1)).ToPublishedEvent());
 
             // Assert
             Assert.That(updatedModel, Has.Property(nameof(updatedModel.LastResumeEventUtcTimestamp)).Null);

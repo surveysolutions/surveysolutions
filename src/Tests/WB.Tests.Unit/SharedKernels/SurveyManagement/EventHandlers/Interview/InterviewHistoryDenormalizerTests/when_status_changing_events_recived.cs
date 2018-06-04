@@ -13,19 +13,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             statusEvents = new List<IEvent>();
-            statusEvents.Add(new InterviewerAssigned(interviewId, Guid.NewGuid(), DateTime.Now));
-            statusEvents.Add(new InterviewReceivedByInterviewer());
+            statusEvents.Add(new InterviewerAssigned(interviewId, Guid.NewGuid(), originDate: DateTimeOffset.Now));
+            statusEvents.Add(new InterviewReceivedByInterviewer(originDate: DateTimeOffset.Now));
             statusEvents.Add(new InterviewCompleted(Guid.NewGuid(), DateTime.Now, "comment"));
             statusEvents.Add(new InterviewRestarted(Guid.NewGuid(), DateTime.Now,"rest"));
-            statusEvents.Add(new InterviewReceivedBySupervisor());
+            statusEvents.Add(new InterviewReceivedBySupervisor(originDate: DateTimeOffset.Now));
             statusEvents.Add(new InterviewRejected(Guid.NewGuid(), "rej", DateTime.Now));
             statusEvents.Add(new InterviewApproved(Guid.NewGuid(), "comment", DateTime.Now));
-            statusEvents.Add(new InterviewRestored(Guid.NewGuid()));
-            statusEvents.Add(new InterviewRejectedByHQ(Guid.NewGuid(), "rej"));
-            statusEvents.Add(new InterviewApprovedByHQ(Guid.NewGuid(), "comment"));
-            statusEvents.Add(new UnapprovedByHeadquarters(Guid.NewGuid(), "comment"));
-            statusEvents.Add(new InterviewApprovedByHQ(Guid.NewGuid(), "comment"));
-            statusEvents.Add(new InterviewDeleted(interviewId));
+            statusEvents.Add(new InterviewRestored(Guid.NewGuid(), originDate: DateTimeOffset.Now));
+            statusEvents.Add(new InterviewRejectedByHQ(Guid.NewGuid(), "rej", originDate: DateTimeOffset.Now));
+            statusEvents.Add(new InterviewApprovedByHQ(Guid.NewGuid(), "comment", originDate: DateTimeOffset.Now));
+            statusEvents.Add(new UnapprovedByHeadquarters(Guid.NewGuid(), "comment", originDate: DateTimeOffset.Now));
+            statusEvents.Add(new InterviewApprovedByHQ(Guid.NewGuid(), "comment", originDate: DateTimeOffset.Now));
+            statusEvents.Add(new InterviewDeleted(interviewId, originDate: DateTimeOffset.Now));
 
             interviewHistoryView = CreateInterviewHistoryView(interviewId);
 

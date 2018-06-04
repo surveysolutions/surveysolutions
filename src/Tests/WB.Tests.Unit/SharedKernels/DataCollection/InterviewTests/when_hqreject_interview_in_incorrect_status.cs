@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.HqReject(userId, String.Empty));
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.HqReject(userId, String.Empty, DateTimeOffset.Now));
 
         [NUnit.Framework.Test] public void should_raise_InterviewException () =>
             exception.Should().NotBeNull();

@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Infrastructure
                 userId: Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 questionnaireId: Create.Entity.QuestionnaireIdentity(),
                 answers: new List<InterviewAnswer>(),
-                answersTime: DateTime.UtcNow,
+                
                 protectedVariables: new List<string>(), 
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),

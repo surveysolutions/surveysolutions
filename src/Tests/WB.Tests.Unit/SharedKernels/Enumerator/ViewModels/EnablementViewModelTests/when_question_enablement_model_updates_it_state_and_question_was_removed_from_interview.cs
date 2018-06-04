@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelT
         public void BecauseOf() 
         {
             interview.RemoveAnswer(multiQuestionIdentity.Id, multiQuestionIdentity.RosterVector, Guid.NewGuid(), DateTime.Now);
-            viewModel.Handle(Create.Event.QuestionsEnabled(multiQuestionIdentity,numericQuestionIdentity));
+            viewModel.Handle(Create.Event.QuestionsEnabled(multiQuestionIdentity, numericQuestionIdentity));
         }
 
         [NUnit.Framework.Test] public void should_disable_model () => 

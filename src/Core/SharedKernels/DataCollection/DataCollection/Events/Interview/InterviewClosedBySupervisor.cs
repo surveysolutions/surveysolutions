@@ -5,11 +5,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewClosedBySupervisor : InterviewActiveEvent
     {
-        public InterviewClosedBySupervisor(Guid userId, DateTime localTime) : base(userId)
+        public InterviewClosedBySupervisor(Guid userId, DateTimeOffset originDate) : base(userId, originDate)
         {
-            LocalTime = localTime;
+            //?check why do we need local
+            this.LocalTime = originDate.LocalDateTime;
         }
 
-        public DateTime LocalTime { get; set; }
+        public DateTime? LocalTime { get; set; }
     }
 }

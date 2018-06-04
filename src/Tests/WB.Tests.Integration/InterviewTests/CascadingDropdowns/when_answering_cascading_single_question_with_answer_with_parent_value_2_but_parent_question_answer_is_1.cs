@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                     Create.Event.SingleOptionQuestionAnswered(
                         parentSingleOptionQuestionId, new decimal[] { }, 1, null, null
                     ),
-                    Create.Event.QuestionsEnabled(Create.Identity(childCascadedComboboxId))
+                    Create.Event.QuestionsEnabled(DateTimeOffset.Now, Create.Identity(childCascadedComboboxId))
                 });
 
                 using (var eventContext = new EventContext())

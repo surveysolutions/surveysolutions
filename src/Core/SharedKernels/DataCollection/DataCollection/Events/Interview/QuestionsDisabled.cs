@@ -1,11 +1,11 @@
-﻿using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+﻿using System;
+using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class QuestionsDisabled : QuestionsPassiveEvent
     {
-        public QuestionsDisabled(Identity[] questions)
-            : base(questions) {}
+        public QuestionsDisabled(Identity[] questions, DateTimeOffset originDate)
+            : base(questions, originDate) {}
     }
 }

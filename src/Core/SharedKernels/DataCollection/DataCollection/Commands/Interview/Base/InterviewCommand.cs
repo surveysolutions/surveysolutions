@@ -26,6 +26,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview.Base
         {
             this.InterviewId = interviewId;
             this.UserId = userId;
+
+            this.OriginDate = DateTimeOffset.Now;
         }
+
+        public DateTimeOffset OriginDate { get; set; }
     }
 }

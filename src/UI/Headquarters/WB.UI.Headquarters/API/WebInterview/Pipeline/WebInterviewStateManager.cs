@@ -44,11 +44,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             if (isInterviewer && !interview.IsCompleted)
             {
-                pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(Guid.Parse(interviewId), userId, DateTime.Now, DateTime.UtcNow));
+                pauseResumeQueue.EnqueuePause(new PauseInterviewCommand(Guid.Parse(interviewId), userId));
             }
             else if (isSupervisor && interview.Status != InterviewStatus.ApprovedBySupervisor)
             {
-                pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(Guid.Parse(interviewId), userId, DateTime.Now));
+                pauseResumeQueue.EnqueueCloseBySupervisor(new CloseInterviewBySupervisorCommand(Guid.Parse(interviewId), userId));
             }
         }
     }

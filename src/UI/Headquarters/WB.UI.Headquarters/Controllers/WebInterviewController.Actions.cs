@@ -44,7 +44,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                        DateTime.UtcNow, fileName, audioInfo.Duration);
+                        fileName, audioInfo.Duration);
 
                     this.commandService.Execute(command);
                 }
@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.Controllers
                     var responsibleId = interview.CurrentResponsibleId;
 
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, filename));
+                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, filename));
 
                     this.imageFileStorage.StoreInterviewBinaryData(interview.Id, filename, ms.ToArray(), file.ContentType);
                 }

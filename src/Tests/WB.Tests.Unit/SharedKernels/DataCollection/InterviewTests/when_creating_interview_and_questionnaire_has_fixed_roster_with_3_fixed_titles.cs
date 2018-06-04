@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 questionnaireVersion: 1,
                 responsibleSupervisorId: supervisorId,
                 answersToFeaturedQuestions: answersToFeaturedQuestions,
-                answersTime: answersTime,
+                
                 userId: userId);
             interview.CreateInterview(command);
         }

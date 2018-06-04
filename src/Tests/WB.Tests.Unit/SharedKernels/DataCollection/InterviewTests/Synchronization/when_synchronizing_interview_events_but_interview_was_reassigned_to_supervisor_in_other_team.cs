@@ -25,9 +25,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, "", DateTimeOffset.Now));
             interview.Apply(new InterviewerAssigned(interviewerId, interviewerId, DateTime.Now));
-            interview.Apply(new SupervisorAssigned(supervisorId, supervisorId));
+            interview.Apply(new SupervisorAssigned(supervisorId, supervisorId, DateTimeOffset.Now));
             interview.Apply(new InterviewerAssigned(supervisorId, null, DateTime.Now));
             command = Create.Command.SynchronizeInterviewEventsCommand(
                userId: Guid.NewGuid(),
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         static InterviewException exception;
 
-        static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+        static IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0], DateTimeOffset.Now), new GroupsEnabled(new Identity[0], DateTimeOffset.Now) };
         static SynchronizeInterviewEventsCommand command;
     }
 }

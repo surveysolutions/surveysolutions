@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
 
-            interview.Apply(new InterviewReceivedByInterviewer());
+            interview.Apply(new InterviewReceivedByInterviewer(DateTimeOffset.Now));
             BecauseOf();
         }
 

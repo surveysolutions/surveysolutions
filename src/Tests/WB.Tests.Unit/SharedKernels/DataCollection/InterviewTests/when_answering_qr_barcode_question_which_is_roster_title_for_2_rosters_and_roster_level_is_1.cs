@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         public void BecauseOf() =>
             interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, rosterVector: rosterVector, 
-                answerTime: DateTime.Now, answer: answer);
+                originDate: DateTimeOffset.Now, answer: answer);
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {

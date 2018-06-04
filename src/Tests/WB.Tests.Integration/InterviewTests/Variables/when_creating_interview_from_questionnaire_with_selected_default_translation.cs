@@ -61,7 +61,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 
             var command = Create.Command.CreateInterview(Guid.Empty, Id.g1, 
                 new QuestionnaireIdentity(nonTranslatedQuestionnaire.PublicKey, 1),
-                DateTime.Now, Id.g2, null, null, null);
+                Id.g2, null, null, null);
 
             this.eventContext = new EventContext();
             interview.CreateInterview(command);

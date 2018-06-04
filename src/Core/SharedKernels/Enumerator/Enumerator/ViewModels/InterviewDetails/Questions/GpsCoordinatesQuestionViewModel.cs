@@ -66,8 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.interviewId,
                     this.userId,
                     new Identity(this.questionIdentity.Id,
-                        this.questionIdentity.RosterVector),
-                    DateTime.UtcNow);
+                    this.questionIdentity.RosterVector));
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -209,7 +208,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.userId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 accuracy: location.Accuracy,
                 altitude: location.Altitude,
                 latitude: location.Latitude,

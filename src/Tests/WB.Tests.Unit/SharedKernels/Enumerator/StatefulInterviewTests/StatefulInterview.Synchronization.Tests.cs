@@ -119,7 +119,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                );
 
             //act
-            TestDelegate sync = () => interview.ApplyEvent(new InterviewSynchronized(syncDto));
+            TestDelegate sync = () => interview.ApplyEvent(new InterviewSynchronized(syncDto, DateTimeOffset.Now));
 
             //assert
             Assert.DoesNotThrow(sync);
@@ -235,7 +235,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             );
 
             //act
-            interview.ApplyEvent(new InterviewSynchronized(syncDto));
+            interview.ApplyEvent(new InterviewSynchronized(syncDto, DateTimeOffset.Now));
 
             //assert
             Assert.That(interview.IsReadOnlyQuestion(textQuestionIdentity), Is.True);

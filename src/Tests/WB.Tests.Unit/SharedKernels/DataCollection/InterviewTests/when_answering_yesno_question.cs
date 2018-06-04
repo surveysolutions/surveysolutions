@@ -32,8 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 userId: userId,
                 questionId: questionId,
                 rosterVector: Create.Entity.RosterVector(0),
-                answeredOptions: answeredYesNoOptions,
-                answerTime: DateTime.UtcNow));
+                answeredOptions: answeredYesNoOptions));
 
         [NUnit.Framework.Test] public void should_raise_YesNoQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<YesNoQuestionAnswered>();
@@ -54,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 .AnsweredOptions.Should().BeEquivalentTo(answeredYesNoOptions);
 
         [NUnit.Framework.Test] public void should_raise_YesNoQuestionAnswered_event_with_AnswerTime_from_command () =>
-            (DateTime.UtcNow - eventContext.GetSingleEvent<YesNoQuestionAnswered>().AnswerTimeUtc).Seconds.Should().BeLessThan(2);
+            (DateTimeOffset.Now.UtcDateTime - eventContext.GetSingleEvent<YesNoQuestionAnswered>().OriginDate).Value.Seconds.Should().BeLessThan(2);
 
         private static Interview interview;
         private static readonly Guid rosterId = Guid.Parse("44444444444444444444444444444444");

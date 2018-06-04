@@ -22,12 +22,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewReceivedByInterviewer());
+            interview.Apply(new InterviewReceivedByInterviewer(DateTimeOffset.Now));
             BecauseOf();
         }
 
         public void BecauseOf() =>
-            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AnswerGeoLocationQuestion(userId, questionId, new decimal[0], DateTime.Now, 1, 1, 1, 1, DateTimeOffset.UtcNow));
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AnswerGeoLocationQuestion(userId, questionId, new decimal[0], DateTimeOffset.Now, 1, 1, 1, 1, DateTimeOffset.UtcNow));
 
         [NUnit.Framework.Test] public void should_throw_InterviewException () =>
             exception.Should().NotBeNull();

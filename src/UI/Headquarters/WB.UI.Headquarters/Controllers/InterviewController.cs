@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
 
             if (this.authorizedUser.IsSupervisor)
             {
-                this.pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id, DateTime.Now));
+                this.pauseResumeQueue.EnqueueOpenBySupervisor(new OpenInterviewBySupervisorCommand(id, this.authorizedUser.Id));
             }
 
             ViewBag.SpecificPageCaption = interviewSummary.Key;

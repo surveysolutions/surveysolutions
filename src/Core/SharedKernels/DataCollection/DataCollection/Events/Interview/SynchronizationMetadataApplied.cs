@@ -10,8 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public SynchronizationMetadataApplied(Guid userId, Guid questionnaireId, long questionnaireVersion, InterviewStatus status,
             AnsweredQuestionSynchronizationDto[] featuredQuestionsMeta, bool createdOnClient, string comments,
             DateTime? rejectedDateTime, DateTime? interviewerAssignedDateTime,
+            DateTimeOffset originDate,
             bool usesExpressionStorage = false)
-            : base(userId)
+            : base(userId, originDate)
         {
             this.InterviewerAssignedDateTime = interviewerAssignedDateTime;
             this.Comments = comments;

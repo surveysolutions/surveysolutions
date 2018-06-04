@@ -16,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
         }
 
         public void BecauseOf() =>
-            interviewHistoryView = interviewExportedDataDenormalizer.Update(interviewHistoryView, CreatePublishableEvent(() => new SupervisorAssigned(Guid.NewGuid(), interviewId)));
+            interviewHistoryView = interviewExportedDataDenormalizer.Update(interviewHistoryView, CreatePublishableEvent(() => new SupervisorAssigned(Guid.NewGuid(), interviewId, DateTimeOffset.Now)));
 
         [NUnit.Framework.Test] public void should_action_of_first_record_be_SupervisorAssigned () =>
             interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.SupervisorAssigned);

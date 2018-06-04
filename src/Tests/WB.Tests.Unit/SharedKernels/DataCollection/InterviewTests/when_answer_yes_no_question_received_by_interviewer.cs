@@ -25,12 +25,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewReceivedByInterviewer());
+            interview.Apply(new InterviewReceivedByInterviewer(DateTimeOffset.Now));
             BecauseOf();
         }
 
         public void BecauseOf() =>
-            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AnswerYesNoQuestion(new AnswerYesNoQuestion(interview.EventSourceId, userId, questionId,  new decimal[0], DateTime.UtcNow, Enumerable.Empty<AnsweredYesNoOption>())));
+            exception =  NUnit.Framework.Assert.Throws<InterviewException>(() => 
+                interview.AnswerYesNoQuestion(new AnswerYesNoQuestion(interview.EventSourceId, userId, questionId,  new decimal[0], Enumerable.Empty<AnsweredYesNoOption>())));
 
         [NUnit.Framework.Test] public void should_throw_InterviewException () =>
             exception.Should().NotBeNull();

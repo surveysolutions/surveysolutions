@@ -81,9 +81,10 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     for (int i = 0; i < existingInterviewIds.Count; i++)
                     {
                         var interviewKeyTouse = new InterviewKey(keysList[i]);
-                        var eventString = JsonConvert.SerializeObject(new InterviewKeyAssigned(interviewKeyTouse),
-                            Formatting.Indented,
-                            EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+                        var eventString = JsonConvert.SerializeObject(
+                            new InterviewKeyAssigned(interviewKeyTouse, DateTimeOffset.Now),
+                                Formatting.Indented,
+                                EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
                         Guid existingInterviewId = existingInterviewIds[i].interviewid;
                         var existingSequence =

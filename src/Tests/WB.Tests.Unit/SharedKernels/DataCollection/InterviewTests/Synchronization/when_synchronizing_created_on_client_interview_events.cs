@@ -52,6 +52,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
        static StatefulInterview interview;
 
-       static readonly IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+       static readonly IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0], DateTimeOffset.Now), new GroupsEnabled(new Identity[0], DateTimeOffset.Now) };
     }
 }

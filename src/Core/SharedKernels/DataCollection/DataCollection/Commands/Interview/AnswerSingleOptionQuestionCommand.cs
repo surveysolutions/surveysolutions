@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public int SelectedValue { get; private set; }
 
-        public AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, int selectedValue)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+        public AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, int selectedValue)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.SelectedValue = selectedValue;
         }
