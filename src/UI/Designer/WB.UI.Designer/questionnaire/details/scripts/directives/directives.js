@@ -59,10 +59,15 @@
 
         var linkFn = function (scope, element, attrs) {
             element.bind("mousedown", function (event) {
+                var offset = $(element).offset();
+                var x = event.pageX - offset.left;
+                var y = event.pageY - offset.top;
+                console.log("x: " + x + ", y: " + y);
+
                 element.addClass('draggable').parents().on('mousemove', function (e) {
                     $('.draggable').offset({
-                        top: e.pageY - element.outerHeight() / 8,
-                        left: e.pageX - element.outerWidth() / 8
+                        top: e.pageY - y,
+                        left: e.pageX - x
                     }).on('mouseup', function () {
                         element.removeClass('draggable');
                     });
