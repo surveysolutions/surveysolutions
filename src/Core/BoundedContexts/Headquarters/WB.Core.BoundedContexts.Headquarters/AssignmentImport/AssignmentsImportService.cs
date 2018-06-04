@@ -449,20 +449,21 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             Dictionary<int, int> oldToNewRosterInstanceIds, int[] levelsOfRostersByRosterSize)
         {
             foreach (var answersByRosterInstanceId in answersGroupedByRosterInstanceId)
+            foreach (var interviewAnswer in answersByRosterInstanceId)
+            foreach (var rosterLevel in levelsOfRostersByRosterSize)
             {
+                if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
+
+                var rosterVectorIndex = rosterLevel - 1;
+                var numericRosterInstanceCode = interviewAnswer.Identity.RosterVector[rosterVectorIndex];
+
                 // this means that roster instance id in roster file as we expected in our system
-                if (oldToNewRosterInstanceIds[answersByRosterInstanceId.Key] == answersByRosterInstanceId.Key) continue;
+                if (oldToNewRosterInstanceIds[numericRosterInstanceCode] == numericRosterInstanceCode) continue;
 
-                foreach (var interviewAnswer in answersByRosterInstanceId)
-                foreach (var rosterLevel in levelsOfRostersByRosterSize)
-                {
-                    if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
+                var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
+                    rosterVectorIndex, oldToNewRosterInstanceIds[numericRosterInstanceCode]);
 
-                    var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
-                        rosterLevel - 1, oldToNewRosterInstanceIds[answersByRosterInstanceId.Key]);
-
-                    interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
-                }
+                interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
             }
         }
 
