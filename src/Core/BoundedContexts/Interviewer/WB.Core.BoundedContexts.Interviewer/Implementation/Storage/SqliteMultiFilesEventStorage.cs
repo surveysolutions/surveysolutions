@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                         .Table<EventView>()
                         .Where(eventView
                             => eventView.EventSourceId == interviewId
-                               && !eventView.ExistsOnHq)
+                               && eventView.ExistsOnHq == null || eventView.ExistsOnHq == 0)
                         .OrderBy(x => x.EventSequence)
                         .ToList()
                         .Select(x => ToCommitedEvent(x, eventSerializer))
@@ -518,7 +518,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 DateTimeUtc = evt.EventTimeStamp,
                 JsonEvent = serializer.Serialize(evt.Payload),
                 EventType = evt.Payload.GetType().Name,
-                ExistsOnHq = true
+                ExistsOnHq = 1
             };
         }
 
