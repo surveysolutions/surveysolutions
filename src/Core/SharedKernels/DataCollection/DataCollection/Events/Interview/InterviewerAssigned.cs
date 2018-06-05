@@ -11,8 +11,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             : base(userId, originDate)
         {
             this.InterviewerId = interviewerId;
-
-            if (assignTime != null && assignTime != default(DateTime))
+            
+            if (originDate != default(DateTimeOffset))
+                this.AssignTime = originDate.UtcDateTime;
+            else if (assignTime != null && assignTime != default(DateTime))
             {
                 this.AssignTime = assignTime;
             }

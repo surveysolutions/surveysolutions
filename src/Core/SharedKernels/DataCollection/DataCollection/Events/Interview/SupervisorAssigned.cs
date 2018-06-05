@@ -12,7 +12,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             : base(userId, originDate)
         {
             this.SupervisorId = supervisorId;
-            this.AssignTime = assignTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.AssignTime = originDate.UtcDateTime;
+            else if (assignTime != null && assignTime != default(DateTime))
+                this.AssignTime = assignTime;
         }
     }
 }

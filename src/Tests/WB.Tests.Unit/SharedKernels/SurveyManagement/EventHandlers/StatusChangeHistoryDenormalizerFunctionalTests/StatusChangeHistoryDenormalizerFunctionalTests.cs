@@ -24,11 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 
             var statuses = interviewSummary.InterviewCommentedStatuses;
             Assert.That(InterviewExportedAction.Created, Is.EqualTo(statuses[0].Status));
-            Assert.That(currentTime.AddSeconds(1), Is.EqualTo(statuses[0].Timestamp));
+            Assert.That(currentTime.AddSeconds(1).UtcDateTime, Is.EqualTo(statuses[0].Timestamp));
             Assert.That(InterviewExportedAction.SupervisorAssigned, Is.EqualTo(statuses[1].Status));
-            Assert.That(currentTime.AddSeconds(2), Is.EqualTo(statuses[1].Timestamp));
+            Assert.That(currentTime.AddSeconds(2).UtcDateTime, Is.EqualTo(statuses[1].Timestamp));
             Assert.That(InterviewExportedAction.InterviewerAssigned, Is.EqualTo(statuses[2].Status));
-            Assert.That(currentTime.AddSeconds(3), Is.EqualTo(statuses[2].Timestamp));
+            Assert.That(currentTime.AddSeconds(3).UtcDateTime, Is.EqualTo(statuses[2].Timestamp));
         }
 
         [Test]
@@ -101,8 +101,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: startDate));
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, originDate: startDate));
             denormalizer.Update(interviewSummary, Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: startDate.AddHours(2)));
-            denormalizer.Update(interviewSummary, Create.Event.InterviewPaused().ToPublishedEvent(eventSourceId: interviewId));
-            denormalizer.Update(interviewSummary, Create.Event.InterviewResumed().ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewPaused(startDate.AddHours(2)).ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewResumed(startDate.AddHours(2)).ToPublishedEvent(eventSourceId: interviewId));
             denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId, originDate: startDate.AddHours(5)));
 
             // Assert

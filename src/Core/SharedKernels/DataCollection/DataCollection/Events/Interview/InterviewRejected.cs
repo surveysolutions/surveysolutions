@@ -11,7 +11,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             : base(userId, originDate)
         {
             this.Comment = comment;
-            this.RejectTime = rejectTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.RejectTime = originDate.UtcDateTime;
+            else if (rejectTime != null && rejectTime != default(DateTime))
+            {
+                this.RejectTime = rejectTime;
+            }
         }
     }
 }

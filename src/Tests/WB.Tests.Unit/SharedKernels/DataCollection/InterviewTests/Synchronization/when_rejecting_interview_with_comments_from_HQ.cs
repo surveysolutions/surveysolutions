@@ -38,17 +38,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
 
             interview = Setup.StatefulInterview(questionnaire);
-            interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, existingComment.Date, existingComment.Text));
+            interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, new DateTimeOffset(), existingComment.Text, existingComment.Date));
 
-            interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
+            interview.AssignInterviewer(supervisorId, userId, DateTimeOffset.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
-            interview.Approve(userId, string.Empty, DateTime.Now);
+            interview.Approve(userId, string.Empty, DateTimeOffset.Now);
 
             eventContext = new EventContext();
             BecauseOf();
         }
 
-        public void BecauseOf() => interview.RejectInterviewFromHeadquarters(userId, supervisorId, interviewerId, interviewSynchronizationDto, DateTime.Now);
+        public void BecauseOf() => interview.RejectInterviewFromHeadquarters(userId, supervisorId, interviewerId, interviewSynchronizationDto, DateTimeOffset.Now);
 
 
         [NUnit.Framework.Test] public void should_add_new_comments () => eventContext.ShouldContainEvent<AnswerCommented>(@event => 

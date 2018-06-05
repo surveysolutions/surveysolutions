@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             {
                 this.RestartTime = originDate.UtcDateTime;
             }
-            else if (restartTime != default(DateTime))
+            else if (restartTime != null && restartTime != default(DateTime))
             {
                 this.RestartTime = restartTime;
             }
