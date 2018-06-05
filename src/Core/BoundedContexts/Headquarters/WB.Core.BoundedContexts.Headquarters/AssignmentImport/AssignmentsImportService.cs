@@ -329,21 +329,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             var allRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions();
             if (allRosterSizeQuestions.Count == 0)
+            {
                 foreach (var assignmentToImport in assignments)
                     yield return assignmentToImport;
-
-            var questionsInsideRosters = allRosterSizeQuestions
-                .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
-                .Select(x => (rosterSize: x.rosterSize,
-                    rosterQuestions: x.rosters.SelectMany(questionnaire.GetAllUnderlyingQuestions).ToArray()))
-                .ToArray();
-
-            foreach (var assignment in assignments)
+            }
+            else
             {
-                if (assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
-                    BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions, questionsInsideRosters, questionnaire);
+                var questionsInsideRosters = allRosterSizeQuestions
+                    .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
+                    .Select(x => (rosterSize: x.rosterSize,
+                        rosterQuestions: x.rosters.SelectMany(questionnaire.GetAllUnderlyingQuestions).ToArray()))
+                    .ToArray();
 
-                yield return assignment;
+                foreach (var assignment in assignments)
+                {
+                    if (assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
+                        BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions,
+                            questionsInsideRosters, questionnaire);
+
+                    yield return assignment;
+                }
             }
         }
 
