@@ -214,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private static AssignmentAnswer ToAssignmentDateTimeAnswer(PreloadingValue answer)
         {
             DateTime? dataTimeValue = null;
-            if (DateTime.TryParse(answer.Value, out var date))
+            if (DateTime.TryParse(answer.Value, null, DateTimeStyles.AdjustToUniversal, out var date))
                 dataTimeValue = date;
 
             return new AssignmentDateTimeAnswer
