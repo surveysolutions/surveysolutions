@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public decimal Answer { get; private set; }
 
         public NumericRealQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
-            DateTimeOffset originDate, decimal answer)
-            : base(userId, questionId, rosterVector, originDate)
+            DateTimeOffset originDate, decimal answer, DateTime? answerTimeUtc = null)
+            : base(userId, questionId, rosterVector, originDate, answerTimeUtc)
         {
             this.Answer = answer;
         }

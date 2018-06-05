@@ -7,11 +7,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string Comment { get; private set; }
         public DateTime? RejectTime { get; private set; }
-        public InterviewRejected(Guid userId, string comment, DateTimeOffset originDate)
+        public InterviewRejected(Guid userId, string comment, DateTimeOffset originDate, DateTime? rejectTime)
             : base(userId, originDate)
         {
             this.Comment = comment;
-            this.RejectTime = originDate.UtcDateTime;
+            this.RejectTime = rejectTime;
         }
     }
 }

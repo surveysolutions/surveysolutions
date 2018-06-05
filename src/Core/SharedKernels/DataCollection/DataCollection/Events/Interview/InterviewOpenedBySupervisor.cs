@@ -5,10 +5,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewOpenedBySupervisor : InterviewActiveEvent
     {
-        public InterviewOpenedBySupervisor(Guid userId, DateTimeOffset originDate) : base(userId, originDate)
+        public InterviewOpenedBySupervisor(Guid userId, DateTimeOffset originDate, DateTime? localTime = null) : base(userId, originDate)
         {
-            //check out why is it local but not UTC
-            LocalTime = originDate.LocalDateTime;
+            LocalTime = localTime;
         }
         public DateTime? LocalTime { get; set; }
     }

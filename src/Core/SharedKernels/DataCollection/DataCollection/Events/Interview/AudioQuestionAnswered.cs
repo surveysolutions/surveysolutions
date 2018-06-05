@@ -9,8 +9,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public string FileName { get; set; }
 
         public AudioQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector,
-            DateTimeOffset originDate, string fileName, TimeSpan length)
-            : base(userId, questionId, rosterVector, originDate)
+            DateTimeOffset originDate, string fileName, TimeSpan length, DateTime? answerTimeUtc = null)
+            : base(userId, questionId, rosterVector, originDate, answerTimeUtc)
         {
             this.Length = length;
             this.FileName = fileName;

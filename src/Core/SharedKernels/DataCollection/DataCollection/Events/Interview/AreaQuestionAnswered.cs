@@ -16,8 +16,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public AreaQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector,
                                     DateTimeOffset originDate, string geometry, string mapName, double? areaSize, 
-                                    double? length, string coordinates, double? distanceToEditor, int? numberOfPoints)
-            : base(userId, questionId, rosterVector, originDate)
+                                    double? length, string coordinates, double? distanceToEditor, int? numberOfPoints, DateTime? answerTimeUtc = null)
+            : base(userId, questionId, rosterVector, originDate, answerTimeUtc)
         {
             
             this.Geometry = geometry;

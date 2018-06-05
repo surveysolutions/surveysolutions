@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<SupervisorAssigned> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.SupervisorAssigned, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
             return state;
         }
@@ -158,7 +158,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApprovedByHQ> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.ApproveByHeadquarter, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
             
@@ -168,7 +168,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewerAssigned> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.InterviewerAssigned, @event.Payload.UserId, 
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AssignTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AssignTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 new Dictionary<string, string> { { "responsible", @event.Payload.InterviewerId.FormatGuid() } });
 
@@ -178,7 +178,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewCompleted> @event){
 
             this.AddHistoricalRecord(view, InterviewHistoricalAction.Completed, Guid.Empty,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.CompleteTime??@event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CompleteTime??@event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestarted> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.Restarted, Guid.Empty,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.RestartTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RestartTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -197,7 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewApproved> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.ApproveBySupervisor, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.ApproveTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.ApproveTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
               this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -207,7 +207,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejected> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.RejectedBySupervisor, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.RejectTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RejectTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
               this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -217,7 +217,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRejectedByHQ> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.RejectedByHeadquarter, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
              this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewDeleted> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.Deleted, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return view;
@@ -237,7 +237,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<InterviewRestored> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.Restored, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return view;
@@ -246,7 +246,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer), @event.Payload.RosterVector));
 
@@ -256,7 +256,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedValues),
                     @event.Payload.RosterVector));
@@ -267,7 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedValue),
                     @event.Payload.RosterVector));
@@ -278,7 +278,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericRealQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, 
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
                     @event.Payload.RosterVector));
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<NumericIntegerQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
              this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
                  @event.Payload.RosterVector));
@@ -303,7 +303,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var question = questionnaire.Find<DateTimeQuestion>(@event.Payload.QuestionId);
 
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer, isTimestamp: question.IsTimestamp),
                     @event.Payload.RosterVector));
@@ -314,7 +314,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GeoLocationQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
           this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new GeoPosition(@event.Payload.Latitude, @event.Payload.Longitude, @event.Payload.Accuracy, @event.Payload.Altitude,
                         @event.Payload.Timestamp)),
@@ -326,7 +326,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswerRemoved> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.RemoveTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RemoveTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(@event.Payload.QuestionId, @event.Payload.RosterVector));
 
@@ -336,7 +336,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AnswersRemoved> @event)
         {
            @event.Payload.Questions.ForEach(e=>  this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerRemoved, null,
-               @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.RemoveTime ?? @event.EventTimeStamp,
+               @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.RemoveTime ?? @event.EventTimeStamp,
                @event.Payload.OriginDate?.Offset,
                this.CreateQuestionParameters(e.Id, e.RosterVector)));
 
@@ -346,7 +346,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
               this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedRosterVectors),
                   @event.Payload.RosterVector));
@@ -357,7 +357,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<SingleOptionLinkedQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
              this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.SelectedRosterVector),
                  @event.Payload.RosterVector));
@@ -368,7 +368,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<TextListQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(new InterviewTextListAnswers(@event.Payload.Answers)),
                @event.Payload.RosterVector));
@@ -379,7 +379,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QRBarcodeQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId, 
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer),
             @event.Payload.RosterVector));
@@ -390,7 +390,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<PictureQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
            this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.PictureFileName),
            @event.Payload.RosterVector));
@@ -401,7 +401,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<YesNoQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateAnswerParameters(@event.Payload.QuestionId,
                     AnswerUtils.AnswerToString(@event.Payload.AnsweredOptions),
@@ -423,7 +423,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
 
             this.AddHistoricalRecord(view, InterviewHistoricalAction.CommentSet, @event.Payload.UserId, 
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.CommentTime,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.CommentTime,
                 @event.Payload.OriginDate?.Offset,
                 parameters);
 
@@ -655,7 +655,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var question in @event.Payload.FailedValidationConditions.Keys)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredInvalid, null, 
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
@@ -667,7 +667,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var question in @event.Payload.Questions)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDeclaredValid, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp, 
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp, 
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
@@ -679,7 +679,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var question in @event.Payload.Questions)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
@@ -691,7 +691,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var question in @event.Payload.Questions)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
             }
@@ -703,7 +703,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var group in @event.Payload.Groups)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateGroupParameters(group.Id, group.RosterVector));
             }
@@ -715,7 +715,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var group in @event.Payload.Groups)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                 this.CreateGroupParameters(group.Id, group.RosterVector));
             }
@@ -725,7 +725,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<UnapprovedByHeadquarters> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.UnapproveByHeadquarters, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 this.CreateCommentParameters(@event.Payload.Comment));
 
@@ -735,7 +735,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedByInterviewer> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedByInterviewer, null,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return state;
@@ -744,7 +744,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewReceivedBySupervisor> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.ReceivedBySupervisor, null, 
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return state;
@@ -753,7 +753,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AreaQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(
                 new Area(@event.Payload.Geometry, @event.Payload.MapName,@event.Payload.NumberOfPoints, 
@@ -766,7 +766,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<AudioQuestionAnswered> @event)
         {
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.Payload.AnswerTimeUtc,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
             this.CreateAnswerParameters(@event.Payload.QuestionId, $"{@event.Payload.FileName}, {@event.Payload.Length}", @event.Payload.RosterVector));
             return view;
@@ -777,7 +777,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var variable in @event.Payload.ChangedVariables)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableSet, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                     this.CreateNewVariableValueParameters(variable.Identity.Id, variable.NewValue, variable.Identity.RosterVector));
             }
@@ -789,7 +789,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var variable in @event.Payload.Variables)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableEnabled, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                     this.CreateVariableParameters(variable.Id, variable.RosterVector));
             }
@@ -801,7 +801,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             foreach (var variable in @event.Payload.Variables)
             {
                 this.AddHistoricalRecord(view, InterviewHistoricalAction.VariableDisabled, null,
-                    @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                     @event.Payload.OriginDate?.Offset,
                     this.CreateVariableParameters(variable.Id, variable.RosterVector));
             }
@@ -811,7 +811,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewKeyAssigned> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.KeyAssigned, null,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 new Dictionary<string, string>
                 {
@@ -824,7 +824,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewPaused> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.Paused, null,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return state;
@@ -833,7 +833,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewResumed> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.Resumed, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return state;
@@ -842,7 +842,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewOpenedBySupervisor> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.OpenedBySupervisor, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return state;
@@ -851,7 +851,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<InterviewClosedBySupervisor> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.ClosedBySupervisor, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset);
 
             return state;
@@ -860,7 +860,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         public InterviewHistoryView Update(InterviewHistoryView state, IPublishedEvent<TranslationSwitched> @event)
         {
             this.AddHistoricalRecord(state, InterviewHistoricalAction.TranslationSwitched, @event.Payload.UserId,
-                @event.Payload.OriginDate?.UtcDateTime ?? @event.EventTimeStamp,
+                @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
                 @event.Payload.OriginDate?.Offset,
                 new Dictionary<string, string>
                 {

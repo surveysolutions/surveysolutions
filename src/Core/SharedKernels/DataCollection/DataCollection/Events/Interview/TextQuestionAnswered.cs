@@ -7,8 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string Answer { get; private set; }
 
-        public TextQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate, string answer)
-            : base(userId, questionId, rosterVector, originDate)
+        public TextQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
+            DateTimeOffset originDate, string answer, DateTime? answerTimeUtc = null)
+            : base(userId, questionId, rosterVector, originDate, answerTimeUtc)
         {
             this.Answer = answer;
         }
