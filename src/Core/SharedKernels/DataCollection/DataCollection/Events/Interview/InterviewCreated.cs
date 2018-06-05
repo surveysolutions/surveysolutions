@@ -20,7 +20,11 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.QuestionnaireVersion = questionnaireVersion;
             this.AssignmentId = assignmentId;
             this.UsesExpressionStorage = usesExpressionStorage;
-            this.CreationTime = creationTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.CreationTime = originDate.UtcDateTime;
+            else if(creationTime != null && creationTime != default(DateTime))
+                this.CreationTime = creationTime;
         }
     }
 }

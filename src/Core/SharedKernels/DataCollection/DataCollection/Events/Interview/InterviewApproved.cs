@@ -12,7 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             this.Comment = comment;
 
-            if(approveTime != null && approveTime != default(DateTime))
+            if (originDate != default(DateTimeOffset))
+                this.ApproveTime = originDate.UtcDateTime;
+            else if (approveTime != null && approveTime != default(DateTime))
                 ApproveTime = approveTime;
         }
     }
