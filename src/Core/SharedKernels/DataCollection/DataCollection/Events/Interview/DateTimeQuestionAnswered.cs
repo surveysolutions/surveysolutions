@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public DateTime Answer { get; private set; }
 
         public DateTimeQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
-            DateTimeOffset originDate, DateTime answer)
-            : base(userId, questionId, rosterVector, originDate)
+            DateTimeOffset originDate, DateTime answer, DateTime? answerTimeUtc = null)
+            : base(userId, questionId, rosterVector, originDate, answerTimeUtc)
         {
             this.Answer = answer;
         }

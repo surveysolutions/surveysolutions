@@ -6,6 +6,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
     {
         public DateTime? AnswerTimeUtc { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="questionId"></param>
+        /// <param name="rosterVector"></param>
+        /// <param name="originDate"></param>
+        /// <param name="answerTimeUtc">Backward compatibility. Delete consciously</param>
         protected QuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate, DateTime? answerTimeUtc = null)
             : base(userId, questionId, rosterVector, originDate)
         {
