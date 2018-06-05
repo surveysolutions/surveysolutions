@@ -45,5 +45,15 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 ))
                 .ExpectError("WB0059");
         }
+
+        [Test]
+        public void should_validate_location_of_roster_title_for_numeric_roster()
+        {
+            Create.QuestionnaireDocumentWithOneChapter(
+                Create.NumericIntegerQuestion(id: Id.g1),
+                Create.NumericRoster(rosterId: Id.g2, rosterSizeQuestionId: Id.g1, title: "title %rostertitle%")
+            )
+            .ExpectError("WB0059");
+        }
     }
 }
