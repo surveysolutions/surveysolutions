@@ -1115,4 +1115,8 @@
   <data name="IsWarning" xml:space="preserve">
     <value>Предупреждение</value>
   </data>
+    <data name="GeometryType" xml:space="preserve">
+    <value>Тип геометрии</value>
+    <comment>Тип геометрии</comment>
+  </data>
 </root>
