@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
@@ -33,6 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly SpecialValuesViewModel specialValues;
         private Identity questionIdentity;
         private string interviewId;
+        private readonly Timer timer;
+        const int ThrottlePeriod = 500; // ms
 
         public IQuestionStateViewModel QuestionState => this.questionState;
         public SpecialValuesViewModel SpecialValues => this.specialValues;
@@ -129,12 +132,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
             this.specialValues = specialValues;
+
+            this.timer = new Timer(async _ => { await AnswerQuestion(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public Identity Identity => this.questionIdentity;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
+            
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 
@@ -185,10 +191,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async void SpecialValueChanged(object sender, EventArgs eventArgs)
+        private void SpecialValueChanged(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel)sender;
-            await SaveAnswer(selectedSpecialValue.Value, true);
+            EnqueueSaveAnswer(selectedSpecialValue.Value, true);
         }
 
         private async void SpecialValueRemoved(object sender, EventArgs eventArgs)
@@ -212,11 +218,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            await SaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
+            EnqueueSaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
         }
 
-        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        private void ResetTimer() {
+            timer.Change(ThrottlePeriod, Timeout.Infinite);
+        }
+
+        private decimal? answerOrSelectedValueToSave = null;
+        private bool isSpecialValueToSave = false;
+
+        private void EnqueueSaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
         {
+            this.answerOrSelectedValueToSave = answeredOrSelectedValue;
+            this.isSpecialValueToSave = isSpecialValueSelected;
+            this.ResetTimer();
+        }
+
+        private async Task AnswerQuestion()
+        {
+            var answeredOrSelectedValue = this.answerOrSelectedValueToSave;
+            var isSpecialValueSelected = this.isSpecialValueToSave;
+
             if (ProtectedAnswer.HasValue && answeredOrSelectedValue < protectedAnswer)
             {
                 var message = string.Format(UIResources.Interview_Questions_Integer_ProtectedValue,
