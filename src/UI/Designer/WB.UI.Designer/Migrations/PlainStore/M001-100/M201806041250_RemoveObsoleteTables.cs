@@ -7,8 +7,15 @@ namespace WB.UI.Designer.Migrations.PlainStore
     {
         public override void Up()
         {
-            Delete.Table("zz_archived_sharedpersons");
-            Delete.Table("zz_archived_questionnairesharedpersons");
+            if (Schema.Table("zz_archived_sharedpersons").Exists())
+            {
+                Delete.Table("zz_archived_sharedpersons");
+            }
+
+            if (Schema.Table("zz_archived_questionnairesharedpersons").Exists())
+            {
+                Delete.Table("zz_archived_questionnairesharedpersons");
+            }
         }
 
         public override void Down()

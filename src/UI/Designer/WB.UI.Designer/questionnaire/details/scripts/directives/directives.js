@@ -59,6 +59,11 @@
 
         var linkFn = function (scope, element, attrs) {
             element.bind("mousedown", function (event) {
+                if ($(event.target).is('input')) {
+                    event.stopPropagation();
+                    return;
+                }
+
                 var offset = $(element).offset();
                 var x = event.pageX - offset.left;
                 var y = event.pageY - offset.top;
@@ -70,7 +75,6 @@
                     }).on('mouseup', function () {
                         element.removeClass('draggable');
                     });
-                    e.preventDefault();
                 });
             });
 
