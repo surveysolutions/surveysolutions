@@ -325,30 +325,26 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private static RosterVector ToRosterVector(AssignmentRosterInstanceCode[] rosterInstanceCodes)
             => new RosterVector(rosterInstanceCodes.Select(x => x.Code.Value).ToArray());
 
-        private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments, IQuestionnaire questionnaire)
+        private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments,
+            IQuestionnaire questionnaire)
         {
             var allRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions();
-            if (allRosterSizeQuestions.Count == 0)
-            {
-                foreach (var assignmentToImport in assignments)
-                    yield return assignmentToImport;
-            }
-            else
-            {
-                var questionsInsideRosters = allRosterSizeQuestions
-                    .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
-                    .Select(x => (rosterSize: x.rosterSize,
-                        rosterQuestions: x.rosters.SelectMany(questionnaire.GetAllUnderlyingQuestions).ToArray()))
-                    .ToArray();
 
-                foreach (var assignment in assignments)
+            var questionsInsideRosters = allRosterSizeQuestions
+                .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
+                .Select(x => (rosterSize: x.rosterSize,
+                    rosterQuestions: x.rosters.SelectMany(questionnaire.GetAllUnderlyingQuestions).ToArray()))
+                .ToArray();
+
+            foreach (var assignment in assignments)
+            {
+                if (allRosterSizeQuestions.Count > 0 && assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
                 {
-                    if (assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
-                        BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions,
-                            questionsInsideRosters, questionnaire);
-
-                    yield return assignment;
+                    BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions,
+                        questionsInsideRosters, questionnaire);
                 }
+
+                yield return assignment;
             }
         }
 

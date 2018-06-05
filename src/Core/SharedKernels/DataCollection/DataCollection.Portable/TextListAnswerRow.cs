@@ -22,5 +22,13 @@ namespace WB.Core.SharedKernels.DataCollection
         public string Item2 => Text;
 
         public override string ToString() => $"{Value} -> {Text}";
+
+        public override bool Equals(object obj)
+        {
+            var row = (TextListAnswerRow) obj;
+            if (row == null) return false;
+
+            return this.Value == row.Value && this.Text == row.Text;
+        }
     }
 }
