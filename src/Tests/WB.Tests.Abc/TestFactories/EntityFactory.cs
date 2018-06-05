@@ -1688,9 +1688,13 @@ namespace WB.Tests.Abc.TestFactories
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
             ISet<InterviewSummary> interviewSummary = null,
-            string questionnaireTitle = null, DateTime? updatedAt = null)
+            string questionnaireTitle = null, 
+            DateTime? updatedAt = null,
+            Guid? responsibleId = null,
+            List<string> protectedVariables = null)
         {
             var result = new Assignment();
+            
             var asDynamic = result.AsDynamic();
             asDynamic.Quantity = quantity;
             asDynamic.Id = id ?? 0;
@@ -1728,6 +1732,11 @@ namespace WB.Tests.Abc.TestFactories
 
             if(interviewSummary != null)
                 asDynamic.InterviewSummaries = interviewSummary;
+            if (responsibleId.HasValue)
+            {
+                asDynamic.ResponsibleId = responsibleId.Value;
+            }
+            asDynamic.ProtectedVariables = protectedVariables;
 
             return result;
         }
