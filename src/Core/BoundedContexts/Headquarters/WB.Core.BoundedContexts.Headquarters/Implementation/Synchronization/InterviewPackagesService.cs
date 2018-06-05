@@ -235,9 +235,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var aggregateRootEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events);
 
-                if (eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(aggregateRootEvents.FirstOrDefault()?.EventSequence ?? 0 - 1, 
-                    interview.InterviewId,
-                    EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                var firstEvent = aggregateRootEvents.FirstOrDefault();
+                if (firstEvent != null && 
+                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1, 
+                        interview.InterviewId,
+                        EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
                     throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", InterviewDomainExceptionType.PackageIsOudated);
                 }
