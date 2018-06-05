@@ -637,6 +637,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Geometry type.
+        /// </summary>
+        public static string GeometryType {
+            get {
+                return ResourceManager.GetString("GeometryType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Title.
         /// </summary>
         public static string GroupTitle {
@@ -736,7 +745,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to add comment.
+        ///   Looks up a localized string similar to Add comment.
         /// </summary>
         public static string HelpNewComment {
             get {
