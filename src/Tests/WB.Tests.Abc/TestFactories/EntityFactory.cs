@@ -1945,12 +1945,14 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
         public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
+            => this.PreloadedFile(null, questionnaireOrRosterName, rows);
+
+        public PreloadedFile PreloadedFile(string fileName, string questionnaireOrRosterName, params PreloadingRow[] rows)
         {
             var columns = rows.SelectMany(x => x.Cells).OfType<PreloadingValue>().Select(x => x.Column).ToArray();
             return new PreloadedFile
             {
-                FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName,
-                    columns: columns),
+                FileInfo = Create.Entity.PreloadedFileInfo(columns, fileName, questionnaireOrRosterName),
                 Rows = rows
             };
         }
