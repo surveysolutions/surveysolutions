@@ -8,14 +8,22 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public InterviewResumed(Guid userId, DateTimeOffset originDate, DateTime? localTime = null, DateTime? utcTime = null) 
             : base(userId, originDate)
         {
-            if (localTime != null && localTime != default(DateTime))
+            if (originDate != default(DateTimeOffset))
             {
-                this.LocalTime = localTime;
+                this.LocalTime = originDate.LocalDateTime;
+                this.UtcTime = originDate.UtcDateTime;
             }
-
-            if (utcTime != null && utcTime != default(DateTime))
+            else
             {
-                this.UtcTime = utcTime;
+                if (localTime != null && localTime != default(DateTime))
+                {
+                    this.LocalTime = localTime;
+                }
+
+                if (utcTime != null && utcTime != default(DateTime))
+                {
+                    this.UtcTime = utcTime;
+                }
             }
         }
 
