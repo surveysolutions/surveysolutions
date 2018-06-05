@@ -17,7 +17,13 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.PreviousStatus = previousStatus;
             this.Status = status;
             this.Comment = comment;
-            this.UtcTime = utcTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.UtcTime = originDate.UtcDateTime;
+            else if (utcTime != null && utcTime != default(DateTime))
+            {
+                this.UtcTime = utcTime;
+            }
         }
     }
 }
