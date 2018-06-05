@@ -505,8 +505,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 ? UserRoles.Interviewer
                 : @event.UserId == this.properties.SupervisorId ? UserRoles.Supervisor : UserRoles.Headquarter;
 
-            this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(new AnswerComment(@event.UserId, userRole, @event.OriginDate?.UtcDateTime ?? @event.CommentTime.Value, @event.Comment,
-                commentByQuestion));
+            this.Tree.GetQuestion(commentByQuestion).AnswerComments.Add(
+                new AnswerComment(@event.UserId, userRole, 
+                    @event.OriginDate?.UtcDateTime ?? @event.CommentTime.Value, 
+                    @event.Comment, commentByQuestion));
         }
 
         public virtual void Apply(FlagSetToAnswer @event) { }
@@ -1897,7 +1899,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                     Text = answerComment.Text,
                     QuestionId = answerDto.Id,
                     RosterVector = answerDto.QuestionRosterVector
-                });
+                }).ToList();
 
             if (this.properties.Status == InterviewStatus.Deleted)
             {
@@ -1917,7 +1919,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var commentedAnswer in commentedAnswers)
             {
                 this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId,
-                    commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
+                    commentedAnswer.RosterVector, originDate, commentedAnswer.Text, commentedAnswer.Date));
             }
         }
 

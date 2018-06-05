@@ -10,7 +10,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             this.Comment = comment;
 
-            if (completeTime!= null && completeTime != default(DateTime))
+            if (originDate != default(DateTimeOffset))
+                this.CompleteTime = originDate.UtcDateTime;
+            else if (completeTime!= null && completeTime != default(DateTime))
             {
                 this.CompleteTime = completeTime;
             }

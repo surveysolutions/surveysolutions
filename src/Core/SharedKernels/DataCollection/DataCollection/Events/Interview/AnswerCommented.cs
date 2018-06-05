@@ -14,11 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         {
             this.Comment = comment;
 
-            if (originDate != default(DateTimeOffset))
-            {
-                this.CommentTime = originDate.UtcDateTime;
-            }
-            else if (commentTime != null && commentTime != default(DateTime))
+            if (commentTime != null && commentTime != default(DateTime))
             {
                 this.CommentTime = commentTime;
             }
