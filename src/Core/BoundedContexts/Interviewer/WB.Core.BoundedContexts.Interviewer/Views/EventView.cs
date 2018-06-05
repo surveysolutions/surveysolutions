@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using SQLite;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -22,6 +23,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public string EventType { get; set; }
 
-        public bool ExistsOnHq { get; set; }
+        public int? ExistsOnHq { get; set; } // library does not support good way of handling default values and bools https://github.com/praeclarum/sqlite-net/issues/326
     }
 }
