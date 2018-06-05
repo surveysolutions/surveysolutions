@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewClosedBySupervisor : InterviewActiveEvent
     {
-        public InterviewClosedBySupervisor(Guid userId, DateTimeOffset originDate, DateTime localTime) 
+        public InterviewClosedBySupervisor(Guid userId, DateTimeOffset originDate, DateTime? localTime = null) 
             : base(userId, originDate)
         {
             if (localTime != null && localTime != default(DateTime))

@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string Comment { get; private set; }
         public DateTime? ApproveTime { get; private set; }
-        public InterviewApproved(Guid userId, string comment, DateTimeOffset originDate, DateTime? approveTime) 
+        public InterviewApproved(Guid userId, string comment, DateTimeOffset originDate, DateTime? approveTime = null) 
             : base(userId, originDate)
         {
             this.Comment = comment;
