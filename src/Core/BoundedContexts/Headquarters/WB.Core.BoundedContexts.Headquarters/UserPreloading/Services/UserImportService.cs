@@ -15,7 +15,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -146,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
 
             if (!hasErrors) this.Save(fileName, usersToImport);
 
-            usersImportTask.Run().WaitAndUnwrapException();
+            usersImportTask.Run();
         }
 
         private string[] GetRequiredUserProperties() => this.GetUserProperties().Take(4).ToArray();

@@ -14,14 +14,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IAssignmentsUpgradeService upgradeService =
             ServiceLocator.Current.GetInstance<IAssignmentsUpgradeService>();
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             var processToRun = upgradeService.DequeueUpgrade();
             if (processToRun != null)
             {
                 ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To, upgradeService.GetCancellationToken(processToRun.ProcessId));
             }
-            return Task.CompletedTask;
         }
     }
 
