@@ -45,7 +45,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 Mock.Of<ILiteEventRegistry>(),
-                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>());
+                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>())
+            {
+                ThrottlePeriod = 0
+            };
         }
 
         protected static void SetUp()
