@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 
@@ -26,7 +25,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IUserImportService importUsersService => ServiceLocator.Current
             .GetInstance<IUserImportService>();
 
-        public void Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             this.logger.Info("User import job: Started");
 
@@ -43,7 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
                     if (userToImport == null) break;
 
-                    this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
+                    await this.CreateUserOrUnarchiveAndUpdateAsync(userToImport);
 
                     this.transactionManager.ExecuteInPlainTransaction(
                         () => this.importUsersService.RemoveImportedUser(userToImport));

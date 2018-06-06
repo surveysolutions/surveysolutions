@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
@@ -15,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public void Configure()
+        public async Task Configure()
         {
             IJobDetail job = JobBuilder.Create<ExportJob>()
                 .WithIdentity("export job", "Export")
@@ -30,9 +31,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
                     .RepeatForever())
                 .Build();
 
-            this.scheduler.ScheduleJob(job, trigger);
+            await this.scheduler.ScheduleJob(job, trigger);
 
-            this.scheduler.AddJob(job, true);
+            await this.scheduler.AddJob(job, true);
         }
     }
 }
