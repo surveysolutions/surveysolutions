@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 this.ExecuteInPlain(() =>
                     this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import));
 
-                await assignmentsImportTask.Run();
+                assignmentsImportTask.Run();
 
                 sw.Stop();
                 this.logger.Debug($"Assignments verfication job: Finished. Elapsed time: {sw.Elapsed}");
