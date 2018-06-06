@@ -182,9 +182,9 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
-        public ActionResult RevalidateAllInterviewsWithErrors()
+        public ActionResult RevalidateAllInterviewsWithErrors(DateTimeOffset? startDateTimeOffset, DateTimeOffset? endDate)
         {
-            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync();
+            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync(Guid.Empty, startDateTimeOffset?.UtcDateTime, endDate?.UtcDateTime);
 
             return this.RedirectToAction("RevalidateInterviews");
         }

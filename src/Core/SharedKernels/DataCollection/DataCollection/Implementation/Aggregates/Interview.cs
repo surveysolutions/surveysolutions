@@ -1569,7 +1569,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         }
 
         //todo should respect changes calculated in ExpressionState
-        public void ReevaluateSynchronizedInterview()
+        public void ReevaluateSynchronizedInterview(Guid responsibleId)
         {
             InterviewPropertiesInvariants propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -1589,7 +1589,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
 
-            this.ApplyEvents(treeDifference);
+            this.ApplyEvents(treeDifference, responsibleId);
 
             if (!this.HasInvalidAnswers())
             {
@@ -2058,7 +2058,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             this.ApplyReadonlyStateEvents(diff);
         }
 
-        protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid? responsibleId = null)
+        protected void ApplyEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff, Guid responsibleId)
         {
             var diffByQuestions = diff.OfType<InterviewTreeQuestionDiff>().ToList();
             var questionsWithRemovedAnswer = diffByQuestions.Where(x => x.IsAnswerRemoved).ToArray();
@@ -2073,7 +2073,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var aggregatedEventsShouldBeFired = intersection.Count == 0;
             if (aggregatedEventsShouldBeFired)
             {
-                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId.Value);
+                this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer, responsibleId);
                 this.ApplyRosterEvents(changedRosters);
             }
             else
@@ -2082,7 +2082,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 // events fired by levels (from the questionnaire level down to nested rosters)
                 for (int i = 0; i <= maxDepth; i++)
                 {
-                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId.Value);
+                    this.ApplyUpdateAnswerEvents(questionsWithChangedAnswer.Where(x => x.Identity.RosterVector.Length == i).ToArray(), responsibleId);
                     this.ApplyRosterEvents(changedRosters.Where(x => x.Identity.RosterVector.Length == i + 1).ToArray());
                 }
             }
