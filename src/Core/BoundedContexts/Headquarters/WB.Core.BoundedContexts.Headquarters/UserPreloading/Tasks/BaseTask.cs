@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
@@ -24,22 +23,19 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
             this.triggerKey = new TriggerKey($"{groupName} trigger", groupName);
         }
 
-        public virtual bool IsJobRunning() 
-        {
-            return this.scheduler.GetCurrentlyExecutingJobs().Result.FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
-        }
-    
+        public virtual bool IsJobRunning() =>
+            this.scheduler.GetCurrentlyExecutingJobs().FirstOrDefault(x => Equals(x.JobDetail.Key, jobKey)) != null;
 
-        public virtual async Task Schedule(int repeatIntervalInSeconds)
+        public virtual void Schedule(int repeatIntervalInSeconds)
         {
-            if (!(await this.scheduler.CheckExists(jobKey)))
+            if (!this.scheduler.CheckExists(jobKey))
             {
                 IJobDetail job = JobBuilder.Create(jobType)
                     .WithIdentity(jobKey)
                     .StoreDurably()
                     .Build();
 
-                await this.scheduler.AddJob(job, true);
+                this.scheduler.AddJob(job, true);
             }
 
             var trigger = TriggerBuilder.Create()
@@ -49,31 +45,29 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks
                 .WithSimpleSchedule(x => x.WithIntervalInSeconds(repeatIntervalInSeconds).RepeatForever())
                 .Build();
 
-            if (!(await scheduler.CheckExists(triggerKey)))
-            {
-                await this.scheduler.ScheduleJob(trigger);
-            }
+            if (!this.scheduler.CheckExists(triggerKey))
+                this.scheduler.ScheduleJob(trigger);
         }
 
-        public virtual async Task Run(int startAtInSeconds = 1)
+        public virtual void Run(int startAtInSeconds = 1)
         {
-            if (!(await this.scheduler.CheckExists(jobKey)))
+            if (!this.scheduler.CheckExists(jobKey))
             {
                 IJobDetail job = JobBuilder.Create(jobType)
                     .WithIdentity(jobKey)
                     .StoreDurably()
                     .Build();
 
-                await this.scheduler.AddJob(job, true);
+                this.scheduler.AddJob(job, true);
             }
 
             var trigger = TriggerBuilder.Create()
-                .WithIdentity(new TriggerKey($"{triggerKey.Name}{(await this.scheduler.GetTriggersOfJob(jobKey))?.Count + 1}", triggerKey.Group))
+                .WithIdentity(new TriggerKey($"{triggerKey.Name}{this.scheduler.GetTriggersOfJob(jobKey)?.Count + 1}", triggerKey.Group))
                 .ForJob(jobKey)
                 .StartAt(DateBuilder.FutureDate(startAtInSeconds, IntervalUnit.Second))
                 .Build();
 
-            await this.scheduler.ScheduleJob(trigger);
+            this.scheduler.ScheduleJob(trigger);
         }
     }
 }

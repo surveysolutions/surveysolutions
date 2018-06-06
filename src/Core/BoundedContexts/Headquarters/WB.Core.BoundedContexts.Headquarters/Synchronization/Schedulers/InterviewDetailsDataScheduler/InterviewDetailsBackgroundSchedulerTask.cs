@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
@@ -18,13 +17,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
             this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
         }
 
-        public async Task Configure()
+        public void Configure()
         {
-            await RunSyncPackagesProcessorBackgroundJob();
-            await RunSyncPackagesReprocessorBackgroundJob();
+            RunSyncPackagesProcessorBackgroundJob();
+            RunSyncPackagesReprocessorBackgroundJob();
         }
 
-        public async Task RunSyncPackagesProcessorBackgroundJob()
+        public void RunSyncPackagesProcessorBackgroundJob()
         {
             IJobDetail job = JobBuilder.Create<SyncPackagesProcessorBackgroundJob>()
                 .WithIdentity("Capi interview packages sync", "Synchronization")
@@ -42,13 +41,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                         .RepeatForever())
                     .Build();
 
-                await this.scheduler.ScheduleJob(job, trigger);
+                this.scheduler.ScheduleJob(job, trigger);
             }
 
-            await this.scheduler.AddJob(job, true);
+            this.scheduler.AddJob(job, true);
         }
 
-        public async Task RunSyncPackagesReprocessorBackgroundJob()
+        public void RunSyncPackagesReprocessorBackgroundJob()
         {
             IJobDetail job = JobBuilder.Create<SyncPackagesReprocessorBackgroundJob>()
                 .WithIdentity("Capi interview packages reprocesing", "Reprocessor")
@@ -63,8 +62,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     .RepeatForever())
                 .Build();
 
-            await this.scheduler.ScheduleJob(job, trigger);
-            await this.scheduler.AddJob(job, true);
+            this.scheduler.ScheduleJob(job, trigger);
+            this.scheduler.AddJob(job, true);
         }
     }
 }

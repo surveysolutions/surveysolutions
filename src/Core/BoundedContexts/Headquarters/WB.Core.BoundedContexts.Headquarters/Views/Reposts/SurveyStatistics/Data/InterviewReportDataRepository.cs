@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Dapper;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -17,10 +16,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             this.sessionProvider = sessionProvider;
         }
 
-        public async Task RefreshAsync()
+        public void Refresh()
         {
             var connection = this.sessionProvider.GetSession().Connection;
-            await connection.ExecuteAsync("DO $$ BEGIN PERFORM readside.refresh_report_data(); END $$;", commandTimeout: 3600);
+            connection.Execute("DO $$ BEGIN PERFORM readside.refresh_report_data(); END $$;", commandTimeout: 3600);
         }
 
         public List<Guid> QuestionsForQuestionnaireWithData(QuestionnaireIdentity questionnaireIdentity)

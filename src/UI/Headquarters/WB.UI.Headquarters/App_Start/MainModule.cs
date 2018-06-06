@@ -112,17 +112,19 @@ namespace WB.UI.Headquarters
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
 
-        public async Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
-            await serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
-            await serviceLocator.GetInstance<UsersImportTask>().Run();
-            await serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
-            await serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
-            await serviceLocator.GetInstance<ExportJobScheduler>().Configure();
-            await serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
-            await serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
-            await serviceLocator.GetInstance<IRefreshReportsTask>().Run();
-            await serviceLocator.GetInstance<IScheduler>().Start();
+            serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
+            serviceLocator.GetInstance<UsersImportTask>().Run();
+            serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
+            serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
+            serviceLocator.GetInstance<ExportJobScheduler>().Configure();
+            serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
+            serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
+            serviceLocator.GetInstance<IRefreshReportsTask>().Run();
+
+            serviceLocator.GetInstance<IScheduler>().Start();
+            return Task.CompletedTask;
         }
     }
 }
