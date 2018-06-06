@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
 
 
-        public void Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {

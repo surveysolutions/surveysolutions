@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ExportJob>();
 
-        public void Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
             ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
