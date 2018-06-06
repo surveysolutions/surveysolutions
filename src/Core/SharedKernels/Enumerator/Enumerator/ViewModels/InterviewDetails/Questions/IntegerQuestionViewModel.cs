@@ -190,10 +190,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void SpecialValueChanged(object sender, EventArgs eventArgs)
+        private async void SpecialValueChanged(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel)sender;
-            EnqueueSaveAnswer(selectedSpecialValue.Value, true);
+            await EnqueueSaveAnswer(selectedSpecialValue.Value, true);
         }
 
         private async void SpecialValueRemoved(object sender, EventArgs eventArgs)
@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            EnqueueSaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
+            await EnqueueSaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
         }
 
         private void ResetTimer() {
@@ -227,11 +227,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private decimal? answerOrSelectedValueToSave = null;
         private bool isSpecialValueToSave = false;
 
-        private void EnqueueSaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        private async Task EnqueueSaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
         {
             this.answerOrSelectedValueToSave = answeredOrSelectedValue;
             this.isSpecialValueToSave = isSpecialValueSelected;
-            this.ResetTimer();
+            if (this.ThrottlePeriod == 0)
+            {
+                await AnswerQuestion();
+            }
+            else
+            {
+                this.ResetTimer();
+            }
         }
 
         private async Task AnswerQuestion()
