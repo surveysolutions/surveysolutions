@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel InstructionViewModel { get; private set; }
         private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
-        private IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        private IMvxMainThreadDispatcher mainThreadDispatcher;
 
         private TextListAddNewItemViewModel addNewItemViewModel
             => this.Answers?.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            IMvxMainThreadDispatcher mainThreadDispatcher)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -180,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => this.ShowOrHideAddNewItem());
+                this.mainThreadDispatcher.RequestMainThreadAction(this.ShowOrHideAddNewItem);
             }
             catch (InterviewException ex)
             {
