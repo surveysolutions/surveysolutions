@@ -710,8 +710,9 @@ namespace WB.Tests.Abc.TestFactories
                 x.Query<AssignmentToImport>() == GetNhQueryable<AssignmentToImport>());
 
             sessionProvider = sessionProvider ?? Mock.Of<IPlainSessionProvider>(x => x.GetSession() == session);
+            userViewFactory = userViewFactory ?? Mock.Of<IUserViewFactory>();
 
-            return new AssignmentsImportService(userViewFactory ?? Mock.Of<IUserViewFactory>(),
+            return new AssignmentsImportService(userViewFactory,
                 verifier ?? ImportDataVerifier(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                 sessionProvider,
@@ -719,7 +720,7 @@ namespace WB.Tests.Abc.TestFactories
                 importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
                 interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
                 assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
-                assignmentsImportFileConverter ?? AssignmentsImportFileConverter());
+                assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
         }
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
