@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         public void Load(IIocRegistry registry)
         {
             registry.Bind<ISchedulerFactory, NinjectSchedulerFactory>();
-            registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler().Result);
+            registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler());
         }
 
         public Task Init(IServiceLocator serviceLocator)

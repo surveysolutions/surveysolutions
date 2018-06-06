@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -17,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
             "Duration of particular report to refresh",
             "ReportName");
 
-        public async Task Execute(IJobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
         {
             LogInfo("Started");
 
@@ -28,12 +27,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
                 var task = ServiceLocator.Current.GetInstance<IRefreshReportsTask>();
                 var repository = ServiceLocator.Current.GetInstance<IInterviewReportDataRepository>();
 
-                await transactionManager.ExecuteInPlainTransaction(async () =>
+                transactionManager.ExecuteInPlainTransaction(() =>
                 {
                     var localJobRun = Stopwatch.StartNew();
                     task.RegisterJobStart(DateTime.UtcNow);
                     LogInfo($"Start refresh of report");
-                    await repository.RefreshAsync();
+                    repository.Refresh();
                     task.RegisterJobCompletion(DateTime.UtcNow);
 
                     LogInfo($"Completed refesh of reports. Took: {localJobRun.Elapsed:g}");

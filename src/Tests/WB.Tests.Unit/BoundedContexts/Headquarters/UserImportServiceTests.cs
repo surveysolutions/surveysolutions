@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -65,14 +61,12 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         {
             //arrange
             var scheduler = Mock.Of<IScheduler>(x =>
-                x.GetCurrentlyExecutingJobs(It.IsAny<CancellationToken>()) == Task.FromResult(
-            
-            (new List<IJobExecutionContext>()
+                x.GetCurrentlyExecutingJobs() == new[]
                 {
                     Mock.Of<IJobExecutionContext>(y =>
                         y.JobDetail ==
                         Mock.Of<IJobDetail>(z => z.Key == new JobKey("Import users job", "Import users")))
-                }) as IReadOnlyCollection<IJobExecutionContext>));
+                });
 
             var usersImportTask = new UsersImportTask(scheduler);
 

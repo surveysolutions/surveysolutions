@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
-        public async Task Execute(IJobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
         {
             try
             {
