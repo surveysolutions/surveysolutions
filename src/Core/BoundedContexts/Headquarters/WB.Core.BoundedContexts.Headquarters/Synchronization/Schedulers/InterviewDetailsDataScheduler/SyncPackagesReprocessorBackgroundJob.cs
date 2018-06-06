@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 IReadOnlyCollection<int> packageIds = this.ExecuteInQueryTransaction(() =>
                     this.InterviewBrokenPackagesService.GetTopBrokenPackageIdsAllowedToReprocess(this.interviewPackagesJobSetings.SynchronizationBatchCount));
 
-                if (packageIds == null || !packageIds.Any()) return;
+                if (packageIds == null || !packageIds.Any()) return Task.CompletedTask;
 
                 this.logger.Debug($"Interview reproces packages job: Received {packageIds.Count} packages for reprocession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
@@ -57,6 +57,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
             {
                 this.logger.Error($"Interview reprocess packages job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask;
         }
 
         private T ExecuteInQueryTransaction<T>(Func<T> query)

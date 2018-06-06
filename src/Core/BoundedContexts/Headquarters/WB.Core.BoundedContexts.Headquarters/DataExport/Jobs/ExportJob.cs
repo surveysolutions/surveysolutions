@@ -20,35 +20,39 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ExportJob>();
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
             ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
 
             var pendingExportProcess = this.exportService.GetAndStartOldestUnprocessedDataExport();
-            if (pendingExportProcess == null) return;
-
-            try
+            if (pendingExportProcess != null)
             {
-                if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
-                    this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType).ExportData(exportToExternalStorageProcess);
-                else
-                    this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
+                try
+                {
+                    if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
+                        this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType)
+                            .ExportData(exportToExternalStorageProcess);
+                    else
+                        this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
 
-                this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
+                    this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
 
-            }
-            catch (Exception e)
-            {
-                this.exportService.FinishExportWithError(pendingExportProcess.NaturalId, e);
+                }
+                catch (Exception e)
+                {
+                    this.exportService.FinishExportWithError(pendingExportProcess.NaturalId, e);
 
-               this.logger.Error("Export job failed", e);
+                    this.logger.Error("Export job failed", e);
+                }
+                finally
+                {
+                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                    ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
+                }
             }
-            finally
-            {
-                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-            }
+
+            return Task.CompletedTask;
         }
 
         private AbstractExternalStorageDataExportHandler GetExternalStorageExportHandler(ExternalStorageType storageType)

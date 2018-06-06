@@ -36,12 +36,12 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private T ExecuteInPlain<T>(Func<T> func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
         private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
 
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
             try
             {
                 var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
-                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Import) return;
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Import) return Task.CompletedTask;
 
                 var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());
 
@@ -84,6 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
             }
+
+            return Task.CompletedTask;
         }
 
         private void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
