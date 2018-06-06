@@ -234,6 +234,11 @@ namespace WB.UI.Headquarters.API.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
+            if (deviceSyncProtocolVersion == 7070) // KP-11462
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+            }
+
             if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
             {
                 if (deviceSyncProtocolVersion < SyncProtocolVersionProvider.ProtectedVariablesIntroduced
