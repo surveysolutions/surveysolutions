@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-// ReSharper disable once CheckNamespace
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
 {
     public static class ExpressionExtensions
@@ -15,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
 
         public static bool InRange(this int? value, int? low, int? high)
         {
-			if (value == null || low == null || high == null) return false;
+            if (value == null || low == null || high == null) return false;
             if (value < low) return false;
             if (value > high) return false;
             return true;
@@ -24,7 +23,7 @@ namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
         // backward compatibility
         public static bool InRange(this int? value, double? low, double? high)
         {
-			if (value == null || low == null || high == null) return false;
+            if (value == null || low == null || high == null) return false;
             if (value < low) return false;
             if (value > high) return false;
             return true;
