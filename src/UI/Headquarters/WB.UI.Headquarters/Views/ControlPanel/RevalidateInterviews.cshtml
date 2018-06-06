@@ -2,23 +2,64 @@
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
     this.ViewBag.Title = "Control Panel: Revalidate Interviews";
 }
+
+@model WB.UI.Headquarters.Controllers.ControlPanelController.RevalidateModel
+
 <h3>Revalidate Interviews</h3>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="btn-group">
+            <div class="form-inline">
+                @using (Html.BeginForm("RevalidateAllInterviewsWithErrors", "ControlPanel", FormMethod.Post))
+                {
+                    <div class="input-group date datepicker" data-bind="datepicker: FromDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2015', endDate: '+0d', forseParse: false }">
+                        @Html.TextBoxFor(x => x.FromDate, new { @class = "form-control", autocomplete = "off", @readonly= "readonly" })
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
+
+                    <div class="input-group date datepicker" data-bind="datepicker: ToDate, datepickerOptions: { format: 'mm/dd/yyyy', keyboardNavigation: false, autoclose: true, todayHighlight: true, startDate: '01/01/2015', endDate: '+0d', forseParse: false }">
+                        @Html.TextBoxFor(x => x.ToDate, new { @class = "form-control", autocomplete = "off", @readonly= "readonly" })
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" onclick="return confirmAction()">Revalidate All</button>
+                    @Html.ActionLink("Stop", "StopInterviewRevalidating", new { }, new { @class = "btn btn-danger" })
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <pre id="statusArea" style="height: 500px; overflow-y: scroll;">
 Requesting status...
 </pre>
 
-@Html.ActionLink("Revalidate All", "RevalidateAllInterviewsWithErrors", new { }, new { @class = "btn btn-primary", onclick = "return confirmAction()" })
-@Html.ActionLink("Stop", "StopInterviewRevalidating", new { }, new { @class = "btn btn-danger" })
 
 
 @section scripts
 {
-
+    @Styles.Render("~/Content/bootstrap-datepicker3.css")
+    @Scripts.Render("~/js/revalidate")
 
     <script type="text/javascript">
         function confirmAction() {
             var confirmed = confirm("Are you sure you want to revalidate interviews at " + window.location.host + " ?");
+//            var url = '@Url.Action("RevalidateAllInterviewsWithErrors")';
+//            var fromDate = $("#date-picker-from").val();
+//            var toDate = $("#date-picker-to").val();
+//
+//            if (fromDate || toDate) {
+//                url = url + "?";
+//
+//                if (fromDate) url = url + "fromDate=" + fromDate;
+//                if (toDate) url = url + "toDate=" + toDate;
+//            }
+//
+//            $(".revalidate-button").href(url);
             return confirmed;
         }
         function updateReadSideStatus() {
@@ -40,6 +81,10 @@ Requesting status...
 
         $(function () {
             updateReadSideStatusNeverending();
+
+            $('.datepicker').datepicker({
+                format: 'mm/dd/yyyy'
+            });
         });
 
     </script>
