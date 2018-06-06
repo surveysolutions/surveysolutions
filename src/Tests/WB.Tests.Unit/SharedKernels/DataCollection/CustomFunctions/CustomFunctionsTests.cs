@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
 using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
+using Extensions = WB.Core.SharedKernels.DataCollection.V2.CustomFunctions.Extensions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {
@@ -31,12 +32,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         public void Test_InRange()
         {
             Assert.IsTrue(1.InRange(0, 10));
-            Assert.IsFalse(Extensions.InRange(1, 3, 10));
-            Assert.IsFalse(Extensions.InRange(13, 3, 10));
+            Assert.IsFalse(1.InRange(3, 10));
+            Assert.IsFalse(13.InRange(3, 10));
 
-            Assert.IsTrue(Extensions.InRange(1.0, 0.0, 10.0));
-            Assert.IsFalse(Extensions.InRange(1.0, 3.0, 10.0));
-            Assert.IsFalse(Extensions.InRange(13.0, 3.0, 10.0));
+            Assert.IsTrue( ((double?)1d).InRange(0.0, 10.0));
+            Assert.IsFalse(((double?)1d).InRange(3.0, 10.0));
+            Assert.IsFalse(((double?)13d).InRange(3.0, 10.0));
 
             decimal? ten = 10;
             decimal? three = 3;
@@ -44,9 +45,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? zero = 0;
             decimal? thirteen = 13;
 
-            Assert.IsTrue(Extensions.InRange(one, zero, ten));
-            Assert.IsFalse(Extensions.InRange(one, three, ten));
-            Assert.IsFalse(Extensions.InRange(thirteen, three, ten));
+            Assert.IsTrue(one.InRange(zero, ten));
+            Assert.IsFalse(one.InRange(three, ten));
+            Assert.IsFalse(thirteen.InRange(three, ten));
 
             Assert.IsTrue(one.InRange(zero, ten));
             Assert.IsFalse(one.InRange(three, ten));
@@ -1021,23 +1022,23 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_ContainsAnyOtherThan()
         {
-            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 2)); // Contains 1, 3
-            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 2, 0)); // Contains 1, 3; 0 is irrelevant
-            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 5, 10)); // Contains 1,2,3
-            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, null)); // Contains 1,2,3
-            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(_mc123, new int[0])); // Contains 1,2,3
-            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 1, 2, 3)); // No, does not contain anything else
-            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(_mc123, 1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(2)); // Contains 1, 3
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(2, 0)); // Contains 1, 3; 0 is irrelevant
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(5, 10)); // Contains 1,2,3
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(null)); // Contains 1,2,3
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(new int[0])); // Contains 1,2,3
+            Assert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3)); // No, does not contain anything else
+            Assert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
 
             int[] empty = null;
-            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(empty, 2)); // No, empty does not contain any other
-            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(empty ,null));
+            Assert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does not contain any other
+            Assert.IsFalse(empty.ContainsAnyOtherThan(null));
 
             empty = new int[0];
-            Assert.IsFalse(ExpressionExtensions.ContainsAnyOtherThan(empty ,2)); // No, empty does nto contain any other
+            Assert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does nto contain any other
 
             var trivial = new int[] { 0 };
-            Assert.IsTrue(ExpressionExtensions.ContainsAnyOtherThan(trivial,2)); // Yes, contains 0
+            Assert.IsTrue(trivial.ContainsAnyOtherThan(2)); // Yes, contains 0
         }
 
         [Test]
