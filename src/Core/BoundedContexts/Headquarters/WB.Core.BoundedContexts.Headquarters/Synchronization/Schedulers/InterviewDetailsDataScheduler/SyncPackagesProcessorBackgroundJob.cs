@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
         IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     this.interviewPackagesService.GetTopPackageIds(
                         this.interviewPackagesJobSetings.SynchronizationBatchCount));
 
-                if (packageIds == null || !packageIds.Any()) return Task.CompletedTask;
+                if (packageIds == null || !packageIds.Any()) return;
 
                 this.logger.Debug($"Interview packages job: Received {packageIds.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
@@ -57,8 +57,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
             {
                 this.logger.Error($"Interview packages job: FAILED. Reason: {ex.Message} ", ex);
             }
-
-            return Task.CompletedTask;
         }
 
         private T ExecuteInQueryTransaction<T>(Func<T> query)
