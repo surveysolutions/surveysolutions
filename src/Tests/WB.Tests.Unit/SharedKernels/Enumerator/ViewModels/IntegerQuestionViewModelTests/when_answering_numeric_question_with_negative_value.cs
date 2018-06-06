@@ -1,3 +1,4 @@
+using System.Threading;
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -36,6 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
        
             integerModel.Answer = -4;
             integerModel.ValueChangeCommand.Execute();
+            Thread.Sleep(600);
         }
 
         [Test]

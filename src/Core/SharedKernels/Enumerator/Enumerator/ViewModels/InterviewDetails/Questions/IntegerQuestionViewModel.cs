@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
         private readonly Timer timer;
-        const int ThrottlePeriod = 500; // ms
+        protected internal int ThrottlePeriod { get; set; } = 500; // ms
 
         public IQuestionStateViewModel QuestionState => this.questionState;
         public SpecialValuesViewModel SpecialValues => this.specialValues;
