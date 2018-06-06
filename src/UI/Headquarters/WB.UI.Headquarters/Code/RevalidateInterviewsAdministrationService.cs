@@ -50,9 +50,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
-        public void RevalidateAllInterviewsWithErrorsAsync(Guid userId, DateTime? startDate, DateTime? endDate)
+        public void RevalidateAllInterviewsWithErrorsAsync(Guid userId, DateTime? fromDate, DateTime? toDate)
         {
-            new Task(() => this.RevalidateAllInterviewsWithErrors(userId, startDate, endDate)).Start();
+            new Task(() => this.RevalidateAllInterviewsWithErrors(userId, fromDate, toDate)).Start();
         }
 
         public bool AreInterviewsBeingRevalidatingNow()
@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 areInterviewsBeingRevalidatingNow ? "Yes" : "No");
         }
 
-        private void RevalidateAllInterviewsWithErrors(Guid userId, DateTime? startDate, DateTime? endDate)
+        private void RevalidateAllInterviewsWithErrors(Guid userId, DateTime? fromDate, DateTime? toDate)
         {
             if (!areInterviewsBeingRevalidatingNow)
             {
@@ -76,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 {
                     if (!areInterviewsBeingRevalidatingNow)
                     {
-                        this.RevalidateAllInterviewsImpl(userId, startDate, endDate);
+                        this.RevalidateAllInterviewsImpl(userId, fromDate, toDate);
                     }
                 }
             }
@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             shouldStopInterviewsRevalidating = true;
         }
 
-        private void RevalidateAllInterviewsImpl(Guid userId, DateTime? startDate, DateTime? endDate)
+        private void RevalidateAllInterviewsImpl(Guid userId, DateTime? fromDate, DateTime? toDate)
         {
             try
             {
@@ -108,10 +108,10 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 {
                     interviews = this.interviewsReader.Query(_ =>
                     {
-                        if (startDate.HasValue)
-                            _ = _.Where(i => i.UpdateDate >= startDate.Value);
-                        if (endDate.HasValue)
-                            _ = _.Where(i => i.UpdateDate <= endDate.Value);
+                        if (fromDate.HasValue)
+                            _ = _.Where(i => i.UpdateDate >= fromDate.Value);
+                        if (toDate.HasValue)
+                            _ = _.Where(i => i.UpdateDate <= toDate.Value);
 
                         return _.Where(interview =>
                             interview.Status == InterviewStatus.Completed

@@ -177,14 +177,24 @@ namespace WB.UI.Headquarters.Controllers
 
         #region interview ravalidationg
 
+        public class RevalidateModel
+        {
+            public DateTime? FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+        }
+
         public ActionResult RevalidateInterviews()
         {
             return this.View();
         }
 
-        public ActionResult RevalidateAllInterviewsWithErrors(DateTimeOffset? startDateTimeOffset, DateTimeOffset? endDate)
+        public ActionResult RevalidateAllInterviewsWithErrors(RevalidateModel model)
         {
-            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync(Guid.Empty, startDateTimeOffset?.UtcDateTime, endDate?.UtcDateTime);
+            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync(
+                Guid.Empty,
+                model.FromDate,
+                model.ToDate?.AddDays(1)
+            );
 
             return this.RedirectToAction("RevalidateInterviews");
         }
