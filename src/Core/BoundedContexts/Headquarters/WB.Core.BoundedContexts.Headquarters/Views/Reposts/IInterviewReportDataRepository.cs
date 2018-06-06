@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts
 {
     public interface IInterviewReportDataRepository
     {
-        void Refresh();
+        Task RefreshAsync();
         List<Guid> QuestionsForQuestionnaireWithData(QuestionnaireIdentity questionnaireIdentity);
         List<QuestionnaireIdentity> QuestionnairesWithData(Guid? teamLeadId);
         List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params);

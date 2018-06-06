@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs
 {
     public interface IRefreshReportsTask
     {
-        void ScheduleRefresh();
+        Task ScheduleRefresh();
         void RegisterJobStart(DateTime now);
         void RegisterJobCompletion(DateTime now);
         DateTime? LastRefreshTime();
-        void ForceRefresh();
-        RefreshReportsState GetReportState();
-        void Run();
+        Task ForceRefresh();
+        Task<RefreshReportsState> GetReportState();
+        Task Run();
     }
 }
