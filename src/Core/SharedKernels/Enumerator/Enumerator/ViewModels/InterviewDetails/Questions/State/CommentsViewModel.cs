@@ -152,7 +152,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public ObservableCollection<CommentViewModel> Comments { get; } = new ObservableCollection<CommentViewModel>();
-        public IMvxAsyncCommand InterviewerCommentChangeCommand => new MvxAsyncCommand(this.SendCommentQuestionCommandAsync);
+        public IMvxAsyncCommand InterviewerCommentChangeCommand => new MvxAsyncCommand(async () =>
+            await this.SendCommentQuestionCommandAsync(), () => this.principal.IsAuthenticated);
 
         private async Task SendCommentQuestionCommandAsync()
         {
