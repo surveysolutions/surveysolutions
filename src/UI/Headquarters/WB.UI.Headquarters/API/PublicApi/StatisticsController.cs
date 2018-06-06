@@ -11,7 +11,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -276,9 +275,9 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         [HttpPost]
         [Route("status")]
-        public async Task<IHttpActionResult> GetRefreshStatus()
+        public IHttpActionResult GetRefreshStatus()
         {
-            var refreshState = await this.refreshReportsTask.GetReportState();
+            var refreshState = this.refreshReportsTask.GetReportState();
             return Json(new
             {
                 status = new

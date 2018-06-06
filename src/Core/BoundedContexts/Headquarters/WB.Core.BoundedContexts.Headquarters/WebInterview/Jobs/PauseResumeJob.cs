@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -25,7 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
 
         public ICommandService CommandService => ServiceLocator.Current.GetInstance<ICommandService>();
 
-        public async Task Execute(IJobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
         {
             var allCommands = Queue.DeQueueForPublish();
 
@@ -36,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
                 try
                 {
                     transactionManager.BeginCommandTransaction();
-                    await this.CommandService.ExecuteAsync(interviewCommand);
+                    this.CommandService.Execute(interviewCommand);
                     transactionManager.CommitCommandTransaction();
                 }
                 catch(InterviewException interviewException) when (interviewException.ExceptionType == InterviewDomainExceptionType.StatusIsNotOneOfExpected)

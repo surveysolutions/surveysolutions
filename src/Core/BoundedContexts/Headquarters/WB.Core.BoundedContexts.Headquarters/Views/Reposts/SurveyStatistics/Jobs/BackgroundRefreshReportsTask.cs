@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs
@@ -18,29 +17,29 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
             this.scheduler = scheduler;
         }
 
-        public async Task Run()
+        public void Run()
         {
-            if (!(await this.scheduler.CheckExists(RefreshReportJobKey)))
+            if (!this.scheduler.CheckExists(RefreshReportJobKey))
             {
                 IJobDetail job = JobBuilder.Create<RefreshReportsJob>()
                     .WithIdentity(RefreshReportJobKey)
                     .StoreDurably()
                     .Build();
 
-                await this.scheduler.AddJob(job, true);
+                this.scheduler.AddJob(job, true);
             }
 
-            await this.ScheduleDelayedReportsRefresh();
+            this.ScheduleDelayedReportsRefresh();
         }
 
-        private async Task ScheduleDelayedReportsRefresh()
+        private void ScheduleDelayedReportsRefresh()
         {
-            var trigger = await this.scheduler.GetTrigger(refreshTriggerKey);
+            var trigger = this.scheduler.GetTrigger(refreshTriggerKey);
             if (trigger != null)
             {
                 if (!trigger.JobDataMap.ContainsKey("force"))
                 {
-                    await this.scheduler.UnscheduleJob(this.refreshTriggerKey);
+                    this.scheduler.UnscheduleJob(this.refreshTriggerKey);
                 }
                 else
                 {
@@ -48,26 +47,26 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
                 }
             }
             
-            await this.scheduler.ScheduleJob(TriggerBuilder.Create()
+            this.scheduler.ScheduleJob(TriggerBuilder.Create()
                 .WithIdentity(refreshTriggerKey)
                 .ForJob(RefreshReportJobKey)
                 .StartAt(DateBuilder.FutureDate(30, IntervalUnit.Second))
                 .Build());
         }
 
-        public async Task ForceRefresh()
+        public void ForceRefresh()
         {
-            await this.scheduler.UnscheduleJob(this.refreshTriggerKey);
-            await this.scheduler.ScheduleJob(TriggerBuilder.Create()
+            this.scheduler.UnscheduleJob(this.refreshTriggerKey);
+            this.scheduler.ScheduleJob(TriggerBuilder.Create()
                 .WithIdentity(refreshTriggerKey)
                 .UsingJobData("force", true)
                 .ForJob(RefreshReportJobKey)
                 .Build());
         }
         
-        public async Task ScheduleRefresh()
+        public void ScheduleRefresh()
         {
-            var existingTrigger = await this.scheduler.GetTrigger(this.refreshTriggerKey);
+            var existingTrigger = this.scheduler.GetTrigger(this.refreshTriggerKey);
 
             if (existingTrigger != null)
             {
@@ -76,11 +75,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
 
                 if (!existingTrigger.JobDataMap.ContainsKey("force")) // do not kill force trigger
                 {
-                   await this.scheduler.UnscheduleJob(this.refreshTriggerKey);
+                    this.scheduler.UnscheduleJob(this.refreshTriggerKey);
                 }
             }
 
-            await this.ScheduleDelayedReportsRefresh();
+            this.ScheduleDelayedReportsRefresh();
         }
 
         public void RegisterJobStart(DateTime now)
@@ -102,15 +101,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
             return RefreshFinishTime;
         }
         
-        public async Task<RefreshReportsState> GetReportState()
+        public RefreshReportsState GetReportState()
         {
-            if ((await this.scheduler.GetCurrentlyExecutingJobs())
+            if (this.scheduler.GetCurrentlyExecutingJobs()
                 .Any(j => j.JobDetail.Key.Equals(RefreshReportJobKey)))
             {
                 return RefreshReportsState.Refreshing;
             }
 
-            if ((await this.scheduler.GetTrigger(this.refreshTriggerKey))?.GetNextFireTimeUtc() != null)
+            if (this.scheduler.GetTrigger(this.refreshTriggerKey)?.GetNextFireTimeUtc() != null)
             {
                 return RefreshReportsState.ScheduledForRefresh;
             }
