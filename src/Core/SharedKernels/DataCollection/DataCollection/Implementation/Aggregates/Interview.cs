@@ -1575,26 +1575,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             propertiesInvariants.ThrowIfInterviewHardDeleted();
 
-            ILatestInterviewExpressionState expressionProcessorState = this.ExpressionProcessorStatePrototype.Clone();
+            var questionnaire = this.GetQuestionnaireOrThrow();
+            var sourceInterview = this.Tree.Clone();
 
-            expressionProcessorState.SaveAllCurrentStatesAsPrevious();
-
-            InterviewTree changedInterviewTree = this.Tree.Clone();
-
-            EnablementChanges enablementChanges = expressionProcessorState.ProcessEnablementConditions();
-            this.UpdateTreeWithEnablementChanges(changedInterviewTree, enablementChanges);
-
-            ValidityChanges validationChanges = expressionProcessorState.ProcessValidationExpressions();
-            this.UpdateTreeWithValidationChanges(changedInterviewTree, validationChanges);
-
-            IReadOnlyCollection<InterviewTreeNodeDiff> treeDifference = FindDifferenceBetweenTrees(this.Tree, changedInterviewTree);
-
+            this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, null);
+            var treeDifference = FindDifferenceBetweenTrees(sourceInterview, this.Tree);
             this.ApplyEvents(treeDifference, responsibleId);
-
-            if (!this.HasInvalidAnswers())
-            {
-                this.ApplyEvent(new InterviewDeclaredValid());
-            }
         }
 
         public void RepeatLastInterviewStatus(RepeatLastInterviewStatus command)
