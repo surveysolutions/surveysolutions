@@ -4,7 +4,7 @@ using System.Linq;
 // ReSharper disable once CheckNamespace
 namespace WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions
 {
-    public static class ExpressionExtensions
+    public static class Extensions
     {
         public static bool InRange(this int value, int low, int high)
         {
