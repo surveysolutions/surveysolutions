@@ -1065,5 +1065,196 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Is.Empty);
         }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_assignment_with_limit_by_quantity_should_return_empty_errors_and_save_assignment_with_specified_quantity()
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_quantity", "5"))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Quantity, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_assignment_with_empty_by_quantity_should_return_empty_errors_and_save_assignment_with_quantity_equals_to_1()
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_quantity", ""))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Quantity, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_assignment_without_quantity_should_return_empty_errors_and_save_assignment_with_quantity_equals_to_1()
+        {
+            //arrange 
+            var textQuestion = "txt";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(variable: textQuestion)));
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue(textQuestion, "text"))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Quantity, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_assignment_infinity_quantity_should_return_empty_errors_and_save_assignment_with_quantity_equals_null()
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_quantity", "-1"))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Quantity, Is.Null);
+        }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_responsible_interviewer_should_return_empty_errors_and_save_assignment_assigner_to_interviewer()
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+            var interviewerId = Guid.Parse("11111111111111111111111111111111");
+            var supervisorId = Guid.Parse("22222222222222222222222222222222");
+            var interviewerName = "int1";
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_responsible", interviewerName))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+            var userViewFactory = Create.Storage.UserViewFactory(
+                Create.Entity.HqUser(interviewerId, supervisorId, userName: interviewerName));
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository,
+                userViewFactory: userViewFactory);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Interviewer, Is.EqualTo(interviewerId));
+            Assert.That(savedAssignments[0].Supervisor, Is.EqualTo(supervisorId));
+        }
+
+        [Test]
+        public void when_VerifySimpleAndSaveIfNoErrors_and_preloaded_file_has_responsible_supervisorr_should_return_empty_errors_and_save_assignment_assigner_to_supervisor()
+        {
+            //arrange 
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+            var supervisorId = Guid.Parse("22222222222222222222222222222222");
+            var supervisorName = "super";
+
+            var preloadedFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("_responsible", supervisorName))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+            var userViewFactory = Create.Storage.UserViewFactory(
+                Create.Entity.HqUser(supervisorId, userName: supervisorName, role: UserRoles.Supervisor));
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository,
+                userViewFactory: userViewFactory);
+
+            //act
+            var errors = service.VerifySimpleAndSaveIfNoErrors(preloadedFile, Guid.Empty, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Interviewer, Is.Null);
+            Assert.That(savedAssignments[0].Supervisor, Is.EqualTo(supervisorId));
+        }
     }
 }
