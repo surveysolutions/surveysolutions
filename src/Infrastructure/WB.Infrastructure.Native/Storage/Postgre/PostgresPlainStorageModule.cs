@@ -60,15 +60,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             try
             {
+                status.Message = "Initialize database";
                 DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
+
+                status.Message = "Migrate database to latest version";
+                DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
             }
             catch (Exception exc)
             {
                 LogManager.GetLogger("maigration", typeof(PostgresPlainStorageModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
-
-            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
 
             return Task.CompletedTask;
         }
