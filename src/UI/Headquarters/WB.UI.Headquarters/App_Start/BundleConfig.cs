@@ -177,6 +177,15 @@ namespace WB.UI.Headquarters
                 "~/Scripts/knockout/ko.spin.js",
                 "~/Scripts/viewmodels/pages/controlpanel/synchronizationlog.js"
                 ));
+            bundles.Add(new ScriptBundle("~/js/revalidate").Include(
+                "~/Scripts/bootstrap-datepicker.js",
+                "~/Scripts/ko.datepicker.js",
+                "~/Scripts/bootstrap3-typeahead.js",
+                "~/Scripts/components/typeahead-extended.js",
+                "~/Scripts/knockout/ko.typeahead.js",
+                "~/Scripts/spin.js",
+                "~/Scripts/knockout/ko.spin.js"
+                ));
             bundles.Add(new ScriptBundle("~/js/brokeninterviewpackages").Include(
                 "~/Scripts/bootstrap-datepicker.js",
                 "~/Scripts/ko.datepicker.js",

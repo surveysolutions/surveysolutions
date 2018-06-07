@@ -386,6 +386,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             {
                 return expression == null || expression();
             }
+            catch (TypeLoadException)
+            {
+                throw;
+            }
             catch
             {
                 return false;
