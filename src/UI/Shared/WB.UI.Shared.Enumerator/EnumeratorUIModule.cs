@@ -71,7 +71,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CoverInterviewFragment>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             return Task.CompletedTask;

@@ -33,7 +33,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             typeof(WebInterviewConnectionsCounter)
         };
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

@@ -79,7 +79,7 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Code
             registry.BindAsSingleton<IRoleRepository, CQRSRoleRepository>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

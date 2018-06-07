@@ -48,8 +48,8 @@ namespace WB.UI.Designer.Code
 
         public void Load(IWebIocRegistry registry)
         {
-            registry.BindHttpFilter<ServerInitializingHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
-            registry.BindMvcFilter<ServerInitializingMvcFilter>(FilterScope.First, 0);
+            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
+            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global);
 
@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Code
             registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

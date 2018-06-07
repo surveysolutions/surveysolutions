@@ -83,8 +83,8 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
 
-            registry.BindHttpFilter<ServerInitializingHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
-            registry.BindMvcFilter<ServerInitializingMvcFilter>(FilterScope.First, 0);
+            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
+            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Controller);
@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
