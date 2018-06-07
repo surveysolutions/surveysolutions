@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Web.Captcha
             registry.Bind<ICaptchaService, WebCacheBasedCaptchaService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

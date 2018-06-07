@@ -106,7 +106,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
         }
 
-        public override Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public override Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             if (runInitAndMigrations)
             {

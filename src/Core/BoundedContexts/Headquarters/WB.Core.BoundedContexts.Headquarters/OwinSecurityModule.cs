@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuthorizedUser, AuthorizedUser>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             serviceLocator.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
             serviceLocator.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();

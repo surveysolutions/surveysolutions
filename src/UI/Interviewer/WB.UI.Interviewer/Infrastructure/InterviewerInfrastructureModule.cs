@@ -90,7 +90,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
