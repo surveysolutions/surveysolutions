@@ -325,12 +325,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private static RosterVector ToRosterVector(AssignmentRosterInstanceCode[] rosterInstanceCodes)
             => new RosterVector(rosterInstanceCodes.Select(x => x.Code.Value).ToArray());
 
-        private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments, IQuestionnaire questionnaire)
+        private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments,
+            IQuestionnaire questionnaire)
         {
             var allRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions();
-            if (allRosterSizeQuestions.Count == 0)
-                foreach (var assignmentToImport in assignments)
-                    yield return assignmentToImport;
 
             var questionsInsideRosters = allRosterSizeQuestions
                 .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
@@ -340,8 +338,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var assignment in assignments)
             {
-                if (assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
-                    BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions, questionsInsideRosters, questionnaire);
+                if (allRosterSizeQuestions.Count > 0 && assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
+                {
+                    BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions,
+                        questionsInsideRosters, questionnaire);
+                }
 
                 yield return assignment;
             }
