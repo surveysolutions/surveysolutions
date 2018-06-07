@@ -130,13 +130,13 @@ namespace WB.UI.Interviewer
 
             var serviceLocator = ServiceLocator.Current;
 
-            InitModulesStatus status = new InitModulesStatus();
-            status.Status = ServerInitializingStatus.Running;
+            UnderConstructionInfo status = new UnderConstructionInfo();
+            status.Status = UnderConstructionStatus.Running;
             foreach (var module in modules)
             {
                 module.Init(serviceLocator, status).Wait();
             }
-            status.Status = ServerInitializingStatus.Finished;
+            status.Status = UnderConstructionStatus.Finished;
 
             // need remove in release this line and setting option
             Interview.TestingConditions = false;

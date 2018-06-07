@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Tester
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
         }
 
-        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
