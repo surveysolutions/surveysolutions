@@ -30,7 +30,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             try
             {
+                status.Message = "Initialize database";
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
+
+                status.Message = "Migrate database to latest version";
                 DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
             }
             catch (Exception exc)
