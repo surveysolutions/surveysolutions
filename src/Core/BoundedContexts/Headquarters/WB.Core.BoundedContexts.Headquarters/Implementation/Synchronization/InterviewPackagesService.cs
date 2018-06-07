@@ -122,7 +122,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     this.ProcessPackage(interviewPackage);
                 }
 
-                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
                 this.brokenInterviewPackageStorage.Remove(packageId);
             });
         }
@@ -132,9 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             packageIds.ForEach(packageId =>
             {
                 var brokenInterviewPackage = this.brokenInterviewPackageStorage.GetById(packageId);
-                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
                 brokenInterviewPackage.ExceptionType = requestErrorType.ToString();
-                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Inc();
             });
         }
 
@@ -297,9 +294,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
                     ReprocessAttemptsCount = interview.ProcessAttemptsCount,
                 }, null);
-
-                CommonMetrics.BrokenPackagesCount.Labels(exceptionType).Inc();
-
+                
                 this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
