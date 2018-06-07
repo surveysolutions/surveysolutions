@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireUpgradeService, QuestionnaireUpgradeService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }

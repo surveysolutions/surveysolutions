@@ -12,7 +12,7 @@ namespace WB.Core.Infrastructure.Ncqrs
             registry.Bind<IDomainRepository, DomainRepository>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }
