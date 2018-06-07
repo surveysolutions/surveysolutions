@@ -696,5 +696,35 @@ namespace WB.Tests.Abc.TestFactories
 
         public CsvReader CsvReader() => new CsvReader();
         public ZipArchiveUtils ArchiveUtils() => new ZipArchiveUtils();
+
+        public AssignmentsImportService AssignmentsImportService(IUserViewFactory userViewFactory = null,
+            IPreloadedDataVerifier verifier = null,
+            IAuthorizedUser authorizedUser = null,
+            IPlainSessionProvider sessionProvider = null,
+            IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository = null,
+            IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
+            IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
+            IPlainStorageAccessor<Assignment> assignmentsStorage = null,
+            IAssignmentsImportFileConverter assignmentsImportFileConverter = null)
+        {
+            var session = Mock.Of<ISession>(x =>
+                x.Query<AssignmentsImportProcess>() == GetNhQueryable<AssignmentsImportProcess>() &&
+                x.Query<AssignmentToImport>() == GetNhQueryable<AssignmentToImport>());
+
+            sessionProvider = sessionProvider ?? Mock.Of<IPlainSessionProvider>(x => x.GetSession() == session);
+            userViewFactory = userViewFactory ?? Mock.Of<IUserViewFactory>();
+
+            return new AssignmentsImportService(userViewFactory,
+                verifier ?? ImportDataVerifier(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>(),
+                sessionProvider,
+                importAssignmentsProcessRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentsImportProcess>>(),
+                importAssignmentsRepository ?? Mock.Of<IPlainStorageAccessor<AssignmentToImport>>(),
+                interviewCreatorFromAssignment ?? Mock.Of<IInterviewCreatorFromAssignment>(),
+                assignmentsStorage ?? Mock.Of<IPlainStorageAccessor<Assignment>>(),
+                assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
+        }
+
+        private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
     }
 }
