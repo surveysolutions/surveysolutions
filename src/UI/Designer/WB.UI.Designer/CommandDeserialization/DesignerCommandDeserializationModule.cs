@@ -13,7 +13,7 @@ namespace WB.UI.Designer.CommandDeserialization
             registry.Bind<ICommandDeserializer, DesignerCommandDeserializer>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }

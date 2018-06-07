@@ -129,10 +129,14 @@ namespace WB.UI.Interviewer
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
             var serviceLocator = ServiceLocator.Current;
+
+            InitModulesStatus status = new InitModulesStatus();
+            status.Status = ServerInitializingStatus.Running;
             foreach (var module in modules)
             {
-                module.Init(serviceLocator).Wait();
+                module.Init(serviceLocator, status).Wait();
             }
+            status.Status = ServerInitializingStatus.Finished;
 
             // need remove in release this line and setting option
             Interview.TestingConditions = false;

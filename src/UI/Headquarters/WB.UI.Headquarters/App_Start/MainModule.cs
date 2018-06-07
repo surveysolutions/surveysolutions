@@ -112,7 +112,7 @@ namespace WB.UI.Headquarters
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             serviceLocator.GetInstance<UsersImportTask>().Run();

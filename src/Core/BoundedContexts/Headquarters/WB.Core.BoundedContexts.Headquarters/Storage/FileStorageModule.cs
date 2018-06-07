@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage
             }
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }

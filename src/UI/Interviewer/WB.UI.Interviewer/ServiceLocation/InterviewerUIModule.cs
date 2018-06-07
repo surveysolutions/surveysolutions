@@ -106,7 +106,7 @@ namespace WB.UI.Interviewer.ServiceLocation
 #endif
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
 #if !EXCLUDEEXTENSIONS
             WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();

@@ -23,7 +23,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<IAggregateSnapshotter, DummyAggregateSnapshotter>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }
