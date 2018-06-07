@@ -33,7 +33,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }

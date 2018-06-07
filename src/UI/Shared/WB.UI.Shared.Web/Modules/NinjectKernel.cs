@@ -43,14 +43,21 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             this.Kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            var status = new InitModulesStatus();
+            this.Kernel.Bind<InitModulesStatus>().ToConstant(status).InSingletonScope();
+
             // ServiceLocator
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
+
+            status.Status = ServerInitializingStatus.Running;
             foreach (var module in initModules)
             {
-                await module.Init(ServiceLocator.Current);
+                status.Message = null;
+                await module.Init(ServiceLocator.Current, status);
             }
+            status.Status = ServerInitializingStatus.Finished;
         }
     }
 }

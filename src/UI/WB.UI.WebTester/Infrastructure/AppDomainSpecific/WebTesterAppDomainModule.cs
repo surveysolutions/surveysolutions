@@ -41,7 +41,7 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
             registry.BindAsSingleton<IWebTesterTranslationService, WebTesterTranslationStorage>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             CommandRegistry
                .Setup<StatefulInterview>()

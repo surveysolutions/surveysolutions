@@ -106,7 +106,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
         }
 
-        public override Task Init(IServiceLocator serviceLocator)
+        public override Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             if (runInitAndMigrations)
             {
@@ -124,7 +124,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
             }
 
-            return base.Init(serviceLocator);
+            return base.Init(serviceLocator, status);
         }
 
         private object GetEntityIdentifierColumnName(IModuleContext context)

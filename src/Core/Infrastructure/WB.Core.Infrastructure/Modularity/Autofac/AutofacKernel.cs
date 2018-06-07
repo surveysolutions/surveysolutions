@@ -32,14 +32,20 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public async Task Init()
         {
+            var status = new InitModulesStatus();
+            this.containerBuilder.Register((ctx, p) => status).SingleInstance();
+
             Container = containerBuilder.Build();
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
+            status.Status = ServerInitializingStatus.Running;
             foreach (var module in initModules)
             {
-                await module.Init(ServiceLocator.Current); 
+                status.Message = null;
+                await module.Init(ServiceLocator.Current, status); 
             }
+            status.Status = ServerInitializingStatus.Finished;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             try
             {

@@ -23,7 +23,7 @@ namespace WB.UI.Shared.Web.Modules
             );
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, InitModulesStatus status)
         {
             return Task.CompletedTask;
         }
