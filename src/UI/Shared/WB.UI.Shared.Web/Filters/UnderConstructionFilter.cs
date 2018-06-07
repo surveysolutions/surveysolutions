@@ -5,6 +5,7 @@ using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.UI.Shared.Web.Resources;
 
 namespace WB.UI.Shared.Web.Filters
 {
@@ -18,7 +19,7 @@ namespace WB.UI.Shared.Web.Filters
             {
                 actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
                 {
-                    Content = new StringContent(status.Message ?? "Server Initializing. Please wait..."),
+                    Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
                 };
                 return Task.CompletedTask;
             }
@@ -37,7 +38,7 @@ namespace WB.UI.Shared.Web.Filters
             {
                 filterContext.Result = new ContentResult()
                 {
-                    Content = GeneratePageWithMessage(status.Message ?? "Server Initializing. Please wait..."),
+                    Content = GeneratePageWithMessage(status.Message ?? UnderConstruction.ServerInitializing),
                     ContentType = "text/html"
                 };
                 return;
@@ -48,7 +49,7 @@ namespace WB.UI.Shared.Web.Filters
 
         public string GeneratePageWithMessage(string message)
         {
-            var title = "Server Initializing";
+            var title = UnderConstruction.UnderConstructionTitle;
             var html = @"<!DOCTYPE html>
 <html>
 <head>
