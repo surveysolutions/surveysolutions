@@ -82,12 +82,12 @@ namespace CoreTester.Commands
 
             if (!interviewState.Removed.Any()) return;
 
-            process.AddInterviewWithError(interviewId);
+            Console.WriteLine(interviewId);
+            //process.AddInterviewWithError(interviewId);
 
-            this.TransactionManager.ExecuteInQueryTransaction(() =>
-            {
-                interviewFactory.Save(interviewState);
-            });
+            this.TransactionManager.BeginCommandTransaction();
+            interviewFactory.Save(interviewState);
+            this.TransactionManager.CommitCommandTransaction();
         }
     }
 }
