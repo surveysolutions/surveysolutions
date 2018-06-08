@@ -277,7 +277,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 this.transactionManager.RollbackCommandTransaction();
 
-                var exceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? UnknownExceptionType;
+                var interviewException = exception as InterviewException;
+                if (interviewException == null)
+                {
+                    interviewException = interviewException.UnwrapAllInnerExceptions()
+                        .OfType<InterviewException>()
+                        .FirstOrDefault();
+                }
+
+                var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
