@@ -230,7 +230,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
                 var aggregateRootEvents = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(interview.Events);
+                    .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
 
                 AssertPackageNotDuplicated(aggregateRootEvents);
 
