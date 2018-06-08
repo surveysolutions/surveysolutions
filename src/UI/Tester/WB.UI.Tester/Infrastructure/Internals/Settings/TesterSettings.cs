@@ -100,9 +100,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
-        public bool TestingConditions
- { get; }
-
         public double GpsDesiredAccuracy
         {
             get
