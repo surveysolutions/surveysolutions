@@ -1772,54 +1772,54 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments[0].Answers, Is.Empty);
         }
 
-        //[Test]
-        //public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_empty_answer_on_text_question_should_be_saved_assignemnt_with_roster_size_answer_only()
-        //{
-        //    //arrange 
-        //    var questionId = Guid.Parse("10101010101010101010101010101010");
-        //    var variable = "myvar";
+        [Test]
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_empty_answer_on_text_question_should_be_saved_assignemnt_with_roster_size_answer_only()
+        {
+            //arrange 
+            var questionId = Guid.Parse("10101010101010101010101010101010");
+            var variable = "myvar";
 
-        //    var rosterVariable = "r";
-        //    var listRosterId = Guid.Parse("22222222222222222222222222222222");
-        //    var rosterSizeQuestion = "list";
-        //    var questionnaire = Create.Entity.PlainQuestionnaire(
-        //        Create.Entity.QuestionnaireDocumentWithOneChapter(
-        //            Create.Entity.TextListQuestion(listRosterId, variable: rosterSizeQuestion),
-        //            Create.Entity.ListRoster(variable: rosterVariable, rosterSizeQuestionId: listRosterId,
-        //                children: new[]
-        //                {
-        //                    Create.Entity.TextQuestion(questionId, variable)
-        //                })));
+            var rosterVariable = "r";
+            var listRosterId = Guid.Parse("22222222222222222222222222222222");
+            var rosterSizeQuestion = "list";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextListQuestion(listRosterId, variable: rosterSizeQuestion),
+                    Create.Entity.ListRoster(variable: rosterVariable, rosterSizeQuestionId: listRosterId,
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion(questionId, variable: variable)
+                        })));
 
-        //    var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
+            var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
 
-        //    var rosterFile = Create.Entity.PreloadedFile(rosterVariable, rows: new[]
-        //    {
-        //        Create.Entity.PreloadingRow(
-        //            Create.Entity.PreloadingValue("interview__id", "1"),
-        //            Create.Entity.PreloadingValue(rosterSizeQuestion, "item1"),
-        //            Create.Entity.PreloadingValue($"{rosterVariable}__id", "1"),
-        //            Create.Entity.PreloadingValue(variable, ""))
-        //    });
+            var rosterFile = Create.Entity.PreloadedFile(rosterVariable, rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue(rosterSizeQuestion, "item1"),
+                    Create.Entity.PreloadingValue($"{rosterVariable}__id", "1"),
+                    Create.Entity.PreloadingValue(variable, ""))
+            });
 
-        //    var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
 
-        //    var service = Create.Service.AssignmentsImportService(
-        //        importAssignmentsRepository: importAssignmentsRepository);
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
 
-        //    //act
-        //    var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
+            //act
+            var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
-        //    //assert
-        //    Assert.That(errors, Is.Empty);
+            //assert
+            Assert.That(errors, Is.Empty);
 
-        //    var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
 
-        //    Assert.That(savedAssignments, Has.One.Items);
-        //    Assert.That(savedAssignments[0].Answers, Has.One.Items);
-        //    Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
-        //        Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
-        //}
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers, Has.One.Items);
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
+                Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
+        }
 
         [Test]
         public void when_VerifyPanelAndSaveIfNoErrors_and_numeric_roster_size_trigger_roster_and_nested_roster_should_be_saved_assignemnt_with_answers_in_roster_and_nested_roster()
