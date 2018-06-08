@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+android:shape="rectangle" >
+  <!-- Background -->
+  <item>
+    <shape>
+      <solid android:color="@color/sections_list_background_color" />
+      <corners android:radius="@dimen/Dashboard_Layout_border_radius" />
+    </shape>
+  </item>
+
+  <item>
+    <shape>
+      <stroke
+          android:width="@dimen/Dashboard_Layout_border_width"
+          android:color="@color/dashboard_border" />
+
+      <padding
+          android:bottom="@dimen/Dashboard_Layout_border_width"
+          android:left="@dimen/Dashboard_Layout_border_width"
+          android:right="@dimen/Dashboard_Layout_border_width"
+          android:top="@dimen/Dashboard_Layout_border_width" />
+
+      <corners android:radius="@dimen/Dashboard_Layout_border_radius" />
+    </shape>
+  </item>
+
+  <item>
+    <shape android:shape="rectangle">
+      <stroke android:width="@dimen/Dashboard_Layout_border_width" android:color="@color/dashboard_border_shadow" />
+      <corners android:radius="@dimen/Dashboard_Layout_border_radius" />
+    </shape>
+  </item>
+
+</layer-list>
