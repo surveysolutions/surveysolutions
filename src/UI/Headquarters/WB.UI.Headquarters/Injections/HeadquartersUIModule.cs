@@ -98,6 +98,8 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
+
+            registry.Bind<IQRCodeHelper, QRCodeHelper>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
