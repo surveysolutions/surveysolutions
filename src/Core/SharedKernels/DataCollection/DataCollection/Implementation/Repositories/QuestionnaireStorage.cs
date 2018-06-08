@@ -99,7 +99,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
 
-            this.questionnaireDocumentsCache.TryRemove(repositoryId);
+            this.questionnaireDocumentsCache.TryRemove(repositoryId, out _);
             this.plainQuestionnairesCache.Clear();
         }
 
