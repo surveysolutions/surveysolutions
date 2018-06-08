@@ -11,11 +11,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations
         }
 
         private static string GetScriptToChangeJsonToJsonb(string tableName, string columnName)
-            => $"alter table {tableName} alter column {columnName} type jsonb using replace({columnName}::text, '\u0000', '')::jsonb;";
+            => $"alter table {tableName} alter column {columnName} type jsonb using replace({columnName}::text, '\\u0000', '')::jsonb;";
 
         public override void Down()
         {
         }
-        
     }
 }
