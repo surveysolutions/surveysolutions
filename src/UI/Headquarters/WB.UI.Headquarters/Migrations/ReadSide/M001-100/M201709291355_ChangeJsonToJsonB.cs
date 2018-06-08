@@ -29,8 +29,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 	                where table_name = '{tableName}' and column_name = '{columnName}'
 	                into isAlreadyJsonB;
 
-	                IF doesTableExists > 0 and isAlreadyJsonB = false THEN
-		                alter table {schema}.{tableName} alter column {columnName} type jsonb using {columnName}::jsonb;
+	                IF doesTableExists > 0 and isAlreadyJsonB = false THEN 
+		                alter table {schema}.{tableName} alter column {columnName} type jsonb using replace({columnName}::text, '\u0000', '')::jsonb;
 	                END IF;
                 END
                 $$";
