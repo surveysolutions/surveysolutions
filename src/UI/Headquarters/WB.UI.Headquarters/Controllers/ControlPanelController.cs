@@ -189,6 +189,7 @@ namespace WB.UI.Headquarters.Controllers
             return this.View();
         }
 
+        [HttpPost]
         public ActionResult RevalidateAllInterviewsWithErrors(RevalidateModel model)
         {
             var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
