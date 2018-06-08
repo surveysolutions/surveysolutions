@@ -8,7 +8,6 @@ namespace WB.Core.SharedKernels.Enumerator
         double GpsDesiredAccuracy { get; }
         int EventChunkSize { get; }
         bool VibrateOnError { get; }
-        bool TestingConditions { get; }
         bool ShowVariables { get; }
         bool ShowLocationOnMap { get; }
         bool ShowAnswerTime { get; }
