@@ -23,7 +23,8 @@ namespace WB.UI.Headquarters.Migrations.PlainStore
                 BEGIN
                     SELECT count(tablename) FROM pg_tables WHERE schemaname = '{schema}' AND tablename = '{tableName}' INTO doesTableExists;
                     IF doesTableExists > 0 THEN
-                        alter table {schema}.{tableName} alter column {columnName} type jsonb using {columnName}::text::jsonb;
+                        alter table {schema}.{tableName} alter column {columnName} type jsonb 
+                            using replace({columnName}::text, '\u0000', '')::jsonb;
                 END IF;
                 END
                 $$"; 
