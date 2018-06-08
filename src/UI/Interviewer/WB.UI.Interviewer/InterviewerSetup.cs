@@ -134,9 +134,6 @@ namespace WB.UI.Interviewer
                 module.Init(serviceLocator).Wait();
             }
 
-            // need remove in release this line and setting option
-            Interview.TestingConditions = false;
-
             return container;
         }
 
