@@ -4,6 +4,7 @@ using System.Linq;
 using Dapper;
 using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -35,6 +36,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     var packages = from bip in session.Query<BrokenInterviewPackage>()
                        group bip by bip.ExceptionType into g
                        select new { Type = g.Key, Count = g.Count() };
+
+                    foreach (var type in Enum.GetValues(typeof(InterviewDomainExceptionType)))
+                    {
+                        BrokenPackagesCount.Labels(type.ToString()).Set(0);
+                    }
+
+                    BrokenPackagesCount.Labels("Unexpected").Set(0);
 
                     foreach (var package in packages.ToList())
                     {
