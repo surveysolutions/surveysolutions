@@ -147,7 +147,6 @@ namespace WB.Enumerator.Native.WebInterview
             var questionarie = this.GetCallerQuestionnaire();
 
             var entities = ids
-                .Where(id => !questionarie.IsVariable(id.Id))
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),

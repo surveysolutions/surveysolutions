@@ -302,6 +302,7 @@
     <Compile Include="CustomControls\FlowLayout.cs" />
     <Compile Include="CustomControls\InstantAutoComplete.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
+    <Compile Include="CustomControls\InterviewOverviewTemplateSelector.cs" />
     <Compile Include="CustomControls\InterviewTemplateSelector.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
     <Compile Include="CustomControls\NumericEditText.cs" />
@@ -1337,6 +1338,29 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\img_placeholder.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_group.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_statictext.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\styles-interview_overview.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

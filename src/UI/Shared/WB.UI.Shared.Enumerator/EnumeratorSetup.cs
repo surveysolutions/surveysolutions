@@ -21,6 +21,7 @@ using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
@@ -80,6 +81,7 @@ namespace WB.UI.Shared.Enumerator
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
+                {typeof(OverviewViewModel), typeof (OverviewFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
