@@ -49,7 +49,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterview)]
-        public HttpResponseMessage Details(Guid id)
+        [Obsolete("Since 18.08 KP-11379")]
+        public virtual HttpResponseMessage Details(Guid id)
         {
             var interviewDetails = this.interviewsFactory.GetInProgressInterviewDetails(id);
             if (interviewDetails == null)

@@ -5,6 +5,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -12,6 +15,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -30,6 +34,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly ITabletDiagnosticService diagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IAuditLogSynchronizer auditLogSynchronizer;
+        private readonly ILiteEventBus eventBus;
+        private readonly IInterviewerEventStorage eventStore;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -62,7 +68,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             ITabletDiagnosticService diagnosticService,
             IInterviewerSettings interviewerSettings,
             IAuditLogSynchronizer auditLogSynchronizer,
-            IAuditLogService auditLogService) : base(synchronizationService, logger,
+            IAuditLogService auditLogService,
+            ILiteEventBus eventBus,
+            IInterviewerEventStorage eventStore) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
             interviewViewRepository, auditLogService)
         {
@@ -84,6 +92,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.diagnosticService = diagnosticService;
             this.interviewerSettings = interviewerSettings;
             this.auditLogSynchronizer = auditLogSynchronizer;
+            this.eventBus = eventBus;
+            this.eventStore = eventStore;
         }
 
         
@@ -240,7 +250,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
                     await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics);
 
-                    var interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
+                    List<CommittedEvent> interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
                         interview.Id,
                         (progressPercentage, bytesReceived, totalBytesToReceive) => { },
                         cancellationToken);
@@ -251,7 +261,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                         continue;
                     }
 
-                    await this.interviewFactory.CreateInterviewAsync(interview, interviewDetails);
+                    eventBus.PublishCommittedEvents(interviewDetails);
+                    eventStore.StoreEvents(new CommittedEventStream(interview.Id, interviewDetails));
+
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
                     if (interview.IsRejected)
@@ -429,6 +441,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                 {
                     statistics.FailedToUploadInterviwesCount++;
                     await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken);
+
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }
             }
