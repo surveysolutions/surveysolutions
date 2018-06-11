@@ -1,7 +1,6 @@
 ﻿namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
-    public class OverviewGroup
+    public class OverviewGroup : OverviewNode
     {
-        public string Title { get; set; }
     }
 }

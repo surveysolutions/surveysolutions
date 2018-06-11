@@ -4,10 +4,15 @@
               android:orientation="vertical"
               style="@style/Interview_Entity"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
-
+              android:layout_height="wrap_content"
+              local:MvxBind="Tag Id">
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               style="@style/Overview_GroupTitle"
+               style="@style/Overview_Question"
                local:MvxBind="Html Title"/>
+    
+    <TextView  android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               style="@style/Overview_Answer_Unanswered"
+               local:MvxBind="Text Localization('Interview_Overview_NotAnswered')"/>
 </LinearLayout>

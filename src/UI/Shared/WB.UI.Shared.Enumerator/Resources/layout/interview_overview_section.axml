@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-              style="@style/Interview_Entity"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
+    <View style="@style/Interview_Entity_Divider" />
 
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               style="@style/Overview_GroupTitle"
+               style="@style/Overview_Section_Entity"
                local:MvxBind="Html Title"/>
 </LinearLayout>

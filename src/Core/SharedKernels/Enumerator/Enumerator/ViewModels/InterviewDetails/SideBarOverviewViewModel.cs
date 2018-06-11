@@ -3,6 +3,7 @@ using System.Windows.Input;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
@@ -27,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             this.navigation = navigationState;
             this.SideBarGroupState.Init(interviewId, null);
-            this.Title.InitAsStatic("Overview");
+            this.Title.InitAsStatic(UIResources.Interview_Overview);
 
             navigationState.ScreenChanged += args => 
                 this.IsSelected = this.IsCurrent = this.navigation.CurrentScreenType == ScreenType.Overview;
