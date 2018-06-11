@@ -210,7 +210,7 @@ namespace WB.Tests.Abc.TestFactories
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 Mock.Of<IInterviewEventStreamOptimizer>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILiteEventRegistry>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
@@ -433,7 +433,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogSynchronizer>(),
-                Mock.Of<IAuditLogService>());
+                Mock.Of<IAuditLogService>(),
+                Mock.Of<IEventBus>(),
+                Mock.Of<IInterviewerEventStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -662,7 +664,8 @@ namespace WB.Tests.Abc.TestFactories
                 interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
                 transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
                 userRepository: userRepository ?? userRepositoryMock.Object,
-                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>());
+                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
+                eventStore: Mock.Of<IHeadquartersEventStore>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,

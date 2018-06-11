@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
-namespace WB.Core.BoundedContexts.Tester.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public interface IDesignerApiService
     {
