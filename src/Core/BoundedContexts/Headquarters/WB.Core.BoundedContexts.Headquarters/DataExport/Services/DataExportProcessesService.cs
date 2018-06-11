@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             this.processes.GetOrNull(processId)?.Cancel();
 
-            this.processes.TryRemove(processId);
+            this.processes.TryRemove(processId, out _);
         }
 
         public void DeleteProcess(QuestionnaireIdentity questionnaire, DataExportFormat exportFormat,

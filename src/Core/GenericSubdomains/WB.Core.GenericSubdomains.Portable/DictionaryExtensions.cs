@@ -51,10 +51,5 @@ namespace WB.Core.GenericSubdomains.Portable
         {
             return dictionary.ContainsKey(key) ? dictionary[key] : new List<TValue>();
         }
-
-        public static bool TryRemove<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> dictionary, TKey key)
-        {
-            return dictionary.TryRemove(key, out _);
-        }
     }
 }
