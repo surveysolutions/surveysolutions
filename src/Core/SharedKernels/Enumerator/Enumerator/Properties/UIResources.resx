@@ -596,4 +596,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} out of {1} options selected</value>
   </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
 </root>

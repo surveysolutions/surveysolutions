@@ -596,4 +596,13 @@
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} из {1} опций выбрано</value>
   </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Не отвечен</value>
+  </data>
 </root>
