@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -28,6 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
         private const string StateKey = "interviewerIdentity";
+        private readonly IQRBarcodeScanService qrBarcodeScanService;
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -36,6 +38,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IInterviewerSettings interviewerSettings,
             ISynchronizationService synchronizationService,
+            IQRBarcodeScanService qrBarcodeScanService,
             ILogger logger, 
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
@@ -46,6 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
+            this.qrBarcodeScanService = qrBarcodeScanService;
         }
 
         protected override bool IsAuthenticationRequired => false;
@@ -103,6 +107,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxAsyncCommand SignInCommand
         {
             get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
+        }
+
+        private IMvxAsyncCommand scanAsyncCommand;
+        public IMvxAsyncCommand ScanCommand
+        {
+            get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }
+        }
+
+        private async Task ScanAsync()
+        {
+            this.IsInProgress = true;
+
+            try
+            {
+                var scanCode = await this.qrBarcodeScanService.ScanAsync();
+
+                if (scanCode != null)
+                {
+                    //parse and set fields
+
+                    this.Endpoint = scanCode.Code;
+                    //this.UserName = "";
+                    //this.Password = "";
+                }
+            }
+            
+            catch (MissingPermissionsException)
+            {
+                
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
         }
 
         public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
