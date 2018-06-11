@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+              android:orientation="vertical"
               style="@style/Interview_Entity"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              local:MvxBind="Tag Id">
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               style="@style/Overview_Question"
                local:MvxBind="Html Title"/>
     
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               style="@style/Overview_Answer"
                local:MvxBind="Text Answer"/>
 </LinearLayout>

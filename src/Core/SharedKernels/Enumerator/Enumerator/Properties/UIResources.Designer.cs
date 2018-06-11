@@ -828,6 +828,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string Interview_Overview {
+            get {
+                return ResourceManager.GetString("Interview_Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string Interview_Overview_Name {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string Interview_Overview_NotAnswered {
+            get {
+                return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
