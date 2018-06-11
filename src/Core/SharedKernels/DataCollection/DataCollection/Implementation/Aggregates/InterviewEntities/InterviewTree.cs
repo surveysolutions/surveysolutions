@@ -218,7 +218,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
            => $"Tree ({this.InterviewId})" + Environment.NewLine
            + string.Join(Environment.NewLine, this.Sections.Select(section => section.ToString().PrefixEachLine("  ")));
 
-
         public InterviewTree Clone()
         {
             this.DebugHealthCheck();

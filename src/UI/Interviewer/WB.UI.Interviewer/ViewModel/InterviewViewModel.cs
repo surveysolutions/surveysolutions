@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.UI.Interviewer.ViewModel
 {
@@ -100,6 +101,10 @@ namespace WB.UI.Interviewer.ViewModel
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
                     activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                     return activeStageViewModel;
+                case ScreenType.Overview:
+                    var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
+                    overviewViewModel.Configure(this.InterviewId);
+                    return overviewViewModel;
                 default:
                     return null;
             }
