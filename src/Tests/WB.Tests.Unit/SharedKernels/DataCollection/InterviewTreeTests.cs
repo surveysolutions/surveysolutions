@@ -607,7 +607,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
             var clonedTree = sourceTree.Clone();
 
             //assert
-            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string), typeof(ISubstitutionService), typeof(IVariableToUIStringService) };
+            Type[] ignoreTypes = new[] {typeof(Identity), typeof(RosterVector), typeof(string), typeof(ISubstitutionService), typeof(IVariableToUIStringService) , typeof(SubstitutionText)};
             var sourceInterviewTreeNodes = sourceTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
             var clonedInterviewTreeNodes = clonedTree.Sections.Cast<IInterviewTreeNode>().TreeToEnumerable(s => s.Children).ToList();
             foreach (var pair in Enumerable.Zip(sourceInterviewTreeNodes, clonedInterviewTreeNodes, (s, c) => new { SourceNode = s, ClonedNode = c }))

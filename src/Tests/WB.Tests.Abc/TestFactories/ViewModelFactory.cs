@@ -317,6 +317,13 @@ namespace WB.Tests.Abc.TestFactories
                         liteEventRegistry,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 
+            
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
+                .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
+                    liteEventRegistry,
+                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>()));
+
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
                 .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
