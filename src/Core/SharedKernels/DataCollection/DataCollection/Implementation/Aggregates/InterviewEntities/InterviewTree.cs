@@ -584,6 +584,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         IInterviewTreeNode Parent { get; }
         IEnumerable<IInterviewTreeNode> Parents { get; }
         IReadOnlyCollection<IInterviewTreeNode> Children { get; }
+        SubstitutionText Title { get; }
 
         bool IsDisabled();
         bool IsDisabledByOwnCondition();
@@ -625,11 +626,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         IReadOnlyCollection<IInterviewTreeNode> IInterviewTreeNode.Children { get; } = Enumerable.Empty<IInterviewTreeNode>().ToReadOnlyCollection();
 
+        public abstract SubstitutionText Title { get; protected set; }
+
         public virtual void SetTree(InterviewTree tree)
         {
             this.Tree = tree;
         }
-
 
         void IInternalInterviewTreeNode.SetParent(IInterviewTreeNode parent)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
@@ -24,46 +25,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public void Configure(string interviewId)
         {
             var interview = interviewRepository.Get(interviewId);
-            var sections = interview.GetEnabledSections().Select(x => x.Identity);
+            var sections = interview.GetEnabledSections().Select(x => x.Identity).ToImmutableHashSet();
 
-            this.Items = interview.GetUnderlyingInterviewerEntities()
-                .Select(x => this.BuildOverviewNode(x, interview, sections))
-                .ToList();
+            var interviewEntities = interview.GetUnderlyingInterviewerEntities();
 
             this.Name = nameViewModel;
             this.Name.InitAsStatic(UIResources.Interview_Overview_Name);
+            this.Items = interviewEntities.Select(x => BuildOverviewNode(x, interview, sections)).ToList();
         }
 
-        private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity, IStatefulInterview interview,
-            IEnumerable<Identity> sections)
+        private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
+            IStatefulInterview interview,
+            ICollection<Identity> sections)
         {
             var question = interview.GetQuestion(interviewerEntityIdentity);
 
             if (question != null)
             {
-                if (question.IsAnswered())
-                {
-                    return new OverviewQuestion
-                    {
-                        Id = question.Identity.ToString(),
-                        Title = question.Title.Text,
-                        Answer = question.GetAnswerAsString()
-                    };
-                }
-                else
-                {
-                    return new OverviewQuestionUnaswered
-                    {
-                        Id = question.Identity.ToString(),
-                        Title = question.Title.Text
-                    };
-                }
+                return new OverviewQuestion(question);
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
             if (staticText != null)
             {
-                return new OverviewStaticText
+                return new OverviewStaticText(staticText)
                 {
                     Id = staticText.Identity.ToString(),
                     Title = staticText.Title.Text
@@ -73,23 +58,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             var group = interview.GetGroup(interviewerEntityIdentity);
             if (group != null)
             {
-                if (sections.Any(x => x.Equals(group.Identity)))
+                if (sections.Contains(group.Identity))
                 {
-                    return new OverviewSection
+                    return new OverviewSection(group)
                     {
                         Id = group.Identity.ToString(),
                         Title = group.Title.Text
                     };
                 }
 
-                return new OverviewGroup
+                return new OverviewGroup(group)
                 {
                     Id = group.Identity.ToString(),
                     Title = group.Title.Text
                 };
             }
 
-            throw new NotSupportedException($"Display of {interviewerEntityIdentity.GetType()} entity is not supported");
+            throw new NotSupportedException($"Display of {interviewerEntityIdentity} entity is not supported");
         }
 
         public List<OverviewNode> Items { get; private set; }

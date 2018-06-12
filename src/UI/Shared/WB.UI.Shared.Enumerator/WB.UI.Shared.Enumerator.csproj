@@ -274,6 +274,7 @@
     <Compile Include="CustomBindings\NumericDisableBinding.cs" />
     <Compile Include="CustomBindings\SignaturePadSettingsBinding.cs" />
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
+    <Compile Include="CustomBindings\TextViewUnansweredTextColorBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />
     <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
     <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
+    <Compile Include="CustomBindings\ViewOverviewNodeStateBinding.cs" />
     <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
     <Compile Include="CustomBindings\ViewTagBinding.cs" />
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
@@ -1367,7 +1369,25 @@
     <AndroidResource Include="Resources\layout\interview_overview_group.axml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\interview_overview_question_unanswered.axml">
+    <AndroidResource Include="Resources\drawable\overview_background_invalid.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_unanswered.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_answered.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_commented.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

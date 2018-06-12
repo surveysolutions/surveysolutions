@@ -2,17 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:local="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-              style="@style/Interview_Entity"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              local:MvxBind="Tag Id">
+              local:MvxBind="Tag Id; ViewOverviewNodeState State">
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               style="@style/Overview_Question"
+               style="@style/Overview_Question_Title"
                local:MvxBind="Html Title"/>
     
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               style="@style/Overview_Answer"
-               local:MvxBind="Text Answer"/>
+               style="@style/Overview_Question_Answer"
+               local:MvxBind="Text Answer; TextViewUnansweredTextColor State"/>
 </LinearLayout>

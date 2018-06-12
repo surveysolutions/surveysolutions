@@ -17,14 +17,14 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {typeof(OverviewQuestion), Resource.Layout.interview_overview_question},
                 {typeof(OverviewGroup), Resource.Layout.interview_overview_group},
                 {typeof(OverviewStaticText), Resource.Layout.interview_overview_statictext},
-                {typeof(OverviewSection), Resource.Layout.interview_overview_section}
+                {typeof(OverviewSection), Resource.Layout.interview_overview_section},
             };
         }
 
         public int GetItemViewType(object forItemObject)
         {
             if (typeMapping.TryGetValue(forItemObject.GetType(), out int result))
-            {
+            { 
                 return result;
             }
 
