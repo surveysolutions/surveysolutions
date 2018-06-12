@@ -211,7 +211,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             //assert
             var addedDisabledSectionViewModel = viewModel.AllVisibleSections.Except(viewModelsWithoutDisabled).Single();
 
-            Assert.That(viewModel.AllVisibleSections.Count, Is.EqualTo(5));
+            Assert.That(viewModel.AllVisibleSections.Count, Is.EqualTo(6));
             Assert.That(viewModel.AllVisibleSections.ToList().IndexOf(addedDisabledSectionViewModel), Is.EqualTo(2));
         }
     }
