@@ -148,6 +148,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
+            registry.RegisterCustomBindingFactory<View>("ViewOverviewNodeState", (view) => new ViewOverviewNodeStateBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextViewUnansweredTextColor", (view) => new TextViewUnansweredTextColorBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);
