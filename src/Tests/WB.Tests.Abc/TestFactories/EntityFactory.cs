@@ -1195,7 +1195,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variable ?? Guid.NewGuid().ToString(),
+                StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString(),
                 QuestionScope = scope,
                 Featured = preFilled,
                 VariableLabel = label,
