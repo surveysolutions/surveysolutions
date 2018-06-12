@@ -18,13 +18,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 this.State = OverviewNodeState.Commented;
             }
-            else if (!treeQuestion.IsValid)
-            {
-                this.State = OverviewNodeState.Invalid;
-            }
             else if (!treeQuestion.IsAnswered())
             {
                 this.State = OverviewNodeState.Unanswered;
+            }
+            else if (!treeQuestion.IsValid)
+            {
+                this.State = OverviewNodeState.Invalid;
             }
             else
             {
