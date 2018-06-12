@@ -11,11 +11,11 @@
 
   <color name="sideBarPrefilledQuestionText">#FF747474</color>
 
-
   <color name="commentInterviewerTextColor">#FF747474</color>
   <color name="commentDetailsInterviewerTextColor">#FF000000</color>
   <color name="commentSupervisorTextColor">#FFF6D6D0</color>
   <color name="nonAnsweredBackground">#EEEFF0</color>
+  <color name="invalidAnsweredBackground">#FFF6D6D0</color>
 
   <color name="colorToolbarText">#FFFFFFFF</color>
   <color name="colorToolbarTransp">#BFFFFFFF</color>

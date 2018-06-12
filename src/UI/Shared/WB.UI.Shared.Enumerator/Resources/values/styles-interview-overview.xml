@@ -1,20 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <style name="Overview_GroupTitle" parent="Interview_Entity">
+        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
         <item name="android:textColor">@color/commentInterviewerTextColor</item>
     </style>
     <style name="Overview_Section_Entity" parent="Overview_GroupTitle">
         <item name="android:letterSpacing">0.05</item>
         <item name="android:textAllCaps">true</item>
     </style>
-    <style name="Overview_Question">
+    <style name="Overview_Question_Title">
+        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
         <item name="android:textColor">@color/recordedAnswerText</item>
     </style>
-    <style name="Overview_Answer" parent="Overview_Question">
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="Overview_Answer_Unanswered">
-        <item name="android:textColor">@color/commentInterviewerTextColor</item>
+    <style name="Overview_Question_Answer" parent="Overview_Question_Title">
         <item name="android:textStyle">bold</item>
     </style>
 </resources>
