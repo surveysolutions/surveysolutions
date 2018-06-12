@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
             this.Name = nameViewModel;
             this.Name.InitAsStatic(UIResources.Interview_Overview_Name);
-            this.Items = interviewEntities.Select(x => BuildOverviewNode(x, interview, sections)).ToList();
+            this.Items = interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections)).ToList();
         }
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
@@ -66,7 +66,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                         Title = group.Title.Text
                     };
                 }
-
                 return new OverviewGroup(group)
                 {
                     Id = group.Identity.ToString(),
