@@ -1956,6 +1956,67 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments[0].ProtectedVariables, Is.EquivalentTo(new[] {numQuestion, multiQuestion}));
         }
 
+        [Test]
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_by_numeric_question_which_trigger_2_rosters_has_2_roster_instances_should_be_saved_assignemnt_with_answer_on_roster_size_question()
+        {
+            //arrange 
+            var rosterSizeQuestionId = Guid.Parse("99999999999999999999999999999999");
+            var rosterSizeQuestion = "q";
+            var roster1 = "r1";
+            var txtInRoster1 = "txt1";
+            var roster2 = "r2";
+            var txtInRoster2 = "txt2";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: rosterSizeQuestion),
+                    Create.Entity.NumericRoster(variable: roster1, rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
+                    {
+                        Create.Entity.TextQuestion(variable: txtInRoster1)
+                    }),
+                    Create.Entity.NumericRoster(variable: roster2, rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
+                    {
+                        Create.Entity.TextQuestion(variable: txtInRoster2)
+                    })));
+
+            var mainFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue(rosterSizeQuestion, "10"))
+            });
+
+            var rosterFile = Create.Entity.PreloadedFile(roster1, rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster1}__id", "1"),
+                    Create.Entity.PreloadingValue(txtInRoster1, "")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster1}__id", "2"),
+                    Create.Entity.PreloadingValue(txtInRoster1, ""))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers[0].Answer, Is.TypeOf<NumericIntegerAnswer>());
+            Assert.That(((NumericIntegerAnswer)savedAssignments[0].Answers[0].Answer).Value, Is.EqualTo(2));
+        }
+
         private static T GetAnswer<T>(AssignmentToImport assignment, Identity questionIdentity) where T : AbstractAnswer
             => (T)assignment.Answers.FirstOrDefault(x => x.Identity == questionIdentity)?.Answer;
     }
