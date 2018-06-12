@@ -8,10 +8,10 @@
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                style="@style/Overview_Question_Title"
-               local:MvxBind="Html Title"/>
+               local:MvxBind="Html Title; TextViewNodeStateTextColor State"/>
     
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                style="@style/Overview_Question_Answer"
-               local:MvxBind="Text Answer; TextViewUnansweredTextColor State"/>
+               local:MvxBind="Text Answer; TextViewAnswerStateTextColor State"/>
 </LinearLayout>

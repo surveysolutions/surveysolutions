@@ -273,8 +273,9 @@
     <Compile Include="CustomBindings\AudioSizeByNoiseLevelBinding.cs" />
     <Compile Include="CustomBindings\NumericDisableBinding.cs" />
     <Compile Include="CustomBindings\SignaturePadSettingsBinding.cs" />
+    <Compile Include="CustomBindings\TextViewAnswerStateTextColorBinding.cs" />
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
-    <Compile Include="CustomBindings\TextViewUnansweredTextColorBinding.cs" />
+    <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />

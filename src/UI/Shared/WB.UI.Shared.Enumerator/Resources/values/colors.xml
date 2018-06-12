@@ -6,6 +6,7 @@
   <color name="colorPrimary">@android:color/darker_gray</color>
 
   <color name="errorTextColor">#e64a19</color>
+  <color name="commentsTextColor">#DF3DBF</color>
   <color name="warningTextColor">#F9BD07</color>
   <color name="disabledTextColor">#afafaf</color>
 
