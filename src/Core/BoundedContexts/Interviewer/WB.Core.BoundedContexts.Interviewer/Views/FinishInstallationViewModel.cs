@@ -3,12 +3,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -127,9 +129,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     //parse and set fields
 
-                    this.Endpoint = scanCode.Code;
-                    //this.UserName = "";
-                    //this.Password = "";
+                    var finishInfo = JsonConvert.DeserializeObject<FinishInstallationInfo>(scanCode.Code);
+
+                    this.Endpoint = finishInfo.Url;
+                    this.UserName = finishInfo.Login;
+                    this.Password = finishInfo.Password;
                 }
             }
             
