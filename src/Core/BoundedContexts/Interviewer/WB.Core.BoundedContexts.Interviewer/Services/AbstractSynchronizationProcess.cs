@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -14,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -232,8 +231,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
                     this.restCredentials.Token = token;
 
                     this.remoteLoginRequired = false;
-
-                    await this.synchronizationService.GetInterviewerAsync(this.restCredentials);
                 }
 
                 if (this.shouldUpdatePasswordOfInterviewer)

@@ -15452,6 +15452,18 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090036
 			public const int FUNCTION = 2131296310;
 			
+			// aapt resource value: 0x7f0900e5
+			public const int LoginPage_error_message = 2131296485;
+			
+			// aapt resource value: 0x7f0900e6
+			public const int LoginPage_login = 2131296486;
+			
+			// aapt resource value: 0x7f0900e4
+			public const int LoginPage_logo = 2131296484;
+			
+			// aapt resource value: 0x7f0900e7
+			public const int LoginPage_password = 2131296487;
+			
 			// aapt resource value: 0x7f090037
 			public const int META = 2131296311;
 			
@@ -15461,8 +15473,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f09001e
 			public const int MvxBindingTagUnique = 2131296286;
 			
-			// aapt resource value: 0x7f09010f
-			public const int RelativeLayout1 = 2131296527;
+			// aapt resource value: 0x7f090115
+			public const int RelativeLayout1 = 2131296533;
 			
 			// aapt resource value: 0x7f090038
 			public const int SHIFT = 2131296312;
@@ -15470,8 +15482,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090039
 			public const int SYM = 2131296313;
 			
-			// aapt resource value: 0x7f0900ff
-			public const int action0 = 2131296511;
+			// aapt resource value: 0x7f090105
+			public const int action0 = 2131296517;
 			
 			// aapt resource value: 0x7f09008d
 			public const int action_bar = 2131296397;
@@ -15494,17 +15506,17 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f09006b
 			public const int action_bar_title = 2131296363;
 			
-			// aapt resource value: 0x7f0900fc
-			public const int action_container = 2131296508;
+			// aapt resource value: 0x7f090102
+			public const int action_container = 2131296514;
 			
 			// aapt resource value: 0x7f09008e
 			public const int action_context_bar = 2131296398;
 			
-			// aapt resource value: 0x7f090103
-			public const int action_divider = 2131296515;
+			// aapt resource value: 0x7f090109
+			public const int action_divider = 2131296521;
 			
-			// aapt resource value: 0x7f0900fd
-			public const int action_image = 2131296509;
+			// aapt resource value: 0x7f090103
+			public const int action_image = 2131296515;
 			
 			// aapt resource value: 0x7f090003
 			public const int action_menu_divider = 2131296259;
@@ -15521,11 +15533,11 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f09006d
 			public const int action_mode_close_button = 2131296365;
 			
-			// aapt resource value: 0x7f0900fe
-			public const int action_text = 2131296510;
+			// aapt resource value: 0x7f090104
+			public const int action_text = 2131296516;
 			
-			// aapt resource value: 0x7f09010c
-			public const int actions = 2131296524;
+			// aapt resource value: 0x7f090112
+			public const int actions = 2131296530;
 			
 			// aapt resource value: 0x7f09006e
 			public const int activity_chooser_view_content = 2131296366;
@@ -15614,8 +15626,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0900c1
 			public const int button_update = 2131296449;
 			
-			// aapt resource value: 0x7f090100
-			public const int cancel_action = 2131296512;
+			// aapt resource value: 0x7f090106
+			public const int cancel_action = 2131296518;
 			
 			// aapt resource value: 0x7f090047
 			public const int center = 2131296327;
@@ -15632,8 +15644,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090084
 			public const int checkbox = 2131296388;
 			
-			// aapt resource value: 0x7f090108
-			public const int chronometer = 2131296520;
+			// aapt resource value: 0x7f09010e
+			public const int chronometer = 2131296526;
 			
 			// aapt resource value: 0x7f090050
 			public const int clip_horizontal = 2131296336;
@@ -15698,8 +15710,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090032
 			public const int end = 2131296306;
 			
-			// aapt resource value: 0x7f09010e
-			public const int end_padder = 2131296526;
+			// aapt resource value: 0x7f090114
+			public const int end_padder = 2131296532;
 			
 			// aapt resource value: 0x7f090041
 			public const int enterAlways = 2131296321;
@@ -15728,8 +15740,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090056
 			public const int @fixed = 2131296342;
 			
-			// aapt resource value: 0x7f090112
-			public const int flashButton = 2131296530;
+			// aapt resource value: 0x7f090118
+			public const int flashButton = 2131296536;
 			
 			// aapt resource value: 0x7f090067
 			public const int forever = 2131296359;
@@ -15752,8 +15764,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090073
 			public const int icon = 2131296371;
 			
-			// aapt resource value: 0x7f09010d
-			public const int icon_group = 2131296525;
+			// aapt resource value: 0x7f090113
+			public const int icon_group = 2131296531;
 			
 			// aapt resource value: 0x7f09003c
 			public const int ifRoom = 2131296316;
@@ -15761,8 +15773,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090070
 			public const int image = 2131296368;
 			
-			// aapt resource value: 0x7f090109
-			public const int info = 2131296521;
+			// aapt resource value: 0x7f09010f
+			public const int info = 2131296527;
 			
 			// aapt resource value: 0x7f0900af
 			public const int input_email = 2131296431;
@@ -15839,26 +15851,32 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090072
 			public const int list_item = 2131296370;
 			
+			// aapt resource value: 0x7f0900e3
+			public const int login_page_footer = 2131296483;
+			
+			// aapt resource value: 0x7f0900e2
+			public const int login_page_scroll_container = 2131296482;
+			
 			// aapt resource value: 0x7f0900cc
 			public const int main_layout = 2131296460;
 			
-			// aapt resource value: 0x7f090118
-			public const int map_editor_exit = 2131296536;
+			// aapt resource value: 0x7f09011e
+			public const int map_editor_exit = 2131296542;
 			
 			// aapt resource value: 0x7f0900d1
 			public const int mapsList = 2131296465;
 			
-			// aapt resource value: 0x7f090116
-			public const int masked = 2131296534;
+			// aapt resource value: 0x7f09011c
+			public const int masked = 2131296540;
 			
-			// aapt resource value: 0x7f090102
-			public const int media_actions = 2131296514;
+			// aapt resource value: 0x7f090108
+			public const int media_actions = 2131296520;
 			
-			// aapt resource value: 0x7f090117
-			public const int menu = 2131296535;
+			// aapt resource value: 0x7f09011d
+			public const int menu = 2131296541;
 			
-			// aapt resource value: 0x7f090114
-			public const int message = 2131296532;
+			// aapt resource value: 0x7f09011a
+			public const int message = 2131296538;
 			
 			// aapt resource value: 0x7f090033
 			public const int middle = 2131296307;
@@ -15866,80 +15884,80 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090055
 			public const int mini = 2131296341;
 			
-			// aapt resource value: 0x7f0900ee
-			public const int mr_art = 2131296494;
-			
-			// aapt resource value: 0x7f0900e3
-			public const int mr_chooser_list = 2131296483;
-			
-			// aapt resource value: 0x7f0900e6
-			public const int mr_chooser_route_desc = 2131296486;
-			
-			// aapt resource value: 0x7f0900e4
-			public const int mr_chooser_route_icon = 2131296484;
-			
-			// aapt resource value: 0x7f0900e5
-			public const int mr_chooser_route_name = 2131296485;
-			
-			// aapt resource value: 0x7f0900e2
-			public const int mr_chooser_title = 2131296482;
-			
-			// aapt resource value: 0x7f0900eb
-			public const int mr_close = 2131296491;
-			
-			// aapt resource value: 0x7f0900f1
-			public const int mr_control_divider = 2131296497;
-			
-			// aapt resource value: 0x7f0900f7
-			public const int mr_control_playback_ctrl = 2131296503;
-			
-			// aapt resource value: 0x7f0900fa
-			public const int mr_control_subtitle = 2131296506;
-			
-			// aapt resource value: 0x7f0900f9
-			public const int mr_control_title = 2131296505;
-			
-			// aapt resource value: 0x7f0900f8
-			public const int mr_control_title_container = 2131296504;
-			
-			// aapt resource value: 0x7f0900ec
-			public const int mr_custom_control = 2131296492;
-			
-			// aapt resource value: 0x7f0900ed
-			public const int mr_default_control = 2131296493;
-			
-			// aapt resource value: 0x7f0900e8
-			public const int mr_dialog_area = 2131296488;
-			
-			// aapt resource value: 0x7f0900e7
-			public const int mr_expandable_area = 2131296487;
-			
-			// aapt resource value: 0x7f0900fb
-			public const int mr_group_expand_collapse = 2131296507;
-			
-			// aapt resource value: 0x7f0900ef
-			public const int mr_media_main_control = 2131296495;
-			
-			// aapt resource value: 0x7f0900ea
-			public const int mr_name = 2131296490;
-			
-			// aapt resource value: 0x7f0900f0
-			public const int mr_playback_control = 2131296496;
+			// aapt resource value: 0x7f0900f4
+			public const int mr_art = 2131296500;
 			
 			// aapt resource value: 0x7f0900e9
-			public const int mr_title_bar = 2131296489;
+			public const int mr_chooser_list = 2131296489;
+			
+			// aapt resource value: 0x7f0900ec
+			public const int mr_chooser_route_desc = 2131296492;
+			
+			// aapt resource value: 0x7f0900ea
+			public const int mr_chooser_route_icon = 2131296490;
+			
+			// aapt resource value: 0x7f0900eb
+			public const int mr_chooser_route_name = 2131296491;
+			
+			// aapt resource value: 0x7f0900e8
+			public const int mr_chooser_title = 2131296488;
+			
+			// aapt resource value: 0x7f0900f1
+			public const int mr_close = 2131296497;
+			
+			// aapt resource value: 0x7f0900f7
+			public const int mr_control_divider = 2131296503;
+			
+			// aapt resource value: 0x7f0900fd
+			public const int mr_control_playback_ctrl = 2131296509;
+			
+			// aapt resource value: 0x7f090100
+			public const int mr_control_subtitle = 2131296512;
+			
+			// aapt resource value: 0x7f0900ff
+			public const int mr_control_title = 2131296511;
+			
+			// aapt resource value: 0x7f0900fe
+			public const int mr_control_title_container = 2131296510;
 			
 			// aapt resource value: 0x7f0900f2
-			public const int mr_volume_control = 2131296498;
+			public const int mr_custom_control = 2131296498;
 			
 			// aapt resource value: 0x7f0900f3
-			public const int mr_volume_group_list = 2131296499;
+			public const int mr_default_control = 2131296499;
+			
+			// aapt resource value: 0x7f0900ee
+			public const int mr_dialog_area = 2131296494;
+			
+			// aapt resource value: 0x7f0900ed
+			public const int mr_expandable_area = 2131296493;
+			
+			// aapt resource value: 0x7f090101
+			public const int mr_group_expand_collapse = 2131296513;
 			
 			// aapt resource value: 0x7f0900f5
-			public const int mr_volume_item_icon = 2131296501;
+			public const int mr_media_main_control = 2131296501;
+			
+			// aapt resource value: 0x7f0900f0
+			public const int mr_name = 2131296496;
 			
 			// aapt resource value: 0x7f0900f6
-			public const int mr_volume_slider = 2131296502;
+			public const int mr_playback_control = 2131296502;
+			
+			// aapt resource value: 0x7f0900ef
+			public const int mr_title_bar = 2131296495;
+			
+			// aapt resource value: 0x7f0900f8
+			public const int mr_volume_control = 2131296504;
+			
+			// aapt resource value: 0x7f0900f9
+			public const int mr_volume_group_list = 2131296505;
+			
+			// aapt resource value: 0x7f0900fb
+			public const int mr_volume_item_icon = 2131296507;
+			
+			// aapt resource value: 0x7f0900fc
+			public const int mr_volume_slider = 2131296508;
 			
 			// aapt resource value: 0x7f09002a
 			public const int multiply = 2131296298;
@@ -15956,17 +15974,17 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090020
 			public const int normal = 2131296288;
 			
-			// aapt resource value: 0x7f09010b
-			public const int notification_background = 2131296523;
-			
-			// aapt resource value: 0x7f090105
-			public const int notification_main_column = 2131296517;
-			
-			// aapt resource value: 0x7f090104
-			public const int notification_main_column_container = 2131296516;
-			
 			// aapt resource value: 0x7f090111
-			public const int overlayImage = 2131296529;
+			public const int notification_background = 2131296529;
+			
+			// aapt resource value: 0x7f09010b
+			public const int notification_main_column = 2131296523;
+			
+			// aapt resource value: 0x7f09010a
+			public const int notification_main_column_container = 2131296522;
+			
+			// aapt resource value: 0x7f090117
+			public const int overlayImage = 2131296535;
 			
 			// aapt resource value: 0x7f09005e
 			public const int packed = 2131296350;
@@ -15992,8 +16010,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0900cb
 			public const int prefilledQuestions_questionnaireTitle_holder = 2131296459;
 			
-			// aapt resource value: 0x7f090110
-			public const int preview_view = 2131296528;
+			// aapt resource value: 0x7f090116
+			public const int preview_view = 2131296534;
 			
 			// aapt resource value: 0x7f090006
 			public const int progress_circular = 2131296262;
@@ -16007,11 +16025,11 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f09004c
 			public const int right = 2131296332;
 			
-			// aapt resource value: 0x7f09010a
-			public const int right_icon = 2131296522;
+			// aapt resource value: 0x7f090110
+			public const int right_icon = 2131296528;
 			
-			// aapt resource value: 0x7f090106
-			public const int right_side = 2131296518;
+			// aapt resource value: 0x7f09010c
+			public const int right_side = 2131296524;
 			
 			// aapt resource value: 0x7f0900c7
 			public const int rootLayout = 2131296455;
@@ -16127,8 +16145,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f09004d
 			public const int start = 2131296333;
 			
-			// aapt resource value: 0x7f090101
-			public const int status_bar_latest_event_content = 2131296513;
+			// aapt resource value: 0x7f090107
+			public const int status_bar_latest_event_content = 2131296519;
 			
 			// aapt resource value: 0x7f090087
 			public const int submenuarrow = 2131296391;
@@ -16166,8 +16184,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090015
 			public const int textinput_error = 2131296277;
 			
-			// aapt resource value: 0x7f090107
-			public const int time = 2131296519;
+			// aapt resource value: 0x7f09010d
+			public const int time = 2131296525;
 			
 			// aapt resource value: 0x7f09001c
 			public const int title = 2131296284;
@@ -16223,11 +16241,11 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090016
 			public const int view_offset_helper = 2131296278;
 			
-			// aapt resource value: 0x7f090115
-			public const int visible = 2131296533;
+			// aapt resource value: 0x7f09011b
+			public const int visible = 2131296539;
 			
-			// aapt resource value: 0x7f0900f4
-			public const int volume_item_container = 2131296500;
+			// aapt resource value: 0x7f0900fa
+			public const int volume_item_container = 2131296506;
 			
 			// aapt resource value: 0x7f0900c2
 			public const int web_update_details = 2131296450;
@@ -16256,8 +16274,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0900b7
 			public const int wrapper_messages_buttons = 2131296439;
 			
-			// aapt resource value: 0x7f090113
-			public const int zoomButton = 2131296531;
+			// aapt resource value: 0x7f090119
+			public const int zoomButton = 2131296537;
 			
 			static Id()
 			{
@@ -16656,97 +16674,100 @@ namespace WB.UI.Supervisor
 			public const int interview_variable = 2130903143;
 			
 			// aapt resource value: 0x7f030068
-			public const int map_item = 2130903144;
+			public const int Login = 2130903144;
 			
 			// aapt resource value: 0x7f030069
-			public const int mr_chooser_dialog = 2130903145;
+			public const int map_item = 2130903145;
 			
 			// aapt resource value: 0x7f03006a
-			public const int mr_chooser_list_item = 2130903146;
+			public const int mr_chooser_dialog = 2130903146;
 			
 			// aapt resource value: 0x7f03006b
-			public const int mr_controller_material_dialog_b = 2130903147;
+			public const int mr_chooser_list_item = 2130903147;
 			
 			// aapt resource value: 0x7f03006c
-			public const int mr_controller_volume_item = 2130903148;
+			public const int mr_controller_material_dialog_b = 2130903148;
 			
 			// aapt resource value: 0x7f03006d
-			public const int mr_playback_control = 2130903149;
+			public const int mr_controller_volume_item = 2130903149;
 			
 			// aapt resource value: 0x7f03006e
-			public const int mr_volume_control = 2130903150;
+			public const int mr_playback_control = 2130903150;
 			
 			// aapt resource value: 0x7f03006f
-			public const int notification_action = 2130903151;
+			public const int mr_volume_control = 2130903151;
 			
 			// aapt resource value: 0x7f030070
-			public const int notification_action_tombstone = 2130903152;
+			public const int notification_action = 2130903152;
 			
 			// aapt resource value: 0x7f030071
-			public const int notification_media_action = 2130903153;
+			public const int notification_action_tombstone = 2130903153;
 			
 			// aapt resource value: 0x7f030072
-			public const int notification_media_cancel_action = 2130903154;
+			public const int notification_media_action = 2130903154;
 			
 			// aapt resource value: 0x7f030073
-			public const int notification_template_big_media = 2130903155;
+			public const int notification_media_cancel_action = 2130903155;
 			
 			// aapt resource value: 0x7f030074
-			public const int notification_template_big_media_custom = 2130903156;
+			public const int notification_template_big_media = 2130903156;
 			
 			// aapt resource value: 0x7f030075
-			public const int notification_template_big_media_narrow = 2130903157;
+			public const int notification_template_big_media_custom = 2130903157;
 			
 			// aapt resource value: 0x7f030076
-			public const int notification_template_big_media_narrow_custom = 2130903158;
+			public const int notification_template_big_media_narrow = 2130903158;
 			
 			// aapt resource value: 0x7f030077
-			public const int notification_template_custom_big = 2130903159;
+			public const int notification_template_big_media_narrow_custom = 2130903159;
 			
 			// aapt resource value: 0x7f030078
-			public const int notification_template_icon_group = 2130903160;
+			public const int notification_template_custom_big = 2130903160;
 			
 			// aapt resource value: 0x7f030079
-			public const int notification_template_lines_media = 2130903161;
+			public const int notification_template_icon_group = 2130903161;
 			
 			// aapt resource value: 0x7f03007a
-			public const int notification_template_media = 2130903162;
+			public const int notification_template_lines_media = 2130903162;
 			
 			// aapt resource value: 0x7f03007b
-			public const int notification_template_media_custom = 2130903163;
+			public const int notification_template_media = 2130903163;
 			
 			// aapt resource value: 0x7f03007c
-			public const int notification_template_part_chronometer = 2130903164;
+			public const int notification_template_media_custom = 2130903164;
 			
 			// aapt resource value: 0x7f03007d
-			public const int notification_template_part_time = 2130903165;
+			public const int notification_template_part_chronometer = 2130903165;
 			
 			// aapt resource value: 0x7f03007e
-			public const int prefilled_questions = 2130903166;
+			public const int notification_template_part_time = 2130903166;
 			
 			// aapt resource value: 0x7f03007f
-			public const int prefilled_questions_start_button = 2130903167;
+			public const int prefilled_questions = 2130903167;
 			
 			// aapt resource value: 0x7f030080
-			public const int scanner = 2130903168;
+			public const int prefilled_questions_start_button = 2130903168;
 			
 			// aapt resource value: 0x7f030081
-			public const int select_dialog_item_material = 2130903169;
+			public const int scanner = 2130903169;
 			
 			// aapt resource value: 0x7f030082
-			public const int select_dialog_multichoice_material = 2130903170;
+			public const int select_dialog_item_material = 2130903170;
 			
 			// aapt resource value: 0x7f030083
-			public const int select_dialog_singlechoice_material = 2130903171;
+			public const int select_dialog_multichoice_material = 2130903171;
 			
 			// aapt resource value: 0x7f030084
-			public const int splash = 2130903172;
+			public const int select_dialog_singlechoice_material = 2130903172;
 			
 			// aapt resource value: 0x7f030085
-			public const int support_simple_spinner_dropdown_item = 2130903173;
+			public const int splash = 2130903173;
 			
 			// aapt resource value: 0x7f030086
-			public const int tooltip = 2130903174;
+			public const int support_simple_spinner_dropdown_item = 2130903174;
+			
+			// aapt resource value: 0x7f030087
+			public const int tooltip = 2130903175;
 			
 			static Layout()
 			{
@@ -18266,11 +18287,44 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c019a
 			public const int Link_Button = 2131493274;
 			
-			// aapt resource value: 0x7f0c022f
-			public const int Menu_Hint = 2131493423;
+			// aapt resource value: 0x7f0c0235
+			public const int Login_Button = 2131493429;
+			
+			// aapt resource value: 0x7f0c0231
+			public const int Login_Editor = 2131493425;
+			
+			// aapt resource value: 0x7f0c0232
+			public const int Login_Endpoint_Editor = 2131493426;
 			
 			// aapt resource value: 0x7f0c0230
-			public const int Menu_Hint_Bold = 2131493424;
+			public const int Login_ErrorMessage = 2131493424;
+			
+			// aapt resource value: 0x7f0c0237
+			public const int Login_Footer = 2131493431;
+			
+			// aapt resource value: 0x7f0c0238
+			public const int Login_Footer_Message = 2131493432;
+			
+			// aapt resource value: 0x7f0c0233
+			public const int Login_Login_Editor = 2131493427;
+			
+			// aapt resource value: 0x7f0c022f
+			public const int Login_Logo = 2131493423;
+			
+			// aapt resource value: 0x7f0c0239
+			public const int Login_OnlineSingin_Button = 2131493433;
+			
+			// aapt resource value: 0x7f0c0234
+			public const int Login_Password_Editor = 2131493428;
+			
+			// aapt resource value: 0x7f0c0236
+			public const int Login_Troubleshotting_Button = 2131493430;
+			
+			// aapt resource value: 0x7f0c023a
+			public const int Menu_Hint = 2131493434;
+			
+			// aapt resource value: 0x7f0c023b
+			public const int Menu_Hint_Bold = 2131493435;
 			
 			// aapt resource value: 0x7f0c002d
 			public const int Platform_AppCompat = 2131492909;
@@ -18704,8 +18758,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0006
 			public const int Theme_MediaRouter_LightControlPanel = 2131492870;
 			
-			// aapt resource value: 0x7f0c0231
-			public const int Theme_SplashBackground = 2131493425;
+			// aapt resource value: 0x7f0c023c
+			public const int Theme_SplashBackground = 2131493436;
 			
 			// aapt resource value: 0x7f0c0116
 			public const int ThemeOverlay_AppCompat = 2131493142;

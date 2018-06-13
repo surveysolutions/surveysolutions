@@ -5,19 +5,19 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.WebBrowser;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class BandwidthTestViewModel : MvxNotifyPropertyChanged
     {
+        private const int CountOfPingAttemps = 5;
+
         private readonly INetworkService networkService;
-        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IDeviceSettings deviceSettings;
         private readonly IRestService restService;
         private readonly IMvxWebBrowserTask webBrowser;
-        private const int countOfPingAttemps = 5;
 
         private bool isConnectionAbsent;
         private bool isBandwidthTested;
@@ -29,67 +29,67 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public BandwidthTestViewModel(
             INetworkService networkService,
-            IInterviewerSettings interviewerSettings,
+            IDeviceSettings deviceSettings,
             IRestService restService,
             IMvxWebBrowserTask webBrowser)
         {
             this.networkService = networkService;
-            this.interviewerSettings = interviewerSettings;
+            this.deviceSettings = deviceSettings;
             this.restService = restService;
             this.webBrowser = webBrowser;
         }
 
         public bool IsConnectionAbsent
         {
-            get { return this.isConnectionAbsent; }
-            set { this.RaiseAndSetIfChanged(ref this.isConnectionAbsent, value); }
+            get => this.isConnectionAbsent;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isConnectionAbsent, value);
         }
 
         public bool IsBandwidthTested
         {
-            get { return this.isBandwidthTested; }
-            set { this.RaiseAndSetIfChanged(ref this.isBandwidthTested, value); }
+            get => this.isBandwidthTested;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isBandwidthTested, value);
         }
 
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
+            get => this.isInProgress;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isInProgress, value);
         }
 
         public string ConnectionType
         {
-            get { return this.connectionType; }
-            set { this.RaiseAndSetIfChanged(ref this.connectionType, value); }
+            get => this.connectionType;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.connectionType, value);
         }
 
         public string ConnectionDescription
         {
-            get { return this.connectionDescription; }
-            set { this.RaiseAndSetIfChanged(ref this.connectionDescription, value); }
+            get => this.connectionDescription;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.connectionDescription, value);
         }
 
         public string NetworkName
         {
-            get { return this.networkName; }
-            set { this.RaiseAndSetIfChanged(ref this.networkName, value); }
+            get => this.networkName;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.networkName, value);
         }
 
         public string Ping
         {
-            get { return this.ping; }
-            set { this.RaiseAndSetIfChanged(ref this.ping, value); }
+            get => this.ping;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.ping, value);
         }
 
-        public string ServerUrl => this.interviewerSettings.Endpoint;
+        public string ServerUrl => this.deviceSettings.Endpoint;
 
         public IMvxAsyncCommand TestConnectionCommand => new MvxAsyncCommand(this.TestConnectionAsync, () => !string.IsNullOrEmpty(this.ServerUrl));
 
         public IMvxCommand OpenSyncEndPointCommand => new MvxCommand(() =>
         {
-            if (Uri.TryCreate(this.interviewerSettings.Endpoint, UriKind.Absolute, out Uri _))
+            if (Uri.TryCreate(this.deviceSettings.Endpoint, UriKind.Absolute, out Uri _))
             {
-                this.webBrowser.ShowWebPage(this.interviewerSettings.Endpoint);
+                this.webBrowser.ShowWebPage(this.deviceSettings.Endpoint);
             }
             else
             {
@@ -114,15 +114,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             this.IsInProgress = true;
             
-            var pingsInMilliseconds = new double[countOfPingAttemps];
+            var pingsInMilliseconds = new double[CountOfPingAttemps];
             int countOfFailedPingAttemps = 0;
-            for (int pingIndex = 0; pingIndex < countOfPingAttemps; pingIndex++)
+            for (int pingIndex = 0; pingIndex < CountOfPingAttemps; pingIndex++)
             {
                 try
                 {
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
-                    await this.restService.GetAsync(this.interviewerSettings.BandwidthTestUri);
+                    await this.restService.GetAsync(this.deviceSettings.BandwidthTestUri);
                     stopwatch.Stop();
                     pingsInMilliseconds[pingIndex] = stopwatch.ElapsedMilliseconds;
                 }
@@ -140,7 +140,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ConnectionType = this.networkService.GetNetworkType();
             this.NetworkName = this.networkService.GetNetworkName();
 
-            this.IsConnectionAbsent = countOfFailedPingAttemps == countOfPingAttemps;
+            this.IsConnectionAbsent = countOfFailedPingAttemps == CountOfPingAttemps;
             this.ConnectionDescription = this.IsConnectionAbsent
                 ? this.ConnectionDescription =
                     InterviewerUIResources.Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title

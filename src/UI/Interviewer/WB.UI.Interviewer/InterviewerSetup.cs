@@ -119,7 +119,11 @@ namespace WB.UI.Interviewer
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
 
-            builder.RegisterType<InterviewerSettings>().As<IEnumeratorSettings>().As<IRestServiceSettings>().As<IInterviewerSettings>()
+            builder.RegisterType<InterviewerSettings>()
+                .As<IEnumeratorSettings>()
+                .As<IRestServiceSettings>()
+                .As<IInterviewerSettings>()
+                .As<IDeviceSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 

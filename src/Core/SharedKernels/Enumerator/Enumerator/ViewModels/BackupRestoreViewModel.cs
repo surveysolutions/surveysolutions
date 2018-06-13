@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -11,13 +9,13 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class BackupRestoreViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
         private readonly IUserInteractionService userInteractionService;
-        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IDeviceSettings deviceSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly ILogger logger;
@@ -36,14 +34,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public BackupRestoreViewModel(
             IBackupRestoreService backupRestoreService, 
             IUserInteractionService userInteractionService, 
-            IInterviewerSettings interviewerSettings, 
+            IDeviceSettings deviceSettings, 
             IFileSystemAccessor fileSystemAccessor, 
             ITabletDiagnosticService tabletDiagnosticService, 
             ILogger logger)
         {
             this.backupRestoreService = backupRestoreService;
             this.userInteractionService = userInteractionService;
-            this.interviewerSettings = interviewerSettings;
+            this.deviceSettings = deviceSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.logger = logger;
@@ -51,66 +49,61 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public bool IsRestoreVisible
         {
-            get { return this.isRestoreVisible; }
+            get => this.isRestoreVisible;
             set { this.isRestoreVisible = value; this.RaisePropertyChanged(); }
         }
 
         public bool IsBackupCreated
         {
-            get { return this.isBackupCreated; }
+            get => this.isBackupCreated;
             set { this.isBackupCreated = value; this.RaisePropertyChanged(); }
         }
 
         public bool IsBackupInProgress
         {
-            get { return this.isBackupInProgress; }
+            get => this.isBackupInProgress;
             set { this.isBackupInProgress = value; this.RaisePropertyChanged(); }
         }
 
         public string BackupLocation
         {
-            get { return this.backupLocation; }
+            get => this.backupLocation;
             set { this.backupLocation = value; this.RaisePropertyChanged(); }
         }
 
         public DateTime BackupCreationDate
         {
-            get { return this.backupCreationDate; }
+            get => this.backupCreationDate;
             set { this.backupCreationDate = value; this.RaisePropertyChanged(); }
         }
 
         public string BackupScope
         {
-            get { return this.backupScope; }
+            get => this.backupScope;
             set { this.backupScope = value; this.RaisePropertyChanged(); }
         }
 
         public string RestoreLocation
         {
-            get { return this.restoreLocation; }
+            get => this.restoreLocation;
             set { this.restoreLocation = value; this.RaisePropertyChanged(); }
         }
 
         public DateTime RestoreCreationDate
         {
-            get { return this.restoreCreationDate; }
+            get => this.restoreCreationDate;
             set { this.restoreCreationDate = value; this.RaisePropertyChanged(); }
         }
 
         public string RestoreScope
         {
-            get { return this.restoreScope; }
+            get => this.restoreScope;
             set { this.restoreScope = value; this.RaisePropertyChanged(); }
         }
 
         public IMvxAsyncCommand BackupCommand => new MvxAsyncCommand(this.BackupAsync);
-
-        public IMvxCommand RestoreCommand
-        {
-            get { return new MvxCommand(async () => await RestoreAsync()); }
-        }
-
-        public IMvxCommand IncreaseClicksCountOnDescriptionPanelCommand => new MvxCommand(async () => await this.IncreaseClicksCountOnDescriptionPanel());
+        public IMvxCommand RestoreCommand => new MvxAsyncCommand(this.RestoreAsync);
+        public IMvxCommand IncreaseClicksCountOnDescriptionPanelCommand => new MvxAsyncCommand(this.IncreaseClicksCountOnDescriptionPanel);
 
         private async Task IncreaseClicksCountOnDescriptionPanel()
         {
@@ -122,7 +115,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.clicksCountOnDescriptionPanel = 0;
 
-                var restoreFolder = this.interviewerSettings.RestoreFolder;
+                var restoreFolder = this.deviceSettings.RestoreFolder;
 
                 try
                 {
@@ -158,7 +151,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             try
             {
                 var createdFileName = await
-                    this.backupRestoreService.BackupAsync(this.interviewerSettings.BackupFolder)
+                    this.backupRestoreService.BackupAsync(this.deviceSettings.BackupFolder)
                         .ConfigureAwait(false);
 
                 this.BackupLocation = createdFileName;

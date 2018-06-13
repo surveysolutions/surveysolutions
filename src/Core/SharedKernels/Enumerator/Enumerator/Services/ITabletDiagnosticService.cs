@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface ITabletDiagnosticService
     {

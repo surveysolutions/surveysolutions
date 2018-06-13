@@ -3,7 +3,6 @@ using Android.App;
 using Android.OS;
 using Android.Preferences;
 using MvvmCross;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.SharedPreferences;

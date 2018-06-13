@@ -1,6 +1,6 @@
 using System;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SynchronizationException : Exception
     {

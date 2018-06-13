@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IAuditLogService
     {

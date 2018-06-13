@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IBackupRestoreService
     {

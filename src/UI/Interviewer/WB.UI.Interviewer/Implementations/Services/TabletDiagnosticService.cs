@@ -15,6 +15,8 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Shared.Enumerator.Services;
 
