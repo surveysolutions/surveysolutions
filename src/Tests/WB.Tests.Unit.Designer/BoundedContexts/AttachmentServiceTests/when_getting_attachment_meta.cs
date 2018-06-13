@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
@@ -18,10 +18,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 
         [NUnit.Framework.Test] public void should_return_attachment_meta_with_specified_properties () 
         {
-            attachment.FileName.ShouldEqual(fileName);
-            attachment.AttachmentId.ShouldEqual(attachmentId);
-            attachment.ContentId.ShouldEqual(attachmentContentId);
-            attachment.QuestionnaireId.ShouldEqual(questionnaireId);
+            attachment.FileName.Should().Be(fileName);
+            attachment.AttachmentId.Should().Be(attachmentId);
+            attachment.ContentId.Should().Be(attachmentContentId);
+            attachment.QuestionnaireId.Should().Be(questionnaireId);
         }
 
         private static AttachmentMeta attachment;

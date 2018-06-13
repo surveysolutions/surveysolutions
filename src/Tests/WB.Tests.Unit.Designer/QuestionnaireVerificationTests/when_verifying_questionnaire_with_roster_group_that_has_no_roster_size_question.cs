@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -29,13 +29,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainCritical("WB0009");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.GetCritical("WB0009").References.Count().ShouldEqual(1);
+            verificationMessages.GetCritical("WB0009").References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
-            verificationMessages.GetCritical("WB0009").References.Single().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.GetCritical("WB0009").References.Single().Type.Should().Be(QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
-            verificationMessages.GetCritical("WB0009").References.Single().Id.ShouldEqual(rosterGroupId);
+            verificationMessages.GetCritical("WB0009").References.Single().Id.Should().Be(rosterGroupId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

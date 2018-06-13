@@ -564,4 +564,25 @@
   <data name="Yes" xml:space="preserve">
     <value>是</value>
   </data>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>答案已接受。用时{0}</value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>在此签名</value>
+  </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>保存签名</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>警告</value>
+  </data>
 </root>

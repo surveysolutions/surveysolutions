@@ -32,6 +32,73 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         }
 
         [Test]
+        public void KP_11208_should_count_errors()
+        {
+             //arrange
+            var interviewId = Guid.NewGuid();
+            var questionnaireId = new QuestionnaireIdentity(Guid.NewGuid(), 1);
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                interviewSummaryRepository.Store(new InterviewSummary
+                {
+                    SummaryId = interviewId.FormatGuid(),
+                    InterviewId = interviewId,
+                    Status = InterviewStatus.Completed,
+                    QuestionnaireIdentity = questionnaireId.ToString(),
+                    ReceivedByInterviewer = false
+                }, interviewId.FormatGuid()));
+
+            var factory = CreateInterviewFactory();
+
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                id: questionnaireId.QuestionnaireId,
+
+                children: new IComposite[]
+                {
+                    Create.Entity.NumericIntegerQuestion(Id.g1),
+                    Create.Entity.StaticText(Id.g2)
+                });
+
+            PrepareQuestionnaire(questionnaire, questionnaireId.Version);
+
+            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+                factory.Save(new InterviewState
+                {
+                    Id = interviewId,
+                    Validity = new Dictionary<InterviewStateIdentity, InterviewStateValidation>
+                    {
+                        {
+                            InterviewStateIdentity.Create(Create.Identity(Id.g1)), new InterviewStateValidation
+                            {
+                                Id = Id.g1,
+                                RosterVector = RosterVector.Empty,
+                                Validations = new[] {1}
+                            }
+                        },
+                        {
+                            InterviewStateIdentity.Create(Create.Identity(Id.g2)), new InterviewStateValidation
+                            {
+                                Id = Id.g2,
+                                RosterVector = RosterVector.Empty,
+                                Validations = new[] {1}
+                            }
+                        }
+                    }
+                }));
+
+            //act
+            var interviewSummary = this.plainTransactionManager.ExecuteInPlainTransaction(() =>
+            {
+                var summary = interviewSummaryRepository.Query(_ => _.First(x => x.InterviewId == interviewId));
+                var summaryErrorsCount = summary.ErrorsCount; // to trigger lazy load
+                return summary;
+            });
+
+            //assert
+            Assert.That(interviewSummary, Has.Property(nameof(interviewSummary.ErrorsCount)).EqualTo(2));
+        }
+
+        [Test]
         public void KP_11251_when_there_is_roster_with_negative_value()
         {
             //arrange
@@ -524,7 +591,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                  new InterviewEntity{EntityType = EntityType.Question, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
                  new InterviewEntity{EntityType = EntityType.Question, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
                  new InterviewEntity{EntityType = EntityType.Question, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
-                 new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 1, 1, "1:1", 1)},
+                 new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 3, 1, 1, "1:1", 1)},
                  new InterviewEntity{EntityType = EntityType.Question, AsDateTime = new DateTime(2012,12,12)},
                  new InterviewEntity{EntityType = EntityType.Question, AsIntArray = new[]{1,2,3}},
                  new InterviewEntity{EntityType = EntityType.Variable, AsLong = 2222L},
@@ -622,7 +689,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                  new InterviewEntity{EntityType = EntityType.Question, AsYesNo = new []{ new AnsweredYesNoOption(12, true), new AnsweredYesNoOption(1,false) }},
                  new InterviewEntity{EntityType = EntityType.Question, AsGps = new GeoPosition{ Accuracy = 1, Longitude = 2, Latitude = 3, Altitude = 4, Timestamp = DateTimeOffset.Now }},
                  new InterviewEntity{EntityType = EntityType.Question, AsAudio = AudioAnswer.FromString("path/to/file.avi", TimeSpan.FromSeconds(2))},
-                 new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 1, 1, "1:1", 1)},
+                 new InterviewEntity{EntityType = EntityType.Question, AsArea = new Area("geometry", "map", 3, 1, 1, "1:1", 1)},
                  new InterviewEntity{EntityType = EntityType.Question, AsDateTime = new DateTime(2012,12,12)},
                  new InterviewEntity{EntityType = EntityType.Question, AsIntArray = new[]{1,2,3}},
                  new InterviewEntity{EntityType = EntityType.Variable, AsLong = 2222L},

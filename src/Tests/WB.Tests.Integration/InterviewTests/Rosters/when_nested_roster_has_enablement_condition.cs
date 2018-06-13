@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -9,9 +10,22 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
-    internal class when_nested_roster_has_enablement_condition : in_standalone_app_domain
+    internal class when_nested_roster_has_enablement_condition : InterviewTestsContext
     {
-        Because of = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -93,17 +107,17 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_not_enable_mother_roster = () =>
-            results.MotherRosterEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_mother_roster () =>
+            results.MotherRosterEnabled.Should().BeFalse();
 
-        It should_not_enable_father_roster = () =>
-            results.FatherRosterEnabled.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_enable_father_roster () =>
+            results.FatherRosterEnabled.Should().BeFalse();
 
-        It should_not_enable_son_roster = () =>
-           results.SonRosterEnabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_not_enable_son_roster () =>
+           results.SonRosterEnabled.Should().BeTrue();
 
-        It should_not_enable_daughter_roster = () =>
-           results.DaughterRosterEnabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_not_enable_daughter_roster () =>
+           results.DaughterRosterEnabled.Should().BeTrue();
 
         private static InvokeResults results;
 

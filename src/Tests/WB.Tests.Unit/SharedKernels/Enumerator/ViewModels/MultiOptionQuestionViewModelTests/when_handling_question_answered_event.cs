@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -9,14 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     internal class when_handling_question_answered_event : MultiOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -47,19 +46,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
+            BecauseOf();
           
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             viewModel.Handle(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []{2m, 1m}));
-        };
+        }
 
-        It should_set_checked_order_to_options = () => viewModel.Options.Second().CheckedOrder.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_set_checked_order_to_options () => viewModel.Options.Second().CheckedOrder.Should().Be(1);
 
-        It should_mark_options_as_checked = () => viewModel.Options.Count(x => x.Checked).ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_mark_options_as_checked () => viewModel.Options.Count(x => x.Checked).Should().Be(2);
 
-        It should_set_checked_order_to_options1 = () => viewModel.Options.First().CheckedOrder.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_set_checked_order_to_options1 () => viewModel.Options.First().CheckedOrder.Should().Be(2);
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;

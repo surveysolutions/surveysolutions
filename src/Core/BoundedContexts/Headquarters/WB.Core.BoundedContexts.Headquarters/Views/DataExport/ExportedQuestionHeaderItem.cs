@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
+    [DebuggerDisplay("{VariableName}")]
     public class ExportedQuestionHeaderItem : IExportedHeaderItem
     {
         public Guid PublicKey { get; set; }

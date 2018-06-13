@@ -299,13 +299,13 @@
     margin-bottom: 22px;
 }
 %uppercase-font{
-    font: 12px/14px "TrebuchetMSBold";
+    font: 12px/14px $trebuchet_bold;
     text-transform: uppercase;
     letter-spacing: 0.13em;
 } 
 %gray-uppercase{
     color: $gray_light;
-    font: 11px/13px "TrebuchetMSBold";
+    font: 11px/13px $trebuchet_bold;
     letter-spacing: 1px;
     text-transform: uppercase;
 }
@@ -390,9 +390,6 @@
 @mixin tight-filters-aside(){
     .filters{
         margin-top: 60px;
-        // .foldback-button{
-        //     top: $indent-foldback-button;
-        // }
     }
 }
 @mixin visible-foldback-button(){

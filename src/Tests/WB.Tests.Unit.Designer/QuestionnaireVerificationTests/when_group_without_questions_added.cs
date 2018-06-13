@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -25,7 +24,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_return_warning () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_return_warning () => errors.Where(x => x.MessageLevel == VerificationMessageLevel.Warning).Should().NotBeEmpty();
 
         [NUnit.Framework.Test] public void should_return_WB0202_warning_with_reference_to_empty_group () 
         {
@@ -33,8 +32,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .Where(x => x.MessageLevel == VerificationMessageLevel.Warning)
                 .SingleOrDefault(x => x.Code == "WB0202");
 
-            warning.ShouldNotBeNull();
-            warning.References.First().Id.ShouldEqual(groupId);
+            warning.Should().NotBeNull();
+            warning.References.First().Id.Should().Be(groupId);
         }
 
 

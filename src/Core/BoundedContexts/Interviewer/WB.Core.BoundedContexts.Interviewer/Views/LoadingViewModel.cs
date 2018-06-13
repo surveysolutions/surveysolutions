@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class LoadingViewModel : BaseViewModel, IDisposable
+    public class LoadingViewModel : BaseViewModel<LoadingViewModelArg>, IDisposable
     {
         protected Guid interviewId;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -51,11 +51,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
         }
 
-        public void Init(Guid interviewId)
+        public override void Prepare(LoadingViewModelArg arg)
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            this.interviewId = interviewId;
+            this.interviewId = arg.InterviewId;
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            if (interviewId == Guid.Empty) throw new ArgumentException(nameof(interviewId));
             this.ProgressDescription = InterviewerUIResources.Interview_Loading;
+        }
+
+        public override void ViewAppeared()
+        {
+            Task.Run(RestoreInterviewAndNavigateThereAsync);
         }
 
         public async Task RestoreInterviewAndNavigateThereAsync()
@@ -69,18 +79,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
 
-                IStatefulInterview interview =
-                    await
-                        this.interviewRepository.GetAsync(interviewIdString, progress,
-                            this.loadingCancellationTokenSource.Token).ConfigureAwait(false);
+                IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token)
+                                                                             .ConfigureAwait(false);
 
-                await Task.Run(() => this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language));
+                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
                 if (interview.Status == InterviewStatus.Completed)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
                     var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
-                        this.principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                        this.Principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
                     await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
                 }
 
@@ -88,11 +96,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (interview.HasEditableIdentifyingQuestions)
                 {
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewIdString);
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
                 }
                 else
                 {
-                    this.viewModelNavigationService.NavigateToInterview(interviewIdString, navigationIdentity: null);
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString, navigationIdentity: null);
                 }
             }
             catch (OperationCanceledException)
@@ -103,7 +111,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             {
                 await this.interactionService.AlertAsync(exception.Message, InterviewerUIResources.FailedToLoadInterview);
                 this.logger.Error($"Failed to load interview {this.interviewId}. {exception.ToString()}", exception);
-                await this.viewModelNavigationService.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             finally
             {
@@ -132,8 +140,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToDashboard());
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
 
-        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
     }
 }

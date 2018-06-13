@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using Main.Core.Entities.SubEntities;
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             importDataVerifier.VerifyPanelFiles(questionnaireId, 1, Create.Entity.PreloadedDataByFile(preloadedDataByFile), status);
 
             // Assert
-            status.VerificationState.Errors.Count.ShouldEqual(0);
+            status.VerificationState.Errors.Count.Should().Be(0);
         }
 
         private static ImportDataVerifier importDataVerifier;

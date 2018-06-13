@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
-using WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
@@ -124,7 +123,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                 }
             };
 
-            var command = Create.Command.CreateInterview(interview.Id, answersToIdentifyingQuestions: answersToIdentifyingQuestions, assignmentId: 1);
+            var command = Create.Command.CreateInterview(interview.Id, answers: answersToIdentifyingQuestions, assignmentId: 1);
 
             //act
             interview.CreateInterview(command);
@@ -154,7 +153,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Answer = TextAnswer.FromString("value")
                 }
             };
-            var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
+            var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answers: answersToIdentifyingQuestions);
 
             //act
             interview.CreateInterview(command);
@@ -180,7 +179,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
                     Answer = TextAnswer.FromString("value")
                 }
             };
-            var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answersToIdentifyingQuestions: answersToIdentifyingQuestions);
+            var command = Create.Command.CreateInterview(interview.Id, assignmentId: 1, answers: answersToIdentifyingQuestions);
 
             // act
             interview.CreateInterview(command);

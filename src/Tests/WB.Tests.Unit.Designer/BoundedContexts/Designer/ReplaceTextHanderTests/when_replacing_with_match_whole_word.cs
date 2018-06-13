@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         private void BecauseOf() => questionnaire.ReplaceTexts(command);
 
         [NUnit.Framework.Test] public void should_find_whole_word_match () => 
-            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().ShouldEqual($"static {replaceWith} title {searchFor}second");
+            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().Should().Be($"static {replaceWith} title {searchFor}second");
 
         static Questionnaire questionnaire;
 

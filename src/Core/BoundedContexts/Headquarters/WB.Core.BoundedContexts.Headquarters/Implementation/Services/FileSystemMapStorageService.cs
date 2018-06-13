@@ -74,7 +74,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             try
             {
                 var properties = await mapPropertiesProvider.GetMapPropertiesFromFileAsync(tempFile);
-
                 var mapItem = new MapBrowseItem()
                 {
                     Id = mapFile.Name,
@@ -188,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             var interviewerRoleId = UserRoles.Interviewer.ToUserId();
 
             var availableUsers = this.userStorage.Users
-                .Where(x => users.Contains(x.UserName))
+                .Where(x => users.Select(em => em.ToLower()).Contains(x.UserName.ToLower()))
                 .Select(x => new
                 {
                     UserName = x.UserName,

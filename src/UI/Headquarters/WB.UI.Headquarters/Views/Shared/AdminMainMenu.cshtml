@@ -5,10 +5,10 @@
     var page = ViewBag.ActivePage ?? MenuItem.Logon;
 }
 <ul class="nav navbar-nav">
-    <li class="dropdown @(page == MenuItem.MapReport || 
-                          page == MenuItem.Surveys || 
-                          page == MenuItem.Summary || 
-                          page == MenuItem.Statuses || 
+    <li class="dropdown @(page == MenuItem.MapReport ||
+                          page == MenuItem.Surveys ||
+                          page == MenuItem.Summary ||
+                          page == MenuItem.Statuses ||
                           page == MenuItem.DevicesInterviewers ||
                           page == MenuItem.StatusDuration ||
                           page == MenuItem.InterviewsChart ? "active" : "")">
@@ -24,6 +24,7 @@
             @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
             @Html.MainMenuItem("QuantityBySupervisors", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
             @Html.MainMenuItem("SpeedBySupervisors", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
+            @Html.MainMenuItem("SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
         </ul>
     </li>
     @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)

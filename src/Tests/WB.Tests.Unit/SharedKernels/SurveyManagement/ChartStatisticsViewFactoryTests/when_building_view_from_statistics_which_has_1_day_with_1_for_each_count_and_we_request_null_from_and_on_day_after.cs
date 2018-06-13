@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -38,31 +38,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         [Test]
         public void should_return_7_lines_the_same_as_statuses_count() =>
-            view.Lines.Length.ShouldEqual(7);
+            view.Lines.Length.Should().Be(7);
 
         [Test]
         public void should_set_1st_point_horizontal_coord_of_all_lines_equal_to_2014_08_20() =>
-            view.Lines.ShouldEachConformTo(line => (string)line[0][0] == "2014-08-20");
+            view.Lines.Should().OnlyContain(line => (string)line[0][0] == "2014-08-20");
 
         [Test]
         public void should_set_2nd_point_horizontal_coord_of_all_lines_equal_to_2014_08_21() =>
-            view.Lines.ShouldEachConformTo(line => (string)line[1][0] == "2014-08-21");
+            view.Lines.Should().OnlyContain(line => (string)line[1][0] == "2014-08-21");
 
         [Test]
         public void should_set_3rd_point_horizontal_coord_of_all_lines_equal_to_2014_08_22() =>
-            view.Lines.ShouldEachConformTo(line => (string)line[2][0] == "2014-08-22");
+            view.Lines.Should().OnlyContain(line => (string)line[2][0] == "2014-08-22");
 
         [Test]
         public void should_set_1st_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
-            view.Lines.ShouldEachConformTo(line => (int) line[0][1] == 0);
+            view.Lines.Should().OnlyContain(line => (int) line[0][1] == 0);
 
         [Test]
         public void should_set_2nd_point_vertical_size_of_all_lines_equal_to_0_as_starting_day_with_no_data() =>
-            view.Lines.ShouldEachConformTo(line => (int) line[1][1] == 1);
+            view.Lines.Should().OnlyContain(line => (int) line[1][1] == 1);
 
         [Test]
         public void should_set_3rd_point_vertical_size_of_all_lines_equal_to_1() =>
-            view.Lines.ShouldEachConformTo(line => (int) line[2][1] == 1);
+            view.Lines.Should().OnlyContain(line => (int) line[2][1] == 1);
         
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

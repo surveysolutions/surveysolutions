@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -10,11 +10,9 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
-    [Subject(typeof(InterviewParaDataEventHandler))]
     internal class when_all_available_descendants_of_QuestionAnswered_recived
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (var assembly in assemblies)
             {
@@ -27,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                 {
                 }
             }
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() 
             {
                 foreach (var eventToPublish in availableDescendants)
                 {
@@ -40,10 +38,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
                     if (handleMethod == null)
                         missingHandlers.Add(eventToPublish);
                 }
-            };
+            }
 
-        It should_each_QuestionAnswered_descendant_be_handled_by_InterviewHistoryDenormalizer = () =>
-            missingHandlers.ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_each_QuestionAnswered_descendant_be_handled_by_InterviewHistoryDenormalizer () =>
+            missingHandlers.Should().BeEmpty();
 
         private static HashSet<Type> missingHandlers = new HashSet<Type>();
 

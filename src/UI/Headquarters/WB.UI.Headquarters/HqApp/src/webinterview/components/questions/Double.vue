@@ -5,13 +5,19 @@
                 <div class="form-group">
                     <div class="field" :class="{ answered: $me.isAnswered }"> 
                         <input type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"
+                            ref="inputDouble"
                             :placeholder="noAnswerWatermark" 
                             :title="noAnswerWatermark"
                             :value="$me.answer" v-blurOnEnterKey @blur="answerDoubleQuestion"
                             :disabled="isSpecialValueSelected || !$me.acceptAnswer"
                             :class="{ 'special-value-selected': isSpecialValueSelected }"
-                            v-numericFormatting="{aSep: groupSeparator, aDec:decimalSeparator, mDec: $me.countOfDecimalPlaces, vMin: '-99999999999999.99999999999999', vMax: '99999999999999.99999999999999', aPad: false }">
-                            <wb-remove-answer v-if="!isSpecialValueSelected" />
+                            v-numericFormatting="{minimumValue:'-99999999999999.99999999999999',
+                                                 maximumValue:'99999999999999.99999999999999',
+                                                 digitGroupSeparator: groupSeparator,
+                                                 decimalCharacter:decimalSeparator, 
+                                                 decimalPlaces: decimalPlacesCount, 
+                                                 allowDecimalPadding: false}">
+                            <wb-remove-answer v-if="!isSpecialValueSelected" :on-remove="removeAnswer"/>
                     </div>
                 </div>
                 <div class="radio" v-if="isSpecialValueSelected != false" v-for="option in $me.options" :key="$me.id + '_' + option.value">
@@ -26,7 +32,7 @@
                         <label :for="$me.id + '_' + option.value">
                             <span class="tick"></span> {{option.title}}
                         </label>
-                        <wb-remove-answer />
+                        <wb-remove-answer :on-remove="removeAnswer"/>
                     </div>
                 </div>
                 <wb-lock />
@@ -37,7 +43,12 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import * as $ from "jquery"
+    
     export default {
+        data() {
+            return {
+                autoNumericElement: null}
+            },
         name: 'Double',
         mixins: [entityDetails],
         computed: {
@@ -50,23 +61,43 @@
                 return !this.$me.acceptAnswer && !this.$me.isAnswered ? this.$t('Details.NoAnswer') : this.$t('WebInterviewUI.DecimalEnter')
             },
             groupSeparator() {
+
+                var defaultSeparator = ''
+
                 if (this.$me.useFormatting) {                    
                     var etalon = 1111
                     var localizedNumber = etalon.toLocaleString()
-                    return localizedNumber.substring(1, localizedNumber.length - 3)
+                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
+                
+                    return (separator == null || separator == undefined)
+                        ? defaultSeparator
+                        : separator  
                 }
 
-                return ''
+                return defaultSeparator
             },
             decimalSeparator() {
+
+                var defaultSeparator = '.'
+
                 if (this.$me.useFormatting) {
                     
                     var etalon = 1.111
                     var localizedNumber = etalon.toLocaleString()
-                    return localizedNumber.substring(1, localizedNumber.length - 3)
+                    var separator = localizedNumber.substring(1, localizedNumber.length - 3)
+
+                    return (separator == null || separator == undefined)
+                        ? defaultSeparator
+                        : separator
                 }
 
-                return '.'
+                return defaultSeparator
+            },
+            decimalPlacesCount(){
+                if (this.$me.countOfDecimalPlaces == null || this.$me.countOfDecimalPlaces == undefined)
+                    return 15;
+                
+                return this.$me.countOfDecimalPlaces    
             },
             specialValue: {
                 get() {
@@ -76,10 +107,10 @@
                     this.saveAnswer(value, true);
                 }
             }
-        },
+        },        
         methods: {
             answerDoubleQuestion(evnt) {
-                const answerString = $(evnt.target).autoNumeric('get');
+                const answerString = this.autoNumericElement.getNumericString();
                 if (answerString.replace(/[^0-9]/g, "").length > 15) {
                     this.markAnswerAsNotSavedWithMessage(this.$t("WebInterviewUI.DecimalTooBig"))
                     return
@@ -115,6 +146,18 @@
                         return true;
                 }
                 return false;
+            },
+            removeAnswer() {                                
+                if(this.autoNumericElement)
+                    this.autoNumericElement.clear()
+                
+                this.$store.dispatch("removeAnswer", this.id)
+                    return
+                }
+        },
+        beforeDestroy () {
+            if (this.autoNumericElement) {
+                this.autoNumericElement.remove()
             }
         }
     }

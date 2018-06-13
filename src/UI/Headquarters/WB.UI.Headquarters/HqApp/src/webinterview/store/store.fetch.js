@@ -1,12 +1,11 @@
 import Vue from "vue"
-import { getLocationHash } from "~/shared/helpers"
-import { debounce } from "lodash"
 
 const fetch = {
     state: {
         scroll: {
             id: null
         },
+        loadingProgress: false,
         fetchState: {
             uploaded: null,
             total: null
@@ -43,6 +42,7 @@ const fetch = {
             commit("SET_SCROLL_TARGET", null)
         }
     },
+
     mutations: {
         SET_UPLOAD_PROGRESS(state, { entity, now, total }) {
             Vue.set(entity, "fetchState", {})
@@ -68,6 +68,9 @@ const fetch = {
         },
         SET_SCROLL_TARGET(state, id) {
             state.scroll.id = id
+        },        
+        SET_LOADING_PROGRESS(state, value) {
+            state.loadingProgress = value
         }
     }
 }

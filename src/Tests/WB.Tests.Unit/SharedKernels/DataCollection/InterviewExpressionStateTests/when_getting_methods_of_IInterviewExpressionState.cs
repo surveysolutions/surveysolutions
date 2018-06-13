@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.V2;
 
@@ -9,9 +9,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
 {
     internal class when_getting_methods_of_IInterviewExpressionState
     {
-        Establish context = () => { };
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             methods = typeof(IInterviewExpressionStateV2).GetMethods()
                 .Concat(typeof(IInterviewExpressionStateV2)
                     .GetInterfaces()
@@ -24,61 +28,61 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewExpressionStateTes
                 })
                 .ToList();
 
-        It should_return_list_of_specified_methods_only = () =>
-            methods.Select(m => m.Name).ShouldContainOnly(interfaceMethods.Select(x => x.Name));
-        It should_match_method_signature_for_UpdateNumericRealAnswer = () =>
+        [NUnit.Framework.Test] public void should_return_list_of_specified_methods_only () =>
+            methods.Select(m => m.Name).Should().BeEquivalentTo(interfaceMethods.Select(x => x.Name));
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateNumericRealAnswer () =>
             methods.Get("UpdateNumericRealAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateNumericRealAnswer"));
-        It should_match_method_signature_for_UpdateDateAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateDateAnswer () =>
             methods.Get("UpdateDateAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateDateAnswer"));
-        It should_match_method_signature_for_UpdateMediaAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateMediaAnswer () =>
             methods.Get("UpdateMediaAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateMediaAnswer"));
-        It should_match_method_signature_for_UpdateTextAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateTextAnswer () =>
             methods.Get("UpdateTextAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateTextAnswer"));
-        It should_match_method_signature_for_UpdateQrBarcodeAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateQrBarcodeAnswer () =>
             methods.Get("UpdateQrBarcodeAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateQrBarcodeAnswer"));
-        It should_match_method_signature_for_UpdateSingleOptionAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateSingleOptionAnswer () =>
             methods.Get("UpdateSingleOptionAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateSingleOptionAnswer"));
-        It should_match_method_signature_for_UpdateMultiOptionAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateMultiOptionAnswer () =>
             methods.Get("UpdateMultiOptionAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateMultiOptionAnswer"));
-        It should_match_method_signature_for_UpdateGeoLocationAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateGeoLocationAnswer () =>
             methods.Get("UpdateGeoLocationAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateGeoLocationAnswer"));
-        It should_match_method_signature_for_UpdateTextListAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateTextListAnswer () =>
             methods.Get("UpdateTextListAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateTextListAnswer"));
-        It should_match_method_signature_for_UpdateLinkedSingleOptionAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateLinkedSingleOptionAnswer () =>
             methods.Get("UpdateLinkedSingleOptionAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateLinkedSingleOptionAnswer"));
-        It should_match_method_signature_for_UpdateLinkedMultiOptionAnswer = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_UpdateLinkedMultiOptionAnswer () =>
             methods.Get("UpdateLinkedMultiOptionAnswer").ShouldMatchMethodInfo(interfaceMethods.Get("UpdateLinkedMultiOptionAnswer"));
 
-        It should_match_method_signature_for_DeclareAnswersInvalid = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_DeclareAnswersInvalid () =>
             methods.Get("DeclareAnswersInvalid").ShouldMatchMethodInfo(interfaceMethods.Get("DeclareAnswersInvalid"));
-        It should_match_method_signature_for_DeclareAnswersValid = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_DeclareAnswersValid () =>
             methods.Get("DeclareAnswersValid").ShouldMatchMethodInfo(interfaceMethods.Get("DeclareAnswersValid"));
 
-        It should_match_method_signature_for_DisableGroups = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_DisableGroups () =>
             methods.Get("DisableGroups").ShouldMatchMethodInfo(interfaceMethods.Get("DisableGroups"));
-        It should_match_method_signature_for_EnableGroups = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_EnableGroups () =>
             methods.Get("EnableGroups").ShouldMatchMethodInfo(interfaceMethods.Get("EnableGroups"));
-        It should_match_method_signature_for_DisableQuestions = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_DisableQuestions () =>
             methods.Get("DisableQuestions").ShouldMatchMethodInfo(interfaceMethods.Get("DisableQuestions"));
-        It should_match_method_signature_for_EnableQuestions = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_EnableQuestions () =>
             methods.Get("EnableQuestions").ShouldMatchMethodInfo(interfaceMethods.Get("EnableQuestions"));
 
 
-        It should_match_method_signature_for_AddRoster = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_AddRoster () =>
             methods.Get("AddRoster").ShouldMatchMethodInfo(interfaceMethods.Get("AddRoster"));
-        It should_match_method_signature_for_RemoveRoster = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_RemoveRoster () =>
             methods.Get("RemoveRoster").ShouldMatchMethodInfo(interfaceMethods.Get("RemoveRoster"));
         
-        It should_match_method_signature_for_ProcessValidationExpressions = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_ProcessValidationExpressions () =>
             methods.Get("ProcessValidationExpressions").ShouldMatchMethodInfo(interfaceMethods.Get("ProcessValidationExpressions"));
-        It should_match_method_signature_for_ProcessEnablementConditions = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_ProcessEnablementConditions () =>
             methods.Get("ProcessEnablementConditions").ShouldMatchMethodInfo(interfaceMethods.Get("ProcessEnablementConditions"));
-        It should_match_method_signature_for_SaveAllCurrentStatesAsPrevious = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_SaveAllCurrentStatesAsPrevious () =>
             methods.Get("SaveAllCurrentStatesAsPrevious").ShouldMatchMethodInfo(interfaceMethods.Get("SaveAllCurrentStatesAsPrevious"));
 
-        It should_match_method_signature_for_Clone_of_first_version = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_Clone_of_first_version () =>
             methods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionState)).ShouldMatchMethodInfo(interfaceMethods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionState)));
-        It should_match_method_signature_for_Clone_of_second_version = () =>
+        [NUnit.Framework.Test] public void should_match_method_signature_for_Clone_of_second_version () =>
            methods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionStateV2)).ShouldMatchMethodInfo(interfaceMethods.GetByMethodNameAndReturnType("Clone", typeof(IInterviewExpressionStateV2)));
 
         private static List<MetodInfo> methods;

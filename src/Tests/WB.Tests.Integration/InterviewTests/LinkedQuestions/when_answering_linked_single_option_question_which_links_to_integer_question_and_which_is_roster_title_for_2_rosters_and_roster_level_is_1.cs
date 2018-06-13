@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
@@ -91,24 +91,24 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         [Test]
         public void should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
-                .ShouldContainOnly(rosterAId, rosterBId);
+                .Should().BeEquivalentTo(rosterAId, rosterBId);
 
         [Test]
         public void should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events() =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(
+                .Should().OnlyContain(
                 @event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(RosterVector.Empty.CoordinatesAsDecimals)));
 
         [Test]
         public void should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events  () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
 
         [Test]
         public void should_set_title_to_invariant_culture_formatted_value_assigned_to_corresponding_linked_to_question_in_all_RosterRowTitleChanged_events() =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
                 .SelectMany(@event => @event.ChangedInstances.Select(x=>x.Title))
-                .ShouldEachConformTo(title => title == linkedOption2TextInvariantCulture);
+                .Should().OnlyContain(title => title == linkedOption2TextInvariantCulture);
 
         private static EventContext eventContext;
         private static Interview interview;

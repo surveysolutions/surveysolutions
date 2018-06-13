@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -9,14 +9,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_export_structure_from_questionnaire_containing_2_autopropagated_groups_with_one_trigger_max_2_rows_and__ : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.NumericIntegerQuestion(numericTriggerQuestionId),
                 Create.Entity.Roster(roster1Id, rosterSizeQuestionId: numericTriggerQuestionId, rosterSizeSourceType: RosterSizeSourceType.FixedTitles, children: new []
@@ -32,17 +31,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
+            BecauseOf();
+        }
 
-        };
-
-        Because of = () =>
+        public void BecauseOf() =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1);
 
-        It should_create_header_with_60_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster2Id }].HeaderItems[linkedQuestionId].ColumnHeaders.Count.ShouldEqual(60);
+        [NUnit.Framework.Test] public void should_create_header_with_60_column () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster2Id }].HeaderItems[linkedQuestionId].ColumnHeaders.Count.Should().Be(60);
 
-        It should_create_header_with_nullable_level_labels = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_create_header_with_nullable_level_labels () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.Should().BeNull();
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;

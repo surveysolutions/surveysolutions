@@ -1,12 +1,11 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
 {
     public class when_filter_formatted_decimal_with_max_digits_after_decimal_separator : NumericTextFormatterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var numericTextFormatterSettings = new NumericTextFormatterSettings
             {
                 IsDecimal = true,
@@ -19,12 +18,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Utils.NumericTextFormatterTests
             };
 
             formatter = CreateNumericTextFormatter(numericTextFormatterSettings);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => filteredResult = formatter.FilterFormatted(addedText: "1", sourceText: "11.11", insertToIndex: 5);
+        public void BecauseOf() => filteredResult = formatter.FilterFormatted(addedText: "1", sourceText: "11.11", insertToIndex: 5);
 
-        It should_return_empty_string = () =>
-            filteredResult.ShouldEqual("");
+        [NUnit.Framework.Test] public void should_return_empty_string () =>
+            filteredResult.Should().Be("");
         
         static NumericTextFormatter formatter;
 

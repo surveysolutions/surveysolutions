@@ -1,23 +1,21 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 {
     internal class when_getting_team_interviews : TeamInterviewsFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_return_correct_total_count () {
             Guid responsibleId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-            version = 1;
+            var questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            var version = 1;
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
             {
@@ -32,23 +30,20 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
             PostgreReadSideStorage<InterviewSummary> repository;
             PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader;
-            reportFactory = CreateTeamInterviewsFactory(out repository, out featuredQuestionAnswersReader);
+            var reportFactory = CreateTeamInterviewsFactory(out repository, out featuredQuestionAnswersReader);
 
             ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
 
-        };
+            // Act
+            var report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
+            {
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = version,
+            }));
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
-        {
-            QuestionnaireId = questionnaireId,
-            QuestionnaireVersion = version,
-        }));
+            // Assert
+            report.TotalCount.Should().Be(3);
+        }
 
-        It should_return_correct_total_count = () => report.TotalCount.ShouldEqual(3);
-
-        static ITeamInterviewsFactory reportFactory;
-        static TeamInterviewsView report;
-        static Guid questionnaireId;
-        static int version;
     }
 }

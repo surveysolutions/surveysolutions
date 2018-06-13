@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -27,13 +26,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             messages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_have_1_error () =>
-            messages.Count().ShouldEqual(1);
+            messages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_not_return_message_WB0115 () =>
-            messages.Single().Code.ShouldEqual("WB0115");
+            messages.Single().Code.Should().Be("WB0115");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            messages.Single().References.Count().ShouldEqual(1);
+            messages.Single().References.Count().Should().Be(1);
        
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;

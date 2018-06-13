@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCommandTests
 {
-    [Subject(typeof (Questionnaire))]
     internal class when_creating_new_questionnaire
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
@@ -22,22 +21,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CreateQuestionnaireCom
         private void BecauseOf() => questionnaire.CreateQuestionnaire(Create.Command.CreateQuestionnaire(questionnaireId, questionnaireTitle, createdBy, isPublic));
 
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_id () =>
-            questionnaire.QuestionnaireDocument.PublicKey.ShouldEqual(questionnaireId);
+            questionnaire.QuestionnaireDocument.PublicKey.Should().Be(questionnaireId);
 
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_Title () =>
-            questionnaire.QuestionnaireDocument.Title.ShouldEqual(questionnaireTitle);
+            questionnaire.QuestionnaireDocument.Title.Should().Be(questionnaireTitle);
 
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_IsPublic_flag () =>
-            questionnaire.QuestionnaireDocument.IsPublic.ShouldEqual(isPublic);
+            questionnaire.QuestionnaireDocument.IsPublic.Should().Be(isPublic);
 
         [NUnit.Framework.Test] public void should_contains_questionnaire_with_given_CreatedBy () =>
-            questionnaire.QuestionnaireDocument.CreatedBy.ShouldEqual(createdBy);
+            questionnaire.QuestionnaireDocument.CreatedBy.Should().Be(createdBy);
 
         [NUnit.Framework.Test] public void should_raise_new_group_added_event () 
         {
             var group = (IGroup)questionnaire.QuestionnaireDocument.Children.Single();
-            group.GetParent().ShouldEqual(questionnaire.QuestionnaireDocument);
-            group.Title.ShouldEqual("New Section");
+            group.GetParent().Should().Be(questionnaire.QuestionnaireDocument);
+            group.Title.Should().Be("New Section");
         }
 
 

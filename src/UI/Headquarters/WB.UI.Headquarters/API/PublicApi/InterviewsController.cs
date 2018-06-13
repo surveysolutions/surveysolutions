@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -60,17 +61,28 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.statefullInterviewSearcher = statefullInterviewSearcher;
         }
 
+
+        /// <summary>
+        /// Gets list of interviews existing in the system
+        /// </summary>
+        /// <param name="questionnaireId">Questionnaire id if filtering by this field is required</param>
+        /// <param name="questionnaireVersion">Questionnaire id if filtering by this field is required</param>
+        /// <param name="status">Filtering by interview status</param>
+        /// <param name="interviewId">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="pageSize">Page size</param>
+        /// <param name="page">Page number (starting from 1)</param>
+        /// <returns></returns>
         [HttpGet]
-        [Route("")] //?{templateId}&{templateVersion}&{status}&{interviewId}&{limit=10}&{offset=1}
-        public InterviewApiView InterviewsFiltered(Guid? templateId = null, long? templateVersion = null,
-            InterviewStatus? status = null, Guid? interviewId = null, int limit = 10, int offset = 1)
+        [Route("")]
+        public InterviewApiView InterviewsFiltered(Guid? questionnaireId = null, long? questionnaireVersion = null,
+            InterviewStatus? status = null, Guid? interviewId = null, int pageSize = 10, int page = 1)
         {
             var input = new AllInterviewsInputModel
             {
-                Page = this.CheckAndRestrictOffset(offset),
-                PageSize = this.CheckAndRestrictLimit(limit),
-                QuestionnaireId = templateId,
-                QuestionnaireVersion = templateVersion,
+                Page = this.CheckAndRestrictOffset(page),
+                PageSize = this.CheckAndRestrictLimit(pageSize),
+                QuestionnaireId = questionnaireId,
+                QuestionnaireVersion = questionnaireVersion,
                 Statuses = status.HasValue ? new[] { status.Value } : null,
                 InterviewId = interviewId
             };
@@ -80,9 +92,13 @@ namespace WB.UI.Headquarters.API.PublicApi
             return new InterviewApiView(interviews);
         }
 
+        /// <summary>
+        /// Gets all the answers for given interview
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         [HttpGet]
-        [Route("{id:guid}/details")]
-        public InterviewApiDetails InterviewDetails(Guid id)
+        [Route("{id:guid}")]
+        public InterviewApiDetails Get(Guid id)
         {
             var interview = this.statefulInterviewRepository.Get(id.ToString());
             if (interview == null)
@@ -122,8 +138,22 @@ namespace WB.UI.Headquarters.API.PublicApi
             };
         }
 
+        [HttpGet]
+        [Route("{id:guid}/history")]
+        public InterviewHistoryView InterviewHistory(Guid id)
+        {
+            var interview = this.interviewHistoryViewFactory.Load(id);
+
+            if (interview == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+
+            return interview;
+        }
+
         /// <summary>
-        /// Leave a comment on a question
+        /// Leave a comment on a question using questionnaire variable name and roster vector
         /// </summary>
         /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
         /// <param name="variable">Variable name. This is the variable name for a question in Designer or in an export file.</param>
@@ -174,32 +204,21 @@ namespace WB.UI.Headquarters.API.PublicApi
             return this.TryExecuteCommand(command);
         }
 
-        [HttpGet]
-        [Route("{id:guid}/history")]
-        public InterviewHistoryView InterviewHistory(Guid id)
-        {
-            var interview = this.interviewHistoryViewFactory.Load(id);
+        #region POST
 
-            if (interview == null)
-            {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-
-            return interview;
-        }
-
-#region POST
         /// <summary>
         /// Assigns interview to interviewer
         /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="request">Responsible id or responsible name</param>
         /// <response code="200">Interview was reassigned</response>
         /// <response code="404">Interview was not found</response>
         /// <response code="406">Target responsible was not found or it is not an interviewer</response>
-        [HttpPost]
-        [Route("assign")]
-        public HttpResponseMessage PostAssign(AssignChangeApiModel request)
+        [HttpPatch]
+        [Route("{id:guid}/assign")]
+        public HttpResponseMessage Assign(Guid id, AssignChangeApiModel request)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
 
             var userInfo = this.userViewFactory.GetUser(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value): new UserViewInputModel(request.ResponsibleName, null));
 
@@ -209,70 +228,107 @@ namespace WB.UI.Headquarters.API.PublicApi
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
             
-            return this.TryExecuteCommand(new AssignInterviewerCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey, DateTime.UtcNow));
+            return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id, DateTime.UtcNow));
         }
 
-        [HttpPost]
-        [Route("approve")]
-        public HttpResponseMessage Approve(StatusChangeApiModel request)
+        /// <summary>
+        /// Approves interview 
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="comment">Approval comment</param>
+        /// <response code="200">Interview was approved</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target interview was in status that was not ready to be approved</response>
+        [HttpPatch]
+        [Route("{id:guid}/approve")]
+        public HttpResponseMessage Approve(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new ApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow));
         }
 
-        [HttpPost]
-        [Route("reject")]
-        public HttpResponseMessage Reject(StatusChangeApiModel request)
+        /// <summary>
+        /// Rejects interview as supervisor
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="comment">Rejection comment</param>
+        /// <response code="200">Interview was rejected</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        [HttpPatch]
+        [Route("{id:guid}/reject")]
+        public HttpResponseMessage Reject(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new RejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow));
         }
 
-        [HttpPost]
-        [Route("hqapprove")]
-        public HttpResponseMessage HQApprove(StatusChangeApiModel request)
+        /// <summary>
+        /// Approves interview as headquarters
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="comment">Rejection comment</param>
+        /// <response code="200">Interview was approved</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target interview was in status that was not ready to be approved</response>
+        [HttpPatch]
+        [Route("{id:guid}/hqapprove")]
+        public HttpResponseMessage HQApprove(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new HqApproveInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
+            return this.TryExecuteCommand(new HqApproveInterviewCommand(id, this.authorizedUser.Id, comment));
         }
 
-
-        [HttpPost]
-        [Route("hqreject")]
-        public HttpResponseMessage HQReject(StatusChangeApiModel request)
+        /// <summary>
+        /// Rejects interview as headquarters
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="comment">Rejection comment</param>
+        /// <response code="200">Interview was rejected</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        [HttpPatch]
+        [Route("{id:guid}/hqreject")]
+        public HttpResponseMessage HQReject(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new HqRejectInterviewCommand(request.Id, this.authorizedUser.Id, request.Comment));
+            return this.TryExecuteCommand(new HqRejectInterviewCommand(id, this.authorizedUser.Id, comment));
         }
 
-
-        [HttpPost]
-        [Route("hqunapprove")]
-        public HttpResponseMessage HQUnapprove(StatusChangeApiModel request)
+        /// <summary>
+        /// Rejects interview from Approved by headquarters status
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="comment">Rejection comment</param>
+        /// <response code="200">Interview was rejected</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target interview was in status that was not ready to be rejected</response>
+        [HttpPatch]
+        [Route("{id:guid}/hqunapprove")]
+        public HttpResponseMessage HQUnapprove(Guid id, string comment = null)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new UnapproveByHeadquartersCommand(request.Id, this.authorizedUser.Id, request.Comment));
+            return this.TryExecuteCommand(new UnapproveByHeadquartersCommand(id, this.authorizedUser.Id, comment));
         }
 
-        [HttpPost]
-        [Route("delete")]
-        public HttpResponseMessage Delete(StatusChangeApiModel request)
+        /// <summary>
+        /// Assigns supervisor
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <param name="request"></param>
+        /// <response code="200">Interview was deleted</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Interview cannot be reassigned. Check response for error description</response>
+        [HttpPatch]
+        [Route("{id:guid}/assignsupervisor")]
+        public HttpResponseMessage PostAssignSupervisor(Guid id, AssignChangeApiModel request)
         {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
-            
-            return this.TryExecuteCommand(new DeleteInterviewCommand(request.Id, this.authorizedUser.Id));
-        }
-
-        [HttpPost]
-        [Route("assignsupervisor")]
-        public HttpResponseMessage PostAssignSupervisor(AssignChangeApiModel request)
-        {
-            this.GetQuestionnaireIdByInterviewOrThrow(request.Id);
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
 
             var userInfo = this.userViewFactory.GetUser(request.ResponsibleId.HasValue ? new UserViewInputModel(request.ResponsibleId.Value) : new UserViewInputModel(request.ResponsibleName, null));
 
@@ -282,12 +338,28 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (!userInfo.Roles.Contains(UserRoles.Supervisor))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not a supervisor.");
             
-            return this.TryExecuteCommand(new AssignSupervisorCommand(request.Id, this.authorizedUser.Id, userInfo.PublicKey));
+            return this.TryExecuteCommand(new AssignSupervisorCommand(id, this.authorizedUser.Id, userInfo.PublicKey));
+        }
+
+        /// <summary>
+        /// Deletes interview 
+        /// </summary>
+        /// <param name="id">Interview Id. This corresponds to the interview__id variable in data export files or the interview Id obtained through other API requests.</param>
+        /// <response code="200">Interview was deleted</response>
+        /// <response code="404">Interview was not found</response>
+        /// <response code="406">Target interview was in status that was not ready to be deleted</response>
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public HttpResponseMessage Delete(Guid id)
+        {
+            this.GetQuestionnaireIdByInterviewOrThrow(id);
+            
+            return this.TryExecuteCommand(new DeleteInterviewCommand(id, this.authorizedUser.Id));
         }
 
         #endregion
 
-        private HttpResponseMessage TryExecuteCommand(ICommand command)
+        private HttpResponseMessage TryExecuteCommand(InterviewCommand command)
         {
             try
             {
@@ -299,8 +371,15 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
             catch (Exception exc)
             {
-                this.Logger.Error("Error occurred on Api request", exc);
-                throw new HttpResponseException(HttpStatusCode.ServiceUnavailable);
+                this.Logger.Error($"Error during execution of {command.GetType()}", new Exception(null, exc)
+                {
+                    Data =
+                    {
+                        {"CommandInterviewId", command.InterviewId},
+                        {"CommandUserId", command.UserId}
+                    }
+                });
+                throw new HttpResponseException(HttpStatusCode.InternalServerError);
             }
 
             return this.Request.CreateResponse(HttpStatusCode.OK);

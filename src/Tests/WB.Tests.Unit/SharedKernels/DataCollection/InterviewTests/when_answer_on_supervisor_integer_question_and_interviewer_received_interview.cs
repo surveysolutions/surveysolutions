@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Spec;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_on_supervisor_integer_question_and_interviewer_received_interview : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             questionId = Guid.Parse("22222222222222222222222222222222");
@@ -32,29 +31,30 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             interview.Apply(new InterviewReceivedByInterviewer());
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
-            exception = Catch.Exception(() => interview.AnswerNumericIntegerQuestion(userId, questionId, new decimal[] { }, DateTime.Now, 0));
+        public void BecauseOf() =>
+            exception = NUnit.Framework.Assert.Throws<InterviewException>(() => interview.AnswerNumericIntegerQuestion(userId, questionId, new decimal[] { }, DateTime.Now, 0));
 
-        It should_raise_InterviewException = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewException () 
         {
-            exception.ShouldNotBeNull();
-            exception.ShouldBeOfExactType<InterviewException>();
-            exception.Message.ShouldEqual($"Can't modify Interview {interview.EventSourceId.FormatGuid()} on server, because it received by interviewer.");
-        };
+            exception.Should().NotBeNull();
+            exception.Should().BeOfType<InterviewException>();
+            exception.Message.Should().Be($"Can't modify Interview on server, because it received by interviewer");
+        }
 
-        It should_not_raise_any_NumericIntegerQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_any_NumericIntegerQuestionAnswered_event () =>
             eventContext.ShouldNotContainEvent<NumericIntegerQuestionAnswered>();
 
-        It should_not_raise_any_events = () =>
-            eventContext.Events.ShouldBeEmpty();
+        [NUnit.Framework.Test] public void should_not_raise_any_events () =>
+            eventContext.Events.Should().BeEmpty();
 
         private static EventContext eventContext;
         private static Interview interview;

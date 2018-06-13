@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -29,13 +28,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
         private void BecauseOf() => errors = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
-        [NUnit.Framework.Test] public void should_produce_WB0205_warning () => errors.Count(x => x.Code == "WB0209").ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_produce_WB0205_warning () => errors.Count(x => x.Code == "WB0209").Should().Be(2);
 
         [NUnit.Framework.Test] public void should_reference_wrong_question () => 
-            errors.Where(x => x.Code == "WB0209").First().References.ShouldContain(Create.VerificationReference(id: groupId, type: QuestionnaireVerificationReferenceType.Group));
+            errors.Where(x => x.Code == "WB0209").First().References.Should().Contain(Create.VerificationReference(id: groupId, type: QuestionnaireVerificationReferenceType.Group));
 
         [NUnit.Framework.Test] public void should_reference_wrong_group () =>
-            errors.Where(x => x.Code == "WB0209").Second().References.ShouldContain(Create.VerificationReference(id: questionId));
+            errors.Where(x => x.Code == "WB0209").Second().References.Should().Contain(Create.VerificationReference(id: questionId));
 
         static Guid questionId;
         static QuestionnaireVerifier verifier;

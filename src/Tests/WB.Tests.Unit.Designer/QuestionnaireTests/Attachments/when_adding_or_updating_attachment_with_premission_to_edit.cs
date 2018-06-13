@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Attachments
         private void BecauseOf() => questionnaire.AddOrUpdateAttachment(addOrUpdateAttachment);
 
         [NUnit.Framework.Test] public void should_contains_attachment_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).AttachmentId.ShouldEqual(attachmentId);
+            questionnaire.QuestionnaireDocument.Attachments.Single(a => a.AttachmentId == attachmentId).AttachmentId.Should().Be(attachmentId);
 
 
         private static AddOrUpdateAttachment addOrUpdateAttachment;

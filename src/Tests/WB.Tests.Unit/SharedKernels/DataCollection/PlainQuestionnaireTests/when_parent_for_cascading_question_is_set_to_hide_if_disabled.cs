@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
@@ -7,8 +7,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
 {
     internal class when_parent_for_cascading_question_is_set_to_hide_if_disabled : PlainQuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var parentQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             cascadingQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
@@ -21,11 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                         questionId: cascadingQuestionId,
                         cascadeFromQuestionId: parentQuestionId)
                 }));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => shouldBeHidden = questionnaire.ShouldBeHiddenIfDisabled(cascadingQuestionId);
+        public void BecauseOf() => shouldBeHidden = questionnaire.ShouldBeHiddenIfDisabled(cascadingQuestionId);
 
-        It should_mark_child_cascading_question_to_be_hidden_as_parent = () => shouldBeHidden.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_mark_child_cascading_question_to_be_hidden_as_parent () => shouldBeHidden.Should().BeTrue();
 
         static PlainQuestionnaire questionnaire;
         static Guid cascadingQuestionId;

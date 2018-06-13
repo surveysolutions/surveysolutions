@@ -1,8 +1,9 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
@@ -11,14 +12,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
 {
     internal class when_3_interviews_are_completed_during_a_month_period : with_postgres_db
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
                 new[] {typeof (CumulativeReportStatusChangeMap)}, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
@@ -27,7 +26,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             pgSqlConnection.Open();
 
             cumulativeReportStatusChangeStorage =
-                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>(), "EntryId");
+                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>());
 
             var cumulativeReportStatusChangeBegin = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);
             var cumulativeReportStatusChangeInBetween = IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, dateInBetween);
@@ -45,28 +44,28 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
 
             oldschoolChartStatisticsDataProvider =
                 new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
-        };
+            BecauseOf();
+        }
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            pgSqlConnection.Close();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() =>
                 result =
                     postgresTransactionManager.ExecuteInQueryTransaction(
                         () => oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireId, questionnaireVersion));
 
-        It should_return_32_days_timespan =
-            () => result.StatisticsByDate.Count.ShouldEqual(32);
+        [NUnit.Framework.Test] public void should_return_32_days_timespan () => result.StatisticsByDate.Count.Should().Be(32);
 
 
-        It should_return_1_completed_interview_on_first_day =
-            () => result.StatisticsByDate[beginDate].CompletedCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_return_1_completed_interview_on_first_day () => result.StatisticsByDate[beginDate].CompletedCount.Should().Be(1);
 
-        It should_return_2_completed_interview_on_april_first =
-            () => result.StatisticsByDate[dateInBetween].CompletedCount.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_return_2_completed_interview_on_april_first () => result.StatisticsByDate[dateInBetween].CompletedCount.Should().Be(2);
 
-        It should_return_3_completed_interview_on_last_day =
-            () => result.StatisticsByDate[endDate].CompletedCount.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_return_3_completed_interview_on_last_day () => result.StatisticsByDate[endDate].CompletedCount.Should().Be(3);
 
 
         private static void ExecuteInCommandTransaction(Action action)

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -9,7 +9,6 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOfTests
 {
-    [Subject(typeof(Questionnaire))]
     internal class when_finding_group_that_exists_in_questionnaire
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.GetChapterOf
 
         private void BecauseOf() => foundGroup = questionnaire.GetChapterOfItemById(targetGroupId);
 
-        [NUnit.Framework.Test] public void should_find_needed_group () => foundGroup.PublicKey.ShouldEqual(chapterId);
+        [NUnit.Framework.Test] public void should_find_needed_group () => foundGroup.PublicKey.Should().Be(chapterId);
 
         private static QuestionnaireDocument questionnaire;
         private static Guid targetGroupId;

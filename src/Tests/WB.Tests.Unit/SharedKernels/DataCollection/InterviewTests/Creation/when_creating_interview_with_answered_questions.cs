@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Tests.Abc;
 
@@ -33,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
 
             // Act
             interview.CreateInterview(
-                Create.Command.CreateInterview(answersToIdentifyingQuestions: answers));
+                Create.Command.CreateInterview(answers: answers));
 
             // Assert
             Assert.That(interview.GetTextQuestion(identity).GetAnswer().Value, Is.EqualTo(textQuestionAnswer));
@@ -69,7 +68,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Creation
 
             // Act
             interview.CreateInterview(
-                Create.Command.CreateInterview(answersToIdentifyingQuestions: answers));
+                Create.Command.CreateInterview(answers: answers));
 
             // Assert
             Assert.That(interview.GetTextQuestion(identity).GetAnswer().Value, Is.EqualTo(textQuestionAnswer));

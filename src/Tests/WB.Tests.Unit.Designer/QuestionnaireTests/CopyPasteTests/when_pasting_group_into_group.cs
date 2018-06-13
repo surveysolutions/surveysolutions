@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -42,11 +42,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             questionnaire.PasteInto(command);
 
         [NUnit.Framework.Test] public void should_clone_group () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(targetId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_clone_group_with_QuestionId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(targetId)
-                .PublicKey.ShouldEqual(targetId);
+                .PublicKey.Should().Be(targetId);
         
         static Questionnaire questionnaire;
         static Guid groupToPasteInId;

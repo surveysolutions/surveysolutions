@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid? LocationQuestionId { get; set; }
 
         public DateTime CreatedAtUtc { get; set; }
+        public List<string> ProtectedVariables { get; set; }
 
         public class InterviewSerializedAnswer
         {

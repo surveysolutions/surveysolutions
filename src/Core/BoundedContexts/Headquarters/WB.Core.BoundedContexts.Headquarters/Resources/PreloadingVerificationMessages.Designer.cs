@@ -61,11 +61,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [PL0001] Questionnaire is missing in HQ.
+        ///   Looks up a localized string similar to Password-protected archives are not supported.
         /// </summary>
-        public static string PL0001_NoQuestionnaire {
+        public static string ArchiveWithPasswordNotSupported {
             get {
-                return ResourceManager.GetString("PL0001_NoQuestionnaire", resourceCulture);
+                return ResourceManager.GetString("ArchiveWithPasswordNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please, wait until previous import of assignments is completed.
+        /// </summary>
+        public static string HasAssignmentsToImport {
+            get {
+                return ResourceManager.GetString("HasAssignmentsToImport", resourceCulture);
             }
         }
         
@@ -250,7 +259,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preloading data were not found.
+        ///   Looks up a localized string similar to Preloading data were not found..
         /// </summary>
         public static string PL0024_DataWasNotFound {
             get {
@@ -412,7 +421,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answer to multiple choice question cannot contain more than {0} answers..
+        ///   Looks up a localized string similar to Answered options count to multiple choice question can&apos;t be more than max allowed answers count.
         /// </summary>
         public static string PL0041_AnswerExceedsMaxAnswersCount {
             get {
@@ -462,6 +471,60 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0046_HasDifferentTextsInListAndRosterTitles {
             get {
                 return ResourceManager.GetString("PL0046_HasDifferentTextsInListAndRosterTitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required column {0} is missing.
+        /// </summary>
+        public static string PL0047_ProtectedVariables_MissingColumn {
+            get {
+                return ResourceManager.GetString("PL0047_ProtectedVariables_MissingColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protected variable is not found in provided questionnaire.
+        /// </summary>
+        public static string PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire {
+            get {
+                return ResourceManager.GetString("PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Variable has type that does not support protection.
+        /// </summary>
+        public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
+            get {
+                return ResourceManager.GetString("PL0049_ProtectedVariables_VariableNotSupportsProtection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Negative value is not allowed for Categorical Multi select question.
+        /// </summary>
+        public static string PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1 {
+            get {
+                return ResourceManager.GetString("PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster by list question should have column for text list answers.
+        /// </summary>
+        public static string PL0052_ColumnByTextListRosterSizeAnswerNotFound {
+            get {
+                return ResourceManager.GetString("PL0052_ColumnByTextListRosterSizeAnswerNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances.
+        /// </summary>
+        public static string PL0053_InconsistentNumericRosterInstanceCodes {
+            get {
+                return ResourceManager.GetString("PL0053_InconsistentNumericRosterInstanceCodes", resourceCulture);
             }
         }
     }

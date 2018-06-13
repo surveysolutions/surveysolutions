@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Tests.Abc;
@@ -9,8 +9,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 {
     internal class when_removing_events_not_needed_to_be_sent
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var firstCompletionCommitId = Guid.Parse("11111111111111111111111111111111");
             var lastCompletionCommitId = Guid.Parse("99999999999999999999999999999999");
 
@@ -69,13 +68,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             };
 
             optimizer = Create.Service.InterviewEventStreamOptimizer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = optimizer.RemoveEventsNotNeededToBeSent(eventStream);
 
-        It should_remove_calculated_events_but_leave_calculated_events_from_last_interview_completion = () =>
-            result.ShouldContainOnly(new[]
+        [NUnit.Framework.Test] public void should_remove_calculated_events_but_leave_calculated_events_from_last_interview_completion () =>
+            result.Should().BeEquivalentTo(new[]
             {
                 questionAnswered,
 

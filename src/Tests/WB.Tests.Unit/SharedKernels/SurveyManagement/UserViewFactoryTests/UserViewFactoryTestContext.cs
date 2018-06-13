@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Machine.Specifications;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
@@ -8,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
-    [Subject(typeof(UserViewFactory))]
     [TestOf(typeof(UserViewFactory))]
     internal class UserViewFactoryTestContext
     {

@@ -9,11 +9,11 @@ const shared = require("./.build/webpack.shared.vendor");
 
 module.exports = merge(shared(packageName, devMode), {
     entry: {
-        [packageName]: [
-            "autonumeric",
+        [packageName]: [                       
+            "autonumeric/dist/autonumeric.min",
             "axios",
-            "bootbox",
             "babel-polyfill",
+            "bootbox",            
             "bootstrap/dist/js/bootstrap.js",
             "flatpickr",
             "flatpickr/dist/l10n",
@@ -22,6 +22,7 @@ module.exports = merge(shared(packageName, devMode), {
             "jquery",
             "moment",
             "scriptjs",
+            "fuse.js",
             "signalr",
             "smoothscroll-polyfill",
             "toastr",

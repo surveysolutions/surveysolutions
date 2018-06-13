@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion,
+                Version = 22,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -113,6 +113,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     {
                         HasQuestionnaire = questionnaire => questionnaire.Find<IMultimediaQuestion>(q => q.IsSignature).Any(),
                         Description = "Contains Signature Question"
+                    }
+                }
+            },
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => true,
+                        Description = "New set of functions and geography question in conditions"
                     }
                 }
             }

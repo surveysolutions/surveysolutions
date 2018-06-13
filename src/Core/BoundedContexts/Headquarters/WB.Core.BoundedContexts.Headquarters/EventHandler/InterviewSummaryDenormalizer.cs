@@ -21,7 +21,8 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    public class InterviewSummaryDenormalizer : ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
+    public class InterviewSummaryDenormalizer : 
+        ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
         IUpdateHandler<InterviewSummary, InterviewOnClientCreated>,
@@ -37,8 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewSummary, QRBarcodeQuestionAnswered>,
         IUpdateHandler<InterviewSummary, AnswersRemoved>,
         IUpdateHandler<InterviewSummary, InterviewerAssigned>,
-        IUpdateHandler<InterviewSummary, InterviewDeclaredInvalid>,
-        IUpdateHandler<InterviewSummary, InterviewDeclaredValid>,
         IUpdateHandler<InterviewSummary, SynchronizationMetadataApplied>,
         IUpdateHandler<InterviewSummary, InterviewHardDeleted>,
         IUpdateHandler<InterviewSummary, InterviewKeyAssigned>,
@@ -303,14 +302,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             });
         }
 
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeclaredInvalid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.HasErrors = true;
-            });
-        }
-
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewKeyAssigned> @event)
         {
             return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
@@ -321,14 +312,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 }
 
                 interview.Key = @event.Payload.Key.ToString();
-            });
-        }
-
-        public InterviewSummary Update(InterviewSummary state, IPublishedEvent<InterviewDeclaredValid> @event)
-        {
-            return this.UpdateInterviewSummary(state, @event.EventTimeStamp, interview =>
-            {
-                interview.HasErrors = false;
             });
         }
 
@@ -434,8 +417,8 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public InterviewSummary Update(InterviewSummary state, IPublishedEvent<AreaQuestionAnswered> @event)
         {
-            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName, @event.Payload.AreaSize, @event.Payload.Length,
-                @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
+            var area = new Area(@event.Payload.Geometry, @event.Payload.MapName,@event.Payload.NumberOfPoints,
+                @event.Payload.AreaSize, @event.Payload.Length, @event.Payload.Coordinates, @event.Payload.DistanceToEditor);
             return this.AnswerQuestion(state, @event.Payload.QuestionId, area, @event.EventTimeStamp);
         }
 

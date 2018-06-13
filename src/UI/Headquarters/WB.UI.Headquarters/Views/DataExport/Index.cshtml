@@ -2,6 +2,7 @@
 @using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos
 @using WB.Core.BoundedContexts.Headquarters.Views.DataExport
 @using WB.Core.SharedKernels.SurveyManagement.Web.Utils
+@using WB.UI.Headquarters.Code
 @using WB.UI.Headquarters.Models
 @model WB.UI.Headquarters.Models.ExportModel
 
@@ -48,14 +49,14 @@
             var exportFromats = [];
             @foreach (DataExportFormat formatValue in Enum.GetValues(typeof(DataExportFormat)))
             {
-                <text>exportFromats[@((int) formatValue)] = '@formatValue.ToString()'</text>
+                <text>exportFromats[@((int) formatValue)] = '@Html.ToSafeJavascriptMessage(formatValue.ToString())'</text>
             }
 
             var statuses = [
-                { status: null, title: '@Common.AllStatuses' },
+                { status: null, title: '@Html.ToSafeJavascriptMessage(Common.AllStatuses)' },
                 @foreach (var item in Model.ExportStatuses)
                 {
-                    <text>{ status: @((int)item), title: '@item.ToUiString()' },</text>
+                    <text>{ status: @((int)item), title: '@Html.ToSafeJavascriptMessage(item.ToUiString())' },</text>
                 }
             ];
 

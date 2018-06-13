@@ -1,0 +1,64 @@
+.map-tooltip-info {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #dbdfe2;
+    &:last-of-type,
+    &:only-child{
+        margin-bottom: 0;
+        border: none;
+    }
+    p{
+        margin-bottom: 3px;
+        &:first-of-type {
+            font: 12px/14px "RobotoLight";
+            margin-bottom: 10px;
+        }
+        strong {
+            letter-spacing: 1px;
+            margin-right: 5px;
+        }
+        &:last-of-type {
+            padding-top: 5px;
+            a {
+                text-transform: uppercase;
+                font: 10px/12px $trebuchet_bold;
+                letter-spacing: 1px;
+                &:hover,
+                &:focus{
+                    text-decoration: none;
+	                color: #0e5591;
+                }
+            }
+        }
+    }
+}
+.map-tooltip-info:last-of-type,
+.map-tooltip-info:only-child {
+	margin-bottom: 0;
+    border: none;
+}
+.map-tooltip-info p{
+	margin-bottom: 3px;
+}
+.map-tooltip-info p:first-of-type {
+    font: 12px/14px "RobotoLight";
+	margin-bottom: 10px;
+}
+.map-tooltip-info p strong {
+    letter-spacing: 1px;
+    margin-right: 5px;
+}
+.map-tooltip-info p:last-of-type {
+    padding-top: 5px;
+}
+
+.map-tooltip-info p:last-of-type a {
+    text-transform: uppercase;
+    font: 10px/12px "TrebuchetMSBold";
+    letter-spacing: 1px;
+}
+.map-tooltip-info p:last-of-type a:hover,
+.map-tooltip-info p:last-of-type a:focus{
+	text-decoration: none;
+	color: #0e5591;
+}

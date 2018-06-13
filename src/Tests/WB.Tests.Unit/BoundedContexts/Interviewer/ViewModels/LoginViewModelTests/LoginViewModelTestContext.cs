@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using MvvmCross.Test.Core;
+﻿using MvvmCross.Test.Core;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -35,7 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 new InMemoryPlainStorage<CompanyLogo>(), 
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
-                logger ?? Mock.Of<ILogger>());
+                logger ?? Mock.Of<ILogger>(),
+                Mock.Of<IAuditLogService>());
         }
         
         protected static InterviewerIdentity CreateInterviewerIdentity(string userName, string userPasswordHash = null, string token = null)

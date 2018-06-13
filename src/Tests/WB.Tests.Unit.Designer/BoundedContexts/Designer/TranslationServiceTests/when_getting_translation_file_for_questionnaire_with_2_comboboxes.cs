@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,7 +10,6 @@ using Moq;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 
@@ -59,7 +58,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
             var excelWorkbook = new ExcelPackage(new MemoryStream(translationFile.ContentAsExcelFile)).Workbook;
             var worksheetNames = excelWorkbook.Worksheets.Select(x=>x.Name).ToList();
 
-            worksheetNames.ShouldContainOnly("Translations", "@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_03");
+            worksheetNames.Should().BeEquivalentTo("Translations", "@@_singlequestionwithdiffinlast", "@@_singlequestionwithdiffinl_03");
         }
 
         static TranslationFile translationFile;

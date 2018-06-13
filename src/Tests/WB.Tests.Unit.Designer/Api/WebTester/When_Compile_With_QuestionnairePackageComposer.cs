@@ -3,7 +3,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using AutoFixture;
-using AutoFixture.AutoMoq;
 using Main.Core.Documents;
 using Microsoft.CodeAnalysis;
 using Moq;

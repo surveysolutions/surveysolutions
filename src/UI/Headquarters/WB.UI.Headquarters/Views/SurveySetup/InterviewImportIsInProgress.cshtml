@@ -1,4 +1,5 @@
-﻿@model WB.UI.Headquarters.Models.PreloadedDataInProgressModel
+﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@model WB.UI.Headquarters.Models.PreloadedDataInProgressModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.VerifySampleData;
@@ -29,12 +30,21 @@
             <div class="col-sm-7 col-xs-12 action-block">
                 <div class="import-progress">
                     <p class="error-text">@BatchUpload.ImportInProgress</p>
-                    <p>@Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewImportProgress", "SurveySetup", new { id = Model.CurrentProcessId}, new {})</p>
+                    <p>
+                        @if (Model.ProcessStatus == AssignmentsImportProcessStatus.Verification)
+                        {
+                            @Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewVerificationProgress", "SurveySetup", new { }, new { })
+                        }
+                        @if (Model.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                        {
+                            @Html.ActionLink(BatchUpload.RunningInterviewImportProcess, "InterviewImportProgress", "SurveySetup", new { }, new { })
+                        }
+                    </p>
                 </div>
                 <div class="action-buttons">
                     @Html.ActionLink(BatchUpload.BackToImport, "BatchUpload", "SurveySetup", new { id = Model.Questionnaire.Id, version = Model.Questionnaire.Version }, new { })
                 </div>
             </div>
         </div>
-    </div>
+    </div> 
 </main>

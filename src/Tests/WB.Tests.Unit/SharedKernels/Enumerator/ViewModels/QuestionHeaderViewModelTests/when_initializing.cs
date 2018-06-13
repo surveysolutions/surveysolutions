@@ -1,19 +1,18 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
     internal class when_initializing : QuestionHeaderViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             substitutedQuesiton = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             substitutionTargetId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
           
@@ -31,13 +30,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var interviewRepository = Mock.Of<IStatefulInterviewRepository>(x => x.Get(Moq.It.IsAny<string>()) == interview);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => 
+        public void BecauseOf() => 
             viewModel.Init("interview", Create.Identity(substitutionTargetId, Empty.RosterVector));
 
-        It should_substitute_question_titles = () => 
-            viewModel.Title.HtmlText.ShouldEqual("title with answer");
+        [NUnit.Framework.Test] public void should_substitute_question_titles () => 
+            viewModel.Title.HtmlText.Should().Be("title with answer");
 
         static QuestionHeaderViewModel viewModel;
         private static Guid substitutionTargetId;

@@ -1,0 +1,555 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdvancedMode" xml:space="preserve">
+    <value>الوضع المتقدم لتحميل البيانات</value>
+  </data>
+  <data name="AdvancedModeDescription" xml:space="preserve">
+    <value>من أجل تحميل البيانات مسبقا إلى المزيد من الأقسام والمتغيرات، يمكنك إعداد مجموعة من ملفات .tab التي تتوافق مع بنية الاستبيان ووضعها في أرشيف .zip. الرجاء استخدام أرشيف النماذج أدناه. يمكنك وضع الملفات والأعمدة التي تريد تحميلها فقط. سيتم تجاهل أي أعمدة مفقودة أو مع عناوين لا تتطابق مع متغير موجود في الاستبيان.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>الكل</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>هل تريد بالتأكيد حذف هذا الملف ؟</value>
+  </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>تم تعينه الى {0} الباحثين</value>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>تم تعينه الى {0} المشرفين</value>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>تم تعينه الى 1 باحث</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>تم تعينه الى 1 مشرف</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>لم يتم إنشاء أية مهام</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>الرجوع الى الاستيراد</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>حمل الأرشيف باستخدام ملف علامة تبويب محدد والبيانات المجمعة.</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>أخفق التحقق من الملف الذي تم تحميله</value>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>تحديد البيانات وجمعها (الأرشيف)</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>تحميل دفعة</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>انشاء مهام متعددة</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>تصفح الفرق</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>خلية</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>رمز</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>عامود</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>انشاء مهام</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>انشاء مقابلات</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>انشاء مقابلات من هذه البيانات</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>انشاء مستخدمين</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>انشاء مهام متعددة</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>انشاء مقابلات متعددة</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>انشاء المستخدمين</value>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>تم العثور على بيانات من {0} المهام</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>تم العثور على بيانات من {0} المقابلات</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>تم العثور على بيانات ل1 مهمة</value>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>تم العثور على بيانات ل1 مقابلة</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>البيانات صالحة</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>تفاصيل</value>
+  </data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>المتغيرات التي تحمل علامة "تحديد في المصمم". تحميل a</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>تنزيل المهام غير الصالحة</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>تنزيل مالمقابلات غير الصالحةصالحة</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>نموذج علامة التبويب.</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>تحميل. نموذج علامة التبويب لهذا الاستبيان</value>
+  </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>تحميل. نموذج عالأرشيف .ZIP لهذا الاستبيان</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>إذا لم يتم تحديد أسماء المستخدمين سوف تحتاج إلى تعيين المشرف لجميع المهام في خطوة لاحقة.</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>الوقت المقدر</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ملف</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>اسم الملف</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>لم يتم تحليل الملف. يسمح فقط بالملفات المفصولة بعلامات جدولة.</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>حجم الملف</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>لا يمكن أن يتجاوز حجم الملف 300 ميغابايت.</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>تم الانتهاء</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>تم الانتهاء من الخطأ (الأخطاء)</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>تم الانتهاء من الخطأ (الأخطاء). السبب:</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>تنسيق الملف غير مدعوم. سيتم تجاهل البيانات الموجودة داخل الملف</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>إخفاء قائمة بيانات التعريف المطلوبة</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>   1 مهمة تم التحقق منها بنجاح </value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 خطأ</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>تم التحقق من المهام بنجاح {0}</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{0} أخطاء</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>التحقق من بيانات التعيين</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>التحقق من تخصيصات الاستبيان {0}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>التحقق من ملف البيانات</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>الخطوة {0} من {1}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>تم التحقق من ملف البيانات بنجاح</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>انشاء مهام متعددة مع تحميل دفعة واحدة</value>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>استيراد المهام ل {0}</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>استيراد المعلومات من {0} ل {1}</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>استيراد</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>عملية استيراد مهمة أخرى قيد التشغيل. يسمح بعملية استيراد مهمة واحدة فقط في كل مرة. انتظر حتى يتم الانتهاء من العملية ثم قم بتحميل ملف عينة جديد. اتبع الرابط إذا كنت ترغب في الحصول على معلومات تقدم أكثر تفصيلا حول عملية الاستيراد الأخرى.</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>اختر ملف للتحميل</value>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>تم إنجازه</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>لم يفشل أي شيء</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>انشاء مقابلات متعددة مع تحميل دفعة واحدة</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>تحديد</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>اختر مسؤول</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>استيراد المقابلات ل {0}</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{1} من {0}</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>استيراد عينة</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>استيراد عينة</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>لم يتم إنشاء أي مقابلات</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>استيراد المقابلات</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>في عملية التحقق، تم التحقق منها</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>غير صالح. يرجى إصلاح الخطأ (الأخطاء) أدناه وتحميله مرة أخرى.</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>تاريخ آخر تحديث</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>يمكنك إنشاء مهام فردية عن طريق إدخال جميع البيانات المطلوبة في {0}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>الوضع اليدوي</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>رسالة</value>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>فشل انشاء مهام {0}</value>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>انشاء مهام {0}</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>{0} وجد أخطاء</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} مقابلات فشل انشاءها</value>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} مقابلات تم انشائها</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>تم إنشاء المقابلة (المقابلات)</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>بعيد عن</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>يرجى الانتظار ، الملف</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>لا يحتوي الملف على عمود (أعمدة) لأسئلة تحديد الهوية المطلوبة: &lt;br/&gt; &lt;br/&gt; &lt;b&gt; {0} &lt;/ b&gt;</value>
+  </data>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>مطلوب تحديد البيانات</value>
+  </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>الملف الذي تم تحميله لا يمكن فتحه .الرجاء التاكد من انه بالشكل الصحيح</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>لا يمكن استخدام الاستبيان للتحميل المسبق</value>
+  </data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>يسمح فقط بتحميل ملفات .tab و .txt.</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>الملفات التالية غير مدعومة: {0}.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>يسمح فقط بتحميل ملفات zip.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>قيد المعالجة</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>جاهز لإنشاء المستخدم</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>جاهز للتحقق</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>تعداد التسجيلات</value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>سيتم تعيين المستخدم المسؤول تلقائيا</value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>صف</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>الذهاب إلى تشغيل عملية الاستيراد المهمة</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>اكتمل إنشاء المقابلة بنجاح.</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>نتيجة إنشاء المقابلة</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>استيراد المقابلة اكتمل مع وجود أخطاء</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>اكتمل استيراد المقابلة بنجاح</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>اختر المسؤول لهذه الدفعة</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>تحميل ملف فصل علامة التبويب مع بيانات تحديد اللازمة. اختياريا، حدد أسماء المستخدمين للمشرفين أو العدادين في العمود _responsible(المسؤولية)، في عمود _(الكمية)quantity يمكنك تحديد قدرة التعيين.</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>تحديد البيانات فقط</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 مهمة تم انشاءها</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 مهمةفشل انشاءها</value>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 وجد خطأ</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 مقابلة تم انشاءها</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 مقابلة فشل في انشاءها</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>الحالة</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>يجب اختيار المشرف او الباحث</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>تحميل</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>تاريخ التحميل</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>تحميل ملف مع تحديد البيانات لإنشاء مهام جديدة.حدد أسماء المستخدمين للمشرفين أو العدادين للقيام بمهام الدفعات.</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>تم تحميله</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>تحميل بيانات جديدة</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>تحميل ملف جديد</value>
+  </data>
+  <data name="UploadSample" xml:space="preserve">
+    <value>تحميل نموذج</value>
+  </data>
+  <data name="UploadSampleDescription" xml:space="preserve">
+    <value>لتحميل العينة التي سيتم مقابلتها، يرجى إعداد ملف (حجم يصل إلى 300MB) مع قيم مفصولة بعلامات الجدولة (ملف .tab) المقابلة للنموذج أدناه، تحتوي على قيم تلك المتغيرات من الاستبيان الذي تم وضع علامة عليه على أنه تحديد.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>تحميل ملف tab.</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>تحميل دفعة المستخدم</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>يسمح فقط بتحميل الملفات التي تحتوي على {0} و {1} من الإضافات.</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>قائمة الملفات مع المستخدمين مسبقة التحميل</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>قم بإعداد ملف به قيم مفصولة بعلامات جدولة (ملف .tab) يتوافق مع النموذج أدناه. الأعمدة التي تحمل علامة (*) مطلوبة. يسمح فقط "المشرف" أو "الباحث" في العمود "دور".</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>تحميل ملف zip.</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>تحميل دفعة المستخدم</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>عملية التحميل المسبق للمستخدم مفقودة</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>تم إنشاء مستخدم (مستخدمين)</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>التحقق من الصحة</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>التحقق من الصحة</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>التحقق من الصحة</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>اكتمل التحقق</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>التحقق</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>تحقق من بيانات اللوحة</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>بيانات التحقق</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>عرض قائمة بيانات التعريف المطلوبة</value>
+  </data>
+</root>

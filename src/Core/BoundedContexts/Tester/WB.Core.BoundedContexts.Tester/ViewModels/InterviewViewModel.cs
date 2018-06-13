@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
@@ -35,41 +34,40 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
-            IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             QuestionnaireDownloadViewModel questionnaireDownloader)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
+                interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxCommand(this.NavigateToDashboard);
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.NavigateToDashboard);
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
 
         public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
-        public override void NavigateBack()
+        public override async Task NavigateBack()
         {
             if (this.HasPrefilledQuestions)
             {
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
             }
             else
             {
-                this.NavigateToDashboard();
+                await this.NavigateToDashboard();
             }
         }
 
-        private void NavigateToDashboard()
+        private async Task NavigateToDashboard()
         {
-            this.viewModelNavigationService.NavigateToDashboard();
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
             this.Dispose();
         }
 
@@ -80,7 +78,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.IsInProgress = true;
             try
             {
-                var interview = this.interviewRepository.Get(this.interviewId);
+                var interview = this.interviewRepository.Get(this.InterviewId);
                 string questionnaireId = interview.QuestionnaireIdentity.QuestionnaireId.FormatGuid();
 
                 bool succeeded = await this.QuestionnaireDownloader.ReloadQuestionnaireAsync(
@@ -103,15 +101,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             {
                 case ScreenType.Complete:
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                    completeInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return completeInterviewViewModel;
                 case ScreenType.Cover:
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return coverInterviewViewModel;
                 case ScreenType.Group:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                    activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                     return activeStageViewModel;
                 default:
                     return null;

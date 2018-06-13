@@ -367,6 +367,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nothing selected.
+        /// </summary>
+        internal static string NothingSelected {
+            get {
+                return ResourceManager.GetString("NothingSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         internal static string Ok {

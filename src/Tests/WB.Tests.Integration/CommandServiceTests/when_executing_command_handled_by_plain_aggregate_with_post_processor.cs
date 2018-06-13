@@ -1,12 +1,10 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -27,8 +25,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .InitializesWith<PlainCommandWithPostProcesor>(_ => Guid.Empty, aggregate => aggregate.Handle, config => config.PostProcessBy<PostProcessor>());
@@ -38,11 +35,13 @@ namespace WB.Tests.Integration.CommandServiceTests
                 && _.GetInstance(typeof(PostProcessor)) == mockOfPostProcessor.Object);
 
             commandService = Create.Service.CommandService(serviceLocator: serviceLocator);
-        };
 
-        Because of = () => commandService.Execute(commandWithPostProcesor, null);
+            BecauseOf();
+        }
 
-        It should_call_process_method_in_command_post_processor = () =>
+        private void BecauseOf() => commandService.Execute(commandWithPostProcesor, null);
+
+        [NUnit.Framework.Test] public void should_call_process_method_in_command_post_processor () =>
             mockOfPostProcessor.Verify(x=>x.Process(aggregate, commandWithPostProcesor), Times.Once);
         
         private static readonly Mock<PostProcessor> mockOfPostProcessor = new Mock<PostProcessor>();

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -32,22 +32,22 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_WB0102_message_with_level_critical() =>
             verificationMessages.ShouldContainCritical("WB0102");
 
         [NUnit.Framework.Test] public void should_return_message_with_2_references () =>
-            verificationMessages.Single().References.Count.ShouldEqual(2);
+            verificationMessages.Single().References.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_message_with_reference_to_group () =>
-            verificationMessages.Single().References.ShouldContain(reference => reference.Type == QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.Single().References.Should().Contain(reference => reference.Type == QuestionnaireVerificationReferenceType.Group);
 
         [NUnit.Framework.Test] public void should_return_message_with_reference_to_question () =>
-            verificationMessages.Single().References.ShouldContain(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.Single().References.Should().Contain(reference => reference.Type == QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_with_references_having_same_shared_id () =>
-            verificationMessages.Single().References.ShouldEachConformTo(reference => reference.Id == sharedId);
+            verificationMessages.Single().References.Should().OnlyContain(reference => reference.Id == sharedId);
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireVerifier verifier;

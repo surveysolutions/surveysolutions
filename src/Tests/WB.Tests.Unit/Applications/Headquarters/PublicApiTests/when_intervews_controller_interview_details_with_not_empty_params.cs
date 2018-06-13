@@ -1,28 +1,28 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.PublicApi.Models;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {
     internal class when_intervews_controller_interview_details_with_not_empty_params : ApiTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var statefulInterview = Create.AggregateRoot.StatefulInterview(interviewId);
 
             controller = CreateInterviewsController(statefulInterviewRepository: Create.Fake.StatefulInterviewRepositoryWith(statefulInterview));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
-            actionResult = controller.InterviewDetails(interviewId);
-        };
+            actionResult = controller.Get(interviewId);
+        }
 
-        It should_return_InterviewApiDetails = () =>
-            actionResult.ShouldBeOfExactType<InterviewApiDetails>();
+        [NUnit.Framework.Test] public void should_return_InterviewApiDetails () =>
+            actionResult.Should().BeOfType<InterviewApiDetails>();
         
         private static Guid interviewId = Guid.Parse("11111111111111111111111111111111");
         private static InterviewApiDetails actionResult;

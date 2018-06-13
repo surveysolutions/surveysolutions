@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -98,10 +98,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             errorsMapperMock.Verify(x => x.EnrichVerificationErrors(verificationMessages, Moq.It.IsAny<ReadOnlyQuestionnaireDocument>()), Times.Once);
 
         [NUnit.Framework.Test] public void should_return_messages_created_by_mapper_as_action_result () =>
-            result.Errors.ShouldEqual(mappedAndEnrichedVerificationErrors);
+            result.Errors.Should().BeEquivalentTo(mappedAndEnrichedVerificationErrors);
 
         [NUnit.Framework.Test] public void should_return_warnings_created_by_mapper_as_action_result () =>
-            result.Warnings.ShouldEqual(mappedAndEnrichedVerificationWarnings);
+            result.Warnings.Should().BeEquivalentTo(mappedAndEnrichedVerificationWarnings);
 
         private static ReadOnlyQuestionnaireDocument questionnaireDocument; 
         private static QuestionnaireView questionnaireView; 

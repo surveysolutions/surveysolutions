@@ -9,6 +9,9 @@
 		word-wrap: break-word;
     	overflow-wrap: break-word;
 	}
+	.panel-details{
+		z-index: 7;
+	}
 }
 .reset-filters{
 	font-size: 14px;
@@ -57,7 +60,7 @@
 }
 .complete-link{
 	display: block;
-	font: 16px/18px "RobotoMedium";
+	font: 16px/18px $roboto_medium;
 	padding: 15px 20px 15px 60px;
 	border-bottom: 1px solid rgb(221, 221, 221);
 	&:hover, &:focus, &:active{
@@ -111,14 +114,14 @@
 			}
 			li a{
 					color: rgba(255, 255, 255, 0.5);
-					font: 10px/12px "TrebuchetMS";
+					font: 10px/12px $trebuchet;
 			}
 			& > li:after{
 		  		color: rgba(255, 255, 255, 0.5);
 		  	}
 		}
 		h3{
-			font: 16px/18px "RobotoMedium";
+			font: 16px/18px $roboto_medium;
 		}
 	}
 	.complete-section>.unit-title{
@@ -149,7 +152,7 @@
 	color: $gray_light;
 	h6, .comment label{
 		margin-top: 20px;
-		font: 10px/12px "TrebuchetMSBold";
+		font: 10px/12px $trebuchet_bold;
 		letter-spacing: 0.5px;
     	text-transform: uppercase;
     	display: block;
@@ -293,7 +296,7 @@
 		&:before{left: -25px;}
 	}
 	.btn-link{
-		font: 10px/12px "TrebuchetMSBold";
+		font: 10px/12px $trebuchet_bold;
 	}
 	.block-with-data .btn-link{
 		padding-left: 0;
@@ -301,7 +304,6 @@
 	&.answered .question-unit{
 		.options-group{
 			background-color: transparent;
-			font-size: 0;
 		}
 	}
 	&.has-error {
@@ -436,8 +438,8 @@
 	background-color: transparent;
 	display: none;
 	@include absolute(0, null, null, -40px);
-	line-height: 42px;
 	text-align: right;
+	line-height: 42px;
 	font-size: 14px;
 	font-weight: bold;
 	width: 25px;
@@ -634,8 +636,9 @@
 	width: 27px;
 	height: 27px;
 }
-.readonly {
+.readonly{
 	input[type="text"]:disabled,
+	textarea:disabled,
 	.field label,
 	.radio .field,
 	.options-group input,
@@ -645,6 +648,31 @@
 		&:hover, &:focus, &:active{
 			box-shadow: none;
 		}
+	}
+}
+.unavailable-option{
+	background: rgba(248, 248, 248, 0.8);
+	border-radius: 5px;
+	&:hover, &:focus, &:active{
+		box-shadow: none;
+	}
+	label, input[type="text"]:disabled, input[type="number"]:disabled,{
+		background: rgba(248, 248, 248, 0.8);
+		border-radius: 5px;
+		&:hover, &:focus, &:active{
+			box-shadow: none;
+		}
+	}
+}
+.locked-option{
+	.lock{
+		display: block;
+		background-size: 18px 18px;
+		top: calc(50% - 9px);
+		left: auto;
+		right: 9px;
+		width: 18px;
+		height: 18px;
 	}
 }
 .audio-question{
@@ -721,7 +749,8 @@
 		}
 	}
 	.btn-recording-done{
-		font: 16px/22px "RobotoItalic";
+		font: 16px/22px $roboto_italic;
+		font-style: italic;
 		text-transform: initial;
 		float: right;
 		letter-spacing: normal;
@@ -732,7 +761,7 @@
 .readonly .dropdown-toggle:disabled{
 	background: rgba(248, 248, 248, 0.8);
 }
-.readonly {
+.readonly, .unavailable-option{
 	.btn:disabled,
 	.btn.disabled{
 		background: rgba(248, 248, 248, 1);
@@ -741,6 +770,7 @@
 		display: none;
 	}
 }
+
 @media only screen and (max-width: 1525px){
 	.content{
 		width: $content-width-small;
@@ -895,6 +925,11 @@
 			left: -25px;
 		}
 	}
+	.locked-option{
+		.lock{
+			left: auto;
+		}
+	}
 }
 @media (max-width: $screen-xs){
 	.web-interview{
@@ -921,6 +956,11 @@
 			left: -17px;
 		}
 	}
+	.locked-option{
+		.lock{
+			left: auto;
+		}
+	}
 }
 @media only screen and (max-width: 425px){
 	.web-interview{
@@ -929,5 +969,15 @@
 				font-size: 10px;
 			}
 		}
+	}
+}
+
+.web-interview.center-block{
+	.question-editor{
+		margin: 0 auto;
+		max-width: 550px;
+	}
+	.action-container{
+		margin: 0 auto;
 	}
 }

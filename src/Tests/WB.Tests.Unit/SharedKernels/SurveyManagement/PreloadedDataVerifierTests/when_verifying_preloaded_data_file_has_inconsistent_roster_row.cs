@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
 {
@@ -55,22 +54,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
         private void BecauseOf() => importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
 
         [NUnit.Framework.Test] public void should_result_has_1_error () =>
-            status.VerificationState.Errors.Count().ShouldEqual(1);
+            status.VerificationState.Errors.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_single_PL0009_error () =>
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0009");
+            status.VerificationState.Errors.First().Code.Should().Be("PL0009");
 
         [NUnit.Framework.Test] public void should_return_reference_with_Cell_type () =>
-            status.VerificationState.Errors.First().References.First().Type.ShouldEqual(PreloadedDataVerificationReferenceType.Cell);
+            status.VerificationState.Errors.First().References.First().Type.Should().Be(PreloadedDataVerificationReferenceType.Cell);
 
         [NUnit.Framework.Test] public void should_error_PositionX_be_equal_to_0 () =>
-            status.VerificationState.Errors.First().References.First().PositionX.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionX.Should().Be(0);
 
         [NUnit.Framework.Test] public void should_error_PositionY_be_equal_to_0 () =>
-            status.VerificationState.Errors.First().References.First().PositionY.ShouldEqual(0);
+            status.VerificationState.Errors.First().References.First().PositionY.Should().Be(0);
 
         [NUnit.Framework.Test] public void should_error_has_content_id_of_inconsistent_record () =>
-            status.VerificationState.Errors.First().References.First().Content.ShouldEqual("5");
+            status.VerificationState.Errors.First().References.First().Content.Should().Be("5");
 
         private static ImportDataVerifier importDataVerifier;
         private static QuestionnaireDocument questionnaire;

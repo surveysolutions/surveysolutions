@@ -1,6 +1,6 @@
 ﻿@{
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
-    this.ViewBag.Title = "Control Panel: Broken interview packages";
+    this.ViewBag.Title = "Control Panel: Rejected interview packages";
 }
 
 
@@ -17,6 +17,7 @@
         var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Interviewers" })';
         var questionnairesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "Questionnaires" })';
         var reprocessSelectedUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "ReprocessSelectedBrokenPackages" })';
+        var downloadPackageUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "ControlPanelApi", action = "DownloadSyncPackage" })';
         $(function () {
             var viewModel = new Supervisor.VM.ControlPanel.BrokenInterviewPackages(brokenInperviewPackagesUrl, controlPanelBrokenInperviewPackagesUrl, exceptionTypesUrl, responsiblesUrl, questionnairesUrl, reprocessSelectedUrl);
             viewModel.load();

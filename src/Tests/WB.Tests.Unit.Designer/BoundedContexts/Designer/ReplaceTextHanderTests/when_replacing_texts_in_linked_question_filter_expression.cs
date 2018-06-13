@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
@@ -21,10 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         private void BecauseOf() => questionnaire.ReplaceTexts(Create.Command.ReplaceTextsCommand(searchFor, replaceWith, userId: responsibleId));
 
         [NUnit.Framework.Test] public void should_replace_text_in_filter_expression () =>
-                questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId).LinkedFilterExpression.ShouldEqual($"filter with {replaceWith}");
+                questionnaire.QuestionnaireDocument.Find<IQuestion>(filteredQuestionId).LinkedFilterExpression.Should().Be($"filter with {replaceWith}");
 
         [NUnit.Framework.Test] public void should_record_number_of_affected_entities () =>
-                questionnaire.GetLastReplacedEntriesCount().ShouldEqual(1);
+                questionnaire.GetLastReplacedEntriesCount().Should().Be(1);
 
         static Questionnaire questionnaire;
 

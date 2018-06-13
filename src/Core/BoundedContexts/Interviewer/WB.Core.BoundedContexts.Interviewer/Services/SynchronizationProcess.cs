@@ -25,11 +25,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         private readonly AttachmentsCleanupService cleanupService;
         private readonly IHttpStatistician httpStatistician;
-        private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
+        private readonly IAssignmentDocumentsStorage assignmentsStorage;
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly ITabletDiagnosticService diagnosticService;
         private readonly IInterviewerSettings interviewerSettings;
+        private readonly IAuditLogSynchronizer auditLogSynchronizer;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -57,12 +58,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
-            IPlainStorage<AssignmentDocument, int> assignmentsStorage,
+            IAssignmentDocumentsStorage assignmentsStorage,
             IAudioFileStorage audioFileStorage,
             ITabletDiagnosticService diagnosticService,
-            IInterviewerSettings interviewerSettings) : base(synchronizationService, logger,
+            IInterviewerSettings interviewerSettings,
+            IAuditLogSynchronizer auditLogSynchronizer,
+            IAuditLogService auditLogService) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
-            interviewViewRepository)
+            interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
             this.interviewViewRepository = interviewViewRepository;
@@ -81,6 +84,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.audioFileStorage = audioFileStorage;
             this.diagnosticService = diagnosticService;
             this.interviewerSettings = interviewerSettings;
+            this.auditLogSynchronizer = auditLogSynchronizer;
         }
 
         
@@ -106,6 +110,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);

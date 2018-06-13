@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Machine.Specifications;
+using System.Collections.Generic;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 
@@ -7,15 +7,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
 {
     internal class when_requesting_list_of_packages_and_storage_contains_2_invalid_and_1valid_package : FileBasedTabletInformationServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileBasedTabletInformationService = CreateFileBasedTabletInformationService(null, presentFileNames);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => returnedPackages = fileBasedTabletInformationService.GetAllTabletInformationPackages();
+        public void BecauseOf() => returnedPackages = fileBasedTabletInformationService.GetAllTabletInformationPackages();
 
-        It should_contain_3_elements_in_list = () => returnedPackages.Count.ShouldEqual(3);
-        It should_android_id_be_equal_2 = () => returnedPackages[0].AndroidId.ShouldEqual("2");
+        [NUnit.Framework.Test] public void should_contain_3_elements_in_list () => returnedPackages.Count.Should().Be(3);
+        [NUnit.Framework.Test] public void should_android_id_be_equal_2 () => returnedPackages[0].AndroidId.Should().Be("2");
 
         private static FileBasedTabletInformationService fileBasedTabletInformationService;
 

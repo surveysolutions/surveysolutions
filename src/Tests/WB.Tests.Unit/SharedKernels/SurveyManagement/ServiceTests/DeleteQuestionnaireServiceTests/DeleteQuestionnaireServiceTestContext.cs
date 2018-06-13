@@ -1,10 +1,9 @@
-﻿using System;
-using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -15,14 +14,14 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
 {
-    [Subject(typeof(DeleteQuestionnaireService))]
+    [NUnit.Framework.TestOf(typeof(DeleteQuestionnaireService))]
     internal class DeleteQuestionnaireServiceTestContext
     {
         protected static DeleteQuestionnaireService CreateDeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory = null,
            ICommandService commandService = null, 
            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null, 
            IQuestionnaireStorage questionnaireStorage = null,
-           IInterviewImportService interviewImportService = null)
+           IAssignmentsImportService interviewImportService = null)
         {
             IInterviewsToDeleteFactory Factory() => interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>();
 
@@ -32,7 +31,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     Factory,
                     commandService ?? Mock.Of<ICommandService>(), Mock.Of<ILogger>(),
                     Mock.Of<ITranslationManagementService>(),
-                    interviewImportService ?? Mock.Of<IInterviewImportService>(_ => _.Status == new AssignmentImportStatus()),
+                    interviewImportService ?? Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
                     Mock.Of<IAuditLog>());
         }
     }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
@@ -12,7 +12,6 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -31,8 +30,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .InitializesWith<Initialize>(_ => aggregateId, (command, aggregate) => aggregate.Initialize());
@@ -63,18 +61,20 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetInstance(typeof(Aggregate)) == new Aggregate());
 
             commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object, serviceLocator: serviceLocator);
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             commandService.Execute(new Initialize(), null);
 
-        It should_publish_result_aggregate_root_event_to_event_bus = () =>
-            publishedEvents.Single().Payload.ShouldBeOfExactType<Initialized>();
+        [NUnit.Framework.Test] public void should_publish_result_aggregate_root_event_to_event_bus () =>
+            publishedEvents.Single().Payload.Should().BeOfType<Initialized>();
 
-        It should_set_specified_aggregate_id_to_constructed_aggregate_root = () =>
-            constructedAggregateId.ShouldEqual(aggregateId);
+        [NUnit.Framework.Test] public void should_set_specified_aggregate_id_to_constructed_aggregate_root () =>
+            constructedAggregateId.Should().Be(aggregateId);
 
-        It should_create_snapshot_of_aggregate_root_if_needed = () =>
+        [NUnit.Framework.Test] public void should_create_snapshot_of_aggregate_root_if_needed () =>
             snapshooterMock.Verify(
                 snapshooter => snapshooter.CreateSnapshotIfNeededAndPossible(Moq.It.Is<IEventSourcedAggregateRoot>(aggregate => aggregate.EventSourceId == aggregateId)),
                 Times.Once());

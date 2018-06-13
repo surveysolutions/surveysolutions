@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
@@ -9,10 +10,13 @@ using WB.UI.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Code;
 
 namespace ASP
 {
+    [Localizable(false)]
     public static partial class HtmlExtensions
     {
         public static IHtmlString  MainMenuItem(this HtmlHelper html, string actionName, string controllerName, string linkText, MenuItem renderedPage)
@@ -115,11 +119,12 @@ namespace ASP
                 case MenuItem.Assignments: return MainMenu.Assignments;
                 case MenuItem.AuditLog: return AuditLog.PageTitle;
                 case MenuItem.Maps: return MainMenu.Maps;
+                case MenuItem.SurveyStatistics: return MainMenu.SurveyStatistics;
                 default: return String.Empty;
             }
         }
 
-        private static JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
+        private static readonly JsonSerializerSettings asJsonValueSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
@@ -140,7 +145,14 @@ namespace ASP
                 script += $"window.CONFIG.title=\"{helper.ToSafeJavascriptMessage(titleString)}\"";
             }
 
-            return new HtmlString($@"<script>{script};window.CONFIG.model={ model.AsJsonValue() }</script>");
+            return new HtmlString($@"<script>{script};window.CONFIG.model={ model?.AsJsonValue() ?? new HtmlString(@"null") }</script>");
+        }
+
+        public static IHtmlString AuthorizedUserInfoJson(this HtmlHelper helper)
+        {
+            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+            if (authorizedUser == null) return new HtmlString("{}");
+            return new HtmlString(JsonConvert.SerializeObject(authorizedUser));
         }
     }
 }

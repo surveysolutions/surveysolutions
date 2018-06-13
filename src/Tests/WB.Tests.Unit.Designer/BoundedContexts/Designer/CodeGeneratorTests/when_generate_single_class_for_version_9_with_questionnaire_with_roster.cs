@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -35,10 +35,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             generatedClassContent = generator.Generate(questionnaire, version).Values.First();
 
         [NUnit.Framework.Test] public void should_generate_class_without_IInterviewExpressionStateV4 () =>
-            generatedClassContent.ShouldNotContain("IInterviewExpressionStateV10");
+            generatedClassContent.Should().NotContain("IInterviewExpressionStateV10");
 
         [NUnit.Framework.Test] public void should_generate_class_with_AbstractConditionalLevelInstanceV4 () =>
-            generatedClassContent.ShouldContain("AbstractInterviewExpressionStateV10");
+            generatedClassContent.Should().Contain("AbstractInterviewExpressionStateV10");
 
         private static int version = 16;
         private static CodeGenerator generator;

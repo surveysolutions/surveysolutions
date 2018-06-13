@@ -1,11 +1,9 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionInfo;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFactoryTests
@@ -22,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetRosterEditView(questionnaireId, rosterId);
 
         [NUnit.Framework.Test] public void should_return_null () =>
-            result.ShouldBeNull();
+            result.Should().BeNull();
 
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;

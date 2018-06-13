@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Modularity;
@@ -19,6 +21,11 @@ namespace WB.Core.Infrastructure
             registry.Bind<IEventSourcedAggregateRootRepository, DummyEventSourcedAggregateRootRepository>();
             registry.Bind<ILiteEventBus, DummyEventBus>();
             registry.Bind<IAggregateSnapshotter, DummyAggregateSnapshotter>();
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
 
         public class DummyEventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository

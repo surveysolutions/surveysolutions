@@ -1,0 +1,117 @@
+﻿@using System.Globalization
+@using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog
+@model WB.UI.Headquarters.Controllers.InterviewerAuditLogModel
+
+@{
+    ViewBag.Title = InterviewerAuditRecord.PageTitle;
+    ViewBag.ActivePage = MenuItem.Interviewers;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<main>
+    <div class="container settings">
+        <div class="row">
+            <div class="page-header">
+                <ol class="breadcrumb">
+                    <li><a href="@Url.Action("Index", "Interviewers")">@Pages.InterviewerProfile_Interviewers</a></li>
+                    <li><a href="@Url.Action("Profile", "Interviewer", new {Id = Model.InterviewerId})">@Pages.Profile_InterviewerProfile</a></li>
+                </ol>
+                <h1>
+                    @InterviewerAuditRecord.DetailedActionLog (@Model.InterviewerName)
+                </h1>
+                @if (Model.HasDeviceInfo)
+                {
+                    <ul class="list-unstyled">
+                        <li><b>@Model.DeviceModel (id @Model.DeviceId)</b></li>
+                        <li>
+                            <b>
+                                @Pages.InterviewerProfile_InterviewerAppVersion: @Model.InterviewerAppVersion &mdash;
+
+                                @if (!Model.HasUpdateForInterviewerApp)
+                                {
+                                    <span class="success-text">@Pages.InterviewerProfile_InterviewerUpToDate</span>
+                                }
+                                else
+                                {
+                                    <span class="error-text">@Pages.InterviewerProfile_InterviewerCanBeUpdated</span>
+                                }
+                            </b>
+                        </li>
+                    </ul>
+                }
+            </div>
+        </div>
+        <div class="row  extra-margin-bottom">
+            <div class="col-sm-7 ">
+                @if (Model.RecordsByDate.Length > 0)
+                {
+                    <a href="@Url.Action("DownloadTabLog", new {Id = Model.InterviewerId})">@InterviewerAuditRecord.DownloadTabLog</a>
+                }
+                else
+                {
+                    @InterviewerAuditRecord.RocordsMissing
+                }
+            </div>
+        </div>
+
+        @foreach (var dateRecords in Model.RecordsByDate)
+        {
+            <div class="row">
+                <div class="col-sm-7">
+                    <h2>@dateRecords.Date.ToLongDateString()</h2>
+                    <table class="table timestamps-table">
+                        <tbody>
+                            @foreach (var record in dateRecords.RecordsByDate)
+                            {
+                                <tr>
+                                    <td class="gray-text date">@record.Time.ToString("HH:mm", CultureInfo.InvariantCulture)</td>
+                                    <td><span class="@GetMessageCssClass(record.Type)">@record.Message</span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        
+        @if (Model.StartDateTime.HasValue)
+        {
+            <div class="row">
+                <div class="col-sm-7 ">
+                    <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId, startDateTime = Model.StartDateTime.Value})">@InterviewerAuditRecord.ShowPrevious7Days</a>
+                </div>
+            </div>
+        }
+    </div>
+</main>
+
+@functions
+{
+
+    string GetMessageCssClass(AuditLogEntityType entityType)
+    {
+        switch (entityType)
+        {
+            case AuditLogEntityType.SynchronizationCompleted:
+                return "success-text";
+            case AuditLogEntityType.Relink:
+            case AuditLogEntityType.DeleteInterview:
+            case AuditLogEntityType.SynchronizationCanceled:
+            case AuditLogEntityType.SynchronizationFailed:
+                return "error-text";
+            case AuditLogEntityType.OpenApplication:
+            case AuditLogEntityType.CreateInterviewFromAssignment:
+            case AuditLogEntityType.OpenInterview:
+            case AuditLogEntityType.CloseInterview:
+            case AuditLogEntityType.CompleteInterview:
+            case AuditLogEntityType.SynchronizationStarted:
+            case AuditLogEntityType.Login:
+            case AuditLogEntityType.Logout:
+            default:
+                return "";
+        }
+    }
+
+
+}

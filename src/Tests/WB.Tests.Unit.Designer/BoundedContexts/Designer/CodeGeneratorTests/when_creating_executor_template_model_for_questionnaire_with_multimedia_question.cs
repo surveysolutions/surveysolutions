@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             templateModel = expressionStateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_generate_model_for_multimedia_question () =>
-            GetQuestion(multimediaId).ShouldNotBeNull();
+            GetQuestion(multimediaId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_generate_model_for_multimedia_question_with_specified_values () =>
             GetQuestion(multimediaId).ShouldContainValues(
@@ -68,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
 
 
         [NUnit.Framework.Test] public void should_generate_model_for_text_question () =>
-            GetQuestion(textId).ShouldNotBeNull();
+            GetQuestion(textId).Should().NotBeNull();
 
         private static QuestionTemplateModel GetQuestion(Guid id)
         {

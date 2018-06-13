@@ -1,25 +1,23 @@
-﻿using System;
-using Machine.Specifications;
+using System;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
 {
     internal class when_marking_interview_as_received : InterviewsApiV2ControllerTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             controller = CreateInterviewerInterviewsController(
                 commandService: mockOfCommandService.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => controller.LogInterviewAsSuccessfullyHandled(interviewId);
+        public void BecauseOf() => controller.LogInterviewAsSuccessfullyHandled(interviewId);
 
-        It should_executed_command_to_mark_interview_as_received = () =>
+        [NUnit.Framework.Test] public void should_executed_command_to_mark_interview_as_received () =>
             mockOfCommandService.Verify(x=>x.Execute(Moq.It.IsAny<MarkInterviewAsReceivedByInterviewer>(), Moq.It.IsAny<string>()), Times.Once);
         
         

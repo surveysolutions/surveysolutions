@@ -88,6 +88,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             }
         }
 
+        public int GetRegistredDeviceCount(Guid interviewerId)
+            => this.dbContext.DeviceSyncInfo
+                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
+                .Select(info => info.DeviceId).Distinct().Count();
+
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)
                 .Where(d => d.InterviewerId == interviewerId && d.StatisticsId != null)        

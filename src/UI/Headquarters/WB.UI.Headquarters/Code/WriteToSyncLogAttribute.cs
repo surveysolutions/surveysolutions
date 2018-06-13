@@ -91,7 +91,10 @@ namespace WB.UI.Headquarters.Code
                         if (context.Response.IsSuccessStatusCode) 
                             logItem.Log = SyncLogMessages.CanSynchronize;
                         else if (context.Response.StatusCode == HttpStatusCode.UpgradeRequired)
-                            logItem.Log =  SyncLogMessages.DeviceUpdateRequired.FormatString(context.GetActionArgumentOrDefault<int>("version", -1));
+                        {
+                            var version = context.GetActionArgumentOrDefault("version", context.GetActionArgumentOrDefault("deviceSyncProtocolVersion", -1));
+                            logItem.Log =  SyncLogMessages.DeviceUpdateRequired.FormatString(version);
+                        }
                         else if (context.Response.StatusCode == HttpStatusCode.Forbidden)
                             logItem.Log = SyncLogMessages.DeviceRelinkRequired;
                         break;
@@ -241,8 +244,8 @@ namespace WB.UI.Headquarters.Code
 
         private static string GetInterviewLink(Guid interviewId)
         {
-            var interviewLink = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext).Action("Details",
-                new { controller = "Interview", action = "Details", id = interviewId });
+            var interviewLink = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext).Action("Review",
+                new { controller = "Interview", action = "Review", id = interviewId });
 
             return $"<a href=\"{interviewLink}\">{interviewId:N}</a>";
         }

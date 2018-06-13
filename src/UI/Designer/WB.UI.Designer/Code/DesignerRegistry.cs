@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using WB.Core.BoundedContexts.Designer.Comments;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -7,6 +8,7 @@ using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Implementation.Services;
@@ -65,6 +67,11 @@ namespace WB.UI.Designer.Code
             registry.BindToConstant<QuestionnaireHistorySettings>(() => historySettings);
             registry.Bind<IPdfFactory, PdfFactory>();
             registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

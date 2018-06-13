@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -21,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0269_message () => verificationMessages.ShouldContainError("WB0269");
 
         [NUnit.Framework.Test] public void should_return_WB0269_message_with_appropriate_message () =>
-            verificationMessages.ShouldContain(x => x.Message == VerificationMessages.WB0269_QuestionTitleIsEmpty);
+            verificationMessages.Should().Contain(x => x.Message == VerificationMessages.WB0269_QuestionTitleIsEmpty);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

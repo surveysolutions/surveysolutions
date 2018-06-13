@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -59,19 +59,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.CodeGeneratorTests
             model = templateModelFactory.CreateQuestionnaireExecutorTemplateModel(questionnaire, Create.CodeGenerationSettings());
 
         [NUnit.Framework.Test] public void should_generate_model_for_1_lookup_table () =>
-            model.LookupTables.Count.ShouldEqual(1);
+            model.LookupTables.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_generate_model_with_TableName_price () =>
-            model.LookupTables[0].TableName.ShouldEqual("price");
+            model.LookupTables[0].TableName.Should().Be("price");
 
         [NUnit.Framework.Test] public void should_generate_model_with_TableNameField_price () =>
-            model.LookupTables[0].TableNameField.ShouldEqual("@__price");
+            model.LookupTables[0].TableNameField.Should().Be("@__price");
 
         [NUnit.Framework.Test] public void should_generate_model_with_TypeName_Price () =>
-            model.LookupTables[0].TypeName.ShouldEqual("@Lookup__Price");
+            model.LookupTables[0].TypeName.Should().Be("@Lookup__Price");
 
         [NUnit.Framework.Test] public void should_generate_model_with_VariableNames__min__max () =>
-            model.LookupTables[0].VariableNames.ShouldContainOnly("min", "max");
+            model.LookupTables[0].VariableNames.Should().BeEquivalentTo("min", "max");
 
         private static Version version = new Version(11, 0, 0);
         private static QuestionnaireExpressionStateModelFactory templateModelFactory;

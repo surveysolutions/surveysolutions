@@ -1,23 +1,27 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 
 namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_gps_question : ExportedQuestionTestContext
     {
-        Establish context = () => { };
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
+        {
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             filledQuestion = CreateFilledExportedQuestion(QuestionType.GpsCoordinates, 5, new GeoPosition(1, 2, 3, 4, DateTimeOffset.MinValue));
             disabledQuestion = CreateDisabledExportedQuestion(QuestionType.GpsCoordinates, columnsCount: 5);
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.GpsCoordinates, columnsCount: 5);
-        };
+        }
 
-        It should_return_correct_filled_answer = () => filledQuestion.ShouldEqual(new []{ "1", "2", "3", "4", "0001-01-01T00:00:00" });
-        It should_return_correct_disabled_answer = () => disabledQuestion.ShouldEqual(new []{ DisableValue, DisableValue, DisableValue, DisableValue, DisableValue });
-        It should_return_correct_missing_answer = () => missingQuestion.ShouldEqual(new []{ MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingStringQuestionValue });
+        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo("1", "2", "3", "4", "0001-01-01T00:00:00");
+        [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => disabledQuestion.Should().BeEquivalentTo(DisableValue, DisableValue, DisableValue, DisableValue, DisableValue);
+        [NUnit.Framework.Test] public void should_return_correct_missing_answer () => missingQuestion.Should().BeEquivalentTo(MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingNumericQuestionValue, MissingStringQuestionValue);
 
 
         private static string[] filledQuestion;

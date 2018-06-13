@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,14 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_export_structure_from_questionnaire_containing_2_rosters_triggered_by_1_TextListQuestion : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new TextListQuestion("text list roster size question")
                 {
@@ -55,16 +54,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireId, 1));
 
-        It should_create_header_with_1_column = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideRoster1Id].ColumnHeaders.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_create_header_with_1_column () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { rosterSizeQuestionId }].HeaderItems[questionInsideRoster1Id].ColumnHeaders.Count.Should().Be(1);
 
-        It should_create_header_with_5_columns_at_first_level = () =>
-          questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[rosterSizeQuestionId].ColumnHeaders.Count.ShouldEqual(maxAnswerCount);
+        [NUnit.Framework.Test] public void should_create_header_with_5_columns_at_first_level () =>
+          questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[rosterSizeQuestionId].ColumnHeaders.Count.Should().Be(maxAnswerCount);
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;

@@ -1,23 +1,23 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTests
 {
     internal class when_getting_data_for_not_existing_file : ImageQuestionFileStorageTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = imageFileRepository.GetInterviewBinaryData(interviewId, fileName1);
+        public void BecauseOf() => result = imageFileRepository.GetInterviewBinaryData(interviewId, fileName1);
 
-        It should_result_Be_equal_to_null = () =>
-            result.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_result_Be_equal_to_null () =>
+            result.Should().BeNull();
 
         private static ImageFileStorage imageFileRepository;
 

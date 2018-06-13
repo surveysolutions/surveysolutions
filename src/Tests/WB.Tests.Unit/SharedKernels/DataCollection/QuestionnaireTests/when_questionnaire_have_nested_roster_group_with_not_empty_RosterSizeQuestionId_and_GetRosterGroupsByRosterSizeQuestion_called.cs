@@ -1,25 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     class when_questionnaire_have_nested_roster_group_with_not_empty_RosterSizeQuestionId_and_GetRosterGroupsByRosterSizeQuestion_called : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterGroupId = new Guid("EBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(new IComposite[]
             {
@@ -41,16 +34,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                         }.ToReadOnlyCollection()
                 }
             });
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             rosterGroups = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1).GetRosterGroupsByRosterSizeQuestion(rosterSizeQuestionId);
 
-        It should_rosterGroups_not_be_empty = () =>
-            rosterGroups.ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_rosterGroups_not_be_empty () =>
+            rosterGroups.Should().NotBeEmpty();
 
-        It should_rosterGroups_have_only_1_roster_group = () =>
-            rosterGroups.ShouldContainOnly(rosterGroupId);
+        [NUnit.Framework.Test] public void should_rosterGroups_have_only_1_roster_group () =>
+            rosterGroups.Should().BeEquivalentTo(rosterGroupId);
 
         private static IEnumerable<Guid> rosterGroups;
         private static QuestionnaireDocument questionnaireDocument;

@@ -9,9 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.API.WebInterview;
-using WB.UI.Headquarters.API.WebInterview.Services;
-
 using static WB.Enumerator.Native.WebInterview.WebInterview;
 
 namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.NotificationService

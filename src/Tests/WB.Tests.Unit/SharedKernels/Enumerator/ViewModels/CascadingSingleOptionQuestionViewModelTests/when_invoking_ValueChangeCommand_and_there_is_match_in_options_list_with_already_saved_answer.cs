@@ -1,25 +1,22 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using System.Threading.Tasks;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_invoking_ValueChangeCommand_and_there_is_match_in_options_list_with_already_saved_answer : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             SetUp();
 
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(answerOnChildQuestion));
@@ -46,11 +43,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
                 questionnaireRepository: questionnaireRepository);
 
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            await BecauseOf();
 
-        Because of = () => cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3").Await();
+        }
 
-        It should_not_send_answer_command = () =>
+        public async Task BecauseOf() => await cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3");
+
+        [NUnit.Framework.Test] public void should_not_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Never);
 
 

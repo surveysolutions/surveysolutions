@@ -1,19 +1,19 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_text_list_question_which_is_roster_size_for_2_rosters_with_previous_answer_and_new_answer_has_only_changed_values : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
 
             var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
@@ -35,9 +35,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 });
          
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerTextListQuestion(userId, textListQuestionId, emptyRosterVector, DateTime.Now,
                 new[]
                 {
@@ -46,64 +47,67 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                     new Tuple<decimal, string>(3, "Answer 3 !New")
                 });
 
-        It should_raise_MultipleOptionsQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event () =>
            eventContext.ShouldContainEvent<TextListQuestionAnswered>();
 
-        It should_raise_0_RosterRowAdded_events = () =>
+        [NUnit.Framework.Test] public void should_raise_0_RosterRowAdded_events () =>
             eventContext.ShouldContainEvents<RosterInstancesAdded>(count: 0);
 
-        It should_raise_0_any_RosterRowRemoved_events = () =>
+        [NUnit.Framework.Test] public void should_raise_0_any_RosterRowRemoved_events () =>
             eventContext.ShouldContainEvents<RosterInstancesAdded>(count: 0);
 
-        It should_raise_1_RosterRowsTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_raise_1_RosterRowsTitleChanged_events () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
-        It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_1 = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_1 () =>
             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
                 @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == 1) == 2);
 
-        It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_2 = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_2 () =>
              eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
                 @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == 2) == 2);
 
-        It should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_3 = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterRowsTitleChanged_event_with_2_roster_instance_id_equals_to_3 () =>
              eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(
                 @event => @event.ChangedInstances.Count(row => row.RosterInstance.RosterInstanceId == 3) == 2);
 
-        It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
-            eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
-                .ShouldContain(rosterAId, rosterBId);
+        [NUnit.Framework.Test] public void should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events ()
+        {
+            var array = eventContext.GetEvents<RosterInstancesTitleChanged>()
+                .SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray();
+            Assert.That(array, Does.Contain(rosterAId).And.Contain(rosterBId));
+        }
 
-        It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
 
-        It should_set_title_to__Answer_1_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_1 = () =>
+        [NUnit.Framework.Test] public void should_set_title_to__Answer_1_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_1 () =>
             eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
                         .ChangedInstances
                         .Where(x => x.RosterInstance.RosterInstanceId == 1)
                         .Select(x => x.Title)
-                        .ShouldContainOnly("Answer 1 !New", "Answer 1 !New");
+                        .Should().BeEquivalentTo("Answer 1 !New", "Answer 1 !New");
 
-        It should_set_title_to__Answer_2_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_2 = () =>
+        [NUnit.Framework.Test] public void should_set_title_to__Answer_2_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_2 () =>
             eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
                         .ChangedInstances
                         .Where(x => x.RosterInstance.RosterInstanceId == 2)
                         .Select(x => x.Title)
-                        .ShouldContainOnly("Answer 2 !New", "Answer 2 !New");
+                        .Should().BeEquivalentTo("Answer 2 !New", "Answer 2 !New");
 
-        It should_set_title_to__Answer_3_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_3 = () =>
+        [NUnit.Framework.Test] public void should_set_title_to__Answer_3_New__in_all_RosterRowTitleChanged_events_with_roster_instance_id_equals_to_3 () =>
             eventContext.GetSingleEvent<RosterInstancesTitleChanged>()
                         .ChangedInstances
                         .Where(x => x.RosterInstance.RosterInstanceId == 3)
                         .Select(x => x.Title)
-                        .ShouldContainOnly("Answer 3 !New", "Answer 3 !New");
+                        .Should().BeEquivalentTo("Answer 3 !New", "Answer 3 !New");
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
         private static EventContext eventContext;
         private static Interview interview;

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>Vous avez déjà importé un autre questionnaire portant le titre '{0}' de Designer. Si vous voulez toujours importer celui-ci, veuillez lui donner un nom différent dans le Designer.</value>
+    <value>Vous avez déjà importé un autre questionnaire portant le titre '{0}' du Designer. Si vous voulez toujours importer celui-ci, veuillez lui donner un nom différent dans le Designer.</value>
   </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Seul le Chef d'équipe responsable de cette affectation peut répondre aux questions de Chef d'Equipe</value>

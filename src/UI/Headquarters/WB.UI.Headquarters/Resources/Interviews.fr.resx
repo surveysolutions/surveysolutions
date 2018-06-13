@@ -192,9 +192,6 @@
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
     <value>Identifiant de l'affectation à laquelle appartient cet entretien. Cliquez sur l'icône de tri pour ordonner par numéro d'affectation.</value>
   </data>
-  <data name="Tooltip_Table_HasErrors" xml:space="preserve">
-    <value>Indicateur montrant si l'entretien a au moins une erreur de validation. "Oui" indique au moins une erreur; "-" n'indique aucune erreur. Cliquez sur l'icône de tri pour trier par existence d'erreurs.</value>
-  </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
     <value>Cliquez ici pour cacher ou montrer les questions d'identification. Masquer les questions d'identification peut fournir plus d'espace pour d'autres informations. La présentation de questions d'identification peut fournir des détails pour différencier les entretiens.</value>
   </data>
@@ -215,5 +212,8 @@
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
     <value>Etat de l'entretien dans le flux de travail d'enquête. Cliquez sur l'icône de tri pour ordonner par état.</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Erreurs</value>
   </data>
 </root>

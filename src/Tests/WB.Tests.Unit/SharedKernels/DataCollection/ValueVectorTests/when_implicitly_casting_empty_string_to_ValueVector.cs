@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.ValueVectorTests
 {
     internal class when_implicitly_casting_empty_string_to_ValueVector
     {
-        Because of = () =>
-           result = "";
+        [NUnit.Framework.Test] public void should_return_null_result ()
+        {
+            result = "";
 
-        It should_return_null_result = () =>
-             result.ShouldBeNull();
+            result.Should().BeNull();
+        }
 
         private static ValueVector<decimal> result;
     }

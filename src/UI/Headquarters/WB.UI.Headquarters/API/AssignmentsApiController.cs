@@ -6,11 +6,12 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -18,7 +19,6 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API
 {
@@ -32,7 +32,7 @@ namespace WB.UI.Headquarters.API
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IAuditLog auditLog;
-        private readonly IInterviewImportService interviewImportService;
+        private readonly IPreloadedDataVerifier verifier;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireStorage questionnaireStorage,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IAuditLog auditLog,
-            IInterviewImportService interviewImportService)
+            IPreloadedDataVerifier verifier)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -48,7 +48,7 @@ namespace WB.UI.Headquarters.API
             this.questionnaireStorage = questionnaireStorage;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.auditLog = auditLog;
-            this.interviewImportService = interviewImportService;
+            this.verifier = verifier;
         }
         
         [Route("")]
@@ -217,9 +217,9 @@ namespace WB.UI.Headquarters.API
                 });
             }
 
-            var verificationResult = interviewImportService.VerifyAssignment(answers.GroupedByLevels(), questionnaire);
-            if (!verificationResult.Status)
-                return Content(HttpStatusCode.Forbidden, verificationResult.ErrorMessage);
+            var error = verifier.VerifyWithInterviewTree(answers, null, questionnaire);
+            if (error != null)
+                return Content(HttpStatusCode.Forbidden, error.ErrorMessage);
 
             assignment.SetIdentifyingData(identifyingAnswers);
             assignment.SetAnswers(answers);
@@ -231,7 +231,6 @@ namespace WB.UI.Headquarters.API
             return this.Ok(new {});
         }
 
- 
         public class CreateAssignmentRequest
         {
             public Guid QuestionnaireId { get; set; }

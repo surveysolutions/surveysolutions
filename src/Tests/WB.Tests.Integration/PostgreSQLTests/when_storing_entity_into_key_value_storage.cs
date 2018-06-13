@@ -1,13 +1,12 @@
-﻿using System;
-using System.Data.SqlClient;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.PostgreSQLTests
 {
@@ -16,10 +15,11 @@ namespace WB.Tests.Integration.PostgreSQLTests
         public DateTime Date { get; set; }
     }
 
-    [Subject(typeof(PostgresReadSideKeyValueStorage<TestPersistedClass>))]
+    [TestOf(typeof(PostgresReadSideKeyValueStorage<TestPersistedClass>))]
     public class when_storing_entity_into_key_value_storage : with_postgres_db
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
         {
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
@@ -29,13 +29,18 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 sessionProvider: sessionProvider, postgreConnectionSettings: new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
-        };
+            BecauseOf();
+        }
 
-        Because of = () => { storage.Store(new TestPersistedClass{Date = storedDate}, usedId); };
+        public void BecauseOf() { storage.Store(new TestPersistedClass { Date = storedDate }, usedId); }
 
-        It should_read_item_that_was_stored = () => storage.GetById(usedId).Date.ShouldEqual(storedDate);
+        [NUnit.Framework.Test] public void should_read_item_that_was_stored() => storage.GetById(usedId).Date.Should().Be(storedDate);
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            pgSqlConnection.Close();
+        }
 
         static PostgresReadSideKeyValueStorage<TestPersistedClass> storage;
         static DateTime storedDate;

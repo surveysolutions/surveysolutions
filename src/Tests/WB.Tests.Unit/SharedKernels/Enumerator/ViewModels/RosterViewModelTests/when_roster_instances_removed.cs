@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -11,7 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
     internal class when_roster_instances_removed : RosterViewModelTests
     {
         [Test]
-        public void should_remove_view_models()
+        public async Task should_remove_view_models()
         {
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: statefulInterviewRepository);
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
-            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
             viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
 
             interview.AnswerTextListQuestion(interviewerId, textListQuestionId, RosterVector.Empty, DateTime.UtcNow,

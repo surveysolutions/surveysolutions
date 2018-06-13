@@ -1,10 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Preloading;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -14,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_creating_interview_with_preloaded_data_and_int_question_triggers_roster_and_answer_on_roster_child_text_question_is_set : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireId = Guid.Parse("22220000000000000000000000000000");
             userId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             supervisorId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -51,21 +48,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
                 interview.CreateInterview(Create.Command.CreateInterview(interview.EventSourceId, userId, questionnaireId, 1, preloadedDataDto.Answers, answersTime, supervisorId, null, null, null));
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_InterviewCreated_event = () =>
+        [NUnit.Framework.Test] public void should_raise_InterviewCreated_event () =>
                 eventContext.ShouldContainEvent<InterviewCreated>();
 
-        It should_raise_valid_TextQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_valid_TextQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<TextQuestionAnswered>(@event
                 => @event.Answer == prefilledTextQuestionAnswer && @event.QuestionId == prefilledTextQuestionId);
 

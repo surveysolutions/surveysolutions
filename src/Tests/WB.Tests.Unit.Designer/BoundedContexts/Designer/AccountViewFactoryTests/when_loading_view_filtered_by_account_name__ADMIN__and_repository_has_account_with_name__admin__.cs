@@ -1,12 +1,7 @@
-using System;
-using System.Linq;
-using Machine.Specifications;
-using Moq;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Account;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-
 using it = Moq.It;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTests
@@ -26,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountViewFactoryTest
             filteredAccount = accountFactory.Load(inputWithFilterByAccountName);
 
         [NUnit.Framework.Test] public void should_find_one_account () =>
-            filteredAccount.ShouldNotBeNull(); 
+            filteredAccount.Should().NotBeNull(); 
 
         private static IAccountView filteredAccount;
         private static AccountViewInputModel inputWithFilterByAccountName;

@@ -1,10 +1,7 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Translations;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Designer.Api;

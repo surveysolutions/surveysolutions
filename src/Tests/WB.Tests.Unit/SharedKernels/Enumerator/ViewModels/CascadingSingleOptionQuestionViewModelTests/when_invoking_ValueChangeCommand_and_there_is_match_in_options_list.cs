@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using System.Threading.Tasks;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -10,15 +11,14 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     [Ignore("I want deploy hotfix ;(")]
     internal class when_invoking_ValueChangeCommand_and_there_is_match_in_options_list : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             SetUp();
 
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(answerOnChildQuestion));
@@ -48,11 +48,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewId, questionIdentity, navigationState);
 
             cascadingModel.FilterCommand.Execute("o");
-        };
 
-        Because of = () => cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3").Await();
+            await cascadingModel.SaveAnswerBySelectedOptionCommand.ExecuteAsync("3");
+        }
 
-        It should_send_answer_command = () =>
+        [NUnit.Framework.Test] public void should_send_answer_command () =>
             AnsweringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionQuestionCommand>()), Times.Exactly(2));
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;

@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -71,15 +69,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.compositeCollectionInflationService = compositeCollectionInflationService;
         }
 
-        public void Init(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
+        public void Configure(string interviewId, NavigationState navigationState, Identity groupId, Identity anchoredElementIdentity)
         {
-            if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
             if (this.navigationState != null) throw new InvalidOperationException("ViewModel already initialized");
 
             this.interviewId = interviewId;
             this.groupId = groupId;
-
-            this.navigationState = navigationState;
+            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.Items = new CompositeCollection<ICompositeEntity>();
 
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
@@ -166,7 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                 await this.commandService.WaitPendingCommandsAsync();
 
-                this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
             }
         }
     }

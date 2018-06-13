@@ -16,20 +16,29 @@ using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal class PostgreReadSideStorage<TEntity> : IReadSideRepositoryWriter<TEntity>,
-        IReadSideRepositoryCleaner,
-        INativeReadSideStorage<TEntity>
+    internal class PostgreReadSideStorage<TEntity> : PostgreReadSideStorage<TEntity, string>, 
+            IReadSideRepositoryWriter<TEntity>,
+            INativeReadSideStorage<TEntity>
+        where TEntity : class, IReadSideRepositoryEntity
+    {
+        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
+            ILogger logger) : base(sessionProvider, logger)
+        {
+        }
+    }
+
+    internal class PostgreReadSideStorage<TEntity, TKey> : IReadSideRepositoryWriter<TEntity, TKey>,
+        INativeReadSideStorage<TEntity,TKey>
         where TEntity : class, IReadSideRepositoryEntity
     {
         private readonly ISessionProvider sessionProvider;
         private readonly ILogger logger;
-        private readonly string entityIdentifierColumnName;
 
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, ILogger logger, string entityIdentifierColumnName)
+        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
+            ILogger logger)
         {
             this.sessionProvider = sessionProvider;
             this.logger = logger;
-            this.entityIdentifierColumnName = entityIdentifierColumnName;
         }
 
         public virtual int Count()
@@ -37,12 +46,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return this.sessionProvider.GetSession().QueryOver<TEntity>().RowCount();
         }
 
-        public virtual TEntity GetById(string id)
+        public virtual TEntity GetById(TKey id)
         {
             return this.sessionProvider.GetSession().Get<TEntity>(id);
         }
 
-        public virtual void Remove(string id)
+        public virtual void Remove(TKey id)
         {
             var session = this.sessionProvider.GetSession();
 
@@ -53,26 +62,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             session.Delete(entity);
         }
-        
-        public void RemoveIfStartsWith(string beginingOfId)
-        {
-            var session = this.sessionProvider.GetSession();
 
-            string hql = $"DELETE {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
-
-            session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").ExecuteUpdate();
-        }
-
-        public IEnumerable<string> GetIdsStartWith(string beginingOfId)
-        {
-            var session = this.sessionProvider.GetSession();
-
-            string hql = $"SELECT e.{entityIdentifierColumnName} FROM {typeof(TEntity).Name} e WHERE e.{entityIdentifierColumnName} like :id";
-
-            return session.CreateQuery(hql).SetParameter("id", $"{beginingOfId}%").List<string>().ToList();
-        }
-
-        public virtual void Store(TEntity entity, string id)
+        public virtual void Store(TEntity entity, TKey id)
         {
             ISession session = this.sessionProvider.GetSession();
 
@@ -87,7 +78,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
+        public virtual void BulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
             try
             {
@@ -181,7 +172,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return "PostgreSQL :'(";
         }
 
-        private void FastBulkStore(List<Tuple<TEntity, string>> bulk)
+        private void FastBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
 
@@ -193,7 +184,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     foreach (var tuple in subBulk)
                     {
                         TEntity entity = tuple.Item1;
-                        string id = tuple.Item2;
+                        TKey id = tuple.Item2;
 
                         session.Save(entity, id);
                     }
@@ -203,7 +194,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
+        private void SlowBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
             var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
             using (ISession session = sessionFactory.OpenSession())
@@ -212,7 +203,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 foreach (var tuple in bulk)
                 {
                     TEntity entity = tuple.Item1;
-                    string id = tuple.Item2;
+                    TKey id = tuple.Item2;
 
                     var storedEntity = session.Get<TEntity>(id);
 

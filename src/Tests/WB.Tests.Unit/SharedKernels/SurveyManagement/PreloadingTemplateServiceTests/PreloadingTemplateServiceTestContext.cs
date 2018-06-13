@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -13,7 +12,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadingTemplateServiceTests
 {
-    [Subject(typeof(AssignmentImportTemplateGenerator))]
+    [NUnit.Framework.TestOf(typeof(AssignmentImportTemplateGenerator))]
     internal class PreloadingTemplateServiceTestContext
     {
         protected static AssignmentImportTemplateGenerator CreatePreloadingTemplateService(

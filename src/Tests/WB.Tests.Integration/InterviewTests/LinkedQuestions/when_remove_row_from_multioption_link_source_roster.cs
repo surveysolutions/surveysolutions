@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -13,8 +12,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_remove_row_from_multioption_link_source_roster : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
             rosterId = Guid.Parse("21111111111111111111111111111111");
@@ -35,31 +33,33 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             interview.AnswerMultipleOptionsLinkedQuestion(userId, linkedQuestionId, RosterVector.Empty, DateTime.Now,
                 new RosterVector[] { new decimal[] { 1 }, new decimal[] {0}});
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.AnswerNumericIntegerQuestion(userId, rosterSizeQuestionId, new decimal[0],
                 DateTime.Now, 0);
 
-        It should_raise_RosterInstancesRemoved_event_for_first_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_for_first_row () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances[0].GroupId == rosterId && @event.Instances[0].RosterInstanceId == 0);
 
-        It should_raise_RosterInstancesRemoved_event_for_second_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesRemoved_event_for_second_row () =>
             eventContext.ShouldContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances[1].GroupId == rosterId && @event.Instances[1].RosterInstanceId == 1);
 
-        It should_raise_AnswersRemoved_event_for_answered_linked_Question = () =>
+        [NUnit.Framework.Test] public void should_raise_AnswersRemoved_event_for_answered_linked_Question () =>
             eventContext.ShouldContainEvent<AnswersRemoved>(@event
                 => @event.Questions.Count(q => q.Id == linkedQuestionId && !q.RosterVector.Any()) == 1);
 
-        It should_raise_LinkedOptionsChanged_event_with_empty_option_list_for_linked_question = () =>
+        [NUnit.Framework.Test] public void should_raise_LinkedOptionsChanged_event_with_empty_option_list_for_linked_question () =>
           eventContext.ShouldContainEvent<LinkedOptionsChanged>(@event
               => @event.ChangedLinkedQuestions.Count(q => q.QuestionId.Id == linkedQuestionId && !q.Options.Any()) == 1);
 

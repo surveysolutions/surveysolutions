@@ -209,6 +209,21 @@ namespace WB.Tests.Abc.TestFactories
                 newSupervisorId);
         }
 
+        public AnswerGeographyQuestionCommand AnswerGeographyQuestionCommand(Guid interviewId, Guid questionId, Guid? userId = null)
+            => new AnswerGeographyQuestionCommand(
+                interviewId: interviewId,
+                userId: userId ?? Guid.NewGuid(),
+                questionId: questionId,
+                rosterVector: new decimal[0],
+                answerTime: DateTime.UtcNow,
+                geometry: "",
+                mapName:"",
+                area:0,
+                coordinates:"",
+                length:0,
+                distanceToEditor:0,
+                numberOfPoints:0);
+
         public DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? responsibleId)
         {
             return new DeleteQuestionnaire(questionnaireId, questionnaireVersion, responsibleId);
@@ -253,13 +268,15 @@ namespace WB.Tests.Abc.TestFactories
             Guid supervisorId,
             Guid? interviewerId = null,
             InterviewKey interviewKey = null,
-            int? assignmentId = null)
+            int? assignmentId = null,
+            List<string> protectedAnswers = null)
         {
             return new CreateInterview(
                 interviewId, 
                 userId, 
                 Create.Entity.QuestionnaireIdentity(questionnaireId, version), 
                 answers, 
+                protectedAnswers ?? new List<string>(),
                 answersTime, 
                 supervisorId, 
                 interviewerId, 
@@ -272,7 +289,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? responsibleSupervisorId = null,
             List<InterviewAnswer> answersToFeaturedQuestions = null,
             Guid? userId = null,
-            DateTime? answersTime = null)
+            DateTime? answersTime = null,
+            List<string> protectedAnswers = null)
         {
             return this.CreateInterview(
                 Guid.NewGuid(),
@@ -283,7 +301,9 @@ namespace WB.Tests.Abc.TestFactories
                 answersTime ?? DateTime.Now,
                 responsibleSupervisorId ?? Guid.NewGuid(),
                 null,
-                Create.Entity.InterviewKey());
+                Create.Entity.InterviewKey(),
+                null,
+                protectedAnswers);
         }
 
         public CreateInterview CreateInterview(
@@ -294,18 +314,21 @@ namespace WB.Tests.Abc.TestFactories
             Guid? supervisorId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
-            List<InterviewAnswer> answersToIdentifyingQuestions = null)
+            List<InterviewAnswer> answers = null,
+            List<string> protectedAnswers = null
+            )
         {
             return this.CreateInterview(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(), 
                 questionnaireIdentity?.QuestionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? 1,
-                answersToIdentifyingQuestions ?? new List<InterviewAnswer>(),
+                answers ?? new List<InterviewAnswer>(),
                 answersTime ?? DateTime.UtcNow,
                 supervisorId ?? Guid.NewGuid(),
                 userId,
                 interviewKey, 
-                assignmentId);
+                assignmentId,
+                protectedAnswers);
         }
 
         public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 

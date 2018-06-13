@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_contain_WB0210_warning () => errors.ShouldContainWarning("WB0210");
 
         [NUnit.Framework.Test] public void should_referece_to_question_with_warning () =>
-            errors.GetWarning("WB0210").References.ShouldContainOnly(Create.VerificationReference(id: questionId));
+            errors.GetWarning("WB0210").References.Should().BeEquivalentTo(Create.VerificationReference(id: questionId));
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

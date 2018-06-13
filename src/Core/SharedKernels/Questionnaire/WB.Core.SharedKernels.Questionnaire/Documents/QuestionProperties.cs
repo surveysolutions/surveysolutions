@@ -1,3 +1,5 @@
+using WB.Core.SharedKernels.Questionnaire.Documents;
+
 namespace WB.Core.SharedKernels.QuestionnaireEntities
 {
     public class QuestionProperties
@@ -16,5 +18,7 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public bool UseFormatting { get; set; }
 
         public string OptionsFilterExpression { get; set; }
+
+        public GeometryType? GeometryType { get; set; }
     }
 }

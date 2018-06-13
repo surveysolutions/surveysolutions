@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Threading;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
@@ -14,14 +14,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOptionQuestionViewModelTests
 {
     internal class when_entering_filter_text : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var interviewId = "interviewId";
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             questionStateMock = new Mock<QuestionStateViewModel<SingleOptionQuestionAnswered>> { DefaultValue = DefaultValue.Mock };
@@ -55,20 +54,21 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
             var navigationState = Create.Other.NavigationState();
             
             viewModel.Init(interviewId, questionIdentity, navigationState);
+            await BecauseOf();
             
-        };
+        }
 
-        Because of = () => viewModel.FilterCommand.ExecuteAsync(answerValue).Await();
+        public async Task BecauseOf() => await viewModel.FilterCommand.ExecuteAsync(answerValue);
 
-        It should_update_suggestions_list = () =>
-            viewModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_update_suggestions_list () =>
+            viewModel.AutoCompleteSuggestions.Count.Should().Be(3);
 
-        It should_suggestions_list_contains_only_items_after_filtering_text = () =>
+        [NUnit.Framework.Test] public void should_suggestions_list_contains_only_items_after_filtering_text () 
         {
-            viewModel.AutoCompleteSuggestions.ShouldContain(i => i == "<b>a</b>bc");
-            viewModel.AutoCompleteSuggestions.ShouldContain(i => i == "b<b>a</b>c");
-            viewModel.AutoCompleteSuggestions.ShouldContain(i => i == "bb<b>a</b>");
-        };
+            viewModel.AutoCompleteSuggestions.Should().Contain(i => i == "<b>a</b>bc");
+            viewModel.AutoCompleteSuggestions.Should().Contain(i => i == "b<b>a</b>c");
+            viewModel.AutoCompleteSuggestions.Should().Contain(i => i == "bb<b>a</b>");
+        }
 
         static FilteredSingleOptionQuestionViewModel viewModel;
 

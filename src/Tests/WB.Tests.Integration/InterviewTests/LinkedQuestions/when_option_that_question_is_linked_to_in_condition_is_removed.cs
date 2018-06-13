@@ -1,18 +1,31 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
-    internal class when_option_that_question_is_linked_to_in_condition_is_removed : in_standalone_app_domain
+    internal class when_option_that_question_is_linked_to_in_condition_is_removed : InterviewTestsContext
     {
-        Because of = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() =>
            results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
            {
                AssemblyContext.SetupServiceLocator();
@@ -53,8 +66,8 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                }
            });
 
-        It should_disable_question1 = () => results.QuestionUsedSingleOptionDisabled.ShouldBeTrue();
-        It should_disable_question2 = () => results.QuestionUsedMultiOptionDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_question1 () => results.QuestionUsedSingleOptionDisabled.Should().BeTrue();
+        [NUnit.Framework.Test] public void should_disable_question2 () => results.QuestionUsedMultiOptionDisabled.Should().BeTrue();
 
         static InvokeResults results;
 

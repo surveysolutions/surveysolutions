@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.Infrastructure.PlainStorage;
@@ -25,8 +24,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 
         [NUnit.Framework.Test] public void should_meta_have_updated_properties () 
         {
-            expectedAttachmentMeta.ContentId.ShouldEqual(attachmentContentId);
-            expectedAttachmentMeta.FileName.ShouldEqual(fileName);
+            expectedAttachmentMeta.ContentId.Should().Be(attachmentContentId);
+            expectedAttachmentMeta.FileName.Should().Be(fileName);
         }
 
         private static AttachmentService attachmentService;

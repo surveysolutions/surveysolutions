@@ -1,5 +1,7 @@
 ﻿using System.Collections.Specialized;
+using System.Threading.Tasks;
 using System.Web.Configuration;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Configuration;
 
@@ -19,6 +21,11 @@ namespace WB.UI.Shared.Web.Modules
                 appSettings: WebConfigurationManager.AppSettings,
                 membershipSettings: this.membershipSettings)
             );
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -4,7 +4,6 @@ using FluentAssertions;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using Ncqrs.Eventing.Storage;
-using WB.Tests.Unit;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Tests.Eventing.Storage

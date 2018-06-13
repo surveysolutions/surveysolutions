@@ -26,6 +26,7 @@
             @Html.MainMenuItem("InterviewsChart", "Reports", @MainMenu.CumulativeChart, MenuItem.InterviewsChart)
             @Html.MainMenuItem("QuantityBySupervisors", "Reports", @MainMenu.Quantity, MenuItem.NumberOfCompletedInterviews)
             @Html.MainMenuItem("SpeedBySupervisors", "Reports", @MainMenu.Speed, MenuItem.SpeedOfCompletingInterviews)
+            @Html.MainMenuItem("SurveyStatistics", "Reports", @MainMenu.SurveyStatistics, MenuItem.SurveyStatistics)
         </ul>
     </li>
     @Html.MainMenuItem("Interviews", "HQ", @MainMenu.Interviews, MenuItem.Docs)
@@ -37,7 +38,10 @@
         <ul class="dropdown-menu">
             @Html.MainMenuItem("Index", "Supervisor", @MainMenu.Supervisors, MenuItem.Teams)
             @Html.MainMenuItem("Index", "Interviewers", @MainMenu.Interviewers, MenuItem.Interviewers)
-            @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+            @if (!isCurrentUserObserver)
+            {
+                @Html.MainMenuItem("Upload", "Users", @MainMenu.UserBatchUpload, MenuItem.UserBatchUpload)
+            }
         </ul>
     </li>
     <li class="dropdown  @(page == MenuItem.Questionnaires || page == MenuItem.Assignments || page == MenuItem.Maps ? "active" : "")">

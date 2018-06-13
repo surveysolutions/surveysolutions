@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -11,7 +11,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
@@ -53,26 +52,26 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
         [Test]
         public void should_substitute_2_into_error_message() =>
-            interview.GetFailedValidationMessages(Create.Identity(staticTextId), String.Empty).First().ShouldEqual("error 2");
+            interview.GetFailedValidationMessages(Create.Identity(staticTextId), String.Empty).First().Should().Be("error 2");
 
         [Test]
         public void should_substitute_30_into_question0_error_message() =>
-            interview.GetFailedValidationMessages(Create.Identity(questionId, 0), String.Empty).First().ShouldEqual("error 30");
+            interview.GetFailedValidationMessages(Create.Identity(questionId, 0), String.Empty).First().Should().Be("error 30");
 
         [Test]
         public void should_substitute_30_into_question1_error_message() =>
-            interview.GetFailedValidationMessages(Create.Identity(questionId, 1), String.Empty).First().ShouldEqual("error 30");
+            interview.GetFailedValidationMessages(Create.Identity(questionId, 1), String.Empty).First().Should().Be("error 30");
 
         [Test]
         public void should_mark_static_text_and_2_questions_as_invalid() =>
-            interview.GetInvalidEntitiesInInterview().ShouldContainOnly(
+            interview.GetInvalidEntitiesInInterview().Should().BeEquivalentTo(
                 Create.Identity(staticTextId),
                 Create.Identity(questionId, 0),
                 Create.Identity(questionId, 1));
 
         [Test]
         public void should_raise_title_changed_event_for_questions_0_and_1() =>
-            events.GetSingleEvent<SubstitutionTitlesChanged>().Questions.ShouldContainOnly(
+            events.GetSingleEvent<SubstitutionTitlesChanged>().Questions.Should().BeEquivalentTo(
                 Create.Identity(questionId, 0),
                 Create.Identity(questionId, 1));
 

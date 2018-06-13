@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetRosterEditView(questionnaireId, g2Id);
         
         [NUnit.Framework.Test] public void should_return_grouped_list_of_title_questions_size_2 () =>
-            result.NumericIntegerTitles.Count.ShouldEqual(2);
+            result.NumericIntegerTitles.Count.Should().Be(2);
        
         private static QuestionnaireInfoFactory factory;
         private static NewEditRosterView result;

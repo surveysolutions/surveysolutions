@@ -50,21 +50,36 @@ export const entityDetails = {
             return this.$me.acceptAnswer;
         }
     },
-    props: ["id"],
+
+    props:
+    {
+        id: {
+            type: String,
+            required: true
+        },
+
+        fetchOnMount: {
+            type: Boolean,
+            default: false
+        }
+    },
 
     mounted() {
-        this.fetch()
+        if(this.fetchOnMount){
+            this.fetch()
+        }
     },
-    
+
     watch: {
         id(to, from) {
             this.$store.dispatch("cleanUpEntity", from)
-            this.fetch(to)
         }
     },
+
     destroyed() {
         this.$store.dispatch("cleanUpEntity", this.id)
     },
+
     methods: {
         sendAnswer(callback) {
             if (this.acceptAnswer) {

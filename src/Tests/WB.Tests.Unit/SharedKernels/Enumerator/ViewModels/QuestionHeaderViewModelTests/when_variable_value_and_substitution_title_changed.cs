@@ -1,11 +1,10 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
@@ -42,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
         [Test]
         public void should_change_item_title() => statefullInterview.GetTitleText(staticTextWithSubstitutionIdentity)
-            .ShouldEqual($"Your answer on question is 2 and variable is 10");
+            .Should().Be($"Your answer on question is 2 and variable is 10");
         
         static StatefulInterview statefullInterview;
         static Guid interviewerId = Guid.Parse("11111111111111111111111111111111");

@@ -1,6 +1,6 @@
-﻿using System;
-using Machine.Specifications;
-using It = Machine.Specifications.It;
+using System;
+using FluentAssertions;
+
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryTests;
@@ -9,18 +9,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
 {
     internal class when_create_interview_summary_with_GPS_prefilled : InterviewSummaryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireWithTwoPrefieldIncludingOneGPS(questionnaireId);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel = new InterviewSummary(questionnaireDocument);
+        public void BecauseOf() => viewModel = new InterviewSummary(questionnaireDocument);
 
-        It should_view_model_not_be_null = () =>
-            viewModel.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_view_model_not_be_null () =>
+            viewModel.Should().NotBeNull();
 
-        It should_ = () =>
-            viewModel.AnswersToFeaturedQuestions.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_ () =>
+            viewModel.AnswersToFeaturedQuestions.Count.Should().Be(1);
 
         
         private static QuestionnaireDocument questionnaireDocument;

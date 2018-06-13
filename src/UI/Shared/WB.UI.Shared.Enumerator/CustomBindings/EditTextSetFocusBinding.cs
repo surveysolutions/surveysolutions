@@ -1,4 +1,5 @@
-﻿using Android.Content;
+﻿using System;
+using Android.Content;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
@@ -78,9 +79,12 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
+            if (IsDisposed)
+                return;
+
             if (isDisposing)
             {
-                if (this.EditText != null)
+                if (this.EditText != null && this.EditText.Handle != IntPtr.Zero)
                 {
                     this.EditText.FocusChange -= this.HandleFocusChange;
                     this.EditText.EditorAction -= this.HandleEditorAction;

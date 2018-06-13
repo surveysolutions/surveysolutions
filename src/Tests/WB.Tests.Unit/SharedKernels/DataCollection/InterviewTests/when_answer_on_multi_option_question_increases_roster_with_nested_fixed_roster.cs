@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -9,15 +8,14 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_on_multi_option_question_increases_roster_with_nested_fixed_roster :
         InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -39,20 +37,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerMultipleOptionsQuestion(userId, questionWhichIncreasesRosterSizeId, RosterVector.Empty, 
                 DateTime.Now,
                 new [] { 0 });
 
-        It should_raise_RosterInstancesAdded_for_first_row_of_first_level_roster = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_for_first_row_of_first_level_roster () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 =>
                     @event.Instances.Any(
@@ -60,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                             instance.GroupId == rosterGroupId && instance.RosterInstanceId == 0 &&
                             instance.OuterRosterVector.Length == 0));
 
-        It should_raise_RosterInstancesAdded_for_first_row_of_fixed_roster_by_first_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_for_first_row_of_fixed_roster_by_first_row () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 =>
                     @event.Instances.Any(
@@ -68,22 +67,21 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                             instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 0 &&
                             instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
-        It should_rise_RosterRowsTitleChanged_event_with_title_of_first_row_of_fixed_roster_by_first_row = () =>
+        [NUnit.Framework.Test] public void should_rise_RosterRowsTitleChanged_event_with_title_of_first_row_of_fixed_roster_by_first_row () =>
             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
                 => @event.ChangedInstances.Any(row =>
                     row.RosterInstance.GroupId == fixedRosterGroupId && row.RosterInstance.RosterInstanceId == 0 &&
                     row.RosterInstance.OuterRosterVector.Length == 1 &&
                     row.RosterInstance.OuterRosterVector[0] == 0 && row.Title == title1));
 
-        It should_rise_RosterRowsTitleChanged_event_with_title_of_first_row_of_fixed_roster_by_second_row =
-            () =>
+        [NUnit.Framework.Test] public void should_rise_RosterRowsTitleChanged_event_with_title_of_first_row_of_fixed_roster_by_second_row () =>
                 eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
                     => @event.ChangedInstances.Any(row =>
                         row.RosterInstance.GroupId == fixedRosterGroupId && row.RosterInstance.RosterInstanceId == 0 &&
                         row.RosterInstance.OuterRosterVector.Length == 1 && row.RosterInstance.OuterRosterVector[0] == 0 &&
                         row.Title == title1));
 
-        It should_raise_RosterInstancesAdded_for_second_row_of_fixed_roster_by_first_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_for_second_row_of_fixed_roster_by_first_row () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 =>
                     @event.Instances.Any(
@@ -91,15 +89,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                             instance.GroupId == fixedRosterGroupId && instance.RosterInstanceId == 1 &&
                             instance.OuterRosterVector.SequenceEqual(new decimal[] { 0 })));
 
-        It should_rise_RosterRowsTitleChanged_event_with_title_of_second_row_of_fixed_roster_by_first_row =
-            () =>
+        [NUnit.Framework.Test] public void should_rise_RosterRowsTitleChanged_event_with_title_of_second_row_of_fixed_roster_by_first_row () =>
                 eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
                     => @event.ChangedInstances.Any(row
                         =>
                             row.RosterInstance.GroupId == fixedRosterGroupId && row.RosterInstance.RosterInstanceId == 1 &&
                             row.RosterInstance.OuterRosterVector.SequenceEqual(new decimal[] { 0 }) && row.Title == title2));
 
-        It should_raise_RosterRowsTitleChanged_event_with_title_of_first_nested_row = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterRowsTitleChanged_event_with_title_of_first_nested_row () =>
             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(@event
                 => @event.ChangedInstances.Any(row
                     =>

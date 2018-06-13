@@ -1,5 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
@@ -12,7 +11,7 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests
 {
-    [Subject(typeof(CommentsExporter))]
+    [NUnit.Framework.TestOf(typeof(CommentsExporter))]
     internal class CommentsExporterTestsContext
     {
         protected static CommentsExporter CreateExporter(IFileSystemAccessor fileSystemAccessor = null, 

@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Storage.Memory.Implementation;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.MemoryCachedReadSideStoreTests
 {
     internal class when_GetById_called_and_cache_is_enabled_and_view_is_absent_in_cache_but_present_in_store : MemoryCachedReadSideStoreTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             readSideStorageMock = new Mock<IReadSideStorage<ReadSideRepositoryEntity>>();
             readSideStorageMock.Setup(x => x.GetById(id)).Returns(view);
             memoryCachedReadSideStorage = CreateMemoryCachedReadSideStore(readSideStorageMock.Object);
             memoryCachedReadSideStorage.EnableCache();
-        };
-        Because of = () =>
+            BecauseOf();
+        }
+        public void BecauseOf() =>
             result = memoryCachedReadSideStorage.GetById(id);
 
-        It should_once_call_GetById_of_IReadSideStorage = () =>
+        [NUnit.Framework.Test] public void should_once_call_GetById_of_IReadSideStorage () =>
             readSideStorageMock.Verify(x => x.GetById(id), Times.Once);
 
-        It should_return_cached_result = () =>
-           result.ShouldEqual(view);
+        [NUnit.Framework.Test] public void should_return_cached_result () =>
+           result.Should().Be(view);
 
         private static MemoryCachedReadSideStorage<ReadSideRepositoryEntity> memoryCachedReadSideStorage;
         private static Mock<IReadSideStorage<ReadSideRepositoryEntity>> readSideStorageMock;

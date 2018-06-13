@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using FluentAssertions;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -12,7 +11,6 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
@@ -340,16 +338,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireHistoryItem = historyStorage.Query(historyItems
                 => historyItems.First(historyItem => historyItem.QuestionnaireId == questionnaireId.FormatGuid()));
 
-            questionnaireHistoryItem.ShouldNotBeNull();
-            questionnaireHistoryItem.QuestionnaireId.ShouldEqual(command.QuestionnaireId.FormatGuid());
-            questionnaireHistoryItem.ActionType.ShouldEqual(QuestionnaireActionType.Import);
-            questionnaireHistoryItem.UserId.ShouldEqual(questionnaireOwner);
-            questionnaireHistoryItem.UserName.ShouldEqual(ownerName);
-            questionnaireHistoryItem.Sequence.ShouldEqual(0);
-            questionnaireHistoryItem.TargetItemType.ShouldEqual(QuestionnaireItemType.Questionnaire);
-            questionnaireHistoryItem.TargetItemId.ShouldEqual(questionnaireId);
-            questionnaireHistoryItem.TargetItemTitle.ShouldEqual(questionnnaireTitle);
-            questionnaireHistoryItem.ResultingQuestionnaireDocument.ShouldNotBeNull();
+            questionnaireHistoryItem.Should().NotBeNull();
+            questionnaireHistoryItem.QuestionnaireId.Should().Be(command.QuestionnaireId.FormatGuid());
+            questionnaireHistoryItem.ActionType.Should().Be(QuestionnaireActionType.Import);
+            questionnaireHistoryItem.UserId.Should().Be(questionnaireOwner);
+            questionnaireHistoryItem.UserName.Should().Be(ownerName);
+            questionnaireHistoryItem.Sequence.Should().Be(0);
+            questionnaireHistoryItem.TargetItemType.Should().Be(QuestionnaireItemType.Questionnaire);
+            questionnaireHistoryItem.TargetItemId.Should().Be(questionnaireId);
+            questionnaireHistoryItem.TargetItemTitle.Should().Be(questionnnaireTitle);
+            questionnaireHistoryItem.ResultingQuestionnaireDocument.Should().NotBeNull();
         }
 
         [Test]

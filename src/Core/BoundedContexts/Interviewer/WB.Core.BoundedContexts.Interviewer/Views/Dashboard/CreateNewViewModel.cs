@@ -4,7 +4,9 @@ using System.Linq;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
@@ -18,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly IPlainStorage<AssignmentDocument, int> assignmentViewRepository;
+        private readonly IAssignmentDocumentsStorage assignmentViewRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private SynchronizationViewModel synchronization;
 
@@ -28,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IAssignmentDocumentsStorage assignmentsRepository,
-            IPlainStorage<AssignmentDocument, int> assignmentViewRepository,
+            IAssignmentDocumentsStorage assignmentViewRepository,
             IViewModelNavigationService viewModelNavigationService)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;

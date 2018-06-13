@@ -177,4 +177,7 @@
   <data name="MyQuestionnairesTitle" xml:space="preserve">
     <value>Designer: Мои опросники</value>
   </data>
+  <data name="UpgradeAssignments" xml:space="preserve">
+    <value>Обновить задания</value>
+  </data>
 </root>

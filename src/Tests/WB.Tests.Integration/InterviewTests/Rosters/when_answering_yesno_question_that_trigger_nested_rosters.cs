@@ -2,23 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_answering_yesno_question_that_trigger_nested_rosters : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        private Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -84,14 +83,14 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_not_create_duplicates_links_in_sidebar = () =>
-            results.FirstSectionContainsDuplicates.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_create_duplicates_links_in_sidebar () =>
+            results.FirstSectionContainsDuplicates.Should().BeFalse();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.BoundedContexts.Tester.Views;
@@ -13,22 +14,22 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
     internal class when_start_and_local_storage_has_2_public_and_2_my_questionnaires : DashboardViewModelTestContext
     {
         [OneTimeSetUp]
-        public void Establish()
+        public async Task Establish()
         {
             var storageAccessor = new SqliteInmemoryStorage<QuestionnaireListItem>();
             storageAccessor.Store(MyQuestionnaires.Union(PublicQuestionnaires));
 
             viewModel = CreateDashboardViewModel(questionnaireListStorage: storageAccessor);
 
-            Because();
+            await Because();
         }
 
-        public void Because() => viewModel.Load();
+        public async Task Because() => await viewModel.Initialize();
 
         [Test]
         public void should_Questionnaires_have_my_questionnaires_only() =>
             viewModel.Questionnaires.All(questionnaire => questionnaire.Id == firstMyQuestionnaire ||
-                                                          questionnaire.Id == secondMyQuestionnaire).ShouldBeTrue();
+                                                          questionnaire.Id == secondMyQuestionnaire).Should().BeTrue();
 
         static DashboardViewModel viewModel;
 
