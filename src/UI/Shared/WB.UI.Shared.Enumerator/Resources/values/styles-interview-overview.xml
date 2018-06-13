@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <style name="Overview_GroupTitle" parent="Interview_Entity">
-        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_with_border_left</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
         <item name="android:textColor">@color/commentInterviewerTextColor</item>
         <item name="android:textSize">@dimen/textsize_18</item>
     </style>

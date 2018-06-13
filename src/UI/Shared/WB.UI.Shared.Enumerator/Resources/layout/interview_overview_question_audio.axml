@@ -10,7 +10,7 @@
                style="@style/Overview_Question_Title"
                local:MvxBind="Html Title; TextViewNodeStateTextColor State"/>
     
-    <ImageButton style="@style/Interview_Button"
+    <ImageButton style="@style/Overview_Question_Answer_Audio"
                  local:MvxBind="Visible And(IsAnswered, CanBePlayed); Click TogglePlayback; Playback IsPlaying"
                  local:srcCompat="@drawable/play_icon"/>
 
