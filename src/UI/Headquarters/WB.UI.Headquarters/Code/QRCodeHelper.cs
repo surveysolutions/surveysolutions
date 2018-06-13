@@ -19,15 +19,24 @@ namespace WB.UI.Headquarters.Code
             set { throw new NotImplementedException(); }
         }
 
-        public string GetQRCodeAsBase64StringSrc(string relativeUrl, int height = 250, int width = 250, int margin = 0)
+        public string GetBaseUrl() => BaseUrl;
+
+        public string GetFullUrl(string relativeUrl)
         {
             if (string.IsNullOrWhiteSpace(BaseUrl))
                 return string.Empty;
 
             var fullUrl = new Url(BaseUrl, relativeUrl, null);
 
-            return $"data:image/png;base64,{QRCodeBuilder.GetQRCodeAsBase64String(fullUrl.ToString(), height, width)}";
+            return fullUrl.ToString();
         }
+
+        public string GetQRCodeAsBase64StringSrc(string content, int height = 250, int width = 250, int margin = 0)
+        {
+            return $"data:image/png;base64,{QRCodeBuilder.GetQRCodeAsBase64String(content, height, width)}";
+        }
+
+
 
         public bool SupportQRCodeGeneration()
         {
@@ -39,5 +48,9 @@ namespace WB.UI.Headquarters.Code
     {
         string GetQRCodeAsBase64StringSrc(string relativeUrl, int height, int width, int margin = 0);
         bool SupportQRCodeGeneration();
+
+        string GetFullUrl(string relativeUrl);
+
+        string GetBaseUrl();
     }
 }

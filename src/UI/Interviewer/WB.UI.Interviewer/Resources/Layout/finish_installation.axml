@@ -48,7 +48,6 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal">
 
-              
               <EditText
                   style="@style/Login_Endpoint_Editor"
                   android:id="@+id/LoginPage_endpoint"
@@ -56,7 +55,7 @@
                   android:singleLine="true"
                   android:inputType="textUri|textNoSuggestions"
                   android:imeOptions="actionNext"
-                  android:padding="20dp"
+                  android:padding="24dp"
                   local:MvxBind="Text Endpoint; Watermark Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
               
               <ImageButton
@@ -65,12 +64,8 @@
                   android:id="@+id/LoginPage_scan"
                   local:srcCompat="@drawable/scan_icon"
                   android:layout_alignParentRight="true"
-                  local:MvxBind="Click ScanCommand;"
-              />
+                  local:MvxBind="Click ScanCommand;"/>
           </RelativeLayout>
-          
-
-          
 
           <EditText
           style="@style/Login_Login_Editor"
