@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
+﻿namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
     public enum OverviewNodeState
     {
