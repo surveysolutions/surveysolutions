@@ -84,6 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public virtual IList<InterviewCommentedStatus> InterviewCommentedStatuses { get; set; }
 
         public virtual ISet<TimeSpanBetweenStatuses> TimeSpansBetweenStatuses { get; set; }
+
+        public virtual int CommentedEntitiesCount { get; set; }
         
         public virtual void AnswerFeaturedQuestion(Guid questionId, string answer)
         {
