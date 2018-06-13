@@ -1,0 +1,573 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>គណនេយ្យរបស់អ្នកត្រូវបានចាក់សោរ។ សូមទាក់ទងប្រធានរបស់អ្នក</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>គណនេយ្យរបស់អ្នកមិនមានតួនាទីអ្នកសម្ភាសន៍</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>គណនេយ្យរបស់អ្នកមិនអនុញ្ញាតិ។ សូមទាក់ទងប្រធានកុរុមរបស់អ្នក។​</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>ការស្នើសុំរបស់អ្នកមិនអាចទទួលយកបានទេ ជាមួយ server.  ធ្វើបច្ចុប្បន្នភាព ការស្នើសុំសម្ភាសន៍របស់អ្នកម្តងទៀត។​ </value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>បញ្ចប់ ({0})</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>ថ្មី ({0})</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>គ្រប់គ្រងរួម</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>គ្រប់គ្រងរួម ដើម្បីធ្វើកិច្ចការថ្មី ឬទាក់ទង ប្រធានរបស់អ្នកសំរាប់ការណែនាំបន្ត។ </value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>អ្នកមិនមានកិច្ចការថ្មីទេ</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>មិនមានថ្មី</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>ការសម្ភាសន៍បានបញ្ចប់។ តើអ្នកចងចាប់ផ្តើមសម្ភាសន៍ដែរឬទេ?​</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>បដិសេធ({0})</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>តើអ្នកប្រាកដទេថាអ្នកចង់លុបការសម្ភាសន៍នេះ {0}?</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>ចាប់ផ្តើម ({0})</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>ផ្តោតលើ {0}</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>គំរូជំរឿន បង្កើតការសម្ភាសន៍៖ {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>បញ្ចប់លើ {0}</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>បង្កើតលើ {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>មិនទាន់ចាប់ផ្តើម</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>បដិសេធលើ​{0}</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>ចាប់ផ្តើមលើ{0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>ការប្រមូលទិន្នន័យទាំងអស់នឹងរក្សាទុកឡើងវិញ</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>រក្សាទុកឡើងវិញ រាល់ពត៌មានដែលបានប្រមូល</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>ពេលដែលរក្សាទុក៖</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>រក្សាទុកឡើងវិញក្នុងfile location</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>ទិន្នន័យរក្សាទុក</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>សកម្មភាព</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;ពណ៌ខ្នាតអក្សរ="ក្រុហម"&gt; មិនមានភ្ជាប់អ៊ីនធឺណែត&lt;/ខ្នាតអក្សរ&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>ភ្ជាប់ទៅ &lt;ពណ៌ខ្នាតអក្សរ="ក្រហម"&gt;មិនល្ង&lt;/ខ្នាតអក្សរ&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>ការភ្ជាប់បានសំរេច</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;ពណ៌ខ្នាតអក្សរ="ក្រុហម"&gt;មិនអាចភ្ជាប់ទៅកាន់ server &lt;/ខ្នាតអក្សរ&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>ប្រភេទនៃការតភ្ជាប់៖</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>ឈ្មោះបណ្តាញ៖</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>សូរសំលេងពីង៖</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>យើងនឹងពិនិត្យសំរាប់កំណែថ្មី លើHQ server </value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>កំណែទំរង់៖{0} ពិនិត្យសំរាប់កំណែថ្មី</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>លុប</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>កំពង់ទាញយក សូមរងចាំ...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>មានកំណែថ្មីហើយ។​ តើអ្នកចង់ទាញយក និង​ធ្វើបច្ចុប្បន្នភាពសំណើរដែរឬទេ?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>លេខកំណែ៖ </value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>ទេ</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>ដោយមានការរក្សាទុកទិន្នន័យឡើងវិញ អ្នកនឹងជំនួសកិច្ចការថ្មីទាំងអស់សំរាប់ការបែងចែកនេះ។</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>ដំឡើងសារឡើងវិញ</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>ទិន្នន័យដែលបានរក្សាទុករកឃើញ៖</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>ផ្ងើរ</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>គ្រប់ការស្នើរសុំទាំងអស់ និង ទិន្នន័យសម្ភាសន៍ នឹងប្រមូលសំរេចតែមួយ។ នេះអាចចំនាយពេល១០នាទីឡើងទៅ។​</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>ប្រមូលនិងផ្ញើរ ទី ការិយាល័យកណ្តាល គ្រប់ពត៌មានរបស់ Tablet</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>គ្រប់ពត៌មានទាំងអស់ខាងក្រោមនឹងចែករំលែកជាអត្ថបទធម្មតា។​អាចផ្ញើរតាមរយះអ៊ីមេល google hangouts ចេញជាសារក្នុងapp  </value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>ចែករំលែកពត៌មានបច្ចេកទេស</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>ទិន្នន័យសំរេច បានរូចរាល់</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>ទំហំការងារ៖</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>នៅពេលរូមបញ្ចូលគ្នា៖​</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>យើងនឹងសាកល្បងភ្ជាប់ជាមួយ server របស់យើង និង​ល្បឿនរបស់វា</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>សាកល្បងbandwidth ទៅកាន់Server</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>អ្នកវិនិច្ឆ័យ</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>ធ្វើបច្ចុប្បន្នភាព</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>អ្នកមានកំណែចុងក្រោយបំផុតនៃការស្មើរសុំ</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>ចំនុចបញ្ជប់ ការគ្រប់គ្រងរូម'{0}' តើខុសពីការផ្តល់ដោយ Settings ('{1}').  URLទាញចេញពីsettingsដែរឬទេ?</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Server មានបញ្ហា។ សូមទាក់ទងក្រុមជំនួយតាមអ៊ីមែល support@mysurvey.solutions</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>អាស័យដ្ឋាន គេហទំព័រប្រធានមិនត្រឹមត្រូវ។ ប្រាកដថា អ្នកបញ្ចូលអាស័យដ្ឋានត្រឹមត្រូវ</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>នេះគឺជាដំណើរបើកដំបូង។ អ្នកប្រើ​និង domain គឺមិនទាន់បង្កើតទេ។&lt;br /&gt; អ្នកត្រូវដំណើរការភ្ជាប់អ៊ិនធឺណែត </value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>អ្នកអាចព្យាយាមចុះឈ្មោះ តាម ប្រព័ន្ធអ៊ិនធឺណែត ប្រសិនបើអ្នកភ្លេចលេខកូដ រឺវាត្រូវបានបង្កើតឡើងវិញ។​</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>មានបញ្ហាមិនអោយទៅមុខ នៅលើការបញ្ជា server។​សូមទាកទងទៅប្រធានរបស់អ្នក។ </value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>ខុសលេខកូដ</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>គេហទំព័រ survey Solutions Supervisor កំពុងជួសជុល។ សូមអាធ្យាស្រ័យសំរាប់ការរអាក់រអួល។​</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>អ្នកវិនិច្ឆ័យ</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>ចូលក្នុង</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>ស៊ីតធីង</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>ចាក់ចេញពី</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>មិនអាចភ្ជាប់បណ្តាញ។ ពិនិត្យ បណ្តាញស៊ីតធីង</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>អ្នកមិនអាចបញ្ជូលកំណែ ការស្នើសុំអ្នកសម្ភាសន៍បានទេ។ សូមកុំដំឡើងវា និង ដំឡើងវាម្តងទៀតពី​គេហទំព័រ Survey Solution Supervisor</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>អំពីការស្នើសុំ៖</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>កំណែការស្នើសុំ៖</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>ចំនួននៃកញ្ចប់ bytesដែលបានទទួល/បញ្ជូនទិន្នន័យពី/ ទៅកាន់ប្រធានស្នើសុំ។</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>ទំហំកញ្ចប់ទំនាក់ទំនង</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>ស៊ីតធីងការតភ្ជាប់ </value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>ការបែងចែកកូដ៖</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>ប្រធាន URL</value>
+  </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>តើមានហេតុការប៉ុន្មានដែលអាចអានក្នុងសំនួរនេះ </value>
+  </data>
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>ទំហំហេតុការ</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>ចំនួនវិនាទីរងចាំសំរាប់ការសម្របសម្រួល</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>ជីភីអេសហួសពេលទទួលបាន</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>ចំនួនវិនាទីរងចាំរហូតដល់មានការឆ្លើយតបពី server</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>ហួសពេលការឆ្លើយតបពីServer</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>ការដាក់សម្ភាសន៍</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>ការដាក់ (ស៊ីតធីង)</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>អ្នកប្រើស្នើសុំលុបចោល</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>ហួសពេល នៅពេលតភ្ចាប់គេហទំព័រ Survey Solution supervisor។ សូមពិនិត្យការភ្ចាប់អ៊ិនធឺណែត។ </value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>មិនអាចភ្ចាប់ទៅ Survey Solution supervisor។ សូមប្រាកដថា គេហទំព័រត្រឹមត្រូវ។​</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>ចែករំលែកពត៌មានទៅ....</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>លុបចោល</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>ពិនិត្យសំរាប់កម្រងសំនួរឈប់ប្រើ</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>ការលុបចេញ {0}កម្រងសំនួរចេញពី {1}</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>ការលុប ឯកសារភ្ជាប់ ដែលឈប់ប្រើ</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{0} of {1} {2} ធ្វើរូច</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>ធ្វើបច្ចុប្បន្នភាព កិច្ចការ</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} of {1} លុបការសម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} of {1} ទាញយកការសម្ភាសន៍ថ្មី</value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} of {1} ទាញយកមកវិញសំរាប់សម្ភាសន៍លុបចោល</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} of {1} បញ្ចប់ ការចាប់យកការសម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>ការគ្រប់គ្រងរួម មានការរំខាន សូមព្យាយាមម្តងទៀត</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>រំពឹងមិនទទួលយក</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>សម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>កិច្ចការគឺចាក់សោរ រហូតដល់ ការគ្រប់គ្រងរូមបញ្ចប់</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>កម្រងសំនួរ</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>គ្រប់កិច្ចការទាំងអស់បានធ្វើបច្ចុប្បន្នភាព</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} លុបការសម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} ទាញយកការសម្ភាសន៍ថ្មី</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} ទាញប្រឡប់មកវិញ លុបចោលការសម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} បញ្ចប់ ការចាប់យកការសម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>ការគ្រប់គ្រងរួម បានបញ្ជប់ដោយជោគជ័យ</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>បញ្ចប់កិច្ចការ</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{0} of {1} {2} ធ្វើរូច</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>សម្ភាសន៍</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>កំពង់ដាក់ចូល {0}</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>កំពង់រៀបចំការគ្រប់គ្រងរួម</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>អ្នកប្រើ ត្រឹមត្រូវតាមច្បាប់</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>អ្នកប្រើ មិនត្រឹមត្រូវតាមច្បាប់</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>គណនេយ្យរបស់អ្នក​ត្រុវបានភ្ចាប់ម្តងទៀត ទៅនឹង Tablet ផ្សេងទៀត</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>បញ្ហាមិនត្រូវត្រូវតាមច្បាប់។ យើងមិនអាចបន្តបញ្ជាក់ជាមួយលេខសំគាល់របស់អ្នក {0}.  គណនេយ្យរបស់អ្នកប្រហែលជាខុសលេខកូដ ជាប់សោរ ឬបានលុប។ សូមវាយបញ្ចូលលេខកូដម្តងទៀត។ ប្រសិនបើអ្នកមានបញ្ហា សូមទាក់ទងប្រធានរបស់អ្នក។ </value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>បង្កើត Backup</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>បញ្ហាខ្លះបានខុស និង backup បង្កើតខុស</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Backup ត្រូវបានរក្សាទុក {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>កំណែ {0}​ បានពិនិត្យសំរាប់កំណែថ្មី</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>កញ្ចប់ពត៌មានផ្ញើរបានជោគជ័យ</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>ទំហំកញ្ចប់ពត៌មាន {0} នឹងផ្ញើរតាមរយះបណ្តាញNetwork។ តើអ្នកច្បាស់ទេថាចង់ផ្ញើរចេញ? </value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>មានកំណែថ្មីហើយ។​ តើអ្នកចង់ទាញយក និង​ធ្វើបច្ចុប្បន្នភាពសំណើរដែរឬទេ?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>អ្នកមានកំណែចុងក្រោយបំផុតនៃការស្មើរសុំ</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>ទិន្នន័យថ្មីៗទាំងអស់ត្រូវបានលុបអស់។ តើអ្នកប្រាកដថាចង់ដំណើរការតំឡើងថ្មីទេ ប្រសិនបើចង់តំឡើងទិន្នន័យថ្មី គឺបង្ហាញ{0} </value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>កំពង់បង្កើតកញ្ចប់ពត៌មាន</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>កញ្ចប់ពត៌មាន </value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>កញ្ចប់ពត៌មានបានផ្ញើរជោគជ័យ</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>ទំហំកញ្ចប់ពត៌មាន {0} នឹងផ្ញើរតាមរយះបណ្តាញNetwork។ តើអ្នកច្បាស់ទេថាចង់ផ្ញើរចេញ? </value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>កំពង់ផ្ញើរកញ្ចប់ពត៌មាន</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>កំពង់ផ្ងើរកញ្ចប់ពត៌មាន លុបចេញ។ ហេតុផល {0} </value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>កំពង់លុបចោល</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>បញ្ហាខ្លះបានខុស និង backup បង្កើតខុស</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>បង្កើតឡើងវិញពី Backup</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>ទិន្នន័យថ្មីៗទាំងអស់ត្រូវបានលុបអស់។ តើអ្នកប្រាកដថាចង់ដំណើរការតំឡើងថ្មីទេ ប្រសិនបើចង់តំឡើងទិន្នន័យថ្មី គឺបង្ហាញ{0} </value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Tablet តំឡើងបានជោគជ័យ</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Folder'{0}'  គឺទទេ។ សូមដាក់packup អ្នកចង់បង្កើតវាម្តងទៀតក្នុង Folder</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>បរាជ័យ កំពង់ផ្ញើរកញ្ចប់ពត៌មាន</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>ផ្ញើរពត៌មានរបស់Tablet</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>មានការរំខាន</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>ខុសលើ ការពិនិត្យកំណែ។ សូមពិនិត្យ ក្នុង Setting ឬព្យាយាមបន្តិចទៀត</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>ចុះឈ្មោះរបស់អ្នក ឬលេខកូដមិនត្រឹមត្រូវ</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>ខុសដោយមិនបានរំពឹងទុក</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>កំណែថ្មីនៃការស្នើសុំ ត្រុវបានជំនួស។ សូមធ្វើបច្ចុប្បន្នភាពការស្នើសុំនេះ។</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>បំរាម</value>
+  </data>
+</root>

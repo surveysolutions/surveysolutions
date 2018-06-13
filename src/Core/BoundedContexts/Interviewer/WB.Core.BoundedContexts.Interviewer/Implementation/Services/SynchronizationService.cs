@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -13,6 +12,8 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -20,7 +21,7 @@ using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Impl
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class SynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
+    public class SynchronizationService : IInterviewerSynchronizationService, IAssignmentSynchronizationApi
     {
         private const string apiVersion = "v2";
         private const string interviewerApiUrl = "api/interviewer/";
@@ -146,7 +147,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         #region [Device Api]
 
-        public Task<bool> HasCurrentInterviewerDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<bool>(url: string.Concat(this.usersController, "/hasdevice"),
                 credentials: credentials ?? this.restCredentials, token: token));
@@ -210,7 +211,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-        public Task LinkCurrentInterviewerToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.devicesController, "/link/", this.interviewerSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),

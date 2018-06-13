@@ -1,21 +1,19 @@
 ﻿using MvvmCross.Commands;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class DiagnosticsViewModel : BaseViewModel
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
-        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IDeviceSettings deviceSettings;
 
         public DiagnosticsViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
-            IInterviewerSettings interviewerSettings, 
+            IDeviceSettings deviceSettings, 
             ITabletDiagnosticService tabletDiagnosticService,
             BackupViewModel sendTabletInformationViewModel,
             CheckNewVersionViewModel checkNewVersion,
@@ -23,7 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
-            this.interviewerSettings = interviewerSettings;
+            this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.TabletInformation = sendTabletInformationViewModel;
             this.CheckNewVersion = checkNewVersion;
@@ -42,10 +40,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public BandwidthTestViewModel BandwidthTest { get; set; }
 
         public IMvxCommand ShareDeviceTechnicalInformationCommand => new MvxCommand(this.ShareDeviceTechnicalInformation);
-
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToDashboardAsync());
-
-        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToMapsAsync);
 
         public IMvxCommand SignOutCommand
             => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
@@ -58,7 +54,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void ShareDeviceTechnicalInformation()
         {
             this.tabletDiagnosticService.LaunchShareAction(InterviewerUIResources.Share_to_Title,
-                this.interviewerSettings.GetDeviceTechnicalInformation());
+                this.deviceSettings.GetDeviceTechnicalInformation());
         }
     }
 }

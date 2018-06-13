@@ -3,16 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class CheckNewVersionViewModel : MvxNotifyPropertyChanged
     {
         private readonly ISynchronizationService synchronizationService;
-        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IDeviceSettings deviceSettings;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
@@ -22,34 +22,34 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private string checkNewVersionResult;
 
         public CheckNewVersionViewModel(ISynchronizationService synchronizationService, 
-            IInterviewerSettings interviewerSettings, 
+            IDeviceSettings deviceSettings, 
             ITabletDiagnosticService tabletDiagnosticService, 
             ILogger logger)
         {
             this.synchronizationService = synchronizationService;
-            this.interviewerSettings = interviewerSettings;
+            this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.logger = logger;
-            Version = this.interviewerSettings.GetApplicationVersionName();
+            this.Version = this.deviceSettings.GetApplicationVersionName();
             this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
         }
 
         public bool IsVersionCheckInProgress
         {
             get => this.isVersionCheckInProgress;
-            set => this.RaiseAndSetIfChanged(ref this.isVersionCheckInProgress, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isVersionCheckInProgress, value);
         }
 
         public bool IsNewVersionAvaliable
         {
             get => this.isNewVersionAvaliable;
-            set => this.RaiseAndSetIfChanged(ref this.isNewVersionAvaliable, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isNewVersionAvaliable, value);
         }
 
         public string CheckNewVersionResult
         {
             get => this.checkNewVersionResult;
-            set => this.RaiseAndSetIfChanged(ref this.checkNewVersionResult, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.checkNewVersionResult, value);
         }
 
         public string Version { get; set; }
@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (!this.cancellationTokenSource.IsCancellationRequested)
                 {
-                    if (versionFromServer.HasValue && versionFromServer > this.interviewerSettings.GetApplicationVersionCode())
+                    if (versionFromServer.HasValue && versionFromServer > this.deviceSettings.GetApplicationVersionCode())
                     {
                         this.IsNewVersionAvaliable = true;
                     }
