@@ -294,6 +294,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ServiceLocation\InfrastructureModule.cs" />
+    <Compile Include="Services\IInterviewerSynchronizationService.cs" />
+    <Compile Include="Services\ViewModelNavigationService.cs" />
     <Compile Include="SupervisorMvxApplication.cs" />
     <Compile Include="SupervisorApplication.cs" />
     <Compile Include="SupervisorAppStart.cs" />
@@ -303,6 +306,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorSetup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
+    <Compile Include="ViewModel\FinishInstallationViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -310,6 +315,9 @@
       <SubType>Designer</SubType>
     </None>
     <AndroidResource Include="Resources\layout\splash.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\Login.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -396,6 +404,10 @@
     <AndroidResource Include="Resources\drawable\dashboard_interview_status_new.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
+      <Project>{51A31F37-36A0-45E4-B746-D6A66803E7A8}</Project>
+      <Name>WB.Core.BoundedContexts.Supervisor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj">
       <Project>{1bb55f28-7905-424d-9aa6-05e4048dfb0c}</Project>
       <Name>WB.Core.GenericSubdomains.Portable</Name>
@@ -442,8 +454,6 @@
   <ItemGroup>
     <Folder Include="Resources\menu\" />
     <Folder Include="Resources\xml\" />
-    <Folder Include="Services\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
@@ -488,6 +498,9 @@
     <AndroidResource Include="Resources\values\Themes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\login.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

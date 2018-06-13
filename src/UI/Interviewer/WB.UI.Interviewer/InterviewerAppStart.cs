@@ -33,7 +33,7 @@ namespace WB.UI.Interviewer
 
             if (currentInterviewer == null)
             {
-                viewModelNavigationService.NavigateToAsync<FinishInstallationViewModel>().ConfigureAwait(false);
+                viewModelNavigationService.NavigateToFinishInstallationAsync().ConfigureAwait(false);
             }
             else
             {

@@ -2,8 +2,8 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 using Toolbar = Android.Support.V7.Widget.Toolbar;
 

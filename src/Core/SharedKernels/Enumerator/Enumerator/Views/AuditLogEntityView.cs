@@ -2,7 +2,7 @@
 using SQLite;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class AuditLogEntityView 
     {

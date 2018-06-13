@@ -3,15 +3,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class BackupViewModel : MvxNotifyPropertyChanged
     {
@@ -45,46 +44,38 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public string Scope
         {
-            get { return this.scope; }
-            set
-            {
-                this.scope = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.scope;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.scope, value);
         }
 
         public DateTime WhenGenerated
         {
-            get { return this.whenGenerated; }
-            set
-            {
-                this.whenGenerated = value;
-                this.RaisePropertyChanged();
-            }
+            get => this.whenGenerated;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.whenGenerated, value);
         }
 
         public bool IsPackageBuild
         {
-            get { return this.isPackageBuild; }
-            set { this.RaiseAndSetIfChanged(ref this.isPackageBuild, value); }
+            get => this.isPackageBuild;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isPackageBuild, value);
         }
 
         public bool IsPackageSendingAttemptCompleted
         {
-            get { return this.isPackageSendingAttemptCompleted; }
-            set { this.RaiseAndSetIfChanged(ref this.isPackageSendingAttemptCompleted, value); }
+            get => this.isPackageSendingAttemptCompleted;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isPackageSendingAttemptCompleted, value);
         }
 
         public string PackageSendingAttemptResponceText
         {
-            get { return this.packageSendingAttemptResponceText; }
-            set { this.RaiseAndSetIfChanged(ref this.packageSendingAttemptResponceText, value); }
+            get => this.packageSendingAttemptResponceText;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.packageSendingAttemptResponceText, value);
         }
 
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
+            get => this.isInProgress;
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isInProgress, value);
         }
 
         private async Task CreateBackupAsync()
