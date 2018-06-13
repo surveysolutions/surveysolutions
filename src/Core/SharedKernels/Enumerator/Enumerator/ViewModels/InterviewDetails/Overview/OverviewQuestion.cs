@@ -9,11 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public OverviewQuestion(InterviewTreeQuestion treeQuestion) : base(treeQuestion)
         {
             this.Answer = treeQuestion.GetAnswerAsString(CultureInfo.CurrentCulture);
-            if (!treeQuestion.IsAnswered())
-            {
-                this.Answer = UIResources.Interview_Overview_NotAnswered;
-            }
-
+            
             if (treeQuestion.AnswerComments.Count > 0)
             {
                 this.State = OverviewNodeState.Commented;

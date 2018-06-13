@@ -1,13 +1,14 @@
 ﻿using Android.Graphics;
 using Android.Support.V4.Content;
 using Android.Widget;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class TextViewAnswerStateTextColorBinding : BaseBinding<TextView, OverviewNodeState>
+    public class TextViewAnswerStateBinding : BaseBinding<TextView, OverviewNodeState>
     {
-        public TextViewAnswerStateTextColorBinding(TextView androidControl) : base(androidControl)
+        public TextViewAnswerStateBinding(TextView androidControl) : base(androidControl)
         {
         }
 
@@ -24,6 +25,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 case OverviewNodeState.Unanswered:
                 {
                     colorid = Resource.Color.disabledTextColor;
+                    control.SetText(UIResources.Interview_Overview_NotAnswered, TextView.BufferType.Normal);
                     break;
                 }
                 case OverviewNodeState.Invalid:
