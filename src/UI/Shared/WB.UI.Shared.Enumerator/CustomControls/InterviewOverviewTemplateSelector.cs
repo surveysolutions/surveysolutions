@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.UI.Shared.Enumerator.CustomControls

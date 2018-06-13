@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.Enumerator.Properties;
 
-namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
+namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
     public class OverviewQuestion : OverviewNode
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Android.Views;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

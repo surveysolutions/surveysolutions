@@ -6,6 +6,7 @@ using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
