@@ -30,6 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 this.State = OverviewNodeState.Answered;
             }
+
+            base.IsAnswered = treeQuestion.IsAnswered();
         }
 
         public string Answer { get; set; }

@@ -2,23 +2,37 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using MvvmCross;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
     public class OverviewViewModel : MvxViewModel
     {
         private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IImageFileStorage fileStorage;
+        private readonly IViewModelNavigationService navigationService;
+        private readonly IAudioService audioService;
+        private readonly IAudioFileStorage audioFileStorage;
         private readonly DynamicTextViewModel nameViewModel;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
+            IImageFileStorage fileStorage,
+            IViewModelNavigationService navigationService,
+            IAudioService audioService,
+            IAudioFileStorage audioFileStorage,
             DynamicTextViewModel nameViewModel)
         {
             this.interviewRepository = interviewRepository;
+            this.fileStorage = fileStorage;
+            this.navigationService = navigationService;
+            this.audioService = audioService;
+            this.audioFileStorage = audioFileStorage;
             this.nameViewModel = nameViewModel;
         }
 
@@ -42,6 +56,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
             if (question != null)
             {
+                if (question.IsMultimedia)
+                {
+                    return new OverviewMultimediaQuestionViewModel(question, fileStorage, navigationService);
+                }
+
+                if (question.IsAudio)
+                {
+                    return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService);
+                }
+
                 return new OverviewQuestion(question);
             }
 
