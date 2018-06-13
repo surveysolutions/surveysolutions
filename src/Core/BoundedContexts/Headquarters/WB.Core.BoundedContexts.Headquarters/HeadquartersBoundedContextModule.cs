@@ -191,6 +191,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
+            registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();

@@ -37,6 +37,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
                                WHERE i.interviewid = interviewid AND i.invalidvalidations IS NOT NULL
                                                                  AND i.isenabled)");
             });
+            Property(x => x.CommentedEntitiesCount, clm =>
+            {
+                clm.Lazy(true);
+                clm.Formula(@"(SELECT COUNT(c.interviewid) FROM readside.commentaries c 
+                               WHERE c.interviewid::uuid = interviewid)");
+            });
             Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
             {

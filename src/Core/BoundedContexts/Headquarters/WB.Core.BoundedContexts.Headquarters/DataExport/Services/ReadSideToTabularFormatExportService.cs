@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
+        private readonly DiagnosticsExporter diagnosticsExporter;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
@@ -67,10 +68,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.productVersion = productVersion;
 
             this.interviewsExporter = ServiceLocator.Current.GetInstance<IInterviewsExporter>();
-
             this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
-
             this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
+            this.diagnosticsExporter = ServiceLocator.Current.GetInstance<DiagnosticsExporter>();
         }
 
         public void GenerateDescriptionFile(QuestionnaireIdentity questionnaireIdentity, string basePath, string dataFilesExtension)
@@ -120,6 +120,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportCommentsProgress), cancellationToken),
                 Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken),
                 Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.diagnosticsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
             }, cancellationToken);
 
             exportWatch.Stop();
