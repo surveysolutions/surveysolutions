@@ -1,7 +1,7 @@
 ﻿using Android.Graphics;
 using Android.Support.V4.Content;
 using Android.Widget;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {

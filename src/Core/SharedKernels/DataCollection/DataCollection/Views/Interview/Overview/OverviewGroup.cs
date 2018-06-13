@@ -1,6 +1,6 @@
 ﻿using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
-namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
+namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
     public class OverviewGroup : OverviewNode
     {
