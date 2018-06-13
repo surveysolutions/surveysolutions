@@ -37,7 +37,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
        
             integerModel.Answer = -4;
             integerModel.ValueChangeCommand.Execute();
-            Thread.Sleep(600);
         }
 
         [Test]
