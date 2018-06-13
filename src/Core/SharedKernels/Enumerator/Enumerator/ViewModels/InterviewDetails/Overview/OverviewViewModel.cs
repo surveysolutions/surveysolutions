@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using MvvmCross;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -105,18 +105,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public List<OverviewNode> Items { get; private set; }
 
         public DynamicTextViewModel Name { get; private set; }
-    }
-
-    public class OverviewStaticTextViewModel : OverviewStaticText
-    {
-        public OverviewStaticTextViewModel(InterviewTreeStaticText treeNode,
-            AttachmentViewModel attachmentViewModel) : base(treeNode)
-        {
-            this.Attachment = attachmentViewModel;
-            this.Attachment.Init(treeNode.Tree.InterviewId, treeNode.Identity);
-        }
-
-        public AttachmentViewModel Attachment { get; set; }
     }
 }
 
