@@ -386,7 +386,11 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireExportStructureStorage>(_
                     => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) ==
                        questionnaireExportStructure),
-                Mock.Of<IProductVersion>());
+                Mock.Of<IProductVersion>(),
+                Mock.Of<IInterviewsExporter>(),
+                Mock.Of<CommentsExporter>(),
+                Mock.Of<InterviewActionsExporter>(),
+                Mock.Of<DiagnosticsExporter>());
 
         public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPasswordHasher passwordHasher)
