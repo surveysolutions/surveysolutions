@@ -877,7 +877,7 @@
     <value>Jamais connecté</value>
   </data>
   <data name="Interviewers_OutdatedOption" xml:space="preserve">
-    <value>Dépassé</value>
+    <value>Expiré</value>
   </data>
   <data name="Interviewers_Selected" xml:space="preserve">
     <value>enquêteur (s) sélectionné (s)</value>
@@ -1055,5 +1055,146 @@
   </data>
   <data name="Users_Supervisors_Instruction2" xml:space="preserve">
     <value>Cliquez sur un nom d'utilisateur pour modifier le profil d'un chef d'équipe existant.</value>
+  </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>Voulez-vous supprimer la carte?</value>
+  </data>
+  <data name="InterviewerProfile_Relinked" xml:space="preserve">
+    <value>Relié</value>
+  </data>
+  <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+    <value>Terminé avec des erreurs. Veuillez répéter l'action plus tard. Écrivez au Support Technique si les problèmes se répètent à l'avenir.</value>
+  </data>
+  <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+    <value>Le(s) enquêteur(s) {0} seront déplacés vers une équipe du superviseur {1}.</value>
+  </data>
+  <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+    <value>Le(s) enquêteur(s) {0} font partie de l'équipe du superviseur {1} et aucune action ne sera effectuée.</value>
+  </data>
+  <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+    <value>Déplacez les enquêteurs avec leurs affectations et entretiens à l'équipe du superviseur {0}.</value>
+  </data>
+  <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+    <value>Sélectionnez une équipe où déplacer {0}</value>
+  </data>
+  <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+    <value>Passer à une autre équipe</value>
+  </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>Déplacement des utilisateurs achevés</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>Le déplacement est en cours</value>
+  </data>
+  <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+    <value>{0} et {1}</value>
+  </data>
+  <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+    <value>{0} et {1} autres</value>
+  </data>
+  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+    <value>Rendre le superviseur d’origine responsable des affectations existantes et des entretiens des enquêteurs déplacés.</value>
+  </data>
+  <data name="Map_DiscardConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer la carte?</value>
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>Le fichier a été téléchargé. Traitement en cours.</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>Chargement</value>
+  </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>Une erreur s'est produite lors du téléchargement</value>
+  </data>
+  <data name="Map_UploadingSuccess" xml:space="preserve">
+    <value>Les cartes ont été téléchargées avec succès</value>
+  </data>
+  <data name="MapDetails_DelinkUser" xml:space="preserve">
+    <value>Délier l'Utilisateur de la carte</value>
+  </data>
+  <data name="MapDetails_ImportedOn" xml:space="preserve">
+    <value>Importé sur</value>
+  </data>
+  <data name="MapDetails_InterviewerName" xml:space="preserve">
+    <value>Nom de l'intervieweur</value>
+  </data>
+  <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+    <value>Cet aperçu montre la carte chargée superposée sur la carte du monde</value>
+  </data>
+  <data name="MapDetails_MapTitle" xml:space="preserve">
+    <value>Carte</value>
+  </data>
+  <data name="MapDetails_MaxScale" xml:space="preserve">
+    <value>Max Scale</value>
+  </data>
+  <data name="MapDetails_MinScale" xml:space="preserve">
+    <value>Min Echelle</value>
+  </data>
+  <data name="MapDetails_Size" xml:space="preserve">
+    <value>Taille (MB)</value>
+  </data>
+  <data name="MapLinking_Description" xml:space="preserve">
+    <value>Télécharger le fichier contenant la correspondance entre les cartes et les utilisateurs</value>
+  </data>
+  <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+    <value>Gérer les liens de la carte utilisateur</value>
+  </data>
+  <data name="MapLinking_DownloadExisting" xml:space="preserve">
+    <value>Télécharger les liens existants</value>
+  </data>
+  <data name="MapLinking_UploadDescription" xml:space="preserve">
+    <value>Cela vous permettra de créer une correspondance entre la carte et l'utilisateur.</value>
+  </data>
+  <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+    <value>Importer des mappages d'utilisateurs</value>
+  </data>
+  <data name="MapLinking_UploadFile" xml:space="preserve">
+    <value>Télécharger le fichier .tab</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+    <value>Télécharger le fichier .tab avec les mappages de fichiers</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+    <value>Les noms et les noms d'utilisateurs invalides seront ignorés.</value>
+  </data>
+  <data name="MapList_DeleteMap" xml:space="preserve">
+    <value>Supprimer la carte</value>
+  </data>
+  <data name="MapList_Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="MapList_Size" xml:space="preserve">
+    <value>Taille (MB)</value>
+  </data>
+  <data name="MapList_Title" xml:space="preserve">
+    <value>Cartes  </value>
+  </data>
+  <data name="MapList_Updated" xml:space="preserve">
+    <value>Mis à jour le</value>
+  </data>
+  <data name="MapList_Upload" xml:space="preserve">
+    <value>Télécharger le fichier .zip</value>
+  </data>
+  <data name="MapList_UploadDescription" xml:space="preserve">
+    <value>Importer une archive zip contenant des cartes.</value>
+  </data>
+  <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+    <value>Les fichiers portant le même nom seront remplacés.</value>
+  </data>
+  <data name="MapList_UserLinking" xml:space="preserve">
+    <value>Mettre à jour les liens d'utilisateur à carte</value>
+  </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>Cartes de l'utilisateur</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>Cartes de l'utilisateur</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer l'utilisateur de la carte?</value>
   </data>
 </root>

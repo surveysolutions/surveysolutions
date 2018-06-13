@@ -1,5 +1,4 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;

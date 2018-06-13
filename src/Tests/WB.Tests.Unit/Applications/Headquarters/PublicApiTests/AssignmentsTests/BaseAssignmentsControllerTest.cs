@@ -1,4 +1,3 @@
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -8,18 +7,13 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 using WB.UI.Headquarters.API.PublicApi;
@@ -37,7 +31,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
         protected Mock<TestHqUserManager> userManager;
         protected Mock<IQuestionnaireStorage> questionnaireStorage;
         protected Mock<ILogger> logger;
-        protected Mock<IInterviewImportService> interviewImportService;
+        protected Mock<IPreloadedDataVerifier> interviewImportService;
 
         [SetUp]
         public virtual void Setup()
@@ -65,7 +59,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests.AssignmentsTest
             this.assignmentViewFactory = new Mock<IAssignmentViewFactory>();
             this.mapper = new Mock<IMapper>();
             this.userManager = new Mock<TestHqUserManager>();
-            this.interviewImportService = new Mock<IInterviewImportService>();
+            this.interviewImportService = new Mock<IPreloadedDataVerifier>();
             this.questionnaireStorage = new Mock<IQuestionnaireStorage>();
             this.logger = new Mock<ILogger>();
         }

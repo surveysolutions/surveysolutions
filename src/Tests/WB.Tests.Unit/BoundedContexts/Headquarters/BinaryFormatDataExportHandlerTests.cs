@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using Moq;
-using NSubstitute.ReturnsExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Moq;
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
                 index: nullIndex);
 
         [NUnit.Framework.Test] public void should_contains_TextQuestion_with_questionId () =>
-            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<TextQuestion>(questionId).Should().NotBeNull();
 
         private static Questionnaire questionnaire;
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");

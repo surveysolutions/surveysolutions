@@ -21,6 +21,8 @@
         <div style="display:none;">
             <div ref="tooltip">
                 <div class="row-fluid">
+                    <strong>{{$t("Common.InterviewKey")}} :</strong>&nbsp;{{selectedTooltip.InterviewKey}}</div>
+                <div class="row-fluid">
                     <strong>{{$t("Users.Interviewer")}} :</strong>&nbsp;{{selectedTooltip.InterviewerName}}</div>
                 <div class="row-fluid">
                     <strong>{{$t("Users.Supervisor")}} :</strong>&nbsp;{{selectedTooltip.SupervisorName}}</div>
@@ -133,7 +135,7 @@ export default {
               self.selectGpsQuestion(self.gpsQuestions[0]);
             }
           } else {
-            toastr.error(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
+            toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
           }
         });
     },

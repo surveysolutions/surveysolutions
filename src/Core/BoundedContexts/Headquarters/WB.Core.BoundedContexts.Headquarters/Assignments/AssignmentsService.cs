@@ -45,6 +45,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             return this.assignmentsAccessor.GetById(id);
         }
 
+        public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
+        {
+            List<List<string>> listOfProtectedValiablesFromAssignments = this.assignmentsAccessor.Query(_ => _
+                .Where(assigment =>
+                    assigment.ResponsibleId == responsibleId
+                    && !assigment.Archived
+                    && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                .Select(x => x.ProtectedVariables)
+                .ToList());
+
+            bool result = listOfProtectedValiablesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
+            return result;
+        }
+
         public List<Assignment> GetAssignmentsReadyForWebInterview(QuestionnaireIdentity questionnaireId)
         {
             var assignmentsReadyForWebInterview = this.assignmentsAccessor.Query(_ => _
@@ -78,7 +92,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 Id = assignment.Id,
                 QuestionnaireId = assignment.QuestionnaireId,
                 Quantity = assignment.InterviewsNeeded,
-                CreatedAtUtc = assignment.CreatedAtUtc
+                CreatedAtUtc = assignment.CreatedAtUtc,
+                ProtectedVariables = assignment.ProtectedVariables
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);

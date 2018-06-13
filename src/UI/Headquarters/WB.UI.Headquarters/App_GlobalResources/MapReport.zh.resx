@@ -132,4 +132,7 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>查看访谈内容</value>
   </data>
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>选定的问卷模板中没有任何地理位置</value>
+  </data>
 </root>

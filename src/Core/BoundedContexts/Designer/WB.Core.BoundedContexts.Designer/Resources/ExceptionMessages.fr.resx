@@ -142,7 +142,7 @@
     <value>Les options de la question en cascade ne peuvent pas avoir de valeur numérique dans la colonne ParentValue.</value>
   </data>
   <data name="CategoricalCascadingOptionsContainsNotUniqueTitleAndParentValuePair" xml:space="preserve">
-    <value>Il y a au moins un doublon de Titre + Parent Value. La liste des options ne doit pas contenir de doublons de ce type.</value>
+    <value>Il y a au moins un doublon de la pair Titre + Parent Value. La liste des options ne doit pas contenir de doublons de ce type.</value>
   </data>
   <data name="ComboboxCannotBeFound" xml:space="preserve">
     <value>Impossible de trouver la question de type combo box avec la clé publique {0}</value>
@@ -160,13 +160,13 @@
     <value>Un ensemble d'éléments fixes est requis</value>
   </data>
   <data name="ItemWithIdExistsAlready" xml:space="preserve">
-    <value>Un ou plusieurs éléments de questionnaire ayant le même ID {0} existent déjà.</value>
+    <value>Un ou plusieurs éléments de questionnaire de même ID {0} existent déjà.</value>
   </data>
   <data name="LookupTableAlreadyExist" xml:space="preserve">
     <value>Une table de référence avec un tel identifiant existe déjà.</value>
   </data>
   <data name="LookupTableIsAbsent" xml:space="preserve">
-    <value>La table de référence avec un tel identifiant n'existe pas.</value>
+    <value>Une table de référence avec un tel identifiant n'existe pas.</value>
   </data>
   <data name="LookupTables_cant_has_empty_content" xml:space="preserve">
     <value>Fichier sans données ne peut pas être chargé</value>
@@ -199,7 +199,7 @@
     <value>Macro avec tel est déjà existant.</value>
   </data>
   <data name="MacroIsAbsent" xml:space="preserve">
-    <value>Macro avec tel est absent.</value>
+    <value>Macro avec tel n'existe pas </value>
   </data>
   <data name="MoreThanOneQuestionWithSameId" xml:space="preserve">
     <value>Une ou plusieurs questions ayant le même identifiant {0} existent déjà: {1} {2}.</value>
@@ -263,5 +263,41 @@
   </data>
   <data name="VariableCantBePaste" xml:space="preserve">
     <value>La variable ne peut pas être collée ici.</value>
+  </data>
+  <data name="AttachmentIdIsMissing" xml:space="preserve">
+    <value>Importation relative a id {0} manquante</value>
+  </data>
+  <data name="LookupTableHasEmptyContent" xml:space="preserve">
+    <value>Une table de référence avec l'identifiant {0} n'a pas de contenu.</value>
+  </data>
+  <data name="LookupTableIsMissing" xml:space="preserve">
+    <value>Une table de référence {0} avec un tel identifiant est manquant.</value>
+  </data>
+  <data name="OldAttachmentIdIsEmpty" xml:space="preserve">
+    <value>L'ancien pièce jointe de ID est vide et le repertoire pièce jointe  de {0} est vide dans le questionnaire {1}</value>
+  </data>
+  <data name="TranlationExcelFileHasErrors" xml:space="preserve">
+    <value>Erreurs retrouvées le fichier excel</value>
+  </data>
+  <data name="TranslationCel_A_lIsInvalid" xml:space="preserve">
+    <value>{0} a un id invalide dans [{1}]</value>
+  </data>
+  <data name="TranslationCellIndexIsInvalid" xml:space="preserve">
+    <value>{0} a une indice invalide dans [{1}]</value>
+  </data>
+  <data name="TranslationCellTypeIsInvalid" xml:space="preserve">
+    <value>{0} a un type invalide dans [{1}]</value>
+  </data>
+  <data name="TranslationFileIsEmpty" xml:space="preserve">
+    <value>Le fichier excel est vide - ne contient aucun feuille</value>
+  </data>
+  <data name="TranslationsCantBeExtracted" xml:space="preserve">
+    <value>Echec d'extraire des traduction du fichier téléchargé</value>
+  </data>
+  <data name="TranslationWorksheetIsMissing" xml:space="preserve">
+    <value>Feuille avec traduction introuvable</value>
+  </data>
+  <data name="VariableWithIdWasNotFound" xml:space="preserve">
+    <value>La variable avec l'ID {0} n'a pas été trouvée dans le questionnaire {1}</value>
   </data>
 </root>

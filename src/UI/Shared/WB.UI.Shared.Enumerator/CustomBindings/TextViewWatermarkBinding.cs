@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.Graphics;
 using Android.Text;
@@ -52,10 +53,13 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
+            if (IsDisposed)
+                return;
+
             if (isDisposing)
             {
                 var editText = this.Target;
-                if (editText != null && this.subscribed)
+                if (editText != null && this.subscribed && editText.Handle != IntPtr.Zero)
                 {
                     editText.TextChanged -= this.TextChangedHandler;
                     this.subscribed = false;

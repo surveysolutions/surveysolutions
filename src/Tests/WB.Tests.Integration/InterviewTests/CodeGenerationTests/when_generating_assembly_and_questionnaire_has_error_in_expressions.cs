@@ -1,21 +1,20 @@
-﻿using System;
+using System;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_assembly_and_questionnaire_has_error_in_expressions : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 string resultAssembly;
@@ -26,39 +25,39 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireWithQuestionAndRosterWithQuestionWithInvalidExpressions(questionId, questionInRosterId);
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, CreateQuestionnaireVersion(), out resultAssembly);
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument, LatestQuestionnaireVersion(), out resultAssembly);
 
                 return new InvokeResults
                 {
-                    Success = emitResult.Success, 
-                    ErrorLocations =  emitResult.Diagnostics.Where(l =>l.Severity == GenerationDiagnosticSeverity.Error).
-                        Select(l => l.Location).Distinct().Select(s => new ExpressionLocation(s)).ToArray()
+                    Success = emitResult.Success,
+                    ErrorLocations = emitResult.Diagnostics.Where(l => l.Severity == GenerationDiagnosticSeverity.Error)
+                        .Select(l => l.Location).Distinct().Select(s => new ExpressionLocation(s)).ToArray()
                 };
             });
 
-        It should_result_succeded = () =>
-            results.Success.ShouldEqual(false);
+        [NUnit.Framework.Test] public void should_result_succeded () =>
+            results.Success.Should().Be(false);
 
-        It should_errors_locations_count_equals_2 = () =>
-            results.ErrorLocations.Count().ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_errors_locations_count_equals_2 () =>
+            results.ErrorLocations.Count().Should().Be(2);
 
-        It should_errors_locations_contains_question1 = () =>
+        [NUnit.Framework.Test] public void should_errors_locations_contains_question1 () =>
             results.ErrorLocations.SingleOrDefault(x => x.Id == questionId 
                 && x.ItemType == ExpressionLocationItemType.Question 
-                && x.ExpressionType == ExpressionLocationType.Condition).ShouldNotBeNull();
+                && x.ExpressionType == ExpressionLocationType.Condition).Should().NotBeNull();
     
-        It should_errors_locations_contains_question2 = () =>
+        [NUnit.Framework.Test] public void should_errors_locations_contains_question2 () =>
             results.ErrorLocations.SingleOrDefault(x => x.Id == questionInRosterId 
                 && x.ItemType == ExpressionLocationItemType.Question 
-                && x.ExpressionType ==ExpressionLocationType.Validation).ShouldNotBeNull();
+                && x.ExpressionType ==ExpressionLocationType.Validation).Should().NotBeNull();
  
             
             
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;

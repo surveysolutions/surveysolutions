@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Designer.Api;
@@ -27,10 +27,10 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             message = controller.Post(model);
 
         [NUnit.Framework.Test] public void should_not_be_null () =>
-            message.ShouldNotBeNull();
+            message.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_not_be_correct_status () =>
-            message.StatusCode.ShouldEqual(HttpStatusCode.NotFound);
+            message.StatusCode.Should().Be(HttpStatusCode.NotFound);
 
         private static CommandController controller;
         private static CommandController.CommandExecutionModel model;

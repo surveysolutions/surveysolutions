@@ -13,6 +13,8 @@ namespace WB.UI.Interviewer.CustomControls
 
         public int GetItemViewType(object forItemObject)
         {
+            if (forItemObject == null) return -1;
+
             var typeOfViewModel = forItemObject.GetType();
 
             if (typeOfViewModel == CensusType)
@@ -20,10 +22,10 @@ namespace WB.UI.Interviewer.CustomControls
 
             if (typeOfViewModel == InterviewType || typeOfViewModel == AssignmentType)
                 return Resource.Layout.dashboard_interview_item;
-            
+
             if (typeOfViewModel == SubtitleType)
                 return Resource.Layout.dashboard_tab_subtitle;
-            
+
             return -1;
         }
 

@@ -1,10 +1,10 @@
 ﻿using System;
-using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 

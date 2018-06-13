@@ -1,10 +1,8 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 {
@@ -25,15 +23,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 questionnaire.MoveGroup(roster1Id, roster2Id, 0, responsibleId);
 
         [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event () =>
-            questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event_with_GroupId_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id)
-           .PublicKey.ShouldEqual(roster1Id);
+           .PublicKey.Should().Be(roster1Id);
 
         [NUnit.Framework.Test] public void should_raise_QuestionnaireItemMoved_event_with_roster2Id_specified () =>
             questionnaire.QuestionnaireDocument.Find<IGroup>(roster1Id)
-            .GetParent().PublicKey.ShouldEqual(roster2Id);
+            .GetParent().PublicKey.Should().Be(roster2Id);
 
         private static Questionnaire questionnaire;
         private static Guid responsibleId = Guid.Parse("DDDD0000000000000000000000000000");

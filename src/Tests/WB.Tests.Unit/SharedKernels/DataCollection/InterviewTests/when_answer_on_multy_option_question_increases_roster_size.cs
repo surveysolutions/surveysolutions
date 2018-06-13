@@ -1,25 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Moq;
 using Ncqrs.Spec;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answer_on_multy_option_question_increases_roster_size : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("10000000000000000000000000000000");
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
 
@@ -59,26 +54,27 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Synchronize(Create.Command.Synchronize(userId, synchronizationDto));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
            interview.AnswerMultipleOptionsQuestion(userId, multyOptionRosterSizeId, new decimal[] { }, DateTime.Now, new []{1,2});
 
-        It should_raise_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 2));
 
-        It should_not_raise_RosterInstancesAdded_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesAdded_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesAdded>(@event
                 => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 1));
 
-        It should_not_raise_RosterInstancesRemoved_event = () =>
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesRemoved_event () =>
             eventContext.ShouldNotContainEvent<RosterInstancesRemoved>(@event
                 => @event.Instances.Any(instance => instance.GroupId == rosterGroupId && instance.RosterInstanceId == 1));
 

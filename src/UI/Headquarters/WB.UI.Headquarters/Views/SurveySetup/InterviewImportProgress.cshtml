@@ -1,4 +1,5 @@
-﻿@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
+﻿@using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto
+@model WB.UI.Headquarters.Models.PreloadedDataInterviewProgressModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.InterviewsImport_ImportingProgressPageTitle;
@@ -7,7 +8,7 @@
 @section scripts
 {
     @Scripts.Render("~/js/responsibles-selector")
-    <script type="text/javascript">
+<script type="text/javascript">
         var InterviewCreationProgressModel = function(ajax) {
             var $importInterviewsStatusUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewsApi", action = "GetImportInterviewsStatus"})';
@@ -16,30 +17,34 @@
 
             self.questionnaireId = '@Model.QuestionnaireId';
             self.questionnaireVersion = @Model.Version;
-            self.interviewImportProcessId = '@Model.Status.InterviewImportProcessId';
             self.questionnaireTitle = '@Model.QuestionnaireTitle';
 
             self.status = {
-                createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
+                @if (Model.Status.ProcessStatus == AssignmentsImportProcessStatus.Import)
+                {
+                    <text>createdInterviewsCount: ko.observable(@Model.Status.ProcessedCount),
+                isInProgress: ko.observable(true),</text>
+                }
+                @if (Model.Status.ProcessStatus == AssignmentsImportProcessStatus.ImportCompleted)
+                {
+                    <text>createdInterviewsCount: ko.observable(@Model.Status.TotalCount),
+                        isInProgress: ko.observable(false),</text>
+                }
                 totalInterviewsCount: ko.observable(@Model.Status.TotalCount),
-                interviewsWithError: ko.observable(@Model.Status.State.Errors.Count),
-                elapsedTime: ko.observable('@Model.Status.ElapsedTime'),
-                estimatedTime: ko.observable("@Model.Status.EstimatedTime"),
-                isInProgress: ko.observable(true),
-                hasErrors: ko.observable(false)
+                interviewsWithError: ko.observable(@Model.Status.WithErrorsCount)
             };
+            self.status.hasErrors = ko.computed(function() {
+                    return this.interviewsWithError() > 0;
+            }, self.status);
+
             self.isStatusLoaded = ko.observable(false);
 
             var countOfRequestsToStopImport = 0;
 
             var shouldStopRequestUpdates = function(data) {
-                if (_.isNull(data.interviewImportProcessId))
-                    countOfRequestsToStopImport++;
-                else if (data.totalInterviewsCount === 0)
+                if (data.totalInterviewsCount === 0)
                     countOfRequestsToStopImport++;
                 else if (data.isInProgress === false)
-                    countOfRequestsToStopImport++;
-                else if (data.interviewImportProcessId !== self.interviewImportProcessId)
                     countOfRequestsToStopImport++;
                 else {
                     countOfRequestsToStopImport = 0;
@@ -51,20 +56,25 @@
             }
 
             self.updateStatusByInterviewsImport = function() {
-                ajax.sendRequest($importInterviewsStatusUrl, 'get', {}, true,
+                ajax.sendRequest($importInterviewsStatusUrl,
+                    'get',
+                    {},
+                    true,
                     function(data) {
-                        self.status.isInProgress(data.isInProgress);
-                        self.status.createdInterviewsCount(data.createdInterviewsCount);
-                        self.status.totalInterviewsCount(data.totalInterviewsCount);
-                        self.status.interviewsWithError(data.interviewsWithError);
+                        if (data.status === "ImportCompleted") {
+                            self.status.isInProgress(false);
+                            self.status.createdInterviewsCount(self.status.totalInterviewsCount());
+                        } else {
+                            self.status.isInProgress(data.createdInterviewsCount !== data.totalInterviewsCount);
+                            self.status.createdInterviewsCount(data.createdInterviewsCount);
+                            self.status.totalInterviewsCount(data.totalInterviewsCount - data.interviewsWithError);
+                            self.status.interviewsWithError(data.interviewsWithError);
 
-                        self.status.elapsedTime(data.elapsedTime);
-                        self.status.estimatedTime(data.estimatedTime);
-                        self.status.hasErrors(data.hasErrors);
-                        self.isStatusLoaded(true);
+                            self.isStatusLoaded(true);
 
-                        if (shouldStopRequestUpdates(data) === false) {
-                            _.delay(self.updateStatusByInterviewsImport, 3000);
+                            if (shouldStopRequestUpdates(data) === false) {
+                                _.delay(self.updateStatusByInterviewsImport, 3000);
+                            }
                         }
                     });
             };
@@ -75,7 +85,7 @@
             var model = new InterviewCreationProgressModel(new Ajax(new Notifier()));
             ko.applyBindings(model);
         });
-    </script>
+</script>
 }
 <main>
     <div class="container">

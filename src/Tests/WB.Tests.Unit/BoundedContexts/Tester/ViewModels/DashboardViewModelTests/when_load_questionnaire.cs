@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -53,9 +54,6 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         public void should_be_executed_CreateInterviewCommand() => 
             mockOfCommandService.Verify(_ => _.ExecuteAsync(Moq.It.IsAny<CreateInterview>(), null, Moq.It.IsAny<CancellationToken>()), Times.Once);
 
-        [Test]
-        public void should_be_navigated_to_prefilled_questions_view_model() => 
-            mockOfViewModelNavigationService.Verify(_ => _.NavigateToPrefilledQuestions(Moq.It.IsAny<string>()), Times.Once);
         
         private static DashboardViewModel viewModel;
         private static readonly Questionnaire downloadedQuestionnaire = new Questionnaire

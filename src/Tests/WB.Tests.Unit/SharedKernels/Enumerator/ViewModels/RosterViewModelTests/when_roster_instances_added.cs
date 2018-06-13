@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
     internal class when_roster_instances_added : RosterViewModelTests
     {
         [Test]
-        public void should_append_new_roster_instances()
+        public async Task should_append_new_roster_instances()
         {
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -35,7 +36,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: statefulInterviewRepository);
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
-            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
             viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,
@@ -46,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
         }
 
         [Test]
-        public void should_insert_item_inside_list()
+        public async Task should_insert_item_inside_list()
         {
             var rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var chapterId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
@@ -69,7 +70,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             var viewModel = this.CreateViewModel(interviewRepository: statefulInterviewRepository);
             var navigationState = Create.Other.NavigationState(statefulInterviewRepository);
 
-            navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
+            await navigationState.NavigateTo(Create.Entity.NavigationIdentity(Identity.Create(chapterId, RosterVector.Empty)));
             viewModel.Init(null, Create.Entity.Identity(rosterId), navigationState);
 
             interview.AnswerMultipleOptionsQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty,

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitutions
@@ -56,11 +55,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Substitution
 
         [Test]
         public void should_raise_title_changed_event_for_3_groups() =>
-            events.GetEvent<SubstitutionTitlesChanged>().Groups.Length.ShouldEqual(3);
+            events.GetEvent<SubstitutionTitlesChanged>().Groups.Length.Should().Be(3);
 
         [Test]
         public void should_raise_title_changed_event_for_group_after_answer() =>
-            events.GetEvent<SubstitutionTitlesChanged>().Groups.ShouldContainOnly(
+            events.GetEvent<SubstitutionTitlesChanged>().Groups.Should().BeEquivalentTo(
                 Create.Entity.Identity(group2Id, Create.Entity.RosterVector(0)),
                 Create.Entity.Identity(group2Id, Create.Entity.RosterVector(1)),
                 Create.Entity.Identity(group1Id, RosterVector.Empty));

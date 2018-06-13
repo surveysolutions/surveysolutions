@@ -1,8 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using MultipartDataMediaFormatter.Infrastructure;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
@@ -37,7 +36,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandApiControllerTests
             message = controller.UpdateAttachment(new CommandController.AttachmentModel { File = new HttpFile { Buffer = fileBytes, FileName = fileName, MediaType = contentType }, Command = serializedUpdateAttachmentCommand });
 
         [NUnit.Framework.Test] public void should_return_message_with_NotAcceptable_code () =>
-            message.StatusCode.ShouldEqual(HttpStatusCode.NotAcceptable);
+            message.StatusCode.Should().Be(HttpStatusCode.NotAcceptable);
         
         private static CommandController controller;
         private static readonly Mock<IAttachmentService> attachmentServiceMock = new Mock<IAttachmentService>();

@@ -1,8 +1,8 @@
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
-using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -10,12 +10,12 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
-using WB.Core.BoundedContexts.Headquarters.Implementation.SampleRecordsAccessors;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -43,7 +43,9 @@ namespace WB.UI.Headquarters.Injections
     {
         public void Load(IWebIocRegistry registry)
         {
-            registry.Bind<IInterviewImportService, InterviewImportService>();
+            registry.Bind<IAssignmentsImportReader, AssignmentsImportReader>();
+            registry.Bind<IAssignmentsImportFileConverter, AssignmentsImportFileConverter>();
+            registry.Bind<IAssignmentsImportService, AssignmentsImportService>();
             registry.Bind<IFormDataConverterLogger, FormDataConverterLogger>();
             registry.Bind<IInterviewTreeBuilder, InterviewTreeBuilder>();
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
@@ -54,7 +56,6 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
             registry.Bind<IDataExportProcessDetails, DataExportProcessDetails>();
 
-            registry.Bind<IRecordsAccessor, CsvRecordsAccessor>();
             registry.Bind<IExceptionFilter, HandleUIExceptionAttribute>();
 
             registry.Bind<IAssemblyService, AssemblyService>();
@@ -97,6 +98,11 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

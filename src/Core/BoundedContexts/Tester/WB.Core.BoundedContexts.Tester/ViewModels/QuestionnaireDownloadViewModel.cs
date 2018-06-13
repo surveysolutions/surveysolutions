@@ -11,11 +11,13 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -36,6 +38,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly ILogger logger;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
+        private readonly IQuestionnaireStorage questionnaireRepository;
 
         public QuestionnaireDownloadViewModel(
             IPrincipal principal,
@@ -46,7 +49,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
-            IAttachmentContentStorage attachmentContentStorage)
+            IAttachmentContentStorage attachmentContentStorage, 
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.principal = principal;
             this.designerApiService = designerApiService;
@@ -57,17 +61,27 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.userInteractionService = userInteractionService;
             this.logger = logger;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public async Task<bool> LoadQuestionnaireAsync(string questionnaireId, string questionnaireTitle,
             IProgress<string> progress, CancellationToken cancellationToken)
         {
-            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken);
+            var questionnaireIdentity = await DownloadQuestionnaireWithAllDependencisAsync(questionnaireId, questionnaireTitle, progress, cancellationToken).ConfigureAwait(false);
             if (questionnaireIdentity != null)
             {
-                var interviewId = await this.CreateInterview(questionnaireIdentity, progress);
-
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(interviewId.FormatGuid());
+                var interviewId = await this.CreateInterview(questionnaireIdentity, progress).ConfigureAwait(false);
+                var questionnaire = this.questionnaireRepository.GetQuestionnaire(questionnaireIdentity, null);
+                if (questionnaire.GetPrefilledQuestions().Count == 0)
+                {
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), null)
+                        .ConfigureAwait(false);
+                }
+                else
+                {
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid())
+                        .ConfigureAwait(false);
+                }
             }
 
             return questionnaireIdentity != null;
@@ -91,14 +105,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         sycnhronizedInterview: synchronizationDto);
                     await this.commandService.ExecuteAsync(createInterviewCommand, null, cancellationToken);
 
-                    this.viewModelNavigationService.NavigateToInterview(interviewId.FormatGuid(), navigationIdentity);
+                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
                 }
                 catch (Exception e)
                 {
                     logger.Warn("Cant reload questionnaire with data", e);
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
-                    this.viewModelNavigationService.NavigateToPrefilledQuestions(newInterviewId.FormatGuid());
+                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
                 }
             }
 
@@ -178,6 +192,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionnaireId: questionnaireIdentity,
                 answers: new List<InterviewAnswer>(), 
+                protectedVariables: new List<string>(), 
                 answersTime: DateTime.UtcNow,
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),

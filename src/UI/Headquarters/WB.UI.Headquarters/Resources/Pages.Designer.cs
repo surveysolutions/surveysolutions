@@ -556,7 +556,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no any information about geolocation points..
+        ///   Looks up a localized string similar to This questionnaire contains no GPS coordinates to show on the map for selected variable..
         /// </summary>
         public static string GlobalSettings_NotifyNoMarkersDialogText {
             get {
@@ -1078,7 +1078,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please provide a comment if needed to restart an interview.
+        ///   Looks up a localized string similar to Please provide a comment if needed to reopen an interview.
         /// </summary>
         public static string InterviewerHq_RestartConfirm {
             get {
@@ -1087,7 +1087,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restart.
+        ///   Looks up a localized string similar to Reopen.
         /// </summary>
         public static string InterviewerHq_RestartInterview {
             get {
@@ -1510,11 +1510,29 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Relinked.
+        /// </summary>
+        public static string InterviewerProfile_Relinked {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_Relinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server time at the beginning of synchronization.
         /// </summary>
         public static string InterviewerProfile_ServerDate {
             get {
                 return ResourceManager.GetString("InterviewerProfile_ServerDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show actions log.
+        /// </summary>
+        public static string InterviewerProfile_ShowAuditLog {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_ShowAuditLog", resourceCulture);
             }
         }
         
@@ -1807,7 +1825,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {0}.
+        ///   Looks up a localized string similar to Move interviewer(s) with their assignments and interviews to the team of supervisor {0}..
         /// </summary>
         public static string Interviewers_MoveAllToNewTeam {
             get {
@@ -2163,6 +2181,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Map_UploadingError {
             get {
                 return ResourceManager.GetString("Map_UploadingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File is too big.
+        /// </summary>
+        public static string Map_UploadingFileTooBig {
+            get {
+                return ResourceManager.GetString("Map_UploadingFileTooBig", resourceCulture);
             }
         }
         
@@ -3154,6 +3181,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade assignments.
+        /// </summary>
+        public static string UpgradeAssignmentsTitle {
+            get {
+                return ResourceManager.GetString("UpgradeAssignmentsTitle", resourceCulture);
             }
         }
         

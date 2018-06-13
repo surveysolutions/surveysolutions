@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
@@ -42,23 +42,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
 
         [Test]
         public void should_have_from_be_equal_to_formated_date_from_input() =>
-            view.From.ShouldEqual(input.To.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            view.From.Should().Be(input.To.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
         [Test]
         public void should_have_to_be_equal_to_formated_date_to_input() =>
-            view.To.ShouldEqual(input.From.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+            view.To.Should().Be(input.From.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
         [Test]
-        public void should_have_7_lines() =>
-            view.Lines.Length.ShouldEqual(0);
-
-        [Test]
-        public void should_each_line_has_1_day_inside() =>
-            view.Lines.ShouldEachConformTo(line => line.Length == 1);
-
-        [Test]
-        public void should_each_line_has_record_equal_to_from_date() =>
-            view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+        public void should_have_0_lines() =>
+            view.Lines.Length.Should().Be(0);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

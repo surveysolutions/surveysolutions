@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
@@ -11,8 +11,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 {
     internal class when_removing_asnwer_which_changes_value_of_a_variable_that_uses_in_substitution1 : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             QuestionnaireDocument questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(id: QuestionnaireId,
                 children: new IComposite[]
                 {
@@ -35,28 +34,30 @@ namespace WB.Tests.Integration.InterviewTests.Variables
             interview.AnswerNumericIntegerQuestion(userId, n1Id, new decimal[0], DateTime.Now, 1);
             interview.AnswerNumericIntegerQuestion(userId, n3Id, new decimal[0], DateTime.Now, 10);
             eventContext = new EventContext();
-        };
 
-        Cleanup stuff = () =>
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerNumericIntegerQuestion(userId, n2Id, new decimal[0], DateTime.Now, 2);
 
-        It should_update_title_of_question_n3 = () =>
-            interview.GetTitleText(Create.Identity(n3Id)).ShouldEqual("title #3");
+        [NUnit.Framework.Test] public void should_update_title_of_question_n3 () =>
+            interview.GetTitleText(Create.Identity(n3Id)).Should().Be("title #3");
 
-        It should_update_title_of_group_g = () =>
-            interview.GetTitleText(Create.Identity(gId)).ShouldEqual("group #3");
+        [NUnit.Framework.Test] public void should_update_title_of_group_g () =>
+            interview.GetTitleText(Create.Identity(gId)).Should().Be("group #3");
 
-        It should_update_title_of_roster_0 = () =>
-            interview.GetTitleText(Create.Identity(rId, Create.RosterVector(0))).ShouldEqual("roster #30");
+        [NUnit.Framework.Test] public void should_update_title_of_roster_0 () =>
+            interview.GetTitleText(Create.Identity(rId, Create.RosterVector(0))).Should().Be("roster #30");
 
-        It should_update_title_of_question_n4 = () =>
-            interview.GetTitleText(Create.Identity(n4Id)).ShouldEqual("title #90");
+        [NUnit.Framework.Test] public void should_update_title_of_question_n4 () =>
+            interview.GetTitleText(Create.Identity(n4Id)).Should().Be("title #90");
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

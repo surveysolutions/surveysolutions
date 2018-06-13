@@ -97,7 +97,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to {0} enumerators.
+        ///   Looks up a localized string similar to Assigned to {0} interviewers.
         /// </summary>
         internal static string AssignedToMultipleEnumerators {
             get {
@@ -115,7 +115,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assigned to 1 enumerator.
+        ///   Looks up a localized string similar to Assigned to 1 interviewer.
         /// </summary>
         internal static string AssignedToSingleEnumerator {
             get {
@@ -511,11 +511,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hidden questions.
+        /// </summary>
+        internal static string HiddenQuestions {
+            get {
+                return ResourceManager.GetString("HiddenQuestions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide list of required identifying data.
         /// </summary>
         internal static string HideListPrefilledData {
             get {
                 return ResourceManager.GetString("HideListPrefilledData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identifying questions.
+        /// </summary>
+        internal static string IdentifyingQuestions {
+            get {
+                return ResourceManager.GetString("IdentifyingQuestions", resourceCulture);
             }
         }
         
@@ -988,11 +1006,29 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This field is mandatory.
+        /// </summary>
+        internal static string RequiredField {
+            get {
+                return ResourceManager.GetString("RequiredField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The responsible user will be assigned automatically.
         /// </summary>
         internal static string ResponsibleSupervisorWillBeAssigned {
             get {
                 return ResourceManager.GetString("ResponsibleSupervisorWillBeAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roster source questions.
+        /// </summary>
+        internal static string RosterSizeQuestions {
+            get {
+                return ResourceManager.GetString("RosterSizeQuestions", resourceCulture);
             }
         }
         
@@ -1056,6 +1092,24 @@ namespace Resources {
         internal static string SelectResponsibleToAssign {
             get {
                 return ResourceManager.GetString("SelectResponsibleToAssign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select default responsible (required).
+        /// </summary>
+        internal static string Select_Responsible {
+            get {
+                return ResourceManager.GetString("Select_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If no responsible assigned in batch file use this supervisor/interviewer account:.
+        /// </summary>
+        internal static string Select_Responsible_Description {
+            get {
+                return ResourceManager.GetString("Select_Responsible_Description", resourceCulture);
             }
         }
         
@@ -1160,7 +1214,7 @@ namespace Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to Upload a file with identifying data to create new assignments.
-        ///Specify usernames for supervisors or enumerators to make batch assignments..
+        ///Specify usernames for supervisors or interviewers to make batch assignments..
         /// </summary>
         internal static string UploadDescription {
             get {
@@ -1363,6 +1417,15 @@ namespace Resources {
         internal static string ViewListPrefilledData {
             get {
                 return ResourceManager.GetString("ViewListPrefilledData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View list of preloaded values.
+        /// </summary>
+        internal static string ViewListPreloadedData {
+            get {
+                return ResourceManager.GetString("ViewListPreloadedData", resourceCulture);
             }
         }
     }

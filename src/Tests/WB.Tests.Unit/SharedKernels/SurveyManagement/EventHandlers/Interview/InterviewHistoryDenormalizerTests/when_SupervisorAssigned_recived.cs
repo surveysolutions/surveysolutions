@@ -1,25 +1,25 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
     internal class when_SupervisorAssigned_recived : InterviewHistoryDenormalizerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewHistoryView = CreateInterviewHistoryView();
             interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interviewHistoryView = interviewExportedDataDenormalizer.Update(interviewHistoryView, CreatePublishableEvent(() => new SupervisorAssigned(Guid.NewGuid(), interviewId)));
 
-        It should_action_of_first_record_be_SupervisorAssigned = () =>
-            interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.SupervisorAssigned);
+        [NUnit.Framework.Test] public void should_action_of_first_record_be_SupervisorAssigned () =>
+            interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.SupervisorAssigned);
 
 
         private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;

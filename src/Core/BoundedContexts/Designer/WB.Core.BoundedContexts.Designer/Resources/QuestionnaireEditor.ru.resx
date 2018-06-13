@@ -135,6 +135,9 @@
   <data name="QuestionTypeArea" xml:space="preserve">
     <value>Область</value>
   </data>
+  <data name="QuestionTypeGeography" xml:space="preserve">
+    <value>География</value>
+  </data>
   <data name="QuestionTypeAudio" xml:space="preserve">
     <value>Аудио</value>
   </data>

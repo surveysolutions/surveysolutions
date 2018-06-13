@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -11,7 +10,7 @@ using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServiceTests
 {
-    [Subject(typeof(QuestionnaireUpgradeService))]
+    [NUnit.Framework.TestOf(typeof(QuestionnaireUpgradeService))]
     internal class QuestionnaireUpgradeServiceTestContext
     {
         protected static QuestionnaireUpgradeService CreateQuestionnaireUpgradeService()

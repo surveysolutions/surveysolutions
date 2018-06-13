@@ -1,11 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
-using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
+using FluentAssertions;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.LanguageTests
@@ -13,12 +12,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
     [Ignore("KP-4381")]
     internal class when_answering_on_question_and_related_group_condition_expression_throws_exception : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -54,17 +53,17 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 return result;
             });
 
-        It should_not_enable_groupId = () =>
-            results.GroupEnabledEventWasFound.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_not_enable_groupId () =>
+            results.GroupEnabledEventWasFound.Should().BeTrue();
 
-        It should_disable_groupId_because_of_calculation_error = () =>
-            results.GroupDisabledEventWasFound.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_disable_groupId_because_of_calculation_error () =>
+            results.GroupDisabledEventWasFound.Should().BeFalse();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

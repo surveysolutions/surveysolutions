@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -30,9 +30,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
 
         private void BecauseOf() => matches = questionnaire.FindAllTexts(searchFor.ToLower(), false, true, false);
 
-        [NUnit.Framework.Test] public void should_find_whole_word_match () => matches.ShouldContain(x => x.Id == staticTextId);
+        [NUnit.Framework.Test] public void should_find_whole_word_match () => matches.Should().Contain(x => x.Id == staticTextId);
 
-        [NUnit.Framework.Test] public void should_not_find_parts_of_word () => matches.ShouldNotContain(x => x.Id == staticTextId1);
+        [NUnit.Framework.Test] public void should_not_find_parts_of_word () => matches.Should().NotContain(x => x.Id == staticTextId1);
 
         static Questionnaire questionnaire;
 

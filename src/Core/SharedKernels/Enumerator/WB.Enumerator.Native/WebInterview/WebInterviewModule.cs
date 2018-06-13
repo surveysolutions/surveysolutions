@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Concurrent;
 using System.Configuration;
+using System.Threading.Tasks;
 using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Owin;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview.Services;
 
@@ -31,6 +33,12 @@ namespace WB.Enumerator.Native.WebInterview
                 return new WebInterviewInvoker(lazyClients);
             });
         }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
+        }
+
 
         public static void Configure(IAppBuilder app, Type[] pipelineModules)
         {

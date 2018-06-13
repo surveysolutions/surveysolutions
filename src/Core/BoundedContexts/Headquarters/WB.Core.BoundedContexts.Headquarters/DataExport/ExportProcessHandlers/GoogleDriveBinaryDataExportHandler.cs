@@ -38,9 +38,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         }
 
         private DriveService driveService;
+        private string GoogleDriveFolderMimeType = "application/vnd.google-apps.folder";
+
         protected override IDisposable GetClient(string accessToken)
         {
-            var token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse()
+            var token = new Google.Apis.Auth.OAuth2.Responses.TokenResponse
             {
                 AccessToken = accessToken,
                 ExpiresInSeconds = 3600,
@@ -57,7 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             });
 
             UserCredential credential = new UserCredential(fakeflow, "fakeUserId", token);
-            var serviceInitializer = new BaseClientService.Initializer()
+            var serviceInitializer = new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential
             };
@@ -68,68 +70,94 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override string CreateApplicationFolder()
         {
-            var applicationFolderName = "Survey Solutions";
-
-            var applicationFolder = this.GetFileOrDirectory(applicationFolderName, false);
-            if (applicationFolder == null)
-            {
-                var request = driveService.Files.Create(new File
-                {
-                    Name = applicationFolderName,
-                    MimeType = "application/vnd.google-apps.folder"
-                });
-                request.Fields = "id";
-                applicationFolder = request.Execute();
-            }
-
-            return applicationFolder.Id;
+            const string applicationFolderName = "Survey Solutions";
+            return GetOrCreateFolder(applicationFolderName);
         }
 
-        protected override string CreateFolder(string applicatioFolder, string folderName)
+        protected override string CreateFolder(string applicationFolder, string folderName)
         {
-            var interviewFolder = this.GetFileOrDirectory(folderName, false, applicatioFolder);
-            if (interviewFolder == null)
+            string[] folders = folderName.Split('/');
+
+            string parentFolder = applicationFolder;
+
+            foreach (var folder in folders)
             {
-                var request = driveService.Files.Create(new File
-                {
-                    Name = folderName,
-                    MimeType = "application/vnd.google-apps.folder",
-                    Parents = new List<string> {applicatioFolder}
-                });
-                request.Fields = "id";
-                interviewFolder = request.Execute();
+                parentFolder = GetOrCreateFolder(folder, parentFolder);
             }
 
-            return interviewFolder.Id;
-        }
-
-        private File GetFileOrDirectory(string folderOrFileName, bool isFile, string parentFolder = null)
-        {
-            FilesResource.ListRequest listRequest = driveService.Files.List();
-            listRequest.Q = $"name = '{folderOrFileName}' and " +
-                            (isFile ? "" : "mimeType = 'application/vnd.google-apps.folder' and ") +
-                            $"trashed = false " +
-                            $"{(parentFolder == null ? "" : $"and '{parentFolder}' in parents")}";
-            listRequest.Fields = "files(id, name)";
-
-            return listRequest.Execute().Files.FirstOrDefault();
+            return parentFolder;
         }
 
         protected override void UploadFile(string folder, byte[] fileContent, string fileName)
         {
-            var file = this.GetFileOrDirectory(fileName, true, folder);
+            var file = this.GetFileId(fileName, folder);
             if (file != null) return;
 
             var fileMetadata = new File
             {
                 Name = fileName,
-                Parents = new List<string> {folder}
+                Parents = new List<string> { folder }
             };
 
             var request = driveService.Files.Create(
                 fileMetadata, new MemoryStream(fileContent), "application/octet-stream");
 
             request.Upload();
+        }
+
+        private string GetFileId(string filename, string parentFolderId = null)
+        {
+            var query = SearchQuery(filename, parentFolderId);
+            return SearchForFirstOccurence(query);
+        }
+
+        private string GetOrCreateFolder(string folder, string parentId = null)
+        {
+            return this.GetFolderId(folder, parentId) ?? this.ExecuteCreateFolder(folder, parentId);
+        }
+
+        private string ExecuteCreateFolder(string folder, string parentId = null)
+        {
+            var file = new File
+            {
+                Name = folder,
+                MimeType = GoogleDriveFolderMimeType
+            };
+
+            if (!string.IsNullOrWhiteSpace(parentId))
+            {
+                file.Parents = new List<string> { parentId };
+            }
+
+            var request = driveService.Files.Create(file);
+
+            request.Fields = "id";
+            return request.Execute()?.Id;
+        }
+
+        private string GetFolderId(string folderName, string parentFolderId = null)
+        {
+            var query = SearchQuery(folderName, parentFolderId);
+            query += $" and mimeType = \'{GoogleDriveFolderMimeType}'";
+            return SearchForFirstOccurence(query);
+        }
+
+        private string SearchForFirstOccurence(string query)
+        {
+            FilesResource.ListRequest listRequest = driveService.Files.List();
+            listRequest.Q = query;
+            listRequest.Fields = "files(id, name)";
+
+            var files = listRequest.Execute().Files;
+
+            return files.FirstOrDefault()?.Id;
+        }
+
+        private string SearchQuery(string name, string parentFolder)
+        {
+            var query = $"name = '{name}' and trashed = false";
+            if (parentFolder != null) query += $" and '{parentFolder}' in parents";
+            return query;
         }
     }
 }

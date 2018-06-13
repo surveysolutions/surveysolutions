@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -14,19 +14,22 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
 {
     internal class when_answering_question_removes_rosters_and_answer_for_linked_single_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
 
                 var options = new List<Answer>
                 {
-                    Create.Entity.Option("1"), Create.Entity.Option("2"), Create.Entity.Option("3"), Create.Entity.Option("12")
+                    Create.Entity.Option("1"),
+                    Create.Entity.Option("2"),
+                    Create.Entity.Option("3"),
+                    Create.Entity.Option("12")
                 };
 
                 var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new IComposite[]
@@ -62,14 +65,14 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
                 return result;
             });
 
-        It should_disable_q5 = () =>
-            results.QuestionsQ5Disabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_disable_q5 () =>
+            results.QuestionsQ5Disabled.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

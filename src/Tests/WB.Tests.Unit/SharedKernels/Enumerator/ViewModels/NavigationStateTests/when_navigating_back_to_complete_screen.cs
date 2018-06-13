@@ -1,5 +1,6 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using System.Threading.Tasks;
+using FluentAssertions;
 using NSubstitute;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -8,11 +9,9 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
 {
-    [Subject(typeof (NavigationState))]
     internal class when_navigating_back_to_complete_screen
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             section1Identity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             section2Identity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"), Empty.RosterVector);
 
@@ -28,22 +27,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.NavigationStateTests
                      .Returns(true);
 
             navigationState = Create.Other.NavigationState(Setup.StatefulInterviewRepository(interview));
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section1Identity));
-            navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
-            navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section2Identity));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section1Identity));
+            await navigationState.NavigateTo(NavigationIdentity.CreateForCompleteScreen());
+            await navigationState.NavigateTo(NavigationIdentity.CreateForGroup(section2Identity));
 
             emptyHistoryHandler = () => { };
 
             navigationState.ScreenChanged += eventArgs => navigatedTo = eventArgs;
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             navigationState.NavigateBack(emptyHistoryHandler);
-        };
+        }
 
-        It should_navigate_to_complete_screen = () =>
-            navigatedTo.TargetStage.ShouldEqual(ScreenType.Complete);
+        [NUnit.Framework.Test] public void should_navigate_to_complete_screen () =>
+            navigatedTo.TargetStage.Should().Be(ScreenType.Complete);
 
         static NavigationState navigationState;
         static Identity section1Identity;

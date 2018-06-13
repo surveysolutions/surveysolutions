@@ -1,25 +1,24 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.Infrastructure.FileSystem;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireAssemblyFileAccessorTests
 {
     internal class when_getting_assembly_as_byte_array : QuestionnaireAssemblyFileAccessorTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             AssemblyServiceMock.Setup(x => x.GetAssemblyInfo(Moq.It.IsAny<string>())).Returns(new AssemblyInfo() { Content = data1 });
             questionnaireAssemblyFileAccessor = CreateQuestionnaireAssemblyFileAccessor(assemblyService: AssemblyServiceMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = questionnaireAssemblyFileAccessor.GetAssemblyAsByteArray(questionnaireId, version);
+        public void BecauseOf() => result = questionnaireAssemblyFileAccessor.GetAssemblyAsByteArray(questionnaireId, version);
 
-        It should_data_of_returned_file_be_equal_to_data1 = () =>
-            result.ShouldEqual(data1);
+        [NUnit.Framework.Test] public void should_data_of_returned_file_be_equal_to_data1 () =>
+            result.Should().BeEquivalentTo(data1);
 
         private static QuestionnaireAssemblyAccessor questionnaireAssemblyFileAccessor;
         private static readonly Mock<IAssemblyService> AssemblyServiceMock = CreateIAssemblyService();

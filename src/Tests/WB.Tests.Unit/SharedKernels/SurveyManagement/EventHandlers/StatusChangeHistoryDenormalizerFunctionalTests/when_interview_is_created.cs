@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 {
     internal class when_interview_is_created : StatusChangeHistoryDenormalizerFunctionalTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewStatusesStorage = new TestInMemoryWriter<InterviewSummary>();
             statusEventsToPublish = new List<IPublishableEvent>();
 
@@ -22,19 +21,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
             statusEventsToPublish.Add(Create.PublishedEvent.InterviewFromPreloadedDataCreated(interviewId: Guid.NewGuid()));
 
             denormalizer = CreateDenormalizer(interviewStatuses: interviewStatusesStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf()
             {
                 foreach (var publishableEvent in statusEventsToPublish)
                 {
                     denormalizer.Handle(new[] {publishableEvent}, publishableEvent.EventSourceId);
                 }
-            };
+            }
 
-        It should_create_InterviewStatuses_for_3_interviews =
-            () => statusEventsToPublish.TrueForAll(s => interviewStatusesStorage.GetById(s.EventSourceId.FormatGuid())!=null).ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_create_InterviewStatuses_for_3_interviews () => statusEventsToPublish.TrueForAll(s => interviewStatusesStorage.GetById(s.EventSourceId.FormatGuid())!=null).Should().BeTrue();
 
         private static InterviewSummaryCompositeDenormalizer denormalizer;
         private static List<IPublishableEvent> statusEventsToPublish;

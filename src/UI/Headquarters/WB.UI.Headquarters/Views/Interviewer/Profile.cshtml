@@ -2,14 +2,14 @@
 @using Main.Core.Entities.SubEntities
 @using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 @using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.BoundedContexts.Headquarters.Views.Device
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @model WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles.InterviewerProfileModel
 
 @{
     ViewBag.ActivePage = MenuItem.Interviewers;
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
     ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.InterviewerName);
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
 }
@@ -49,7 +49,6 @@
 }
 @section scripts
 {
-    <script type="text/javascript">$('#umbrella').hide();</script>
     @if (Model.DeviceLocationOrLastKnownLocationLat.HasValue && Model.DeviceLocationOrLastKnownLocationLon.HasValue)
     {
         <script>
@@ -67,9 +66,12 @@
             }
         </script>
         <script async defer
-                src="@string.Format("https://maps.googleapis.com/maps/api/js?key={0}&callback=getAddress", ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
+                src="@string.Format("{0}/maps/api/js?key={1}", @AppSettings.Instance.GoogleMapApiBaseUrl, ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
         </script>
     }
+    <script type="text/javascript"
+            src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
+    </script>
 }
 <main class="enumerators">
 <div class="container">
@@ -116,34 +118,56 @@
                         }
                     }
                 </li>
+                <li>                            
+                    <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_ShowAuditLog</a>
+                </li>
             </ul>
         </div>
     </div>
 </div>
 <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="interviews-information clearfix">
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.NewInterviewsOnDevice</div>
-                        <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
-                    </div>
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.RejectedInterviewsOnDevice</div>
-                        <div class="description">@Pages.InterviewerProfile_Rejected</div>
-                    </div>
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
-                        <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
-                    </div>
-                    <div class="number-information">
-                        <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
-                        <div class="description">@Pages.InterviewerProfile_Approved</div>
-                    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="interviews-information clearfix">
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.NewInterviewsOnDevice</div>
+                    <div class="description">@Pages.InterviewerProfile_NewOnDevice</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.RejectedInterviewsOnDevice</div>
+                    <div class="description">@Pages.InterviewerProfile_Rejected</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.WaitingInterviewsForApprovalCount</div>
+                    <div class="description">@Pages.InterviewerProfile_WaitingForApproval</div>
+                </div>
+                <div class="number-information">
+                    <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
+                    <div class="description">@Pages.InterviewerProfile_Approved</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="container-fluid" style='@(Model.HasAnyGpsAnswerForInterviewer ? "" : "display: none;")'>
+    <div class="row">
+        <div class="col-sm-9 map">
+            @Html.RenderHqConfig(new
+            {
+                ShowMap = Model.HasAnyGpsAnswerForInterviewer,
+                InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
+                Api = new
+                {
+                    InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
+                    InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints"}),
+                    InterviewDetailsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Interview", action = "Review"})
+                }
+            })
+            <div id="vueApp"></div>
+        </div>
+    </div>
+</div>
+
     @if (Model.HasDeviceInfo)
     {
         <div class="container-fluid">
@@ -241,7 +265,7 @@
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-6 connection-statistics">
                     <h3>@Pages.InterviewerProfile_DeviceAndConnectionStatistics</h3>
@@ -262,7 +286,12 @@
                         </li>
                         @if (Model.DeviceAssignmentDate.HasValue)
                         {
-                            <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)</b></li>
+                            <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)
+                                    @if (Model.RegistredDevicesCount > 1)
+                                    {
+                                    <span style="color: red;">(@Pages.InterviewerProfile_Relinked)</span>
+                                    }</b>
+                            </li>
                         }
                     </ul>
                     <ul class="list-unstyled">

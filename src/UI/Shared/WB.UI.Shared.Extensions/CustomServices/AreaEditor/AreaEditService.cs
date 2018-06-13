@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
         }
 
         private readonly IPermissions permissions;
-        private IViewModelNavigationService viewModelNavigationService;
+        private readonly IViewModelNavigationService viewModelNavigationService;
 
         public AreaEditService(IPermissions permissions,
             IViewModelNavigationService viewModelNavigationService)
@@ -38,49 +38,64 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             this.viewModelNavigationService = viewModelNavigationService;
         }
 
-        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
+        public static void RegisterLicence()
         {
-            bool is64Bit = IntPtr.Size == 8;
+            var isSupportedDevice = IsSupportedDevice();
+            if (isSupportedDevice)
+                ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,6PAZ0H4AH409L50JT147");
+        }
 
-            if (is64Bit)
+        public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
+        {
+            var isSupportedDevice = IsSupportedDevice();
+            if (!isSupportedDevice)
                 throw new NotSupportedException("This functionality is not available for this device");
 
             await this.permissions.AssureHasPermission(Permission.Location);
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            ArcGISRuntimeEnvironment.SetLicense("runtimebasic,1000,rud000017554,none,4N400PJPXJGH2T8AG192");
-
-            return await this.EditArea(area);
+            return await this.EditAreaImplAsync(area, geometryType);
         }
-        
-        private Task<AreaEditResult> EditArea(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area)
+
+        private static bool IsSupportedDevice()
+        {
+            bool is64Bit = IntPtr.Size == 8;
+            return !is64Bit;
+        }
+
+        private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
             var tcs = new TaskCompletionSource<AreaEditResult>();
 
-            this.viewModelNavigationService.NavigateTo<AreaEditorViewModel>(new
+            void AreaEditorActivityOnOnAreaEditCompleted(AreaEditorResult editResult)
             {
-                geometry = area?.Geometry,
-                mapName = area?.MapName
+                AreaEditorActivity.OnAreaEditCompleted -= (AreaEditorActivityOnOnAreaEditCompleted);
+
+                tcs.TrySetResult(editResult == null
+                    ? null
+                    : new AreaEditResult
+                    {
+                        Geometry = editResult.Geometry,
+                        MapName = editResult.MapName,
+                        Area = editResult.Area,
+                        Length = editResult.Length,
+                        Coordinates = editResult.Coordinates,
+                        DistanceToEditor = editResult.DistanceToEditor,
+                        Preview = editResult.Preview,
+                        NumberOfPoints = editResult.NumberOfPoints
+                    });
+            }
+
+            AreaEditorActivity.OnAreaEditCompleted += (AreaEditorActivityOnOnAreaEditCompleted);
+
+            await this.viewModelNavigationService.NavigateToAsync<AreaEditorViewModel, AreaEditorViewModelArgs>(new AreaEditorViewModelArgs
+            {
+                Geometry = area?.Geometry,
+                MapName = area?.MapName,
+                RequestedGeometryType = geometryType
             });
 
-            AreaEditorActivity.OnAreaEditCompleted += (editResult =>
-            {
-                tcs.TrySetResult(
-                    editResult == null
-                        ? null
-                        : new AreaEditResult()
-                        {
-                            Geometry = editResult.Geometry,
-                            MapName = editResult.MapName,
-                            Area = editResult.Area,
-                            Length = editResult.Length,
-                            Coordinates = editResult.Coordinates,
-                            DistanceToEditor = editResult.DistanceToEditor,
-                            Preview = editResult.Preview
-                        });
-            });
-
-            return tcs.Task;
+            return await tcs.Task;
         }
     }
 }

@@ -4,12 +4,10 @@ using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -22,7 +20,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [Subject(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
     internal class when_synchronize_and_upload_sync_statistics
     {
         private Mock<ISynchronizationService> synchronizationServiceMock;

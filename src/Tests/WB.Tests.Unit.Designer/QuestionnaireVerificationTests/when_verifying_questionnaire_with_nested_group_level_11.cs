@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -136,10 +134,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroupId () =>
-            verificationMessages.GetError("WB0101").References.First().Id.ShouldEqual(rosterGroupId);
+            verificationMessages.GetError("WB0101").References.First().Id.Should().Be(rosterGroupId);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Group () =>
-            verificationMessages.GetError("WB0101").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Group);
+            verificationMessages.GetError("WB0101").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Group);
 
         [NUnit.Framework.Test] public void should_return_first_error_with_code__WB0055 () =>
             verificationMessages.ShouldContainError("WB0101");

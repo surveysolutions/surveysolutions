@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -9,23 +8,23 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_interview_export_view_by_interview_with_nested_roster_with_2_rows_each : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
             rosterId = Guid.Parse("11111111111111111111111111111111");
             nestedRosterId = Guid.Parse("13333333333333333333333333333333");
 
-            questionnaire = CreateQuestionnaireDocumentWithOneChapter(
+            questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 Create.Entity.FixedRoster(rosterId: rosterId, obsoleteFixedTitles: new[] {"t1", "t2"},
                     children: new IComposite[]
                     {
@@ -42,29 +41,31 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                     }));
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaire);
+            questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-               result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaire.PublicKey, 1)),
-                CreateInterviewDataWith2PropagatedLevels());
+        public void BecauseOf() =>
+               result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1)),
+                CreateInterviewDataWith2PropagatedLevels(), questionnaire);
 
-        It should_records_count_equals_4 = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records.Length.ShouldEqual(4);
+        [NUnit.Framework.Test] public void should_records_count_equals_4 () =>
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records.Length.Should().Be(4);
 
-        It should_first_record_id_equals_0 = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].RecordId.ShouldEqual("0");
+        [NUnit.Framework.Test] public void should_first_record_id_equals_0 () =>
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[0].RecordId.Should().Be("0");
 
-        It should_second_record_id_equals_1 = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[1].RecordId.ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_second_record_id_equals_1 () =>
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[1].RecordId.Should().Be("1");
 
-        It should_third_record_id_equals_1 = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].RecordId.ShouldEqual("0");
+        [NUnit.Framework.Test] public void should_third_record_id_equals_1 () =>
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[2].RecordId.Should().Be("0");
 
-        It should_fourth_record_id_equals_1 = () =>
-           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[3].RecordId.ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_fourth_record_id_equals_1 () =>
+           GetLevel(result, new[] { rosterId, nestedRosterId }).Records[3].RecordId.Should().Be("1");
 
         private static InterviewData CreateInterviewDataWith2PropagatedLevels()
         {
@@ -97,7 +98,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
         private static Guid rosterId;
         private static Guid questionInsideRosterGroupId;
         private static int levelCount=2;
-        private static QuestionnaireDocument questionnaire;
+        private static QuestionnaireDocument questionnaireDocument;
+        private static IQuestionnaire questionnaire;
         private static ExportViewFactory exportViewFactory;
     }
 }

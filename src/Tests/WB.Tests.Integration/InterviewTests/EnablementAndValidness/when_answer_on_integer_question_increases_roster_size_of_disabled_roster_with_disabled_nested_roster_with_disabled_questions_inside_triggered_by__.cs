@@ -1,15 +1,29 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by_the_same_question : in_standalone_app_domain
+    internal class when_answer_on_integer_question_increases_roster_size_of_disabled_roster_with_disabled_nested_roster_with_disabled_questions_inside_triggered_by_the_same_question : InterviewTestsContext
     {
-        Because of = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -68,23 +82,23 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_raise_RosterInstancesAdded_event_for_roster_and_nested_roster = () =>
-            results.RosterAndNestedRosterInstancesAdded.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_RosterInstancesAdded_event_for_roster_and_nested_roster () =>
+            results.RosterAndNestedRosterInstancesAdded.Should().BeTrue();
 
-        It should_raise_GroupsDisabled_event_for_first_row_of_nested_roster = () =>
-            results.FirstRowOfNestedRosterDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_GroupsDisabled_event_for_first_row_of_nested_roster () =>
+            results.FirstRowOfNestedRosterDisabled.Should().BeTrue();
 
-        It should_raise_GroupsDisabled_event_for_first_row_of_roster = () =>
-            results.FirstRowOfRosterDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_GroupsDisabled_event_for_first_row_of_roster () =>
+            results.FirstRowOfRosterDisabled.Should().BeTrue();
 
-        It should_raise_QuestionsDisabled_event_for_first_question_from_first_row_of_roster = () =>
-            results.FirstQuestionFromFirstRowOfNestedRosterDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_for_first_question_from_first_row_of_roster () =>
+            results.FirstQuestionFromFirstRowOfNestedRosterDisabled.Should().BeTrue();
 
-        It should_raise_QuestionsDisabled_event_for_first_question_from_first_row_of_nested_roster = () =>
-            results.FirstQuestionFromFirstRowOfRosterDisabled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_for_first_question_from_first_row_of_nested_roster () =>
+            results.FirstQuestionFromFirstRowOfRosterDisabled.Should().BeTrue();
 
-        It should_not_raise_RosterInstancesRemoved_event_for_nested_roster = () =>
-            results.NestedRosterInstanceRemoved.ShouldBeFalse();
+        [NUnit.Framework.Test] public void should_not_raise_RosterInstancesRemoved_event_for_nested_roster () =>
+            results.NestedRosterInstanceRemoved.Should().BeFalse();
 
         private static InvokeResults results;
         private static Guid userId = Guid.Parse("11111111111111111111111111111111");

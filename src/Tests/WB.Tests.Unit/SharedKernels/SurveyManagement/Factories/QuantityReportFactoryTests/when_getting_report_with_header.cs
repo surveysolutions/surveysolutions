@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Tests.Abc;
@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.QuantityReportF
             var report = quantityReportFactory.GetReport(input);
 
             // Assert
-            report.Headers.Second().ShouldEqual(reportStartDate.ToString("yyyy-MM-dd"));
+            report.Headers.Second().Should().Be(reportStartDate.ToString("yyyy-MM-dd"));
         }
     }
 }

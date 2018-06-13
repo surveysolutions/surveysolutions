@@ -1,36 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using System;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuestionnaireServiceTests
 {
     internal class when_delete_disabled_questionnaire : DeleteQuestionnaireServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             commandServiceMock = new Mock<ICommandService>();
             deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock.Object,
                 questionnaireBrowseItemStorage:
                     Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ => _.GetById(Moq.It.IsAny<string>()) == new QuestionnaireBrowseItem() {Disabled = true}));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
                 deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId);
 
-        It should_never_execute_DisableQuestionnaire_Command = () =>
+        [NUnit.Framework.Test] public void should_never_execute_DisableQuestionnaire_Command () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<DisableQuestionnaire>(), Moq.It.IsAny<string>()), Times.Never);
 
         private static DeleteQuestionnaireService deleteQuestionnaireService;

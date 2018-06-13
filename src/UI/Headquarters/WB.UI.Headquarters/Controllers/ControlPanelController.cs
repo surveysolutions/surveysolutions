@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
+using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -177,14 +179,26 @@ namespace WB.UI.Headquarters.Controllers
 
         #region interview ravalidationg
 
+        public class RevalidateModel
+        {
+            public DateTime? FromDate { get; set; }
+            public DateTime? ToDate { get; set; }
+        }
+
         public ActionResult RevalidateInterviews()
         {
             return this.View();
         }
 
-        public ActionResult RevalidateAllInterviewsWithErrors()
+        public ActionResult RevalidateAllInterviewsWithErrors(RevalidateModel model)
         {
-            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync();
+            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+
+            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync(
+                authorizedUser.Id,
+                model.FromDate,
+                model.ToDate?.AddDays(1)
+            );
 
             return this.RedirectToAction("RevalidateInterviews");
         }
@@ -208,5 +222,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult BrokenInterviewPackages() => this.View();
         public ActionResult RejectedInterviewPackages() => this.View();
+        
+        public Task Exceptions() => ExceptionalModule.HandleRequestAsync(System.Web.HttpContext.Current);
     }
 }

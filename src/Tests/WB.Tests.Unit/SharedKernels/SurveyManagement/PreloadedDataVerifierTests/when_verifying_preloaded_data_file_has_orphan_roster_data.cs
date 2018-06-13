@@ -74,21 +74,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
             
             importDataVerifier = CreatePreloadedDataVerifier(questionnaire, preloadedDataServiceMock.Object);
 
-            importDataVerifier.VerifyPanelFiles(questionnaireId, 1, files, status);
+            VerificationErrors = importDataVerifier.VerifyPanelFiles(files, preloadedDataServiceMock.Object).ToList();
 
-            Assert.AreEqual(status.VerificationState.Errors.Count(), 1);
+            Assert.AreEqual(VerificationErrors.Count(), 1);
 
-            Assert.AreEqual(status.VerificationState.Errors.First().Code, "PL0008");
+            Assert.AreEqual(VerificationErrors.First().Code, "PL0008");
 
-            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Type,
+            Assert.AreEqual(VerificationErrors.First().References.First().Type,
                 PreloadedDataVerificationReferenceType.Cell);
 
-            Assert.AreEqual(status.VerificationState.Errors.First().References.First().PositionX, 1);
+            Assert.AreEqual(VerificationErrors.First().References.First().PositionX, 1);
 
             Assert.AreEqual(
-                status.VerificationState.Errors.First().References.First().PositionY, 0);
+                VerificationErrors.First().References.First().PositionY, 0);
 
-            Assert.AreEqual(status.VerificationState.Errors.First().References.First().Content, "1");
+            Assert.AreEqual(VerificationErrors.First().References.First().Content, "1");
 
         }
     }

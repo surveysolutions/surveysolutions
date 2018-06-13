@@ -1,5 +1,5 @@
 ﻿using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
@@ -47,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         }
 
         [Test]
-        public void should_change_item_title() => viewModel.Text.PlainText.ShouldEqual($"Old title {answerOnDoubleQuestion}");
+        public void should_change_item_title() => viewModel.Text.PlainText.Should().Be($"Old title {answerOnDoubleQuestion}");
 
         static StaticTextViewModel viewModel;
         static StatefulInterview interview;

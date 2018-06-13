@@ -1,31 +1,31 @@
-﻿using System.Linq;
-using Machine.Specifications;
+using System.Linq;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentContentServiceTests
 {
     class when_getting_attachment_content : CommentsExporterTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, expectedContent.ContentHash);
             attachmentContentService = Create.Service.AttachmentContentService(attachmentContentPlainStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             actualContent = attachmentContentService.GetAttachmentContent(expectedContent.ContentHash);
 
-        It should_return_specified_attachment_content = () =>
+        [NUnit.Framework.Test] public void should_return_specified_attachment_content () 
         {
-            expectedContent.ContentHash.ShouldEqual(actualContent.ContentHash);
+            expectedContent.ContentHash.Should().Be(actualContent.ContentHash);
             expectedContent.Content.SequenceEqual(actualContent.Content);
-        };
+        }
 
         private static AttachmentContentService attachmentContentService;
         private static AttachmentContent actualContent;

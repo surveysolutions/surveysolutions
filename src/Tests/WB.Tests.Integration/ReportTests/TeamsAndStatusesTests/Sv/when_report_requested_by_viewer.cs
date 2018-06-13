@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -9,14 +9,12 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
 {
     internal class when_report_requested_by_viewer : TeamsAndStatusesReportContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             viewerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var responsible = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             
@@ -31,11 +29,12 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
 
             reportFactory = CreateSvTeamsAndStatusesReport(repository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
+        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
 
-        It should_count_number_of_interviews_for_teamlead = () => report.Items.First().CompletedCount.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_count_number_of_interviews_for_teamlead () => report.Items.First().CompletedCount.Should().Be(2);
 
         static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;

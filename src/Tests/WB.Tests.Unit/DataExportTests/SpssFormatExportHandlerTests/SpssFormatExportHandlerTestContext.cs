@@ -1,5 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -14,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
 {
-    [Subject(typeof(SpssFormatExportHandler))]
+    [NUnit.Framework.TestOf(typeof(SpssFormatExportHandler))]
     public class SpssFormatExportHandlerTestContext
     {
         internal static SpssFormatExportHandler CreateSpssFormatExportHandler(

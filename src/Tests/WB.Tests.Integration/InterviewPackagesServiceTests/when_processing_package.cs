@@ -1,14 +1,13 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -25,14 +24,14 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Integration.PostgreSQLTests;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
     internal class when_processing_package : with_postgres_db
     {
-        private Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
+            Context();
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
@@ -89,28 +88,30 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         IsCensusInterview = expectedCommand.CreatedOnClient,
                         Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray())
                     }));
-        };
+            BecauseOf();
+        }
 
-        Because of = () => plainPostgresTransactionManager.ExecuteInPlainTransaction(
+        private void BecauseOf() => plainPostgresTransactionManager.ExecuteInPlainTransaction(
                 () => interviewPackagesService.ProcessPackage("1"));
 
-        It should_execute_SynchronizeInterviewEventsCommand_command =
-            () => mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), origin), Times.Once);
+        [NUnit.Framework.Test] public void should_execute_SynchronizeInterviewEventsCommand_command () =>
+            mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), origin), Times.Once);
 
-        It should_actual_command_contains_specified_properties = () =>
+        [NUnit.Framework.Test] public void should_actual_command_contains_specified_properties ()
         {
-            actualCommand.CreatedOnClient.ShouldEqual(expectedCommand.CreatedOnClient);
-            actualCommand.InterviewStatus.ShouldEqual(expectedCommand.InterviewStatus);
-            actualCommand.QuestionnaireId.ShouldEqual(expectedCommand.QuestionnaireId);
-            actualCommand.QuestionnaireVersion.ShouldEqual(expectedCommand.QuestionnaireVersion);
-            actualCommand.SynchronizedEvents.Length.ShouldEqual(expectedCommand.SynchronizedEvents.Length);
-            actualCommand.SynchronizedEvents.ShouldEachConformTo(x=>expectedCommand.SynchronizedEvents.Any(y=>y.GetType() == x.GetType()));
-        };
+            actualCommand.CreatedOnClient.Should().Be(expectedCommand.CreatedOnClient);
+            actualCommand.InterviewStatus.Should().Be(expectedCommand.InterviewStatus);
+            actualCommand.QuestionnaireId.Should().Be(expectedCommand.QuestionnaireId);
+            actualCommand.QuestionnaireVersion.Should().Be(expectedCommand.QuestionnaireVersion);
+            actualCommand.SynchronizedEvents.Length.Should().Be(expectedCommand.SynchronizedEvents.Length);
+            actualCommand.SynchronizedEvents.Should().OnlyContain(x=>expectedCommand.SynchronizedEvents.Any(y=>y.GetType() == x.GetType()));
+        }
 
-        It should_commit_transaction = () => transactionManager.Verify(x => x.CommitCommandTransaction(), Times.Once);
-        It should_begin_transaction = () => transactionManager.Verify(x => x.BeginCommandTransaction(), Times.Once);
+        [NUnit.Framework.Test] public void should_commit_transaction () => transactionManager.Verify(x => x.CommitCommandTransaction(), Times.Once);
+        [NUnit.Framework.Test] public void should_begin_transaction () => transactionManager.Verify(x => x.BeginCommandTransaction(), Times.Once);
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown() => pgSqlConnection.Close();
 
         private static SynchronizeInterviewEventsCommand expectedCommand;
         private static SynchronizeInterviewEventsCommand actualCommand;

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -14,8 +14,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
 {
     internal class when_report_requested_by_viewer : TeamsAndStatusesReportContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             viewerId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 
             List<InterviewSummary> interviews = new List<InterviewSummary>
@@ -29,11 +28,13 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
 
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
-        };
 
-        Because of = () => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel { ViewerId = viewerId }));
+            BecauseOf();
+        }
 
-        It should_count_number_of_interviews_for_teamlead = () => report.Items.First().CompletedCount.ShouldEqual(2);
+        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel { ViewerId = viewerId }));
+
+        [NUnit.Framework.Test] public void should_count_number_of_interviews_for_teamlead () => report.Items.First().CompletedCount.Should().Be(2);
 
         static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.Infrastructure.PlainStorage;
@@ -27,13 +27,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
             lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent);
 
         [NUnit.Framework.Test] public void should_save_not_null_content () =>
-            lookupTableContent.ShouldNotBeNull();
+            lookupTableContent.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_save_row_with_rowcode__4 () =>
-            lookupTableContent.Rows.ElementAt(0).RowCode.ShouldEqual(4);
+            lookupTableContent.Rows.ElementAt(0).RowCode.Should().Be(4);
 
         [NUnit.Framework.Test] public void should_save_row_with_data__9_087e_10 () =>
-            lookupTableContent.Rows.ElementAt(0).Variables[1].ShouldEqual((decimal)9.087E-10);
+            lookupTableContent.Rows.ElementAt(0).Variables[1].Should().Be((decimal)9.087E-10);
 
         private static readonly Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid lookupTableId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -9,7 +9,6 @@ using Moq;
 using OfficeOpenXml;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 
@@ -60,14 +59,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         [NUnit.Framework.Test] public void should_export_translation_on__Translations_combobox__sheet_in_2_row () 
         {
-            comboboxCells[2, 4].GetValue<string>().ShouldEqual("Option");
-            comboboxCells[2, 5].GetValue<string>().ShouldEqual("Опция");
+            comboboxCells[2, 4].GetValue<string>().Should().Be("Option");
+            comboboxCells[2, 5].GetValue<string>().Should().Be("Опция");
         }
 
         [NUnit.Framework.Test] public void should_export_translation_on__Translations_cascading__sheet_in_2_row () 
         {
-            cascadingCells[2, 4].GetValue<string>().ShouldEqual("Cascading Option");
-            cascadingCells[2, 5].GetValue<string>().ShouldEqual("Каскадная Опция");
+            cascadingCells[2, 4].GetValue<string>().Should().Be("Cascading Option");
+            cascadingCells[2, 5].GetValue<string>().Should().Be("Каскадная Опция");
         }
 
         static TranslationsService service;

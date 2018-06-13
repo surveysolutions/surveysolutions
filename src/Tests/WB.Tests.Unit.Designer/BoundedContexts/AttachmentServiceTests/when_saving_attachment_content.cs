@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.Infrastructure.PlainStorage;

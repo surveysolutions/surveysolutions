@@ -1,14 +1,12 @@
-using Machine.Specifications;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.EnablementViewModelTests
 {
-    [Subject(typeof(EnablementViewModel))]
+    [NUnit.Framework.TestOf(typeof(EnablementViewModel))]
     internal class EnablementViewModelTestsContext
     {
         public static EnablementViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null,

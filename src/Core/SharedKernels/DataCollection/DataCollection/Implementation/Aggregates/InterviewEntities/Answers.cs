@@ -152,7 +152,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return null;
         }
-        
+
+        public static CategoricalFixedMultiOptionAnswer FromIntArray(int[] checkedValues)
+            => new CategoricalFixedMultiOptionAnswer(checkedValues);
+
         public static CategoricalFixedMultiOptionAnswer FromDecimalArray(decimal[] checkedValues)
             => checkedValues == null || !checkedValues.Any() ? null : new CategoricalFixedMultiOptionAnswer(checkedValues.Select(value => (int)value));
 
@@ -213,11 +216,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.Rows = rows.ToReadOnlyCollection();
         }
 
-        public IReadOnlyCollection<TextListAnswerRow> Rows { get; set; }
+        public IReadOnlyList<TextListAnswerRow> Rows { get; set; }
 
         public Tuple<decimal, string>[] ToTupleArray() => this.Rows.Select(row => Tuple.Create((decimal)row.Value, row.Text)).ToArray();
 
         public static TextListAnswer FromTextListAnswerRows(IEnumerable<TextListAnswerRow> rows) => rows == null ? null : new TextListAnswer(rows);
+
+        public static TextListAnswer FromTupleArray(Tuple<int, string>[] tupleArray)
+            => tupleArray == null ? null : new TextListAnswer(
+                tupleArray.Select(tuple => new TextListAnswerRow(tuple.Item1, tuple.Item2.Trim().RemoveControlChars())));
 
         public static TextListAnswer FromTupleArray(Tuple<decimal, string>[] tupleArray)
             => tupleArray == null ? null : new TextListAnswer(
@@ -343,6 +350,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public static AreaAnswer FromArea(Area area) => area != null ? new AreaAnswer(area) : null;
 
         public override string ToString() => Value.ToString();
+
+        public Georgaphy ToGeorgaphy()
+        {
+            return new Georgaphy
+            {
+                Area = Value.AreaSize ?? 0,
+                Length = Value.Length ?? 0,
+                PointsCount = Value.NumberOfPoints ?? 0
+            };
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]

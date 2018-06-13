@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Interviewer
 {
@@ -216,6 +217,7 @@ namespace WB.UI.Headquarters.API.Interviewer
         [ApiBasicAuth(UserRoles.Interviewer)]
         [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [HttpGet]
+        [ApiNoCache]
         public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)
         {
             int serverSyncProtocolVersion = this.syncVersionProvider.GetProtocolVersion();
@@ -232,7 +234,20 @@ namespace WB.UI.Headquarters.API.Interviewer
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
-            if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
+            if (deviceSyncProtocolVersion == 7070) // KP-11462
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+            }
+
+            if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
+            {
+                if (deviceSyncProtocolVersion < SyncProtocolVersionProvider.ProtectedVariablesIntroduced
+                    && this.assignmentsService.HasAssignmentWithProtectedVariables(this.authorizedUser.Id))
+                {
+                    return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
+                }
+            }
+            else if (deviceSyncProtocolVersion == 7050 /* PRE assignment devices, that still allowed to connect*/)
             {
                 var interviewerAssignments = this.assignmentsService.GetAssignments(this.authorizedUser.Id);
                 var assignedQuestionarries = this.questionnaireBrowseViewFactory.GetByIds(interviewerAssignments.Select(ia => ia.QuestionnaireId).ToArray());
@@ -241,6 +256,7 @@ namespace WB.UI.Headquarters.API.Interviewer
                 {
                     return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
                 }
+
             }
             else if (deviceSyncProtocolVersion != serverSyncProtocolVersion)
             {

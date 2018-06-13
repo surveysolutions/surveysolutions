@@ -291,4 +291,10 @@
   <data name="Yes" xml:space="preserve">
     <value>Oui</value>
   </data>
+  <data name="AllGpsQuestions" xml:space="preserve">
+    <value>Toutes les questions GPS</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>En cours de traitement...</value>
+  </data>
 </root>

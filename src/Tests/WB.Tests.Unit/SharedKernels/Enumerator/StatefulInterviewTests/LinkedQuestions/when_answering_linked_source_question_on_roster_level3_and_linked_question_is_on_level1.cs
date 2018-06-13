@@ -1,9 +1,8 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQuestions
@@ -49,31 +48,31 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.LinkedQu
         {
             var identity = Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(0));
 
-            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.ShouldEqual(3);
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).ShouldEqual("Multi 1: Title 1: answer 0.1.100");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).ShouldEqual("Multi 2: Title 1: answer 0.2.100");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).ShouldEqual("Multi 2: Title 2: answer 0.2.200");
+            interview.GetLinkedSingleOptionQuestion(identity).Options.Count.Should().Be(3);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).Should().Be("Multi 1: Title 1: answer 0.1.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).Should().Be("Multi 2: Title 1: answer 0.2.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).Should().Be("Multi 2: Title 2: answer 0.2.200");
         }
 
         [NUnit.Framework.Test] public void should_linked_single_question_from_roster2_has_no_options () 
         {
             interview.GetLinkedSingleOptionQuestion(Create.Entity.Identity(linkedSingleQuestionId, Create.Entity.RosterVector(1)))
-                .Options.ShouldBeEmpty();
+                .Options.Should().BeEmpty();
         }
 
         [NUnit.Framework.Test] public void should_linked_multi_question_from_roster1_has_3_options () 
         {
             var identity = Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(0));
 
-            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.ShouldEqual(3);
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).ShouldEqual("Multi 1: Title 1: answer 0.1.100");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).ShouldEqual("Multi 2: Title 1: answer 0.2.100");
-            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).ShouldEqual("Multi 2: Title 2: answer 0.2.200");
+            interview.GetLinkedMultiOptionQuestion(identity).Options.Count.Should().Be(3);
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 1, 100)).Should().Be("Multi 1: Title 1: answer 0.1.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 100)).Should().Be("Multi 2: Title 1: answer 0.2.100");
+            interview.GetLinkedOptionTitle(identity, Create.Entity.RosterVector(0, 2, 200)).Should().Be("Multi 2: Title 2: answer 0.2.200");
         }
 
         [NUnit.Framework.Test] public void should_linked_multi_question_from_roster2_has_no_options () {
             interview.GetLinkedMultiOptionQuestion(Create.Entity.Identity(linkedMultiQuestionId, Create.Entity.RosterVector(1)))
-                .Options.ShouldBeEmpty();
+                .Options.Should().BeEmpty();
         }
 
         static StatefulInterview interview;

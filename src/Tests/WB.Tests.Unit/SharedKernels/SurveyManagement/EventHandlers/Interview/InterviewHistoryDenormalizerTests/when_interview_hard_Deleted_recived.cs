@@ -1,26 +1,26 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewHistoryDenormalizerTests
 {
     internal class when_interview_hard_Deleted_recived : InterviewHistoryDenormalizerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewHistoryView = CreateInterviewHistoryView();
             interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interviewHistoryView = interviewExportedDataDenormalizer.Update(interviewHistoryView, CreatePublishableEvent(() => new InterviewHardDeleted(Guid.NewGuid()),
                 interviewId));
 
-        It should_history_should_be_null = () =>
-            interviewHistoryView.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_history_should_be_null () =>
+            interviewHistoryView.Should().BeNull();
 
 
         private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;

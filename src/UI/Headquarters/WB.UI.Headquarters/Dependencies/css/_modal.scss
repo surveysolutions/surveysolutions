@@ -13,7 +13,7 @@ body > .ui-pnotify{
  	@extend %modal-window;
      width: 500px !important;
   	.alert{
-   		font-family: "RobotoMedium";
+   		font-family: $roboto_medium;
         margin: 0;
         border-top: none !important;
   		padding: 20px;

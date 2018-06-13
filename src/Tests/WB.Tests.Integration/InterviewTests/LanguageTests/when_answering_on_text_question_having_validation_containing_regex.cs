@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,12 +10,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_answering_on_text_question_having_validation_containing_regex : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -48,22 +44,21 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                     {
                         AnswerDeclaredValidEventCount = eventContext.Count<AnswersDeclaredValid>(),
                         AnswerDeclaredInvalidEventCount = eventContext.Count<AnswersDeclaredInvalid>()
-
                     };
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
         
-        It should_raise_AnswerDeclaredValidEvent_event = () =>
-            result.AnswerDeclaredValidEventCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_raise_AnswerDeclaredValidEvent_event () =>
+            result.AnswerDeclaredValidEventCount.Should().Be(1);
 
-        It should_raise_AnswerDeclaredInvalidEvent_event = () =>
-            result.AnswerDeclaredInvalidEventCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_raise_AnswerDeclaredInvalidEvent_event () =>
+            result.AnswerDeclaredInvalidEventCount.Should().Be(0);
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;

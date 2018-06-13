@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Macros;
@@ -19,19 +19,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         private void BecauseOf() => denormalizer.AddMacro(command);
 
         [NUnit.Framework.Test] public void should_add_one_macro () =>
-            questionnaire.Macros.Count.ShouldEqual(1);
+            questionnaire.Macros.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_add_macro_with_key_equals_entity_id () =>
-           questionnaire.Macros.ContainsKey(entityId).ShouldBeTrue();
+           questionnaire.Macros.ContainsKey(entityId).Should().BeTrue();
 
         [NUnit.Framework.Test] public void should_add_macro_with_empty_name () =>
-           questionnaire.Macros[entityId].Name.ShouldBeNull();
+           questionnaire.Macros[entityId].Name.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_add_macro_with_empty_content () =>
-           questionnaire.Macros[entityId].Content.ShouldBeNull();
+           questionnaire.Macros[entityId].Content.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_add_macro_with_empty_description () =>
-           questionnaire.Macros[entityId].Description.ShouldBeNull();
+           questionnaire.Macros[entityId].Description.Should().BeNull();
 
         private static Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         private static Guid entityId = Guid.Parse("11111111111111111111111111111111");

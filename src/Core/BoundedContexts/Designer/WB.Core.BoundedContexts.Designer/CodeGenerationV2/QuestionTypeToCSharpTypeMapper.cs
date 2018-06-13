@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
                 case QuestionType.Multimedia:
                 case QuestionType.QRBarcode:
                 case QuestionType.Text:
-                case QuestionType.Area:
                 
                     return "string";
                 case QuestionType.Numeric:
@@ -56,6 +55,8 @@ namespace WB.Core.BoundedContexts.Designer.CodeGenerationV2
 
                 case QuestionType.Audio:
                     return typeof(AudioAnswerForConditions).Name;
+                case QuestionType.Area:
+                    return typeof(Georgaphy).Name;
 
                 default:
                     throw new ArgumentException("Unknown question type.");

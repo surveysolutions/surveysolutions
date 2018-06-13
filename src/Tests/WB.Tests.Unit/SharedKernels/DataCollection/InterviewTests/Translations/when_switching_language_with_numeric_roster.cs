@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -17,8 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
 {
     internal class when_switching_language_with_numeric_roster_having_title_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             rosterId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             rosterSizeQuestion = Guid.Parse("11111111111111111111111111111111");
             rosterTitleQuestionId = Guid.Parse("21111111111111111111111111111111");
@@ -81,19 +80,20 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Translations
             interview.AnswerNumericIntegerQuestion(Guid.NewGuid(), rosterSizeQuestion, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(Guid.NewGuid(), rosterTitleQuestionId, new decimal[] {0}, DateTime.Now, 1);
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
 
-        Because of = () => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
+        public void BecauseOf() => interview.SwitchTranslation(Create.Command.SwitchTranslation(language: targetLanguage));
 
-        It should_raise_roster_titles_changed_event_for_roster = () =>
+        [NUnit.Framework.Test] public void should_raise_roster_titles_changed_event_for_roster () 
         {
             var @event = eventContext.GetSingleEvent<RosterInstancesTitleChanged>();
-            @event.ChangedInstances.Length.ShouldEqual(1);
-            @event.ChangedInstances.All(x => x.RosterInstance.GroupId == rosterId).ShouldBeTrue();
-            @event.ChangedInstances[0].RosterInstance.RosterInstanceId.ShouldEqual(0);
-            @event.ChangedInstances[0].Title.ShouldEqual("11");
-        };
+            @event.ChangedInstances.Length.Should().Be(1);
+            @event.ChangedInstances.All(x => x.RosterInstance.GroupId == rosterId).Should().BeTrue();
+            @event.ChangedInstances[0].RosterInstance.RosterInstanceId.Should().Be(0);
+            @event.ChangedInstances[0].Title.Should().Be("11");
+        }
 
         static Interview interview;
         static EventContext eventContext;

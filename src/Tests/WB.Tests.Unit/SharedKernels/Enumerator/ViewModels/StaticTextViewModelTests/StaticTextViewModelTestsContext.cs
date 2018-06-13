@@ -1,6 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
-using MvvmCross.Platform.Core;
+﻿using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -10,7 +8,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelTests
 {
-    [Subject(typeof(StaticTextViewModel))]
+    [NUnit.Framework.TestOf(typeof(StaticTextViewModel))]
     internal class StaticTextViewModelTestsContext
     {
         public static StaticTextViewModel CreateViewModel(IQuestionnaireStorage questionnaireRepository = null, 

@@ -1,5 +1,4 @@
 ﻿using System;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
 using NUnit.Framework;
@@ -10,7 +9,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.InterviewSummaryEventHandlerFunctionalTests
 {
-    [Subject(typeof(InterviewSummaryDenormalizer))]
     [TestOf(typeof(InterviewSummaryDenormalizer))]
     public class InterviewSummaryDenormalizerTestsContext
     {

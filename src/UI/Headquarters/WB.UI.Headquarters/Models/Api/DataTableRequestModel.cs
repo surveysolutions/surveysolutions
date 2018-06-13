@@ -4,12 +4,16 @@ using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.UI.Headquarters.Models.Api
 {
+    /// <summary>
+    /// Datatable specific
+    /// </summary>
     public class DataTableRequest
     {
         public class SortOrder
         {
             public int Column { get; set; }
             public OrderDirection Dir { get; set; }
+            public string Name { get; set; }
         }
 
         public class SearchInfo
@@ -18,8 +22,8 @@ namespace WB.UI.Headquarters.Models.Api
 
             public string Value
             {
-                get { return this.value?.Trim(); }
-                set { this.value = value; }
+                get => this.value?.Trim();
+                set => this.value = value;
             }
 
             public bool Regex { get; set; }
@@ -28,19 +32,47 @@ namespace WB.UI.Headquarters.Models.Api
         public class ColumnInfo
         {
             public int Title { get; set; }
-            public string Data { get; set; }
             public string Name { get; set; }
             public bool Searchable { get; set; }
             public bool Orderable { get; set; }
             public SearchInfo Search { get; set; }
         }
 
+        /// <summary>
+        /// Datatables specific
+        /// </summary>
         public int Draw { get; set; }
+
+        /// <summary>
+        /// Paging - Start row
+        /// </summary>
         public int Start { get; set; }
+
+        /// <summary>
+        /// How many rows per page 
+        /// </summary>
         public int Length { get; set; }
+
+        /// <summary>
+        /// order of output
+        /// </summary>
         public List<SortOrder> Order { get; set; }
+        
+        /// <summary>
+        /// This is shorthand for <c>Columns</c> property. DataTable works via Get requests
+        /// </summary>
+        public List<ColumnInfo> _C { get; set; }
+
+        /// <summary>
+        /// List of columns that need to be outputed. Leave null for default values
+        /// </summary>
         public List<ColumnInfo> Columns { get; set; }
+
+        public List<ColumnInfo> ColummnsList => Columns ?? _C;
+
         public SearchInfo Search { get; set; }
+
+
         public int PageIndex => 1 + this.Start / this.Length;
         public int PageSize => this.Length;
 
@@ -50,7 +82,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return string.Empty;
 
-            var columnName = this.Columns[order.Column].Name;
+            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
             var stringifiedOrder = order.Dir == OrderDirection.Asc ? string.Empty : OrderDirection.Desc.ToString();
 
             return $"{columnName} {stringifiedOrder}";
@@ -62,7 +94,7 @@ namespace WB.UI.Headquarters.Models.Api
             if (order == null)
                 return Enumerable.Empty<OrderRequestItem>();
 
-            var columnName = this.Columns[order.Column].Name;
+            var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
 
             return new[] {new OrderRequestItem {Direction = order.Dir, Field = columnName}};
         }
@@ -74,7 +106,7 @@ namespace WB.UI.Headquarters.Models.Api
 
             foreach (var order in this.Order)
             {
-                var columnName = this.Columns[order.Column].Name;
+                var columnName = this.ColummnsList?[order.Column].Name ?? order.Name;
 
                 yield return new OrderRequestItem {Direction = order.Dir, Field = columnName};
             }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using NLog;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -20,6 +22,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
+            registry.BindAsSingletonWithConstructorArgument<IStreamableEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
             try
             {
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
@@ -31,8 +39,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 throw;
             }
 
-            registry.BindAsSingletonWithConstructorArgument<IStreamableEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
-            registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
+            return Task.CompletedTask;
         }
     }
 }

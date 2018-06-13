@@ -1,5 +1,4 @@
 using System;
-using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Tests.Abc;

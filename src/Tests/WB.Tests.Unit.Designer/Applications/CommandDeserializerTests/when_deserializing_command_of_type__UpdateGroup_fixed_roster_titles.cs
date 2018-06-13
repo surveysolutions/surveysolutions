@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Group;
 using WB.Core.Infrastructure.CommandBus;
 using WB.UI.Shared.Web.CommandDeserialization;
@@ -36,31 +36,31 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
             result = deserializer.Deserialize(type, command);
 
         [NUnit.Framework.Test] public void should_return_NewUpdateGroupCommand () =>
-            result.ShouldBeOfExactType<UpdateGroup>();
+            result.Should().BeOfType<UpdateGroup>();
 
         [NUnit.Framework.Test] public void should_return_same_title_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).Title.ShouldEqual(sanitizedTitle);
+            ((UpdateGroup)result).Title.Should().Be(sanitizedTitle);
 
         [NUnit.Framework.Test] public void should_return_same_questionnaire_id_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateGroup)result).QuestionnaireId.Should().Be(Guid.Parse(questionnaireId));
 
         [NUnit.Framework.Test] public void should_return_same_group_id_in_NewUpdateGroupCommand () =>
-            ((UpdateGroup)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((UpdateGroup)result).GroupId.Should().Be(Guid.Parse(groupId));
 
         [NUnit.Framework.Test] public void should_return_2_fixed_roster_titles () =>
-            ((UpdateGroup)result).FixedRosterTitles.Count().ShouldEqual(2);
+            ((UpdateGroup)result).FixedRosterTitles.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_sanizited_first_fixed_title () =>
-            ((UpdateGroup)result).FixedRosterTitles[0].Title.ShouldEqual("привет, Мир!");
+            ((UpdateGroup)result).FixedRosterTitles[0].Title.Should().Be("привет, Мир!");
 
         [NUnit.Framework.Test] public void should_return_sanizited_second_fixed_title () =>
-            ((UpdateGroup)result).FixedRosterTitles[1].Title.ShouldEqual("hi, Hello!");
+            ((UpdateGroup)result).FixedRosterTitles[1].Title.Should().Be("hi, Hello!");
         
         [NUnit.Framework.Test] public void should_return_first_fixed_roster_title_value_1_0 () =>
-            ((UpdateGroup)result).FixedRosterTitles[0].Value.ShouldEqual("1.0");
+            ((UpdateGroup)result).FixedRosterTitles[0].Value.Should().Be("1.0");
 
         [NUnit.Framework.Test] public void should_return_second_fixed_roster_title_value_2_0 () =>
-            ((UpdateGroup)result).FixedRosterTitles[1].Value.ShouldEqual("2.0");
+            ((UpdateGroup)result).FixedRosterTitles[1].Value.Should().Be("2.0");
 
 
         private static ICommand result;

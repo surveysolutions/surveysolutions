@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -59,16 +58,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0035");
 
         [NUnit.Framework.Test] public void should_return_2_errors_with_1_references () =>
-            verificationMessages.ShouldEachConformTo(error => error.References.Count() == 1);
+            verificationMessages.Should().OnlyContain(error => error.References.Count() == 1);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_type_Roster () =>
-            verificationMessages.ShouldEachConformTo(error => error.References.First().Type == QuestionnaireVerificationReferenceType.Roster);
+            verificationMessages.Should().OnlyContain(error => error.References.First().Type == QuestionnaireVerificationReferenceType.Roster);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroup1Id () =>
-            verificationMessages.ElementAt(0).References.First().Id.ShouldEqual(rosterGroup1Id);
+            verificationMessages.ElementAt(0).References.First().Id.Should().Be(rosterGroup1Id);
 
         [NUnit.Framework.Test] public void should_return_message_reference_with_id_of_rosterGroup2Id () =>
-            verificationMessages.ElementAt(1).References.First().Id.ShouldEqual(rosterGroup2Id);
+            verificationMessages.ElementAt(1).References.First().Id.Should().Be(rosterGroup2Id);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

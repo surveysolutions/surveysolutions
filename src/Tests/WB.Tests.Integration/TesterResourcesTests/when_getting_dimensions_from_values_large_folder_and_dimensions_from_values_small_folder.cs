@@ -1,5 +1,5 @@
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace WB.Tests.Integration.TesterResourcesTests
@@ -15,7 +15,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
 
         [Test]
         public void should_return_same_dimensions_from_both_folders() =>
-            largeDevicesDimensions.ShouldContainOnly(smallDevicesDimensions);
+            largeDevicesDimensions.Should().BeEquivalentTo(smallDevicesDimensions);
 
         private static string[] largeDevicesDimensions;
         private static string[] smallDevicesDimensions;

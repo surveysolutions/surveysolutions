@@ -188,9 +188,6 @@
   <data name="Tooltip_Table_Assignment" xml:space="preserve">
     <value>用于标记任务所属访谈的标识。点击排序按钮以任务编号进行排序。</value>
   </data>
-  <data name="Tooltip_Table_HasErrors" xml:space="preserve">
-    <value>访谈是否有至少一个验证性错误的指示器。“是”表示只要有一个错误， “-” 表示没有错误。点击排序按钮以出现的错误进行排序。</value>
-  </data>
   <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
     <value>点击这里显示或隐藏识别型问题。隐藏识别型问题可能为其它信息提供更多的空间。显示识别型问题可能可以提供更多的识别细节</value>
   </data>
@@ -211,5 +208,11 @@
   </data>
   <data name="Tooltip_Table_Status" xml:space="preserve">
     <value>调研工作流程中的访谈状态。点击排序按钮以状态进行排序。</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>显示问卷中无效问题和静态文本的总数。同一个问题下多个验证失败的条件将被计为1。</value>
   </data>
 </root>

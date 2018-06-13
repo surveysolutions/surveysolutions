@@ -1,6 +1,5 @@
 using System;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 
@@ -19,7 +18,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
         private void BecauseOf() => questionnaire.AddLookupTable(addLookupTable);
 
         [NUnit.Framework.Test] public void should_contains_lookuptable_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.LookupTables.ShouldContain(t => t.Key == lookupTableId);
+            questionnaire.QuestionnaireDocument.LookupTables.Keys.Should().Contain(t => t == lookupTableId);
 
 
         private static AddLookupTable addLookupTable;

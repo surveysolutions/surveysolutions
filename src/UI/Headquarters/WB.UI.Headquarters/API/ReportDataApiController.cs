@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
     [ApiNoCache]
     public partial class ReportDataApiController : BaseApiController
     {
-        const int MaxPageSize = 1024;
+        const int MaxPageSize = 50000;
 
         private readonly ITeamsAndStatusesReport teamsAndStatusesReport;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;

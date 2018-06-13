@@ -1,6 +1,4 @@
 using System;
-using System.Linq.Expressions;
-using Machine.Specifications;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -12,7 +10,6 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 {
-    [Subject(typeof(StatefulInterview))]
     [TestOf(typeof(StatefulInterview))]
     internal class StatefulInterviewTestsContext
     {

@@ -24,20 +24,23 @@ namespace WB.UI.Tester.ServiceLocation
             var basePath = Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.Personal))
                ? Environment.GetFolderPath(Environment.SpecialFolder.Personal)
                : AndroidPathUtils.GetPathToExternalDirectory();
-            ContainerBuilder builder = new ContainerBuilder();
-            builder.RegisterModule(new NcqrsModule().AsAutofac());
-            builder.RegisterModule(new InfrastructureModuleMobile().AsAutofac());
-            builder.RegisterModule(new DataCollectionSharedKernelModule().AsAutofac());
-            builder.RegisterModule(new TesterBoundedContextModule().AsAutofac());
-            builder.RegisterModule(new TesterInfrastructureModule(basePath).AsAutofac());
-            builder.RegisterModule(new EnumeratorUIModule().AsAutofac());
-            builder.RegisterModule(new TesterUIModule().AsAutofac());
-            builder.RegisterModule(new EnumeratorSharedKernelModule().AsAutofac());
 
-            var container = builder.Build();
+            AutofacKernel kernel = new AutofacKernel();
 
-            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-            return new MvxIoCProvider(container);
+            kernel.Load(
+                new NcqrsModule(),
+                new InfrastructureModuleMobile(),
+                new DataCollectionSharedKernelModule(),
+                new TesterBoundedContextModule(),
+                new TesterInfrastructureModule(basePath),
+                new EnumeratorUIModule(),
+                new TesterUIModule(),
+                new EnumeratorSharedKernelModule()
+                );
+
+            kernel.Init().Wait();
+
+            return new MvxIoCProvider(kernel.Container);
         }
     }
 }

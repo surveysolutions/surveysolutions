@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQuestionViewModelTests
 {
     internal class when_linked_options_chagned : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkSourceQuestionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
@@ -42,14 +41,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
                && _.Options == new List<RosterVector> { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) });
 
             interview.GetLinkedSingleOptionQuestion(linkedQuestionId).Returns(newAnswer);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
+        public void BecauseOf() => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
         {
             new ChangedLinkedOptions(linkedQuestionId, new[] { Create.Entity.RosterVector(1), Create.Entity.RosterVector(2) }),
         }));
 
-        It should_replace_answer_title_from_add_provided_by_event_options_to_self = () => viewModel.Options.Count.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_replace_answer_title_from_add_provided_by_event_options_to_self () => viewModel.Options.Count.Should().Be(2);
 
         static SingleOptionLinkedQuestionViewModel viewModel;
         static Identity linkSourceQuestionId;

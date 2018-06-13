@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -13,12 +13,12 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_3_level_nested_rosters_are_triggered_by_same_yesno_question_and_answer_is_has_1_option : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -92,36 +92,36 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        It should_add_3_rosters = () =>
-            results.CountOfAddedInstances.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_add_3_rosters () =>
+            results.CountOfAddedInstances.Should().Be(3);
 
-        It should_add_first_level_roster_with_intstance_is_20 = () =>
-            results.Roster1_20_Added.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_add_first_level_roster_with_intstance_is_20 () =>
+            results.Roster1_20_Added.Should().BeTrue();
 
-        It should_add_second_level_roster_with_intstance_is_20 = () =>
-           results.Roster2_20_20_Added.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_add_second_level_roster_with_intstance_is_20 () =>
+           results.Roster2_20_20_Added.Should().BeTrue();
 
-        It should_add_third_level_roster_with_intstance_is_20 = () =>
-           results.Roster3_20_20_20_Added.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_add_third_level_roster_with_intstance_is_20 () =>
+           results.Roster3_20_20_20_Added.Should().BeTrue();
 
-        It should_remove_3_rosters = () =>
-            results.CountOfRemovedInstances.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_remove_3_rosters () =>
+            results.CountOfRemovedInstances.Should().Be(3);
 
-        It should_remove_first_level_roster_with_intstance_is_30 = () =>
-            results.Roster1_30_Removed.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_first_level_roster_with_intstance_is_30 () =>
+            results.Roster1_30_Removed.Should().BeTrue();
 
-        It should_remove_second_level_roster_with_intstance_is_30 = () =>
-           results.Roster2_30_30_Removed.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_second_level_roster_with_intstance_is_30 () =>
+           results.Roster2_30_30_Removed.Should().BeTrue();
 
-        It should_remove_third_level_roster_with_intstance_is_30 = () =>
-           results.Roster3_30_30_30_Removed.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_remove_third_level_roster_with_intstance_is_30 () =>
+           results.Roster3_30_30_30_Removed.Should().BeTrue();
 
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

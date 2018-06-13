@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -46,13 +45,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.Verify(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_WB0200_message () =>
-            verificationMessages.Count(x => x.Code == "WB0200").ShouldEqual(1);
+            verificationMessages.Count(x => x.Code == "WB0200").Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_Warning_level () =>
-            verificationMessages.First(x => x.Code == "WB0200").MessageLevel.ShouldEqual(VerificationMessageLevel.Warning);
+            verificationMessages.First(x => x.Code == "WB0200").MessageLevel.Should().Be(VerificationMessageLevel.Warning);
 
         [NUnit.Framework.Test] public void should_return_message_with_no_references () =>
-            verificationMessages.First(x => x.Code == "WB0200").References.Count().ShouldEqual(0);
+            verificationMessages.First(x => x.Code == "WB0200").References.Count().Should().Be(0);
 
         static QuestionnaireDocument questionnaire;
         static QuestionnaireVerifier verifier;

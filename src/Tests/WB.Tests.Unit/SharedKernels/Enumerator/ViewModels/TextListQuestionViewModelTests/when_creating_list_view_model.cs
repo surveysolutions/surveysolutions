@@ -1,33 +1,32 @@
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
     internal class when_creating_list_view_model : TextListQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
-            
-        };
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             listModel = CreateTextListQuestionViewModel(
             questionStateViewModel: QuestionStateMock.Object,
             answering: AnsweringViewModelMock.Object);
 
-        It should_set_QuestionState_with_non_null_value = () =>
-            listModel.QuestionState.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_set_QuestionState_with_non_null_value () =>
+            listModel.QuestionState.Should().NotBeNull();
 
-        It should_set_Answering_with_non_null_value = () =>
-            listModel.Answering.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_set_Answering_with_non_null_value () =>
+            listModel.Answering.Should().NotBeNull();
 
-        It should_set_Answers_with_non_null_value = () =>
-            listModel.Answers.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_set_Answers_with_non_null_value () =>
+            listModel.Answers.Should().NotBeNull();
 
         static TextListQuestionViewModel listModel;
 

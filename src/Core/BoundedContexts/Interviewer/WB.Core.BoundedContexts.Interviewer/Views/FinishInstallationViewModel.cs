@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -16,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class FinishInstallationViewModel : BaseViewModel
+    public class FinishInstallationViewModel : BaseViewModel<FinishInstallationViewModelArg>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IPasswordHasher passwordHasher;
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
+        private const string StateKey = "interviewerIdentity";
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -46,54 +48,54 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.userInteractionService = userInteractionService;
         }
 
-        public override bool IsAuthenticationRequired => false;
+        protected override bool IsAuthenticationRequired => false;
 
         private string endpoint;
         public string Endpoint
         {
-            get { return this.endpoint; }
+            get => this.endpoint;
             set { this.endpoint = value; RaisePropertyChanged(); }
         }
 
         private string userName;
         public string UserName
         {
-            get { return this.userName; }
+            get => this.userName;
             set { this.userName = value; RaisePropertyChanged(); }
         }
 
         private string password;
         public string Password
         {
-            get { return this.password; }
+            get => this.password;
             set { this.password = value; RaisePropertyChanged(); }
         }
 
         private bool isEndpointValid;
         public bool IsEndpointValid
         {
-            get { return this.isEndpointValid; }
+            get => this.isEndpointValid;
             set { this.isEndpointValid = value; RaisePropertyChanged(); }
         }
 
         private bool isUserValid;
         public bool IsUserValid
         {
-            get { return this.isUserValid; }
+            get => this.isUserValid;
             set { this.isUserValid = value; RaisePropertyChanged(); }
         }
 
         private string errorMessage;
         public string ErrorMessage
         {
-            get { return this.errorMessage; }
+            get => this.errorMessage;
             set { this.errorMessage = value; RaisePropertyChanged(); }
         }
 
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
+            get => this.isInProgress;
             set { this.isInProgress = value; RaisePropertyChanged(); }
         }
 
@@ -103,26 +105,43 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
         }
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>());
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
-        private InterviewerIdentity userIdentity;
-        public void Init(InterviewerIdentity userIdentity)
+        public override void Prepare(FinishInstallationViewModelArg parameter)
         {
-            this.userIdentity = userIdentity;
+            this.UserName = parameter.UserName;
         }
 
-        public override void Load()
+        public override Task Initialize()
         {
             this.IsUserValid = true;
             this.IsEndpointValid = true;
             this.Endpoint =  this.interviewerSettings.Endpoint;
-            this.UserName = this.userIdentity.Name;
 
 #if DEBUG
             this.Endpoint = "http://192.168.88./headquarters";
             this.UserName = "int";
             this.Password = "1";
 #endif
+            return Task.CompletedTask;
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            if (this.UserName != null)
+            {
+                bundle.Data[StateKey] = this.userName;
+            }
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle state)
+        {
+            base.ReloadFromBundle(state);
+            if (state.Data.ContainsKey(StateKey))
+            {
+                this.UserName = state.Data[StateKey];
+            }
         }
 
         public async Task RefreshEndpoint()
@@ -195,8 +214,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 
                 this.interviewersPlainStorage.Store(interviewerIdentity);
 
-                this.principal.SignIn(restCredentials.Login, this.Password, true);
-                await this.viewModelNavigationService.NavigateToDashboard();
+                this.Principal.SignIn(restCredentials.Login, this.Password, true);
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
             }
             catch (SynchronizationException ex)
             {
@@ -231,7 +250,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
 
             if (isNeedNavigateToRelinkPage)
-                this.viewModelNavigationService.NavigateTo<RelinkDeviceViewModel>(interviewerIdentity);
+                await this.viewModelNavigationService.NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(new RelinkDeviceViewModelArg{ Identity = interviewerIdentity});
         }
 
         public void CancellInProgressTask()

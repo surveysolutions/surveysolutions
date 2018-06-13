@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTemplate;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
@@ -32,17 +32,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
-        private readonly IInterviewImportService importService;
+        private readonly IAssignmentsImportService importService;
         private readonly IAuditLog auditLog;
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
 
+        IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
+
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
             ITranslationManagementService translations,
-            IInterviewImportService importService,
+            IAssignmentsImportService importService,
             IAuditLog auditLog)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
@@ -103,14 +105,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity);
 
-                var isAssignmentImportIsGoing = importService.Status.IsInProgress &&
-                                                importService.Status.QuestionnaireId.Equals(questionnaireIdentity);
+                var assignmentsImportStatus = plainTransactionManager.ExecuteInPlainTransaction(() => this.importService.GetImportStatus());
+
+                var isAssignmentImportIsGoing = assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
+                                                assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
 
                 if (!isAssignmentImportIsGoing)
                 {
                     this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
-
-                    IPlainTransactionManager plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
                     plainTransactionManager.ExecuteInPlainTransaction(() =>
                         this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,

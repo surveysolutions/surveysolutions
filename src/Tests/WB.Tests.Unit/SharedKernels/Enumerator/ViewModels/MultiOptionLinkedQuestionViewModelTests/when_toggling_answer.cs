@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -10,14 +9,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQuestionViewModelTests
 {
     internal class when_toggling_answer : MultiOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             Guid userId = Guid.Parse("77777777777777777777777777777777");
@@ -42,15 +40,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             questionViewModel = CreateViewModel(interviewRepository: interviews, questionnaireStorage: questionnaires, answering:answering.Object);
             questionViewModel.Init("interviewId", questionId, Create.Other.NavigationState());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             questionViewModel.Options.First().Checked = true;
             questionViewModel.ToggleAnswerAsync(questionViewModel.Options.First()).WaitAndUnwrapException();
-        };
+        }
 
-        It should_send_command_with_selected_roster_vectors = () =>
+        [NUnit.Framework.Test] public void should_send_command_with_selected_roster_vectors () =>
             answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
                 c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.Identical(questionViewModel.Options.First().Value)))));
 

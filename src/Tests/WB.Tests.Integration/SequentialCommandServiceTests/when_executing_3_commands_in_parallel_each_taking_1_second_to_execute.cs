@@ -1,17 +1,17 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
+using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.SequentialCommandServiceTests
 {
-    [Machine.Specifications.Ignore("Test always fails. ")]
+    [Ignore("Test always fails. ")]
     internal class when_executing_3_commands_in_parallel_each_taking_1_second_to_execute
     {
         private class WorkAbout1Second : ICommand { public Guid CommandIdentifier { get; private set; } }
@@ -24,8 +24,7 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .Handles<WorkAbout1Second>(_ => aggregateId, aggregate => aggregate.WorkAbout1Second);
@@ -34,9 +33,10 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 => _.GetLatest(typeof(Aggregate), aggregateId) == new Aggregate());
 
             commandService = IntegrationCreate.SequentialCommandService(repository: repository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             var startTime = DateTime.Now;
 
@@ -46,10 +46,10 @@ namespace WB.Tests.Integration.SequentialCommandServiceTests
                 commandService.ExecuteAsync(new WorkAbout1Second(), null, CancellationToken.None));
 
             timeSpent = DateTime.Now - startTime;
-        };
+        }
 
-        It should_take_more_than_3_seconds_to_execute = () =>
-            timeSpent.TotalMilliseconds.ShouldBeGreaterThan(3000);
+        [NUnit.Framework.Test] public void should_take_more_than_3_seconds_to_execute () =>
+            timeSpent.TotalMilliseconds.Should().BeGreaterThan(3000);
 
         private static SequentialCommandService commandService;
         private static Guid aggregateId = Guid.NewGuid(); // ensure random ID to prevent collisions by NamedLock

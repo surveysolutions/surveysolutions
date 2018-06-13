@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -28,10 +27,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
         [NUnit.Framework.Test] public void should_return_messages_with_codes__WB0259 () =>
-            verificationMessages.Select(message => message.Code).ShouldContain("WB0259");
+            verificationMessages.Select(message => message.Code).Should().Contain("WB0259");
 
         [NUnit.Framework.Test] public void should_return_messages_with_translation_name () =>
-            verificationMessages.Single(message => message.Code == "WB0259").Message.ShouldContain("normal name");
+            verificationMessages.Single(message => message.Code == "WB0259").Message.Should().Contain("normal name");
 
 
         private static QuestionnaireDocument questionnaire;

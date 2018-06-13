@@ -43,8 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
         protected override string CreateApplicationFolder() => string.Empty;
 
-        protected override string CreateFolder(string applicatioFolder, string folderName) => $"/{folderName}";
-
+        protected override string CreateFolder(string applicationFolder, string folderName) => $"/{folderName}";
 
         protected override void UploadFile(string folder, byte[] fileContent, string fileName) 
             => this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"), new MemoryStream(fileContent)).WaitAndUnwrapException();

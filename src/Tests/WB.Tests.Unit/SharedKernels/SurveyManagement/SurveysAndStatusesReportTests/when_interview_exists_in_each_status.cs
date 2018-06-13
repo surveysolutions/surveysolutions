@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
@@ -14,8 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
 {
     internal class when_interview_exists_in_each_status : SurveysAndStatusesReportTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             List<InterviewSummary> interviews = new List<InterviewSummary>()
             {
@@ -32,23 +31,24 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement
             interviews.ForEach(summary => interviewsReader.Store(summary, Guid.NewGuid().FormatGuid()));
 
             reportFactory = CreateSurveysAndStatusesReport(interviewsReader);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => report = reportFactory.Load(new SurveysAndStatusesReportInputModel());
+        public void BecauseOf() => report = reportFactory.Load(new SurveysAndStatusesReportInputModel());
 
-        It should_return_7_in_total_count = () => report.Items.First().TotalCount.ShouldEqual(7);
+        [NUnit.Framework.Test] public void should_return_7_in_total_count () => report.Items.First().TotalCount.Should().Be(7);
 
-        It should_return_1_in_each_status = () =>
+        [NUnit.Framework.Test] public void should_return_1_in_each_status ()
         {
             HeadquarterSurveysAndStatusesReportLine first = report.Items.First();
-            first.SupervisorAssignedCount.ShouldEqual(1);
-            first.InterviewerAssignedCount.ShouldEqual(1);
-            first.CompletedCount.ShouldEqual(1);
-            first.ApprovedBySupervisorCount.ShouldEqual(1);
-            first.RejectedBySupervisorCount.ShouldEqual(1);
-            first.RejectedByHeadquartersCount.ShouldEqual(1);
-            first.ApprovedByHeadquartersCount.ShouldEqual(1);
-        };
+            first.SupervisorAssignedCount.Should().Be(1);
+            first.InterviewerAssignedCount.Should().Be(1);
+            first.CompletedCount.Should().Be(1);
+            first.ApprovedBySupervisorCount.Should().Be(1);
+            first.RejectedBySupervisorCount.Should().Be(1);
+            first.RejectedByHeadquartersCount.Should().Be(1);
+            first.ApprovedByHeadquartersCount.Should().Be(1);
+        }
 
         static SurveysAndStatusesReport reportFactory;
         static SurveysAndStatusesReportView report;

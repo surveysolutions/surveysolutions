@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -92,55 +92,55 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.ReplaceTextHanderTests
         private void BecauseOf() => questionnaire.ReplaceTexts(command);
 
         [NUnit.Framework.Test] public void should_replace_title_of_static_text () => 
-            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().ShouldEqual($"static text title with {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).GetTitle().Should().Be($"static text title with {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_enablement_condition_of_static_text () => 
-            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ConditionExpression.ShouldEqual($"static text enablement {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ConditionExpression.Should().Be($"static text enablement {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_validation_condition_of_static_text () =>
-            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ValidationConditions.First().Expression.ShouldEqual($"st validation exp {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ValidationConditions.First().Expression.Should().Be($"st validation exp {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_validation_message_of_static_text () =>
-            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ValidationConditions.First().Message.ShouldEqual($"st validation msg {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<StaticText>(staticTextId).ValidationConditions.First().Message.Should().Be($"st validation msg {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_title_of_question () => 
-            questionnaire.QuestionnaireDocument.Find<IComposite>(questionId).GetTitle().ShouldEqual($"question title with {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IComposite>(questionId).GetTitle().Should().Be($"question title with {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_enablement_condition_of_question () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ConditionExpression.ShouldEqual($"question enablement {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ConditionExpression.Should().Be($"question enablement {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_validation_condition_of_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ValidationConditions.First().Expression.ShouldEqual($"q validation exp {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ValidationConditions.First().Expression.Should().Be($"q validation exp {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_validation_message_of_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ValidationConditions.First().Message.ShouldEqual($"q validation msg {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ValidationConditions.First().Message.Should().Be($"q validation msg {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_title_of_group () => 
-            questionnaire.QuestionnaireDocument.Find<IComposite>(groupId).GetTitle().ShouldEqual($"group title with {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IComposite>(groupId).GetTitle().Should().Be($"group title with {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_enablement_condition_of_group () => 
-            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ConditionExpression.ShouldEqual($"group enablement {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IGroup>(groupId).ConditionExpression.Should().Be($"group enablement {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_content_of_macro () =>
-            questionnaire.QuestionnaireDocument.Macros[macroId].Content.ShouldEqual($"macro content {replaceWith}");
+            questionnaire.QuestionnaireDocument.Macros[macroId].Content.Should().Be($"macro content {replaceWith}");
 
         [NUnit.Framework.Test] public void should_repalce_variable_expressions () => 
-            questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.ShouldEqual($"var expression {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Expression.Should().Be($"var expression {replaceWith}");
 
         [NUnit.Framework.Test] public void should_repalce_variable_lablel () =>
-        questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Label.ShouldEqual($"label {replaceWith}");
+        questionnaire.QuestionnaireDocument.Find<IVariable>(variableId).Label.Should().Be($"label {replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_variable_names () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.ShouldEqual($"var_{replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).StataExportCaption.Should().Be($"var_{replaceWith}");
 
         [NUnit.Framework.Test] public void should_replace_option_text () => 
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.ShouldEqual($"answer with {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId1).Answers.First().AnswerText.Should().Be($"answer with {replaceWith}");
 
         [NUnit.Framework.Test] public void should_record_number_of_affected_entities () => 
-            questionnaire.GetLastReplacedEntriesCount().ShouldEqual(7);
+            questionnaire.GetLastReplacedEntriesCount().Should().Be(7);
 
         [NUnit.Framework.Test] public void should_replace_text_in_attachment_name () => 
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(staticTextWithAttachmentId).AttachmentName.ShouldEqual($"attachment {replaceWith}");
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(staticTextWithAttachmentId).AttachmentName.Should().Be($"attachment {replaceWith}");
 
         static Guid chapterId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         static Questionnaire questionnaire;

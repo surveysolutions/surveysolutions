@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Enumerator.Native.WebInterview
 {
@@ -12,5 +13,7 @@ namespace WB.Enumerator.Native.WebInterview
         IReadOnlyCollection<int> GetTopBrokenPackageIdsAllowedToReprocess(int count);
 
         void ReprocessSelectedBrokenPackages(int[] packageIds);
+
+        void PutReason(int[] packageIds, InterviewDomainExceptionType requestErrorType);
     }
 }

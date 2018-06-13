@@ -246,4 +246,7 @@
   <data name="UserIsLockedByHq" xml:space="preserve">
     <value>User is locked by Headquarter</value>
   </data>
+  <data name="MandatoryField" xml:space="preserve">
+    <value>This field is mandatory</value>
+  </data>
 </root>

@@ -1,16 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
 
@@ -18,8 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_two_nested_rosters_linked_to_the_same_list_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
@@ -52,11 +46,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.AnswerTextListQuestion(userId, questionId, Empty.RosterVector, DateTime.Now, new[] { Tuple.Create(1m, "one") });
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () => interview.AnswerTextListQuestion(userId, questionId,Empty.RosterVector, DateTime.Now, new[] {Tuple.Create(1m, "one1")});
+        public void BecauseOf() => interview.AnswerTextListQuestion(userId, questionId,Empty.RosterVector, DateTime.Now, new[] {Tuple.Create(1m, "one1")});
 
-        It should_raise_roster_title_changed = () => 
+        [NUnit.Framework.Test] public void should_raise_roster_title_changed () => 
             eventContext.ShouldContainEvent<RosterInstancesTitleChanged>(x => x.ChangedInstances.Second().RosterInstance.OuterRosterVector.Identical(new []{1m}));
 
         static Guid userId;

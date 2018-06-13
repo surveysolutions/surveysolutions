@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
-
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.SharedKernels.QuestionnaireEntities;
-using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Tests.Unit.Designer
 {

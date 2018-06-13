@@ -1,12 +1,11 @@
 using System;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.API.PublicApi;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
@@ -21,7 +20,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private void BecauseOf() => result = controller.CancelProcess(questionnaireIdentity.ToString(), DataExportFormat.Tabular);
 
         [NUnit.Framework.Test] public void should_return_http_ok_response () =>
-            result.ShouldBeOfExactType<OkResult>();
+            result.Should().BeOfType<OkResult>();
 
         [NUnit.Framework.Test] public void should_call_add_export_method_in_data_export_processes_service () =>
             mockOfDataExportProcessesService.Verify(x=>x.DeleteDataExport(Moq.It.IsAny<string>()), Times.Once);

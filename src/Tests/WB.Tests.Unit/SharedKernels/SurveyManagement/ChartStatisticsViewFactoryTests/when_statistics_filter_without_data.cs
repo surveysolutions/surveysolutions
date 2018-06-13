@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -61,16 +61,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ChartStatisticsViewFactor
         public void Because() => view = chartStatisticsViewFactory.Load(input);
 
         [Test]
-        public void should_have_7_lines() => view.Lines.Length.ShouldEqual(7);
+        public void should_have_7_lines() => view.Lines.Length.Should().Be(7);
 
         [Test]
-        public void should_each_line_has_2_days_inside() => view.Lines.ShouldEachConformTo(line => line.Length == 2);
+        public void should_each_line_has_2_days_inside() => view.Lines.Should().OnlyContain(line => line.Length == 2);
 
         [Test]
-        public void should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1() => view.Lines.ShouldEachConformTo(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[0][1] == 1);
+        public void should_each_line_has_first_record_equal_to_from_date_and_with_count_equal_to_1() => view.Lines.Should().OnlyContain(line => line[0][0].ToString() == baseDate.AddDays(-2).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[0][1] == 1);
 
         [Test]
-        public void should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1() => view.Lines.ShouldEachConformTo(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[1][1] == 1);
+        public void should_each_line_has_second_record_equal_to_to_date_and_with_count_equal_to_1() => view.Lines.Should().OnlyContain(line => line[1][0].ToString() == baseDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) && (int)line[1][1] == 1);
 
         private static ChartStatisticsViewFactory chartStatisticsViewFactory;
         private static ChartStatisticsInputModel input;

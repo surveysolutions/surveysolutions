@@ -1,8 +1,9 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.FileSystem;
@@ -11,14 +12,13 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_cloning_questionnaire_and_new_title_equals_to_roster_variable_name : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException_containing_specific_words () {
             QuestionnaireDocument questionnaireDocument = Create.Entity.QuestionnaireDocument(children: new IComposite[]
             {
                 Create.Entity.Roster(variable: rosterVariableName),
@@ -40,18 +40,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
                 questionnaireStorage: plainQuestionnaireRepository,
                 fileSystemAccessor: fileSystemAccessor);
-        };
 
-        Because of = () =>
-            questionnaireException = Catch.Only<QuestionnaireException>(() =>
+            var questionnaireException = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(
                     questionnaireIdentity: questionnaireIdentity, newTitle: rosterVariableName)));
+            questionnaireException.Message.ToLower().ToSeparateWords().Should().Contain("title", "roster");
+            questionnaireException.Message.Should().Contain(rosterVariableName);
 
-        It should_throw_QuestionnaireException_containing_specific_words = () =>
-            questionnaireException.Message.ToLower().ToSeparateWords().ShouldContain("title", "roster");
-
-        It should_throw_QuestionnaireException_containing_roster_variable_name = () =>
-            questionnaireException.Message.ShouldContain(rosterVariableName);
+        }
 
         private static QuestionnaireException questionnaireException;
         private static Questionnaire questionnaire;

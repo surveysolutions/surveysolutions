@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected Guid interviewId;
         protected NavigationState navigationState;
 
-        public virtual void Init(string interviewId, NavigationState navigationState)
+        public virtual void Configure(string interviewId, NavigationState navigationState)
         {
             this.navigationState = navigationState;
             this.interviewId = Guid.Parse(interviewId);
@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private async Task StartInterviewAsync()
         {
             await this.commandService.WaitPendingCommandsAsync();
-            this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
+            await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
         }
     }
 }

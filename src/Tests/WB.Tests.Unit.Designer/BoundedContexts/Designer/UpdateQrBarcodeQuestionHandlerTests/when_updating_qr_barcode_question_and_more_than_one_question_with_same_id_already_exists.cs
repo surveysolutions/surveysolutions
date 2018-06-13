@@ -1,21 +1,20 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Exceptions;
-
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestionHandlerTests
 {
     internal class when_updating_qr_barcode_question_and_more_than_one_question_with_same_id_already_exists : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
 
             var answers = new List<Answer>() { new Answer() { AnswerCode = 1, AnswerText = "1" }, new Answer() { AnswerCode = 2, AnswerText = "2" } };
@@ -30,11 +29,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
             questionnaire = Create.Questionnaire();
             questionnaire.Initialize(Guid.NewGuid(), questionnaireDoc, null);
             BecauseOf();
-
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "more", "question(s)", "exist" });
         }
 
         private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateQRBarcodeQuestion(
                     new UpdateQRBarcodeQuestion(
                         questionnaire.Id,
@@ -50,13 +49,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateQrBarcodeQuestio
                         responsibleId: responsibleId,
                         scope: QuestionScope.Interviewer,
                         validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>())));
-
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__more__question__exist__ () =>
-             new[] { "more", "question", "exist" }.ShouldEachConformTo(
-                    keyword => exception.Message.ToLower().Contains(keyword));
 
         
         private static Questionnaire questionnaire;

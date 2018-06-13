@@ -1,5 +1,5 @@
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionViewModelTests
 {
     internal class when_initializing_list_view_model_and_there_is_no_answers_in_interview : TextListQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var textListAnswer = Mock.Of<InterviewTreeTextListQuestion>(_ => _.IsAnswered() == false);
 
             var interview = Mock.Of<IStatefulInterview>(_ => _.QuestionnaireId == questionnaireId
@@ -32,19 +31,20 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 AnsweringViewModelMock.Object,
                 interviewRepository: interviewRepository,
                 questionnaireRepository: questionnaireRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             listModel.Init(interviewId, questionIdentity, navigationState);
 
-        It should_initialize_question_state = () =>
+        [NUnit.Framework.Test] public void should_initialize_question_state () =>
             QuestionStateMock.Verify(x => x.Init(interviewId, questionIdentity, navigationState), Times.Once);
 
-        It should_create_empty_list_of_answers = () =>
-            listModel.Answers.OfType<TextListItemViewModel>().Count().ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_create_empty_list_of_answers () =>
+            listModel.Answers.OfType<TextListItemViewModel>().Count().Should().Be(0);
 
-        It should_contain_add_new_item_view_model = () =>
-            listModel.Answers.OfType<TextListAddNewItemViewModel>().ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_contain_add_new_item_view_model () =>
+            listModel.Answers.OfType<TextListAddNewItemViewModel>().Should().NotBeEmpty();
 
         private static TextListQuestionViewModel listModel;
         private static NavigationState navigationState = Create.Other.NavigationState();

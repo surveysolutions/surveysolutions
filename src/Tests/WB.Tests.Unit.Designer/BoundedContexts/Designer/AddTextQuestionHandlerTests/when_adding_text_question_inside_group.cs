@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddTextQuestionHandler
 
         [NUnit.Framework.Test] public void should_contains_Question_with_QuestionId_specified_on_second_place () =>
             questionnaire.QuestionnaireDocument.Find<Group>(chapterId).Children[1]
-                .PublicKey.ShouldEqual(questionId);
+                .PublicKey.Should().Be(questionId);
 
         
         private static Questionnaire questionnaire;
