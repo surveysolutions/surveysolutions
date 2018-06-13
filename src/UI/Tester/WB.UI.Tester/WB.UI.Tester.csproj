@@ -77,6 +77,9 @@
       <HintPath>..\..\..\..\packages\Autofac.4.8.1\lib\netstandard1.1\Autofac.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FastAndroidCamera, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\FastAndroidCamera.2.0.0\lib\MonoAndroid403\FastAndroidCamera.dll</HintPath>
+    </Reference>
     <Reference Include="HockeySDK, Version=5.0.6585.25315, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\HockeySDK.Xamarin.5.1.2\lib\MonoAndroid403\HockeySDK.dll</HintPath>
     </Reference>
@@ -131,10 +134,6 @@
     </Reference>
     <Reference Include="MvvmCross.Plugin.Visibility, Version=6.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.6.0.1\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
-    </Reference>
-    <Reference Include="MWBarcodeScanner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
@@ -250,6 +249,15 @@
     <Reference Include="Xamarin.Android.Support.Vector.Drawable">
       <HintPath>..\..\..\..\packages\Xamarin.Android.Support.Vector.Drawable.27.0.2\lib\MonoAndroid81\Xamarin.Android.Support.Vector.Drawable.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ZXing.Net.Mobile.Core, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.2.4.1\lib\MonoAndroid71\ZXing.Net.Mobile.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.portable, Version=0.16.2.0, Culture=neutral, PublicKeyToken=830ae994e36ac27d, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.2.4.1\lib\MonoAndroid71\zxing.portable.dll</HintPath>
+    </Reference>
+    <Reference Include="ZXingNetMobile, Version=2.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.Mobile.2.4.1\lib\MonoAndroid71\ZXingNetMobile.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
