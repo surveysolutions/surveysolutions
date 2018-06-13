@@ -97,11 +97,33 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             progress.Report(100);
         }
 
+        public void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
+        {
+            var doContent = new DoFile();
+
+            doContent.BuildInsheet(Path.ChangeExtension(this.diagnosticsFileName, this.dataFileExtension));
+            doContent.AppendLine();
+
+            foreach (var exportFileHeader in diagnosticsFileColumns)
+            {
+                if (exportFileHeader.AddCapture)
+                    doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                else
+                    doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+            }
+
+            var fileName = $"{diagnosticsFileName}.{DoFile.ContentFileNameExtension}";
+            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
+
+            this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
+        }
+
+
         private void WriteFileHeader(string commentsFilePath)
         {
-            var commentsHeader = diagnosticsFileColumns.Select(h => h.Title).ToArray();
+            var diagnosticsHeader = diagnosticsFileColumns.Select(h => h.Title).ToArray();
 
-            this.csvWriter.WriteData(commentsFilePath, new[] { commentsHeader }, ExportFileSettings.DataFileSeparator.ToString());
+            this.csvWriter.WriteData(commentsFilePath, new[] { diagnosticsHeader }, ExportFileSettings.DataFileSeparator.ToString());
         }
 
         private List<string[]> QueryDiagnosticsChunkFromReadSide(IEnumerable<Guid> interviewIds)
