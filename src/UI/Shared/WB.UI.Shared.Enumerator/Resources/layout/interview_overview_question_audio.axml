@@ -10,9 +10,13 @@
                style="@style/Overview_Question_Title"
                local:MvxBind="Html Title; TextViewNodeStateTextColor State"/>
     
+    <ImageButton style="@style/Interview_Button"
+                 local:MvxBind="Visible And(IsAnswered, CanBePlayed); Click TogglePlayback; Playback IsPlaying"
+                 local:srcCompat="@drawable/play_icon"/>
+
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                style="@style/Overview_Question_Answer"
-               local:MvxBind="Text Answer; TextViewAnswerStateTextColor State"/>
+               local:MvxBind="Text Answer; TextViewAnswerStateTextColor State; Visible Not(IsAnswered)"/>
     
 </LinearLayout>

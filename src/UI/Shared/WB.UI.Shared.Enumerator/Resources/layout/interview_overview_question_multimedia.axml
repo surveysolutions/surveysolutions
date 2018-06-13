@@ -10,9 +10,12 @@
                style="@style/Overview_Question_Title"
                local:MvxBind="Html Title; TextViewNodeStateTextColor State"/>
     
+    <ImageView style="@style/Overview_Question_Answer_Multimedia"
+               local:MvxBind="Bitmap Image,Converter=InMemoryImageValueWithDefault;Click ShowPhotoView; Visible IsAnswered "/>
+
     <TextView  android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                style="@style/Overview_Question_Answer"
-               local:MvxBind="Text Answer; TextViewAnswerStateTextColor State"/>
+               local:MvxBind="Text Answer; TextViewAnswerStateTextColor State; Visible Not(IsAnswered)"/>
     
 </LinearLayout>

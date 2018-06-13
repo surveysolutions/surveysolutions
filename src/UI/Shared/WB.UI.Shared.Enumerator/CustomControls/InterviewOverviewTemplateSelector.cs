@@ -18,6 +18,8 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                 {typeof(OverviewGroup), Resource.Layout.interview_overview_group},
                 {typeof(OverviewStaticText), Resource.Layout.interview_overview_statictext},
                 {typeof(OverviewSection), Resource.Layout.interview_overview_section},
+                {typeof(OverviewMultimediaQuestionViewModel), Resource.Layout.interview_overview_question_multimedia},
+                {typeof(OverviewAudioQuestionViewModel), Resource.Layout.interview_overview_question_audio},
             };
         }
 
