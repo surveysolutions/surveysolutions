@@ -1,10 +1,14 @@
 ﻿@using Humanizer
 @using Main.Core.Entities.SubEntities
+@using Newtonsoft.Json
 @using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.SharedKernels.DataCollection.ValueObjects
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Headquarters.Code
+@using WB.Core.SharedKernels.DataCollection.ValueObjects;
 @model WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles.InterviewerProfileModel
 
 @{
@@ -12,6 +16,8 @@
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
     ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.InterviewerName);
     var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+
+    var qRCodeHelper = ServiceLocator.Current.GetInstance<IQRCodeHelper>();
 }
 @helper ConnectionType(InterviewerProfileSyncStatistics syncInfo)
 {
@@ -145,7 +151,13 @@
                     <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
                     <div class="description">@Pages.InterviewerProfile_Approved</div>
                 </div>
-            </div>
+                @if (qRCodeHelper.SupportQRCodeGeneration())
+                {
+                    <img id="download-qr" alt="QR Code" width="250" height="250" 
+                         src="@qRCodeHelper.GetQRCodeAsBase64StringSrc(JsonConvert.SerializeObject((new FinishInstallationInfo(){Url = qRCodeHelper.GetBaseUrl(), Login = Model.InterviewerName})), 250, 250)"/>
+                }
+                </div>
+
         </div>
     </div>
 </div>
