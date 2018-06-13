@@ -16,19 +16,22 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly CommentsExporter commentsExporter;
         private readonly IInterviewErrorsExporter interviewErrorsExporter;
+        private readonly DiagnosticsExporter diagnosticsExporter;
 
         public StataEnvironmentContentService(
             IFileSystemAccessor fileSystemAccessor, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
             InterviewActionsExporter interviewActionsExporter,
             CommentsExporter commentsExporter,
-            IInterviewErrorsExporter interviewErrorsExporter)
+            IInterviewErrorsExporter interviewErrorsExporter,
+            DiagnosticsExporter diagnosticsExporter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
             this.interviewActionsExporter = interviewActionsExporter;
             this.commentsExporter = commentsExporter;
             this.interviewErrorsExporter = interviewErrorsExporter;
+            this.diagnosticsExporter = diagnosticsExporter;
         }
 
 
@@ -48,6 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             interviewActionsExporter.ExportActionsDoFile(folderPath);
             commentsExporter.ExportCommentsDoFile(questionnaireExportStructure, folderPath);
             interviewErrorsExporter.WriteDoFile(questionnaireExportStructure, folderPath);
+            diagnosticsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
         }
 
         private void CreateContentOfAdditionalFile(QuestionnaireLevelLabels questionnaireLevelLabels, string dataFileName, string basePath)

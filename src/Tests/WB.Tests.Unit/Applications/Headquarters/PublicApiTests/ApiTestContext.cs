@@ -76,7 +76,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
                 questionnaireStorage: questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 commandService: commandService ?? Mock.Of<ICommandService>(),
                 authorizedUser: authorizedUser ?? Mock.Of<IAuthorizedUser>(),
-                statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>());
+                statefullInterviewSearcher: statefullInterviewSearcher ?? Mock.Of<IStatefullInterviewSearcher>(),
+                diagnosticsFactory: Mock.Of<IInterviewDiagnosticsFactory>());
 
 
             controller.Request = new HttpRequestMessage(method: HttpMethod.Post, requestUri: "https://localhost");
