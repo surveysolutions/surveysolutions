@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private readonly IInterviewExpressionStorage expressionStorage;
         private readonly IQuestionnaire questionnaire;
         private readonly Identity questionnaireIdentity;
-        private readonly bool removeLinkedAnswers;
+        private readonly bool updateLinkedAnswers;
 
         readonly HashSet<Identity> disabledNodes = new HashSet<Identity>();
         private readonly ConcurrentDictionary<Identity, IInterviewLevel> memoryCache = new ConcurrentDictionary<Identity, IInterviewLevel>();
@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.expressionStorage = expressionStorage;
             this.questionnaire = questionnaire;
             this.questionnaireIdentity = new Identity(questionnaire.QuestionnaireId, RosterVector.Empty);
-            this.removeLinkedAnswers = removeLinkedAnswers;
+            this.updateLinkedAnswers = removeLinkedAnswers;
         }
 
         public void UpdateEnablement(IInterviewTreeNode entity)
@@ -239,7 +239,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                         options.Add(optionAndParent.Option);
                 }
             }
-            question.UpdateLinkedOptionsAndResetAnswerIfNeeded(options.ToArray(), this.removeLinkedAnswers);
+            question.UpdateLinkedOptionsAndUpdateAnswerIfNeeded(options.ToArray(), this.updateLinkedAnswers);
         }
 
         public void UpdateLinkedToListQuestion(InterviewTreeQuestion question)
@@ -247,7 +247,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (this.IsParentDiabled(question))
                 return;
 
-            question.CalculateLinkedToListOptions(this.removeLinkedAnswers);
+            question.CalculateLinkedToListOptions(this.updateLinkedAnswers);
         }
 
         public void UpdateRoster(InterviewTreeRoster roster)
@@ -385,6 +385,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             try
             {
                 return expression == null || expression();
+            }
+            catch (TypeLoadException)
+            {
+                throw;
             }
             catch
             {

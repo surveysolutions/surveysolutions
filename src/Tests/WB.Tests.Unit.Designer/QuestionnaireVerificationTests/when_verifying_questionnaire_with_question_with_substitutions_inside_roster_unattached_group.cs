@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
@@ -59,13 +56,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_2_references_on_questions () =>
             verificationMessages.GetError("WB0019")
                 .References.ToList()
-                .ForEach(question => question.Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question));
+                .ForEach(question => question.Type.Should().Be(QuestionnaireVerificationReferenceType.Question));
 
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_first_reference_to_question_with_substitution_text () =>
-            verificationMessages.GetError("WB0019").References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsId);
+            verificationMessages.GetError("WB0019").References.ElementAt(0).Id.Should().Be(questionWithSubstitutionsId);
 
         [NUnit.Framework.Test] public void should_return_WB0019_error_with_second_reference_to_question_that_used_as_substitution_question () =>
-            verificationMessages.GetError("WB0019").References.ElementAt(1).Id.ShouldEqual(underDeeperRosterLevelQuestionId);
+            verificationMessages.GetError("WB0019").References.ElementAt(1).Id.Should().Be(underDeeperRosterLevelQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

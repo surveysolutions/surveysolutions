@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Humanizer;
 using NHibernate;
 using NHibernate.Cfg;
@@ -9,6 +10,7 @@ using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using NLog;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
@@ -26,24 +28,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public PostgresPlainStorageModule(PostgresPlainStorageSettings settings)
         {
-            if (settings == null) throw new ArgumentNullException(nameof(settings));
-            this.settings = settings;
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public void Load(IIocRegistry registry)
         {
             registry.BindToConstant<PostgresPlainStorageSettings>(() => this.settings);
             
-            try
-            {
-                DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
-            }
-            catch (Exception exc)
-            {
-                LogManager.GetLogger("maigration", typeof(PostgresPlainStorageModule)).Fatal(exc, "Error during db initialization.");
-                throw;
-            }
-
             registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory(settings.SchemaName), SessionFactoryName);
 
             registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<PlainPostgresTransactionManager>();
@@ -63,9 +54,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<IPlainTransactionManagerProvider>(context => context.Get<PlainTransactionManagerProvider>());
 
             registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            try
+            {
+                DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
+            }
+            catch (Exception exc)
+            {
+                LogManager.GetLogger("maigration", typeof(PostgresPlainStorageModule)).Fatal(exc, "Error during db initialization.");
+                throw;
+            }
 
             DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
+
+            return Task.CompletedTask;
         }
+
 
         private ISessionFactory BuildSessionFactory(string schemaName)
         {

@@ -1,8 +1,8 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -13,7 +13,7 @@ using WB.Tests.Integration.PostgreSQLTests;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 {
-    [Subject(typeof(TeamsAndStatusesReport))]
+    [TestOf(typeof(TeamsAndStatusesReport))]
     internal class TeamsAndStatusesReportContext: with_postgres_db
     {
         protected static TeamsAndStatusesReport CreateHqTeamsAndStatusesReport(INativeReadSideStorage<InterviewSummary> reader = null)
@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), "InterviewId");
+            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
         }
 
         protected static void ExecuteInCommandTransaction(Action action)
@@ -68,7 +68,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             }
         }
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            pgSqlConnection.Close();
+        }
 
         protected static NpgsqlConnection pgSqlConnection;
         protected static CqrsPostgresTransactionManager postgresTransactionManager;

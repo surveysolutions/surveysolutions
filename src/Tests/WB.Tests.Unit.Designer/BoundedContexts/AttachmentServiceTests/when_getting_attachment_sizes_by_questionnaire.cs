@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -22,10 +21,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.AttachmentServiceTests
 
         [NUnit.Framework.Test] public void should_return_3_specified_attachment_sizes () 
         {
-            expectedAttachmentSizes.Count.ShouldEqual(3);
-            expectedAttachmentSizes[0].Size.ShouldEqual(100);
-            expectedAttachmentSizes[1].Size.ShouldEqual(100);
-            expectedAttachmentSizes[2].Size.ShouldEqual(50);
+            expectedAttachmentSizes.Count.Should().Be(3);
+            expectedAttachmentSizes[0].Size.Should().Be(100);
+            expectedAttachmentSizes[1].Size.Should().Be(100);
+            expectedAttachmentSizes[2].Size.Should().Be(50);
         }
         
         private static AttachmentService attachmentService;

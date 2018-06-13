@@ -669,9 +669,6 @@
   <data name="WB0268_DoesNotSupportSubstitution" xml:space="preserve">
     <value>Usted ha tratado de usar sustitución en una entidad que no lo soporta</value>
   </data>
-  <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>La pregunta no puede contener un titulo en blanco</value>
-  </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>La sección no puede contener mas de {0} preguntas</value>
   </data>

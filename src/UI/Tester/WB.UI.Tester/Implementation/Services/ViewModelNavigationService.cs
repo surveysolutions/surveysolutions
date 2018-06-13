@@ -1,24 +1,24 @@
-using System;
 using System.Threading.Tasks;
 using Android.Content;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Platform.Droid.Platform;
 using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Activities;
 
 namespace WB.UI.Tester.Implementation.Services
 {
-    public class ViewModelNavigationService : BaseViewModelNavigationService, IViewModelNavigationService
+    public class ViewModelNavigationService : BaseViewModelNavigationService
     {
         private readonly IMvxAndroidCurrentTopActivity androidCurrentTopActivity;
-        private readonly IJsonAllTypesSerializer jsonSerializer;
+        private readonly IMvxNavigationService navigationService;
 
         public ViewModelNavigationService(
             ICommandService commandService,
@@ -26,36 +26,37 @@ namespace WB.UI.Tester.Implementation.Services
             IUserInterfaceStateService userInterfaceStateService,
             IMvxAndroidCurrentTopActivity androidCurrentTopActivity,
             IPrincipal principal,
-            IJsonAllTypesSerializer jsonSerializer)
-            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity,principal)
+            IMvxNavigationService navigationService)
+            : base(commandService, userInteractionService, userInterfaceStateService, androidCurrentTopActivity, navigationService, principal)
         {
             this.androidCurrentTopActivity = androidCurrentTopActivity;
-            this.jsonSerializer = jsonSerializer;
+            this.navigationService = navigationService;
         }
 
-        public void NavigateTo<TViewModel>() where TViewModel : IMvxViewModel => this.NavigateTo<TViewModel>(null);
-
-        public Task NavigateToDashboard(string interviewId = null)
+        public override Task NavigateToDashboardAsync(string interviewId = null)
         {
-            this.NavigateTo<DashboardViewModel>();
-            return Task.CompletedTask;
+            return this.navigationService.Navigate<DashboardViewModel>();
         }
 
-        public void NavigateToSplashScreen()
+        public override void NavigateToSplashScreen()
         {
             base.RestartApp(typeof(SplashActivity));
         }
 
-        public void NavigateToPrefilledQuestions(string interviewId) => this.NavigateTo<PrefilledQuestionsViewModel>(new { interviewId = interviewId });
-
-        public void NavigateToInterview(string interviewId, NavigationIdentity navigationIdentity)
-            => this.NavigateTo<InterviewViewModel>(new
+        public override Task NavigateToPrefilledQuestionsAsync(string interviewId) => 
+            this.navigationService.Navigate<PrefilledQuestionsViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
-                interviewId = interviewId,
-                jsonNavigationIdentity = navigationIdentity != null ? this.jsonSerializer.Serialize(navigationIdentity) : null
+                InterviewId = interviewId
             });
 
-        public override void NavigateToLogin() => this.NavigateTo<LoginViewModel>();
+        public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
+            => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
+            {
+                InterviewId = interviewId,
+                NavigationIdentity = navigationIdentity
+            });
+
+        public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));

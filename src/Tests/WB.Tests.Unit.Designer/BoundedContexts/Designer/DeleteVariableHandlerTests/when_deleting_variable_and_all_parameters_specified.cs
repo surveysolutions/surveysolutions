@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.DeleteVariableHandlerT
 
 
         [NUnit.Framework.Test] public void should_dont_contains_Variable () =>
-            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).ShouldBeNull();
+            questionnaire.QuestionnaireDocument.Find<Variable>(entityId).Should().BeNull();
 
         
         private static Questionnaire questionnaire;

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -48,7 +48,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = controller.Verify(questionnaireId);
 
         [NUnit.Framework.Test] public void should_returned_errors_contains_specified_errors_count () =>
-            result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).ShouldEqual(QuestionnaireController.MaxVerificationErrors);
+            result.Errors.Sum(error => error.Errors.SelectMany(e => e.References).Count()).Should().Be(QuestionnaireController.MaxVerificationErrors);
 
         private static QuestionnaireDocument questionnaireDocument;
         private static QuestionnaireView questionnaireView;

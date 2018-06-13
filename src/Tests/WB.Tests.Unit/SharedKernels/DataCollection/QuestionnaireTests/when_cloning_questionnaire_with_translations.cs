@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
 {
     internal class when_cloning_questionnaire_with_translations : QuestionnaireTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             Guid questionnaireId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             sourceQuestionnaireId = Create.Entity.QuestionnaireIdentity(questionnaireId, 4);
 
@@ -43,14 +42,16 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.QuestionnaireTests
                 translationsStorage: translations,
                 questionnaireBrowseItemStorage: questionnaireBrowseItemStorage,
                 questionnaireStorage: plainQuestionnaireRepositoryMock.Object);
-        };
 
-        Because of = () => questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(sourceQuestionnaireId, newQuestionnaireVersion: targetQuestionnaireVersion));
+            BecauseOf();
+        }
 
-        It should_store_copy_of_translation = () => 
+        public void BecauseOf() => questionnaire.CloneQuestionnaire(Create.Command.CloneQuestionnaire(sourceQuestionnaireId, newQuestionnaireVersion: targetQuestionnaireVersion));
+
+        [NUnit.Framework.Test] public void should_store_copy_of_translation () => 
             translations.Query(_ => _.Count(x => 
                 x.QuestionnaireId.QuestionnaireId == sourceQuestionnaireId.QuestionnaireId && 
-                x.QuestionnaireId.Version == targetQuestionnaireVersion)).ShouldEqual(1);
+                x.QuestionnaireId.Version == targetQuestionnaireVersion)).Should().Be(1);
 
         static Questionnaire questionnaire;
         static QuestionnaireIdentity sourceQuestionnaireId;

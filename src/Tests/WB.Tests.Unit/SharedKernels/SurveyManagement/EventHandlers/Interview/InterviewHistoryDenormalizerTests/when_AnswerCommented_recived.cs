@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -12,27 +8,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.Interview.I
 {
     internal class when_AnswerCommented_recived : InterviewHistoryDenormalizerTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewHistoryView = CreateInterviewHistoryView();
             interviewExportedDataDenormalizer = CreateInterviewHistoryDenormalizer(questionnaire: CreateQuestionnaireExportStructure(questionId, variableName));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interviewHistoryView = interviewExportedDataDenormalizer.Update(interviewHistoryView, CreatePublishableEvent(() => new AnswerCommented(Guid.NewGuid(), questionId, new decimal[] { 1 }, DateTime.Now, comment),
                 interviewId));
 
-        It should_action_of_first_record_be_CommentSet = () =>
-            interviewHistoryView.Records[0].Action.ShouldEqual(InterviewHistoricalAction.CommentSet);
+        [NUnit.Framework.Test] public void should_action_of_first_record_be_CommentSet () =>
+            interviewHistoryView.Records[0].Action.Should().Be(InterviewHistoricalAction.CommentSet);
 
-        It should_first_record_has_commented_question_variable_name_in_parameters = () =>
-            interviewHistoryView.Records[0].Parameters["question"].ShouldEqual(variableName);
+        [NUnit.Framework.Test] public void should_first_record_has_commented_question_variable_name_in_parameters () =>
+            interviewHistoryView.Records[0].Parameters["question"].Should().Be(variableName);
 
-        It should_first_record_has_commented_question_comment_in_parameters = () =>
-            interviewHistoryView.Records[0].Parameters["comment"].ShouldEqual(comment);
+        [NUnit.Framework.Test] public void should_first_record_has_commented_question_comment_in_parameters () =>
+            interviewHistoryView.Records[0].Parameters["comment"].Should().Be(comment);
 
-        It should_first_record_has_commented_question_roster_vector_in_parameters = () =>
-            interviewHistoryView.Records[0].Parameters["roster"].ShouldEqual("1");
+        [NUnit.Framework.Test] public void should_first_record_has_commented_question_roster_vector_in_parameters () =>
+            interviewHistoryView.Records[0].Parameters["roster"].Should().Be("1");
 
 
         private static InterviewParaDataEventHandler interviewExportedDataDenormalizer;

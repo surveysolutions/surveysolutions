@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests.InterviewSummaryViewFactoryTests
 {
     internal class when_load_interview_summary : InterviewSummaryViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewSummaryReaderMock = new Mock<IReadSideRepositoryReader<InterviewSummary>>();
             var interviewSummary = new InterviewSummary()
             {
@@ -26,18 +22,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ViewsTests.InterviewTests
                 .Returns(interviewSummary);
 
             factory = CreateFactory(interviewSummaryReader: interviewSummaryReaderMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel = factory.Load(interviewId);
+        public void BecauseOf() => viewModel = factory.Load(interviewId);
 
-        It should_view_model_not_be_null = () =>
-            viewModel.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_view_model_not_be_null () =>
+            viewModel.Should().NotBeNull();
 
-        It should_ResponsibleName_be_equal_to_interviewerName = () =>
-            viewModel.ResponsibleName.ShouldEqual(interviewerName);
+        [NUnit.Framework.Test] public void should_ResponsibleName_be_equal_to_interviewerName () =>
+            viewModel.ResponsibleName.Should().Be(interviewerName);
 
-        It should_TeamLeadName_be_equal_to_supervisorName = () =>
-            viewModel.TeamLeadName.ShouldEqual(supervisorName);
+        [NUnit.Framework.Test] public void should_TeamLeadName_be_equal_to_supervisorName () =>
+            viewModel.TeamLeadName.Should().Be(supervisorName);
 
 
         private static InterviewSummaryViewFactory factory;

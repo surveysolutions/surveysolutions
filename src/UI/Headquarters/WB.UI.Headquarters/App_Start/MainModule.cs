@@ -1,17 +1,20 @@
+using System.Threading.Tasks;
 using AutoMapper;
-using Main.DenormalizerStorage;
 using Newtonsoft.Json;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Maps;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -41,7 +44,7 @@ using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace WB.UI.Headquarters
 {
-    public class MainModule : IWebModule, IInitModule
+    public class MainModule : IWebModule
     {
         private readonly SettingsProvider settingsProvider;
         private readonly HqSecuritySection applicationSecuritySection;
@@ -68,13 +71,7 @@ namespace WB.UI.Headquarters
 
             registry.BindHttpFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
                 FilterScope.Controller, new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
-
-            registry.BindAsSingleton(typeof(InMemoryReadSideRepositoryAccessor<>), typeof(InMemoryReadSideRepositoryAccessor<>));
-
-
-            registry.Unbind<IInterviewImportService>();
-            registry.BindAsSingleton<IInterviewImportService, InterviewImportService>();
-
+            
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new WebInterviewAutoMapProfile());
@@ -115,15 +112,19 @@ namespace WB.UI.Headquarters
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
 
-
-        public void Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator)
         {
             serviceLocator.GetInstance<InterviewDetailsBackgroundSchedulerTask>().Configure();
             serviceLocator.GetInstance<UsersImportTask>().Run();
+            serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
+            serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             serviceLocator.GetInstance<ExportJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
+            serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
+            serviceLocator.GetInstance<IRefreshReportsTask>().Run();
 
             serviceLocator.GetInstance<IScheduler>().Start();
+            return Task.CompletedTask;
         }
     }
 }

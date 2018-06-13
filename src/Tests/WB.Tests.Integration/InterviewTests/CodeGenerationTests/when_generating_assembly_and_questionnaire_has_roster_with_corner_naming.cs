@@ -1,20 +1,19 @@
-﻿using System;
+using System;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Services;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 {
     internal class when_generating_assembly_and_questionnaire_has_roster_with_corner_naming : CodeGenerationTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 string resultAssembly;
@@ -25,22 +24,22 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
 
                 QuestionnaireDocument questionnaireDocument = CreateQuestionnaireWithRosterAndNamedTextQuestions(namesToCheck);
 
-                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,CreateQuestionnaireVersion(), out resultAssembly);
-                
+                GenerationResult emitResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(questionnaireDocument,LatestQuestionnaireVersion(), out resultAssembly);
+
                 return new InvokeResults
                 {
                     Success = emitResult.Success
                 };
             });
 
-        It should_result_succeded = () =>
-            results.Success.ShouldEqual(true);
+        [NUnit.Framework.Test] public void should_result_succeded () =>
+            results.Success.Should().Be(true);
         
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResults results;

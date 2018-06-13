@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Main.Core.Entities.Composite;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
-using MvvmCross.Test.Core;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;

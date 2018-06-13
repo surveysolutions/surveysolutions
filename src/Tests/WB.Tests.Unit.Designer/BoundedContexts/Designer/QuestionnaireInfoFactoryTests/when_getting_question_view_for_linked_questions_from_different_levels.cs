@@ -1,5 +1,5 @@
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Moq;
@@ -54,25 +54,25 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         [NUnit.Framework.Test] public void should_return_1_elemets_for_dropdown_on_level_0 () 
         {
             var listItems = q8View.SourceOfLinkedEntities.Where(x => x.Type == "textlist");
-            listItems.Select(x => x.Id).ShouldContainOnly(q7Id.FormatGuid());
+            listItems.Select(x => x.Id).Should().BeEquivalentTo(q7Id.FormatGuid());
         }
 
         [NUnit.Framework.Test] public void should_return_2_elemets_for_dropdown_on_level_1 () 
         {
             var listItems = q6View.SourceOfLinkedEntities.Where(x => x.Type == "textlist");
-            listItems.Select(x => x.Id).ShouldContainOnly(q7Id.FormatGuid(), q5Id.FormatGuid());
+            listItems.Select(x => x.Id).Should().BeEquivalentTo(q7Id.FormatGuid(), q5Id.FormatGuid());
         }
 
         [NUnit.Framework.Test] public void should_return_3_elemets_for_dropdown_on_level_2 () 
         {
             var listItems = q4View.SourceOfLinkedEntities.Where(x => x.Type == "textlist");
-            listItems.Select(x => x.Id).ShouldContainOnly(q7Id.FormatGuid(), q5Id.FormatGuid(), q3Id.FormatGuid());
+            listItems.Select(x => x.Id).Should().BeEquivalentTo(q7Id.FormatGuid(), q5Id.FormatGuid(), q3Id.FormatGuid());
         }
 
         [NUnit.Framework.Test] public void should_return_4_elemets_for_dropdown_on_level_3 () 
         {
             var listItems = q2View.SourceOfLinkedEntities.Where(x => x.Type == "textlist");
-            listItems.Select(x => x.Id).ShouldContainOnly(q7Id.FormatGuid(), q5Id.FormatGuid(), q3Id.FormatGuid(), q1Id.FormatGuid());
+            listItems.Select(x => x.Id).Should().BeEquivalentTo(q7Id.FormatGuid(), q5Id.FormatGuid(), q3Id.FormatGuid(), q1Id.FormatGuid());
         }
 
         private static QuestionnaireInfoFactory factory;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
@@ -41,11 +41,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
 
         [NUnit.Framework.Test] public void should_contains_question () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_question_with_PublicKey_equal_to_question_id () =>
             questionnaire.QuestionnaireDocument.Find<IQuestion>(questionId)
-                .PublicKey.ShouldEqual(questionId);
+                .PublicKey.Should().Be(questionId);
 
         private static Questionnaire questionnaire;
         private static Guid questionId;

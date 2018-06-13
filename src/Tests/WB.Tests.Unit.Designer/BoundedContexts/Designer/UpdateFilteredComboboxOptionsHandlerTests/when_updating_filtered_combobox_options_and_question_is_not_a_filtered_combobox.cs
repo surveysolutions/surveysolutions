@@ -1,6 +1,7 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 
@@ -10,7 +11,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
 {
     internal class when_updating_filtered_combobox_options_and_question_is_not_a_filtered_combobox : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
             questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
             questionnaire.AddSingleOptionQuestion(
@@ -20,20 +21,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateFilteredCombobox
                 variableName: "var",
                 responsibleId: responsibleId
             );
-            BecauseOf();
-        }
 
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateFilteredComboboxOptions(questionId: questionId, responsibleId: responsibleId, options: options));
 
-        [NUnit.Framework.Test] public void should_throw_QuestionnaireException () =>
-            exception.ShouldBeOfExactType<QuestionnaireException>();
-
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__not_filtered_combobox__ () =>
-            new[] { "not", "combo box" }.ShouldEachConformTo(
-                keyword => exception.Message.ToLower().Contains(keyword));
-
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "not", "combo", "box" });
+        }
 
         private static Questionnaire questionnaire;
         private static Exception exception;

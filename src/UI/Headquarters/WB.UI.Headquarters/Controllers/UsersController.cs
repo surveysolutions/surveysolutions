@@ -18,6 +18,7 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [ActivePage(MenuItem.UserBatchUpload)]
+        [ObserverNotAllowed]
         public ActionResult Index() => View(new
         {
             Api = new

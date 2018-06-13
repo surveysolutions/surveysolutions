@@ -1,22 +1,21 @@
-﻿using System;
+using System;
 using System.Globalization;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
-using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
     internal class when_variable_value_changed_and_current_culture_is_russian : QuestionHeaderViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             changedCulture = new ChangeCurrentCulture(new CultureInfo("ru-Ru"));
             var substitutedVariable1Identity = Create.Identity(Guid.Parse("11111111111111111111111111111111"), RosterVector.Empty);
             var substitutedVariable2Identity = Create.Identity(Guid.Parse("22222222222222222222222222222222"), RosterVector.Empty); ;
@@ -45,13 +44,15 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
             var questionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireMock);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Init("interview", substitutionTargetQuestionIdentity);
+        public void BecauseOf() => viewModel.Init("interview", substitutionTargetQuestionIdentity);
 
-        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Your first variable is 2016-01-31 and second is 7,77");
+        [NUnit.Framework.Test] public void should_change_item_title () => viewModel.Title.HtmlText.Should().Be("Your first variable is 2016-01-31 and second is 7,77");
 
-        Cleanup cleanup = () => changedCulture.Dispose();
+        [OneTimeTearDown]
+        public void cleanup() => changedCulture.Dispose();
 
         static QuestionHeaderViewModel viewModel;
         static StatefulInterview interview;

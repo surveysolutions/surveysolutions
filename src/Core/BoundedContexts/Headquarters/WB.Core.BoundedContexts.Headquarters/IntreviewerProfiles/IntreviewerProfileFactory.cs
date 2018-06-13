@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
+using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -20,6 +22,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid interviewerId);
 
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
+
+        IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -28,17 +32,89 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IInterviewFactory interviewFactory;
+        private readonly IAuthorizedUser currentUser;
 
         public InterviewerProfileFactory(
             HqUserManager userManager,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewRepository,
-            IDeviceSyncInfoRepository deviceSyncInfoRepository, IInterviewerVersionReader interviewerVersionReader)
+            IDeviceSyncInfoRepository deviceSyncInfoRepository, 
+            IInterviewerVersionReader interviewerVersionReader, 
+            IInterviewFactory interviewFactory,
+            IAuthorizedUser currentUser)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.interviewFactory = interviewFactory;
+            this.currentUser = currentUser;
         }
+
+        public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
+        {
+            InterviewGpsAnswerWithTimeStamp[] points = interviewFactory.GetGpsAnswersForInterviewer(interviewerId);
+
+            var checkinPoints = points
+                .Where(p => HasAccessToInterview(p))
+                .GroupBy(x => new { x.Latitude, x.Longitude })
+                .Select(x => new InterviewerPoint
+                {
+                    Latitude = x.Key.Latitude,
+                    Longitude = x.Key.Longitude,
+                    Timestamp = x.Min(p => p.Timestamp),
+                    InterviewIds = x.Select(point => point.InterviewId).Distinct().ToList(),
+                    Colors = x.Select(point => point.Status).Select(StatusToColor).Distinct().OrderBy(c => c).ToArray()
+                })
+                .OrderBy(x => x.Timestamp)
+                .ToArray();
+
+            for (var index = 0; index < checkinPoints.Length; index++)
+            {
+                checkinPoints[index].Index = index + 1;
+            }
+
+            return checkinPoints;
+        }
+
+        private bool HasAccessToInterview(InterviewGpsAnswerWithTimeStamp answer)
+        {
+            if (currentUser.IsHeadquarter || currentUser.IsAdministrator)
+                return true;
+
+            var isSupervisor = currentUser.IsSupervisor;
+            if (isSupervisor && HasSupervisorAccessToInterview(answer.Status))
+                return true;
+
+            return false;
+        }
+
+        private bool HasSupervisorAccessToInterview(InterviewStatus status)
+        {
+            return status == InterviewStatus.InterviewerAssigned
+                || status == InterviewStatus.SupervisorAssigned
+                || status == InterviewStatus.Completed
+                || status == InterviewStatus.RejectedBySupervisor
+                || status == InterviewStatus.RejectedByHeadquarters;
+        }
+
+        private string StatusToColor(InterviewStatus status)
+        {
+            switch (status)
+            {
+                case InterviewStatus.RejectedByHeadquarters:
+                case InterviewStatus.RejectedBySupervisor:
+                    return "red";
+
+                case InterviewStatus.Completed:
+                case InterviewStatus.ApprovedBySupervisor:
+                case InterviewStatus.ApprovedByHeadquarters:
+                    return "green";
+                default:
+                    return "blue";
+            }
+        }
+
 
         public async Task<InterviewerProfileModel> GetInterviewerProfileAsync(Guid userId)
         {
@@ -49,8 +125,10 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
+            var registredDeviceCount = this.deviceSyncInfoRepository.GetRegistredDeviceCount(userId);
 
-            InterviewerProfileModel profile = this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
+            InterviewerProfileModel profile = 
+                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -65,6 +143,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.WaitingInterviewsForApprovalCount = completedInterviewCount;
             profile.ApprovedInterviewsByHqCount = approvedByHqCount;
             profile.SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId);
+            profile.RegistredDevicesCount = registredDeviceCount;
+            profile.HasAnyGpsAnswerForInterviewer = interviewFactory.HasAnyGpsAnswerForInterviewer(userId);
 
             return profile;
         }

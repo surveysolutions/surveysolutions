@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly IMvxMessenger messenger;
         private readonly ICommandService commandService;
         private readonly IEntitiesListViewModelFactory entitiesListViewModelFactory;
+        private readonly ILastCompletionComments lastCompletionComments;
         protected readonly IPrincipal principal;
 
         public InterviewStateViewModel InterviewState { get; set; }
@@ -31,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IPrincipal principal, 
             IMvxMessenger messenger,
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
+            ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
             DynamicTextViewModel dynamicTextViewModel)
         {
@@ -39,6 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.principal = principal;
             this.messenger = messenger;
             this.entitiesListViewModelFactory = entitiesListViewModelFactory;
+            this.lastCompletionComments = lastCompletionComments;
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
@@ -46,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         protected Guid interviewId;
 
-        public virtual void Init(string interviewId,
+        public virtual void Configure(string interviewId,
             NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
@@ -69,6 +72,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 ? string.Format(UIResources.Interview_Complete_First_n_Entities_With_Errors,
                     this.entitiesListViewModelFactory.MaxNumberOfEntities)
                 : UIResources.Interview_Complete_Entities_With_Errors;
+
+            this.CompleteComment = lastCompletionComments.Get(this.interviewId);
         }
 
         public int AnsweredCount { get; set; }
@@ -87,17 +92,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             get
             {
                 return this.completeInterviewCommand ?? 
-                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !wasThisInterviewCompleted));
+                    (this.completeInterviewCommand = new MvxAsyncCommand(async () => await this.CompleteInterviewAsync(), () => !WasThisInterviewCompleted));
             }
         }
 
-        public string CompleteComment { get; set; }
+        public string CompleteComment
+        {
+            get => completeComment;
+            set
+            {
+                completeComment = value;
+                this.lastCompletionComments.Store(this.interviewId, value);
+            }
+        }
 
         private bool wasThisInterviewCompleted = false;
+        public bool WasThisInterviewCompleted
+        {
+            get => this.wasThisInterviewCompleted;
+            set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
+        }
+
+        private string completeComment;
 
         private async Task CompleteInterviewAsync()
         {
-            this.wasThisInterviewCompleted = true;
+            if (this.WasThisInterviewCompleted)
+                return;
+
+            this.WasThisInterviewCompleted = true;
             await this.commandService.WaitPendingCommandsAsync();
 
             var completeInterview = new CompleteInterviewCommand(
@@ -107,13 +130,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 completeTime: DateTime.UtcNow);
 
             await this.commandService.ExecuteAsync(completeInterview);
+            this.lastCompletionComments.Remove(interviewId);
 
-            await this.CloseInterview();
+            await this.CloseInterviewAfterComplete();
         }
 
-        protected virtual async Task CloseInterview()
+        protected virtual async Task CloseInterviewAfterComplete()
         {
-            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId.ToString());
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.interviewId.ToString());
 
             this.messenger.Publish(new InterviewCompletedMessage(this));
         }

@@ -1,20 +1,18 @@
-using System;
-using Machine.Specifications;
+                        using System;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using It = Machine.Specifications.It;
+                        using WB.Core.SharedKernels.DataCollection.Repositories;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_text_list_question_with_incorrect_roster_vector : InterviewTestsContext
     {
-        private Establish context = () =>
-        {
+         [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
@@ -31,10 +29,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-        };
+             BecauseOf();
+        }
 
-        private Because of = () =>
-            exception = Catch.Exception(() =>
+        private void BecauseOf() =>
+            exception = NUnit.Framework.Assert.Throws<InterviewException>(() =>
                 interview.AnswerTextListQuestion(
                     userId, questionId, invalidRosterVector, DateTime.Now,
                     new[]
@@ -44,17 +43,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                         new Tuple<decimal, string>(3, "Answer 3"),
                     }));
 
-        It should_raise_InterviewException = () =>
-            exception.ShouldBeOfExactType<InterviewException>();
+        [NUnit.Framework.Test] public void should_raise_InterviewException () =>
+            exception.Should().BeOfType<InterviewException>();
 
-        It should_throw_exception_with_message_containting__roster__ = () =>
-            exception.Message.ToLower().ShouldContain("roster");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__roster__ () =>
+            exception.Message.ToLower().Should().Contain("roster");
 
-        It should_throw_exception_with_message_containting__information__ = () =>
-            exception.Message.ToLower().ShouldContain("information");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__information__ () =>
+            exception.Message.ToLower().Should().Contain("information");
 
-        It should_throw_exception_with_message_containting__is_incorrect__ = () =>
-            exception.Message.ToLower().ShouldContain("is incorrect");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__is_incorrect__ () =>
+            exception.Message.ToLower().Should().Contain("is incorrect");
 
         private static Exception exception;
         private static Interview interview;

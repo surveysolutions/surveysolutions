@@ -10,6 +10,8 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 const _ = require("lodash")
 const localization = require("./localization")
 
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 const devMode = process.env.NODE_ENV != 'production';
 const isHot = process.env.NODE_ENV === "hot";
 const path = require('path')
@@ -159,29 +161,13 @@ module.exports = function (appConfig) {
             devMode ? null : new webpack.optimize.ModuleConcatenationPlugin(),
 
             // minizing js files
-            devMode ? null : new webpack.optimize.UglifyJsPlugin({
+            devMode ? null : new UglifyJsPlugin({
                 sourceMap: true,
-                minimize: true,
-                compress: { // https://medium.com/tldr-tech/web-performance-a-poc-by-example-41307c7e6cbe
-                  warnings: false, // warn about potentially dangerous optimizations/code
-                  sequences: true,  // join consecutive statemets with the “comma operator”
-                  properties: true,  // optimize property access: a["foo"] → a.foo
-                  dead_code: true,  // discard unreachable code
-                  drop_debugger: true,  // discard “debugger” statements
-                  unsafe: true, // some unsafe optimizations (see below)
-                  conditionals: true,  // optimize if-s and conditional expressions
-                  comparisons: true,  // optimize comparisons
-                  evaluate: true,  // evaluate constant expressions
-                  booleans: true,  // optimize boolean expressions
-                  loops: true,  // optimize loops
-                  unused: true,  // drop unused variables/functions
-                  hoist_funs: true,  // hoist function declarations
-                  hoist_vars: true, // hoist variable declarations
-                  if_return: true,  // optimize if-s followed by return/continue
-                  join_vars: true,  // join var declarations
-                  cascade: true,  // try to cascade `right` into `left` in sequences
-                  side_effects: true,  // drop side-effect-free statements
-                }
+                cache: true,
+				parallel:true,
+                uglifyOptions: {                  
+				  compress:true
+				}
             }),
 
             // make sure that build will be optimized for production. Required by vuejs
@@ -229,7 +215,6 @@ module.exports = function (appConfig) {
                 openAnalyzer: false,
                 statsOptions: { chunkModules: true, assets: true },
             })
-
         ]).filter(x => x != null),
 
         devServer: {

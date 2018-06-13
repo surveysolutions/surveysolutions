@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Globalization;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;

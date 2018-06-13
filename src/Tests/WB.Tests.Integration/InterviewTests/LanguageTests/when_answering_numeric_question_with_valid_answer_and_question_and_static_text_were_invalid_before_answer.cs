@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
@@ -13,12 +13,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_answering_numeric_question_with_valid_answer_and_question_and_static_text_were_invalid_before_answer : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -69,23 +69,23 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 }
             });
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
-        It should_not_raise_AnswersDeclaredValid_event = () =>
-            result.AnswersDeclaredValidEventCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_not_raise_AnswersDeclaredValid_event () =>
+            result.AnswersDeclaredValidEventCount.Should().Be(1);
 
-        It should_raise_AnswersDeclaredInvalid_event = () =>
-            result.AnswersDeclaredInvalidEventCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_raise_AnswersDeclaredInvalid_event () =>
+            result.AnswersDeclaredInvalidEventCount.Should().Be(0);
 
-        It should_not_raise_StaticTextsDeclaredInvalid_event = () =>
-            result.StaticTextsDeclaredValidCount.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_not_raise_StaticTextsDeclaredInvalid_event () =>
+            result.StaticTextsDeclaredValidCount.Should().Be(1);
 
-        It should_raise_StaticTextsDeclaredInvalid_event = () =>
-            result.StaticTextsDeclaredInvalidCount.ShouldEqual(0);
+        [NUnit.Framework.Test] public void should_raise_StaticTextsDeclaredInvalid_event () =>
+            result.StaticTextsDeclaredInvalidCount.Should().Be(0);
 
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
         private static InvokeResult result;

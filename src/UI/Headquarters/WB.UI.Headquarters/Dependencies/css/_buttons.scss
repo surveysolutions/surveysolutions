@@ -1,5 +1,5 @@
 .btn{
-	font: 12px/14px "TrebuchetMSBold";
+	font: 12px/14px $trebuchet_bold;
 	text-transform: uppercase;
     letter-spacing: 0.13em;
     @include transition(background, 0.2s);
@@ -180,7 +180,7 @@ a.disabled{
 }
 .back-link{
     text-transform: uppercase;
-    font: 12.5px/14px "TrebuchetMSBold";
+	font: 12.5px/14px $trebuchet_bold;
     letter-spacing: 0.13em;
     display: inline-block;
 }
@@ -285,7 +285,7 @@ a.disabled{
 	background-color: transparent;
 	border-width: 3px;
 	border-radius: 4px;
-	font: 14px/16px "TrebuchetMSBold";
+	font: 14px/16px $trebuchet_bold;
 	letter-spacing: 0.05em;
     text-transform: uppercase;  
 	&.btn-success{
@@ -442,32 +442,21 @@ a.disabled{
     border-radius: 100%;
     background-color: rgba(0, 0, 0, 0.85);
     -webkit-transition: background 0.3s linear 0s;
-    transition: background 0.3s linear 0s;
-}
-
-.btn-horizontal-hamburger span:before {
-    content: "";
-    display: block;
-    position: relative;
-    left: -8px;
-    width: 5px;
-    height: 5px;
-    border-radius: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    -webkit-transition: background 0.3s linear 0s;
-    transition: background 0.3s linear 0s;
-}
-
-.btn-horizontal-hamburger span:after {
-    content: "";
-    display: block;
-    position: relative;
-    left: 8px;
-    top: -5px;
-    width: 5px;
-    height: 5px;
-    border-radius: 100%;
-    background-color: rgba(0, 0, 0, 0.85);
-    -webkit-transition: background 0.3s linear 0s;
-    transition: background 0.3s linear 0s;
+	transition: background 0.3s linear 0s;
+	&:before, &:after{
+		content: "";
+		display: block;
+		position: relative;
+		left: -8px;
+		width: 5px;
+		height: 5px;
+		border-radius: 100%;
+		background-color: rgba(0, 0, 0, 0.85);
+		-webkit-transition: background 0.3s linear 0s;
+		transition: background 0.3s linear 0s;
+	}
+	&:after{
+		left: 8px;
+    	top: -5px;
+	}
 }

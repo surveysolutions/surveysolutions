@@ -1,19 +1,16 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
 {
     internal class when_answering_single_option_linked_on_roster_title_question : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
             
             var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(id: questionnaireId, children: new IComposite[]
@@ -31,22 +28,24 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             interview.AnswerNumericIntegerQuestion(userId, triggerQuestionId, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerNumericRealQuestion(userId, titleQuestionId, Abc.Create.RosterVector(0), DateTime.Now, 18.5);
             eventContext = new EventContext();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        public void BecauseOf() =>
             interview.AnswerSingleOptionLinkedQuestion(userId: userId, questionId: linkedToQuestionId,
                  answerTime: DateTime.Now, rosterVector: RosterVector.Empty, selectedRosterVector: Abc.Create.RosterVector(0));
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_SingleOptionLinkedQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_SingleOptionLinkedQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<SingleOptionLinkedQuestionAnswered>();
 
-        It should_raise_QuestionsEnabled_event_for_question_conditionally_dependant_on_lined_question = () =>
+        [NUnit.Framework.Test] public void should_raise_QuestionsEnabled_event_for_question_conditionally_dependant_on_lined_question () =>
              eventContext.ShouldContainEvent<QuestionsEnabled>(q=>q.Questions.Any(x=>x.Id== disabledQuestionsId));
 
         private static EventContext eventContext;

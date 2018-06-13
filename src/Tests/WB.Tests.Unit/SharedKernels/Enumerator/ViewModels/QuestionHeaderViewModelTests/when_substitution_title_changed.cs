@@ -1,20 +1,18 @@
-﻿using System;
-using Machine.Specifications;
-using Main.Core.Entities.Composite;
+using System;
+using FluentAssertions;
 using Ncqrs.Eventing;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewModelTests
 {
     internal class when_substitution_title_changed : QuestionHeaderViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionWithSubstitutionIdentity = Identity.Create(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
 
             var substitutedVariable = "var1";
@@ -34,15 +32,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.QuestionHeaderViewMo
 
             viewModel = CreateViewModel(Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire), interviewRepository, registry);
             viewModel.Init("interview", questionWithSubstitutionIdentity);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => liteEventBus.PublishCommittedEvents(new CommittedEventStream(statefullInterview.EventSourceId,
+        public void BecauseOf() => liteEventBus.PublishCommittedEvents(new CommittedEventStream(statefullInterview.EventSourceId,
             Create.Other.CommittedEvent(payload: Create.Event.SubstitutionTitlesChanged(questions: new Identity[]
                 {
                     Create.Identity(substitutedQuestionId, Empty.RosterVector)
                 }), eventSourceId: statefullInterview.EventSourceId)));
 
-        It should_change_item_title = () => viewModel.Title.HtmlText.ShouldEqual("Old title new value");
+        [NUnit.Framework.Test] public void should_change_item_title () => viewModel.Title.HtmlText.Should().Be("Old title new value");
 
         static ILiteEventBus liteEventBus;
         static QuestionHeaderViewModel viewModel;

@@ -1,10 +1,8 @@
 ﻿using System;
 using FluentAssertions;
-using Moq;
 using Ncqrs.Domain;
 using NUnit.Framework;
 using Ncqrs.Eventing;
-using WB.Tests.Unit;
 
 namespace Ncqrs.Tests.Domain
 {

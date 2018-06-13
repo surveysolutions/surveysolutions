@@ -1,15 +1,18 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
@@ -41,7 +44,7 @@ namespace WB.UI.Interviewer.Infrastructure
             var fileTarget = new FileTarget("logFile")
             {
                 FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=tostring}|${stacktrace}}]"
+                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
             };
 
             var config = new LoggingConfiguration();
@@ -71,6 +74,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.BindAsSingleton<IAuditLogService, AuditLogService>();
 
             registry.BindAsSingleton<IInterviewerEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IInterviewerEventStorage>();
@@ -84,6 +88,11 @@ namespace WB.UI.Interviewer.Infrastructure
 
             registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
         }
     }
 }

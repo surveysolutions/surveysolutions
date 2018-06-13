@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using Moq;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -40,19 +37,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
 
         [NUnit.Framework.Test] public void should_return_1_message () =>
-            verificationMessages.Count().ShouldEqual(1);
+            verificationMessages.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_code__WB0110 () =>
-            verificationMessages.First().Code.ShouldEqual("WB0110");
+            verificationMessages.First().Code.Should().Be("WB0110");
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references () =>
-            verificationMessages.First().References.Count().ShouldEqual(1);
+            verificationMessages.First().References.Count().Should().Be(1);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_question_type () =>
-            verificationMessages.First().References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.First().References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_message_with_one_references_with_id_equals_questionId () =>
-            verificationMessages.First().References.First().Id.ShouldEqual(questionId);
+            verificationMessages.First().References.First().Id.Should().Be(questionId);
         
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

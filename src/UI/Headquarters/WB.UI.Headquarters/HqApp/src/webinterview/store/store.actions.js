@@ -21,6 +21,7 @@ export default {
     fetchEntity: batchedAction(async ({ commit, dispatch }, ids) => {
         const details = await Vue.$api.call(api => api.getEntitiesDetails(uniq(map(ids, "id"))))
         dispatch("fetch", { ids, done: true })
+
         commit("SET_ENTITIES_DETAILS", {
             entities: details,
             lastActivityTimestamp: new Date()
@@ -120,7 +121,7 @@ export default {
     },
 
     shutDownInterview({ state, commit }) {
-        if(!state.interviewShutdown){
+        if (!state.interviewShutdown) {
             commit("SET_INTERVIEW_SHUTDOWN")
             window.close();
         }
@@ -135,8 +136,8 @@ export default {
         })
 
         dispatch("refreshSectionState", null)
-        
-        if(getters.isReviewMode)
+
+        if (getters.isReviewMode)
             dispatch("refreshSearchResults")
     },
 
@@ -171,8 +172,19 @@ export default {
                 commit("SET_SECTION_DATA", prefilledPageData.entities)
             }
         } else {
-            const section = await Vue.$api.call(api => api.getSectionEntities(id))
-            commit("SET_SECTION_DATA", section)
+            try {
+                commit("SET_LOADING_PROGRESS", true)
+
+                const section = await Vue.$api.call(api => api.getFullSectionInfo(id))
+
+                commit("SET_SECTION_DATA", section.entities)
+                commit("SET_ENTITIES_DETAILS", {
+                    entities: section.details,
+                    lastActivityTimestamp: new Date()
+                })
+            } finally {
+                commit("SET_LOADING_PROGRESS", false)
+            }
         }
     }, 200),
 
@@ -224,7 +236,7 @@ export default {
 
         commit("COMPLETE_INTERVIEW");
 
-        Vue.$api.call(api => api.completeInterview(comment))        
+        Vue.$api.call(api => api.completeInterview(comment))
     },
 
     cleanUpEntity: batchedAction(({ commit }, ids) => {

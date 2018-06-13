@@ -88,7 +88,7 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid file {0}.
+        ///   Looks up a localized string similar to File &apos;{0}&apos; contains data system can&apos;t process..
         /// </summary>
         internal static string MapLoadingInvalidFile {
             get {

@@ -1,16 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Machine.Specifications;
 using Moq;
 using Ncqrs.Domain;
-using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.CommandServiceTests
 {
@@ -33,8 +29,7 @@ namespace WB.Tests.Integration.CommandServiceTests
             }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             CommandRegistry
                 .Setup<Aggregate>()
                 .StatelessHandles<DoNothingCommand>(_ => aggregateId, aggregate => aggregate.DoNothing);
@@ -45,22 +40,23 @@ namespace WB.Tests.Integration.CommandServiceTests
                 => _.GetStateless(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
             commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        private void BecauseOf() =>
             commandService.Execute(new DoNothingCommand(), null);
 
-        It should_commit_events = () =>
+        [NUnit.Framework.Test] public void should_commit_events () =>
             eventBusMock.Verify(
                 bus => bus.CommitUncommittedEvents(aggregateFromRepository, null),
                 Times.Once);
 
-        It should_publish_events = () =>
+        [NUnit.Framework.Test] public void should_publish_events () =>
             eventBusMock.Verify(
                 bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()),
                 Times.Once);
 
-        It should_not_load_latest_aggregate_from_repository = () =>
+        [NUnit.Framework.Test] public void should_not_load_latest_aggregate_from_repository () =>
             Mock.Get(repository).Verify(
                 repo => repo.GetLatest(Moq.It.IsAny<Type>(), Moq.It.IsAny<Guid>()),
                 Times.Never());

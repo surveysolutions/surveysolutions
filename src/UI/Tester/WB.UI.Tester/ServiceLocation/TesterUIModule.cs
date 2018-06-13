@@ -1,8 +1,11 @@
-﻿using WB.Core.BoundedContexts.Tester.Implementation.Services;
+﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Implementation.Services;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
@@ -16,6 +19,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<IMapService, MapService>();
             registry.Bind<TesterSettings>();
+            registry.Bind<PhotoViewViewModel>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
@@ -23,6 +27,14 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+#if !EXCLUDEEXTENSIONS
+            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
+#endif
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
 
@@ -34,16 +34,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateVariableHandlerT
             questionnaire.QuestionnaireDocument.Find<IVariable>(entityId);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).PublicKey.ShouldEqual(entityId);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).PublicKey.Should().Be(entityId);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_name_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Name.ShouldEqual(variableName);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Name.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_Type_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Type.ShouldEqual(variableType);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Type.Should().Be(variableType);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_Expression_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Expression.ShouldEqual(variableExpression);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(entityId).Expression.Should().Be(variableExpression);
 
 
         private static UpdateVariable command;

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
@@ -22,13 +22,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.Translations
 
 
         [NUnit.Framework.Test] public void should_raise_QuestionnaireCloned_event_with_1_attachment () =>
-            questionnaire.QuestionnaireDocument.Translations.Count.ShouldEqual(1);
+            questionnaire.QuestionnaireDocument.Translations.Count.Should().Be(1);
 
         [NUnit.Framework.Test] public void should_set_new_TranslationId_in_raised_event () =>
-            questionnaire.QuestionnaireDocument.Translations.First().Id.ShouldNotEqual(translationId);
+            questionnaire.QuestionnaireDocument.Translations.First().Id.Should().NotBe(translationId);
 
         [NUnit.Framework.Test] public void should_set_original_Name_in_raised_event () =>
-            questionnaire.QuestionnaireDocument.Translations.First().Name.ShouldEqual(name);
+            questionnaire.QuestionnaireDocument.Translations.First().Name.Should().Be(name);
 
 
         private static Questionnaire questionnaire;

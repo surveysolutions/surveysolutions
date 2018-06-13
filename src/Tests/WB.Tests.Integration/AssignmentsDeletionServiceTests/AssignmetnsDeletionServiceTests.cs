@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
@@ -50,6 +49,8 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             Assignment assignment = Create.Entity.Assignment(questionnaireIdentity: questionnaireIdentity);
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
             assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, Create.Entity.Identity(Guid.NewGuid())));
+            assignment.SetAnswers(null);
+            assignment.SetProtectedVariables(null);
 
             IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(plainPostgresTransactionManager);
 

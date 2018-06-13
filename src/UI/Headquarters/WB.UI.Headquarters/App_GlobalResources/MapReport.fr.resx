@@ -132,4 +132,7 @@
   <data name="ViewInterviewContent" xml:space="preserve">
     <value>Voir le contenu de L'entretien</value>
   </data>
+  <data name="NoGpsQuestionsByQuestionnaire" xml:space="preserve">
+    <value>Il n'y a aucun emplacement géolocalisation dans le questionnaire choisi</value>
+  </data>
 </root>

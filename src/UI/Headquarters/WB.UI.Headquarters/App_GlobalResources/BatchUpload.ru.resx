@@ -581,4 +581,29 @@
     <value>Проверка завершена</value>
     <comment>Проверка завершена</comment>
   </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Скрытые вопросы</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Вопросы триггеры для ростеров</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Показать список значений для загрузки</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Это обязательное поле</value>
+    <comment>Это обязательное поле</comment>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Выберите ответственного (обязательно)</value>
+    <comment>Выберите ответственного (обязательно)</comment>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Если в файле для назначения нет ответственного, то этот супервизор/интервьювер будет назначен ответственным:</value>
+    <comment>Если в файле для назначения нет ответственного, то этот супервизор/интервьювер будет назначен ответственным:</comment>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Идентифицирующие вопросы </value>
+    <comment>Идентифицирующие вопросы </comment>
+  </data>
 </root>

@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.Controllers;
 using System.Web.Http.Routing;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
@@ -68,12 +68,12 @@ namespace WB.Tests.Unit.Designer.Applications.AttributesTests
         
         [NUnit.Framework.Test]
         public void should_return_forbidden_status_code() =>
-            filterContext.Response.StatusCode.ShouldEqual(HttpStatusCode.Forbidden);
+            filterContext.Response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
 
 
         [NUnit.Framework.Test]
         public void should_return_message_containing_IP() =>
-            filterContext.Response.ReasonPhrase.ShouldContain($"IP:{IPAddresToChecks}");
+            filterContext.Response.ReasonPhrase.Should().Contain($"IP:{IPAddresToChecks}");
 
 
         ApiBasicAuthAttribute attribute;

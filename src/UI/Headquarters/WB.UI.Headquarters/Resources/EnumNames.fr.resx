@@ -162,4 +162,25 @@
   <data name="UserRoles_Supervisor" xml:space="preserve">
     <value>Chef d'équipe</value>
   </data>
+  <data name="WebInterviewUserMessages_FinishInterview" xml:space="preserve">
+    <value>Terminer le texte</value>
+  </data>
+  <data name="WebInterviewUserMessages_Invitation" xml:space="preserve">
+    <value>Bienvenue à l'invitation</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeInvitation" xml:space="preserve">
+    <value>Reprendre l'invitation</value>
+  </data>
+  <data name="WebInterviewUserMessages_ResumeWelcome" xml:space="preserve">
+    <value>Reprendre l'en-tête</value>
+  </data>
+  <data name="WebInterviewUserMessages_SurveyName" xml:space="preserve">
+    <value>Nom de l'enquête</value>
+  </data>
+  <data name="WebInterviewUserMessages_WebSurveyHeader" xml:space="preserve">
+    <value>Terminer l'en-tête</value>
+  </data>
+  <data name="WebInterviewUserMessages_WelcomeText" xml:space="preserve">
+    <value>En-tête de bienvenue</value>
+  </data>
 </root>

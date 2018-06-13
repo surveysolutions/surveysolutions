@@ -1,11 +1,10 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
-using WB.UI.Shared.Web.MembershipProvider.Accounts;
-
 using MembershipProvider = WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.MembershipProvider;
 using it = Moq.It;
 
@@ -40,16 +39,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
         }
 
         private void BecauseOf() => exception =
-            Catch.Exception(() => membershipProvider.UpdateUser(membershipUser));
+            Assert.Throws<System.Configuration.Provider.ProviderException>(() => membershipProvider.UpdateUser(membershipUser));
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__e_mail__ () =>
-            exception.Message.ToLower().ShouldContain("e-mail");
+            exception.Message.ToLower().Should().Contain("e-mail");
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containting_validated_user_email () =>
-            exception.Message.ShouldContain(validatedUserEmail);
+            exception.Message.Should().Contain(validatedUserEmail);
 
         [NUnit.Framework.Test] public void should_throw_exception_with_message_containting__exists__ () =>
-            exception.Message.ToLower().ShouldContain("exists");
+            exception.Message.ToLower().Should().Contain("exists");
 
         private static DesignerMembershipUser membershipUser;
         private static MembershipProvider membershipProvider;

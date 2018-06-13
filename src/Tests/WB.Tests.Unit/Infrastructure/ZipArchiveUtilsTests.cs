@@ -1,10 +1,8 @@
 ﻿using System.IO;
+using FluentAssertions;
 using Ionic.Zip;
-using Machine.Specifications;
 using NUnit.Framework;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure
 {
@@ -32,7 +30,7 @@ namespace WB.Tests.Unit.Infrastructure
             var protectedZipFile = ZipFile.Read(protectedZipStream);
             var unZippedStream = new MemoryStream();
             foreach (var zipEntry in protectedZipFile)
-                Catch.Only<BadPasswordException>(() => zipEntry.Extract(unZippedStream)).ShouldNotBeNull();
+                Assert.Throws<BadPasswordException>(() => zipEntry.Extract(unZippedStream));
         }
 
         private static ZipArchiveUtils CreateZipArchiveUtils() => new ZipArchiveUtils();

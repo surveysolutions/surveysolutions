@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Web.Http;
 using System.Web.Http.Results;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.API.PublicApi;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
 {
@@ -16,13 +15,13 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
             BecauseOf();
         }
 
-        Because BecauseOf = () => result = controller.StartProcess(new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString(), DataExportFormat.DDI);
+        public void BecauseOf() => result = controller.StartProcess(new QuestionnaireIdentity(Guid.Parse("11111111111111111111111111111111"), 1).ToString(), DataExportFormat.DDI);
 
         [NUnit.Framework.Test] public void should_return_http_bad_request_response () =>
-            result.ShouldBeOfExactType<BadRequestErrorMessageResult>();
+            result.Should().BeOfType<BadRequestErrorMessageResult>();
 
         [NUnit.Framework.Test] public void should_response_has_specified_message () =>
-            ((BadRequestErrorMessageResult)result).Message.ShouldEqual("Not supported export type");
+            ((BadRequestErrorMessageResult)result).Message.Should().Be("Not supported export type");
 
         private static ExportController controller;
 

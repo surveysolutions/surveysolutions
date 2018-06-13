@@ -6,17 +6,18 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme", ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+        HardwareAccelerated = true,
+        Theme = "@style/GrayAppTheme", 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
     public class FinishInstallationActivity : BaseActivity<FinishInstallationViewModel>
     {
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.finish_installation; }
-        }
+        protected override int ViewResourceId => Resource.Layout.finish_installation;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -24,7 +25,6 @@ namespace WB.UI.Interviewer.Activities
             var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
             toolbar.Title = "";
             this.SetSupportActionBar(toolbar);
-            
         }
 
         public override void OnBackPressed()
@@ -35,11 +35,11 @@ namespace WB.UI.Interviewer.Activities
             }
         }
 
-        protected override async void OnResume()
+        protected override void OnResume()
         {
             base.OnResume();
 
-            await this.ViewModel.RefreshEndpoint();
+            this.ViewModel.RefreshEndpoint().WaitAndUnwrapException();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

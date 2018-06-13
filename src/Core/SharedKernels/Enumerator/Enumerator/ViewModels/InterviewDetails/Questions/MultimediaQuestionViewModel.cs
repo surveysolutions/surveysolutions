@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
-using Newtonsoft.Json;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -38,6 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IUserInteractionService userInteractionService;
         private readonly IInterviewFileStorage imageFileStorage;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IViewModelNavigationService viewModelNavigationService;
         private Guid interviewId;
         private Identity questionIdentity;
         private string variableName;
@@ -51,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireStorage,
             IPictureChooser pictureChooser,
             IUserInteractionService userInteractionService,
+            IViewModelNavigationService viewModelNavigationService,
             QuestionStateViewModel<PictureQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -65,6 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         public AnsweringViewModel Answering { get; }
@@ -82,6 +80,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public Identity Identity => this.questionIdentity;
         public IMvxAsyncCommand RequestAnswerCommand => new MvxAsyncCommand(this.RequestAnswerAsync);
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswerAsync);
+
+        public IMvxAsyncCommand ShowPhotoView => new MvxAsyncCommand(async ()=> 
+        {
+            if (this.Answer?.Length > 0)
+            {
+                await this.viewModelNavigationService.NavigateToAsync<PhotoViewViewModel, PhotoViewViewModelArgs>(
+                    new PhotoViewViewModelArgs
+                    {
+                        InterviewId = this.interviewId,
+                        FileName = this.GetPictureFileName()
+                    });
+            }
+        });
 
         public QuestionInstructionViewModel InstructionViewModel { get; }
 

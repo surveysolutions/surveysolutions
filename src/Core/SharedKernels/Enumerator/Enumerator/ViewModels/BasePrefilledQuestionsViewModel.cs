@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -33,11 +34,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             VibrationViewModel vibrationViewModel)
             : base(principal, viewModelNavigationService, commandService, vibrationViewModel)
         {
-            if (interviewViewModelFactory == null) throw new ArgumentNullException(nameof(interviewViewModelFactory));
-            if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
-            if (interviewRepository == null) throw new ArgumentNullException(nameof(interviewRepository));
-            if (viewModelNavigationService == null) throw new ArgumentNullException(nameof(viewModelNavigationService));
-
             this.interviewViewModelFactory = interviewViewModelFactory;
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
@@ -49,8 +45,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private bool isInProgress;
         public bool IsInProgress
         {
-            get { return this.isInProgress; }
-            set { this.RaiseAndSetIfChanged(ref this.isInProgress, value); }
+            get => this.isInProgress;
+            set => this.RaiseAndSetIfChanged(ref this.isInProgress, value);
         }
 
         public string QuestionnaireTitle { get; set; }
@@ -62,44 +58,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set { this.prefilledQuestions = value; this.RaisePropertyChanged(); }
         }
 
-        public void Init(string interviewId) => base.Initialize(interviewId);
-
         private string currentLanguage;
         public override string CurrentLanguage => this.currentLanguage;
 
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
 
-        public override void Load()
+        public override async Task Initialize()
         {
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-            var interview = this.interviewRepository.Get(this.interviewId);
+            await base.Initialize().ConfigureAwait(false);
+            var interview = this.interviewRepository.Get(this.InterviewId);
 
             if (interview == null)
             {
-                logger.Error("Interview is null. interviewId: " + interviewId);
-                viewModelNavigationService.NavigateToDashboard();
+                logger.Error("Interview is null. interviewId: " + InterviewId);
+                await viewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
                 return;
             }
 
             var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
             if (questionnaire == null) throw new Exception("questionnaire is null. QuestionnaireId: " + interview.QuestionnaireId);
 
-            if (questionnaire.GetPrefilledQuestions().Count == 0)
-            {
-                this.viewModelNavigationService.NavigateToInterview(interviewId, navigationIdentity: null);
-                return;
-            }
-
             this.QuestionnaireTitle = questionnaire.Title;
             
-            var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.interviewId).ToList();
+            var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.InterviewId).ToList();
 
             this.PrefilledQuestions = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
             
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.InterviewStarted += (sender, args) => this.Dispose();
-            startButton.Init(interviewId);
+            startButton.Init(InterviewId);
             this.PrefilledQuestions.Add(startButton);
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
@@ -108,9 +96,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsSuccessfullyLoaded = true;
         }
 
-        public void NavigateToPreviousViewModel()
+        public virtual Task NavigateToPreviousViewModelAsync()
         {
-            this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
+            return this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
         }
 
         public override void Dispose()

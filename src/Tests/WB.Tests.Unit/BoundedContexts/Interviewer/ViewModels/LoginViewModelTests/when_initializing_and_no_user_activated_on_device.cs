@@ -1,36 +1,28 @@
-using System;
-using System.Linq;
-
-using Machine.Specifications;
+using System.Threading.Tasks;
 using Moq;
-using NSubstitute;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
     public class when_initializing_and_no_user_activated_on_device : LoginViewModelTestContext
     {
-        Establish context = () =>
+        [NUnit.Framework.Test]
+        public async Task should_redirect_to_finish_installation_page()
         {
-            var interview = Substitute.For<IStatefulInterview>();
-         
-            viewModel = CreateLoginViewModel(
-                viewModelNavigationService: ViewModelNavigationServiceMock.Object,
-                interviewersPlainStorage: InterviewersPlainStorage.Object);
-        };
+            Mock<IViewModelNavigationService> viewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
+            Mock<IPlainStorage<InterviewerIdentity>> interviewersPlainStorage = new Mock<IPlainStorage<InterviewerIdentity>>();
 
-        Because of = () => viewModel.Load();
+            var viewModel = CreateLoginViewModel(
+                viewModelNavigationService: viewModelNavigationServiceMock.Object,
+                interviewersPlainStorage: interviewersPlainStorage.Object);
 
-        It should_redirect_to_finish_installation_page = () => 
-            ViewModelNavigationServiceMock.Verify(x => x.NavigateTo<FinishInstallationViewModel>(), Times.Once);
+            // Act
+            await viewModel.Initialize();
 
-        static LoginViewModel viewModel;
-        static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
-        static Mock<IPlainStorage<InterviewerIdentity>> InterviewersPlainStorage = new Mock<IPlainStorage<InterviewerIdentity>>();
+            // Assert
+            viewModelNavigationServiceMock.Verify(x => x.NavigateToAsync<FinishInstallationViewModel>(), Times.Once);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Plugins.Messenger;
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public ICommand ToggleCommand => new MvxCommand(() => { });
-        public ICommand NavigateToSectionCommand => new MvxCommand(this.NavigateToSection);
+        public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
 
         public SideBarCoverSectionViewModel(
             IMvxMessenger messenger,
@@ -59,10 +60,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private void UpdateSelection()
             => this.IsSelected = this.IsCurrent = this.navigationState.CurrentScreenType == ScreenType.Cover;
 
-        private void NavigateToSection()
+        private async Task NavigateToSection()
         {
             this.messenger.Publish(new SectionChangeMessage(this));
-            this.navigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
+            await this.navigationState.NavigateTo(NavigationIdentity.CreateForCoverScreen());
         }
 
         public void Dispose()

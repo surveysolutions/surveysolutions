@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
@@ -42,19 +40,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
             verificationMessages.ShouldContainError("WB0013");
 
         [NUnit.Framework.Test] public void should_return_message_with_two_references () =>
-            verificationMessages.GetError("WB0013").References.Count().ShouldEqual(2);
+            verificationMessages.GetError("WB0013").References.Count().Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_type_Question () =>
-            verificationMessages.GetError("WB0013").References.First().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0013").References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_first_message_reference_with_id_of_linkedQuestionId () =>
-            verificationMessages.GetError("WB0013").References.First().Id.ShouldEqual(linkedQuestionId);
+            verificationMessages.GetError("WB0013").References.First().Id.Should().Be(linkedQuestionId);
 
         [NUnit.Framework.Test] public void should_return_last_message_reference_with_type_Question () =>
-            verificationMessages.GetError("WB0013").References.Last().Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question);
+            verificationMessages.GetError("WB0013").References.Last().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
 
         [NUnit.Framework.Test] public void should_return_last_message_reference_with_id_of_notUnderPropagatedGroupLinkingQuestionId () =>
-            verificationMessages.GetError("WB0013").References.Last().Id.ShouldEqual(notUnderPropagatedGroupLinkingQuestionId);
+            verificationMessages.GetError("WB0013").References.Last().Id.Should().Be(notUnderPropagatedGroupLinkingQuestionId);
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;
         private static QuestionnaireVerifier verifier;

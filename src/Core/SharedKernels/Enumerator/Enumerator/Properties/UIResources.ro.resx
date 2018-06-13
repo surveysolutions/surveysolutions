@@ -1,0 +1,598 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnswerRecordedMsg" xml:space="preserve">
+    <value>Răspuns acceptat. Procesarea a durat {0} </value>
+  </data>
+  <data name="AnswerRecordedMsgDismiss" xml:space="preserve">
+    <value>Revocă</value>
+  </data>
+  <data name="AreaMap_Active_Map_Title" xml:space="preserve">
+    <value>HARTA ACTIVĂ:</value>
+  </data>
+  <data name="AreaMap_AreaFormat" xml:space="preserve">
+    <value>Zona:</value>
+  </data>
+  <data name="AreaMap_Available_Maps_Title" xml:space="preserve">
+    <value>HĂRȚI DISPONIBILE PE DISPOZITIV</value>
+  </data>
+  <data name="AreaMap_Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="AreaMap_Close" xml:space="preserve">
+    <value>Închidere</value>
+  </data>
+  <data name="AreaMap_Edit" xml:space="preserve">
+    <value>Editare</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Perimetru:</value>
+  </data>
+  <data name="AreaMap_Location" xml:space="preserve">
+    <value>Localizare</value>
+  </data>
+  <data name="AreaMap_LocationOutOfBoundaries" xml:space="preserve">
+    <value>Localizarea dvs. este în afara limitelor hărții</value>
+  </data>
+  <data name="AreaMap_MapTitle" xml:space="preserve">
+    <value>Harta</value>
+  </data>
+  <data name="AreaMap_NoChangesInfo" xml:space="preserve">
+    <value>Nu s-au făcut modificări pentru a fi salvate.</value>
+  </data>
+  <data name="AreaMap_NoMapsFound" xml:space="preserve">
+    <value>Nu au fost găsite hărți. Vă rugăm să actualizați hărțile</value>
+  </data>
+  <data name="AreaMap_Save" xml:space="preserve">
+    <value>Salvare</value>
+  </data>
+  <data name="AreaMap_Undo" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="AreaMap_UpdateFailed" xml:space="preserve">
+    <value>Actualizare eșuată</value>
+  </data>
+  <data name="AreaMap_UpdateMaps" xml:space="preserve">
+    <value>Actualizare hărți</value>
+  </data>
+  <data name="AreaMap_Update_Maps" xml:space="preserve">
+    <value>Actualizare hărți</value>
+  </data>
+  <data name="AssignmentN" xml:space="preserve">
+    <value>Sarcina #{0}</value>
+  </data>
+  <data name="AudioQuestion_DurationFormat" xml:space="preserve">
+    <value>{0} din înregistrarea audio</value>
+  </data>
+  <data name="Audio_Io_Exception_Message" xml:space="preserve">
+    <value>Nu s-a putut scrie fișierul audio. Asigurați-vă că dispozitivul are spațiu liber pe spațiul de stocare intern</value>
+  </data>
+  <data name="Audio_Unhandled_Exception_Message" xml:space="preserve">
+    <value>Excepție neașteptată la pornirea înregistrării audio</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
+    <value>Nu există chestionare
+Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
+  </data>
+  <data name="Dashboard_EmptySearchResult" xml:space="preserve">
+    <value>Nu a fost găsit niciun chestionar</value>
+  </data>
+  <data name="Dashboard_LastEntryDate_Format" xml:space="preserve">
+    <value>{0:dd MMM HH:mm}</value>
+  </data>
+  <data name="Dashboard_MyQuestionnairesLinkText" xml:space="preserve">
+    <value>Chestionarele mele</value>
+  </data>
+  <data name="Dashboard_PublicQuestionnairesLinkText" xml:space="preserve">
+    <value>Chestionare publice</value>
+  </data>
+  <data name="Dashboard_ToolbarText" xml:space="preserve">
+    <value>Chestionare</value>
+  </data>
+  <data name="DateQuestion_Hint" xml:space="preserve">
+    <value>Apăsați pentru a înregistrarea datei</value>
+  </data>
+  <data name="Device_Does_Not_Support" xml:space="preserve">
+    <value>Dispozitivul dvs. nu acceptă această funcție</value>
+  </data>
+  <data name="EndpointHint" xml:space="preserve">
+    <value>Punct final de sincronizare</value>
+  </data>
+  <data name="EndpointText" xml:space="preserve">
+    <value>Web Service Endpoint:</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="ErrorMessage_AccountIsLockedOnServer" xml:space="preserve">
+    <value>Contul dvs. este blocat. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions.</value>
+  </data>
+  <data name="ErrorMessage_AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Contul dvs. nu a fost aprobat. Vă rugăm să îl confirmați mai întâi.</value>
+  </data>
+  <data name="ErrorMessage_InternalServerError" xml:space="preserve">
+    <value>Eroare de server. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions.</value>
+  </data>
+  <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
+    <value>Adresa URL introdusă pentru Survey Solutions Designer nu este validă. Verificați setările.</value>
+  </data>
+  <data name="ErrorMessage_Maintenance" xml:space="preserve">
+    <value>Site-ul Survey Solutions Designer este în mod mentenanță acum. Ne cerem scuze pentru inconvenient</value>
+  </data>
+  <data name="ErrorMessage_RequestTimeout" xml:space="preserve">
+    <value>Eroare de conexiune la site-ul Survey Solutions Designer. Verificați conexiunea la Internet.</value>
+  </data>
+  <data name="ErrorMessage_ServiceUnavailable" xml:space="preserve">
+    <value>Nu se poate conecta la Survey Solutions Designer. Verificați disponibilitatea site-ului.</value>
+  </data>
+  <data name="ErrorMessage_Unauthorized" xml:space="preserve">
+    <value>Datele de autentificare sunt incorecte.</value>
+  </data>
+  <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
+    <value>A fost lansată o nouă versiune a aplicației. Vă rugăm să actualizați aplicația.</value>
+  </data>
+  <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
+    <value>Apăsați pentru a introduce text</value>
+  </data>
+  <data name="GpsQuestion_MissingPermissions" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a utiliza locația dispozitivului curent pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să utilizeze locația dispozitivului.</value>
+  </data>
+  <data name="GpsQuestion_Timeout" xml:space="preserve">
+    <value>GPS-ul nu poate detecta localizarea. Pentru a depana, vă rugăm încercați următoarele: asigurați-vă că vă aflați în aer liber, confirmați că GPS-ul dvs. este activat sau modificați setarea de expirare a conexiunii GPS-ului.</value>
+  </data>
+  <data name="IntegerQuestion_Hint" xml:space="preserve">
+    <value>Apăsați pentru a introduce numărul</value>
+  </data>
+  <data name="Interviewer_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Interviewer</value>
+  </data>
+  <data name="Interviewer_AudioRecording" xml:space="preserve">
+    <value>Inregistrare audio</value>
+  </data>
+  <data name="Interviewer_Diagnostics" xml:space="preserve">
+    <value>Diagnosticare</value>
+  </data>
+  <data name="Interviewer_Done" xml:space="preserve">
+    <value>Efectuat</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" xml:space="preserve">
+    <value>Sunteți deja autentificat pe alt dispozitiv</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkButtonText" xml:space="preserve">
+    <value>Reautentificare</value>
+  </data>
+  <data name="Interviewer_RelinkDevice_RelinkMessage" xml:space="preserve">
+    <value>Dacă vă reautentificați pe aceast dispozitiv &lt;br/&gt; toate datele de pe cel vechi se vor pierde</value>
+  </data>
+  <data name="Interviewer_TryOnlineLogin" xml:space="preserve">
+    <value>Încercați să vă autentificați online</value>
+  </data>
+  <data name="InterviewKey" xml:space="preserve">
+    <value>Cheia Chestionarului: {0}</value>
+  </data>
+  <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
+    <value>Comentariul dvs.</value>
+  </data>
+  <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
+    <value>Finalizați chestionarul</value>
+  </data>
+  <data name="Interview_Complete_Answered" xml:space="preserve">
+    <value>Întrebări completate</value>
+  </data>
+  <data name="Interview_Complete_Button" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
+    <value>După ce terminați interviul, acesta va avea statusul "Finalizat" și va fi trimis către supervizor la următoarea sincronizare.</value>
+  </data>
+  <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
+    <value>Entitățile cu erori:</value>
+  </data>
+  <data name="Interview_Complete_Errors" xml:space="preserve">
+    <value>Eroare(erori)</value>
+  </data>
+  <data name="Interview_Complete_First_n_Entities_With_Errors" xml:space="preserve">
+    <value>Primele {0} entități cu erori:</value>
+  </data>
+  <data name="Interview_Complete_No" xml:space="preserve">
+    <value>Fără</value>
+  </data>
+  <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
+    <value>Comentariu pentru supervizor</value>
+  </data>
+  <data name="Interview_Complete_Questions_Status" xml:space="preserve">
+    <value>Statusul întrebării</value>
+  </data>
+  <data name="Interview_Complete_Screen_Description" xml:space="preserve">
+    <value>Sunteți pe punctul de a finaliza acest interviu</value>
+  </data>
+  <data name="Interview_Complete_Screen_DescriptionWithInterviewKey" xml:space="preserve">
+    <value>Sunteți pe punctul de a finaliza interviul {0}</value>
+  </data>
+  <data name="Interview_Complete_Screen_Title" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="Interview_Complete_Unanswered" xml:space="preserve">
+    <value>Întrebări necompletate</value>
+  </data>
+  <data name="Interview_Cover_First_n_Questions_With_Comments" xml:space="preserve">
+    <value>Primele {0} întrebări cu comentarii:</value>
+  </data>
+  <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
+    <value>Întrebări cu comentariile supervizorului:</value>
+  </data>
+  <data name="Interview_Cover_Screen_Title" xml:space="preserve">
+    <value>Copertă</value>
+  </data>
+  <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
+    <value>Notă de supervizor:</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
+    <value>{0} răspunsuri</value>
+  </data>
+  <data name="Interview_Group_AnsweredQuestions_One" xml:space="preserve">
+    <value>un răspuns</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_ManyFormat" xml:space="preserve">
+    <value>{0} erori</value>
+  </data>
+  <data name="Interview_Group_InvalidAnswers_One" xml:space="preserve">
+    <value>o eroare</value>
+  </data>
+  <data name="Interview_Group_Status_CompletedFormat" xml:space="preserve">
+    <value>Secțiune completă: {0}</value>
+  </data>
+  <data name="Interview_Group_Status_NotStarted" xml:space="preserve">
+    <value>Secțiune neîncepută</value>
+  </data>
+  <data name="Interview_Group_Status_StartedIncompleteFormat" xml:space="preserve">
+    <value>Secțiune începută: {0}</value>
+  </data>
+  <data name="Interview_Group_Subgroups_ManyFormat" xml:space="preserve">
+    <value>{0} sub-secțiuni</value>
+  </data>
+  <data name="Interview_Group_Subgroups_One" xml:space="preserve">
+    <value>o sub-secțiune</value>
+  </data>
+  <data name="Interview_Group_Subgroups_Zero" xml:space="preserve">
+    <value>fără sub-secțiuni</value>
+  </data>
+  <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
+    <value>Comentariul Headquarter-ului</value>
+  </data>
+  <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
+    <value>Arată instrucțiunile</value>
+  </data>
+  <data name="Interview_Instruction_Title" xml:space="preserve">
+    <value>Instrucțiune</value>
+  </data>
+  <data name="Interview_Interviewer_Comment_Caption" xml:space="preserve">
+    <value>Comentariul anchetatorului</value>
+  </data>
+  <data name="Interview_LinkedQuestion_Empty" xml:space="preserve">
+    <value>Opțiunile vor fi disponibile după ce răspundeți la întrebarea de referință</value>
+  </data>
+  <data name="Interview_MaxAnswersCount" xml:space="preserve">
+    <value>{0} din {1} opțiuni selectate</value>
+  </data>
+  <data name="Interview_NextSection_ButtonText" xml:space="preserve">
+    <value>Secțiunea următoare</value>
+  </data>
+  <data name="Interview_Other_Comment_Caption" xml:space="preserve">
+    <value>Comentariul utilizatorului</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_AnsweredQuestions" xml:space="preserve">
+    <value>Toate cele {0} întrebări sunt completate</value>
+  </data>
+  <data name="Interview_PreviousGroupNavigation_UnansweredQuestions" xml:space="preserve">
+    <value>Notă: {0} întrebări sunt necompletate</value>
+  </data>
+  <data name="Interview_Questions_Area_SaveAnswer" xml:space="preserve">
+    <value>Apăsați pentru a edita zona</value>
+  </data>
+  <data name="Interview_Questions_Audio_RecordNew" xml:space="preserve">
+    <value>Înregistrare nouă</value>
+  </data>
+  <data name="Interview_Questions_Audio_SaveAnswer" xml:space="preserve">
+    <value>Apăsați pentru a înregistra sunetul</value>
+  </data>
+  <data name="Interview_Questions_Gps_SaveAnswer" xml:space="preserve">
+    <value>Apăsați pentru a înregistra localizarea GPS</value>
+  </data>
+  <data name="Interview_Questions_Integer_ProtectedValue" xml:space="preserve">
+    <value>Un răspuns nou la o întrebare protejată ar trebui să fie mai mare sau egal cu {0}</value>
+  </data>
+  <data name="Interview_Questions_Multimedia_TapToTakePhoto" xml:space="preserve">
+    <value>Apăsați pentru a face o fotografie</value>
+  </data>
+  <data name="Interview_Questions_QrBarcode_SaveAnswer" xml:space="preserve">
+    <value>Apăsați pentru a prelua codul de bare</value>
+  </data>
+  <data name="Interview_Questions_RemoveRowFromRosterMessage" xml:space="preserve">
+    <value>Sigur doriți să eliminați {0} rânduri din fiecare Listă asociată?</value>
+  </data>
+  <data name="Interview_Questions_Timestamp_SaveAnswer" xml:space="preserve">
+    <value>Apăsați pentru a înregistra timpul curent</value>
+  </data>
+  <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
+    <value>Răspunsul "{0}" nu corespunde niciunei opțiuni</value>
+  </data>
+  <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
+    <value>Răspunsul "{0}" nu corespunde niciunei opțiuni</value>
+  </data>
+  <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
+    <value>Valorile necompletate nu pot fi salvate</value>
+  </data>
+  <data name="Interview_Question_Integer_NegativeRosterSizeAnswer" xml:space="preserve">
+    <value>Răspunsul '{0}' este incorect deoarece întrebarea este folosită ca dimensiune a Listei și răspunsul specificat este negativ</value>
+  </data>
+  <data name="Interview_Question_Integer_ParsingError" xml:space="preserve">
+    <value>Valoarea introdusă nu poate fi număr întreg</value>
+  </data>
+  <data name="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" xml:space="preserve">
+    <value>Răspunsul '{0}' este incorect deoarece răspunsul este mai mare decât limita superioară a lui Listei '{1}'.</value>
+  </data>
+  <data name="Interview_Question_List_Empty_Values_Are_Not_Allowed" xml:space="preserve">
+    <value>Valorile necompletate nu sunt permise</value>
+  </data>
+  <data name="Interview_Question_Real_ParsingError" xml:space="preserve">
+    <value>Valoarea introdusă nu poate fi număr zecimal</value>
+  </data>
+  <data name="Interview_Question_Text_Empty" xml:space="preserve">
+    <value>Răspunsul nu poate fi necompletat</value>
+  </data>
+  <data name="Interview_Question_Text_MaskError" xml:space="preserve">
+    <value>Completați toate valorile necesare</value>
+  </data>
+  <data name="Interview_SignatureClear" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="Interview_SignatureSignHere" xml:space="preserve">
+    <value>Semnează aici</value>
+  </data>
+  <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
+    <value>Comentariu supervizor</value>
+  </data>
+  <data name="Interview_TakeSignature" xml:space="preserve">
+    <value>Stocați semnătura</value>
+  </data>
+  <data name="LoginNameHint" xml:space="preserve">
+    <value>Utilizator</value>
+  </data>
+  <data name="LoginText" xml:space="preserve">
+    <value>Intră în cont</value>
+  </data>
+  <data name="LoginTitleText" xml:space="preserve">
+    <value>Survey Solutions Questionnaire Tester</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancel" xml:space="preserve">
+    <value>Ieșire Editor Hărți</value>
+  </data>
+  <data name="MenuItem_Title_AreaCancelEdit" xml:space="preserve">
+    <value>Șterge tot</value>
+  </data>
+  <data name="Messages_WaitPendingOperation" xml:space="preserve">
+    <value>Așteptați până când operația curentă este finalizată</value>
+  </data>
+  <data name="MissingPermission" xml:space="preserve">
+    <value>Aplicația nu are permisiuni suficiente pentru a executa acțiunea solicitată</value>
+  </data>
+  <data name="MissingPermissions_Camera" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a folosi camera pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să folosească camera.</value>
+  </data>
+  <data name="MissingPermissions_Microphone" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a folosi microfonul pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să folosească microfonul.</value>
+  </data>
+  <data name="MissingPermissions_Storage" xml:space="preserve">
+    <value>Aplicația trebuie să aibă permisiunea de a folosi spațiul de stocare pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să folosească spațiul de stocare.</value>
+  </data>
+  <data name="Multimedia_PickFromGallery" xml:space="preserve">
+    <value>Alegeți din galerie</value>
+  </data>
+  <data name="Multimedia_PictureSource" xml:space="preserve">
+    <value>Selectați o opțiune</value>
+  </data>
+  <data name="Multimedia_TakePhoto" xml:space="preserve">
+    <value>Faceți o fotografie</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Parolă</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" xml:space="preserve">
+    <value>Google Play nu este disponibil</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_Location_Client_not_started" xml:space="preserve">
+    <value>Localizarea Clientului nu a început</value>
+  </data>
+  <data name="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" xml:space="preserve">
+    <value>Puteți porni serviciul MvxLocation o singură dată</value>
+  </data>
+  <data name="PrefilledQuestions_StartInterview" xml:space="preserve">
+    <value>START</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracySubTitle" xml:space="preserve">
+    <value>Numărul de metri necesari pentru a stabili acuratețea</value>
+  </data>
+  <data name="Prefs_GpsDesiredAccuracyTitle" xml:space="preserve">
+    <value>Acuratețe necesară pentru întrebările GPS</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
+    <value>Afișare localizare pe hartă</value>
+  </data>
+  <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
+    <value>Încărcați harta pentru a afișa localizarea pentru întrebările GPS</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorSummary" xml:space="preserve">
+    <value>Tableta vibrează când un răspuns nu satisface condiția de validare</value>
+  </data>
+  <data name="Prefs_VibrateOnErrorTitle" xml:space="preserve">
+    <value>Vibrează când este dat un răspuns nevalid</value>
+  </data>
+  <data name="RealQuestion_Hint" xml:space="preserve">
+    <value>Apăsați pentru a introduce zecimale</value>
+  </data>
+  <data name="StaySignedInText" xml:space="preserve">
+    <value>Rămâneți autentificat</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
+    <value>Nu aveți nicio sarcină alocată pe acest dispozitiv. Trimiteți informații despre tabletă, ștergeți datele aplicației și autentificați-vă cu alt cont</value>
+  </data>
+  <data name="TextListQuestion_Hint" xml:space="preserve">
+    <value>Apăsați pentru a introduce un nou element</value>
+  </data>
+  <data name="TextQuestion_Hint" xml:space="preserve">
+    <value>Apăsați pentru a introduce text</value>
+  </data>
+  <data name="TextQuestion_MaskHint" xml:space="preserve">
+    <value>Apăsați pentru a introduce text ({0})</value>
+  </data>
+  <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
+    <value>Răspunsul este invalid</value>
+  </data>
+  <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
+    <value>Răspunsul nu a fost salvat</value>
+  </data>
+  <data name="VariableEmptyValue" xml:space="preserve">
+    <value>&lt;necompletat&gt;</value>
+  </data>
+  <data name="Version_Not_Supports" xml:space="preserve">
+    <value>Versiunea dvs. de aplicație nu acceptă această funcție</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Avertizare</value>
+  </data>
+  <data name="Warnings" xml:space="preserve">
+    <value>Avertizări</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+</root>

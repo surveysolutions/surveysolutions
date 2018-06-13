@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -7,6 +8,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -20,6 +22,7 @@ namespace WB.UI.Interviewer.ViewModel
     {
         readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
+        private readonly IAuditLogService auditLogService;
 
         public InterviewViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -38,40 +41,37 @@ namespace WB.UI.Interviewer.ViewModel
             IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
-            ILastCreatedInterviewStorage lastCreatedInterviewStorage)
+            ILastCreatedInterviewStorage lastCreatedInterviewStorage,
+            IAuditLogService auditLogService)
             : base(questionnaireRepository, interviewRepository, sectionsViewModel,
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
-                interviewViewModelFactory, commandService, jsonSerializer, vibrationViewModel, enumeratorSettings)
+                interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
+            this.auditLogService = auditLogService;
         }
 
-        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToInterview(this.interviewId, this.navigationState.CurrentNavigationIdentity));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => {
-            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
-        public IMvxCommand SignOutCommand => new MvxCommand(this.viewModelNavigationService.SignOutAndNavigateToLogin);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
-        private void NavigateToMaps()
-        {
-            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
-        }
-
-        public override void NavigateBack()
+        public override async Task NavigateBack()
         {
             if (this.HasPrefilledQuestions && this.HasEdiablePrefilledQuestions)
             {
-                this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId);
+                await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId);
             }
             else
             {
-                this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
+                await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             }
         }
 
@@ -89,15 +89,15 @@ namespace WB.UI.Interviewer.ViewModel
             {
                 case ScreenType.Complete:
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
-                    completeInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return completeInterviewViewModel;
                 case ScreenType.Cover:
                     var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Init(this.interviewId, this.navigationState);
+                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return coverInterviewViewModel;
                 case ScreenType.Group:
                     var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                    activeStageViewModel.Init(this.interviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
                     return activeStageViewModel;
                 default:
                     return null;
@@ -106,21 +106,25 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override void ViewAppeared()
         {
-            if (!lastCreatedInterviewStorage.WasJustCreated(interviewId))
+            if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
-                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(interviewId), principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
+                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
             }
+
+            auditLogService.Write(new OpenInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString(), assignmentId));
 
             base.ViewAppeared();
         }
 
         public override void ViewDisappearing()
         {
-            var interview = interviewRepository.Get(this.interviewId);
+            var interview = interviewRepository.Get(this.InterviewId);
             if (!interview.IsCompleted)
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(interviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
             }
+
+            auditLogService.Write(new CloseInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString()));
 
             base.ViewDisappeared();
         }

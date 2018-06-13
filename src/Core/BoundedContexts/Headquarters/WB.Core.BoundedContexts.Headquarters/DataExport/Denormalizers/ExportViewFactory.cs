@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.QuestionnaireEntities;
@@ -92,13 +93,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return result;
         }
 
-        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure, InterviewData interview)
+        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure,
+            InterviewData interview, IQuestionnaire questionnaire)
         {
             var interviewDataExportLevelViews = new List<InterviewDataExportLevelView>();
 
             foreach (var exportStructureForLevel in exportStructure.HeaderToLevelMap.Values)
             {
-                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel);
+                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel, questionnaire);
 
                 var interviewDataExportLevelView = new InterviewDataExportLevelView(
                     exportStructureForLevel.LevelScopeVector, 
@@ -111,7 +113,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray());
         }
 
-        private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview, HeaderStructureForLevel headerStructureForLevel)
+        private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview,
+            HeaderStructureForLevel headerStructureForLevel, IQuestionnaire questionnaire)
         {
             var dataRecords = new List<InterviewDataExportRecord>();
 
@@ -121,21 +124,26 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             {
                 var vectorLength = dataByLevel.RosterVector.Length;
 
-                string recordId = vectorLength == 0
-                    ? interview.InterviewId.FormatGuid()
-                    : dataByLevel.RosterVector.Last().ToString(CultureInfo.InvariantCulture);
-
+                string recordId = interview.InterviewId.FormatGuid();
+                
+                string[] parentRecordIds = new string[vectorLength];
                 string[] systemVariableValues = Array.Empty<string>();
+
                 if (vectorLength == 0)
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
-
-                string[] parentRecordIds = new string[dataByLevel.RosterVector.Length];
-                if (parentRecordIds.Length > 0)
+                else
                 {
+                    var rosterIndexAjustment = headerStructureForLevel.LevelScopeVector
+                        .Select(x => (questionnaire.IsQuestion(x) && questionnaire.IsQuestionInteger(x)) ? 1 : 0)
+                        .ToArray();
+                    
+                    recordId = (dataByLevel.RosterVector.Last() + rosterIndexAjustment.Last())
+                        .ToString(CultureInfo.InvariantCulture);
+
                     parentRecordIds[0] = interview.InterviewId.FormatGuid();
-                    for (int i = 0; i < dataByLevel.RosterVector.Length - 1; i++)
+                    for (int i = 0; i < vectorLength - 1; i++)
                     {
-                        parentRecordIds[i + 1] = dataByLevel.RosterVector[i].ToString(CultureInfo.InvariantCulture);
+                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAjustment[i]).ToString(CultureInfo.InvariantCulture);
                     }
 
                     parentRecordIds = parentRecordIds.Reverse().ToArray();

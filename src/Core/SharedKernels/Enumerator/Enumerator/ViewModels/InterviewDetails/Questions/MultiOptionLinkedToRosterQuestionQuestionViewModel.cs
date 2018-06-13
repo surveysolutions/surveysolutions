@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -52,6 +51,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             foreach (var linkedOption in linkedQuestion.Options)
                 yield return this.CreateOptionViewModel(linkedOption, answeredOptions, interview);
+
+            base.UpateMaxAnswersCountMessage(answeredOptions.Length);
         }
 
         public void Handle(LinkedOptionsChanged @event)
@@ -87,7 +88,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 Value = linkedOption,
                 Checked = answeredOptions.Contains(linkedOption),
                 QuestionState = this.questionState,
-                CheckedOrder = this.areAnswersOrdered ? Array.FindIndex(answeredOptions, x => x.Identical(linkedOption)) + 1 : (int?)null
+                CheckedOrder = this.areAnswersOrdered ? Array.FindIndex(answeredOptions, x => x.Identical(linkedOption)) + 1 : (int?)null,
+                CanBeChecked = answeredOptions.Contains(linkedOption) || !this.maxAllowedAnswers.HasValue || answeredOptions.Length < this.maxAllowedAnswers
             };
     }
 }

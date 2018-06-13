@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
         public void should_return_2_answers_from_2_roster_instances() => interview.GetLinkedMultiOptionQuestion(linkedToQuestionIdentity)
             .Options
             .Select(x => interview.GetAnswerAsString(Identity.Create(sourceOfLinkedQuestionId, x)))
-            .ShouldContainOnly("1", "2");
+            .Should().BeEquivalentTo("1", "2");
 
         private static StatefulInterview interview;
         private static Guid interviewerId = Guid.Parse("55555555555555555555555555555555");

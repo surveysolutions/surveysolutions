@@ -1,19 +1,18 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
 {
     internal class when_hq_filtering_by_archived : UserViewFactoryTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             headquarter1 = Create.Entity.HqUser(headquarter1Id, userName:"headquarter1", role: UserRoles.Headquarter);
 
             supervisor1 = Create.Entity.HqUser(supervisor1Id, userName:"supervisor1", role: UserRoles.Supervisor);
@@ -37,29 +36,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
                 interviewer31, interviewer32, interviewer33, interviewer34);
 
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => result = interviewersViewFactory.GetInterviewers(0, 20, null, null, true, null, null);
+        public void BecauseOf() => result = interviewersViewFactory.GetInterviewers(0, 20, null, null, true, null, null);
 
-        It should_return_3_interviewers = () =>
+        [NUnit.Framework.Test] public void should_return_3_interviewers () 
         {
-            result.TotalCount.ShouldEqual(3);
-            result.Items.Count().ShouldEqual(3);
-        };
+            result.TotalCount.Should().Be(3);
+            result.Items.Count().Should().Be(3);
+        }
 
-        It should_return_all_interviewers_in_correct_order = () =>
+        [NUnit.Framework.Test] public void should_return_all_interviewers_in_correct_order () 
         {
-            result.Items.Skip(0).First().UserId.ShouldEqual(interviewer21Id);
-            result.Items.Skip(1).First().UserId.ShouldEqual(interviewer31Id);
-            result.Items.Skip(2).First().UserId.ShouldEqual(interviewer34Id);
-        };
+            result.Items.Skip(0).First().UserId.Should().Be(interviewer21Id);
+            result.Items.Skip(1).First().UserId.Should().Be(interviewer31Id);
+            result.Items.Skip(2).First().UserId.Should().Be(interviewer34Id);
+        }
 
-        It should_return_supervisorname_for_each_interviewers = () =>
+        [NUnit.Framework.Test] public void should_return_supervisorname_for_each_interviewers () 
         {
-            result.Items.Skip(0).First().SupervisorName.ShouldEqual("supervisor2");
-            result.Items.Skip(1).First().SupervisorName.ShouldEqual("supervisor3");
-            result.Items.Skip(2).First().SupervisorName.ShouldEqual("supervisor3");
-        };
+            result.Items.Skip(0).First().SupervisorName.Should().Be("supervisor2");
+            result.Items.Skip(1).First().SupervisorName.Should().Be("supervisor3");
+            result.Items.Skip(2).First().SupervisorName.Should().Be("supervisor3");
+        }
 
 
         private static HqUser headquarter1;

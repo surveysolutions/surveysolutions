@@ -148,7 +148,14 @@
     <value>Conditions de filtre</value>
   </data>
   <data name="MissingCensusInterviews_Instructions" xml:space="preserve">
-    <value>Pour trouver une entretien, veuillez indiquer le nom du questionnaire. &lt;br/&gt;                                                                                                           Sélectionnez un enquêteur et un calendrier pour affiner votre résultat de recherche</value>
+    <value>"Pour trouver un entretien, veuillez indiquer le nom du questionnaire. &lt;br/&gt;
+
+
+
+Sélectionnez un enquêteur
+et un temps pour affiner vos résultats de recherche. "
+
+</value>
   </data>
   <data name="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" xml:space="preserve">
     <value>Les entretiens {0} satisfont aux conditions de filtrage</value>

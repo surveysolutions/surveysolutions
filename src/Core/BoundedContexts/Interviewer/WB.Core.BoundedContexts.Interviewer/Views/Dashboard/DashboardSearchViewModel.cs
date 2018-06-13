@@ -23,10 +23,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly IMvxMessenger messenger;
 
-        private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-        private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
+        private readonly IDisposable startingLongOperationMessageSubscriptionToken;
+        private readonly IDisposable stopLongOperationMessageSubscriptionToken;
 
         public DashboardSearchViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
@@ -42,7 +41,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.identifyingQuestionsRepo = identifyingQuestionsRepo;
             this.viewModelNavigationService = viewModelNavigationService;
             this.assignmentsRepository = assignmentsRepository;
-            this.messenger = messenger;
+
+            startingLongOperationMessageSubscriptionToken = messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            stopLongOperationMessageSubscriptionToken = messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
         }
 
         public bool IsNeedFocus { get; set; } = true;
@@ -77,7 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty);
-        public IMvxCommand ExitSearchCommand => new MvxCommand(() => viewModelNavigationService.NavigateToDashboard());
+        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToDashboardAsync());
         public IMvxCommand SearchCommand => new MvxCommand<string>(Search);
 
         private void Search(string searctText)
@@ -85,15 +86,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             UpdateUiItems(searctText);
         }
 
-        public override void Load()
+        public override async Task Initialize()
         {
-            startingLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken = this.messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
-
+            await base.Initialize();
             EmptySearchText = InterviewerUIResources.Dashboard_SearchWatermark;
             UpdateUiItems(SearchText);
-
-            base.Load();
         }
 
         private List<InterviewView> interviews;
@@ -172,8 +169,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
                 : InterviewerUIResources.Dashboard_NotFoundSearchResult;
         }
-
-
+        
         protected IEnumerable<IDashboardItem> GetUiItems(string searctText)
         {
             foreach (var assignmentItem in GetAssignmentItems())
@@ -242,8 +238,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public void Dispose()
         {
-            messenger.Unsubscribe<StartingLongOperationMessage>(startingLongOperationMessageSubscriptionToken);
-            messenger.Unsubscribe<StopingLongOperationMessage>(stopLongOperationMessageSubscriptionToken);
+            startingLongOperationMessageSubscriptionToken.Dispose();
+            stopLongOperationMessageSubscriptionToken.Dispose();
 
             this.UiItems?.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
@@ -61,11 +61,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
         [Test]
         public void should_not_multimedia_repository_contains_views_by_specified_id() =>
-            inMemoryMultimediaViewRepository.Where(multimedia => multimedia.InterviewId == interviewId).Any().ShouldBeFalse();
+            inMemoryMultimediaViewRepository.Where(multimedia => multimedia.InterviewId == interviewId).Any().Should().BeFalse();
 
         [Test]
         public void should_not_file_repository_contains_views_by_specified_interview_id() =>
-            inMemoryFileViewRepository.Where(file => file.Id == interviewFile1 || file.Id == interviewFile2).Any().ShouldBeFalse();
+            inMemoryFileViewRepository.Where(file => file.Id == interviewFile1 || file.Id == interviewFile2).Any().Should().BeFalse();
 
         [Test]
         public void should_remove_events_by_specified_interview() =>

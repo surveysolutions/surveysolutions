@@ -1,10 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Entities.Composite;
+﻿using Main.Core.Entities.Composite;
 using NUnit.Framework;
-using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.Questionnaire.Documents;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests

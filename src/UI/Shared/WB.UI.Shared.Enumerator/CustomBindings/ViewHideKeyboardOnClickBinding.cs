@@ -31,7 +31,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            if (isDisposing && this.Target != null)
+            if (IsDisposed)
+                return;
+
+            if (isDisposing && this.Target != null && this.Target.Handle != IntPtr.Zero)
             {
                 this.Target.Click -= this.HandleClick;
             }

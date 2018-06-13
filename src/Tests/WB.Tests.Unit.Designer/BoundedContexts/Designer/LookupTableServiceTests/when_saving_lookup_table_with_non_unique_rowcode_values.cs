@@ -1,5 +1,6 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
 using WB.Core.BoundedContexts.Designer.Resources;
 
@@ -7,7 +8,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
 {
     internal class when_saving_lookup_table_with_non_unique_rowcode_values
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.Test] public void should_throw_ArgumentException () {
             fileContent =
                 $"no{_}rowcode{_}column{_end}" +
                 $"1{_}22222{_}3{_end}" +
@@ -16,21 +17,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.LookupTableServiceTest
                 $"4{_}22222{_}3{_end}";
 
             lookupTableService = Create.LookupTableService();
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
-            exception = Catch.Exception(() =>
+            exception = Assert.Throws<ArgumentException>(() =>
                 lookupTableService.SaveLookupTableContent(questionnaireId, lookupTableId, fileContent));
-
-        [NUnit.Framework.Test] public void should_throw_exception () =>
-            exception.ShouldNotBeNull();
-
-        [NUnit.Framework.Test] public void should_throw_ArgumentException () =>
-            exception.ShouldBeOfExactType<ArgumentException>();
-
-        [NUnit.Framework.Test] public void should_throw_ArgumentException1 () =>
-            ((ArgumentException)exception).Message.ShouldEqual(ExceptionMessages.LookupTables_rowcode_values_must_be_unique);
+            exception.Message.Should().Be(ExceptionMessages.LookupTables_rowcode_values_must_be_unique);
+        }
 
         private static Exception exception;
 

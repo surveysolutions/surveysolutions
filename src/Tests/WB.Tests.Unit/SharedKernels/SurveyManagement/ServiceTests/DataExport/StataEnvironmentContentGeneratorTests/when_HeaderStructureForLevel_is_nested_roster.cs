@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Threading;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
@@ -10,8 +10,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 {
     internal class when_HeaderStructureForLevel_is_nested_roster : StataEnvironmentContentGeneratorTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
 
             var topHeaderStructureForLevel =
@@ -37,21 +36,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
 
             stataEnvironmentContentService =
                 CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
-        };
+            BecauseOf();
+        }
 
-        Because of =
-            () =>
+        private void BecauseOf() =>
                 stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
                     default(CancellationToken));
 
-        It should_contain_stata_script_for_insheet_file = () =>
-            stataGeneratedContent.ShouldContain(string.Format("insheet using \"{0}.tab\", tab case\r\n", dataFileName));
+        [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
+            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName));
 
-        It should_contain_stata_variable_parent2_on_InterviewId_mapping = () =>
-            stataGeneratedContent.ShouldContain("label variable interview__id `\"InterviewId\"'");
+        [NUnit.Framework.Test] public void should_contain_stata_variable_parent2_on_InterviewId_mapping () =>
+            stataGeneratedContent.Should().Contain("label variable interview__id `\"InterviewId\"'");
 
-        It should_contain_stata_variable_parent1_on_parent_roster_mapping = () =>
-            stataGeneratedContent.ShouldContain("label variable parent__id `\"Id in \"parent\"\"'");
+        [NUnit.Framework.Test] public void should_contain_stata_variable_parent1_on_parent_roster_mapping () =>
+            stataGeneratedContent.Should().Contain("label variable parent__id `\"Id in \"parent\"\"'");
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel nestedRosterHeaderStructureForLevel;

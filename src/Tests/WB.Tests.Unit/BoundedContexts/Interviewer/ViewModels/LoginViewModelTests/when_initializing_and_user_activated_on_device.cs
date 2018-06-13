@@ -1,7 +1,5 @@
-using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 
 using Moq;
 
@@ -11,14 +9,11 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-using It = Machine.Specifications.It;
-
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTests
 {
     public class when_initializing_and_user_activated_on_device : LoginViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var interview = Substitute.For<IStatefulInterview>();
 
             var interviewer = CreateInterviewerIdentity(userName);
@@ -30,15 +25,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             viewModel = CreateLoginViewModel(
                 viewModelNavigationService: ViewModelNavigationServiceMock.Object,
                 interviewersPlainStorage: InterviewersPlainStorageMock.Object);
-        };
+            await BecauseOf();
+        }
 
-        Because of = () => viewModel.Load();
+        public async Task BecauseOf() => await viewModel.Initialize();
 
-        It should_fill_user_name = () =>
-            viewModel.UserName.ShouldEqual(userName);
+        [NUnit.Framework.Test] public void should_fill_user_name () =>
+            viewModel.UserName.Should().Be(userName);
 
-        It should_set_IsUserValid_in_true = () =>
-            viewModel.IsUserValid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_set_IsUserValid_in_true () =>
+            viewModel.IsUserValid.Should().BeTrue();
 
         static LoginViewModel viewModel;
         private static readonly string userName = "Vasya";

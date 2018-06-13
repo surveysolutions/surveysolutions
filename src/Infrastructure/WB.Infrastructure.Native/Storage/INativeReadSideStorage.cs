@@ -11,4 +11,10 @@ namespace WB.Infrastructure.Native.Storage
         TResult QueryOver<TResult>(Func<IQueryOver<TEntity, TEntity>, TResult> query);
         int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult, TResult>> query);
     }
+
+    public interface INativeReadSideStorage<TEntity, TKey>: IQueryableReadSideRepositoryReader<TEntity, TKey> where TEntity : class, IReadSideRepositoryEntity
+    {
+        TResult QueryOver<TResult>(Func<IQueryOver<TEntity, TEntity>, TResult> query);
+        int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult, TResult>> query);
+    }
 }

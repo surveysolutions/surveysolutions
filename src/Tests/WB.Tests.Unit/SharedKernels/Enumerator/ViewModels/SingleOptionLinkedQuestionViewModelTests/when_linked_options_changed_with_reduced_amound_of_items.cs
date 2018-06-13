@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -12,8 +12,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 {
     internal class when_linked_options_changed_with_reduced_amound_of_items : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             linkSourceQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             linkedQuestionId = Create.Entity.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
             interviewId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC").FormatGuid();
@@ -37,17 +36,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
             viewModel.Init(interviewId, linkedQuestionId, Create.Other.NavigationState());
 
             interview.RemoveAnswer(linkSourceQuestionId, Create.Entity.RosterVector(2), interviewerId, DateTime.UtcNow);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
+        public void BecauseOf() => viewModel.Handle(Create.Event.LinkedOptionsChanged(new[]
         {
             new ChangedLinkedOptions(linkedQuestionId, new[] { Create.Entity.RosterVector(1) })
         }));
 
 
-        It should_synchronize_visible_options_with_event_data = () => viewModel.Options.Count.ShouldEqual(1);
-        It should_keep_not_removed_options_as_they_were = () => viewModel.Options.First().Title.ShouldEqual("one");
-        It should_not_remove_selected_option = () => viewModel.Options.First().Selected.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_synchronize_visible_options_with_event_data () => viewModel.Options.Count.Should().Be(1);
+        [NUnit.Framework.Test] public void should_keep_not_removed_options_as_they_were () => viewModel.Options.First().Title.Should().Be("one");
+        [NUnit.Framework.Test] public void should_not_remove_selected_option () => viewModel.Options.First().Selected.Should().BeTrue();
 
         static SingleOptionLinkedQuestionViewModel viewModel;
         static Guid linkSourceQuestionId;

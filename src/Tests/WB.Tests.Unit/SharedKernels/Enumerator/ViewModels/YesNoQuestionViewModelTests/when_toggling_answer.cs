@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using Machine.Specifications;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,14 +11,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_toggling_answer : YesNoQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -60,16 +58,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf()
         {
             Thread.Sleep(1);
             viewModel.Options.Second().YesSelected = true;
             viewModel.ToggleAnswerAsync(viewModel.Options.Second()).WaitAndUnwrapException();
-        };
+        }
 
-        It should_send_command_to_service = () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(c =>
+        [NUnit.Framework.Test] public void should_send_command_to_service () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(c =>
             c.AnsweredOptions[0].Yes && c.AnsweredOptions[0].OptionValue == 5 &&
             c.AnsweredOptions[1].Yes && c.AnsweredOptions[1].OptionValue == 2
         )));

@@ -110,7 +110,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
 
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
-
             var errorsExportFilePath = Path.Combine(basePath, InterviewErrorsExporter.FileName);
             errorsExportFilePath = Path.ChangeExtension(errorsExportFilePath, dataFileExtension);
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
@@ -290,7 +289,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 Levels = interviewFactory.GetInterviewDataLevels(questionnaire, interview),
                 InterviewId = interviewToExport.Id
             };
-            InterviewDataExportView interviewDataExportView = exportViewFactory.CreateInterviewDataExportView(exportStructure, interviewData);
+            InterviewDataExportView interviewDataExportView = exportViewFactory.CreateInterviewDataExportView(exportStructure, interviewData, questionnaire);
             InterviewExportedDataRecord exportedData = this.CreateInterviewExportedData(interviewDataExportView, interviewToExport);
             var dataFileSeparator = ExportFileSettings.DataFileSeparator.ToString();
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x => string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
@@ -330,7 +329,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                             systemVariableValues[interviewKeyIndex] = interviewId.Key;
 
                         systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.HasAnyError].Index,
-                            interviewId.HasErrors ? "1" : "0");
+                            interviewId.ErrorsCount.ToString());
                         systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.InterviewStatus].Index,
                             interviewId.Status.ToString());
                     }

@@ -1,5 +1,5 @@
 using System.Web.Http;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ExportApiTests
         private void BecauseOf() => result = controller.Get(new QuestionnaireIdentity().ToString(), DataExportFormat.SPSS);
 
         [NUnit.Framework.Test] public void should_return_progressive_download_result () =>
-            result.ShouldBeOfExactType<ProgressiveDownloadResult>();
+            result.Should().BeOfType<ProgressiveDownloadResult>();
 
         private static ExportController controller;
 

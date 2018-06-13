@@ -207,14 +207,16 @@ body {
   z-index: 2;
 }
 .container-wb-list .header-wb-list header .questionnaire-logo {
-  background: url("../questionnaire/content/i/logo-questionnaire-designer.png") no-repeat;
-  width: 366px;
-  height: 36px;
-  margin: 32px 38px;
+  background: url("../questionnaire/content/i/logo-designer.png") no-repeat;
+  width: 210px;
+  height: 54px;
+  margin: 12px 33px;
   position: absolute;
   top: 0;
   left: 0;
   text-indent: -9999999px;
+  background-size: 100% auto;
+    
 }
 .container-wb-list .header-wb-list header .nav-tabs {
   width: 100%;
@@ -225,7 +227,7 @@ body {
   margin-top: 44px;
 }
 .container-wb-list .header-wb-list header .nav-tabs > li:first-child {
-  margin-left: 450px;
+  margin-left: 300px;
 }
 .container-wb-list .header-wb-list header .nav-tabs > li > a {
   padding-top: 0;

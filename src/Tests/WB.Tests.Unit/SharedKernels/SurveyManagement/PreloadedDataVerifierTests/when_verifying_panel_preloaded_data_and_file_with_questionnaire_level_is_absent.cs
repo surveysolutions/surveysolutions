@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Machine.Specifications;
+using FluentAssertions;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.PreloadedData;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTests
@@ -31,8 +24,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.PreloadedDataVerifierTest
 
             importDataVerifier.VerifyPanelFiles(Guid.NewGuid(), 1, assignmentData, status);
 
-            status.VerificationState.Errors.Count().ShouldEqual(1);
-            status.VerificationState.Errors.First().Code.ShouldEqual("PL0040");
+            status.VerificationState.Errors.Count().Should().Be(1);
+            status.VerificationState.Errors.First().Code.Should().Be("PL0040");
         }
     }
 }

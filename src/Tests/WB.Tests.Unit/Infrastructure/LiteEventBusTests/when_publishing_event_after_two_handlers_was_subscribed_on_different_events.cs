@@ -1,19 +1,16 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
     internal class when_publishing_event_after_two_handlers_was_subscribed_on_different_events : LiteEventBusTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventStub = CreateDummyEvent();
             Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
@@ -25,15 +22,16 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 
             handlerOnDifferentEventMock = new Mock<ILiteEventHandler<DifferentDummyEvent>>();
             eventRegistry.Subscribe(handlerOnDifferentEventMock.Object, eventSourceId.FormatGuid());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             eventBus.PublishCommittedEvents(eventsToPublish);
 
-        It should_not_call_Handle_for_handler_assigned_on_different_event = () =>
+        [NUnit.Framework.Test] public void should_not_call_Handle_for_handler_assigned_on_different_event () =>
             handlerOnDifferentEventMock.Verify(s => s.Handle(Moq.It.IsAny<DifferentDummyEvent>()), Times.Never);
 
-        It should_call_Handle_once_for_handler_on_current_event = () =>
+        [NUnit.Framework.Test] public void should_call_Handle_once_for_handler_on_current_event () =>
             handlerOnFiredEventMock.Verify(s => s.Handle(eventStub), Times.Once());
 
 

@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
     internal class when_creating_export_structure_from_questionnaire_containing_2_questions_one_with_var_lable_other_without : ExportViewFactoryTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                  new NumericQuestion() { PublicKey = questionWithVariableLabelId, QuestionType = QuestionType.Numeric, VariableLabel = variableLabel, QuestionText = "text"},
                  new NumericQuestion() { PublicKey = questionWithoutVariableLabelId, QuestionType = QuestionType.Numeric, QuestionText = questionText}
@@ -27,16 +26,17 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1));
 
-        It should_create_header_with_title_equal_to_variable_lable_if_variable_label_is_not_empty = () =>
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithVariableLabelId].ColumnHeaders[0].Title.ShouldEqual(variableLabel);
+        [NUnit.Framework.Test] public void should_create_header_with_title_equal_to_variable_lable_if_variable_label_is_not_empty () =>
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithVariableLabelId].ColumnHeaders[0].Title.Should().Be(variableLabel);
 
-        It should_create_header_with_title_equal_to_question_title_if_variable_label_is_empty = () =>
-          questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithoutVariableLabelId].ColumnHeaders[0].Title.ShouldEqual(questionText);
+        [NUnit.Framework.Test] public void should_create_header_with_title_equal_to_question_title_if_variable_label_is_empty () =>
+          questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[questionWithoutVariableLabelId].ColumnHeaders[0].Title.Should().Be(questionText);
 
         private static QuestionnaireExportStructure questionnaireExportStructure;
         private static ExportViewFactory exportViewFactory;

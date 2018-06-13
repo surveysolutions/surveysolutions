@@ -1,31 +1,18 @@
 using System;
-using Machine.Specifications;
-using Ncqrs.Eventing;
-using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation;
+using NUnit.Framework;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
     internal class when_publishing_event_and_bus_does_not_have_any_subscriptions : LiteEventBusTestsContext
     {
-        Establish context = () =>
-        {
-            eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
+        [NUnit.Framework.Test] public void should_nothing_happen_including_exceptions () {
+            var eventsToPublish = BuildReadyToBePublishedStream(Guid.NewGuid(), new DummyEvent());
 
-            eventBus = Create.Service.LiteEventBus();
-        };
+            var eventBus = Create.Service.LiteEventBus();
 
-        Because of = () =>
-            exception = Catch.Exception(() => eventBus.PublishCommittedEvents(eventsToPublish));
+            Assert.That(() => eventBus.PublishCommittedEvents(eventsToPublish), Throws.Nothing);
+        }
 
-        It should_nothing_happen_including_exceptions = () =>
-            exception.ShouldBeNull();
-
-
-        private static LiteEventBus eventBus;
-        private static CommittedEventStream eventsToPublish;
-        private static Exception exception;
     }
 }

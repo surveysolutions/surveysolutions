@@ -5,19 +5,96 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.BatchUpload_Title;
 }
-
+@section styles
+{
+    <style>
+        .has-error .input-group-btn .btn {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #a94442;
+        }
+        .has-error .form-control {
+            border-color: #a94442;
+        }
+    </style>
+}
 @section scripts
 {
     @Scripts.Render("~/validate")
+    @Scripts.Render("~/js/responsibles-selector", "~/Scripts/knockout.validation.min.js", "~/Scripts/viewmodels/pages/interview/custom.js")
     <script type="text/javascript">
-        $(function () {
-            $('.prefilled-file-upload').bind('change', function() {
-                var fileSize = this.files[0].size / 1024 / 1024;
-                if (fileSize > 300) {
-                    bootbox.alert('@BatchUpload.FileSizeLimit');
-                    $(".prefilled-file-upload").val('');
+        var StartInterviewCreationModel = function (ajax) {
+            var $responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "Responsibles" })';
+
+            var self = this;
+
+            self.isResponsiblesLoading = ko.observable(false);
+            self.responsibles = function (query, sync, pageSize) {
+                self.isResponsiblesLoading(true);
+                ajax.sendRequest($responsiblesUrl, "get", { query: query, pageSize: pageSize }, true,
+                    // onSuccess
+                    function (response) {
+                        sync(response.Users, response.TotalCountByQuery);
+                    },
+                    // onDone
+                    function () {
+                        self.isResponsiblesLoading(false);
+                    });
+            };
+
+            self.selectedResponsible = ko.observable(undefined).extend({
+                validation: {
+                    validator: function (val) {
+                        return val != undefined;
+                    },
+                    message: '@BatchUpload.RequiredField'
                 }
             });
+
+            self.selectedResponsibleId = ko.computed(function () {
+                return _.isUndefined(self.selectedResponsible()) ? "" : self.selectedResponsible().ResponsibleId;
+            });
+
+            self.isResponsibleSelected = ko.computed(function () {
+                return !_.isUndefined(self.selectedResponsible());
+            });
+
+            self.errors = ko.validation.group(self);
+
+            self.isViewModelValid = function() {
+                if (self.errors().length === 0) {
+                    return true;
+                } else {
+                    self.errors.showAllMessages();
+                    return false;
+                }
+            };
+        };
+
+        $(function () {
+            var model = new StartInterviewCreationModel(new Ajax(new Notifier()));
+            ko.applyBindings(model);
+
+            $('.file').bind('change', function () {
+                Upload(this);
+            });
+
+            function Upload(inputFile) {
+                if (!model.isViewModelValid()) {
+                    $(inputFile).val('');
+                    return;
+                }
+
+                var fileSize = inputFile.files[0].size / 1024 / 1024;
+                if (fileSize > 300) {
+                    bootbox.alert('@BatchUpload.FileSizeLimit');
+                    $(inputFile).val('');
+                    return;
+                }
+
+                inputFile.form.submit();
+            }
+
             $('.toggle-prefilled-table').click(function () {
                 $('.prefilled-table').toggle();
                 return false;
@@ -48,45 +125,88 @@
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block">
                 <p>@BatchUpload.UploadDescription</p>
-                <p>@BatchUpload.EmptySupervisorDescription</p>
             </div>
         </div>
-@if (Model != null && Model.FeaturedQuestions != null)
+@if (Model?.FeaturedQuestions != null || Model.HiddenQuestions.Count > 0 || Model.RosterSizeQuestions.Count > 0)
 {
         <div class="row">
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block short-prefilled-data-info">
-                <a href="#" class="list-required-prefilled-data">@BatchUpload.ViewListPrefilledData</a>
+                <a href="javascript:void(0)" class="list-required-prefilled-data">@BatchUpload.ViewListPreloadedData</a>
             </div>
             <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info" style="display: none;">
-                <h3>@BatchUpload.PrefilledRequiredData</h3>
-                <p>
-                    @BatchUpload.DownloadDescListRequiredPreffiledData
-                    <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadLinkTitleListRequiredPreffiledData</a>
-                </p>
-                <ul class="list-unstyled prefilled-data">
-                    @foreach (var item in Model.FeaturedQuestions)
-                    {
-                        <li>@Html.DisplayFor(modelItem => item.Caption)</li>
-                    }
-                </ul>
-                <a href="#" class="hide-list-of-required-prefilled-data">@BatchUpload.HideListPrefilledData</a>
+                @if (Model?.FeaturedQuestions.Count > 0)
+                {
+                    <h3>@BatchUpload.IdentifyingQuestions</h3>
+
+                    <ul class="list-unstyled prefilled-data">
+                        @foreach (var item in Model.FeaturedQuestions)
+                        {
+                            <li>@Html.DisplayFor(modelItem => item.Caption)</li>
+                        }
+                    </ul>
+                }
+                @if (Model.HiddenQuestions.Count > 0)
+                {
+                    <h3>
+                        @BatchUpload.HiddenQuestions
+                    </h3>
+                    <ul class="list-unstyled prefilled-data">
+                        @foreach (var item in Model.HiddenQuestions)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                }
+                @if (Model.RosterSizeQuestions.Count > 0)
+                {
+                    <h3>
+                        @BatchUpload.RosterSizeQuestions
+                    </h3>
+                    <ul class="list-unstyled prefilled-data">
+                        @foreach (var item in Model.RosterSizeQuestions)
+                        {
+                            <li>@item</li>
+                        }
+                    </ul>
+                }
             </div>
             <script type="text/javascript">
                     $(function() {
                         $(".list-required-prefilled-data")
-                            .click(function() {
+                            .click(function () {
                                 $(".short-prefilled-data-info").hide();
                                 $(".full-prefilled-data-info").show();
                             });
                         $(".hide-list-of-required-prefilled-data")
-                            .click(function() {
+                            .click(function () {
                                 $(".full-prefilled-data-info").hide();
                                 $(".short-prefilled-data-info").show();
                             });
                     });
-            </script>
-        </div>
-}
+                </script>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 col-xs-10 prefilled-data-info info-block full-prefilled-data-info">
+                    <h3>@BatchUpload.Select_Responsible</h3>
+                    <p>
+                        @BatchUpload.Select_Responsible_Description
+                    </p>
+                    <div class="form-group" data-bind="validationElement: selectedResponsible">
+                        <div class="input-group">
+                            <input placeholder="@BatchUpload.ImportInterviews_SelectResponsible"
+                                   class="form-control"
+                                   data-bind="typeahead: selectedResponsible, typeaheadOptions: {source: responsibles, displayText: function(item){return item.UserName}}, valueupdate:'afterkeydown'"
+                                   type="text" />
+                            <span data-bind="spinner: isResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                            <div class="input-group-btn" data-bind="click: function(){ selectedResponsible(undefined); }">
+                                <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                            </div>
+                        </div>
+                        <span class="help-block" data-bind="validationMessage: selectedResponsible"></span>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row flex-row">
             <div class="col-sm-6">
                 <div class="flex-block selection-box">
@@ -96,17 +216,19 @@
                     </div>
                     <div>
                         <a href="@Url.Action("SimpleTemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTabTemplate</a>
-                        @using (Html.BeginForm("AssignmentsBatchUploadAndVerify", "SurveySetup", new {questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, FormMethod.Post, new {enctype = "multipart/form-data"}))
+                        @using (Html.BeginForm("AssignmentsBatchUploadAndVerify", "SurveySetup", new { questionnaireId = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, FormMethod.Post, new { enctype = "multipart/form-data" }))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
                             @Html.HiddenFor(x => x.QuestionnaireVersion)
+                            @Html.HiddenFor(x => x.ResponsibleId, new { data_bind= "value: selectedResponsibleId" })
+                            
                             @Html.Partial("ClientTimezoneOffset")
-                            <label class="btn btn-success btn-file">
-                                @BatchUpload.UploadTabFile
-                                @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".tab, .txt, .zip", onchange = "this.form.submit()"})
-                            </label>
-                            @Html.ValidationMessageFor(x => x.File, null, new {@class = "help-block"})
+                        <label class="btn btn-success btn-file">
+                            @BatchUpload.UploadTabFile
+                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".tab, .txt, .zip", @class = "file" })
+                        </label>
+                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
                         }
                     </div>
                 </div>
@@ -119,17 +241,19 @@
                     </div>
                     <div>
                         <a href="@Url.Action("TemplateDownload", "SurveySetup", new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion})">@BatchUpload.DownloadTemplateArchive</a>
-                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "SurveySetup", routeValues: new {id = Model.QuestionnaireId, version = Model.QuestionnaireVersion}, method: FormMethod.Post, htmlAttributes: new {enctype = "multipart/form-data"}))
+                        @using (Html.BeginForm("PanelBatchUploadAndVerify", "SurveySetup", routeValues: new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }, method: FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
                         {
                             @Html.AntiForgeryToken()
                             @Html.HiddenFor(x => x.QuestionnaireId)
                             @Html.HiddenFor(x => x.QuestionnaireVersion)
+                            @Html.HiddenFor(x => x.ResponsibleId, new { data_bind= "value: selectedResponsibleId" })
+
                             @Html.Partial("ClientTimezoneOffset")
-                            <label class="btn btn-success btn-file">
-                                @BatchUpload.UploadZipFile
-                                @Html.TextBoxFor(m => m.File, new {type = "file", accept = ".zip", onchange = "this.form.submit()"})
-                            </label>
-                            @Html.ValidationMessageFor(x => x.File, null, new {@class = "help-block"})
+                        <label class="btn btn-success btn-file">
+                            @BatchUpload.UploadZipFile
+                            @Html.TextBoxFor(m => m.File, new { type = "file", accept = ".zip", @class = "file" })
+                        </label>
+                            @Html.ValidationMessageFor(x => x.File, null, new { @class = "help-block" })
                         }
                     </div>
                 </div>

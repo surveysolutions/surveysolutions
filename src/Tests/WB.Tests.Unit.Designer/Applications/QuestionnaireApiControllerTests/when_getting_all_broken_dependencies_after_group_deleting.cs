@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,10 +30,10 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireApiControllerTests
             result = controller.GetAllBrokenGroupDependencies(questionnaireId, groupId);
 
         [NUnit.Framework.Test] public void should_return_not_null_result () =>
-            result.ShouldNotBeNull();
+            result.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_return_list_of_links_returned_by_factory () =>
-            result.ShouldEqual(brokenLinks);
+            result.Should().BeEquivalentTo(brokenLinks);
 
         private static QuestionnaireController controller;
         private static List<QuestionnaireItemLink> result;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -39,19 +39,19 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CopyPasteTes
             questionnaire.PasteAfter(command);
 
         [NUnit.Framework.Test] public void should_contains_variable () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_contains_variable_with_QuestionId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).PublicKey.ShouldEqual(targetId);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).PublicKey.Should().Be(targetId);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_variableType_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Type.ShouldEqual(variableType);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Type.Should().Be(variableType);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_variableName_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Name.ShouldEqual(variableName);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Name.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_contains_variable_with_variableExpression_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Expression.ShouldEqual(variableExpression);
+            questionnaire.QuestionnaireDocument.Find<IVariable>(targetId).Expression.Should().Be(variableExpression);
 
         static Questionnaire questionnaire;
         static Guid questionToPastAfterId;

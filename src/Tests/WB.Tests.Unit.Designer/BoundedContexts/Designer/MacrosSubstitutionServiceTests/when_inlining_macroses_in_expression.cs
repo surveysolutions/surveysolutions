@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MacrosSubstitutionServ
             result = macrosSubstitutionService.InlineMacros(expression, macros);
 
         [NUnit.Framework.Test] public void should_inline_longer_macros_first () =>
-            result.ShouldEqual("aaexpression + bbexpression");
+            result.Should().Be("aaexpression + bbexpression");
 
         private static List<Macro> macros; 
         private static string expression;

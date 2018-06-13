@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
             user.Update(userName: "username", comment: null, email: null, passwordQuestion: null, isLockedOut: false, isConfirmed: false, canImportOnHq: false);
 
         [NUnit.Framework.Test] public void should_set_IsLockedOut_to_false () =>
-            user.IsLockedOut.ShouldEqual(false);
+            user.IsLockedOut.Should().Be(false);
 
         private static User user;
     }

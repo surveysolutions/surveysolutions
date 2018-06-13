@@ -133,7 +133,7 @@
     <value>DDI</value>
   </data>
   <data name="export" xml:space="preserve">
-    <value>exporter</value>
+    <value>processus d'exportation</value>
   </data>
   <data name="Format" xml:space="preserve">
     <value>Format</value>
@@ -227,5 +227,32 @@
   </data>
   <data name="ZipArchiveDescription" xml:space="preserve">
     <value>Archive zip avec les principales données d'entretien</value>
+  </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>Compression</value>
+  </data>
+  <data name="Dropbox" xml:space="preserve">
+    <value>Dropbox</value>
+  </data>
+  <data name="ExportBtn" xml:space="preserve">
+    <value>Exportation</value>
+  </data>
+  <data name="FromDate" xml:space="preserve">
+    <value>A partir de</value>
+  </data>
+  <data name="GoogleDrive" xml:space="preserve">
+    <value>Google Drive</value>
+  </data>
+  <data name="OneDrive" xml:space="preserve">
+    <value>OneDrive</value>
+  </data>
+  <data name="SaveBinaryDataTo" xml:space="preserve">
+    <value>Enregistrez les données binaires dans:</value>
+  </data>
+  <data name="ToDate" xml:space="preserve">
+    <value>Pour</value>
+  </data>
+  <data name="ZipFile" xml:space="preserve">
+    <value>Fichier zip</value>
   </data>
 </root>

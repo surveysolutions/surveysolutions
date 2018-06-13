@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -37,10 +37,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
             result = factory.GetQuestionsEligibleForNumericRosterTitle(questionnaireId, roster2Id, rosterSizeQuestionId);
 
         [NUnit.Framework.Test] public void should_return_2_elements_to_show_in_dropdown () =>
-            result.Count.ShouldEqual(2);
+            result.Count.Should().Be(2);
 
         [NUnit.Framework.Test] public void should_return_roster_title_questions_as_the_second_element () => 
-            result.ElementAt(1).Id.ShouldEqual(rosterTitleQuestionId.FormatGuid());
+            result.ElementAt(1).Id.Should().Be(rosterTitleQuestionId.FormatGuid());
 
         private static QuestionnaireInfoFactory factory;
         private static List<DropdownEntityView> result;

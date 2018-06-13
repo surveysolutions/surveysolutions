@@ -1,34 +1,34 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentContentServiceTests
 {
     class when_getting_attachment_content_types
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var attachmentContentPlainStorage = new TestPlainStorage<AttachmentContent>();
             attachmentContentPlainStorage.Store(expectedContent, contentHash);
             attachmentContentService = Create.Service.AttachmentContentService(attachmentContentPlainStorage);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = attachmentContentService.GetAttachmentInfosByContentIds(new List<string>() {  contentHash});
 
-        It should_return_one_item = () =>
-            result.Count().ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_return_one_item () =>
+            result.Count().Should().Be(1);
 
-        It should_return_correct_value = () =>
+        [NUnit.Framework.Test] public void should_return_correct_value () 
         {
-            result.First().ContentHash.ShouldEqual(contentHash);
-            result.First().ContentType.ShouldEqual(contentType);
-        };
+            result.First().ContentHash.Should().Be(contentHash);
+            result.First().ContentType.Should().Be(contentType);
+        }
 
         private static AttachmentContentService attachmentContentService;
         private static string contentHash = "content id";

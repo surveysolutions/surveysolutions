@@ -1,26 +1,22 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
-using NSubstitute;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_handling_SingleOptionQuestionAnswered_for_parent_question : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             SetUp();
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(answerOnChildQuestion));
             var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(1));
@@ -51,23 +47,24 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
             StatefulInterviewMock.Setup(x => x.GetSingleOptionQuestion(parentIdentity)).Returns(secondParentOptionAnswer);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             cascadingModel.Handle(
                 Create.Event.SingleOptionQuestionAnswered(parentIdentity.Id, parentIdentity.RosterVector, 2));
             Thread.Sleep(1000);
-        };
+        }
 
-        It should_set_not_empty_list_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldNotBeEmpty();
+        [NUnit.Framework.Test] public void should_set_not_empty_list_in_AutoCompleteSuggestions () =>
+            cascadingModel.AutoCompleteSuggestions.Should().NotBeEmpty();
 
-        It should_set_3_items_in_AutoCompleteSuggestions = () =>
-            cascadingModel.AutoCompleteSuggestions.Count.ShouldEqual(3);
+        [NUnit.Framework.Test] public void should_set_3_items_in_AutoCompleteSuggestions () =>
+            cascadingModel.AutoCompleteSuggestions.Count.Should().Be(3);
 
-        It should_create_option_models_with_specified_Texts = () =>
-            cascadingModel.AutoCompleteSuggestions.ShouldContainOnly(OptionsIfParentAnswerIs2.Select(x => x.Title));
+        [NUnit.Framework.Test] public void should_create_option_models_with_specified_Texts () =>
+            cascadingModel.AutoCompleteSuggestions.Should().BeEquivalentTo(OptionsIfParentAnswerIs2.Select(x => x.Title));
 
         private static readonly List<CategoricalOption> OptionsIfParentAnswerIs2 = Options.Where(x => x.ParentValue == 2).ToList();
 

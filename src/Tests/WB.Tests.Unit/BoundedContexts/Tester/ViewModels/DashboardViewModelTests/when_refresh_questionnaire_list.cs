@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-using Machine.Specifications;
-
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
@@ -36,11 +34,11 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
 
         public void Because() => viewModel.RefreshQuestionnairesCommand.ExecuteAsync().WaitAndUnwrapException();
 
-        [Test] public void should_stay_on_same_tab_with_public_questionnaires () => viewModel.IsPublicShowed.ShouldBeTrue();
-        [Test] public void should_Questionnaires_have_3_public_questionnaires () => viewModel.Questionnaires.Count.ShouldEqual(3);
-        [Test] public void should_contains_only_public_questionnaires () => viewModel.Questionnaires.All(_ => _.IsPublic).ShouldBeTrue();
-        [Test] public void should_set_MyQuestionnairesCount_to_2 () => viewModel.MyQuestionnairesCount.ShouldEqual(2);
-        [Test] public void should_set_PublicQuestionnairesCount_to_3 () => viewModel.PublicQuestionnairesCount.ShouldEqual(3);
+        [Test] public void should_stay_on_same_tab_with_public_questionnaires () => viewModel.IsPublicShowed.Should().BeTrue();
+        [Test] public void should_Questionnaires_have_3_public_questionnaires () => viewModel.Questionnaires.Count.Should().Be(3);
+        [Test] public void should_contains_only_public_questionnaires () => viewModel.Questionnaires.All(_ => _.IsPublic).Should().BeTrue();
+        [Test] public void should_set_MyQuestionnairesCount_to_2 () => viewModel.MyQuestionnairesCount.Should().Be(2);
+        [Test] public void should_set_PublicQuestionnairesCount_to_3 () => viewModel.PublicQuestionnairesCount.Should().Be(3);
 
         private static DashboardViewModel viewModel;
         private static readonly IReadOnlyCollection<QuestionnaireListItem> Questionnaires = new List<QuestionnaireListItem>

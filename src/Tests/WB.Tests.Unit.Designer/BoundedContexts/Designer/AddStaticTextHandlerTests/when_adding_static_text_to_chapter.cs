@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
@@ -21,13 +21,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AddStaticTextHandlerTe
 
 
         [NUnit.Framework.Test] public void should_raise_StaticTextAdded_event_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).ShouldNotBeNull();
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_raise_StaticTextAdded_event_with_ParentId_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().PublicKey.ShouldEqual(chapterId);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).GetParent().PublicKey.Should().Be(chapterId);
 
         [NUnit.Framework.Test] public void should_raise_StaticTextAdded_event_with_Text_specified () =>
-            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.ShouldEqual(text);
+            questionnaire.QuestionnaireDocument.Find<IStaticText>(entityId).Text.Should().Be(text);
 
 
         private static Questionnaire questionnaire;

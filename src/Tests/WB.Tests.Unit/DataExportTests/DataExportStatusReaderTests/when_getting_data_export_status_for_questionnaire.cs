@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -65,19 +65,19 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
         [Test]
         public void should_CanRefreshBeRequested_be_false_for_data_tabular_export()
         {
-            DataExportView(DataExportType.Data, DataExportFormat.Tabular).CanRefreshBeRequested.ShouldBeFalse();
+            DataExportView(DataExportType.Data, DataExportFormat.Tabular).CanRefreshBeRequested.Should().BeFalse();
         }
 
         [Test]
         public void should_CanRefreshBeRequested_be_true_for_data_binary_export()
         {
-            DataExportView(DataExportType.Data, DataExportFormat.Binary).CanRefreshBeRequested.ShouldBeFalse();
+            DataExportView(DataExportType.Data, DataExportFormat.Binary).CanRefreshBeRequested.Should().BeFalse();
         }
 
         [Test]
         public void should_CanRefreshBeRequested_be_true_for_data_stata_export()
         {
-            DataExportView(DataExportType.Data, DataExportFormat.STATA).CanRefreshBeRequested.ShouldBeTrue();
+            DataExportView(DataExportType.Data, DataExportFormat.STATA).CanRefreshBeRequested.Should().BeTrue();
         }
 
         [Test]
@@ -96,67 +96,67 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
         [Test]
         public void should_first_running_process_be_of_type_ParaData()
         {
-            result.RunningDataExportProcesses[0].Type.ShouldEqual(DataExportType.ParaData);
+            result.RunningDataExportProcesses[0].Type.Should().Be(DataExportType.ParaData);
         }
 
         [Test]
         public void should_HasDataToExport_be_false_for_data_binary_export()
         {
-            DataExportView(DataExportType.Data, DataExportFormat.Binary).HasDataToExport.ShouldBeFalse();
+            DataExportView(DataExportType.Data, DataExportFormat.Binary).HasDataToExport.Should().BeFalse();
         }
 
         [Test]
         public void should_HasDataToExport_be_false_for_data_stata_export()
         {
-            DataExportView(DataExportType.Data, DataExportFormat.STATA).HasDataToExport.ShouldBeFalse();
+            DataExportView(DataExportType.Data, DataExportFormat.STATA).HasDataToExport.Should().BeFalse();
         }
 
         [Test]
         public void should_HasDataToExport_be_true_for_data_tabular_export()
         {
-            DataExportView(DataExportType.Data, DataExportFormat.Tabular).HasDataToExport.ShouldBeTrue();
+            DataExportView(DataExportType.Data, DataExportFormat.Tabular).HasDataToExport.Should().BeTrue();
         }
 
         [Test]
         public void should_return_3_running_processes()
         {
-            result.RunningDataExportProcesses.Length.ShouldEqual(3);
+            result.RunningDataExportProcesses.Length.Should().Be(3);
         }
 
         [Test]
         public void should_return_5_data_exports()
         {
-            result.DataExports.Length.ShouldEqual(6);
+            result.DataExports.Length.Should().Be(6);
         }
 
         [Test]
         public void should_second_running_process_be_of_type_Data()
         {
-            result.RunningDataExportProcesses[1].Type.ShouldEqual(DataExportType.Data);
+            result.RunningDataExportProcesses[1].Type.Should().Be(DataExportType.Data);
         }
 
         [Test]
         public void should_second_running_process_QuestionnaireIdentity_be_equal_to_questionnaireIdentity()
         {
-            result.RunningDataExportProcesses[1].QuestionnaireIdentity.ShouldEqual(questionnaireIdentity);
+            result.RunningDataExportProcesses[1].QuestionnaireIdentity.Should().Be(questionnaireIdentity);
         }
 
         [Test]
         public void should_second_running_process_QuestionnaireIdentity_not_be_null()
         {
-            result.RunningDataExportProcesses[0].QuestionnaireIdentity.ShouldEqual(questionnaireIdentity);
+            result.RunningDataExportProcesses[0].QuestionnaireIdentity.Should().Be(questionnaireIdentity);
         }
 
         [Test]
         public void should_third_running_process_be_of_type_Data()
         {
-            result.RunningDataExportProcesses[2].Type.ShouldEqual(DataExportType.Data);
+            result.RunningDataExportProcesses[2].Type.Should().Be(DataExportType.Data);
         }
 
         [Test]
         public void should_third_running_process_QuestionnaireIdentity_be_not_equal_to_questionnaireIdentity()
         {
-            result.RunningDataExportProcesses[2].QuestionnaireIdentity.ShouldNotEqual(questionnaireIdentity);
+            result.RunningDataExportProcesses[2].QuestionnaireIdentity.Should().NotBe(questionnaireIdentity);
         }
 
         private void ShouldExportDataTypeInFormat(DataExportType dataExportType,
@@ -165,7 +165,7 @@ namespace WB.Tests.Unit.DataExportTests.DataExportStatusReaderTests
             result.DataExports.Where(d => d.DataExportType == dataExportType)
                 .Select(d => d.DataExportFormat)
                 .ToArray()
-                .ShouldEqual(expectedFormats);
+                .Should().BeEquivalentTo(expectedFormats);
         }
     }
 }

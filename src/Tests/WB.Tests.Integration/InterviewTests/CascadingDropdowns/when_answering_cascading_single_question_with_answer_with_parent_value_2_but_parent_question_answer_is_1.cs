@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Tests.Abc;
 
@@ -12,12 +13,13 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
     internal class when_answering_cascading_single_question_with_answer_with_parent_value_2_but_parent_question_answer_is_1 :
         InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
 
-        Because of = () =>
+            BecauseOf();
+        }
+
+        private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 var parentSingleOptionQuestionId = Guid.Parse("00000000000000000000000000000000");
@@ -54,7 +56,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
 
                 using (var eventContext = new EventContext())
                 {
-                    var exception = Catch.Exception(() =>
+                    var exception = Assert.Throws<AnswerNotAcceptedException>(() =>
                         interview.AnswerSingleOptionQuestion(actorId, childCascadedComboboxId, new decimal[] { }, DateTime.Now, 22)
                         );
 
@@ -66,18 +68,19 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 }
             });
 
-        It should_throw_AnswerNotAcceptedException = () =>
-            results.ExceptionType.ShouldEqual(typeof(AnswerNotAcceptedException));
+        [NUnit.Framework.Test] public void should_throw_AnswerNotAcceptedException () =>
+            results.ExceptionType.Should().Be(typeof(AnswerNotAcceptedException));
 
-        It should_throw_exception_with_message_containting__answer____parent_value____incorrect__ = () =>
-            new[] { "answer", "parent value", "do not correspond" }.ShouldEachConformTo(
-                keyword => results.ErrorMessage.Contains(keyword));
+        [NUnit.Framework.Test]
+        public void should_throw_exception_with_message() =>
+            results.ErrorMessage.Should().Be("selected value do not correspond to the parent answer selected value");
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void TearDown()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -10,14 +10,13 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionViewModelTests
 {
     internal class when_initializing_answered_question : MultiOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             interviewId = "interview";
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
@@ -51,22 +50,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 interviewRepository: interviewRepository.Object,
                 eventRegistry: eventRegistry.Object,
                 filteredOptionsViewModel: filteredOptionsViewModel);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Init(interviewId, questionId, navigationState);
+        public void BecauseOf() => viewModel.Init(interviewId, questionId, navigationState);
 
-        It should_build_options = () => viewModel.Options.Count.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_build_options () => viewModel.Options.Count.Should().Be(2);
 
-        It should_mark_answered_options_as_checked = () =>
+        [NUnit.Framework.Test] public void should_mark_answered_options_as_checked () 
         {
             var firstOption = viewModel.Options.First();
-            firstOption.Checked.ShouldBeTrue();
-            firstOption.Title.ShouldEqual("item1");
-            firstOption.CheckedOrder.ShouldEqual(1);
-            firstOption.Value.ShouldEqual(1);
-        };
+            firstOption.Checked.Should().BeTrue();
+            firstOption.Title.Should().Be("item1");
+            firstOption.CheckedOrder.Should().Be(1);
+            firstOption.Value.Should().Be(1);
+        }
 
-        It should_subscribe_model_in_events_registry = () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
+        [NUnit.Framework.Test] public void should_subscribe_model_in_events_registry () => eventRegistry.Verify(x => x.Subscribe(viewModel, Moq.It.IsAny<string>()));
 
         static MultiOptionQuestionViewModel viewModel;
         static string interviewId;

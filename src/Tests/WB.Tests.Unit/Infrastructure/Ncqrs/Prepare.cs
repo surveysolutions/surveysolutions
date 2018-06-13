@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.Sourcing;
-using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace Ncqrs.Spec

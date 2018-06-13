@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -8,14 +8,13 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_text_question_which_is_roster_title_for_2_rosters_and_roster_level_is_1 : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
 
@@ -47,38 +46,39 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             interview.Apply(Create.Event.RosterInstancesAdded(rosterBId, emptyRosterVector, rosterInstanceId, sortIndex: null));
 
             eventContext = new EventContext();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interview.AnswerTextQuestion(userId, questionId, rosterVector, DateTime.Now, answer);
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             eventContext.Dispose();
             eventContext = null;
-        };
+        }
 
-        It should_raise_TextQuestionAnswered_event = () =>
+        [NUnit.Framework.Test] public void should_raise_TextQuestionAnswered_event () =>
             eventContext.ShouldContainEvent<TextQuestionAnswered>();
 
-        It should_raise_21_RosterRowsTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_raise_21_RosterRowsTitleChanged_events () =>
             eventContext.ShouldContainEvents<RosterInstancesTitleChanged>(count: 1);
 
-        It should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_2_affected_roster_ids_in_RosterRowsTitleChanged_events () =>
            eventContext.GetEvents<RosterInstancesTitleChanged>().SelectMany(@event => @event.ChangedInstances.Select(r => r.RosterInstance.GroupId)).ToArray()
-               .ShouldContainOnly(rosterAId, rosterBId);
+               .Should().BeEquivalentTo(rosterAId, rosterBId);
 
-        It should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_empty_outer_roster_vector_to_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.OuterRosterVector.SequenceEqual(emptyRosterVector)));
 
-        It should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_last_element_of_roster_vector_to_roster_instance_id_in_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.RosterInstance.RosterInstanceId == rosterVector.Last()));
 
-        It should_set_question_answer_to_roster_title_in_all_RosterRowTitleChanged_events = () =>
+        [NUnit.Framework.Test] public void should_set_question_answer_to_roster_title_in_all_RosterRowTitleChanged_events () =>
             eventContext.GetEvents<RosterInstancesTitleChanged>()
-                .ShouldEachConformTo(@event => @event.ChangedInstances.All(x => x.Title == answer));
+                .Should().OnlyContain(@event => @event.ChangedInstances.All(x => x.Title == answer));
 
         private static EventContext eventContext;
         private static Interview interview;

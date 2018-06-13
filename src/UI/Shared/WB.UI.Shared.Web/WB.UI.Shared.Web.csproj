@@ -45,7 +45,7 @@
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.2\lib\net461\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="ImageResizer, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\ImageResizer.4.2.0\lib\net45\ImageResizer.dll</HintPath>
@@ -59,11 +59,11 @@
     <Reference Include="NConfig, Version=1.1.23.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NConfig.1.1.23\lib\Net40\NConfig.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=5.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NHibernate.5.0.3\lib\net461\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=5.1.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NHibernate.5.1.0\lib\net461\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -175,6 +175,7 @@
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\ModuleExtensions.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
+    <Compile Include="Modules\NinjectKernel.cs" />
     <Compile Include="Modules\NinjectModuleAdapter.cs" />
     <Compile Include="Modules\NinjectModuleContext.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
@@ -212,11 +213,12 @@
       <Name>WB.Core.SharedKernels.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
-      <Project>{0f67084b-3ecb-4f88-ba20-5a6c7acc35bf}</Project>
+      <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -243,9 +245,11 @@
     <EmbeddedResource Include="Resources\Captcha.zh.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ar.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.es.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.ka.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>

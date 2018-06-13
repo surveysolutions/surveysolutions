@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reactive.Subjects;
 using NUnit.Framework;
 using WB.Tests.Abc;
 using WB.UI.WebTester.Services;

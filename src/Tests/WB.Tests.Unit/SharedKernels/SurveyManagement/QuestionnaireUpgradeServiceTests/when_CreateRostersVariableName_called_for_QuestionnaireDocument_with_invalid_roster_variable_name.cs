@@ -1,5 +1,5 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -8,8 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServi
 {
     internal class when_CreateRostersVariableName_called_for_QuestionnaireDocument_with_invalid_roster_variable_name : QuestionnaireUpgradeServiceTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
                 new Group("roster with empty var name") { PublicKey = rosterWithEmptyVarName, IsRoster = true},
                 new Group(questionnaireTitle) { PublicKey = rosterTitleEqualToQuestionnaireTitle, IsRoster = true },
@@ -32,40 +31,41 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireUpgradeServi
                 );
             questionnaireDocument.Title = questionnaireTitle;
             questionnaireUpgradeService = CreateQuestionnaireUpgradeService();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             result = questionnaireUpgradeService.CreateRostersVariableName(questionnaireDocument);
 
-        It should_result_has_roster_with_variable_name__rosterwithemptyvarname__ = () =>
-            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWithEmptyVarName).VariableName.ShouldEqual("rosterwithemptyvarname");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__rosterwithemptyvarname__ () =>
+            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWithEmptyVarName).VariableName.Should().Be("rosterwithemptyvarname");
 
-        It should_result_has_roster_with_variable_name__title1__ = () =>
-            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterTitleEqualToQuestionnaireTitle).VariableName.ShouldEqual("title1");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__title1__ () =>
+            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterTitleEqualToQuestionnaireTitle).VariableName.Should().Be("title1");
 
-        It should_result_has_roster_with_variable_name__roster__ = () =>
-           result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterAllSymbolsAreUnreadle).VariableName.ShouldEqual("roster");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__roster__ () =>
+           result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterAllSymbolsAreUnreadle).VariableName.Should().Be("roster");
 
-        It should_result_has_roster_with_variable_name__whenvariablenamewillbelongerthen__ = () =>
-            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenNewVeariableNameLongerThen32).VariableName.ShouldEqual("whenvariablenamewillbelongerthen");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__whenvariablenamewillbelongerthen__ () =>
+            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenNewVeariableNameLongerThen32).VariableName.Should().Be("whenvariablenamewillbelongerthen");
 
-        It should_result_has_roster_with_variable_name__whenfirsttitlesymbolisnumeric__ = () =>
-           result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenFirstSymbolInTitleIsNumeric).VariableName.ShouldEqual("whenfirsttitlesymbolisnumeric");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__whenfirsttitlesymbolisnumeric__ () =>
+           result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenFirstSymbolInTitleIsNumeric).VariableName.Should().Be("whenfirsttitlesymbolisnumeric");
 
-        It should_result_has_roster_with_variable_name__a1234567890123456789012345678901__ = () =>
-         result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsTooLong).VariableName.ShouldEqual("a1234567890123456789012345678901");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__a1234567890123456789012345678901__ () =>
+         result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsTooLong).VariableName.Should().Be("a1234567890123456789012345678901");
 
-        It should_result_has_roster_with_variable_name__var__ = () =>
-            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameContainsInvalidCharacters).VariableName.ShouldEqual("var");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__var__ () =>
+            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameContainsInvalidCharacters).VariableName.Should().Be("var");
 
-        It should_result_has_roster_with_variable_name__var012345678901234567890123last__ = () =>
-           result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsValid).VariableName.ShouldEqual(var1);
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__var012345678901234567890123last__ () =>
+           result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsValid).VariableName.Should().Be(var1);
 
-        It should_result_has_roster_with_variable_name__var012345678901234567890123last1__ = () =>
-          result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsDublicate).VariableName.ShouldEqual("var012345678901234567890123last1");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__var012345678901234567890123last1__ () =>
+          result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsDublicate).VariableName.Should().Be("var012345678901234567890123last1");
 
-        It should_result_has_roster_with_variable_name__var110__ = () =>
-            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsDublicateFor11thTime).VariableName.ShouldEqual("var012345678901234567890123las10");
+        [NUnit.Framework.Test] public void should_result_has_roster_with_variable_name__var110__ () =>
+            result.FirstOrDefault<IGroup>(g => g.PublicKey == rosterWhenVariableNameIsDublicateFor11thTime).VariableName.Should().Be("var012345678901234567890123las10");
 
         private static QuestionnaireUpgradeService questionnaireUpgradeService;
         private static QuestionnaireDocument questionnaireDocument;

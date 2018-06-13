@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -10,11 +10,9 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTests
 {
-    [Subject(typeof(ValidityViewModel))]
     public class when_question_became_invalid_and_has_more_then_one_validation
     { 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.TextQuestion(questionId: questionIdentity.Id,
                 validationConditions: new List<ValidationCondition>
@@ -35,17 +33,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.ValidityViewModelTes
                 interviewRepository: statefulInterviewRepository,
                 entityIdentity: questionIdentity);
             viewModel.Init("interviewid", questionIdentity);
-        };
+            BecauseOf();
+        }
 
-        Because of = () => viewModel.Handle(answersDeclaredInvalid);
+        public void BecauseOf() => viewModel.Handle(answersDeclaredInvalid);
 
-        It should_show_all_failed_validation_messages = () => viewModel.Error.ValidationErrors.Count.ShouldEqual(2);
+        [NUnit.Framework.Test] public void should_show_all_failed_validation_messages () => viewModel.Error.ValidationErrors.Count.Should().Be(2);
 
-        It should_show_error_messages_according_to_failed_validation_indexes_with_postfix_added = () =>
+        [NUnit.Framework.Test] public void should_show_error_messages_according_to_failed_validation_indexes_with_postfix_added () 
         {
-            viewModel.Error.ValidationErrors.First()?.PlainText.ShouldEqual("message 2 [2]");
-            viewModel.Error.ValidationErrors.Second()?.PlainText.ShouldEqual("message 1 [1]");
-        };
+            viewModel.Error.ValidationErrors.First()?.PlainText.Should().Be("message 2 [2]");
+            viewModel.Error.ValidationErrors.Second()?.PlainText.Should().Be("message 1 [1]");
+        }
 
         static Identity questionIdentity = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
         static AnswersDeclaredInvalid answersDeclaredInvalid =

@@ -1,17 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
-using It = Machine.Specifications.It;
-using System.Threading;
+using System.Threading.Tasks;
 using MvvmCross.Plugins.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -23,8 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 {
     internal class when_setting_text_existing_option : FilteredSingleOptionQuestionViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var singleOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.GetAnswer() == Create.Entity.SingleOptionAnswer(3));
             var option = new CategoricalOption() {Value = 1, Title = "dfdf" + answerValue };
 
@@ -52,15 +49,16 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var navigationState = Create.Other.NavigationState();
             viewModel.Init(interviewId, questionIdentity, navigationState);
-        };
+            await BecauseOf();
+        }
 
-        Because of = () => viewModel.FilterCommand.ExecuteAsync(answerValue).Await();
+        public async Task BecauseOf() => await viewModel.FilterCommand.ExecuteAsync(answerValue);
 
-        It should_set_value = () =>
-            viewModel.FilterText.ShouldEqual(answerValue);
+        [NUnit.Framework.Test] public void should_set_value () =>
+            viewModel.FilterText.Should().Be(answerValue);
 
-        It should_provide_suggesions = () =>
-            viewModel.AutoCompleteSuggestions.Count.ShouldEqual(1);
+        [NUnit.Framework.Test] public void should_provide_suggesions () =>
+            viewModel.AutoCompleteSuggestions.Count.Should().Be(1);
         
 
         private static FilteredSingleOptionQuestionViewModel viewModel;

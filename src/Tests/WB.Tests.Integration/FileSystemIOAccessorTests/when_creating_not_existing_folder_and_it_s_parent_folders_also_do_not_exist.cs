@@ -1,36 +1,33 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
+using NUnit.Framework;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Integration.FileSystemIOAccessorTests
 {
     internal class when_creating_not_existing_folder_and_it_s_parent_folders_also_do_not_exist
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             fileSystemAccessor = new FileSystemIOAccessor();
 
             DeleteFolderIfExists("a/b/c", fileSystemAccessor);
             DeleteFolderIfExists("a/b", fileSystemAccessor);
             DeleteFolderIfExists("a", fileSystemAccessor);
-        };
 
-        Because of = () =>
-            exception = Catch.Exception(() =>
-                fileSystemAccessor.CreateDirectory("a/b/c"));
+            fileSystemAccessor.CreateDirectory("a/b/c");
+        }
 
-        It should_not_fail = () =>
-            exception.ShouldBeNull();
+        [NUnit.Framework.Test] public void should_create_folder_and_it_s_parent_folders_as_well () =>
+            fileSystemAccessor.IsDirectoryExists("a/b/c").Should().BeTrue();
 
-        It should_create_folder_and_it_s_parent_folders_as_well = () =>
-            fileSystemAccessor.IsDirectoryExists("a/b/c").ShouldBeTrue();
 
-        Cleanup stuff = () =>
+        [OneTimeTearDown]
+        public void  stuff()
         {
             DeleteFolderIfExists("a/b/c", fileSystemAccessor);
             DeleteFolderIfExists("a/b", fileSystemAccessor);
             DeleteFolderIfExists("a", fileSystemAccessor);
-        };
+        }
 
         private static FileSystemIOAccessor fileSystemAccessor;
         private static Exception exception;

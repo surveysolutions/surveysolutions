@@ -691,7 +691,7 @@
     <value>Вы пытаетесь использовать подстановки для неподдерживаемых сущностей.</value>
   </data>
   <data name="WB0269_QuestionTitleIsEmpty" xml:space="preserve">
-    <value>У вопроса не может быть пустой текст опции.</value>
+    <value>У вопроса не может быть пустой текст.</value>
   </data>
   <data name="WB0270_SectionContainsTooManyQuestions" xml:space="preserve">
     <value>Секция не может содержать более {0} вопросов.</value>
@@ -713,5 +713,8 @@
   </data>
   <data name="WB0276_RownameIsNotSupported" xml:space="preserve">
     <value>@rowname переменная не поддерживается больше.</value>
+  </data>
+  <data name="WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore" xml:space="preserve">
+    <value>Имя опросника не должно содержать двух и более последовательных символов подчеркивания.</value>
   </data>
 </root>

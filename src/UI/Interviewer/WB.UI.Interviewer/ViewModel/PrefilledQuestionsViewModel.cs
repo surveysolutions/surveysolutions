@@ -1,9 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -31,28 +34,25 @@ namespace WB.UI.Interviewer.ViewModel
                 principal,
                 commandService,
                 compositeCollectionInflationService,
-                vibrationViewModel) {}
+                vibrationViewModel)
+        {
+        }
 
-        public override IMvxCommand ReloadCommand => new MvxCommand(() => this.viewModelNavigationService.NavigateToPrefilledQuestions(this.interviewId));
+        public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(this.InterviewId));
 
         public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
         {
-            await this.viewModelNavigationService.NavigateToDashboard(this.interviewId);
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxCommand(this.viewModelNavigationService.NavigateTo<DiagnosticsViewModel>);
-        public IMvxCommand SignOutCommand => new MvxCommand(() =>
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(async () =>
         {
-            this.viewModelNavigationService.SignOutAndNavigateToLogin();
+            await this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
             this.Dispose();
         });
 
-        public IMvxCommand NavigateToMapsCommand => new MvxCommand(this.NavigateToMaps);
-
-        private void NavigateToMaps()
-        {
-            this.viewModelNavigationService.NavigateTo<MapsViewModel>();
-        }
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
     }
 }

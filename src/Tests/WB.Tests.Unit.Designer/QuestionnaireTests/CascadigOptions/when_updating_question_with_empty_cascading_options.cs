@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Aggregates;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOptions
 {
@@ -69,7 +68,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.CascadigOpti
 
 
         [NUnit.Framework.Test] public void should_contains_question_with_empty_answers () =>
-            questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count().ShouldEqual(2);
+            questionnaire.QuestionnaireDocument.Find<IQuestion>(updatedQuestionId).Answers.Count().Should().Be(2);
 
 
         private static Questionnaire questionnaire;

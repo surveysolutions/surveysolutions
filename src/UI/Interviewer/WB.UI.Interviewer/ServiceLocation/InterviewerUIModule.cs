@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -9,6 +10,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
@@ -16,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
@@ -54,6 +57,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
+            registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();
             registry.Bind<AttachmentsCleanupService>();
             registry.Bind<CompanyLogoSynchronizer>();
             registry.Bind<IMapSyncProvider, MapSyncProvider>();
@@ -88,7 +92,8 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<DashboardSubTitleViewModel>();
             registry.Bind<CompanyLogoSynchronizer>();
             registry.Bind<LoadingViewModel>();
-            
+            registry.Bind<PhotoViewViewModel>();
+
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
@@ -97,6 +102,15 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
+        }
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+#if !EXCLUDEEXTENSIONS
+            WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
+#endif
+
+            return Task.CompletedTask;
         }
     }
 }

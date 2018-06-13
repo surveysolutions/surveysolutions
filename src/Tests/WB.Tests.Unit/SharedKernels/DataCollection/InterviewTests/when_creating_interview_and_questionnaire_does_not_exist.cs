@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         [Test]
         public void should_throw_interview_exception() =>
-            this.act.ShouldThrow<InterviewException>();
+            this.act.Should().Throw<InterviewException>();
 
         private Guid questionnaireId;
         private Guid userId;

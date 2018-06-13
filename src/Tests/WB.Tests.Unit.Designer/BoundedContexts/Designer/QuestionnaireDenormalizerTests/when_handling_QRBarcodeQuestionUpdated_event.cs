@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -47,43 +47,43 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDenormali
         }
         
         [NUnit.Framework.Test] public void should__not_be_null_qr_barcode_question_from_questionnaire__ () =>
-            qRBarcodeQuestion.ShouldNotBeNull();
+            qRBarcodeQuestion.Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_set_questionId_as_default_value_for__PublicKey__field () =>
-           qRBarcodeQuestion.PublicKey.ShouldEqual(questionId);
+           qRBarcodeQuestion.PublicKey.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_parent_group_exists_in_questionnaire () =>
-           questionnaireView.Find<IGroup>(parentGroupId).ShouldNotBeNull();
+           questionnaireView.Find<IGroup>(parentGroupId).Should().NotBeNull();
 
         [NUnit.Framework.Test] public void should_parent_group_contains_qr_barcode_question () =>
-           questionnaireView.Find<IGroup>(parentGroupId).Children[0].PublicKey.ShouldEqual(questionId);
+           questionnaireView.Find<IGroup>(parentGroupId).Children[0].PublicKey.Should().Be(questionId);
 
         [NUnit.Framework.Test] public void should_set_null_as_default_value_for__ValidationExpression__field () =>
-           qRBarcodeQuestion.ValidationExpression.ShouldBeNull();
+           qRBarcodeQuestion.ValidationExpression.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_set_null_as_default_value_for__ValidationMessage__field () =>
-            qRBarcodeQuestion.ValidationMessage.ShouldBeNull();
+            qRBarcodeQuestion.ValidationMessage.Should().BeNull();
 
         [NUnit.Framework.Test] public void should_set_Interviewer_as_default_value_for__QuestionScope__field () =>
-            qRBarcodeQuestion.QuestionScope.ShouldEqual(QuestionScope.Interviewer);
+            qRBarcodeQuestion.QuestionScope.Should().Be(QuestionScope.Interviewer);
 
         [NUnit.Framework.Test] public void should_set_false_as_default_value_for__Featured__field () =>
-            qRBarcodeQuestion.Featured.ShouldBeFalse();
+            qRBarcodeQuestion.Featured.Should().BeFalse();
 
         [NUnit.Framework.Test] public void should_set_QRBarcode_as_default_value_for__QuestionType__field () =>
-            qRBarcodeQuestion.QuestionType.ShouldEqual(QuestionType.QRBarcode);
+            qRBarcodeQuestion.QuestionType.Should().Be(QuestionType.QRBarcode);
 
         [NUnit.Framework.Test] public void should_set_varibleName_as_value_for__StataExportCaption__field () =>
-            qRBarcodeQuestion.StataExportCaption.ShouldEqual(variableName);
+            qRBarcodeQuestion.StataExportCaption.Should().Be(variableName);
 
         [NUnit.Framework.Test] public void should_set_title_as_value_for__QuestionText__field () =>
-            qRBarcodeQuestion.QuestionText.ShouldEqual(title);
+            qRBarcodeQuestion.QuestionText.Should().Be(title);
 
         [NUnit.Framework.Test] public void should_set_instructions_as_value_for__Instructions__field () =>
-            qRBarcodeQuestion.Instructions.ShouldEqual(instructions);
+            qRBarcodeQuestion.Instructions.Should().Be(instructions);
 
         [NUnit.Framework.Test] public void should_set_condition_value_for__ConditionExpression__field () =>
-            qRBarcodeQuestion.ConditionExpression.ShouldEqual(condition);
+            qRBarcodeQuestion.ConditionExpression.Should().Be(condition);
 
         private static IQRBarcodeQuestion GetQRBarcodeQuestionById()
         {

@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="BinaryData" xml:space="preserve">
+    <value>البيانات الثنائية</value>
+  </data>
+  <data name="BinaryDescription" xml:space="preserve">
+    <value>الأرشيف مع البيانات الثنائية (على سبيل المثال، الصور والصوت)</value>
+  </data>
+  <data name="Bytes" xml:space="preserve">
+    <value>ميجابيت</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>مكتمل</value>
+  </data>
+  <data name="Compressing" xml:space="preserve">
+    <value>ضغط</value>
+  </data>
+  <data name="ConfirmStop" xml:space="preserve">
+    <value>هل تريد التوقف بالتأكيد ؟</value>
+  </data>
+  <data name="DataExport_Header" xml:space="preserve">
+    <value>اختر النوع والتنسيق للتصدير </value>
+  </data>
+  <data name="DataExport_Title" xml:space="preserve">
+    <value>تصدير البيانات</value>
+  </data>
+  <data name="DataWasNotGenerated" xml:space="preserve">
+    <value>لم يتم إنشاؤها</value>
+  </data>
+  <data name="DDI" xml:space="preserve">
+    <value>DDI</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>تنزيل</value>
+  </data>
+  <data name="ErrorThereAreRunningProcesses" xml:space="preserve">
+    <value>لا يمكنك تغيير إعدادات التصدير لأن عملية التصدير قيد التشغيل بالفعل.</value>
+  </data>
+  <data name="export" xml:space="preserve">
+    <value>عملية التصدير</value>
+  </data>
+  <data name="ExportExplanation" xml:space="preserve">
+    <value>الضغط على زر إنشاء  أرشيف البيانات من المقابلات المتاحة على الخادم في ذلك الوقت. يتم عرض وقت إنشاء الأرشيف وحجم الأرشيف في الجدول. آخر أرشيف بيانات تم إنشاءه يمكن تحميله عن طريق الضغط على زر تحميل. اضغط على زر إنشاء مرة أخرى لإنشاء أرشيف جديد.</value>
+  </data>
+  <data name="ExportRange" xml:space="preserve">
+    <value>نطاق التصدير:</value>
+  </data>
+  <data name="FileSizeTitle" xml:space="preserve">
+    <value>حجم الملف</value>
+  </data>
+  <data name="Format" xml:space="preserve">
+    <value>الشكل</value>
+  </data>
+  <data name="FormatTitle" xml:space="preserve">
+    <value>الشكل</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>انشاء</value>
+  </data>
+  <data name="ItemsInQueue" xml:space="preserve">
+    <value>العناصر الموجودة في قائمة انتظار التصدير:</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>تاريخ آخر تحديث</value>
+  </data>
+  <data name="MainSurveyDataTitle" xml:space="preserve">
+    <value>بيانات المسح الرئيسية</value>
+  </data>
+  <data name="Metadata" xml:space="preserve">
+    <value>البيانات الوصفية</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>الأسم</value>
+  </data>
+  <data name="NoDataAvailable" xml:space="preserve">
+    <value>لا تتوافر بيانات</value>
+  </data>
+  <data name="ParaData" xml:space="preserve">
+    <value>بيانات الفقرة</value>
+  </data>
+  <data name="ParadataDescription" xml:space="preserve">
+    <value>البيانات الوصفية عن عملية المقابلة (الأحداث والتوقيت)</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>التقدم</value>
+  </data>
+  <data name="QueuedTitle" xml:space="preserve">
+    <value>في قائمة الانتظار</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>تاريخ البدء</value>
+  </data>
+  <data name="StatusOfExportTitle" xml:space="preserve">
+    <value>حالة لمقابلات مصدره</value>
+  </data>
+  <data name="SurveyTemplateTitle" xml:space="preserve">
+    <value>(نسخة) استبيان المسح</value>
+  </data>
+  <data name="TabularFormat" xml:space="preserve">
+    <value>تنسيق جدولي</value>
+  </data>
+  <data name="XMLFileDescription" xml:space="preserve">
+    <value>تنسيق xml</value>
+  </data>
+  <data name="ZipArchiveDescription" xml:space="preserve">
+    <value>أرشيف مضغوط مع بيانات المقابلة الرئيسية</value>
+  </data>
+</root>

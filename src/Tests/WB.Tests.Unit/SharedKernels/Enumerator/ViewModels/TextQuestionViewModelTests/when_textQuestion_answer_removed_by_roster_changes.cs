@@ -4,9 +4,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewModelTests
@@ -50,7 +48,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
 
             //act
             this.interview.AnswerMultipleOptionsQuestion(interviewerId, rosterQuestionId, Create.Entity.RosterVector(), DateTime.UtcNow, new int[0]);
-            textQuestionViewModel.Handle(new AnswersRemoved(new [] { textQuestionIdentity}));
+            textQuestionViewModel.Handle(new AnswersRemoved(new [] { textQuestionIdentity}, DateTime.UtcNow));
 
             //assert
             Assert.That(textQuestionViewModel.Answer, Is.Empty);

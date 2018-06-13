@@ -1,12 +1,10 @@
 using System;
-using Machine.Specifications;
-using Moq;
+using FluentAssertions;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 {
@@ -23,8 +21,7 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
             public virtual void Handle(DifferentDummyEvent @event) { }
         }
 
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventStub = CreateDummyEvent();
             Guid eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             eventsToPublish = BuildReadyToBePublishedStream(eventSourceId, eventStub);
@@ -33,14 +30,15 @@ namespace WB.Tests.Unit.Infrastructure.LiteEventBusTests
 
             handlerOnFiredEvent = new ChildrenHandler();
             eventRegistry.Subscribe(handlerOnFiredEvent, eventSourceId.FormatGuid());
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             eventBus.PublishCommittedEvents(eventsToPublish);
 
 
-        It should_call_Handle_once_for_handler_on_current_event = () =>
-            handlerOnFiredEvent.WasCalled.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_call_Handle_once_for_handler_on_current_event () =>
+            handlerOnFiredEvent.WasCalled.Should().BeTrue();
 
 
         private static ILiteEventBus eventBus;

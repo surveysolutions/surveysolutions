@@ -17,7 +17,8 @@
                                      Enabled Not(IsInProgressLongOperation); 
                                      Clickable Not(IsInProgressLongOperation);" />
     <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
-                 local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation)"/>
+                 local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation)"
+                 local:srcCompat="@drawable/delete_button" />
   </LinearLayout>
 
   <FrameLayout style="@style/Dashboard_Search_Body">

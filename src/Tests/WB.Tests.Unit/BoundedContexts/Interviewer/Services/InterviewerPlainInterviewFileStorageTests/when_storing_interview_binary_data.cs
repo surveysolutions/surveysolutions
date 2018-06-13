@@ -1,33 +1,31 @@
-﻿using System;
+using System;
 using System.Linq.Expressions;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerPlainInterviewFileStorageTests
 {
     internal class when_storing_interview_binary_data : InterviewerPlainInterviewFileStorageTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             imageViewStorage.Setup(x => x.Where(Moq.It.IsAny<Expression<Func<InterviewMultimediaView, bool>>>()))
                 .Returns(new InterviewMultimediaView[0]);
 
             interviewerImageFileStorage = CreateInterviewerPlainInterviewFileStorage(
                 fileViewStorage: fileViewStorage.Object,
                 imageViewStorage: imageViewStorage.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             interviewerImageFileStorage.StoreInterviewBinaryData(interviewId, imageFileName, imageFileBytes, null);
 
-        It should_store_specified_interview_mulimedia_view = () =>
+        [NUnit.Framework.Test] public void should_store_specified_interview_mulimedia_view () =>
             imageViewStorage.Verify(x=>x.Store(Moq.It.IsAny<InterviewMultimediaView>()), Times.Once);
 
-        It should_store_specified_interview_file_view = () =>
+        [NUnit.Framework.Test] public void should_store_specified_interview_file_view () =>
             fileViewStorage.Verify(x=>x.Store(Moq.It.IsAny<InterviewFileView>()), Times.Once);
 
         private static readonly Guid interviewId = Guid.Parse("11111111111111111111111111111111");

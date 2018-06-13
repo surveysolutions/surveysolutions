@@ -249,4 +249,8 @@
     <value>Выберите другое имя пользователя</value>
     <comment>Выберите другое имя пользователя</comment>
   </data>
+    <data name="MandatoryField" xml:space="preserve">
+    <value>Это обязательное поле</value>
+    <comment>Это обязательное поле</comment>
+  </data>
 </root>

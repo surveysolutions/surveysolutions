@@ -1,8 +1,12 @@
 ﻿using System;
-using System.Globalization;
+using System.Collections.Generic;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage;
 using WB.Core.SharedKernels.DataCollection.V2.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.V5.CustomFunctions;
+using WB.Core.SharedKernels.DataCollection.ExpressionStorage.CustomFunctions;
+using Extensions = WB.Core.SharedKernels.DataCollection.V2.CustomFunctions.Extensions;
 
 namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 {
@@ -12,14 +16,14 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         // For all methods using params[], the indication is that 16383 is the limit:
         // http://stackoverflow.com/questions/12658883/what-is-the-maximum-number-of-parameters-that-a-c-sharp-method-can-be-defined-as
 
-        private decimal[] _mc123;
-        private decimal[] _mc3;
+        private int[] _mc123;
+        private int[] _mc3;
 
         [SetUp]
         public void Init()
         {
-            _mc123 = new decimal[] { 1, 2, 3 };
-            _mc3 = new decimal[] { 3 };
+            _mc123 = new int[] { 1, 2, 3 };
+            _mc3 = new int[] { 3 };
         }
 
         #region Tests
@@ -27,13 +31,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_InRange()
         {
-            Assert.IsTrue(Extensions.InRange(1, 0, 10));
-            Assert.IsFalse(Extensions.InRange(1, 3, 10));
-            Assert.IsFalse(Extensions.InRange(13, 3, 10));
+            Assert.IsTrue(1.InRange(0, 10));
+            Assert.IsFalse(1.InRange(3, 10));
+            Assert.IsFalse(13.InRange(3, 10));
 
-            Assert.IsTrue(Extensions.InRange(1.0, 0.0, 10.0));
-            Assert.IsFalse(Extensions.InRange(1.0, 3.0, 10.0));
-            Assert.IsFalse(Extensions.InRange(13.0, 3.0, 10.0));
+            Assert.IsTrue( ((double?)1d).InRange(0.0, 10.0));
+            Assert.IsFalse(((double?)1d).InRange(3.0, 10.0));
+            Assert.IsFalse(((double?)13d).InRange(3.0, 10.0));
 
             decimal? ten = 10;
             decimal? three = 3;
@@ -41,9 +45,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             decimal? zero = 0;
             decimal? thirteen = 13;
 
-            Assert.IsTrue(Extensions.InRange(one, zero, ten));
-            Assert.IsFalse(Extensions.InRange(one, three, ten));
-            Assert.IsFalse(Extensions.InRange(thirteen, three, ten));
+            Assert.IsTrue(one.InRange(zero, ten));
+            Assert.IsFalse(one.InRange(three, ten));
+            Assert.IsFalse(thirteen.InRange(three, ten));
 
             Assert.IsTrue(one.InRange(zero, ten));
             Assert.IsFalse(one.InRange(three, ten));
@@ -126,7 +130,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
             Assert.IsTrue(_mc123.ContainsAny(2));
 
             Assert.IsTrue(_mc123.ContainsAny(null));
-            Assert.IsTrue(_mc123.ContainsAny(new decimal[0]));
+            Assert.IsTrue(_mc123.ContainsAny(new int[0]));
 
             decimal[] empty = null;
             Assert.IsFalse(empty.ContainsAny(2));
@@ -175,7 +179,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
 
             Assert.IsFalse(_mc123.ContainsAll(3, 9));
 
-            Assert.IsTrue(_mc123.ContainsAll(null));
+            Assert.IsTrue(_mc123.ContainsAll((decimal[])null));
+            Assert.IsTrue(_mc123.ContainsAll((int[])null));
+            
             Assert.IsTrue(_mc123.ContainsAll(new decimal[0]));
 
 
@@ -223,15 +229,17 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         [Test]
         public void Test_CountValues()
         {
-            Assert.AreEqual(1, _mc123.CountValues(1));
-            Assert.AreEqual(1, _mc123.CountValues(2));
-            Assert.AreEqual(1, _mc123.CountValues(3));
-            Assert.AreEqual(2, _mc123.CountValues(1, 2));
-            Assert.AreEqual(2, _mc123.CountValues(1, 3));
-            Assert.AreEqual(3, _mc123.CountValues(1, 2, 3));
-            Assert.AreEqual(3, _mc123.CountValues(1, 2, 3, 4));
-            Assert.AreEqual(0, _mc123.CountValues());
-            Assert.AreEqual(0, _mc123.CountValues(null));
+            var _mc123_1 = new decimal[] { 1, 2, 3 };
+
+            Assert.AreEqual(1, _mc123_1.CountValues(1));
+            Assert.AreEqual(1, _mc123_1.CountValues(2));
+            Assert.AreEqual(1, _mc123_1.CountValues(3));
+            Assert.AreEqual(2, _mc123_1.CountValues(1, 2));
+            Assert.AreEqual(2, _mc123_1.CountValues(1, 3));
+            Assert.AreEqual(3, _mc123_1.CountValues(1, 2, 3));
+            Assert.AreEqual(3, _mc123_1.CountValues(1, 2, 3, 4));
+            Assert.AreEqual(0, _mc123_1.CountValues());
+            Assert.AreEqual(0, _mc123_1.CountValues(null));
 
             decimal[] empty = null;
             Assert.AreEqual(0, empty.CountValues(1, 2, 3));
@@ -811,6 +819,323 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.CustomFunctions
         }
 
         #endregion
+
+        #endregion
+
+        #region EMAIL TESTS 
+        // Examples https://en.wikipedia.org/wiki/Email_address#Examples
+
+        [Test]
+        public void Test_EmailValid()
+        {
+            var validEmails = new List<String>();
+            validEmails.Add("prettyandsimple@example.com");
+            validEmails.Add("very.common@example.com");
+            validEmails.Add("disposable.style.email.with+symbol@example.com");
+            validEmails.Add("other.email-with-dash@example.com");
+            validEmails.Add("\"much.more unusual\"@example.com");
+            validEmails.Add("\"very.unusual.@.unusual.com\"@example.com");
+            validEmails.Add("\"very.(),:;<>[]\\\".VERY.\\\"very@\\\\ \\\"very\\\".unusual\"@strange.example.com");
+            //validEmails.Add("admin@mailserver1");  // ??
+            validEmails.Add("#!$%&'*+-/=?^_`{}|~@example.org");
+            validEmails.Add("\"()<>[]:,;@\\\\\\\"!#$%&'*+-/=?^_`{}| ~.a\"@example.org");
+            validEmails.Add("\" \"@example.org");
+            validEmails.Add("üñîçøðé@example.com");
+            validEmails.Add("üñîçøðé@üñîçøðé.com");
+            validEmails.Add("чебурашка@ящик-с-апельсинами.рф");
+            validEmails.Add("甲斐@黒川.日本");
+            validEmails.Add("我買@屋企.香港");
+            validEmails.Add("δοκιμή@παράδειγμα.δοκιμή");
+            validEmails.Add("Pelé@example.com");
+            validEmails.Add("\"john..doe\"@example.com");  // Quoted content should be permitted
+            //validEmails.Add("postmaster@.");             // Microsoft disallows this. Only one reference on StackOverflow that this may be a valid email. 
+
+            validEmails.Add("support@mysurvey.solutions");
+
+            foreach (var v in validEmails)
+            {
+                Assert.IsTrue(v.IsValidEmail());
+            }
+        }
+        [Test]
+        public void Test_EmailInvalid()
+        {
+            var invalidEmails = new List<String>();
+            invalidEmails.Add("Abc.example.com");
+            invalidEmails.Add("A@b@c@example.com");
+            invalidEmails.Add("a\"b(c)d,e:f;g<h>i[j\\k]l@example.com");
+            invalidEmails.Add("just\"not\"right@example.com");
+            invalidEmails.Add("this is\"not\\allowed@example.com");
+            invalidEmails.Add("this\\ still\\\"not\\\\allowed@example.com");
+            invalidEmails.Add("john..doe@example.com");
+            invalidEmails.Add("john.doe@example..com");
+            invalidEmails.Add(" prettyandsimple@example.com");
+            invalidEmails.Add("prettyandsimple@example.com ");
+            invalidEmails.Add("abc");
+
+            foreach (var v in invalidEmails)
+            {
+                Assert.IsFalse(v.IsValidEmail());
+            }
+        }
+
+        #endregion
+
+        #region March 2016 functions
+
+
+        [Test]
+        public void Test_IsDateLong()
+        {
+            Assert.IsTrue(new LevelFunctions().IsDate((long)2010, 12, 31));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 2, 31));
+
+            Assert.IsFalse(new LevelFunctions().IsDate(null, (long)12, 31));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, null, 31));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, null));
+
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, null));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 13, 10));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, 32));
+
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, 12, -1));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)2010, -12, 1));
+            Assert.IsFalse(new LevelFunctions().IsDate((long)-2010, 12, 1));
+        }
+
+        [Test]
+        public void Test_IsDateInt()
+        {
+            Assert.IsTrue(new LevelFunctions().IsDate((int)2010, 12, 31));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 2, 31));
+
+            Assert.IsFalse(new LevelFunctions().IsDate(null, (int)12, 31));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, null, 31));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, null));
+
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, null));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 13, 10));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, 32));
+
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, 12, -1));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)2010, -12, 1));
+            Assert.IsFalse(new LevelFunctions().IsDate((int)-2010, 12, 1));
+        }
+
+        [Test]
+        public void Test_DaysBetweenDates()
+        {
+            DateTime? d1 = new DateTime(2016, 03, 01);
+            DateTime? d2 = new DateTime(2016, 03, 02);
+            DateTime? d3 = new DateTime(2016, 02, 27);
+            DateTime? d4 = new DateTime(2000, 01, 01);
+
+            Assert.AreEqual(1, new LevelFunctions().DaysBetweenDates(d1, d2));
+            Assert.AreEqual(3, new LevelFunctions().DaysBetweenDates(d3, d1));
+            Assert.AreEqual(4, new LevelFunctions().DaysBetweenDates(d3, d2));
+
+            Assert.AreEqual(5904, new LevelFunctions().DaysBetweenDates(d4, d1)); //confirmed with Gnumeric
+
+            Assert.AreEqual(-9998, new LevelFunctions().DaysBetweenDates(d2, d1));
+
+            Assert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(null, d2));
+            Assert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(d1, null));
+            Assert.AreEqual(-9999, new LevelFunctions().DaysBetweenDates(null, null));
+        }
+
+        [Test]
+        public void Test_YearOfCmc()
+        {
+            var cmc1 = new LevelFunctions().CenturyMonthCode(1, 1900); // jan1900
+            var cmc2 = new LevelFunctions().CenturyMonthCode(12, 1900); // dec1900
+            var cmc3 = new LevelFunctions().CenturyMonthCode(1, 1901); // jan1901
+            var cmc4 = new LevelFunctions().CenturyMonthCode(3, 2016); // mar2016
+            var cmc5 = new LevelFunctions().CenturyMonthCode(1, 1946); // jan1946
+
+            Assert.AreEqual(1900, new LevelFunctions().YearOfCmc(cmc1));
+            Assert.AreEqual(1900, new LevelFunctions().YearOfCmc(cmc2));
+            Assert.AreEqual(1901, new LevelFunctions().YearOfCmc(cmc3));
+            Assert.AreEqual(2016, new LevelFunctions().YearOfCmc(cmc4));
+            Assert.AreEqual(1946, new LevelFunctions().YearOfCmc(cmc5));
+
+            Assert.AreEqual(-9999, new LevelFunctions().YearOfCmc(-1));
+        }
+
+        [Test]
+        public void Test_DaysInMonth1()
+        {
+            var cmc1 = new LevelFunctions().CenturyMonthCode(1, 1900); // jan1900
+            var cmc2 = new LevelFunctions().CenturyMonthCode(12, 1900); // dec1900
+            var cmc3 = new LevelFunctions().CenturyMonthCode(1, 1901); // jan1901
+            var cmc4 = new LevelFunctions().CenturyMonthCode(3, 2016); // mar2016
+            var cmc5 = new LevelFunctions().CenturyMonthCode(1, 1946); // jan1946
+
+            var cmc6 = new LevelFunctions().CenturyMonthCode(2, 1900); // feb1900
+            var cmc7 = new LevelFunctions().CenturyMonthCode(2, 2000); // feb2000
+            var cmc8 = new LevelFunctions().CenturyMonthCode(11, 2016); // nov2016
+
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc1));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc2));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc3));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc4));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(cmc5));
+            Assert.AreEqual(28, new LevelFunctions().DaysInMonth(cmc6));
+            Assert.AreEqual(29, new LevelFunctions().DaysInMonth(cmc7));
+            Assert.AreEqual(30, new LevelFunctions().DaysInMonth(cmc8));
+
+            Assert.AreEqual(-9999, new LevelFunctions().DaysInMonth(-1));
+        }
+
+        [Test]
+        public void Test_DaysInMonth3()
+        {
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 1, 9)));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1900, 12, 9)));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1901, 1, 9)));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(2016, 3, 9)));
+            Assert.AreEqual(31, new LevelFunctions().DaysInMonth(new DateTime(1946, 1, 9)));
+            Assert.AreEqual(28, new LevelFunctions().DaysInMonth(new DateTime(1900, 2, 9)));
+            Assert.AreEqual(29, new LevelFunctions().DaysInMonth(new DateTime(2000, 2, 9)));
+            Assert.AreEqual(30, new LevelFunctions().DaysInMonth(new DateTime(2016, 11, 9)));
+
+            Assert.AreEqual(-9999, new LevelFunctions().DaysInMonth(null));
+        }
+
+        [Test]
+        public void Test_MonthOfCmc()
+        {
+            var cmc1 = new LevelFunctions().CenturyMonthCode(1, 1900); // jan1900
+            var cmc2 = new LevelFunctions().CenturyMonthCode(12, 1900); // dec1900
+            var cmc3 = new LevelFunctions().CenturyMonthCode(1, 1901); // jan1901
+            var cmc4 = new LevelFunctions().CenturyMonthCode(3, 2016); // mar2016
+            var cmc5 = new LevelFunctions().CenturyMonthCode(1, 1946); // jan1946
+
+            Assert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc1));
+            Assert.AreEqual(12, new LevelFunctions().MonthOfCmc(cmc2));
+            Assert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc3));
+            Assert.AreEqual(3, new LevelFunctions().MonthOfCmc(cmc4));
+            Assert.AreEqual(1, new LevelFunctions().MonthOfCmc(cmc5));
+
+            Assert.AreEqual(-9999, new LevelFunctions().MonthOfCmc(-1));
+        }
+
+        [Test]
+        public void Test_ContainsAnyOtherThan()
+        {
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(2)); // Contains 1, 3
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(2, 0)); // Contains 1, 3; 0 is irrelevant
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(5, 10)); // Contains 1,2,3
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(null)); // Contains 1,2,3
+            Assert.IsTrue(_mc123.ContainsAnyOtherThan(new int[0])); // Contains 1,2,3
+            Assert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3)); // No, does not contain anything else
+            Assert.IsFalse(_mc123.ContainsAnyOtherThan(1, 2, 3, 4, 5)); // No, does not contain anything else, couple of irrelevant options
+
+            int[] empty = null;
+            Assert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does not contain any other
+            Assert.IsFalse(empty.ContainsAnyOtherThan(null));
+
+            empty = new int[0];
+            Assert.IsFalse(empty.ContainsAnyOtherThan(2)); // No, empty does nto contain any other
+
+            var trivial = new int[] { 0 };
+            Assert.IsTrue(trivial.ContainsAnyOtherThan(2)); // Yes, contains 0
+        }
+
+        [Test]
+        public void Test_BracketIndexLeftDouble()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(-1.2, 1, 2, 3));
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(1.0, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(1.2, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(2.0, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(2.2, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(3.0, 1, 2, 3));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft(3.3, 1, 2, 3));
+        }
+
+        [Test]
+        public void Test_BracketIndexRightDouble()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight(-1.2, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.0, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.2, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.0, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.2, 1, 2, 3));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.0, 1, 2, 3));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.3, 1, 2, 3));
+        }
+
+        [Test]
+        public void Test_BracketIndexLeftDecimal()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(-1.2m, 1, 2, 3));
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft(1.0m, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(1.2m, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft(2.0m, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(2.2m, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft(3.0m, 1, 2, 3));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft(3.3m, 1, 2, 3));
+        }
+
+        [Test]
+        public void Test_BracketIndexRightDecimal()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight(-1.2m, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.0m, 1, 2, 3));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight(1.2m, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.0m, 1, 2, 3));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight(2.2m, 1, 2, 3));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.0m, 1, 2, 3));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight(3.3m, 1, 2, 3));
+        }
+
+        [Test]
+        public void Test_BracketIndexLeftLong()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((long)-12, 10, 20, 30));
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((long)10, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((long)12, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((long)20, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((long)22, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((long)30, 10, 20, 30));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft((long)33, 10, 20, 30));
+        }
+
+        [Test]
+        public void Test_BracketIndexRightLong()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight((long)-12, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((long)10, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((long)12, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((long)20, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((long)22, 10, 20, 30));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((long)30, 10, 20, 30));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((long)33, 10, 20, 30));
+        }
+
+        [Test]
+        public void Test_BracketIndexLeftInt()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((int)-12, 10, 20, 30));
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexLeft((int)10, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((int)12, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexLeft((int)20, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((int)22, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexLeft((int)30, 10, 20, 30));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexLeft((int)33, 10, 20, 30));
+        }
+
+        [Test]
+        public void Test_BracketIndexRightInt()
+        {
+            Assert.AreEqual(0, new LevelFunctions().BracketIndexRight((int)-12, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((int)10, 10, 20, 30));
+            Assert.AreEqual(1, new LevelFunctions().BracketIndexRight((int)12, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((int)20, 10, 20, 30));
+            Assert.AreEqual(2, new LevelFunctions().BracketIndexRight((int)22, 10, 20, 30));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((int)30, 10, 20, 30));
+            Assert.AreEqual(3, new LevelFunctions().BracketIndexRight((int)33, 10, 20, 30));
+        }
 
         #endregion
 

@@ -1,15 +1,13 @@
-﻿using System;
-using Machine.Specifications;
+using System;
+using FluentAssertions;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.Tests.Unit.GenericSubdomains.Utils.ProgressAggregator
 {
-    [Ignore("Test drives me crazy. I don't know why it is failing")]
-    [Subject(typeof(ProggressAggregator))]
+    [NUnit.Framework.Ignore("Test drives me crazy. I don't know why it is failing")]
     public class when_reporting_progress_from_two_progresses
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             proggressAggregator = new ProggressAggregator();
 
             progress1 = new Progress<int>();
@@ -20,15 +18,16 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.ProgressAggregator
 
             proggressAggregator.ProgressChanged += (sender, progress) =>
               reportedProgress = progress;
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             progress1.Report(100);
             progress2.Report(50);
-        };
+        }
 
-        It should_report_something = () => { reportedProgress.ShouldEqual(75); };
+        [NUnit.Framework.Test] public void should_report_something () { reportedProgress.Should().Be(75); }
 
         static ProggressAggregator proggressAggregator;
         static IProgress<int> progress1;

@@ -54,13 +54,16 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
-            base.Dispose(isDisposing);
+            if (IsDisposed)
+                return;
 
-            if (Target?.SignaturePadCanvas != null)
+            if (Target?.SignaturePadCanvas != null && Target?.SignaturePadCanvas.Handle != IntPtr.Zero)
             {
                 Target.SignaturePadCanvas.StrokeCompleted -= SignaturePadCanvasOnStrokeCompleted;
                 Target.SignaturePadCanvas.Cleared -= SignaturePadCanvasOnStrokeCompleted;
             }
+
+            base.Dispose(isDisposing);
         }
     }
 }

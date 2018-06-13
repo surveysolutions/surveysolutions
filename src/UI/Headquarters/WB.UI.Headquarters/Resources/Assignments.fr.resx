@@ -136,7 +136,7 @@
     <value>Affectations</value>
   </data>
   <data name="AssignmentsSelected" xml:space="preserve">
-    <value>{{count}} Affectation (s) sélectionnée</value>
+    <value>{{count}} Affectation sélectionnée</value>
   </data>
   <data name="ChangeSizeModalTitle" xml:space="preserve">
     <value>Modifier la taille pour l'affectation {{assignmentId}}</value>
@@ -166,7 +166,7 @@
     <value>Le champ Taille doit être égal à -1 ou plus.</value>
   </data>
   <data name="NumberOfAssignmentsAffected" xml:space="preserve">
-    <value>{{count}} Affectation (s) vont être modifiées</value>
+    <value>{{count}} Affectation va être modifiée</value>
   </data>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Sélectionnez le responsable</value>
@@ -218,5 +218,11 @@
   </data>
   <data name="UpdatedAt" xml:space="preserve">
     <value>Mis à jour le</value>
+  </data>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>{{count}} Affectations sélectionnées</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>{{count}} Affectations vont être modifiées</value>
   </data>
 </root>

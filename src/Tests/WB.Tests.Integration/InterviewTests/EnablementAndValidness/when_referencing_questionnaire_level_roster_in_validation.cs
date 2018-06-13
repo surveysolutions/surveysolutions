@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using AppDomainToolkit;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Spec;
@@ -11,9 +12,22 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 {
-    internal class when_referencing_questionnaire_level_roster_in_validation : in_standalone_app_domain
+    internal class when_referencing_questionnaire_level_roster_in_validation : InterviewTestsContext
     {
-        private Because of = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context () {
+            appDomainContext = AppDomainContext.Create();
+            BecauseOf();
+        }
+
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        {
+            appDomainContext.Dispose();
+            appDomainContext = null;
+        }
+
+        protected static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;
+
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -48,11 +62,11 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
                 }
             });
 
-        It should_declare_status_for_person1_as_invalid = () =>
-            results.Status1DeclaredInvalid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_declare_status_for_person1_as_invalid () =>
+            results.Status1DeclaredInvalid.Should().BeTrue();
 
-        It should_declare_status_for_person2_as_invalid = () =>
-            results.Status2DeclaredInvalid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_declare_status_for_person2_as_invalid () =>
+            results.Status2DeclaredInvalid.Should().BeTrue();
 
       
         private static InvokeResults results;

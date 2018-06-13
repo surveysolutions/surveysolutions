@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Pipeline;
@@ -30,5 +32,10 @@ namespace WB.UI.Headquarters.API.WebInterview
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

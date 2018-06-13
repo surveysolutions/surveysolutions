@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NHibernate;
 using Npgsql;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
-using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -24,14 +24,13 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using WB.Tests.Integration.PostgreSQLTests;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
     internal class when_processing_package_failed : with_postgres_db
     {
-        Establish context = () =>
-        {
+        [OneTimeSetUp] public void context () {
+            Context();
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
                 new[] {typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap)}, true);
             plainPostgresTransactionManager =
@@ -99,32 +98,34 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     IsCensusInterview = expectedCommand.CreatedOnClient,
                     Events = expectedEventsString
                 }));
-        };
 
-        Because of = () => plainPostgresTransactionManager.ExecuteInPlainTransaction(
+            BecauseOf();
+        }
+
+        private void BecauseOf() => plainPostgresTransactionManager.ExecuteInPlainTransaction(
             () => interviewPackagesService.ProcessPackage("1"));
 
-        It should_broken_packages_storage_contains_specified_interview = () =>
+        [NUnit.Framework.Test] public void should_broken_packages_storage_contains_specified_interview () 
         {
             var expectedPackage = plainPostgresTransactionManager.ExecuteInPlainTransaction(
                 () => brokenPackagesStorage.GetById(1));
 
-            expectedPackage.IsCensusInterview.ShouldEqual(expectedCommand.CreatedOnClient);
-            expectedPackage.InterviewStatus.ShouldEqual(expectedCommand.InterviewStatus);
-            expectedPackage.ResponsibleId.ShouldEqual(expectedCommand.UserId);
-            expectedPackage.InterviewId.ShouldEqual(expectedCommand.InterviewId);
-            expectedPackage.QuestionnaireId.ShouldEqual(expectedCommand.QuestionnaireId);
-            expectedPackage.QuestionnaireVersion.ShouldEqual(expectedCommand.QuestionnaireVersion);
-            expectedPackage.ExceptionType.ShouldEqual(expectedException.ExceptionType.ToString());
-            expectedPackage.ExceptionMessage.ShouldEqual(expectedException.Message);
-            expectedPackage.Events.ShouldEqual(expectedEventsString);
-            expectedPackage.PackageSize.ShouldEqual(expectedEventsString.Length);
-        };
+            expectedPackage.IsCensusInterview.Should().Be(expectedCommand.CreatedOnClient);
+            expectedPackage.InterviewStatus.Should().Be(expectedCommand.InterviewStatus);
+            expectedPackage.ResponsibleId.Should().Be(expectedCommand.UserId);
+            expectedPackage.InterviewId.Should().Be(expectedCommand.InterviewId);
+            expectedPackage.QuestionnaireId.Should().Be(expectedCommand.QuestionnaireId);
+            expectedPackage.QuestionnaireVersion.Should().Be(expectedCommand.QuestionnaireVersion);
+            expectedPackage.ExceptionType.Should().Be(expectedException.ExceptionType.ToString());
+            expectedPackage.ExceptionMessage.Should().Be(expectedException.Message);
+            expectedPackage.Events.Should().Be(expectedEventsString);
+            expectedPackage.PackageSize.Should().Be(expectedEventsString.Length);
+        }
 
-        It should_rollback_transaction =
-            () => transactionManagerMock.Verify(x => x.BeginCommandTransaction(), Times.Once);
+        [NUnit.Framework.Test] public void should_rollback_transaction () => transactionManagerMock.Verify(x => x.BeginCommandTransaction(), Times.Once);
 
-        Cleanup things = () => { pgSqlConnection.Close(); };
+        [OneTimeTearDown]
+        public void TearDown() => pgSqlConnection.Close();
 
         private static SynchronizeInterviewEventsCommand expectedCommand;
         private static Mock<ICommandService> mockOfCommandService;

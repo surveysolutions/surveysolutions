@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Machine.Specifications;
-using Main.Core.Documents;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
@@ -42,9 +38,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1);
 
 
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.ShouldBeNull();
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[variableId].ShouldNotBeNull();
-            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster1Id }].HeaderItems[variableInRosterId].ShouldNotBeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].LevelLabels.Should().BeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid>()].HeaderItems[variableId].Should().NotBeNull();
+            questionnaireExportStructure.HeaderToLevelMap[new ValueVector<Guid> { roster1Id }].HeaderItems[variableInRosterId].Should().NotBeNull();
         }
 
         [TestCase("it is string", VariableType.String, "it is string")]
@@ -59,14 +55,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
                 Create.Entity.QuestionnaireDocument(children: Create.Entity.Variable(id: variableId, type: variableType));
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null));
+            var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
             questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
             var exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
 
             var result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(questionnaireDocument.PublicKey, 1),
-                interviewData);
+                interviewData, questionnaire);
 
-            result.Levels[0].Records[0].Answers.First().ShouldEqual(new[] { exportResult });
+            result.Levels[0].Records[0].Answers.First().Should().BeEquivalentTo(new[] { exportResult });
         }
 
 

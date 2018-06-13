@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -11,8 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
 {
     internal class when_initializing_and_static_text_is_invalid : StaticTextViewModelTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[] {
                 Create.Entity.NumericIntegerQuestion(numericId, variable: "n"),
                 Create.Entity.StaticText(staticTextId, validationConditions: new List<ValidationCondition> { Create.Entity.ValidationCondition("n == 2")})
@@ -27,13 +26,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(statefulInterview);
 
             viewModel = CreateViewModel(questionnaireRepository, interviewRepository);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             viewModel.Init("interview", Create.Identity(staticTextId, RosterVector.Empty), null);
 
-        It should_mark_static_text_view_model_as_invalid = () =>
-            viewModel.QuestionState.Validity.IsInvalid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_mark_static_text_view_model_as_invalid () =>
+            viewModel.QuestionState.Validity.IsInvalid.Should().BeTrue();
 
         static StaticTextViewModel viewModel;
         static Guid numericId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
 
@@ -14,12 +14,12 @@ namespace WB.Tests.Integration
         {
             if (condition == null)
             {
-                events.ShouldContain(@event
+                events.Should().Contain(@event
                     => @event is TEvent);
             }
             else
             {
-                events.ShouldContain(@event
+                events.Should().Contain(@event
                     => @event is TEvent
                     && condition.Invoke((TEvent) @event));
             }
@@ -30,19 +30,19 @@ namespace WB.Tests.Integration
         {
             if (condition == null)
             {
-                events.ShouldNotContain(@event
+                events.Should().NotContain(@event
                     => @event is TEvent);
             }
             else
             {
-                events.ShouldNotContain(@event
+                events.Should().NotContain(@event
                     => @event is TEvent && condition.Invoke((TEvent) @event));
             }
         }
         
         public static void ShouldContainEvents<TEvent>(this IEnumerable<IEvent> events, int count) where TEvent : IEvent
         {
-            events.Count(e => e is TEvent).ShouldEqual(count);
+            events.Count(e => e is TEvent).Should().Be(count);
         }
 
         public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null) where TEvent : IEvent
@@ -57,7 +57,7 @@ namespace WB.Tests.Integration
         
         public static void ShouldContainEvents<TEvent>(this EventContext eventContext, int count) where TEvent : IEvent
         {
-            eventContext.Events.Count(e => e.Payload is TEvent).ShouldEqual(count);
+            eventContext.Events.Count(e => e.Payload is TEvent).Should().Be(count);
         }
     }
 }

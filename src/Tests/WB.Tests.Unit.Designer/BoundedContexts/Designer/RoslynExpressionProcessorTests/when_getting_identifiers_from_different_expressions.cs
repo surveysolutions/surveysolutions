@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProcessorTests
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.RoslynExpressionProces
         {
             foreach (var result in results)
             {
-                result.Value.ShouldContainOnly(expectedResults[result.Key]);
+                result.Value.Should().BeEquivalentTo(expectedResults[result.Key]);
             }
         }
 

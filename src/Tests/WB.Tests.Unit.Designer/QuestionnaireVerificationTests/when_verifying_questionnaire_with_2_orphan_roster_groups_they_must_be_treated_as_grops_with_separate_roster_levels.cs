@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -53,13 +53,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [NUnit.Framework.Test] public void should_return_WB0019_message_with_2_references_on_questions () =>
             verificationMessages.GetError("WB0019")
                 .References.ToList()
-                .ForEach(question => question.Type.ShouldEqual(QuestionnaireVerificationReferenceType.Question));
+                .ForEach(question => question.Type.Should().Be(QuestionnaireVerificationReferenceType.Question));
 
         [NUnit.Framework.Test] public void should_return_WB0019_message_with_first_reference_to_question_with_substitution_text () =>
-            verificationMessages.GetError("WB0019").References.ElementAt(0).Id.ShouldEqual(questionWithSubstitutionsIdFromLevel1);
+            verificationMessages.GetError("WB0019").References.ElementAt(0).Id.Should().Be(questionWithSubstitutionsIdFromLevel1);
 
         [NUnit.Framework.Test] public void should_return_WB0019_message_with_second_reference_to_question_that_used_as_substitution_question () =>
-            verificationMessages.GetError("WB0019").References.ElementAt(1).Id.ShouldEqual(questionFromLevel2);
+            verificationMessages.GetError("WB0019").References.ElementAt(1).Id.Should().Be(questionFromLevel2);
 
 
         private static IEnumerable<QuestionnaireVerificationMessage> verificationMessages;

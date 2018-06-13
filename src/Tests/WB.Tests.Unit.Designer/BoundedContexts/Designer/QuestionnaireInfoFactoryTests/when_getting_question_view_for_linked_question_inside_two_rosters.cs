@@ -1,5 +1,5 @@
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoFacto
         [NUnit.Framework.Test] public void should_return_4_elemets_for_dropdown () 
         {
             var listItems = q5View.SourceOfLinkedEntities.Where(x => x.Type == "textlist" || x.Type == "text");
-            listItems.Select(x => x.Id).ShouldEqual(new [] { q1Id.FormatGuid(), q2Id.FormatGuid(), q3Id.FormatGuid(), q4Id.FormatGuid() });
+            listItems.Select(x => x.Id).Should().BeEquivalentTo(new [] { q1Id.FormatGuid(), q2Id.FormatGuid(), q3Id.FormatGuid(), q4Id.FormatGuid() });
         }
 
         private static QuestionnaireInfoFactory factory;

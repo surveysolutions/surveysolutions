@@ -120,13 +120,13 @@
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
     <value>Erreur lors de l'importation de l'entretien avec des questions d'identification {0}. Le Chef d'Equipe responsable est manquant</value>
   </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Erreur lors de l'importation de l'entretien avec des questions d'identification {0}. EnquêteurId {1}, QuestionnaireId {2}, Exception: {3}</value>
-  </data>
   <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>Le fichier des données est incorrect</value>
   </data>
   <data name="ImportInterviews_QuestionaireNotFound" xml:space="preserve">
     <value>Le questionnaire n'a pas été trouvé</value>
+  </data>
+  <data name="ImportInterviews_GenericError" xml:space="preserve">
+    <value>Erreur lors de l'importation de l'entretien avec des questions d'identification {0}. EnquêteurId {1}, QuestionnaireId {2}, Exception: {3}</value>
   </data>
 </root>

@@ -1,5 +1,4 @@
 using System;
-using Machine.Specifications;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Services;

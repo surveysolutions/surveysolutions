@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Ncqrs.Spec;
 using NUnit.Framework;
@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             eventContext.ShouldContainEvent<QuestionsDisabled>();
 
         [NUnit.Framework.Test] public void should_raise_QuestionsDisabled_event_with_ids_of_disabled_questions_and_empty_roster_vectors () =>
-            eventContext.GetEvent<QuestionsDisabled>().Questions.ShouldContainOnly(new[]
+            eventContext.GetEvent<QuestionsDisabled>().Questions.Should().BeEquivalentTo(new[]
             {
                 Create.Entity.Identity(disabledQuestion1Id, RosterVector.Empty),
                 Create.Entity.Identity(disabledQuestion2Id, RosterVector.Empty),

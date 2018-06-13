@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Eventing;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 {
     internal class when_building_package_and_some_event_sequences_are_missing
     {
-        Establish context = () =>
+        [NUnit.Framework.OneTimeSetUp] public void context ()
         {
             var events = new List<CommittedEvent>
             {
@@ -25,19 +26,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             interviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 interviewViewRepository: Stub<IPlainStorage<InterviewView>>.Returning(Create.Entity.InterviewView()),
                 eventStore: Stub<IInterviewerEventStorage>.Returning<IEnumerable<CommittedEvent>>(events));
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
-            exception = Catch.Exception(() => interviewAccessor.GetInteviewEventsPackageOrNull(interviewId));
+        public void BecauseOf() =>
+            exception = Assert.Throws<ArgumentException>(() => interviewAccessor.GetInteviewEventsPackageOrNull(interviewId));
 
-        It should_throw_exception = () =>
-            exception.ShouldNotBeNull();
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing_missing_event_sequence () =>
+            exception.Message.Should().Contain("3");
 
-        It should_throw_exception_with_message_containing_missing_event_sequence = () =>
-            exception.Message.ShouldContain("3");
-
-        It should_throw_exception_with_message_containing__event____sequence____missing__ = () =>
-            exception.Message.ToLower().ToSeparateWords().ShouldContain("event", "sequence", "missing");
+        [NUnit.Framework.Test] public void should_throw_exception_with_message_containing__event____sequence____missing__ () =>
+            exception.Message.ToLower().ToSeparateWords().Should().Contain("event", "sequence", "missing");
 
         private static Exception exception;
         private static InterviewerInterviewAccessor interviewAccessor;

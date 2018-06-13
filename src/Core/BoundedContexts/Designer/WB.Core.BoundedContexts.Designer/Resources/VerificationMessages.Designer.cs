@@ -1781,7 +1781,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question cannot have empty option title..
+        ///   Looks up a localized string similar to Question cannot have empty title..
         /// </summary>
         public static string WB0269_QuestionTitleIsEmpty {
             get {
@@ -1849,6 +1849,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string WB0276_RownameIsNotSupported {
             get {
                 return ResourceManager.GetString("WB0276_RownameIsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire title shouldn&apos;t have two and more consecutive underscore characters..
+        /// </summary>
+        public static string WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore {
+            get {
+                return ResourceManager.GetString("WB0277_QuestionnaireTitleCannotHaveConsecutiveUnderscore", resourceCulture);
             }
         }
     }

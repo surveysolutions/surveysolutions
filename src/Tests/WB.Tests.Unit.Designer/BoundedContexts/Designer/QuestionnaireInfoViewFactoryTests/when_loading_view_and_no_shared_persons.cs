@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Aggregates;
@@ -32,8 +32,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireInfoViewF
 
         [NUnit.Framework.Test] public void should_be_only_owner_in_shared_persons_list () 
         {
-            view.SharedPersons.Count.ShouldEqual(1);
-            view.SharedPersons[0].Email.ShouldEqual(userEmail);
+            view.SharedPersons.Count.Should().Be(1);
+            view.SharedPersons[0].Email.Should().Be(userEmail);
         }
 
         private static QuestionnaireInfoView view;

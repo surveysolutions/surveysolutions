@@ -1,5 +1,4 @@
-﻿using Machine.Specifications;
-using Moq;
+﻿using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -11,7 +10,7 @@ using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewApiControllerTests
 {
-    [Subject(typeof(InterviewApiController))]
+    [NUnit.Framework.TestOf(typeof(InterviewApiController))]
     internal class InterviewApiControllerTestsContext
     {
         protected static InterviewApiController CreateController(ICommandService commandService = null,

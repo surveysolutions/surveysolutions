@@ -1,4 +1,4 @@
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
 
         [Test]
         public void  should_not_reset_AnswerAsString_to_previous_value() =>
-            integerModel.Answer.ShouldEqual(70);
+            integerModel.Answer.Should().Be(70);
 
         private static IntegerQuestionViewModel integerModel;
     }

@@ -19,21 +19,12 @@
                             }
 
                             _.forEach(commentThread.comments, function(comment) {
-                                comment.date = moment.utc(comment.date).local().format("LLL");
+                                comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
                                 comment.isResolved = !_.isNull(comment.resolveDate || null);
                             });
 
-                            if (commentThread.indexOfLastUnresolvedComment != null) {
-                                var comments = commentThread.comments.slice(0, commentThread.indexOfLastUnresolvedComment);
-                                var resolvedComments = commentThread.comments.slice(commentThread.indexOfLastUnresolvedComment);
-
-                                commentThread.comments = comments;
-                                commentThread.resolvedComments = resolvedComments;
-                                
-                            } else {
-                                commentThread.resolvedComments = commentThread.comments;
-                                commentThread.comments = [];
-                            }
+                            commentThread.resolvedComments = _.where(commentThread.comments, { isResolved: true });
+                            commentThread.comments = _.where(commentThread.comments, { isResolved: false });
                         });
                     });
             };

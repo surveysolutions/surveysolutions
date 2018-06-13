@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Machine.Specifications;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -124,7 +122,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
         }
     }
 
-    [Subject(typeof(ReadSideToTabularFormatExportService))]
+    [NUnit.Framework.TestOf(typeof(ReadSideToTabularFormatExportService))]
     internal class ReadSideToTabularFormatExportServiceTestContext
     {
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(

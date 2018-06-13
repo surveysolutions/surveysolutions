@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using AppDomainToolkit;
-using Machine.Specifications;
+using FluentAssertions;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 
@@ -10,12 +10,12 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
 {
     internal class when_answering_on_question_validation_expression_throws_exception : InterviewTestsContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             appDomainContext = AppDomainContext.Create();
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
                 Setup.MockedServiceLocator();
@@ -50,14 +50,14 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 return result;
             });
 
-        It should_declare_second_question_as_invalid = () =>
-            results.Questions2ShouldBeDeclaredInvalid.ShouldBeTrue();
+        [NUnit.Framework.Test] public void should_declare_second_question_as_invalid () =>
+            results.Questions2ShouldBeDeclaredInvalid.Should().BeTrue();
 
-        Cleanup stuff = () =>
+        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;
-        };
+        }
 
         private static InvokeResults results;
         private static AppDomainContext<AssemblyTargetLoader, PathBasedAssemblyResolver> appDomainContext;

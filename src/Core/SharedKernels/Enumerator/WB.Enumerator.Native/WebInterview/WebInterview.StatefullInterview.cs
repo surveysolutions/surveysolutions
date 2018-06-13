@@ -159,6 +159,19 @@ namespace WB.Enumerator.Native.WebInterview
             return entities;
         }
 
+        public SectionData GetFullSectionInfo(string sectionId)
+        {
+            var entities = GetSectionEntities(sectionId);
+
+            var details = GetEntitiesDetails(entities.Select(e => e.Identity).ToArray());
+
+            return new SectionData
+            {
+                Entities = entities,
+                Details = details
+            };
+        }
+
         public ButtonState GetNavigationButtonState(string id, IQuestionnaire questionnaire = null)
         {
             var statefulInterview = this.GetCallerInterview();

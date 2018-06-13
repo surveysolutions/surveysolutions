@@ -1,16 +1,15 @@
-﻿using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthCheck.Checks;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.HealthCheck;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
 {
     internal class when_performed_healthcheck_service_check : HealthCheckTestContext
     {
-        private Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             eventStoreHealthCheckResult = EventStoreHealthCheckResult.Happy();
             numberOfUnhandledPackagesHealthCheckResult = NumberOfUnhandledPackagesHealthCheckResult.Happy(0);
             folderPermissionCheckResult = new FolderPermissionCheckResult(HealthCheckStatus.Happy, null, null, null);
@@ -30,33 +29,34 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.HealthCheckTests
                 numberOfUnhandledPackagesCheckerMock.Object,
                 folderPermissionCheckerMock.Object,
                 readSideHealthCheckResultMock.Object);
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() 
         {
             result = service.Check();
-        };
+        }
 
-        It should_return_HealthCheckModel = () =>
-            result.ShouldBeOfExactType<HealthCheckResults>();
+        [NUnit.Framework.Test] public void should_return_HealthCheckModel () =>
+            result.Should().BeOfType<HealthCheckResults>();
 
-        It should_call_EventStoreHealthCheck_Check_once = () =>
+        [NUnit.Framework.Test] public void should_call_EventStoreHealthCheck_Check_once () =>
             eventStoreHealthCheckMock.Verify(x => x.Check(), Times.Once());
 
-        It should_return_EventStoreHealthCheckResult_after_call_EventStoreHealthCheck = () =>
-            result.EventstoreConnectionStatus.ShouldEqual(eventStoreHealthCheckResult);
+        [NUnit.Framework.Test] public void should_return_EventStoreHealthCheckResult_after_call_EventStoreHealthCheck () =>
+            result.EventstoreConnectionStatus.Should().Be(eventStoreHealthCheckResult);
 
-        It should_call_NumberOfUnhandledPackagesChecker_Check_once = () =>
+        [NUnit.Framework.Test] public void should_call_NumberOfUnhandledPackagesChecker_Check_once () =>
             numberOfUnhandledPackagesCheckerMock.Verify(x => x.Check(), Times.Once());
 
-        It should_return_NumberOfUnhandledPackagesHealthCheckResult_after_call_NumberOfUnhandledPackagesChecker = () =>
-           result.NumberOfUnhandledPackages.ShouldEqual(numberOfUnhandledPackagesHealthCheckResult);
+        [NUnit.Framework.Test] public void should_return_NumberOfUnhandledPackagesHealthCheckResult_after_call_NumberOfUnhandledPackagesChecker () =>
+           result.NumberOfUnhandledPackages.Should().Be(numberOfUnhandledPackagesHealthCheckResult);
         
-        It should_call_FolderPermissionChecker_Check_once = () =>
+        [NUnit.Framework.Test] public void should_call_FolderPermissionChecker_Check_once () =>
             folderPermissionCheckerMock.Verify(x => x.Check(), Times.Once());
 
-        It should_return_FolderPermissionCheckResult_after_call_FolderPermissionChecker = () =>
-            result.FolderPermissionCheckResult.ShouldEqual(folderPermissionCheckResult);
+        [NUnit.Framework.Test] public void should_return_FolderPermissionCheckResult_after_call_FolderPermissionChecker () =>
+            result.FolderPermissionCheckResult.Should().Be(folderPermissionCheckResult);
 
 
 

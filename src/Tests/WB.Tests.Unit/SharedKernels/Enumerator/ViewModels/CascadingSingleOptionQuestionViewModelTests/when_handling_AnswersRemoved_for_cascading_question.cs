@@ -1,23 +1,21 @@
 using System;
 using System.Linq;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
-using It = Machine.Specifications.It;
+
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptionQuestionViewModelTests
 {
     internal class when_handling_AnswersRemoved_for_cascading_question : CascadingSingleOptionQuestionViewModelTestContext
     {
-        Establish context = () =>
-        {
+        [NUnit.Framework.OneTimeSetUp] public void context () {
             SetUp();
             var childAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == false);
             var parentOptionAnswer = Mock.Of<InterviewTreeSingleOptionQuestion>(_ => _.IsAnswered() == true && _.GetAnswer() == Create.Entity.SingleOptionAnswer(1));
@@ -43,13 +41,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
             cascadingModel.Init(interviewGuid.FormatGuid(), questionIdentity, navigationState);
 
             cascadingModel.SaveAnswerBySelectedOptionCommand.Execute("3");
-        };
+            BecauseOf();
+        }
 
-        Because of = () =>
+        public void BecauseOf() =>
             cascadingModel.Handle(Create.Event.AnswersRemoved(questionIdentity));
 
-        It should_set_ShouldClearText_in_null = () =>
-            cascadingModel.FilterText.ShouldEqual(string.Empty);
+        [NUnit.Framework.Test] public void should_set_ShouldClearText_in_null () =>
+            cascadingModel.FilterText.Should().Be(string.Empty);
 
         private static CascadingSingleOptionQuestionViewModel cascadingModel;
         

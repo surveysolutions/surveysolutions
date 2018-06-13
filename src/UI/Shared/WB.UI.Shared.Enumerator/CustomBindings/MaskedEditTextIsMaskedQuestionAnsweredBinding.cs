@@ -39,12 +39,14 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected override void Dispose(bool isDisposing)
         {
+            if (IsDisposed)
+                return;
+
             if (isDisposing)
             {
-                var target = this.Target as MaskedEditText;
-                if (target != null)
+                if (this.Target != null && this.Target.Handle != IntPtr.Zero)
                 {
-                    target.IsMaskedFormAnsweredChanged -= this.IsMaskedFormAnsweredChangedHandler;
+                    this.Target.IsMaskedFormAnsweredChanged -= this.IsMaskedFormAnsweredChangedHandler;
                 }
             }
             base.Dispose(isDisposing);

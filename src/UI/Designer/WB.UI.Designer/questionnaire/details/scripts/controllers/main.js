@@ -122,7 +122,7 @@ angular.module('designerApp')
                     var modalInstance = $uibModal.open({
                         templateUrl: 'views/find-replace.html',
                         backdrop: false,
-                        windowClass: "findReplaceModal",
+                        windowClass: "findReplaceModal dragAndDrop",
                         controller: 'findReplaceCtrl',
                         resolve: {
                             isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false

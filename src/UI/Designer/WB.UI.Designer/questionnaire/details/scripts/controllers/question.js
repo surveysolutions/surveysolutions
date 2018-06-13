@@ -78,6 +78,8 @@
                 $scope.activeQuestion.optionsFilterExpression = question.optionsFilterExpression;
                 $scope.activeQuestion.validationConditions = question.validationConditions;
                 $scope.activeQuestion.isTimestamp = question.isTimestamp;
+                $scope.activeQuestion.geometryTypeOptions = question.geometryTypeOptions;
+                $scope.activeQuestion.geometryType = question.geometryType;
 
                 var options = question.options || [];
                 _.each(options, function(option) {
@@ -280,6 +282,13 @@
                     $scope.activeQuestion.linkedFilterExpression = '';
                 }
 
+                if (type === "Area") {
+                    if($scope.activeQuestion.geometryType === null)
+                        $scope.activeQuestion.geometryType = $scope.activeQuestion.geometryTypeOptions[0].value;
+                }
+                else
+                    $scope.activeQuestion.geometryType = null;
+
                 markFormAsChanged();
             };
 
@@ -430,6 +439,13 @@
                 markFormAsChanged();
             };
 
+            $scope.changeGeometryType = function (geometry) {
+                $scope.activeQuestion.geometryType = geometry;
+                
+                markFormAsChanged();
+            };
+
+
             $scope.getQuestionScopes = function (currentQuestion) {
                 if (!currentQuestion)
                     return [];
@@ -519,7 +535,7 @@
                 }
             };
 
-            var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio", "Area"];
+            var questionTypesDoesNotSupportValidations = ["Multimedia", "Audio"];
             
             $scope.doesQuestionSupportValidations = function () {
                 return $scope.activeQuestion &&

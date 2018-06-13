@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -17,7 +18,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.PublicApi
 {
     [RoutePrefix("api/v1/questionnaires")]
-    [ApiBasicAuth(new[] {UserRoles.ApiUser, UserRoles.Administrator}, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(new[] {UserRoles.ApiUser, UserRoles.Administrator}, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -120,4 +121,5 @@ namespace WB.UI.Headquarters.API.PublicApi
             return new InterviewApiView(interviews);
         }
     }
+
 }

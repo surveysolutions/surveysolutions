@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Reactive.Subjects;
 using AutoMapper;
 using Main.Core.Documents;
@@ -179,5 +180,10 @@ namespace WB.UI.WebTester
             typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
+
+        public Task Init(IServiceLocator serviceLocator)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

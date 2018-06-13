@@ -1,30 +1,28 @@
 using System;
-using Machine.Specifications;
 using Main.Core.Documents;
 using Moq;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTests
 {
     internal class when_getting_translation_file_for_empty_questionnaire : TranslationsServiceTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public void should_not_throw_any_exceptions()
+        {
             questionnaireId = Guid.Parse("11111111111111111111111111111111");
-            
+
             var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
             questionnaires.SetReturnsDefault(Create.QuestionnaireDocument(questionnaireId));
 
             service = Create.TranslationsService(questionnaireStorage: questionnaires.Object);
-            BecauseOf();
+
+            service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"));
         }
 
-        private void BecauseOf() => exception = Catch.Exception(()=> service.GetAsExcelFile(questionnaireId, Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")));
-
-        [NUnit.Framework.Test] public void should_not_throw_any_exceptions () => exception.ShouldBeNull();
-        
         static TranslationsService service;
         static Guid questionnaireId;
         static Exception exception;

@@ -1,5 +1,5 @@
 using System;
-using Machine.Specifications;
+using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Account;
@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.AccountRepositoryTests
             validatedAccount = accountRepository.Create(validatedUserId, null, string.Empty, string.Empty);
 
         [NUnit.Framework.Test] public void should_set_returned_account_provider_user_key_to_user_id () =>
-            validatedAccount.ProviderUserKey.ShouldEqual(validatedUserId);
+            validatedAccount.ProviderUserKey.Should().Be(validatedUserId);
 
         private static DesignerAccountRepository accountRepository;
         private static Mock<ICommandService> commandService;
