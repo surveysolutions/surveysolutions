@@ -47,6 +47,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("interview_duration", "active time it took to complete the interview"),
         };
 
+        protected DiagnosticsExporter()
+        {
+
+        }
+
         public DiagnosticsExporter(InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,

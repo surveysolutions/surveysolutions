@@ -56,7 +56,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             InterviewDataExportSettings exportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IProductVersion productVersion)
+            IProductVersion productVersion,
+            IInterviewsExporter interviewsExporter,
+            CommentsExporter commentsExporter,
+            InterviewActionsExporter interviewActionsExporter,
+            DiagnosticsExporter diagnosticsExporter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -66,11 +70,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.exportSettings = exportSettings;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.productVersion = productVersion;
-
-            this.interviewsExporter = ServiceLocator.Current.GetInstance<IInterviewsExporter>();
-            this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
-            this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
-            this.diagnosticsExporter = ServiceLocator.Current.GetInstance<DiagnosticsExporter>();
+            this.interviewsExporter = interviewsExporter;
+            this.commentsExporter = commentsExporter;
+            this.interviewActionsExporter = interviewActionsExporter;
+            this.diagnosticsExporter = diagnosticsExporter;
         }
 
         public void GenerateDescriptionFile(QuestionnaireIdentity questionnaireIdentity, string basePath, string dataFilesExtension)
