@@ -9,6 +9,12 @@
   <color name="commentsTextColor">#DF3DBF</color>
   <color name="warningTextColor">#F9BD07</color>
   <color name="disabledTextColor">#afafaf</color>
+  <color name="notAnsweredLabel">#4277A8</color>
+  <color name="overview_invalid_border">#F0D0C7</color>
+  <color name="overview_invalid_background">#FCDAD1</color>
+  <color name="overview_unanswered_border">#D6D6D6</color>
+  <color name="overview_unanswered_background">#E1E1E1</color>
+  <color name="overview_commented_overlay">#B3E88AD3</color>
 
   <color name="sideBarPrefilledQuestionText">#FF747474</color>
 
