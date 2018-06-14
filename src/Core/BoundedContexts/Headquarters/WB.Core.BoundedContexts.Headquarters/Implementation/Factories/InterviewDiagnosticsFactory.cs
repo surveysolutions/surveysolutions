@@ -31,11 +31,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 
                 return interviews.Select(i => new InterviewDiagnosticsInfo()
                 {
+                    InterviewId = i.InterviewId,
                     InterviewKey = i.Key,
                     Status = i.Status,
                     ResponsibleId = i.ResponsibleId,
                     ResponsibleName = i.ResponsibleName,
-                    NumberOfInterviewers = i.InterviewCommentedStatuses.Select(s => s.InterviewerId).Where(s => s != null).Distinct().Count(),
+                    NumberOfInterviewers = i.InterviewCommentedStatuses.Where(s => s.Status == InterviewExportedAction.InterviewerAssigned).Select(s => s.InterviewerId).Where(s => s != null).Distinct().Count(),
                     NumberRejectionsBySupervisor = i.InterviewCommentedStatuses.Where(s => s.Status == InterviewExportedAction.RejectedBySupervisor).Count(),
                     NumberRejectionsByHq = i.InterviewCommentedStatuses.Where(s => s.Status == InterviewExportedAction.RejectedByHeadquarter).Count(),
                     NumberValidQuetions = 0,
