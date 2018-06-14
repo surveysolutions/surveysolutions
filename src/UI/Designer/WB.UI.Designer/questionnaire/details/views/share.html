@@ -13,6 +13,13 @@
                     <button type="submit" class="btn btn-lg btn-primary invite-button" ng-click="updateTitle()" ng-i18next>Update</button>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label" for="questionnaireTitle" ng-i18next="SettingsQuestionnaireName"></label> <br />
+                <input id="questionnaireVariable" type="text" class="form-control questionaire-title" ng-model="questionnaire.editedVariable">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-lg btn-primary invite-button" ng-click="updateTitle()" ng-i18next>Update</button>
+                </div>
+            </div>
         </form>
         <div class="row make-public" ng-if="questionnaire.hasViewerAdminRights">
             <button class="btn btn-link answer" ng-click="togglePublicity()">{{'SettingsQuestionnaireSharing' | i18next }}

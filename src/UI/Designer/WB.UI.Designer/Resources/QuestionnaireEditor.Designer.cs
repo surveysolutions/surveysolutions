@@ -1861,6 +1861,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Questionnaire variable.
+        /// </summary>
+        public static string SettingsQuestionnaireVariable {
+            get {
+                return ResourceManager.GetString("SettingsQuestionnaireVariable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revoke access.
         /// </summary>
         public static string SettingsRevokeAccess {
