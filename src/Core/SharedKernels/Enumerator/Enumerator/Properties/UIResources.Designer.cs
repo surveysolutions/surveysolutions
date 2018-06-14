@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perimeter:.
+        ///   Looks up a localized string similar to Length:.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
@@ -183,6 +183,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_NoMapsFound {
             get {
                 return ResourceManager.GetString("AreaMap_NoMapsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perimeter:.
+        /// </summary>
+        public static string AreaMap_PerimeterFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_PerimeterFormat", resourceCulture);
             }
         }
         
