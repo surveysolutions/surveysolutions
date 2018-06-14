@@ -128,6 +128,14 @@
                     <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_ShowAuditLog</a>
                 </li>
             </ul>
+            @if (qRCodeHelper.SupportQRCodeGeneration())
+            {
+                <figure class="qrcode-wrapper">
+
+                <img id="download-qr" alt="QR Code" width="250" height="250" 
+                     src="@qRCodeHelper.GetQRCodeAsBase64StringSrc(JsonConvert.SerializeObject((new FinishInstallationInfo(){Url = qRCodeHelper.GetBaseUrl(), Login = Model.InterviewerName})), 250, 250)"/>            
+                </figure>
+            }
         </div>
     </div>
 </div>
@@ -151,11 +159,6 @@
                     <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
                     <div class="description">@Pages.InterviewerProfile_Approved</div>
                 </div>
-                @if (qRCodeHelper.SupportQRCodeGeneration())
-                {
-                    <img id="download-qr" alt="QR Code" width="250" height="250" 
-                         src="@qRCodeHelper.GetQRCodeAsBase64StringSrc(JsonConvert.SerializeObject((new FinishInstallationInfo(){Url = qRCodeHelper.GetBaseUrl(), Login = Model.InterviewerName})), 250, 250)"/>
-                }
                 </div>
 
         </div>
