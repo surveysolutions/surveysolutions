@@ -32,7 +32,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 }
                 case OverviewNodeState.Invalid:
                 {
-                    colorid = Resource.Color.errorTextColor;
+                    colorid = Resource.Color.overview_invalid_text;
                     break;
                 }
                 case OverviewNodeState.Commented:

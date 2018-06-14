@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             typeMapping = new Dictionary<Type, int>
             {
-                {typeof(OverviewQuestion), Resource.Layout.interview_overview_question},
+                {typeof(OverviewQuestionViewModel), Resource.Layout.interview_overview_question},
                 {typeof(OverviewGroup), Resource.Layout.interview_overview_group},
                 {typeof(OverviewStaticTextViewModel), Resource.Layout.interview_overview_statictext},
                 {typeof(OverviewSection), Resource.Layout.interview_overview_section},

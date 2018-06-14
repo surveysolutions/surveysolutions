@@ -20,7 +20,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             }
             else if (value == OverviewNodeState.Invalid)
             {
-                var color =  new Color(ContextCompat.GetColor(control.Context, Resource.Color.errorTextColor));
+                var color =  new Color(ContextCompat.GetColor(control.Context, Resource.Color.overview_invalid_text));
                 control.SetTextColor(color);
             }
             else if (value == OverviewNodeState.Commented)

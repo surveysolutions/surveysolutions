@@ -68,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
                     return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService);
                 }
 
-                return new OverviewQuestion(question);
+                return new OverviewQuestionViewModel(question);
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
