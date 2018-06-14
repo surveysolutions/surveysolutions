@@ -15,7 +15,6 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
@@ -127,19 +126,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                 if (scanCode != null)
                 {
-                    //parse and set fields
+                    if (Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var uriResult))
+                    {
+                        var seachTerm = "/api/interviewersync";
+                        var position = scanCode.Code.IndexOf(seachTerm, StringComparison.InvariantCultureIgnoreCase);
 
-                    var finishInfo = JsonConvert.DeserializeObject<FinishInstallationInfo>(scanCode.Code);
+                        this.Endpoint = position > 0 ? scanCode.Code.Substring(0, position) : scanCode.Code;
+                    }
+                    else
+                    {
+                        var finishInfo = JsonConvert.DeserializeObject<FinishInstallationInfo>(scanCode.Code);
 
-                    this.Endpoint = finishInfo.Url;
-                    this.UserName = finishInfo.Login;
-                    this.Password = finishInfo.Password;
+                        this.Endpoint = finishInfo.Url;
+                        this.UserName = finishInfo.Login;
+                        this.Password = finishInfo.Password;
+                    }
                 }
             }
-            
-            catch (MissingPermissionsException)
+            catch
             {
-                
             }
             finally
             {
