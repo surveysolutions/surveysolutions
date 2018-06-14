@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services;
 
-namespace WB.UI.Interviewer.Services
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class BackupRestoreService : IBackupRestoreService
     {
@@ -19,7 +18,7 @@ namespace WB.UI.Interviewer.Services
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
         private readonly IPermissions permissions;
-        private readonly IInterviewerSettings interviewerSettings;
+        private readonly IDeviceSettings deviceSettings;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -28,14 +27,14 @@ namespace WB.UI.Interviewer.Services
             ILogger logger,
             string privateStorage, 
             IPermissions permissions,
-            IInterviewerSettings interviewerSettings)
+            IDeviceSettings deviceSettings)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
             this.privateStorage = privateStorage;
             this.permissions = permissions;
-            this.interviewerSettings = interviewerSettings;
+            this.deviceSettings = deviceSettings;
         }
 
         public async Task<string> BackupAsync()
@@ -51,10 +50,10 @@ namespace WB.UI.Interviewer.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            var backupTempFolder = $"_temp-backup-interviewer-{DateTime.Now:s}";
+            var backupTempFolder = $"_temp-backup-{DateTime.Now:s}";
             var backupFolderPath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupTempFolder);
 
-            var backupFileName = $"backup-interviewer-{DateTime.Now:s}.ibak";
+            var backupFileName = $"backup-{DateTime.Now:s}.zip";
             var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
 
             try
@@ -220,7 +219,7 @@ namespace WB.UI.Interviewer.Services
         private void CreateDeviceInfoFile()
         {
             var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "device.info");
-            var deviceTechnicalInformation = this.interviewerSettings.GetDeviceTechnicalInformation();
+            var deviceTechnicalInformation = this.deviceSettings.GetDeviceTechnicalInformation();
             this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
         }
     }

@@ -4,6 +4,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -15,33 +16,34 @@ using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Supervisor.Services;
+using WB.UI.Supervisor.Services.Implementation;
 using WB.UI.Supervisor.ViewModel;
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
-    public class SupervisorUIModule : IModule
+    internal class SupervisorUIModule : IModule
     {
         public void Load(IIocRegistry registry)
         {
             registry.Bind<SupervisorMvxApplication>();
             registry.Bind<SupervisorAppStart>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
-            //registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
+            registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
             registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();
-            //registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
+            registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             //registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
 
-            //registry.Bind<ISynchronizationService, SynchronizationService>();
-            //registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
-            //registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
+            registry.Bind<ISynchronizationService, SynchronizationService>();
+            registry.Bind<ISupervisorSynchronizationService, SynchronizationService>();
+            registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
             //registry.Bind<IBattery, AndroidBattery>();
             //registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             //registry.Bind<IDeviceInformationService, DeviceInformationService>();
-            //registry.Bind<IArchivePatcherService, ArchivePatcherService>();
+            registry.Bind<IArchivePatcherService, ArchivePatcherService>();
             //registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 
             registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
@@ -92,7 +94,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
-            //registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
+            registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
         }

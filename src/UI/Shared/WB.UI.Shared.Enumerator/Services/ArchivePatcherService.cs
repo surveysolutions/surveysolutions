@@ -3,10 +3,10 @@ using System.IO;
 using Android.Runtime;
 using Java.IO;
 using Java.Util.Zip;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using JavaFile = Java.IO.File;
 
-namespace WB.UI.Interviewer.Implementations.Services
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class ArchivePatcherService : IArchivePatcherService
     {

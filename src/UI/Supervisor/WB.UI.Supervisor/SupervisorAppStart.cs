@@ -1,7 +1,9 @@
 ﻿using MvvmCross;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Supervisor.Activities;
 
 namespace WB.UI.Supervisor
@@ -19,7 +21,15 @@ namespace WB.UI.Supervisor
 
             var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 
-            viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
+            var currentUser = Mvx.Resolve<IPlainStorage<SupervisorIdentity>>().FirstOrDefault();
+            if (currentUser == null)
+            {
+                viewModelNavigationService.NavigateToFinishInstallationAsync().ConfigureAwait(false);
+            }
+            else
+            {
+                viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
+            }
 
             base.ApplicationStartup(hint);
         }

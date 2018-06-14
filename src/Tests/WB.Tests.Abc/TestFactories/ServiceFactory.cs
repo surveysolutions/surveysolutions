@@ -44,7 +44,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -189,7 +188,7 @@ namespace WB.Tests.Abc.TestFactories
         
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IInterviewerEventStorage eventStore = null,
+            IEnumeratorEventStorage eventStore = null,
             ICommandService commandService = null,
             IPlainStorage<QuestionnaireView> questionnaireRepository = null,
             IInterviewerPrincipal principal = null,
@@ -206,7 +205,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewFileViewRepository ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
-                eventStore ?? Mock.Of<IInterviewerEventStorage>(),
+                eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
                 aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),

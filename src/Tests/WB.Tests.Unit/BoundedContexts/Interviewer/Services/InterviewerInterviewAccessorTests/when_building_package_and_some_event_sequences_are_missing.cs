@@ -4,8 +4,8 @@ using FluentAssertions;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Tests.Abc;
 
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
             interviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 interviewViewRepository: Stub<IPlainStorage<InterviewView>>.Returning(Create.Entity.InterviewView()),
-                eventStore: Stub<IInterviewerEventStorage>.Returning<IEnumerable<CommittedEvent>>(events));
+                eventStore: Stub<IEnumeratorEventStorage>.Returning<IEnumerable<CommittedEvent>>(events));
             BecauseOf();
         }
 

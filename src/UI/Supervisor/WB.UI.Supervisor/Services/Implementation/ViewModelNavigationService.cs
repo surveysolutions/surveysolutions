@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.Infrastructure.CommandBus;
@@ -9,7 +10,7 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Supervisor.Activities;
 using WB.UI.Supervisor.ViewModel;
 
-namespace WB.UI.Supervisor.Services
+namespace WB.UI.Supervisor.Services.Implementation
 {
     internal class ViewModelNavigationService : BaseViewModelNavigationService
     {
@@ -55,9 +56,7 @@ namespace WB.UI.Supervisor.Services
         }
 
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
-        protected override void NavigateToSettingsImpl()
-        {
-            throw new System.NotImplementedException();
-        }
+        protected override void NavigateToSettingsImpl() =>
+            this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
     }
 }
