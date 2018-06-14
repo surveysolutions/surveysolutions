@@ -1111,4 +1111,7 @@
   <data name="IsWarning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>Questionnaire variable</value>
+  </data>
 </root>
