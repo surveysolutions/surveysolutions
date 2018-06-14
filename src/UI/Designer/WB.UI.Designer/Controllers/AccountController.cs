@@ -415,11 +415,11 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public JsonResult FindByEmail(string email)
+        public JsonResult FindByEmail(string emailOrLogin)
         {
             return Json(new
             {
-                doesUserExist = !string.IsNullOrEmpty(Membership.GetUserNameByEmail(email))
+                doesUserExist = !string.IsNullOrEmpty(accountRepository.GetByNameOrEmail(emailOrLogin)?.UserName)
             });
         }
     }

@@ -10,7 +10,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
     {
         public QuestionnaireInfoView()
         {
-            this.SharedPersons = new List<SharedPerson>();
+            this.SharedPersons = new List<SharedPersonView>();
             this.Chapters = new List<ChapterInfoView>();
             this.Macros = new List<MacroView>();
             this.LookupTables = new List<LookupTableView>();
@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
         public List<MacroView> Macros { get; set; }
         public List<LookupTableView> LookupTables { get; set; }
 
-        public List<SharedPerson> SharedPersons { get; set; }
+        public List<SharedPersonView> SharedPersons { get; set; }
         public int QuestionsCount { get; set; }
         public int GroupsCount { get; set; }
         public int RostersCount { get; set; }
