@@ -93,20 +93,8 @@ namespace WB.UI.Interviewer.ViewModel
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
                     completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return completeInterviewViewModel;
-                case ScreenType.Cover:
-                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
-                    return coverInterviewViewModel;
-                case ScreenType.Group:
-                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                    return activeStageViewModel;
-                case ScreenType.Overview:
-                    var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
-                    overviewViewModel.Configure(this.InterviewId);
-                    return overviewViewModel;
                 default:
-                    return null;
+                    return base.UpdateCurrentScreenViewModel(eventArgs);
             }
         }
 
