@@ -15,6 +15,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public int? EventChunkSize { get; set; }
         public bool? VibrateOnError { get; set; }
         public bool? ShowLocationOnMap { get; set; }
-        public bool? TestingConditions { get; set; }
     }
 }

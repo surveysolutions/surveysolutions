@@ -64,14 +64,12 @@ namespace WB.UI.Interviewer.Settings
             GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
             GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy),
             VibrateOnError = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError),
-            TestingConditions = Application.Context.Resources.GetBoolean(Resource.Boolean.TestingConditions)
         };
 
         public string Endpoint => this.CurrentSettings.Endpoint;
         public int EventChunkSize => this.CurrentSettings.EventChunkSize?? Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize);
         public bool VibrateOnError => this.CurrentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
         public bool ShowVariables => false;
-        public bool TestingConditions => this.CurrentSettings.TestingConditions ?? false;
         public bool ShowLocationOnMap => this.CurrentSettings.ShowLocationOnMap.GetValueOrDefault(true);
         public bool ShowAnswerTime => false;
         public TimeSpan Timeout => new TimeSpan(0, 0, this.CurrentSettings.HttpResponseTimeoutInSec);
@@ -196,15 +194,6 @@ namespace WB.UI.Interviewer.Settings
             this.SaveCurrentSettings(settings =>
             {
                 settings.VibrateOnError = vibrateOnError;
-            });
-        }
-
-        public void SetTestingConditions(bool testingConditions)
-        {
-            this.SaveCurrentSettings(settings =>
-            {
-                settings.TestingConditions = testingConditions;
-                Interview.TestingConditions = testingConditions;
             });
         }
 

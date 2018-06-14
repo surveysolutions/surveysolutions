@@ -47,7 +47,7 @@ namespace WB.Core.GenericSubdomains.Portable.CustomCollections
 
         public void Remove(T item)
         {
-            this.dictionary.TryRemove(item);
+            this.dictionary.TryRemove(item, out _);
         }
 
         public void Add(T item)

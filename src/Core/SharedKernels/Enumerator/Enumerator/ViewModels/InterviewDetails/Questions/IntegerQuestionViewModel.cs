@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
         private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = 500; // ms
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
         public SpecialValuesViewModel SpecialValues => this.specialValues;
@@ -140,7 +140,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
-            
             this.questionIdentity = entityIdentity ?? throw new ArgumentNullException(nameof(entityIdentity));
             this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
 

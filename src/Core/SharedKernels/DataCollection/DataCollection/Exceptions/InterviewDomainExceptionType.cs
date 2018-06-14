@@ -12,6 +12,7 @@
         InterviewRecievedByDevice,
         CantMoveToUndefinedTeam,
         ExpessionCalculationError,
-        DuplicateSyncPackage
+        DuplicateSyncPackage,
+        PackageIsOudated
     }
 }

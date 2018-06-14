@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
 using NUnit.Framework;
@@ -515,7 +516,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<NumericIntegerAnswer>(savedAssignments, Identity.Create(integerQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(555));
+            Assert.That(GetAnswer<NumericIntegerAnswer>(savedAssignments[0], Identity.Create(integerQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(555));
         }
 
         [Test]
@@ -560,7 +561,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
 
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<NumericRealAnswer>(savedAssignments, Identity.Create(doubleQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(777.777));
+            Assert.That(GetAnswer<NumericRealAnswer>(savedAssignments[0], Identity.Create(doubleQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(777.777));
         }
 
         [Test]
@@ -607,7 +608,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<TextAnswer>(savedAssignments, Identity.Create(textQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(answer));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(textQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(answer));
         }
 
         [Test]
@@ -654,7 +655,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<QRBarcodeAnswer>(savedAssignments,
+            Assert.That(GetAnswer<QRBarcodeAnswer>(savedAssignments[0],
                 Identity.Create(qrBarcodeQuestionId, Create.RosterVector(1))).DecodedText, Is.EqualTo(answer));
         }
 
@@ -701,7 +702,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<DateTimeAnswer>(savedAssignments,
+            Assert.That(GetAnswer<DateTimeAnswer>(savedAssignments[0],
                 Identity.Create(dateTimeQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(new DateTime(2008, 9, 22, 14, 1, 54, DateTimeKind.Utc)));
         }
 
@@ -748,7 +749,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<DateTimeAnswer>(savedAssignments,
+            Assert.That(GetAnswer<DateTimeAnswer>(savedAssignments[0],
                 Identity.Create(dateTimeQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(new DateTime(2018, 2, 22, 11, 35, 0, DateTimeKind.Utc)));
         }
 
@@ -798,7 +799,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listQuestionId, Create.RosterVector(1))).Rows, Is.EquivalentTo(new[]
             {
                 new TextListAnswerRow(0, "john"),
@@ -856,7 +857,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments, Has.One.Items);
 
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<GpsAnswer>(savedAssignments,
+            Assert.That(GetAnswer<GpsAnswer>(savedAssignments[0],
                 Identity.Create(gpsQuestionId, Create.RosterVector(1))).Value, Is.EqualTo(new GeoPosition(90, 180, 12, 100, new DateTime(2019, 9, 22, 12, 11, 10))));
         }
 
@@ -907,7 +908,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<YesNoAnswer>(savedAssignments,
+            Assert.That(GetAnswer<YesNoAnswer>(savedAssignments[0],
                 Identity.Create(yesNoQuestionId, Create.RosterVector(1))).CheckedOptions, Is.EquivalentTo(new[]
             {
                 new CheckedYesNoAnswerOption(5, true),
@@ -964,7 +965,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<YesNoAnswer>(savedAssignments,
+            Assert.That(GetAnswer<YesNoAnswer>(savedAssignments[0],
                 Identity.Create(yesNoQuestionId, Create.RosterVector(1))).CheckedOptions, Is.EqualTo(new[]
             {
                 new CheckedYesNoAnswerOption(9, false),
@@ -1018,7 +1019,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<CategoricalFixedSingleOptionAnswer>(savedAssignments,
+            Assert.That(GetAnswer<CategoricalFixedSingleOptionAnswer>(savedAssignments[0],
                 Identity.Create(categoricalSingleQuestionId, Create.RosterVector(1))).SelectedValue, Is.EqualTo(10));
         }
 
@@ -1070,7 +1071,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<CategoricalFixedMultiOptionAnswer>(savedAssignments,
+            Assert.That(GetAnswer<CategoricalFixedMultiOptionAnswer>(savedAssignments[0],
                 Identity.Create(categoricalMultiQuestionId, Create.RosterVector(1))).CheckedValues, Is.EquivalentTo(new[] { 11, 13 }));
         }
 
@@ -1122,7 +1123,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.Exactly(2).Items);
-            Assert.That(GetAnswer<CategoricalFixedMultiOptionAnswer>(savedAssignments,
+            Assert.That(GetAnswer<CategoricalFixedMultiOptionAnswer>(savedAssignments[0],
                 Identity.Create(categoricalMultiQuestionId, Create.RosterVector(1))).CheckedValues, Is.EquivalentTo(new[] { 13, 11, 12 }));
         }
 
@@ -1171,7 +1172,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1220,7 +1221,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1269,7 +1270,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1319,7 +1320,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1366,7 +1367,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1420,7 +1421,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1472,7 +1473,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1524,7 +1525,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1577,7 +1578,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(savedAssignments, Has.One.Items);
             Assert.That(savedAssignments[0].Answers, Has.One.Items);
-            Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
                 Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
         }
 
@@ -1771,56 +1772,252 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(savedAssignments[0].Answers, Is.Empty);
         }
 
-        //[Test]
-        //public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_empty_answer_on_text_question_should_be_saved_assignemnt_with_roster_size_answer_only()
-        //{
-        //    //arrange 
-        //    var questionId = Guid.Parse("10101010101010101010101010101010");
-        //    var variable = "myvar";
+        [Test]
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_has_empty_answer_on_text_question_should_be_saved_assignemnt_with_roster_size_answer_only()
+        {
+            //arrange 
+            var questionId = Guid.Parse("10101010101010101010101010101010");
+            var variable = "myvar";
 
-        //    var rosterVariable = "r";
-        //    var listRosterId = Guid.Parse("22222222222222222222222222222222");
-        //    var rosterSizeQuestion = "list";
-        //    var questionnaire = Create.Entity.PlainQuestionnaire(
-        //        Create.Entity.QuestionnaireDocumentWithOneChapter(
-        //            Create.Entity.TextListQuestion(listRosterId, variable: rosterSizeQuestion),
-        //            Create.Entity.ListRoster(variable: rosterVariable, rosterSizeQuestionId: listRosterId,
-        //                children: new[]
-        //                {
-        //                    Create.Entity.TextQuestion(questionId, variable)
-        //                })));
+            var rosterVariable = "r";
+            var listRosterId = Guid.Parse("22222222222222222222222222222222");
+            var rosterSizeQuestion = "list";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.TextListQuestion(listRosterId, variable: rosterSizeQuestion),
+                    Create.Entity.ListRoster(variable: rosterVariable, rosterSizeQuestionId: listRosterId,
+                        children: new[]
+                        {
+                            Create.Entity.TextQuestion(questionId, variable: variable)
+                        })));
 
-        //    var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
+            var mainFile = Create.Entity.PreloadedFile(rows: new[] { Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("interview__id", "1")) });
 
-        //    var rosterFile = Create.Entity.PreloadedFile(rosterVariable, rows: new[]
-        //    {
-        //        Create.Entity.PreloadingRow(
-        //            Create.Entity.PreloadingValue("interview__id", "1"),
-        //            Create.Entity.PreloadingValue(rosterSizeQuestion, "item1"),
-        //            Create.Entity.PreloadingValue($"{rosterVariable}__id", "1"),
-        //            Create.Entity.PreloadingValue(variable, ""))
-        //    });
+            var rosterFile = Create.Entity.PreloadedFile(rosterVariable, rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue(rosterSizeQuestion, "item1"),
+                    Create.Entity.PreloadingValue($"{rosterVariable}__id", "1"),
+                    Create.Entity.PreloadingValue(variable, ""))
+            });
 
-        //    var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
 
-        //    var service = Create.Service.AssignmentsImportService(
-        //        importAssignmentsRepository: importAssignmentsRepository);
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
 
-        //    //act
-        //    var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
+            //act
+            var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
 
-        //    //assert
-        //    Assert.That(errors, Is.Empty);
+            //assert
+            Assert.That(errors, Is.Empty);
 
-        //    var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
 
-        //    Assert.That(savedAssignments, Has.One.Items);
-        //    Assert.That(savedAssignments[0].Answers, Has.One.Items);
-        //    Assert.That(GetAnswer<TextListAnswer>(savedAssignments,
-        //        Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
-        //}
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers, Has.One.Items);
+            Assert.That(GetAnswer<TextListAnswer>(savedAssignments[0],
+                Identity.Create(listRosterId, RosterVector.Empty)).Rows, Is.EquivalentTo(new[] { new TextListAnswerRow(1, "item1") }));
+        }
 
-        private static T GetAnswer<T>(AssignmentToImport[] answers, Identity questionIdentity) where T : AbstractAnswer
-            => (T)answers.SelectMany(x => x.Answers).FirstOrDefault(x => x.Identity == questionIdentity)?.Answer;
+        [Test]
+        public void when_VerifyPanelAndSaveIfNoErrors_and_numeric_roster_size_trigger_roster_and_nested_roster_should_be_saved_assignemnt_with_answers_in_roster_and_nested_roster()
+        {
+            //arrange 
+            var rosterSizeQuestionId = Guid.Parse("99999999999999999999999999999999");
+            var txtInRosterId = Guid.Parse("11111111111111111111111111111111");
+            var txtInNestedRosterId = Guid.Parse("22222222222222222222222222222222");
+            var rosterSizeQuestion = "q";
+            var roster = "r";
+            var nestedroster = "nr";
+            var txtInRoster = "txt";
+            var txtInNestedRoster = "ntxt";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, rosterSizeQuestion),
+                    Create.Entity.NumericRoster(variable: roster, rosterSizeQuestionId: rosterSizeQuestionId, children: new IComposite[]
+                    {
+                        Create.Entity.TextQuestion(txtInRosterId, variable: txtInRoster),
+                        Create.Entity.NumericRoster(variable: nestedroster, rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
+                        {
+                            Create.Entity.TextQuestion(txtInNestedRosterId, variable: txtInNestedRoster)
+                        })
+                    })));
+
+            var mainFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue(rosterSizeQuestion, "3"))
+            });
+
+            var rosterFile = Create.Entity.PreloadedFile(roster, rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue(txtInRoster, "text 1")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
+                    Create.Entity.PreloadingValue(txtInRoster, "text 2"))
+            });
+
+            var nestedRosterFile = Create.Entity.PreloadedFile(nestedroster, rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "1"),
+                    Create.Entity.PreloadingValue(txtInNestedRoster, "text 3")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "1"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "2"),
+                    Create.Entity.PreloadingValue(txtInNestedRoster, "text 4")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "1"),
+                    Create.Entity.PreloadingValue(txtInNestedRoster, "text 5")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster}__id", "2"),
+                    Create.Entity.PreloadingValue($"{nestedroster}__id", "2"),
+                    Create.Entity.PreloadingValue(txtInNestedRoster, "text 6")),
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile, nestedRosterFile }, Guid.Empty, null, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers, Has.Exactly(7).Items);
+            Assert.That(GetAnswer<NumericIntegerAnswer>(savedAssignments[0], Identity.Create(rosterSizeQuestionId, RosterVector.Empty)).Value, Is.EqualTo(2));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(txtInRosterId, Create.RosterVector(0))).Value, Is.EqualTo("text 1"));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(txtInRosterId, Create.RosterVector(1))).Value, Is.EqualTo("text 2"));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(txtInNestedRosterId, Create.RosterVector(0, 0))).Value, Is.EqualTo("text 3"));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(txtInNestedRosterId, Create.RosterVector(0, 1))).Value, Is.EqualTo("text 4"));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(txtInNestedRosterId, Create.RosterVector(1, 0))).Value, Is.EqualTo("text 5"));
+            Assert.That(GetAnswer<TextAnswer>(savedAssignments[0], Identity.Create(txtInNestedRosterId, Create.RosterVector(1, 1))).Value, Is.EqualTo("text 6"));
+        }
+
+        [Test]
+        public void when_VerifyPanelAndSaveIfNoErrors_with_protected_variables_should_be_saved_assignemnt_with_specified_protected_variables()
+        {
+            //arrange 
+            var numQuestion = "num";
+            var multiQuestion = "multi";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(variable: numQuestion),
+                    Create.Entity.MultyOptionsQuestion(variable: multiQuestion,
+                        options: Create.Entity.Options(1, 2, 3))));
+
+            var mainFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue(numQuestion, "1"),
+                    Create.Entity.PreloadingCompositeValue(multiQuestion, Create.Entity.PreloadingValue("3", "1")))
+            });
+
+            var protectedVariablesFile = Create.Entity.PreloadedFile("protected__variables", rows: new[]
+            {
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("variable__name", numQuestion)),
+                Create.Entity.PreloadingRow(Create.Entity.PreloadingValue("variable__name", multiQuestion))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] {mainFile}, Guid.Empty,
+                protectedVariablesFile, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].ProtectedVariables, Is.EquivalentTo(new[] {numQuestion, multiQuestion}));
+        }
+
+        [Test]
+        public void when_VerifyPanelAndSaveIfNoErrors_and_roster_file_by_numeric_question_which_trigger_2_rosters_has_2_roster_instances_should_be_saved_assignemnt_with_answer_on_roster_size_question()
+        {
+            //arrange 
+            var rosterSizeQuestionId = Guid.Parse("99999999999999999999999999999999");
+            var rosterSizeQuestion = "q";
+            var roster1 = "r1";
+            var txtInRoster1 = "txt1";
+            var roster2 = "r2";
+            var txtInRoster2 = "txt2";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                    Create.Entity.NumericIntegerQuestion(rosterSizeQuestionId, variable: rosterSizeQuestion),
+                    Create.Entity.NumericRoster(variable: roster1, rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
+                    {
+                        Create.Entity.TextQuestion(variable: txtInRoster1)
+                    }),
+                    Create.Entity.NumericRoster(variable: roster2, rosterSizeQuestionId: rosterSizeQuestionId, children: new[]
+                    {
+                        Create.Entity.TextQuestion(variable: txtInRoster2)
+                    })));
+
+            var mainFile = Create.Entity.PreloadedFile(rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue(rosterSizeQuestion, "10"))
+            });
+
+            var rosterFile = Create.Entity.PreloadedFile(roster1, rows: new[]
+            {
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster1}__id", "1"),
+                    Create.Entity.PreloadingValue(txtInRoster1, "")),
+                Create.Entity.PreloadingRow(
+                    Create.Entity.PreloadingValue("interview__id", "1"),
+                    Create.Entity.PreloadingValue($"{roster1}__id", "2"),
+                    Create.Entity.PreloadingValue(txtInRoster1, ""))
+            });
+
+            var importAssignmentsRepository = Create.Storage.InMemoryPlainStorage<AssignmentToImport>();
+
+            var service = Create.Service.AssignmentsImportService(
+                importAssignmentsRepository: importAssignmentsRepository);
+
+            //act
+            var errors = service.VerifyPanelAndSaveIfNoErrors("original.zip", new[] { mainFile, rosterFile }, Guid.Empty, null, questionnaire);
+
+            //assert
+            Assert.That(errors, Is.Empty);
+
+            var savedAssignments = importAssignmentsRepository.Query(x => x.ToArray());
+
+            Assert.That(savedAssignments, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers, Has.One.Items);
+            Assert.That(savedAssignments[0].Answers[0].Answer, Is.TypeOf<NumericIntegerAnswer>());
+            Assert.That(((NumericIntegerAnswer)savedAssignments[0].Answers[0].Answer).Value, Is.EqualTo(2));
+        }
+
+        private static T GetAnswer<T>(AssignmentToImport assignment, Identity questionIdentity) where T : AbstractAnswer
+            => (T)assignment.Answers.FirstOrDefault(x => x.Identity == questionIdentity)?.Answer;
     }
 }

@@ -231,4 +231,10 @@
   <data name="PatchRequestedFormat" xml:space="preserve">
     <value>Patch file requested for version {0}</value>
   </data>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Upload interview: {0}</value>
+  </data>
 </root>
