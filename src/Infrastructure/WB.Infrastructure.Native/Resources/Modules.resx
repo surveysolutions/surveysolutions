@@ -117,10 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ServerInitializing" xml:space="preserve">
-    <value>The server is initializing. Please wait.</value>
+  <data name="InitializingDb" xml:space="preserve">
+    <value>Initializing the database</value>
   </data>
-  <data name="UnderConstructionTitle" xml:space="preserve">
-    <value>The server is initializing.</value>
+  <data name="MigrateDb" xml:space="preserve">
+    <value>Migrating the database to the latest version</value>
   </data>
 </root>

@@ -1,11 +1,16 @@
+using System;
+using System.IO;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Mvc;
+using System.Web.Routing;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Resources;
+using RedirectResult = System.Web.Http.Results.RedirectResult;
 
 namespace WB.UI.Shared.Web.Filters
 {
@@ -32,47 +37,18 @@ namespace WB.UI.Shared.Web.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
-
-            if (status.Status == UnderConstructionStatus.Running)
+            if (filterContext.Controller.GetType() != typeof(UnderConstructionController))
             {
-                filterContext.Result = new ContentResult()
+                var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
+
+                if (status.Status != UnderConstructionStatus.Running)
                 {
-                    Content = GeneratePageWithMessage(status.Message ?? UnderConstruction.ServerInitializing),
-                    ContentType = "text/html"
-                };
-                return;
+                    filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
+                    return;
+                }
             }
 
             base.OnActionExecuting(filterContext); 
-        }
-
-        public string GeneratePageWithMessage(string message)
-        {
-            var title = UnderConstruction.UnderConstructionTitle;
-            var html = @"<!DOCTYPE html>
-<html>
-<head>
-    <title>" + title + @"</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <meta http-equiv='refresh' content='30' />
-</head>
-<body>
-    <div id='page' class='container-fluid'>
-        <div id='main'>
-            <h2>"
-            + message +
-          @"</h2>
-        </div>
-    </div>
-    <div class='row-fluid' id='footer-block'>
-    </div>
-    <script type='text/javascript'>
-        setTimeout(function() { document.location.reload(true); }, 1000 * 30);
-    </script>
-</body>
-</html>";
-            return html;
         }
     }
 }

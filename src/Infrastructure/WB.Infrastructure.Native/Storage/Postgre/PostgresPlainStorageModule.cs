@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -60,10 +61,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             try
             {
-                status.Message = "Initialize database";
+                status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
 
-                status.Message = "Migrate database to latest version";
+                status.Message = Modules.MigrateDb;
                 DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
             }
             catch (Exception exc)

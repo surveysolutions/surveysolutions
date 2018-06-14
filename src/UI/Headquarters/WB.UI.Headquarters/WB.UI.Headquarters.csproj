@@ -1755,6 +1755,7 @@
     <Content Include="Views\Reports\SurveyStatistics.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
+    <Content Include="Views\UnderConstruction\Index.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
