@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.UI.Shared.Web.Resources {
+namespace WB.Infrastructure.Native.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace WB.UI.Shared.Web.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class UnderConstruction {
+    internal class Modules {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal UnderConstruction() {
+        internal Modules() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace WB.UI.Shared.Web.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Shared.Web.Resources.UnderConstruction", typeof(UnderConstruction).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Infrastructure.Native.Resources.Modules", typeof(Modules).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,20 @@ namespace WB.UI.Shared.Web.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The server is initializing. Please wait..
+        ///   Looks up a localized string similar to Initializing the database.
         /// </summary>
-        internal static string ServerInitializing {
+        internal static string InitializingDb {
             get {
-                return ResourceManager.GetString("ServerInitializing", resourceCulture);
+                return ResourceManager.GetString("InitializingDb", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The server is initializing..
+        ///   Looks up a localized string similar to Migrating the database to the latest version.
         /// </summary>
-        internal static string UnderConstructionTitle {
+        internal static string MigrateDb {
             get {
-                return ResourceManager.GetString("UnderConstructionTitle", resourceCulture);
+                return ResourceManager.GetString("MigrateDb", resourceCulture);
             }
         }
     }

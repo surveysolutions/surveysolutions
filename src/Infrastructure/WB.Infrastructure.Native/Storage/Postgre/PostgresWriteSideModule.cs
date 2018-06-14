@@ -4,6 +4,7 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Infrastructure.Native.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -30,10 +31,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             try
             {
-                status.Message = "Initialize database";
+                status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
 
-                status.Message = "Migrate database to latest version";
+                status.Message = Modules.MigrateDb;
                 DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
             }
             catch (Exception exc)
