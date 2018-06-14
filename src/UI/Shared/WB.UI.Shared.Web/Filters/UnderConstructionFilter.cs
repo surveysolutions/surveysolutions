@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Web.Filters
             {
                 var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
 
-                if (status.Status != UnderConstructionStatus.Running)
+                if (status.Status == UnderConstructionStatus.Running)
                 {
                     filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
                     return;
