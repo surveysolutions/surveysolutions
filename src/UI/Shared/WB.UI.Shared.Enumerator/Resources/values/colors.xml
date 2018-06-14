@@ -11,6 +11,7 @@
   <color name="disabledTextColor">#afafaf</color>
   <color name="notAnsweredLabel">#4277A8</color>
   <color name="overview_invalid_border">#F0D0C7</color>
+  <color name="overview_invalid_text">#c70000</color>
   <color name="overview_invalid_background">#FCDAD1</color>
   <color name="overview_unanswered_border">#D6D6D6</color>
   <color name="overview_unanswered_background">#E1E1E1</color>

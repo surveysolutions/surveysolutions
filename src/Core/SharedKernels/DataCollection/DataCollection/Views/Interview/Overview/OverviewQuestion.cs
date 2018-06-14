@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
@@ -23,9 +25,11 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             }
 
             base.IsAnswered = treeQuestion.IsAnswered();
-
+            this.ErrorMessages = treeQuestion.ValidationMessages.Select(x => x.Text).ToList();
             HasComment = treeQuestion.AnswerComments.Count > 0;
         }
+
+        public List<string> ErrorMessages { get; set; }
 
         public string Answer { get; set; }
 
