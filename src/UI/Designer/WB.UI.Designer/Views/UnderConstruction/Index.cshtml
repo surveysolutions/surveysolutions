@@ -1,0 +1,25 @@
+﻿@model WB.UI.Shared.Web.Controllers.UnderConstructionController.UnderConstructionModel
+
+@{
+    Layout = "";    
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@Model.Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='refresh' content='30' />
+</head>
+<body>
+    <div id='page' class='container-fluid'>
+        <div id='main'>
+            <h2>@Model.Message</h2>
+        </div>
+    </div>
+    <div class='row-fluid' id='footer-block'>
+    </div>
+    <script type='text/javascript'>
+        setTimeout(function () { document.location.reload(true); }, 1000 * 30);
+    </script>
+</body>
+</html>
