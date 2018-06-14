@@ -540,6 +540,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Cancel</value>
   </data>
   <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Length:</value>
+  </data>
+    <data name="AreaMap_PerimeterFormat" xml:space="preserve">
     <value>Perimeter:</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
