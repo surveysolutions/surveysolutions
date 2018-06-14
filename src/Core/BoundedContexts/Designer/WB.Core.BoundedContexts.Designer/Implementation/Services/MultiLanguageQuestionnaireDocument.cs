@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -14,11 +12,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     {
         public ReadOnlyQuestionnaireDocument Questionnaire { get; }
         public IReadOnlyCollection<ReadOnlyQuestionnaireDocument> TranslatedQuestionnaires { get; }
-        public IReadOnlyCollection<SharedPerson> SharedPersons { get; }
+        public IReadOnlyCollection<SharedPersonView> SharedPersons { get; }
 
         public MultiLanguageQuestionnaireDocument(ReadOnlyQuestionnaireDocument originalQuestionnaireDocument,
             IEnumerable<ReadOnlyQuestionnaireDocument> translatedQuestionnaireDocuments,
-            IEnumerable<SharedPerson> sharedPersons)
+            IEnumerable<SharedPersonView> sharedPersons)
         {
             this.Questionnaire = originalQuestionnaireDocument;
             this.TranslatedQuestionnaires = translatedQuestionnaireDocuments.ToReadOnlyCollection();

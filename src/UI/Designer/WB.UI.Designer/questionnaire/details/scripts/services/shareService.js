@@ -4,9 +4,9 @@
         function($http, utils, commandService) {
             var shareService = {};
 
-            shareService.findUserByEmail = function(email) {
+            shareService.findUserByEmailOrLogin = function(emailOrLogin) {
                 var baseUrl = '../../account/findbyemail';
-                return $http.post(baseUrl, { email: email });
+                return $http.post(baseUrl, { emailOrLogin: emailOrLogin });
             };
 
             shareService.shareWith = function(email, questionnaireId, shareType) {

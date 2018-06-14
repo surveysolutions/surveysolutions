@@ -26,7 +26,7 @@
         };
 
         $scope.invite = function () {
-            var request = shareService.findUserByEmail($scope.viewModel.shareWith);
+            var request = shareService.findUserByEmailOrLogin($scope.viewModel.shareWith);
             request.then(function (result) {
                 var data = result.data;
                 $scope.viewModel.doesUserExist = data.doesUserExist;
@@ -51,6 +51,7 @@
                 $scope.questionnaire.title = $scope.questionnaire.editedTitle;
                 $scope.questionnaire.variable = $scope.questionnaire.editedVariable;
                 $uibModalInstance.close();
+                $scope.questionnaireForm.$setPristine();
             });
         };
 

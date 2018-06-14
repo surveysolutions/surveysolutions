@@ -7123,7 +7123,6 @@ input[type="number"]::-webkit-outer-spin-button {
   z-index: 100;
 }
 .modal .modal-dialog .modal-header {
-  border-bottom: none;
   border-radius: 5px 5px 0 0;
 }
 .modal .modal-dialog .modal-header.blue-strip {
@@ -7131,18 +7130,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .modal .modal-dialog .modal-header h1 {
   font-family: 'Open Sans Light', sans-serif;
-}
-.modal .modal-dialog .modal-header button.close {
-  position: absolute;
-  z-index: 100;
-  top: 12px;
-  right: 4px;
-  width: 40px;
-  height: 40px;
-  background: url(i/cross.png) 0 0 no-repeat;
-}
-.modal .modal-dialog .modal-header button.close:hover {
-  background-position: 0 -40px;
+  margin: 0;
 }
 .modal .modal-dialog .modal-header h2 {
   font-family: Arial, Helvetica, sans-serif;
@@ -7161,10 +7149,23 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .modal-header {
   border-top: 8px solid #d7e4ee;
+  border-bottom: 2px solid #edeff1;
+}
+.modal-header button.close {
+  position: absolute;
+  z-index: 100;
+  right: 4px;
+  width: 40px;
+  height: 40px;
+  background: url(i/cross.png) 0 0 no-repeat;
+}
+.modal-header button.close:hover {
+  background-position: 0 -40px;
 }
 .modal-title {
   font-family: 'Open Sans Light', sans-serif;
   font-size: 36px;
+  line-height: 1;
 }
 .modal-body {
   font-family: Arial, Helvetica, sans-serif;
@@ -9747,18 +9748,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   min-height: 220px;
 }
 #verification-modal .modal-content .modal-header {
-  font-size: 36px;
   font-family: 'Open Sans Light', sans-serif;
-  border-bottom: 2px solid #edeff1;
-}
-#verification-modal .modal-content .modal-header button.close {
-  z-index: 100;
-  width: 40px;
-  height: 40px;
-  background: url(i/cross.png) 0 0 no-repeat;
-}
-#verification-modal .modal-content .modal-header button.close:hover {
-  background-position: 0 -40px;
 }
 #verification-modal .modal-content .modal-header h3 {
   line-height: 32px;
@@ -9891,6 +9881,22 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 #verification-modal.ie9-backdrop {
   right: 0;
 }
+.share-question-dialog h2 {
+  font-family: 'Open Sans Light', sans-serif;
+  font-size: 24px;
+  margin-top: 0;
+}
+.share-question-dialog hr {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 10px;
+}
+.share-question-dialog .share-type .btn {
+  padding: 6px 12px;
+  line-height: 18px;
+  border-width: 2px;
+  border-style: solid;
+}
 .share-question-dialog ul.accounts {
   list-style: none;
   padding-left: 0;
@@ -9912,23 +9918,18 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .share-question-dialog input[type="text"]::-webkit-input-placeholder {
   font-style: italic;
 }
-.share-question-dialog .form-group .vertical-top {
-  vertical-align: top;
-}
-.share-question-dialog .form-group .questionaire-title {
-  width: 475px;
-}
-.share-question-dialog .form-group .share-with-email {
-  width: 320px;
-}
 .share-question-dialog .form-group.share-form-btn-label {
   padding-top: 6px;
 }
-.share-question-dialog .form-group .invite-button {
-  line-height: 0px;
+.share-question-dialog .form-group.input-variable-name:before {
+  display: none;
 }
 .share-question-dialog .form-group p {
   color: #a94442;
+}
+.share-question-dialog .form-group .update-button,
+.share-question-dialog .form-group .invite-button {
+  margin-top: 20px;
 }
 .share-question-dialog a.owner {
   color: #2fc507;
@@ -9937,6 +9938,7 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
   top: 75px;
   left: 0;
   width: 50%;
+  min-width: 650px;
 }
 .findReplaceModal .form-group .checkbox {
   display: inline-block;
