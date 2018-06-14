@@ -18,7 +18,8 @@ namespace WB.Tests.Unit.Designer.Applications.CommandInflaterTests
             return new CommandInflater(
                 userHelper ?? Mock.Of<IMembershipUserService>(),
                 storage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireDocument>>(),
-                listViewItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>());
+                listViewItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(),
+                Create.AccountRepository());
         }
 
         protected static QuestionnaireDocument CreateQuestionnaireDocument(Guid questoinnaireId, string title, Guid creator, bool isPublic = true)
