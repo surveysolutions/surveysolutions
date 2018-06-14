@@ -143,13 +143,13 @@ namespace WB.UI.Headquarters.API.PublicApi
 
                 InterviewId = diagnosticsInfo.InterviewId,
                 InterviewKey = diagnosticsInfo.InterviewKey,
-                Status = diagnosticsInfo.Status,
+                Status = diagnosticsInfo.Status.ToString(),
                 ResponsibleId = diagnosticsInfo.ResponsibleId,
                 ResponsibleName = diagnosticsInfo.ResponsibleName,
                 NumberOfInterviewers = diagnosticsInfo.NumberOfInterviewers,
                 NumberRejectionsBySupervisor = diagnosticsInfo.NumberRejectionsBySupervisor,
                 NumberRejectionsByHq = diagnosticsInfo.NumberRejectionsByHq,
-                InterviewDuration = diagnosticsInfo.InterviewDuration
+                InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null
             };
         }
 
