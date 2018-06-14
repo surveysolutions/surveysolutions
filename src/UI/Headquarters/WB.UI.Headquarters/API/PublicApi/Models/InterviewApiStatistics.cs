@@ -17,12 +17,12 @@ namespace WB.UI.Headquarters.API.PublicApi.Models
 
         public Guid InterviewId { get; set; }
         public string InterviewKey { get; set; }
-        public InterviewStatus Status { get; set; }
+        public string Status { get; set; }
         public Guid ResponsibleId { get; set; }
         public string ResponsibleName { get; set; }
         public int NumberOfInterviewers { get; set; }
         public int NumberRejectionsBySupervisor { get; set; }
         public int NumberRejectionsByHq { get; set; }
-        public long? InterviewDuration { get; set; }
+        public TimeSpan? InterviewDuration { get; set; }
     }
 }
