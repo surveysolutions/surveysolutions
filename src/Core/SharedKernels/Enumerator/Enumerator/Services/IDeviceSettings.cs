@@ -1,6 +1,6 @@
 ﻿using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.SharedKernels.Enumerator
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IDeviceSettings : IRestServiceSettings
     {

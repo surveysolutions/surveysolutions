@@ -327,9 +327,7 @@
     <Compile Include="CustomBindings\StatusToDasboardBackgroundConverter.cs" />
     <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
     <Compile Include="CustomControls\MvxFragmentStatePagerAdapter.cs" />
-    <Compile Include="Implementations\Services\ArchivePatcherService.cs" />
     <Compile Include="Implementations\Services\DeviceInformationService.cs" />
-    <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
@@ -342,7 +340,6 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
-    <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
@@ -444,7 +441,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <AndroidJavaLibrary Include="patch-applier.jar" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>

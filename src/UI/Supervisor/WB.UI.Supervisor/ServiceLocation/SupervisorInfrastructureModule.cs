@@ -16,20 +16,23 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Supervisor.Services;
+using WB.UI.Supervisor.Services.Implementation;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
-    public class InfrastructureModule : IModule
+    public class SupervisorInfrastructureModule : IModule
     {
         public void Load(IIocRegistry registry)
         {
-            //registry.BindToRegisteredInterface<IPrincipal, IInterviewerPrincipal>();
-            //registry.BindAsSingleton<IInterviewerPrincipal, InterviewerPrincipal>();
+            registry.BindToRegisteredInterface<IPrincipal, ISupervisorPrincipal>();
+            registry.BindAsSingleton<ISupervisorPrincipal, SupervisorPrincipal>();
             registry.Bind<IStringCompressor, JsonCompressor>();
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
@@ -46,8 +49,8 @@ namespace WB.UI.Supervisor.ServiceLocation
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
             LogManager.Configuration = config;
 
-            //registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
-            //    "privateStorage", pathToLocalDirectory);
+            registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
+                "privateStorage", pathToLocalDirectory);
 
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
@@ -68,10 +71,10 @@ namespace WB.UI.Supervisor.ServiceLocation
             //registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             //registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
             //registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
-            //registry.BindAsSingleton<IAuditLogService, AuditLogService>();
+            registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
 
-            //registry.BindAsSingleton<IInterviewerEventStorage, SqliteMultiFilesEventStorage>();
-            //registry.BindToRegisteredInterface<IEventStore, IInterviewerEventStorage>();
+            registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
+            registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
             registry.BindToConstant(() => new SqliteSettings
             {

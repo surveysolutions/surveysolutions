@@ -1,7 +1,6 @@
 ﻿using Ncqrs.Eventing.Storage;
-using WB.Core.Infrastructure.Implementation.Storage;
 
-namespace WB.UI.Interviewer.Implementations.Services
+namespace WB.Core.Infrastructure.Implementation.Storage
 {
     public class InMemorySnapshotStoreWithCache : InMemoryCachedSnapshotStore, ISnapshotStoreWithCache
     {

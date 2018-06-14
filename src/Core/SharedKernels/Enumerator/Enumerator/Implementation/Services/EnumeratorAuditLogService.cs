@@ -1,36 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using SQLite;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class AuditLogService : IAuditLogService
+    public abstract class EnumeratorAuditLogService : IAuditLogService
     {
         private readonly IPlainStorage<AuditLogRecordView, int?> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
-        private readonly IPlainStorage<InterviewerIdentity> userIdentity;
         private readonly ISerializer serializer;
         private readonly ILogger logger;
+        private readonly IPrincipal principal;
 
         private const string AuditLogSettingsKey = "settings";
 
-        public AuditLogService(IPlainStorage<AuditLogRecordView, int?> auditLogStorage,
+        protected EnumeratorAuditLogService(IPlainStorage<AuditLogRecordView, int?> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
-            IPlainStorage<InterviewerIdentity> userIdentity,
             ISerializer serializer,
-            ILogger logger)
+            ILogger logger,
+            IPrincipal principal)
         {
             this.auditLogStorage = auditLogStorage;
             this.auditLogSettingsStorage = auditLogSettingsStorage;
-            this.userIdentity = userIdentity;
             this.serializer = serializer;
             this.logger = logger;
+            this.principal = principal;
         }
 
         public class AuditLogRecordView : IPlainStorageEntity<int?>
@@ -44,12 +44,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog
         {
             try
             {
-                var interviewerIdentity = userIdentity.FirstOrDefault();
+                var userIdentity = this.principal.CurrentUserIdentity;
 
                 var auditLogEntityView = new AuditLogEntityView()
                 {
-                    ResponsibleId = interviewerIdentity?.UserId,
-                    ResponsibleName = interviewerIdentity?.Name,
+                    ResponsibleId = userIdentity?.UserId,
+                    ResponsibleName = userIdentity?.Name,
                     Time = DateTime.Now,
                     TimeUtc = DateTime.UtcNow,
                     Type = entity.Type,
