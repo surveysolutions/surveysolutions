@@ -11,6 +11,8 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
@@ -66,6 +68,9 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IMapService, MapService>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
+
+
+            registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 
             registry.Bind<LoginViewModel>();
             registry.Bind<PrefilledQuestionsViewModel>();

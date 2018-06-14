@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Web;
 using System.Web.Http;
@@ -14,6 +15,7 @@ using System.Web.Hosting;
 using System.Reflection;
 using MultipartDataMediaFormatter;
 using StackExchange.Exceptional;
+using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
 
@@ -51,7 +53,9 @@ namespace WB.UI.Designer
                 var assembly = System.Reflection.Assembly.GetExecutingAssembly();
                 dictionary.Add("Assembly", assembly.FullName);
             };
-            
+
+            EnsureJsonStorageForErrorsExists();
+
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -182,6 +186,20 @@ namespace WB.UI.Designer
 
                 this.logger.Info("ShutDownMessage: " + shutDownMessage);
                 this.logger.Info("ShutDownStack: " + shutDownStack);
+            }
+        }
+
+        private void EnsureJsonStorageForErrorsExists()
+        {
+            if (StackExchange.Exceptional.Exceptional.Settings.DefaultStore is JSONErrorStore exceptionalConfig)
+            {
+                var jsonStorePath = exceptionalConfig.Settings.Path;
+                var jsonStorePathAbsolute = HostingEnvironment.MapPath(jsonStorePath);
+
+                if (!Directory.Exists(jsonStorePathAbsolute))
+                {
+                    Directory.CreateDirectory(jsonStorePathAbsolute);
+                }
             }
         }
     }

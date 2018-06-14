@@ -17,7 +17,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         void SetGpsDesiredAccuracy(double value);
         void SetEventChunkSize(int eventChunkSize);
         void SetVibrateOnError(bool vibrate);
-        void SetTestingConditions(bool testingConditions);
         void SetShowLocationOnMap(bool showLocationOnMap);
 
         string BackupFolder { get; }

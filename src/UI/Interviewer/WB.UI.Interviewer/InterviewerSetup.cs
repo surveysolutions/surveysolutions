@@ -138,9 +138,6 @@ namespace WB.UI.Interviewer
             }
             status.Status = UnderConstructionStatus.Finished;
 
-            // need remove in release this line and setting option
-            Interview.TestingConditions = false;
-
             return container;
         }
 

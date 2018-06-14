@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Services;
