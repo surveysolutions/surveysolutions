@@ -15,6 +15,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         protected override void SetValueToView(TextView control, OverviewNodeState value)
         {
             int? colorid = null;
+            var typeFace = TypefaceStyle.Bold;
             switch (value)
             {
                 case OverviewNodeState.Answered:
@@ -24,7 +25,8 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 }
                 case OverviewNodeState.Unanswered:
                 {
-                    colorid = Resource.Color.disabledTextColor;
+                    colorid = Resource.Color.notAnsweredLabel;
+                    typeFace = TypefaceStyle.BoldItalic;
                     control.SetText(UIResources.Interview_Overview_NotAnswered, TextView.BufferType.Normal);
                     break;
                 }
@@ -42,6 +44,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
             if (colorid.HasValue)
             {
+                control.SetTypeface(null, typeFace);
                 control.SetTextColor(new Color(ContextCompat.GetColor(control.Context, colorid.Value)));
             }
         }

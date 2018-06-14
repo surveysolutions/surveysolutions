@@ -43,4 +43,10 @@
   <dimen name="Interview_Readonly_Question_Answer_padding">14dp</dimen>
   <dimen name="Interview_Readonly_Question_Icon_margin_top">14dp</dimen>
   <dimen name="Interview_Readonly_Question_Layout_margin_bottom">40dp</dimen>
+    
+  <dimen name="Interview_Overview_unanswered_background_padding">26dp</dimen>
+  <dimen name="Interview_Overview_background_padding_outer">36dp</dimen>
+  <dimen name="Interview_Overview_background_padding_inner">6dp</dimen>
+  <dimen name="Interview_Overview_left_margin">42dp</dimen>
+  <dimen name="Interview_Overview_top_margin">18dp</dimen>
 </resources>
