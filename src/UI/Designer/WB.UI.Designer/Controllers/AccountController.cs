@@ -417,9 +417,13 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         public JsonResult FindByEmail(string emailOrLogin)
         {
+            var account = accountRepository.GetByNameOrEmail(emailOrLogin);
             return Json(new
             {
-                doesUserExist = !string.IsNullOrEmpty(accountRepository.GetByNameOrEmail(emailOrLogin)?.UserName)
+                doesUserExist = !string.IsNullOrEmpty(account?.UserName),
+                userName = account.UserName,
+                email = account.Email,
+                id = account.ProviderUserKey
             });
         }
     }

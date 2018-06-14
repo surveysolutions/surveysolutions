@@ -9,9 +9,9 @@
                 return $http.post(baseUrl, { emailOrLogin: emailOrLogin });
             };
 
-            shareService.shareWith = function(email, questionnaireId, shareType) {
+            shareService.shareWith = function(emailOrLogin, questionnaireId, shareType) {
                 return commandService.execute("AddSharedPersonToQuestionnaire", {
-                    email: email,
+                    emailOrLogin: emailOrLogin,
                     questionnaireId: questionnaireId,
                     shareType: shareType
                 });

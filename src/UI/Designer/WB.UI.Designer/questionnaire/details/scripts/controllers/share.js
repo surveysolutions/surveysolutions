@@ -32,14 +32,23 @@
                 $scope.viewModel.doesUserExist = data.doesUserExist;
 
                 if (data.doesUserExist) {
-                    var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType.name);
+                    var shareRequest = shareService.shareWith(
+                        $scope.viewModel.shareWith, 
+                        $scope.questionnaire.questionnaireId, 
+                        $scope.viewModel.shareType.name);
                     shareRequest.then(function () {
                         if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
-                            $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
+                            $scope.questionnaire.sharedPersons.push({
+                                 email: data.email, 
+                                 login: data.userName,
+                                 userId: data.id,
+                                 shareType: $scope.viewModel.shareType
+                            });
                         }
 
                         $scope.viewModel.shareWith = '';
                         $scope.viewModel.doesUserExist = true;
+                        $scope.viewModel.shareForm.$setPristine();
                     });
                 }
             });

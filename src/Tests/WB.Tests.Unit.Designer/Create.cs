@@ -29,6 +29,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableServic
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
@@ -716,8 +717,8 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireView QuestionnaireView(Guid? createdBy)
             => Create.QuestionnaireView(new QuestionnaireDocument { CreatedBy = createdBy ?? Guid.NewGuid() });
 
-        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument = null, IEnumerable<SharedPerson> sharedPersons = null)
-            => new QuestionnaireView(questionnaireDocument ?? Create.QuestionnaireDocument(), sharedPersons ?? Enumerable.Empty<SharedPerson>());
+        public static QuestionnaireView QuestionnaireView(QuestionnaireDocument questionnaireDocument = null, IEnumerable<SharedPersonView> sharedPersons = null)
+            => new QuestionnaireView(questionnaireDocument ?? Create.QuestionnaireDocument(), sharedPersons ?? Enumerable.Empty<SharedPersonView>());
 
         public static RoslynExpressionProcessor RoslynExpressionProcessor() => new RoslynExpressionProcessor();
 
@@ -1232,6 +1233,17 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
+        public static SharedPersonView SharedPersonView(Guid? id = null, string email = null, bool isOwner = true, ShareType shareType = ShareType.Edit)
+        {
+            return new SharedPersonView
+            {
+                UserId = id ?? Guid.NewGuid(),
+                IsOwner = isOwner,
+                Email = email ?? "user@e.mail",
+                ShareType = shareType
+            };
+        }
+
         public static TranslationInstance TranslationInstance(Guid? questionnaireId = null,
             TranslationType type = TranslationType.Unknown,
             Guid? questionnaireEntityId = null,
@@ -1408,6 +1420,11 @@ namespace WB.Tests.Unit.Designer
                 return name.Substring(0, 32);
 
             return name;
+        }
+
+        public static IAccountRepository AccountRepository()
+        {
+            return Mock.Of<IAccountRepository>();
         }
     }
 }
