@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
         {
             this.ThrowIfInterviewHardDeleted();
             this.ThrowIfInterviewApprovedByHQ();
-            this.ThrowIfInterviewReceivedByInterviewer();
         }
 
         public void ThrowIfOtherInterviewerIsResponsible(Guid userId)
@@ -126,19 +125,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewProperties.Id}
-                    }
-                };
-        }
-
-        public void ThrowIfInterviewReceivedByInterviewer()
-        {
-            if (this.InterviewProperties.IsReceivedByInterviewer)
-                throw new InterviewException(
-                    $"Can't modify Interview on server, because it received by interviewer",
-                    InterviewDomainExceptionType.InterviewRecievedByDevice){
-                    Data =
-                    {
-                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
                     }
                 };
         }

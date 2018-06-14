@@ -56,7 +56,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
             connection.CreateTable<EventView>();
-            connection.CreateIndex<EventView>(entity => entity.EventId);
 
             return connection;
         }
@@ -158,6 +157,57 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             }
             
             this.RemoveFromEventStoreInSingleFile(interviewId);
+        }
+
+        public void StoreEvents(CommittedEventStream events)
+        {
+            var connection = this.GetOrCreateConnection(events.SourceId);
+            using (connection.Lock())
+            {
+                try
+                {
+                    connection.RunInTransaction(() =>
+                    {
+                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer));
+                        foreach (var @event in storedEvents)
+                        {
+                            connection.Insert(@event);
+                        }
+                    });
+                }
+                catch (SQLiteException ex)
+                {
+                    this.logger.Fatal($"Failed to persist eventstream {events.SourceId}", ex);
+                    throw;
+                }
+            }
+        }
+
+        public List<CommittedEvent> GetPendingEvents(Guid interviewId)
+        {
+            IEnumerable<CommittedEvent> events = null;
+
+            var eventSourceFilePath = this.GetEventSourceConnectionString(interviewId);
+            if (this.fileSystemAccessor.IsFileExists(eventSourceFilePath))
+            {
+                var connection = this.GetOrCreateConnection(interviewId);
+                
+                using (connection.Lock())
+                {
+                    var committedEvents = connection
+                        .Table<EventView>()
+                        .Where(eventView
+                            => eventView.EventSourceId == interviewId
+                               && eventView.ExistsOnHq == null || eventView.ExistsOnHq == 0)
+                        .OrderBy(x => x.EventSequence)
+                        .ToList()
+                        .Select(x => ToCommitedEvent(x, eventSerializer))
+                        .ToList();
+                    return committedEvents;
+                }
+            }
+
+            return new List<CommittedEvent>();
         }
 
         public void Dispose()
@@ -456,6 +506,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
                 JsonEvent = serializer.Serialize(evt.Payload),
                 EventType = evt.Payload.GetType().Name
             };
+
+        private static EventView ToStoredEvent(CommittedEvent evt, IEventSerializer serializer)
+        {
+            return new EventView
+            {
+                EventId = evt.EventIdentifier,
+                EventSourceId = evt.EventSourceId,
+                CommitId = evt.CommitId,
+                EventSequence = evt.EventSequence,
+                DateTimeUtc = evt.EventTimeStamp,
+                JsonEvent = serializer.Serialize(evt.Payload),
+                EventType = evt.Payload.GetType().Name,
+                ExistsOnHq = 1
+            };
+        }
+
 
         private interface IEventSerializer
         {

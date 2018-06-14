@@ -223,6 +223,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;V3&lt;/b&gt; Download interview package: {0}.
+        /// </summary>
+        public static string GetInterviewPackageV3 {
+            get {
+                return ResourceManager.GetString("GetInterviewPackageV3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download list of interviews. &lt;/br&gt; &lt;ul&gt; {0} &lt;/ul&gt;.
         /// </summary>
         public static string GetInterviews {
@@ -372,6 +381,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PostPackage {
             get {
                 return ResourceManager.GetString("PostPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;V3&lt;/b&gt; Upload interview: {0}.
+        /// </summary>
+        public static string PostPackageV3 {
+            get {
+                return ResourceManager.GetString("PostPackageV3", resourceCulture);
             }
         }
         

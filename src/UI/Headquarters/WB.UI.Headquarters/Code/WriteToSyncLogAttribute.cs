@@ -202,6 +202,15 @@ namespace WB.UI.Headquarters.Code
                     case SynchronizationLogType.GetExtendedApkPatch:
                         logItem.Log = SyncLogMessages.ExtendedPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
                         break;
+                    case SynchronizationLogType.GetInterviewV3:
+                        logItem.Log = SyncLogMessages.GetInterviewPackageV3.FormatString(idAsGuid.HasValue ? GetInterviewLink(idAsGuid.Value) : "Null interview id");
+                        logItem.InterviewId = idAsGuid;
+                        break;
+                    case SynchronizationLogType.PostInterviewV3:
+                        Guid? intId = context.GetActionArgumentOrDefault<InterviewPackageApiView>("package", null)?.InterviewId;
+                        logItem.Log = SyncLogMessages.PostPackageV3.FormatString(intId.HasValue ? GetInterviewLink(intId.Value) : UnknownStringArgumentValue);
+                        logItem.InterviewId = intId;
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }
