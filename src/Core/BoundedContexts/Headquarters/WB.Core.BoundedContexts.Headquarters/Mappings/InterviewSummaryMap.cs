@@ -40,8 +40,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.CommentedEntitiesCount, clm =>
             {
                 clm.Lazy(true);
-                clm.Formula(@"(SELECT COUNT(c.interviewid) FROM readside.commentaries c 
-                               WHERE c.interviewid::uuid = interviewid)");
+                clm.Formula(@"(SELECT COUNT(DISTINCT (c.interviewid, c.variable, c.rostervector)) FROM readside.commentaries c 
+                               WHERE c.interviewid::uuid = interviewid AND c.variable != '@@Completed')");
             });
             Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>
