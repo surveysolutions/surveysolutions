@@ -8,18 +8,18 @@ using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using SQLite;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Utils;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class SqliteMultiFilesEventStorage : IInterviewerEventStorage
+    public class 
+        SqliteMultiFilesEventStorage : IEnumeratorEventStorage
     {
         private SQLiteConnectionWithLock eventStoreInSingleFile;
         internal readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();

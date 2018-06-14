@@ -294,9 +294,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ServiceLocation\InfrastructureModule.cs" />
+    <Compile Include="Activities\FinishInstallationActivity.cs" />
+    <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
+    <Compile Include="Services\ISupervisorSettings.cs" />
+    <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
+    <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />
+    <Compile Include="Services\Implementation\SupervisorPrincipal.cs" />
+    <Compile Include="Services\Implementation\SupervisorSettings.cs" />
+    <Compile Include="Services\Implementation\SynchronizationService.cs" />
+    <Compile Include="Services\Implementation\TabletDiagnosticService.cs" />
+    <Compile Include="Services\Implementation\ViewModelNavigationService.cs" />
+    <Compile Include="Services\ISupervisorPrincipal.cs" />
     <Compile Include="Services\IInterviewerSynchronizationService.cs" />
-    <Compile Include="Services\ViewModelNavigationService.cs" />
+    <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SupervisorMvxApplication.cs" />
     <Compile Include="SupervisorApplication.cs" />
     <Compile Include="SupervisorAppStart.cs" />
@@ -308,6 +319,7 @@
     <Compile Include="Activities\SplashActivity.cs" />
     <Compile Include="ViewModel\FinishInstallationViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
+    <Compile Include="Views\ApplicationSettingsView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -319,6 +331,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Login.axml">
       <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\finish_installation.axml">
+      <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
@@ -452,8 +467,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Folder Include="Resources\menu\" />
-    <Folder Include="Resources\xml\" />
+    <AndroidResource Include="Resources\values\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
@@ -501,6 +517,35 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\login.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\diagnostics.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\finish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\login.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\relink.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\settings.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\troubleshooting.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\preferences.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

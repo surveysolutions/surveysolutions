@@ -11,10 +11,13 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Supervisor.Services.Implementation;
 using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Supervisor
@@ -34,6 +37,7 @@ namespace WB.UI.Supervisor
                 new DataCollectionSharedKernelModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
+                new SupervisorInfrastructureModule(),
                 new SupervisorUIModule(),
                 };
 
@@ -44,6 +48,13 @@ namespace WB.UI.Supervisor
             }
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
+
+            builder.RegisterType<SupervisorSettings>()
+                .As<IEnumeratorSettings>()
+                .As<IRestServiceSettings>()
+                .As<IDeviceSettings>()
+                .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
+                .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));

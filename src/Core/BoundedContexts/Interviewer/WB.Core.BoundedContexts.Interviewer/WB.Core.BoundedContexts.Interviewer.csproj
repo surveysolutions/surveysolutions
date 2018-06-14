@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\..\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Implementation\AuditLog\" />
+    <Folder Include="Implementation\Storage\" />
+  </ItemGroup>
 </Project>

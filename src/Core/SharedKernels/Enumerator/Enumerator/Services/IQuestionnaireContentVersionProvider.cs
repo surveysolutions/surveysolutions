@@ -1,5 +1,6 @@
 ﻿using System;
-namespace WB.Core.BoundedContexts.Interviewer.Services
+
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IQuestionnaireContentVersionProvider
     {

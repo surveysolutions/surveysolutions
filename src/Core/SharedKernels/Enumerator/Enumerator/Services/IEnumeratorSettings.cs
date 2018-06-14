@@ -1,12 +1,15 @@
-﻿using WB.Core.GenericSubdomains.Portable.Services;
+﻿using System;
+using WB.Core.GenericSubdomains.Portable.Services;
 
-namespace WB.Core.SharedKernels.Enumerator
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IEnumeratorSettings : IRestServiceSettings
     {
+        int EventChunkSize { get; }
+        Version GetSupportedQuestionnaireContentVersion();
+
         int GpsReceiveTimeoutSec { get; }
         double GpsDesiredAccuracy { get; }
-        int EventChunkSize { get; }
         bool VibrateOnError { get; }
         bool ShowVariables { get; }
         bool ShowLocationOnMap { get; }
