@@ -24,9 +24,10 @@
                 });
             };
 
-            shareService.udpateQuestionnaire = function(questionnaireId, title, isPublic) {
+            shareService.udpateQuestionnaire = function(questionnaireId, title, variable, isPublic) {
                 return commandService.execute("UpdateQuestionnaire", {
                     title: title,
+                    variable: variable,
                     questionnaireId: questionnaireId,
                     isPublic: isPublic
                 });
