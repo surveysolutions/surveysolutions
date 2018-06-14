@@ -1,21 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <style name="Overview_GroupTitle" parent="Interview_Entity">
-        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+    <style name="Overview_GroupTitle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textColor">@color/commentInterviewerTextColor</item>
-        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:textSize">@dimen/textsize_22</item>
+
+        <item name="android:layout_marginLeft">@dimen/Interview_Overview_left_margin</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Overview_top_margin</item>
     </style>
     <style name="Overview_Section_Title" parent="Overview_GroupTitle">
         <item name="android:letterSpacing">0.05</item>
         <item name="android:textAllCaps">true</item>
     </style>
     <style name="Overview_Question_Title">
-        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Overview_top_margin</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Overview_left_margin</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
         <item name="android:textColor">@color/recordedAnswerText</item>
-        <item name="android:textSize">@dimen/textsize_16</item>
+        <item name="android:textSize">@dimen/textsize_20</item>
     </style>
     <style name="Overview_Question_Answer" parent="Overview_Question_Title">
         <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_FilteredComboBox_padding</item>
+        <item name="android:layout_marginBottom">@dimen/Interview_Overview_top_margin</item>
     </style>
     <style name="Overview_Question_Answer_Multimedia" parent="Overview_Question_Answer">
         <item name="android:layout_width">wrap_content</item>
@@ -24,6 +37,6 @@
         <item name="android:adjustViewBounds">true</item>
     </style>
     <style name="Overview_Question_Answer_Audio" parent="Interview_Button">
-        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Overview_left_margin</item>
     </style>
 </resources>

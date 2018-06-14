@@ -1,11 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android" 
-       xmlns:local="http://schemas.android.com/apk/res-auto"
-       android:shape="rectangle">
-  <solid android:color="#F6D6D0" />
-
-  <padding
-    android:top="@dimen/Interview_Question_Answer_background_padding"
-    android:bottom="@dimen/Interview_Question_Answer_background_padding"/>
-
-</shape>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <item
+        android:top="@dimen/Interview_Overview_background_padding_inner"
+        android:right="@dimen/Interview_Overview_left_margin"
+        android:bottom="@dimen/Interview_Overview_background_padding_inner">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/overview_commented_overlay" />
+        </shape>
+    </item>
+</layer-list>
