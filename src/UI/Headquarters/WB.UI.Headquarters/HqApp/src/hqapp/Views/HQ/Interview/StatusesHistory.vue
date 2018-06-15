@@ -30,7 +30,6 @@
                         </td>
                         <td data-bind="text: Comment">{{item.Comment}}</td>
                     </tr>
-                    </tr>
                 </tbody>
             </table>
         </div>
