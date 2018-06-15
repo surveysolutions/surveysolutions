@@ -18,6 +18,11 @@ namespace WB.UI.Shared.Web.Controllers
         {
             var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
 
+            if (status.Status == UnderConstructionStatus.Finished)
+            {
+                return Redirect(Url.Content("~/"));
+            }
+
             var model = new UnderConstructionModel()
             {
                 Title = UnderConstruction.UnderConstructionTitle,
