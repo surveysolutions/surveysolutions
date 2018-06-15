@@ -1792,15 +1792,22 @@
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
+    <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
+    <Compile Include="API\WebInterview\IInterviewOverviewService.cs" />
+    <Compile Include="API\WebInterview\Services\InterviewOverviewService.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebGroupNode.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebQuestionNode.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebSectionNode.cs" />
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\StatefullInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.ar.designer.cs">
       <AutoGen>True</AutoGen>
