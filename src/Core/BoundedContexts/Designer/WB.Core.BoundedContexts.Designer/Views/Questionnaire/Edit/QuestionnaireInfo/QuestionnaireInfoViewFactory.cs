@@ -48,13 +48,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             {
                 QuestionnaireId = questionnaireId,
                 Title = questionnaireDocument.Title,
+                Variable = questionnaireDocument.VariableName,
                 Chapters = new List<ChapterInfoView>(),
                 IsPublic = questionnaireDocument.IsPublic
             };
 
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
             {
-                questionnaireInfoView.Chapters.Add(new ChapterInfoView()
+                questionnaireInfoView.Chapters.Add(new ChapterInfoView
                 {
                     ItemId = chapter.PublicKey.FormatGuid(),
                     Title = chapter.Title,

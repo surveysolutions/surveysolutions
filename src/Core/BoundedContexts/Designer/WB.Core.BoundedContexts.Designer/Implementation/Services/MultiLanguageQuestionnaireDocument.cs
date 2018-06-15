@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public List<Attachment> Attachments => this.Questionnaire.Attachments;
         public List<Translation> Translations => this.Questionnaire.Translations;
         public string Title => this.Questionnaire.Title;
+        public string VariableName => this.Questionnaire.VariableName;
         public Guid PublicKey => this.Questionnaire.PublicKey;
 
         public T Find<T>(Guid publicKey) where T : class, IComposite

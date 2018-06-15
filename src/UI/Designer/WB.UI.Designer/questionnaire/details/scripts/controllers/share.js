@@ -4,7 +4,7 @@
 
         $scope.questionnaire = questionnaire;
         $scope.questionnaire.editedTitle = questionnaire.title;
-        $scope.questionnaire.editedVariable = questionnaire.editedVariable || questionnaire.title;
+        $scope.questionnaire.editedVariable = questionnaire.variable;
 
         $scope.shareTypeOptions = [{ text: $i18next.t('SettingsShareEdit'), name: "Edit" }, { name: "View", text: $i18next.t('SettingsShareView') }];
         
