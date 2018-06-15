@@ -13,7 +13,7 @@
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light">
     <TextView
         style="@style/ToolbarTitle"
-        local:MvxBind="Text Localization('Interviewer_ApplicationName')" />
+        local:MvxBind="Text Localization('Supervisor_ApplicationName')" />
   </android.support.v7.widget.Toolbar>
   <ProgressBar style="@style/Progress_Indicator"
             local:MvxBind="ShowProgress IsInProgress; Visibility VisibleOrInvisible(IsInProgress)" />

@@ -1,6 +1,8 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -9,53 +11,45 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     public class FinishInstallationViewModel : EnumeratorFinishInstallationViewModel
     {
         private readonly IPasswordHasher passwordHasher;
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IInterviewerSynchronizationService synchronizationService;
+        private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
+        private readonly ISupervisorSynchronizationService synchronizationService;
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
+            IPlainStorage<SupervisorIdentity> interviewersPlainStorage,
             IDeviceSettings deviceSettings,
-            IInterviewerSynchronizationService synchronizationService,
+            ISupervisorSynchronizationService synchronizationService,
             ILogger logger,
             IUserInteractionService userInteractionService) : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, logger, userInteractionService)
         {
             this.passwordHasher = passwordHasher;
-            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.supervisorsPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;
         }
 
-        protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
-        {
-            var interviewerIdentity = this.interviewersPlainStorage.FirstOrDefault();
-
-            await this.viewModelNavigationService
-                .NavigateToAsync<RelinkDeviceViewModel, RelinkDeviceViewModelArg>(
-                    new RelinkDeviceViewModelArg { Identity = interviewerIdentity });
-        }
+        protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token) => throw new NotImplementedException();
 
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
         {
-            var interviewer = await this.synchronizationService.GetInterviewerAsync(credentials, token: token).ConfigureAwait(false);
+            var supervisor = await this.synchronizationService.GetSupervisorAsync(credentials, token: token).ConfigureAwait(false);
 
-            var interviewerIdentity = new InterviewerIdentity
+            var supervisorIdentity = new SupervisorIdentity
             {
-                Id = interviewer.Id.FormatGuid(),
-                UserId = interviewer.Id,
-                SupervisorId = interviewer.SupervisorId,
+                Id = GuidExtensions.FormatGuid((Guid) supervisor.Id),
+                UserId = supervisor.Id,
                 Name = this.UserName,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token
             };
 
-            this.interviewersPlainStorage.Store(interviewerIdentity);
+            this.supervisorsPlainStorage.Store(supervisorIdentity);
         }
     }
 }

@@ -1,5 +1,8 @@
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -8,6 +11,7 @@ using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
@@ -17,7 +21,6 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Supervisor.Services;
 using WB.UI.Supervisor.Services.Implementation;
-using WB.UI.Supervisor.ViewModel;
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
@@ -47,7 +50,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             //registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 
             registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
-            //registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
+            registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
 
             //registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
             //registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();

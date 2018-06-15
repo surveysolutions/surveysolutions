@@ -14,24 +14,24 @@ namespace WB.UI.Supervisor
         {
         }
 
-        protected override void Startup(object hint = null)
+        protected override async void Startup(object hint = null)
         {
             var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
+
+            base.ApplicationStartup(hint);
 
             var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 
             var currentUser = Mvx.Resolve<IPlainStorage<SupervisorIdentity>>().FirstOrDefault();
             if (currentUser == null)
             {
-                viewModelNavigationService.NavigateToFinishInstallationAsync().ConfigureAwait(false);
+                await viewModelNavigationService.NavigateToFinishInstallationAsync().ConfigureAwait(false);
             }
             else
             {
-                viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
+                await viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
             }
-
-            base.ApplicationStartup(hint);
         }
     }
 }

@@ -1,8 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Android.Widget;
 using Autofac;
+using HockeyApp.Android;
+using MvvmCross;
+using MvvmCross.Binding.Bindings.Target.Construction;
+using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Views;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
@@ -12,11 +21,15 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
+using WB.UI.Supervisor.Activities;
+using WB.UI.Supervisor.MvvmBindings;
 using WB.UI.Supervisor.Services.Implementation;
 using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
@@ -24,6 +37,38 @@ namespace WB.UI.Supervisor
 {
     public class SupervisorSetup : EnumeratorSetup<SupervisorMvxApplication>
     {
+        protected override void InitializeViewLookup()
+        {
+            base.InitializeViewLookup();
+
+            var viewModelViewLookup = new Dictionary<Type, Type>()
+            {
+                {typeof(LoginViewModel), typeof(LoginActivity)},
+                {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
+                {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
+#if !EXCLUDEEXTENSIONS
+                {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+#endif
+            };
+
+            var container = Mvx.Resolve<IMvxViewsContainer>();
+            container.AddAll(viewModelViewLookup);
+        }
+
+        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
+        {
+            base.FillValueConverters(registry);
+
+            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
+        }
+
+        protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
+        {
+            registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
+
+            base.FillTargetFactories(registry);
+        }
+
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new MvxIoCProvider(this.CreateAndInitializeIoc());
@@ -53,6 +98,7 @@ namespace WB.UI.Supervisor
                 .As<IEnumeratorSettings>()
                 .As<IRestServiceSettings>()
                 .As<IDeviceSettings>()
+                .As<ISupervisorSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
