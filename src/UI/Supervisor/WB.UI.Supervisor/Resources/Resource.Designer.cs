@@ -15863,20 +15863,14 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f090133
 			public const int menu = 2131296563;
 			
-			// aapt resource value: 0x7f090139
-			public const int menu_dashboard = 2131296569;
-			
-			// aapt resource value: 0x7f090138
-			public const int menu_diagnostics = 2131296568;
-			
-			// aapt resource value: 0x7f090135
-			public const int menu_login = 2131296565;
+			// aapt resource value: 0x7f090137
+			public const int menu_dashboard = 2131296567;
 			
 			// aapt resource value: 0x7f090136
-			public const int menu_settings = 2131296566;
+			public const int menu_diagnostics = 2131296566;
 			
-			// aapt resource value: 0x7f090137
-			public const int menu_signout = 2131296567;
+			// aapt resource value: 0x7f090135
+			public const int menu_settings = 2131296565;
 			
 			// aapt resource value: 0x7f090130
 			public const int message = 2131296560;
