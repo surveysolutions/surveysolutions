@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name = "filepicker_ApplicationName">$projectname$</string>
-  <string name = "filepicker_ok">OK</string>
-  <string name = "filepicker_cancel_label">Cancel</string>
-  <string name = "filepicker_confirm_label">Confirm</string>
-  <string name = "filepicker_selected_folder_label">Selected folder:</string>
-  <string name = "filepicker_selected_file_label">Selected file:</string>
-  <string name = "filepicker_create_folder_label">Create folder</string>
-  <string name = "filepicker_enter_folder_msg">Enter Folder Name</string>
-  <string name = "filepicker_create_folder_msg">Create new folder with name "%1$s"?</string>
-  <string name = "filepicker_create_folder_success">Created new folder</string>
-  <string name = "filepicker_create_folder_error_no_write_access">Cannot write to this folder</string>
-  <string name = "filepicker_create_folder_error_already_exists">The selected folder already exists</string>
-  <string name = "filepicker_create_folder_error">Could not create folder</string>
-  <string name = "filepicker_up_label">Up</string>
   <string name="vertical_ellipsis">&#8942;</string>
 </resources>

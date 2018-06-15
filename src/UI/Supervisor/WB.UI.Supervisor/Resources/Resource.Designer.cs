@@ -4693,7 +4693,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.background_material_dark = global::WB.UI.Supervisor.Resource.Color.background_material_dark;
 			global::WB.UI.Shared.Enumerator.Resource.Color.background_material_light = global::WB.UI.Supervisor.Resource.Color.background_material_light;
 			global::WB.UI.Shared.Enumerator.Resource.Color.bread_crumb_transparency = global::WB.UI.Supervisor.Resource.Color.bread_crumb_transparency;
-			global::WB.UI.Shared.Enumerator.Resource.Color.bright_blue = global::WB.UI.Supervisor.Resource.Color.bright_blue;
 			global::WB.UI.Shared.Enumerator.Resource.Color.bright_foreground_disabled_material_dark = global::WB.UI.Supervisor.Resource.Color.bright_foreground_disabled_material_dark;
 			global::WB.UI.Shared.Enumerator.Resource.Color.bright_foreground_disabled_material_light = global::WB.UI.Supervisor.Resource.Color.bright_foreground_disabled_material_light;
 			global::WB.UI.Shared.Enumerator.Resource.Color.bright_foreground_inverse_material_dark = global::WB.UI.Supervisor.Resource.Color.bright_foreground_inverse_material_dark;
@@ -4705,7 +4704,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.button_material_light = global::WB.UI.Supervisor.Resource.Color.button_material_light;
 			global::WB.UI.Shared.Enumerator.Resource.Color.button_pressed = global::WB.UI.Supervisor.Resource.Color.button_pressed;
 			global::WB.UI.Shared.Enumerator.Resource.Color.button_unpressed = global::WB.UI.Supervisor.Resource.Color.button_unpressed;
-			global::WB.UI.Shared.Enumerator.Resource.Color.capi_orange = global::WB.UI.Supervisor.Resource.Color.capi_orange;
 			global::WB.UI.Shared.Enumerator.Resource.Color.colorAccent = global::WB.UI.Supervisor.Resource.Color.colorAccent;
 			global::WB.UI.Shared.Enumerator.Resource.Color.colorBlueThemePrimary = global::WB.UI.Supervisor.Resource.Color.colorBlueThemePrimary;
 			global::WB.UI.Shared.Enumerator.Resource.Color.colorPrimary = global::WB.UI.Supervisor.Resource.Color.colorPrimary;
@@ -4727,29 +4725,9 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.cover_header_text = global::WB.UI.Supervisor.Resource.Color.cover_header_text;
 			global::WB.UI.Shared.Enumerator.Resource.Color.cover_not_from_supervisor_color = global::WB.UI.Supervisor.Resource.Color.cover_not_from_supervisor_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.darkActionBar = global::WB.UI.Supervisor.Resource.Color.darkActionBar;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_border = global::WB.UI.Supervisor.Resource.Color.dashboard_border;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_border_shadow = global::WB.UI.Supervisor.Resource.Color.dashboard_border_shadow;
 			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_button_color = global::WB.UI.Supervisor.Resource.Color.dashboard_button_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_button_color_pressed = global::WB.UI.Supervisor.Resource.Color.dashboard_button_color_pressed;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_completed_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_completed_tab;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_in_progress_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_in_progress_tab;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_interview_background = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_background;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_interview_delimeter = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_delimeter;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_interview_subtitle = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_subtitle;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_interview_title = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_title;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_main_color = global::WB.UI.Supervisor.Resource.Color.dashboard_main_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_new_interview_status = global::WB.UI.Supervisor.Resource.Color.dashboard_new_interview_status;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_new_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_new_tab;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_no_interviews_text = global::WB.UI.Supervisor.Resource.Color.dashboard_no_interviews_text;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_prefilled_question = global::WB.UI.Supervisor.Resource.Color.dashboard_prefilled_question;
 			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_questionnairelist_empty_text = global::WB.UI.Supervisor.Resource.Color.dashboard_questionnairelist_empty_text;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_rejected_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_rejected_tab;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_search_background_color = global::WB.UI.Supervisor.Resource.Color.dashboard_search_background_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_search_exit_color = global::WB.UI.Supervisor.Resource.Color.dashboard_search_exit_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_synchronization_delimiter = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_delimiter;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_synchronization_fail_title = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_fail_title;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_synchronization_regular_title = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_regular_title;
-			global::WB.UI.Shared.Enumerator.Resource.Color.dashboard_synchronization_statistics_text = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_statistics_text;
 			global::WB.UI.Shared.Enumerator.Resource.Color.default_input_button_disabled = global::WB.UI.Supervisor.Resource.Color.default_input_button_disabled;
 			global::WB.UI.Shared.Enumerator.Resource.Color.default_input_button_pressed = global::WB.UI.Supervisor.Resource.Color.default_input_button_pressed;
 			global::WB.UI.Shared.Enumerator.Resource.Color.default_input_button_unpressed = global::WB.UI.Supervisor.Resource.Color.default_input_button_unpressed;
@@ -4812,11 +4790,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.interview_question_yesno_not_selected_text = global::WB.UI.Supervisor.Resource.Color.interview_question_yesno_not_selected_text;
 			global::WB.UI.Shared.Enumerator.Resource.Color.interview_question_yesno_selected_text = global::WB.UI.Supervisor.Resource.Color.interview_question_yesno_selected_text;
 			global::WB.UI.Shared.Enumerator.Resource.Color.list_style_divider_color = global::WB.UI.Supervisor.Resource.Color.list_style_divider_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.login_Input_border_invalid_color = global::WB.UI.Supervisor.Resource.Color.login_Input_border_invalid_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.login_Input_border_valid_color = global::WB.UI.Supervisor.Resource.Color.login_Input_border_valid_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.login_Input_border_valid_disabled_color = global::WB.UI.Supervisor.Resource.Color.login_Input_border_valid_disabled_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.login_Input_disabled_color = global::WB.UI.Supervisor.Resource.Color.login_Input_disabled_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.login_footer_color = global::WB.UI.Supervisor.Resource.Color.login_footer_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.material_blue_grey_800 = global::WB.UI.Supervisor.Resource.Color.material_blue_grey_800;
 			global::WB.UI.Shared.Enumerator.Resource.Color.material_blue_grey_900 = global::WB.UI.Supervisor.Resource.Color.material_blue_grey_900;
 			global::WB.UI.Shared.Enumerator.Resource.Color.material_blue_grey_950 = global::WB.UI.Supervisor.Resource.Color.material_blue_grey_950;
@@ -4829,7 +4802,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.material_grey_800 = global::WB.UI.Supervisor.Resource.Color.material_grey_800;
 			global::WB.UI.Shared.Enumerator.Resource.Color.material_grey_850 = global::WB.UI.Supervisor.Resource.Color.material_grey_850;
 			global::WB.UI.Shared.Enumerator.Resource.Color.material_grey_900 = global::WB.UI.Supervisor.Resource.Color.material_grey_900;
-			global::WB.UI.Shared.Enumerator.Resource.Color.menu_hint_color = global::WB.UI.Supervisor.Resource.Color.menu_hint_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.nonAnsweredBackground = global::WB.UI.Supervisor.Resource.Color.nonAnsweredBackground;
 			global::WB.UI.Shared.Enumerator.Resource.Color.notification_action_color_filter = global::WB.UI.Supervisor.Resource.Color.notification_action_color_filter;
 			global::WB.UI.Shared.Enumerator.Resource.Color.notification_icon_bg_color = global::WB.UI.Supervisor.Resource.Color.notification_icon_bg_color;
@@ -4863,7 +4835,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.sections_list_pressed_background_color = global::WB.UI.Supervisor.Resource.Color.sections_list_pressed_background_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.sections_list_selected_background_color = global::WB.UI.Supervisor.Resource.Color.sections_list_selected_background_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.sections_list_text_color = global::WB.UI.Supervisor.Resource.Color.sections_list_text_color;
-			global::WB.UI.Shared.Enumerator.Resource.Color.selection_background_color = global::WB.UI.Supervisor.Resource.Color.selection_background_color;
 			global::WB.UI.Shared.Enumerator.Resource.Color.show_instructions = global::WB.UI.Supervisor.Resource.Color.show_instructions;
 			global::WB.UI.Shared.Enumerator.Resource.Color.sideBarPrefilledQuestionText = global::WB.UI.Supervisor.Resource.Color.sideBarPrefilledQuestionText;
 			global::WB.UI.Shared.Enumerator.Resource.Color.switch_thumb_disabled_material_dark = global::WB.UI.Supervisor.Resource.Color.switch_thumb_disabled_material_dark;
@@ -4872,42 +4843,10 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Color.switch_thumb_material_light = global::WB.UI.Supervisor.Resource.Color.switch_thumb_material_light;
 			global::WB.UI.Shared.Enumerator.Resource.Color.switch_thumb_normal_material_dark = global::WB.UI.Supervisor.Resource.Color.switch_thumb_normal_material_dark;
 			global::WB.UI.Shared.Enumerator.Resource.Color.switch_thumb_normal_material_light = global::WB.UI.Supervisor.Resource.Color.switch_thumb_normal_material_light;
-			global::WB.UI.Shared.Enumerator.Resource.Color.textedit_border_color_selector = global::WB.UI.Supervisor.Resource.Color.textedit_border_color_selector;
-			global::WB.UI.Shared.Enumerator.Resource.Color.textedit_color_selector = global::WB.UI.Supervisor.Resource.Color.textedit_color_selector;
 			global::WB.UI.Shared.Enumerator.Resource.Color.tooltip_background_dark = global::WB.UI.Supervisor.Resource.Color.tooltip_background_dark;
 			global::WB.UI.Shared.Enumerator.Resource.Color.tooltip_background_light = global::WB.UI.Supervisor.Resource.Color.tooltip_background_light;
 			global::WB.UI.Shared.Enumerator.Resource.Color.warningTextColor = global::WB.UI.Supervisor.Resource.Color.warningTextColor;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Card_CornerRadius = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Card_CornerRadius;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Card_Elevation = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Card_Elevation;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_Comment_lines_margin = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_Comment_lines_margin;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_InformationBlock_margin = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_InformationBlock_margin;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_PrefilledQuestions_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_PrefilledQuestions_marginTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_RemoveInterviewButton_paddingTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_RemoveInterviewButton_paddingTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_margin = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_margin;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_width = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_InterviewItem_Title_marginRight = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_Title_marginRight;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Items_space = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Items_space;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Layout_border_radius = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Layout_border_radius;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Layout_border_width = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Layout_border_width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_NoInterviewsText_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_NoInterviewsText_marginTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_NoInterviewsTitle_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_NoInterviewsTitle_marginTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_SearchView_DeleteButton_size = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_DeleteButton_size;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_SearchView_SearchButton_size = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_SearchButton_size;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_SearchView_SearchView_height = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_SearchView_height;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_SearchView_SearchView_padding = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_SearchView_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Synchronization_Divider_Height = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Synchronization_Divider_Height;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Synchronization_Statistics_Height = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Synchronization_Statistics_Height;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_Synchronization_Statistics_Width = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Synchronization_Statistics_Width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_TabMenu_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_TabMenu_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_marginTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_TabMenu_tab_marginLeft = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_tab_marginLeft;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Dashboard_TabMenu_tab_padding = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_tab_padding;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.DefaultIconSize = global::WB.UI.Supervisor.Resource.Dimension.DefaultIconSize;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Diagnostics_Description_LineSpacing = global::WB.UI.Supervisor.Resource.Dimension.Diagnostics_Description_LineSpacing;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Diagnostics_SubsectionValue_padding = global::WB.UI.Supervisor.Resource.Dimension.Diagnostics_SubsectionValue_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Diagnostics_Title_padding = global::WB.UI.Supervisor.Resource.Dimension.Diagnostics_Title_padding;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.IconSize = global::WB.UI.Supervisor.Resource.Dimension.IconSize;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Attachment_Large_margin_bottom = global::WB.UI.Supervisor.Resource.Dimension.Interview_Attachment_Large_margin_bottom;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Attachment_Small_margin_bottom = global::WB.UI.Supervisor.Resource.Dimension.Interview_Attachment_Small_margin_bottom;
@@ -5018,41 +4957,17 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Sidebar_row_button_margin_left = global::WB.UI.Supervisor.Resource.Dimension.Interview_Sidebar_row_button_margin_left;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Interview_Sidebar_row_button_padding_right = global::WB.UI.Supervisor.Resource.Dimension.Interview_Sidebar_row_button_padding_right;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.ListStyle_Divider_height = global::WB.UI.Supervisor.Resource.Dimension.ListStyle_Divider_height;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Loading_Progress_font_size = global::WB.UI.Supervisor.Resource.Dimension.Loading_Progress_font_size;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Loading_Progress_padding = global::WB.UI.Supervisor.Resource.Dimension.Loading_Progress_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Button_padding = global::WB.UI.Supervisor.Resource.Dimension.Login_Button_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Element_margin_vertical_normal = global::WB.UI.Supervisor.Resource.Dimension.Login_Element_margin_vertical_normal;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Element_width = global::WB.UI.Supervisor.Resource.Dimension.Login_Element_width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_ErrorMessage_Padding = global::WB.UI.Supervisor.Resource.Dimension.Login_ErrorMessage_Padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_ErrorMessage_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_ErrorMessage_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Footer_paddingBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_Footer_paddingBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Holder_width = global::WB.UI.Supervisor.Resource.Dimension.Login_Holder_width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Input_border_width = global::WB.UI.Supervisor.Resource.Dimension.Login_Input_border_width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Input_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_Input_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Input_padding = global::WB.UI.Supervisor.Resource.Dimension.Login_Input_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Password_Editor_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_Password_Editor_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Login_Troubleshooting_Button_marginLeft = global::WB.UI.Supervisor.Resource.Dimension.Login_Troubleshooting_Button_marginLeft;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_Holder_height = global::WB.UI.Supervisor.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_Holder_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_textsize = global::WB.UI.Supervisor.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_textsize;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.PrefilledQuestions_StartButton_Holder_height = global::WB.UI.Supervisor.Resource.Dimension.PrefilledQuestions_StartButton_Holder_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Progress_Indicator_height = global::WB.UI.Supervisor.Resource.Dimension.Progress_Indicator_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Progress_Indicator_padding_top = global::WB.UI.Supervisor.Resource.Dimension.Progress_Indicator_padding_top;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Relink_FormContainer_Width = global::WB.UI.Supervisor.Resource.Dimension.Relink_FormContainer_Width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Relink_FormContainer_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Relink_FormContainer_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Relink_FormContainer_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Relink_FormContainer_marginTop;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Relink_Message_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Relink_Message_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Splash_Logo_padding = global::WB.UI.Supervisor.Resource.Dimension.Splash_Logo_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Splash_Logo_size = global::WB.UI.Supervisor.Resource.Dimension.Splash_Logo_size;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Theme_Button_min_height = global::WB.UI.Supervisor.Resource.Dimension.Theme_Button_min_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Theme_Button_min_width = global::WB.UI.Supervisor.Resource.Dimension.Theme_Button_min_width;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Theme_ProgressBar_height = global::WB.UI.Supervisor.Resource.Dimension.Theme_ProgressBar_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Theme_SeekBar_height = global::WB.UI.Supervisor.Resource.Dimension.Theme_SeekBar_height;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Theme_SeekBar_padding = global::WB.UI.Supervisor.Resource.Dimension.Theme_SeekBar_padding;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Toolbar_margin_horizontal = global::WB.UI.Supervisor.Resource.Dimension.Toolbar_margin_horizontal;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Troubleshooting_Button_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_Button_marginBottom;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Troubleshooting_Element_width = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_Element_width;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Troubleshooting_double_padding = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_double_padding;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.Troubleshooting_padding = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_padding;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.Zero = global::WB.UI.Supervisor.Resource.Dimension.Zero;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.abc_action_bar_content_inset_material = global::WB.UI.Supervisor.Resource.Dimension.abc_action_bar_content_inset_material;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.abc_action_bar_content_inset_with_nav = global::WB.UI.Supervisor.Resource.Dimension.abc_action_bar_content_inset_with_nav;
@@ -5135,8 +5050,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.compat_button_padding_horizontal_material = global::WB.UI.Supervisor.Resource.Dimension.compat_button_padding_horizontal_material;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.compat_button_padding_vertical_material = global::WB.UI.Supervisor.Resource.Dimension.compat_button_padding_vertical_material;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.compat_control_corner_material = global::WB.UI.Supervisor.Resource.Dimension.compat_control_corner_material;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.dashboard_card_base_margin = global::WB.UI.Supervisor.Resource.Dimension.dashboard_card_base_margin;
-			global::WB.UI.Shared.Enumerator.Resource.Dimension.dashboard_card_duo_margin = global::WB.UI.Supervisor.Resource.Dimension.dashboard_card_duo_margin;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.design_appbar_elevation = global::WB.UI.Supervisor.Resource.Dimension.design_appbar_elevation;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.design_bottom_navigation_active_item_max_width = global::WB.UI.Supervisor.Resource.Dimension.design_bottom_navigation_active_item_max_width;
 			global::WB.UI.Shared.Enumerator.Resource.Dimension.design_bottom_navigation_active_text_size = global::WB.UI.Supervisor.Resource.Dimension.design_bottom_navigation_active_text_size;
@@ -5343,7 +5256,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.design_ic_visibility_off = global::WB.UI.Supervisor.Resource.Drawable.design_ic_visibility_off;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.design_password_eye = global::WB.UI.Supervisor.Resource.Drawable.design_password_eye;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.design_snackbar_background = global::WB.UI.Supervisor.Resource.Drawable.design_snackbar_background;
-			global::WB.UI.Shared.Enumerator.Resource.Drawable.diagnostics_section_default = global::WB.UI.Supervisor.Resource.Drawable.diagnostics_section_default;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.flashbuttonoff = global::WB.UI.Supervisor.Resource.Drawable.flashbuttonoff;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.flashbuttonon = global::WB.UI.Supervisor.Resource.Drawable.flashbuttonon;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.group_background = global::WB.UI.Supervisor.Resource.Drawable.group_background;
@@ -5636,8 +5548,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.sidebar_row_unpressed = global::WB.UI.Supervisor.Resource.Drawable.sidebar_row_unpressed;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.stop_icon = global::WB.UI.Supervisor.Resource.Drawable.stop_icon;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.text_editor_border = global::WB.UI.Supervisor.Resource.Drawable.text_editor_border;
-			global::WB.UI.Shared.Enumerator.Resource.Drawable.textedit_invalid = global::WB.UI.Supervisor.Resource.Drawable.textedit_invalid;
-			global::WB.UI.Shared.Enumerator.Resource.Drawable.textedit_valid = global::WB.UI.Supervisor.Resource.Drawable.textedit_valid;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.theme_blue_light_btn_check_holo_light = global::WB.UI.Supervisor.Resource.Drawable.theme_blue_light_btn_check_holo_light;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.theme_blue_light_btn_check_off_disabled_focused_holo_light = global::WB.UI.Supervisor.Resource.Drawable.theme_blue_light_btn_check_off_disabled_focused_holo_light;
 			global::WB.UI.Shared.Enumerator.Resource.Drawable.theme_blue_light_btn_check_off_disabled_holo_light = global::WB.UI.Supervisor.Resource.Drawable.theme_blue_light_btn_check_off_disabled_holo_light;
@@ -6457,18 +6367,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Style.BlueAppTheme = global::WB.UI.Supervisor.Resource.Style.BlueAppTheme;
 			global::WB.UI.Shared.Enumerator.Resource.Style.ButtonAppTheme = global::WB.UI.Supervisor.Resource.Style.ButtonAppTheme;
 			global::WB.UI.Shared.Enumerator.Resource.Style.CheckBoxTheme = global::WB.UI.Supervisor.Resource.Style.CheckBoxTheme;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostic_Container = global::WB.UI.Supervisor.Resource.Style.Diagnostic_Container;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostic_FormContainer = global::WB.UI.Supervisor.Resource.Style.Diagnostic_FormContainer;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostic_Transparent_Button = global::WB.UI.Supervisor.Resource.Style.Diagnostic_Transparent_Button;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Green_Button = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Green_Button;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Section = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Section_Description = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section_Description;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Section_Description_Warning = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section_Description_Warning;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Section_Title = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section_Title;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_SubSection = global::WB.UI.Supervisor.Resource.Style.Diagnostics_SubSection;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Subsection_Title = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Subsection_Title;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_Subsection_Value = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Subsection_Value;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Diagnostics_TitleSection = global::WB.UI.Supervisor.Resource.Style.Diagnostics_TitleSection;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Divider_ListStyle = global::WB.UI.Supervisor.Resource.Style.Divider_ListStyle;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Done_Button = global::WB.UI.Supervisor.Resource.Style.Done_Button;
 			global::WB.UI.Shared.Enumerator.Resource.Style.DrawerArrowStyle = global::WB.UI.Supervisor.Resource.Style.DrawerArrowStyle;
@@ -6599,16 +6497,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_TextEditor = global::WB.UI.Supervisor.Resource.Style.Interview_TextEditor;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Interview_Variable_Description = global::WB.UI.Supervisor.Resource.Style.Interview_Variable_Description;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Link_Button = global::WB.UI.Supervisor.Resource.Style.Link_Button;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Button = global::WB.UI.Supervisor.Resource.Style.Login_Button;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Editor;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Endpoint_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Endpoint_Editor;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_ErrorMessage = global::WB.UI.Supervisor.Resource.Style.Login_ErrorMessage;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Footer = global::WB.UI.Supervisor.Resource.Style.Login_Footer;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Footer_Message = global::WB.UI.Supervisor.Resource.Style.Login_Footer_Message;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Login_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Login_Editor;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_OnlineSingin_Button = global::WB.UI.Supervisor.Resource.Style.Login_OnlineSingin_Button;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Password_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Password_Editor;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Login_Troubleshotting_Button = global::WB.UI.Supervisor.Resource.Style.Login_Troubleshotting_Button;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Platform_AppCompat = global::WB.UI.Supervisor.Resource.Style.Platform_AppCompat;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Platform_AppCompat_Light = global::WB.UI.Supervisor.Resource.Style.Platform_AppCompat_Light;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Platform_ThemeOverlay_AppCompat = global::WB.UI.Supervisor.Resource.Style.Platform_ThemeOverlay_AppCompat;
@@ -6630,7 +6518,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Enumerator.Resource.Style.ProgressBarTheme_Blue_Light = global::WB.UI.Supervisor.Resource.Style.ProgressBarTheme_Blue_Light;
 			global::WB.UI.Shared.Enumerator.Resource.Style.Progress_Indicator = global::WB.UI.Supervisor.Resource.Style.Progress_Indicator;
 			global::WB.UI.Shared.Enumerator.Resource.Style.RadioButtonTheme = global::WB.UI.Supervisor.Resource.Style.RadioButtonTheme;
-			global::WB.UI.Shared.Enumerator.Resource.Style.Restore_Button = global::WB.UI.Supervisor.Resource.Style.Restore_Button;
 			global::WB.UI.Shared.Enumerator.Resource.Style.RtlOverlay_DialogWindowTitle_AppCompat = global::WB.UI.Supervisor.Resource.Style.RtlOverlay_DialogWindowTitle_AppCompat;
 			global::WB.UI.Shared.Enumerator.Resource.Style.RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = global::WB.UI.Supervisor.Resource.Style.RtlOverlay_Widget_AppCompat_ActionBar_TitleItem;
 			global::WB.UI.Shared.Enumerator.Resource.Style.RtlOverlay_Widget_AppCompat_DialogTitle_Icon = global::WB.UI.Supervisor.Resource.Style.RtlOverlay_Widget_AppCompat_DialogTitle_Icon;
@@ -7863,7 +7750,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.background_material_dark = global::WB.UI.Supervisor.Resource.Color.background_material_dark;
 			global::WB.UI.Shared.Extensions.Resource.Color.background_material_light = global::WB.UI.Supervisor.Resource.Color.background_material_light;
 			global::WB.UI.Shared.Extensions.Resource.Color.bread_crumb_transparency = global::WB.UI.Supervisor.Resource.Color.bread_crumb_transparency;
-			global::WB.UI.Shared.Extensions.Resource.Color.bright_blue = global::WB.UI.Supervisor.Resource.Color.bright_blue;
 			global::WB.UI.Shared.Extensions.Resource.Color.bright_foreground_disabled_material_dark = global::WB.UI.Supervisor.Resource.Color.bright_foreground_disabled_material_dark;
 			global::WB.UI.Shared.Extensions.Resource.Color.bright_foreground_disabled_material_light = global::WB.UI.Supervisor.Resource.Color.bright_foreground_disabled_material_light;
 			global::WB.UI.Shared.Extensions.Resource.Color.bright_foreground_inverse_material_dark = global::WB.UI.Supervisor.Resource.Color.bright_foreground_inverse_material_dark;
@@ -7875,7 +7761,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.button_material_light = global::WB.UI.Supervisor.Resource.Color.button_material_light;
 			global::WB.UI.Shared.Extensions.Resource.Color.button_pressed = global::WB.UI.Supervisor.Resource.Color.button_pressed;
 			global::WB.UI.Shared.Extensions.Resource.Color.button_unpressed = global::WB.UI.Supervisor.Resource.Color.button_unpressed;
-			global::WB.UI.Shared.Extensions.Resource.Color.capi_orange = global::WB.UI.Supervisor.Resource.Color.capi_orange;
 			global::WB.UI.Shared.Extensions.Resource.Color.colorAccent = global::WB.UI.Supervisor.Resource.Color.colorAccent;
 			global::WB.UI.Shared.Extensions.Resource.Color.colorBlueThemePrimary = global::WB.UI.Supervisor.Resource.Color.colorBlueThemePrimary;
 			global::WB.UI.Shared.Extensions.Resource.Color.colorPrimary = global::WB.UI.Supervisor.Resource.Color.colorPrimary;
@@ -7897,29 +7782,9 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.cover_header_text = global::WB.UI.Supervisor.Resource.Color.cover_header_text;
 			global::WB.UI.Shared.Extensions.Resource.Color.cover_not_from_supervisor_color = global::WB.UI.Supervisor.Resource.Color.cover_not_from_supervisor_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.darkActionBar = global::WB.UI.Supervisor.Resource.Color.darkActionBar;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_border = global::WB.UI.Supervisor.Resource.Color.dashboard_border;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_border_shadow = global::WB.UI.Supervisor.Resource.Color.dashboard_border_shadow;
 			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_button_color = global::WB.UI.Supervisor.Resource.Color.dashboard_button_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_button_color_pressed = global::WB.UI.Supervisor.Resource.Color.dashboard_button_color_pressed;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_completed_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_completed_tab;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_in_progress_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_in_progress_tab;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_interview_background = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_background;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_interview_delimeter = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_delimeter;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_interview_subtitle = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_subtitle;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_interview_title = global::WB.UI.Supervisor.Resource.Color.dashboard_interview_title;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_main_color = global::WB.UI.Supervisor.Resource.Color.dashboard_main_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_new_interview_status = global::WB.UI.Supervisor.Resource.Color.dashboard_new_interview_status;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_new_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_new_tab;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_no_interviews_text = global::WB.UI.Supervisor.Resource.Color.dashboard_no_interviews_text;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_prefilled_question = global::WB.UI.Supervisor.Resource.Color.dashboard_prefilled_question;
 			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_questionnairelist_empty_text = global::WB.UI.Supervisor.Resource.Color.dashboard_questionnairelist_empty_text;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_rejected_tab = global::WB.UI.Supervisor.Resource.Color.dashboard_rejected_tab;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_search_background_color = global::WB.UI.Supervisor.Resource.Color.dashboard_search_background_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_search_exit_color = global::WB.UI.Supervisor.Resource.Color.dashboard_search_exit_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_synchronization_delimiter = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_delimiter;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_synchronization_fail_title = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_fail_title;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_synchronization_regular_title = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_regular_title;
-			global::WB.UI.Shared.Extensions.Resource.Color.dashboard_synchronization_statistics_text = global::WB.UI.Supervisor.Resource.Color.dashboard_synchronization_statistics_text;
 			global::WB.UI.Shared.Extensions.Resource.Color.default_input_button_disabled = global::WB.UI.Supervisor.Resource.Color.default_input_button_disabled;
 			global::WB.UI.Shared.Extensions.Resource.Color.default_input_button_pressed = global::WB.UI.Supervisor.Resource.Color.default_input_button_pressed;
 			global::WB.UI.Shared.Extensions.Resource.Color.default_input_button_unpressed = global::WB.UI.Supervisor.Resource.Color.default_input_button_unpressed;
@@ -7982,11 +7847,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.interview_question_yesno_not_selected_text = global::WB.UI.Supervisor.Resource.Color.interview_question_yesno_not_selected_text;
 			global::WB.UI.Shared.Extensions.Resource.Color.interview_question_yesno_selected_text = global::WB.UI.Supervisor.Resource.Color.interview_question_yesno_selected_text;
 			global::WB.UI.Shared.Extensions.Resource.Color.list_style_divider_color = global::WB.UI.Supervisor.Resource.Color.list_style_divider_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.login_Input_border_invalid_color = global::WB.UI.Supervisor.Resource.Color.login_Input_border_invalid_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.login_Input_border_valid_color = global::WB.UI.Supervisor.Resource.Color.login_Input_border_valid_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.login_Input_border_valid_disabled_color = global::WB.UI.Supervisor.Resource.Color.login_Input_border_valid_disabled_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.login_Input_disabled_color = global::WB.UI.Supervisor.Resource.Color.login_Input_disabled_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.login_footer_color = global::WB.UI.Supervisor.Resource.Color.login_footer_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.material_blue_grey_800 = global::WB.UI.Supervisor.Resource.Color.material_blue_grey_800;
 			global::WB.UI.Shared.Extensions.Resource.Color.material_blue_grey_900 = global::WB.UI.Supervisor.Resource.Color.material_blue_grey_900;
 			global::WB.UI.Shared.Extensions.Resource.Color.material_blue_grey_950 = global::WB.UI.Supervisor.Resource.Color.material_blue_grey_950;
@@ -7999,7 +7859,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.material_grey_800 = global::WB.UI.Supervisor.Resource.Color.material_grey_800;
 			global::WB.UI.Shared.Extensions.Resource.Color.material_grey_850 = global::WB.UI.Supervisor.Resource.Color.material_grey_850;
 			global::WB.UI.Shared.Extensions.Resource.Color.material_grey_900 = global::WB.UI.Supervisor.Resource.Color.material_grey_900;
-			global::WB.UI.Shared.Extensions.Resource.Color.menu_hint_color = global::WB.UI.Supervisor.Resource.Color.menu_hint_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.nonAnsweredBackground = global::WB.UI.Supervisor.Resource.Color.nonAnsweredBackground;
 			global::WB.UI.Shared.Extensions.Resource.Color.notification_action_color_filter = global::WB.UI.Supervisor.Resource.Color.notification_action_color_filter;
 			global::WB.UI.Shared.Extensions.Resource.Color.notification_icon_bg_color = global::WB.UI.Supervisor.Resource.Color.notification_icon_bg_color;
@@ -8040,7 +7899,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.sections_list_pressed_background_color = global::WB.UI.Supervisor.Resource.Color.sections_list_pressed_background_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.sections_list_selected_background_color = global::WB.UI.Supervisor.Resource.Color.sections_list_selected_background_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.sections_list_text_color = global::WB.UI.Supervisor.Resource.Color.sections_list_text_color;
-			global::WB.UI.Shared.Extensions.Resource.Color.selection_background_color = global::WB.UI.Supervisor.Resource.Color.selection_background_color;
 			global::WB.UI.Shared.Extensions.Resource.Color.show_instructions = global::WB.UI.Supervisor.Resource.Color.show_instructions;
 			global::WB.UI.Shared.Extensions.Resource.Color.sideBarPrefilledQuestionText = global::WB.UI.Supervisor.Resource.Color.sideBarPrefilledQuestionText;
 			global::WB.UI.Shared.Extensions.Resource.Color.switch_thumb_disabled_material_dark = global::WB.UI.Supervisor.Resource.Color.switch_thumb_disabled_material_dark;
@@ -8050,42 +7908,10 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Color.switch_thumb_normal_material_dark = global::WB.UI.Supervisor.Resource.Color.switch_thumb_normal_material_dark;
 			global::WB.UI.Shared.Extensions.Resource.Color.switch_thumb_normal_material_light = global::WB.UI.Supervisor.Resource.Color.switch_thumb_normal_material_light;
 			global::WB.UI.Shared.Extensions.Resource.Color.text_color_light = global::WB.UI.Supervisor.Resource.Color.text_color_light;
-			global::WB.UI.Shared.Extensions.Resource.Color.textedit_border_color_selector = global::WB.UI.Supervisor.Resource.Color.textedit_border_color_selector;
-			global::WB.UI.Shared.Extensions.Resource.Color.textedit_color_selector = global::WB.UI.Supervisor.Resource.Color.textedit_color_selector;
 			global::WB.UI.Shared.Extensions.Resource.Color.tooltip_background_dark = global::WB.UI.Supervisor.Resource.Color.tooltip_background_dark;
 			global::WB.UI.Shared.Extensions.Resource.Color.tooltip_background_light = global::WB.UI.Supervisor.Resource.Color.tooltip_background_light;
 			global::WB.UI.Shared.Extensions.Resource.Color.warningTextColor = global::WB.UI.Supervisor.Resource.Color.warningTextColor;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Card_CornerRadius = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Card_CornerRadius;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Card_Elevation = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Card_Elevation;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_Comment_lines_margin = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_Comment_lines_margin;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_CreateButton_marginTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_InformationBlock_margin = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_InformationBlock_margin;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_PrefilledQuestions_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_PrefilledQuestions_marginTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_RemoveInterviewButton_paddingTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_RemoveInterviewButton_paddingTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_margin = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_margin;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_width = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_StatusPanel_width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_InterviewItem_Title_marginRight = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_InterviewItem_Title_marginRight;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Items_space = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Items_space;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Layout_border_radius = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Layout_border_radius;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Layout_border_width = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Layout_border_width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_NoInterviewsText_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_NoInterviewsText_marginTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_NoInterviewsTitle_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_NoInterviewsTitle_marginTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_SearchView_DeleteButton_size = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_DeleteButton_size;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_SearchView_SearchButton_size = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_SearchButton_size;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_SearchView_SearchView_height = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_SearchView_height;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_SearchView_SearchView_padding = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_SearchView_SearchView_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Synchronization_Divider_Height = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Synchronization_Divider_Height;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Synchronization_Statistics_Height = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Synchronization_Statistics_Height;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_Synchronization_Statistics_Width = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_Synchronization_Statistics_Width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_TabMenu_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_TabMenu_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_marginTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_TabMenu_tab_marginLeft = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_tab_marginLeft;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Dashboard_TabMenu_tab_padding = global::WB.UI.Supervisor.Resource.Dimension.Dashboard_TabMenu_tab_padding;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.DefaultIconSize = global::WB.UI.Supervisor.Resource.Dimension.DefaultIconSize;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Diagnostics_Description_LineSpacing = global::WB.UI.Supervisor.Resource.Dimension.Diagnostics_Description_LineSpacing;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Diagnostics_SubsectionValue_padding = global::WB.UI.Supervisor.Resource.Dimension.Diagnostics_SubsectionValue_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Diagnostics_Title_padding = global::WB.UI.Supervisor.Resource.Dimension.Diagnostics_Title_padding;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.IconSize = global::WB.UI.Supervisor.Resource.Dimension.IconSize;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Interview_Attachment_Large_margin_bottom = global::WB.UI.Supervisor.Resource.Dimension.Interview_Attachment_Large_margin_bottom;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Interview_Attachment_Small_margin_bottom = global::WB.UI.Supervisor.Resource.Dimension.Interview_Attachment_Small_margin_bottom;
@@ -8196,41 +8022,17 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Interview_Sidebar_row_button_margin_left = global::WB.UI.Supervisor.Resource.Dimension.Interview_Sidebar_row_button_margin_left;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Interview_Sidebar_row_button_padding_right = global::WB.UI.Supervisor.Resource.Dimension.Interview_Sidebar_row_button_padding_right;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.ListStyle_Divider_height = global::WB.UI.Supervisor.Resource.Dimension.ListStyle_Divider_height;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Loading_Progress_font_size = global::WB.UI.Supervisor.Resource.Dimension.Loading_Progress_font_size;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Loading_Progress_padding = global::WB.UI.Supervisor.Resource.Dimension.Loading_Progress_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Button_padding = global::WB.UI.Supervisor.Resource.Dimension.Login_Button_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Element_margin_vertical_normal = global::WB.UI.Supervisor.Resource.Dimension.Login_Element_margin_vertical_normal;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Element_width = global::WB.UI.Supervisor.Resource.Dimension.Login_Element_width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_ErrorMessage_Padding = global::WB.UI.Supervisor.Resource.Dimension.Login_ErrorMessage_Padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_ErrorMessage_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_ErrorMessage_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Footer_paddingBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_Footer_paddingBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Holder_width = global::WB.UI.Supervisor.Resource.Dimension.Login_Holder_width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Input_border_width = global::WB.UI.Supervisor.Resource.Dimension.Login_Input_border_width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Input_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_Input_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Input_padding = global::WB.UI.Supervisor.Resource.Dimension.Login_Input_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Password_Editor_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Login_Password_Editor_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Login_Troubleshooting_Button_marginLeft = global::WB.UI.Supervisor.Resource.Dimension.Login_Troubleshooting_Button_marginLeft;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_Holder_height = global::WB.UI.Supervisor.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_Holder_height;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_textsize = global::WB.UI.Supervisor.Resource.Dimension.PrefilledQuestions_QuestionnaireTitle_textsize;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.PrefilledQuestions_StartButton_Holder_height = global::WB.UI.Supervisor.Resource.Dimension.PrefilledQuestions_StartButton_Holder_height;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Progress_Indicator_height = global::WB.UI.Supervisor.Resource.Dimension.Progress_Indicator_height;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Progress_Indicator_padding_top = global::WB.UI.Supervisor.Resource.Dimension.Progress_Indicator_padding_top;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Relink_FormContainer_Width = global::WB.UI.Supervisor.Resource.Dimension.Relink_FormContainer_Width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Relink_FormContainer_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Relink_FormContainer_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Relink_FormContainer_marginTop = global::WB.UI.Supervisor.Resource.Dimension.Relink_FormContainer_marginTop;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Relink_Message_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Relink_Message_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Splash_Logo_padding = global::WB.UI.Supervisor.Resource.Dimension.Splash_Logo_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Splash_Logo_size = global::WB.UI.Supervisor.Resource.Dimension.Splash_Logo_size;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Theme_Button_min_height = global::WB.UI.Supervisor.Resource.Dimension.Theme_Button_min_height;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Theme_Button_min_width = global::WB.UI.Supervisor.Resource.Dimension.Theme_Button_min_width;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Theme_ProgressBar_height = global::WB.UI.Supervisor.Resource.Dimension.Theme_ProgressBar_height;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Theme_SeekBar_height = global::WB.UI.Supervisor.Resource.Dimension.Theme_SeekBar_height;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Theme_SeekBar_padding = global::WB.UI.Supervisor.Resource.Dimension.Theme_SeekBar_padding;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Toolbar_margin_horizontal = global::WB.UI.Supervisor.Resource.Dimension.Toolbar_margin_horizontal;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Troubleshooting_Button_marginBottom = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_Button_marginBottom;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Troubleshooting_Element_width = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_Element_width;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Troubleshooting_double_padding = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_double_padding;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.Troubleshooting_padding = global::WB.UI.Supervisor.Resource.Dimension.Troubleshooting_padding;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.Zero = global::WB.UI.Supervisor.Resource.Dimension.Zero;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.abc_action_bar_content_inset_material = global::WB.UI.Supervisor.Resource.Dimension.abc_action_bar_content_inset_material;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.abc_action_bar_content_inset_with_nav = global::WB.UI.Supervisor.Resource.Dimension.abc_action_bar_content_inset_with_nav;
@@ -8324,8 +8126,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Dimension.compat_button_padding_horizontal_material = global::WB.UI.Supervisor.Resource.Dimension.compat_button_padding_horizontal_material;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.compat_button_padding_vertical_material = global::WB.UI.Supervisor.Resource.Dimension.compat_button_padding_vertical_material;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.compat_control_corner_material = global::WB.UI.Supervisor.Resource.Dimension.compat_control_corner_material;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.dashboard_card_base_margin = global::WB.UI.Supervisor.Resource.Dimension.dashboard_card_base_margin;
-			global::WB.UI.Shared.Extensions.Resource.Dimension.dashboard_card_duo_margin = global::WB.UI.Supervisor.Resource.Dimension.dashboard_card_duo_margin;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.design_appbar_elevation = global::WB.UI.Supervisor.Resource.Dimension.design_appbar_elevation;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.design_bottom_navigation_active_item_max_width = global::WB.UI.Supervisor.Resource.Dimension.design_bottom_navigation_active_item_max_width;
 			global::WB.UI.Shared.Extensions.Resource.Dimension.design_bottom_navigation_active_text_size = global::WB.UI.Supervisor.Resource.Dimension.design_bottom_navigation_active_text_size;
@@ -8535,7 +8335,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Drawable.design_ic_visibility_off = global::WB.UI.Supervisor.Resource.Drawable.design_ic_visibility_off;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.design_password_eye = global::WB.UI.Supervisor.Resource.Drawable.design_password_eye;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.design_snackbar_background = global::WB.UI.Supervisor.Resource.Drawable.design_snackbar_background;
-			global::WB.UI.Shared.Extensions.Resource.Drawable.diagnostics_section_default = global::WB.UI.Supervisor.Resource.Drawable.diagnostics_section_default;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.esri = global::WB.UI.Supervisor.Resource.Drawable.esri;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.flashbuttonoff = global::WB.UI.Supervisor.Resource.Drawable.flashbuttonoff;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.flashbuttonon = global::WB.UI.Supervisor.Resource.Drawable.flashbuttonon;
@@ -8852,8 +8651,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Drawable.stop_icon = global::WB.UI.Supervisor.Resource.Drawable.stop_icon;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.sync_maps = global::WB.UI.Supervisor.Resource.Drawable.sync_maps;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.text_editor_border = global::WB.UI.Supervisor.Resource.Drawable.text_editor_border;
-			global::WB.UI.Shared.Extensions.Resource.Drawable.textedit_invalid = global::WB.UI.Supervisor.Resource.Drawable.textedit_invalid;
-			global::WB.UI.Shared.Extensions.Resource.Drawable.textedit_valid = global::WB.UI.Supervisor.Resource.Drawable.textedit_valid;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.theme_blue_light_btn_check_holo_light = global::WB.UI.Supervisor.Resource.Drawable.theme_blue_light_btn_check_holo_light;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.theme_blue_light_btn_check_off_disabled_focused_holo_light = global::WB.UI.Supervisor.Resource.Drawable.theme_blue_light_btn_check_off_disabled_focused_holo_light;
 			global::WB.UI.Shared.Extensions.Resource.Drawable.theme_blue_light_btn_check_off_disabled_holo_light = global::WB.UI.Supervisor.Resource.Drawable.theme_blue_light_btn_check_off_disabled_holo_light;
@@ -9696,18 +9493,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Style.BlueAppTheme = global::WB.UI.Supervisor.Resource.Style.BlueAppTheme;
 			global::WB.UI.Shared.Extensions.Resource.Style.ButtonAppTheme = global::WB.UI.Supervisor.Resource.Style.ButtonAppTheme;
 			global::WB.UI.Shared.Extensions.Resource.Style.CheckBoxTheme = global::WB.UI.Supervisor.Resource.Style.CheckBoxTheme;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostic_Container = global::WB.UI.Supervisor.Resource.Style.Diagnostic_Container;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostic_FormContainer = global::WB.UI.Supervisor.Resource.Style.Diagnostic_FormContainer;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostic_Transparent_Button = global::WB.UI.Supervisor.Resource.Style.Diagnostic_Transparent_Button;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Green_Button = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Green_Button;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Section = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Section_Description = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section_Description;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Section_Description_Warning = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section_Description_Warning;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Section_Title = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Section_Title;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_SubSection = global::WB.UI.Supervisor.Resource.Style.Diagnostics_SubSection;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Subsection_Title = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Subsection_Title;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_Subsection_Value = global::WB.UI.Supervisor.Resource.Style.Diagnostics_Subsection_Value;
-			global::WB.UI.Shared.Extensions.Resource.Style.Diagnostics_TitleSection = global::WB.UI.Supervisor.Resource.Style.Diagnostics_TitleSection;
 			global::WB.UI.Shared.Extensions.Resource.Style.Divider_ListStyle = global::WB.UI.Supervisor.Resource.Style.Divider_ListStyle;
 			global::WB.UI.Shared.Extensions.Resource.Style.Done_Button = global::WB.UI.Supervisor.Resource.Style.Done_Button;
 			global::WB.UI.Shared.Extensions.Resource.Style.DrawerArrowStyle = global::WB.UI.Supervisor.Resource.Style.DrawerArrowStyle;
@@ -9838,16 +9623,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Style.Interview_TextEditor = global::WB.UI.Supervisor.Resource.Style.Interview_TextEditor;
 			global::WB.UI.Shared.Extensions.Resource.Style.Interview_Variable_Description = global::WB.UI.Supervisor.Resource.Style.Interview_Variable_Description;
 			global::WB.UI.Shared.Extensions.Resource.Style.Link_Button = global::WB.UI.Supervisor.Resource.Style.Link_Button;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Button = global::WB.UI.Supervisor.Resource.Style.Login_Button;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Editor;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Endpoint_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Endpoint_Editor;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_ErrorMessage = global::WB.UI.Supervisor.Resource.Style.Login_ErrorMessage;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Footer = global::WB.UI.Supervisor.Resource.Style.Login_Footer;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Footer_Message = global::WB.UI.Supervisor.Resource.Style.Login_Footer_Message;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Login_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Login_Editor;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_OnlineSingin_Button = global::WB.UI.Supervisor.Resource.Style.Login_OnlineSingin_Button;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Password_Editor = global::WB.UI.Supervisor.Resource.Style.Login_Password_Editor;
-			global::WB.UI.Shared.Extensions.Resource.Style.Login_Troubleshotting_Button = global::WB.UI.Supervisor.Resource.Style.Login_Troubleshotting_Button;
 			global::WB.UI.Shared.Extensions.Resource.Style.Platform_AppCompat = global::WB.UI.Supervisor.Resource.Style.Platform_AppCompat;
 			global::WB.UI.Shared.Extensions.Resource.Style.Platform_AppCompat_Light = global::WB.UI.Supervisor.Resource.Style.Platform_AppCompat_Light;
 			global::WB.UI.Shared.Extensions.Resource.Style.Platform_ThemeOverlay_AppCompat = global::WB.UI.Supervisor.Resource.Style.Platform_ThemeOverlay_AppCompat;
@@ -9869,7 +9644,6 @@ namespace WB.UI.Supervisor
 			global::WB.UI.Shared.Extensions.Resource.Style.ProgressBarTheme_Blue_Light = global::WB.UI.Supervisor.Resource.Style.ProgressBarTheme_Blue_Light;
 			global::WB.UI.Shared.Extensions.Resource.Style.Progress_Indicator = global::WB.UI.Supervisor.Resource.Style.Progress_Indicator;
 			global::WB.UI.Shared.Extensions.Resource.Style.RadioButtonTheme = global::WB.UI.Supervisor.Resource.Style.RadioButtonTheme;
-			global::WB.UI.Shared.Extensions.Resource.Style.Restore_Button = global::WB.UI.Supervisor.Resource.Style.Restore_Button;
 			global::WB.UI.Shared.Extensions.Resource.Style.RtlOverlay_DialogWindowTitle_AppCompat = global::WB.UI.Supervisor.Resource.Style.RtlOverlay_DialogWindowTitle_AppCompat;
 			global::WB.UI.Shared.Extensions.Resource.Style.RtlOverlay_Widget_AppCompat_ActionBar_TitleItem = global::WB.UI.Supervisor.Resource.Style.RtlOverlay_Widget_AppCompat_ActionBar_TitleItem;
 			global::WB.UI.Shared.Extensions.Resource.Style.RtlOverlay_Widget_AppCompat_DialogTitle_Icon = global::WB.UI.Supervisor.Resource.Style.RtlOverlay_Widget_AppCompat_DialogTitle_Icon;
@@ -12237,8 +12011,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d00db
 			public const int bread_crumb_transparency = 2131558619;
 			
-			// aapt resource value: 0x7f0d00bb
-			public const int bright_blue = 2131558587;
+			// aapt resource value: 0x7f0d00c5
+			public const int bright_blue = 2131558597;
 			
 			// aapt resource value: 0x7f0d000e
 			public const int bright_foreground_disabled_material_dark = 2131558414;
@@ -12273,8 +12047,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d0068
 			public const int button_unpressed = 2131558504;
 			
-			// aapt resource value: 0x7f0d00a0
-			public const int capi_orange = 2131558560;
+			// aapt resource value: 0x7f0d00aa
+			public const int capi_orange = 2131558570;
 			
 			// aapt resource value: 0x7f0d0000
 			public const int cardview_dark_background = 2131558400;
@@ -12351,11 +12125,11 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d0082
 			public const int darkActionBar = 2131558530;
 			
-			// aapt resource value: 0x7f0d00b7
-			public const int dashboard_border = 2131558583;
+			// aapt resource value: 0x7f0d00c1
+			public const int dashboard_border = 2131558593;
 			
-			// aapt resource value: 0x7f0d00b8
-			public const int dashboard_border_shadow = 2131558584;
+			// aapt resource value: 0x7f0d00c2
+			public const int dashboard_border_shadow = 2131558594;
 			
 			// aapt resource value: 0x7f0d0077
 			public const int dashboard_button_color = 2131558519;
@@ -12363,62 +12137,62 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d0078
 			public const int dashboard_button_color_pressed = 2131558520;
 			
-			// aapt resource value: 0x7f0d00af
-			public const int dashboard_completed_tab = 2131558575;
+			// aapt resource value: 0x7f0d00b9
+			public const int dashboard_completed_tab = 2131558585;
 			
-			// aapt resource value: 0x7f0d00ae
-			public const int dashboard_in_progress_tab = 2131558574;
+			// aapt resource value: 0x7f0d00b8
+			public const int dashboard_in_progress_tab = 2131558584;
 			
-			// aapt resource value: 0x7f0d00ab
-			public const int dashboard_interview_background = 2131558571;
+			// aapt resource value: 0x7f0d00b5
+			public const int dashboard_interview_background = 2131558581;
 			
-			// aapt resource value: 0x7f0d00aa
-			public const int dashboard_interview_delimeter = 2131558570;
+			// aapt resource value: 0x7f0d00b4
+			public const int dashboard_interview_delimeter = 2131558580;
 			
-			// aapt resource value: 0x7f0d00a9
-			public const int dashboard_interview_subtitle = 2131558569;
-			
-			// aapt resource value: 0x7f0d00a8
-			public const int dashboard_interview_title = 2131558568;
-			
-			// aapt resource value: 0x7f0d00a7
-			public const int dashboard_main_color = 2131558567;
-			
-			// aapt resource value: 0x7f0d00b1
-			public const int dashboard_new_interview_status = 2131558577;
-			
-			// aapt resource value: 0x7f0d00ac
-			public const int dashboard_new_tab = 2131558572;
+			// aapt resource value: 0x7f0d00b3
+			public const int dashboard_interview_subtitle = 2131558579;
 			
 			// aapt resource value: 0x7f0d00b2
-			public const int dashboard_no_interviews_text = 2131558578;
+			public const int dashboard_interview_title = 2131558578;
 			
-			// aapt resource value: 0x7f0d00ad
-			public const int dashboard_prefilled_question = 2131558573;
+			// aapt resource value: 0x7f0d00b1
+			public const int dashboard_main_color = 2131558577;
+			
+			// aapt resource value: 0x7f0d00bb
+			public const int dashboard_new_interview_status = 2131558587;
+			
+			// aapt resource value: 0x7f0d00b6
+			public const int dashboard_new_tab = 2131558582;
+			
+			// aapt resource value: 0x7f0d00bc
+			public const int dashboard_no_interviews_text = 2131558588;
+			
+			// aapt resource value: 0x7f0d00b7
+			public const int dashboard_prefilled_question = 2131558583;
 			
 			// aapt resource value: 0x7f0d0079
 			public const int dashboard_questionnairelist_empty_text = 2131558521;
 			
-			// aapt resource value: 0x7f0d00b0
-			public const int dashboard_rejected_tab = 2131558576;
-			
-			// aapt resource value: 0x7f0d00b9
-			public const int dashboard_search_background_color = 2131558585;
-			
 			// aapt resource value: 0x7f0d00ba
-			public const int dashboard_search_exit_color = 2131558586;
+			public const int dashboard_rejected_tab = 2131558586;
 			
-			// aapt resource value: 0x7f0d00b3
-			public const int dashboard_synchronization_delimiter = 2131558579;
+			// aapt resource value: 0x7f0d00c3
+			public const int dashboard_search_background_color = 2131558595;
 			
-			// aapt resource value: 0x7f0d00b6
-			public const int dashboard_synchronization_fail_title = 2131558582;
+			// aapt resource value: 0x7f0d00c4
+			public const int dashboard_search_exit_color = 2131558596;
 			
-			// aapt resource value: 0x7f0d00b4
-			public const int dashboard_synchronization_regular_title = 2131558580;
+			// aapt resource value: 0x7f0d00bd
+			public const int dashboard_synchronization_delimiter = 2131558589;
 			
-			// aapt resource value: 0x7f0d00b5
-			public const int dashboard_synchronization_statistics_text = 2131558581;
+			// aapt resource value: 0x7f0d00c0
+			public const int dashboard_synchronization_fail_title = 2131558592;
+			
+			// aapt resource value: 0x7f0d00be
+			public const int dashboard_synchronization_regular_title = 2131558590;
+			
+			// aapt resource value: 0x7f0d00bf
+			public const int dashboard_synchronization_statistics_text = 2131558591;
 			
 			// aapt resource value: 0x7f0d0073
 			public const int default_input_button_disabled = 2131558515;
@@ -12531,35 +12305,35 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d001e
 			public const int highlighted_text_material_light = 2131558430;
 			
-			// aapt resource value: 0x7f0d00bd
-			public const int hockeyapp_background_header = 2131558589;
+			// aapt resource value: 0x7f0d00a0
+			public const int hockeyapp_background_header = 2131558560;
 			
-			// aapt resource value: 0x7f0d00be
-			public const int hockeyapp_background_light = 2131558590;
+			// aapt resource value: 0x7f0d00a1
+			public const int hockeyapp_background_light = 2131558561;
 			
-			// aapt resource value: 0x7f0d00bf
-			public const int hockeyapp_background_white = 2131558591;
+			// aapt resource value: 0x7f0d00a2
+			public const int hockeyapp_background_white = 2131558562;
 			
-			// aapt resource value: 0x7f0d00c0
-			public const int hockeyapp_button_background = 2131558592;
+			// aapt resource value: 0x7f0d00a3
+			public const int hockeyapp_button_background = 2131558563;
 			
-			// aapt resource value: 0x7f0d00c1
-			public const int hockeyapp_button_background_pressed = 2131558593;
+			// aapt resource value: 0x7f0d00a4
+			public const int hockeyapp_button_background_pressed = 2131558564;
 			
-			// aapt resource value: 0x7f0d00c2
-			public const int hockeyapp_button_background_selected = 2131558594;
+			// aapt resource value: 0x7f0d00a5
+			public const int hockeyapp_button_background_selected = 2131558565;
 			
-			// aapt resource value: 0x7f0d00c3
-			public const int hockeyapp_text_black = 2131558595;
+			// aapt resource value: 0x7f0d00a6
+			public const int hockeyapp_text_black = 2131558566;
 			
-			// aapt resource value: 0x7f0d00c4
-			public const int hockeyapp_text_light = 2131558596;
+			// aapt resource value: 0x7f0d00a7
+			public const int hockeyapp_text_light = 2131558567;
 			
-			// aapt resource value: 0x7f0d00c5
-			public const int hockeyapp_text_normal = 2131558597;
+			// aapt resource value: 0x7f0d00a8
+			public const int hockeyapp_text_normal = 2131558568;
 			
-			// aapt resource value: 0x7f0d00c6
-			public const int hockeyapp_text_white = 2131558598;
+			// aapt resource value: 0x7f0d00a9
+			public const int hockeyapp_text_white = 2131558569;
 			
 			// aapt resource value: 0x7f0d0095
 			public const int instructions = 2131558549;
@@ -12606,20 +12380,20 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d0081
 			public const int list_style_divider_color = 2131558529;
 			
-			// aapt resource value: 0x7f0d00a6
-			public const int login_Input_border_invalid_color = 2131558566;
+			// aapt resource value: 0x7f0d00b0
+			public const int login_Input_border_invalid_color = 2131558576;
 			
-			// aapt resource value: 0x7f0d00a5
-			public const int login_Input_border_valid_color = 2131558565;
+			// aapt resource value: 0x7f0d00af
+			public const int login_Input_border_valid_color = 2131558575;
 			
-			// aapt resource value: 0x7f0d00a4
-			public const int login_Input_border_valid_disabled_color = 2131558564;
+			// aapt resource value: 0x7f0d00ae
+			public const int login_Input_border_valid_disabled_color = 2131558574;
 			
-			// aapt resource value: 0x7f0d00a3
-			public const int login_Input_disabled_color = 2131558563;
+			// aapt resource value: 0x7f0d00ad
+			public const int login_Input_disabled_color = 2131558573;
 			
-			// aapt resource value: 0x7f0d00a2
-			public const int login_footer_color = 2131558562;
+			// aapt resource value: 0x7f0d00ac
+			public const int login_footer_color = 2131558572;
 			
 			// aapt resource value: 0x7f0d001f
 			public const int material_blue_grey_800 = 2131558431;
@@ -12657,8 +12431,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d002a
 			public const int material_grey_900 = 2131558442;
 			
-			// aapt resource value: 0x7f0d00a1
-			public const int menu_hint_color = 2131558561;
+			// aapt resource value: 0x7f0d00ab
+			public const int menu_hint_color = 2131558571;
 			
 			// aapt resource value: 0x7f0d005e
 			public const int nonAnsweredBackground = 2131558494;
@@ -12780,8 +12554,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0d007e
 			public const int sections_list_text_color = 2131558526;
 			
-			// aapt resource value: 0x7f0d00bc
-			public const int selection_background_color = 2131558588;
+			// aapt resource value: 0x7f0d00c6
+			public const int selection_background_color = 2131558598;
 			
 			// aapt resource value: 0x7f0d00df
 			public const int show_instructions = 2131558623;
@@ -17171,48 +16945,6 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0a0049
 			public const int fab_scroll_shrink_grow_autohide_behavior = 2131361865;
 			
-			// aapt resource value: 0x7f0a00a1
-			public const int filepicker_ApplicationName = 2131361953;
-			
-			// aapt resource value: 0x7f0a00a3
-			public const int filepicker_cancel_label = 2131361955;
-			
-			// aapt resource value: 0x7f0a00a4
-			public const int filepicker_confirm_label = 2131361956;
-			
-			// aapt resource value: 0x7f0a00ad
-			public const int filepicker_create_folder_error = 2131361965;
-			
-			// aapt resource value: 0x7f0a00ac
-			public const int filepicker_create_folder_error_already_exists = 2131361964;
-			
-			// aapt resource value: 0x7f0a00ab
-			public const int filepicker_create_folder_error_no_write_access = 2131361963;
-			
-			// aapt resource value: 0x7f0a00a7
-			public const int filepicker_create_folder_label = 2131361959;
-			
-			// aapt resource value: 0x7f0a00a9
-			public const int filepicker_create_folder_msg = 2131361961;
-			
-			// aapt resource value: 0x7f0a00aa
-			public const int filepicker_create_folder_success = 2131361962;
-			
-			// aapt resource value: 0x7f0a00a8
-			public const int filepicker_enter_folder_msg = 2131361960;
-			
-			// aapt resource value: 0x7f0a00a2
-			public const int filepicker_ok = 2131361954;
-			
-			// aapt resource value: 0x7f0a00a6
-			public const int filepicker_selected_file_label = 2131361958;
-			
-			// aapt resource value: 0x7f0a00a5
-			public const int filepicker_selected_folder_label = 2131361957;
-			
-			// aapt resource value: 0x7f0a00ae
-			public const int filepicker_up_label = 2131361966;
-			
 			// aapt resource value: 0x7f0a003c
 			public const int font_fontFamily_medium = 2131361852;
 			
@@ -17588,8 +17320,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0a003f
 			public const int stop_icon_upper_path_data = 2131361855;
 			
-			// aapt resource value: 0x7f0a00af
-			public const int vertical_ellipsis = 2131361967;
+			// aapt resource value: 0x7f0a00a1
+			public const int vertical_ellipsis = 2131361953;
 			
 			// aapt resource value: 0x7f0a004a
 			public const int view_scroll_translation_autohide_behavior = 2131361866;
@@ -17649,11 +17381,11 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0196
 			public const int Area_ZoomMapOutButton = 2131493270;
 			
-			// aapt resource value: 0x7f0c01af
-			public const int Audio_Dialog_Holder = 2131493295;
+			// aapt resource value: 0x7f0c0198
+			public const int Audio_Dialog_Holder = 2131493272;
 			
-			// aapt resource value: 0x7f0c023b
-			public const int AutoCompleteTextViewTheme = 2131493435;
+			// aapt resource value: 0x7f0c0224
+			public const int AutoCompleteTextViewTheme = 2131493412;
 			
 			// aapt resource value: 0x7f0c00a9
 			public const int Base_AlertDialog_AppCompat = 2131493033;
@@ -18147,11 +17879,11 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0170
 			public const int Base_Widget_Design_TabLayout = 2131493232;
 			
-			// aapt resource value: 0x7f0c0235
-			public const int BlueAppTheme = 2131493429;
+			// aapt resource value: 0x7f0c021e
+			public const int BlueAppTheme = 2131493406;
 			
-			// aapt resource value: 0x7f0c0237
-			public const int ButtonAppTheme = 2131493431;
+			// aapt resource value: 0x7f0c0220
+			public const int ButtonAppTheme = 2131493408;
 			
 			// aapt resource value: 0x7f0c000b
 			public const int CardView = 2131492875;
@@ -18162,467 +17894,467 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c000e
 			public const int CardView_Light = 2131492878;
 			
-			// aapt resource value: 0x7f0c0238
-			public const int CheckBoxTheme = 2131493432;
-			
-			// aapt resource value: 0x7f0c0198
-			public const int Diagnostic_Container = 2131493272;
-			
-			// aapt resource value: 0x7f0c01a2
-			public const int Diagnostic_FormContainer = 2131493282;
-			
-			// aapt resource value: 0x7f0c01a4
-			public const int Diagnostic_Transparent_Button = 2131493284;
-			
-			// aapt resource value: 0x7f0c01a3
-			public const int Diagnostics_Green_Button = 2131493283;
-			
-			// aapt resource value: 0x7f0c0199
-			public const int Diagnostics_Section = 2131493273;
-			
-			// aapt resource value: 0x7f0c019e
-			public const int Diagnostics_Section_Description = 2131493278;
-			
-			// aapt resource value: 0x7f0c019f
-			public const int Diagnostics_Section_Description_Warning = 2131493279;
-			
-			// aapt resource value: 0x7f0c019d
-			public const int Diagnostics_Section_Title = 2131493277;
-			
-			// aapt resource value: 0x7f0c019c
-			public const int Diagnostics_SubSection = 2131493276;
-			
-			// aapt resource value: 0x7f0c01a0
-			public const int Diagnostics_Subsection_Title = 2131493280;
-			
-			// aapt resource value: 0x7f0c01a1
-			public const int Diagnostics_Subsection_Value = 2131493281;
-			
-			// aapt resource value: 0x7f0c019a
-			public const int Diagnostics_TitleSection = 2131493274;
-			
-			// aapt resource value: 0x7f0c0236
-			public const int Divider_ListStyle = 2131493430;
-			
-			// aapt resource value: 0x7f0c01b2
-			public const int Done_Button = 2131493298;
+			// aapt resource value: 0x7f0c0221
+			public const int CheckBoxTheme = 2131493409;
 			
 			// aapt resource value: 0x7f0c022f
-			public const int DrawerArrowStyle = 2131493423;
+			public const int Diagnostic_Container = 2131493423;
 			
-			// aapt resource value: 0x7f0c023e
-			public const int DropDownListViewStyleTheme = 2131493438;
+			// aapt resource value: 0x7f0c0239
+			public const int Diagnostic_FormContainer = 2131493433;
+			
+			// aapt resource value: 0x7f0c023b
+			public const int Diagnostic_Transparent_Button = 2131493435;
 			
 			// aapt resource value: 0x7f0c023a
-			public const int EditTextTheme = 2131493434;
+			public const int Diagnostics_Green_Button = 2131493434;
 			
-			// aapt resource value: 0x7f0c0218
-			public const int FullWidthWrappingLayout = 2131493400;
+			// aapt resource value: 0x7f0c0230
+			public const int Diagnostics_Section = 2131493424;
+			
+			// aapt resource value: 0x7f0c0235
+			public const int Diagnostics_Section_Description = 2131493429;
+			
+			// aapt resource value: 0x7f0c0236
+			public const int Diagnostics_Section_Description_Warning = 2131493430;
 			
 			// aapt resource value: 0x7f0c0234
-			public const int GrayAppTheme = 2131493428;
+			public const int Diagnostics_Section_Title = 2131493428;
 			
-			// aapt resource value: 0x7f0c0243
-			public const int HockeyApp_ButtonStyle = 2131493443;
+			// aapt resource value: 0x7f0c0233
+			public const int Diagnostics_SubSection = 2131493427;
 			
-			// aapt resource value: 0x7f0c0244
-			public const int HockeyApp_EditTextStyle = 2131493444;
+			// aapt resource value: 0x7f0c0237
+			public const int Diagnostics_Subsection_Title = 2131493431;
 			
-			// aapt resource value: 0x7f0c0245
-			public const int HockeyApp_SingleLineInputStyle = 2131493445;
+			// aapt resource value: 0x7f0c0238
+			public const int Diagnostics_Subsection_Value = 2131493432;
 			
-			// aapt resource value: 0x7f0c0232
-			public const int ImageButtonTheme_Blue_Light = 2131493426;
-			
-			// aapt resource value: 0x7f0c021c
-			public const int InterviewToolbarTitle = 2131493404;
-			
-			// aapt resource value: 0x7f0c01e3
-			public const int Interview_Attachment_Picture = 2131493347;
-			
-			// aapt resource value: 0x7f0c01fc
-			public const int Interview_BreadCrumbs = 2131493372;
-			
-			// aapt resource value: 0x7f0c01fb
-			public const int Interview_BreadCrumbsContainer = 2131493371;
-			
-			// aapt resource value: 0x7f0c01e5
-			public const int Interview_Button = 2131493349;
-			
-			// aapt resource value: 0x7f0c0212
-			public const int Interview_Complete_Screen_Button = 2131493394;
-			
-			// aapt resource value: 0x7f0c0205
-			public const int Interview_Complete_Screen_Scroll = 2131493381;
-			
-			// aapt resource value: 0x7f0c020c
-			public const int Interview_Complete_Screen_Statistics_Answered_Counter = 2131493388;
-			
-			// aapt resource value: 0x7f0c020d
-			public const int Interview_Complete_Screen_Statistics_Answered_Label = 2131493389;
-			
-			// aapt resource value: 0x7f0c0207
-			public const int Interview_Complete_Screen_Statistics_Column = 2131493383;
-			
-			// aapt resource value: 0x7f0c0208
-			public const int Interview_Complete_Screen_Statistics_Column_With_Right_Border = 2131493384;
-			
-			// aapt resource value: 0x7f0c0209
-			public const int Interview_Complete_Screen_Statistics_Container = 2131493385;
-			
-			// aapt resource value: 0x7f0c020a
-			public const int Interview_Complete_Screen_Statistics_Counter = 2131493386;
-			
-			// aapt resource value: 0x7f0c0210
-			public const int Interview_Complete_Screen_Statistics_Errors_Counter = 2131493392;
-			
-			// aapt resource value: 0x7f0c0211
-			public const int Interview_Complete_Screen_Statistics_Errors_Label = 2131493393;
-			
-			// aapt resource value: 0x7f0c020b
-			public const int Interview_Complete_Screen_Statistics_Label = 2131493387;
-			
-			// aapt resource value: 0x7f0c020e
-			public const int Interview_Complete_Screen_Statistics_Unanswered_Counter = 2131493390;
-			
-			// aapt resource value: 0x7f0c020f
-			public const int Interview_Complete_Screen_Statistics_Unanswered_Label = 2131493391;
-			
-			// aapt resource value: 0x7f0c0206
-			public const int Interview_Complete_Screen_Text = 2131493382;
-			
-			// aapt resource value: 0x7f0c023f
-			public const int Interview_Confirmation_Editor = 2131493439;
-			
-			// aapt resource value: 0x7f0c0240
-			public const int Interview_Confirmation_Layout = 2131493440;
-			
-			// aapt resource value: 0x7f0c0217
-			public const int Interview_Cover_Description_Header = 2131493399;
-			
-			// aapt resource value: 0x7f0c0213
-			public const int Interview_Cover_Header_Line = 2131493395;
-			
-			// aapt resource value: 0x7f0c0215
-			public const int Interview_Cover_Main_First_Header = 2131493397;
-			
-			// aapt resource value: 0x7f0c0214
-			public const int Interview_Cover_Main_Header = 2131493396;
-			
-			// aapt resource value: 0x7f0c0216
-			public const int Interview_Cover_Main_Second_Header = 2131493398;
-			
-			// aapt resource value: 0x7f0c01ff
-			public const int Interview_Cover_Prefilled_Answers = 2131493375;
-			
-			// aapt resource value: 0x7f0c01fe
-			public const int Interview_Cover_Prefilled_Answers_Block = 2131493374;
-			
-			// aapt resource value: 0x7f0c0200
-			public const int Interview_Cover_Prefilled_Question = 2131493376;
-			
-			// aapt resource value: 0x7f0c0202
-			public const int Interview_Cover_Question_Answer = 2131493378;
-			
-			// aapt resource value: 0x7f0c0201
-			public const int Interview_Cover_Question_Title = 2131493377;
-			
-			// aapt resource value: 0x7f0c01fd
-			public const int Interview_Cover_Screen_Header = 2131493373;
-			
-			// aapt resource value: 0x7f0c0203
-			public const int Interview_Cover_Supervisor_Note = 2131493379;
-			
-			// aapt resource value: 0x7f0c0204
-			public const int Interview_Cover_Supervisor_Note_Text = 2131493380;
-			
-			// aapt resource value: 0x7f0c01b9
-			public const int Interview_DisabledQuestion = 2131493305;
-			
-			// aapt resource value: 0x7f0c01ba
-			public const int Interview_DisabledQuestion_Title = 2131493306;
-			
-			// aapt resource value: 0x7f0c01f7
-			public const int Interview_Entity = 2131493367;
-			
-			// aapt resource value: 0x7f0c01f8
-			public const int Interview_Entity_BasicFont = 2131493368;
-			
-			// aapt resource value: 0x7f0c01fa
-			public const int Interview_Entity_Divider = 2131493370;
-			
-			// aapt resource value: 0x7f0c01f9
-			public const int Interview_Entity_Title = 2131493369;
-			
-			// aapt resource value: 0x7f0c01b4
-			public const int Interview_Group = 2131493300;
-			
-			// aapt resource value: 0x7f0c01b3
-			public const int Interview_GroupWithDivider = 2131493299;
-			
-			// aapt resource value: 0x7f0c01b7
-			public const int Interview_Group_Button = 2131493303;
-			
-			// aapt resource value: 0x7f0c01b6
-			public const int Interview_Group_Description = 2131493302;
-			
-			// aapt resource value: 0x7f0c021e
-			public const int Interview_List = 2131493406;
-			
-			// aapt resource value: 0x7f0c01f5
-			public const int Interview_Previous_Group_Navigation_Button = 2131493365;
-			
-			// aapt resource value: 0x7f0c01f4
-			public const int Interview_Previous_Group_Navigation_Layout = 2131493364;
-			
-			// aapt resource value: 0x7f0c01bb
-			public const int Interview_Question = 2131493307;
-			
-			// aapt resource value: 0x7f0c01b8
-			public const int Interview_QuestionWithDivider = 2131493304;
-			
-			// aapt resource value: 0x7f0c01c4
-			public const int Interview_Question_Answer = 2131493316;
-			
-			// aapt resource value: 0x7f0c01c9
-			public const int Interview_Question_Answer_Editor = 2131493321;
-			
-			// aapt resource value: 0x7f0c01d0
-			public const int Interview_Question_Answer_FilteredComboBox = 2131493328;
-			
-			// aapt resource value: 0x7f0c01d1
-			public const int Interview_Question_Answer_FilteredComboBox_Item = 2131493329;
-			
-			// aapt resource value: 0x7f0c01d2
-			public const int Interview_Question_Answer_FilteredComboBox_Item_Background = 2131493330;
-			
-			// aapt resource value: 0x7f0c01cd
-			public const int Interview_Question_Answer_Input_RemoveAnswerWrapper = 2131493325;
-			
-			// aapt resource value: 0x7f0c01db
-			public const int Interview_Question_Answer_List_Item = 2131493339;
-			
-			// aapt resource value: 0x7f0c01dd
-			public const int Interview_Question_Answer_List_NewItem_Editor = 2131493341;
-			
-			// aapt resource value: 0x7f0c01d3
-			public const int Interview_Question_Answer_Option_Background = 2131493331;
-			
-			// aapt resource value: 0x7f0c01d4
-			public const int Interview_Question_Answer_Option_Corner = 2131493332;
-			
-			// aapt resource value: 0x7f0c01d6
-			public const int Interview_Question_Answer_Option_Input = 2131493334;
-			
-			// aapt resource value: 0x7f0c01ce
-			public const int Interview_Question_Answer_Recorded_RemoveAnswerWrapper = 2131493326;
-			
-			// aapt resource value: 0x7f0c01dc
-			public const int Interview_Question_Answer_Text_Editor = 2131493340;
-			
-			// aapt resource value: 0x7f0c01d7
-			public const int Interview_Question_Answer_YesNo_Option = 2131493335;
-			
-			// aapt resource value: 0x7f0c01cf
-			public const int Interview_Question_Border = 2131493327;
-			
-			// aapt resource value: 0x7f0c01ee
-			public const int Interview_Question_Comment_Editor = 2131493358;
-			
-			// aapt resource value: 0x7f0c01ed
-			public const int Interview_Question_Comment_Item = 2131493357;
-			
-			// aapt resource value: 0x7f0c01ec
-			public const int Interview_Question_Comments = 2131493356;
-			
-			// aapt resource value: 0x7f0c01f0
-			public const int Interview_Question_Comments_InterviewerDetails = 2131493360;
-			
-			// aapt resource value: 0x7f0c01f1
-			public const int Interview_Question_Comments_InterviewerDetails_Editor = 2131493361;
-			
-			// aapt resource value: 0x7f0c01ef
-			public const int Interview_Question_Comments_InterviewerTitle = 2131493359;
-			
-			// aapt resource value: 0x7f0c01f2
-			public const int Interview_Question_Divider = 2131493362;
-			
-			// aapt resource value: 0x7f0c01c8
-			public const int Interview_Question_EmptyOptions = 2131493320;
-			
-			// aapt resource value: 0x7f0c01e7
-			public const int Interview_Question_Errors = 2131493351;
-			
-			// aapt resource value: 0x7f0c01e9
-			public const int Interview_Question_Errors_Details = 2131493353;
-			
-			// aapt resource value: 0x7f0c01e8
-			public const int Interview_Question_Errors_Title = 2131493352;
-			
-			// aapt resource value: 0x7f0c01e0
-			public const int Interview_Question_ExternalData_Container = 2131493344;
-			
-			// aapt resource value: 0x7f0c01e2
-			public const int Interview_Question_GPS_Map = 2131493346;
-			
-			// aapt resource value: 0x7f0c01bc
-			public const int Interview_Question_Header = 2131493308;
-			
-			// aapt resource value: 0x7f0c01e6
-			public const int Interview_Question_InputButton = 2131493350;
-			
-			// aapt resource value: 0x7f0c01bf
-			public const int Interview_Question_Instruction = 2131493311;
-			
-			// aapt resource value: 0x7f0c01c3
-			public const int Interview_Question_Instruction_Details = 2131493315;
-			
-			// aapt resource value: 0x7f0c01c2
-			public const int Interview_Question_Instruction_ShowInstruction = 2131493314;
-			
-			// aapt resource value: 0x7f0c01c1
-			public const int Interview_Question_Instruction_Title = 2131493313;
-			
-			// aapt resource value: 0x7f0c01c0
-			public const int Interview_Question_Instruction_text_styles = 2131493312;
-			
-			// aapt resource value: 0x7f0c01d5
-			public const int Interview_Question_MultiOptionOrder = 2131493333;
-			
-			// aapt resource value: 0x7f0c01e1
-			public const int Interview_Question_Multimedia_Picture = 2131493345;
-			
-			// aapt resource value: 0x7f0c01df
-			public const int Interview_Question_OptionRemoveAnswer = 2131493343;
-			
-			// aapt resource value: 0x7f0c01f3
-			public const int Interview_Question_Progress_Indicator = 2131493363;
-			
-			// aapt resource value: 0x7f0c01cc
-			public const int Interview_Question_ProtectedAnswerIcon = 2131493324;
-			
-			// aapt resource value: 0x7f0c01e4
-			public const int Interview_Question_RecordedAnswer = 2131493348;
-			
-			// aapt resource value: 0x7f0c01de
-			public const int Interview_Question_RemoveAnswer = 2131493342;
-			
-			// aapt resource value: 0x7f0c01cb
-			public const int Interview_Question_TextEditor = 2131493323;
-			
-			// aapt resource value: 0x7f0c01be
-			public const int Interview_Question_Title = 2131493310;
-			
-			// aapt resource value: 0x7f0c01bd
-			public const int Interview_Question_Title_Base = 2131493309;
-			
-			// aapt resource value: 0x7f0c01eb
-			public const int Interview_Question_Warning_Details = 2131493355;
-			
-			// aapt resource value: 0x7f0c01ea
-			public const int Interview_Question_Warning_Title = 2131493354;
-			
-			// aapt resource value: 0x7f0c01d8
-			public const int Interview_Question_YesNo_Title = 2131493336;
-			
-			// aapt resource value: 0x7f0c01d9
-			public const int Interview_Question_YesNo_Title_delimeter = 2131493337;
-			
-			// aapt resource value: 0x7f0c01da
-			public const int Interview_Question_YesNo_Title_text = 2131493338;
-			
-			// aapt resource value: 0x7f0c01c6
-			public const int Interview_Readonly_Question_Answer = 2131493318;
-			
-			// aapt resource value: 0x7f0c01c7
-			public const int Interview_Readonly_Question_Icon = 2131493319;
-			
-			// aapt resource value: 0x7f0c01c5
-			public const int Interview_Readonly_Question_Layout = 2131493317;
-			
-			// aapt resource value: 0x7f0c01b5
-			public const int Interview_Roster = 2131493301;
-			
-			// aapt resource value: 0x7f0c0224
-			public const int Interview_Sidebar = 2131493412;
-			
-			// aapt resource value: 0x7f0c0225
-			public const int Interview_Sidebar_Body = 2131493413;
-			
-			// aapt resource value: 0x7f0c0229
-			public const int Interview_Sidebar_GroupRow = 2131493417;
-			
-			// aapt resource value: 0x7f0c0226
-			public const int Interview_Sidebar_Header = 2131493414;
-			
-			// aapt resource value: 0x7f0c022d
-			public const int Interview_Sidebar_PrefilledQuestion = 2131493421;
-			
-			// aapt resource value: 0x7f0c0220
-			public const int Interview_Sidebar_PrefilledQuestions = 2131493408;
+			// aapt resource value: 0x7f0c0231
+			public const int Diagnostics_TitleSection = 2131493425;
 			
 			// aapt resource value: 0x7f0c021f
-			public const int Interview_Sidebar_PrefilledQuestions_Container = 2131493407;
+			public const int Divider_ListStyle = 2131493407;
+			
+			// aapt resource value: 0x7f0c019b
+			public const int Done_Button = 2131493275;
+			
+			// aapt resource value: 0x7f0c0218
+			public const int DrawerArrowStyle = 2131493400;
 			
 			// aapt resource value: 0x7f0c0227
-			public const int Interview_Sidebar_Sections = 2131493415;
+			public const int DropDownListViewStyleTheme = 2131493415;
 			
-			// aapt resource value: 0x7f0c022a
-			public const int Interview_Sidebar_Sections_Group = 2131493418;
+			// aapt resource value: 0x7f0c0223
+			public const int EditTextTheme = 2131493411;
 			
-			// aapt resource value: 0x7f0c0228
-			public const int Interview_Sidebar_Sections_Section = 2131493416;
+			// aapt resource value: 0x7f0c0201
+			public const int FullWidthWrappingLayout = 2131493377;
+			
+			// aapt resource value: 0x7f0c021d
+			public const int GrayAppTheme = 2131493405;
 			
 			// aapt resource value: 0x7f0c022c
-			public const int Interview_Sidebar_Sections_Section_Title = 2131493420;
+			public const int HockeyApp_ButtonStyle = 2131493420;
 			
-			// aapt resource value: 0x7f0c022b
-			public const int Interview_Sidebar_Sections_ToggleButton = 2131493419;
+			// aapt resource value: 0x7f0c022d
+			public const int HockeyApp_EditTextStyle = 2131493421;
 			
 			// aapt resource value: 0x7f0c022e
-			public const int Interview_Sidebar_Title = 2131493422;
+			public const int HockeyApp_SingleLineInputStyle = 2131493422;
 			
-			// aapt resource value: 0x7f0c01ca
-			public const int Interview_TextEditor = 2131493322;
+			// aapt resource value: 0x7f0c021b
+			public const int ImageButtonTheme_Blue_Light = 2131493403;
+			
+			// aapt resource value: 0x7f0c0205
+			public const int InterviewToolbarTitle = 2131493381;
+			
+			// aapt resource value: 0x7f0c01cc
+			public const int Interview_Attachment_Picture = 2131493324;
+			
+			// aapt resource value: 0x7f0c01e5
+			public const int Interview_BreadCrumbs = 2131493349;
+			
+			// aapt resource value: 0x7f0c01e4
+			public const int Interview_BreadCrumbsContainer = 2131493348;
+			
+			// aapt resource value: 0x7f0c01ce
+			public const int Interview_Button = 2131493326;
+			
+			// aapt resource value: 0x7f0c01fb
+			public const int Interview_Complete_Screen_Button = 2131493371;
+			
+			// aapt resource value: 0x7f0c01ee
+			public const int Interview_Complete_Screen_Scroll = 2131493358;
+			
+			// aapt resource value: 0x7f0c01f5
+			public const int Interview_Complete_Screen_Statistics_Answered_Counter = 2131493365;
 			
 			// aapt resource value: 0x7f0c01f6
-			public const int Interview_Variable_Description = 2131493366;
+			public const int Interview_Complete_Screen_Statistics_Answered_Label = 2131493366;
 			
-			// aapt resource value: 0x7f0c01b1
-			public const int Link_Button = 2131493297;
+			// aapt resource value: 0x7f0c01f0
+			public const int Interview_Complete_Screen_Statistics_Column = 2131493360;
 			
-			// aapt resource value: 0x7f0c01aa
-			public const int Login_Button = 2131493290;
+			// aapt resource value: 0x7f0c01f1
+			public const int Interview_Complete_Screen_Statistics_Column_With_Right_Border = 2131493361;
 			
-			// aapt resource value: 0x7f0c01a6
-			public const int Login_Editor = 2131493286;
+			// aapt resource value: 0x7f0c01f2
+			public const int Interview_Complete_Screen_Statistics_Container = 2131493362;
 			
-			// aapt resource value: 0x7f0c01a7
-			public const int Login_Endpoint_Editor = 2131493287;
+			// aapt resource value: 0x7f0c01f3
+			public const int Interview_Complete_Screen_Statistics_Counter = 2131493363;
 			
-			// aapt resource value: 0x7f0c01a5
-			public const int Login_ErrorMessage = 2131493285;
+			// aapt resource value: 0x7f0c01f9
+			public const int Interview_Complete_Screen_Statistics_Errors_Counter = 2131493369;
 			
-			// aapt resource value: 0x7f0c01ac
-			public const int Login_Footer = 2131493292;
+			// aapt resource value: 0x7f0c01fa
+			public const int Interview_Complete_Screen_Statistics_Errors_Label = 2131493370;
+			
+			// aapt resource value: 0x7f0c01f4
+			public const int Interview_Complete_Screen_Statistics_Label = 2131493364;
+			
+			// aapt resource value: 0x7f0c01f7
+			public const int Interview_Complete_Screen_Statistics_Unanswered_Counter = 2131493367;
+			
+			// aapt resource value: 0x7f0c01f8
+			public const int Interview_Complete_Screen_Statistics_Unanswered_Label = 2131493368;
+			
+			// aapt resource value: 0x7f0c01ef
+			public const int Interview_Complete_Screen_Text = 2131493359;
+			
+			// aapt resource value: 0x7f0c0228
+			public const int Interview_Confirmation_Editor = 2131493416;
+			
+			// aapt resource value: 0x7f0c0229
+			public const int Interview_Confirmation_Layout = 2131493417;
+			
+			// aapt resource value: 0x7f0c0200
+			public const int Interview_Cover_Description_Header = 2131493376;
+			
+			// aapt resource value: 0x7f0c01fc
+			public const int Interview_Cover_Header_Line = 2131493372;
+			
+			// aapt resource value: 0x7f0c01fe
+			public const int Interview_Cover_Main_First_Header = 2131493374;
+			
+			// aapt resource value: 0x7f0c01fd
+			public const int Interview_Cover_Main_Header = 2131493373;
+			
+			// aapt resource value: 0x7f0c01ff
+			public const int Interview_Cover_Main_Second_Header = 2131493375;
+			
+			// aapt resource value: 0x7f0c01e8
+			public const int Interview_Cover_Prefilled_Answers = 2131493352;
+			
+			// aapt resource value: 0x7f0c01e7
+			public const int Interview_Cover_Prefilled_Answers_Block = 2131493351;
+			
+			// aapt resource value: 0x7f0c01e9
+			public const int Interview_Cover_Prefilled_Question = 2131493353;
+			
+			// aapt resource value: 0x7f0c01eb
+			public const int Interview_Cover_Question_Answer = 2131493355;
+			
+			// aapt resource value: 0x7f0c01ea
+			public const int Interview_Cover_Question_Title = 2131493354;
+			
+			// aapt resource value: 0x7f0c01e6
+			public const int Interview_Cover_Screen_Header = 2131493350;
+			
+			// aapt resource value: 0x7f0c01ec
+			public const int Interview_Cover_Supervisor_Note = 2131493356;
+			
+			// aapt resource value: 0x7f0c01ed
+			public const int Interview_Cover_Supervisor_Note_Text = 2131493357;
+			
+			// aapt resource value: 0x7f0c01a2
+			public const int Interview_DisabledQuestion = 2131493282;
+			
+			// aapt resource value: 0x7f0c01a3
+			public const int Interview_DisabledQuestion_Title = 2131493283;
+			
+			// aapt resource value: 0x7f0c01e0
+			public const int Interview_Entity = 2131493344;
+			
+			// aapt resource value: 0x7f0c01e1
+			public const int Interview_Entity_BasicFont = 2131493345;
+			
+			// aapt resource value: 0x7f0c01e3
+			public const int Interview_Entity_Divider = 2131493347;
+			
+			// aapt resource value: 0x7f0c01e2
+			public const int Interview_Entity_Title = 2131493346;
+			
+			// aapt resource value: 0x7f0c019d
+			public const int Interview_Group = 2131493277;
+			
+			// aapt resource value: 0x7f0c019c
+			public const int Interview_GroupWithDivider = 2131493276;
+			
+			// aapt resource value: 0x7f0c01a0
+			public const int Interview_Group_Button = 2131493280;
+			
+			// aapt resource value: 0x7f0c019f
+			public const int Interview_Group_Description = 2131493279;
+			
+			// aapt resource value: 0x7f0c0207
+			public const int Interview_List = 2131493383;
+			
+			// aapt resource value: 0x7f0c01de
+			public const int Interview_Previous_Group_Navigation_Button = 2131493342;
+			
+			// aapt resource value: 0x7f0c01dd
+			public const int Interview_Previous_Group_Navigation_Layout = 2131493341;
+			
+			// aapt resource value: 0x7f0c01a4
+			public const int Interview_Question = 2131493284;
+			
+			// aapt resource value: 0x7f0c01a1
+			public const int Interview_QuestionWithDivider = 2131493281;
 			
 			// aapt resource value: 0x7f0c01ad
-			public const int Login_Footer_Message = 2131493293;
+			public const int Interview_Question_Answer = 2131493293;
+			
+			// aapt resource value: 0x7f0c01b2
+			public const int Interview_Question_Answer_Editor = 2131493298;
+			
+			// aapt resource value: 0x7f0c01b9
+			public const int Interview_Question_Answer_FilteredComboBox = 2131493305;
+			
+			// aapt resource value: 0x7f0c01ba
+			public const int Interview_Question_Answer_FilteredComboBox_Item = 2131493306;
+			
+			// aapt resource value: 0x7f0c01bb
+			public const int Interview_Question_Answer_FilteredComboBox_Item_Background = 2131493307;
+			
+			// aapt resource value: 0x7f0c01b6
+			public const int Interview_Question_Answer_Input_RemoveAnswerWrapper = 2131493302;
+			
+			// aapt resource value: 0x7f0c01c4
+			public const int Interview_Question_Answer_List_Item = 2131493316;
+			
+			// aapt resource value: 0x7f0c01c6
+			public const int Interview_Question_Answer_List_NewItem_Editor = 2131493318;
+			
+			// aapt resource value: 0x7f0c01bc
+			public const int Interview_Question_Answer_Option_Background = 2131493308;
+			
+			// aapt resource value: 0x7f0c01bd
+			public const int Interview_Question_Answer_Option_Corner = 2131493309;
+			
+			// aapt resource value: 0x7f0c01bf
+			public const int Interview_Question_Answer_Option_Input = 2131493311;
+			
+			// aapt resource value: 0x7f0c01b7
+			public const int Interview_Question_Answer_Recorded_RemoveAnswerWrapper = 2131493303;
+			
+			// aapt resource value: 0x7f0c01c5
+			public const int Interview_Question_Answer_Text_Editor = 2131493317;
+			
+			// aapt resource value: 0x7f0c01c0
+			public const int Interview_Question_Answer_YesNo_Option = 2131493312;
+			
+			// aapt resource value: 0x7f0c01b8
+			public const int Interview_Question_Border = 2131493304;
+			
+			// aapt resource value: 0x7f0c01d7
+			public const int Interview_Question_Comment_Editor = 2131493335;
+			
+			// aapt resource value: 0x7f0c01d6
+			public const int Interview_Question_Comment_Item = 2131493334;
+			
+			// aapt resource value: 0x7f0c01d5
+			public const int Interview_Question_Comments = 2131493333;
+			
+			// aapt resource value: 0x7f0c01d9
+			public const int Interview_Question_Comments_InterviewerDetails = 2131493337;
+			
+			// aapt resource value: 0x7f0c01da
+			public const int Interview_Question_Comments_InterviewerDetails_Editor = 2131493338;
+			
+			// aapt resource value: 0x7f0c01d8
+			public const int Interview_Question_Comments_InterviewerTitle = 2131493336;
+			
+			// aapt resource value: 0x7f0c01db
+			public const int Interview_Question_Divider = 2131493339;
+			
+			// aapt resource value: 0x7f0c01b1
+			public const int Interview_Question_EmptyOptions = 2131493297;
+			
+			// aapt resource value: 0x7f0c01d0
+			public const int Interview_Question_Errors = 2131493328;
+			
+			// aapt resource value: 0x7f0c01d2
+			public const int Interview_Question_Errors_Details = 2131493330;
+			
+			// aapt resource value: 0x7f0c01d1
+			public const int Interview_Question_Errors_Title = 2131493329;
+			
+			// aapt resource value: 0x7f0c01c9
+			public const int Interview_Question_ExternalData_Container = 2131493321;
+			
+			// aapt resource value: 0x7f0c01cb
+			public const int Interview_Question_GPS_Map = 2131493323;
+			
+			// aapt resource value: 0x7f0c01a5
+			public const int Interview_Question_Header = 2131493285;
+			
+			// aapt resource value: 0x7f0c01cf
+			public const int Interview_Question_InputButton = 2131493327;
 			
 			// aapt resource value: 0x7f0c01a8
-			public const int Login_Login_Editor = 2131493288;
+			public const int Interview_Question_Instruction = 2131493288;
 			
-			// aapt resource value: 0x7f0c0246
-			public const int Login_Logo = 2131493446;
-			
-			// aapt resource value: 0x7f0c01ae
-			public const int Login_OnlineSingin_Button = 2131493294;
-			
-			// aapt resource value: 0x7f0c01a9
-			public const int Login_Password_Editor = 2131493289;
+			// aapt resource value: 0x7f0c01ac
+			public const int Interview_Question_Instruction_Details = 2131493292;
 			
 			// aapt resource value: 0x7f0c01ab
-			public const int Login_Troubleshotting_Button = 2131493291;
+			public const int Interview_Question_Instruction_ShowInstruction = 2131493291;
+			
+			// aapt resource value: 0x7f0c01aa
+			public const int Interview_Question_Instruction_Title = 2131493290;
+			
+			// aapt resource value: 0x7f0c01a9
+			public const int Interview_Question_Instruction_text_styles = 2131493289;
+			
+			// aapt resource value: 0x7f0c01be
+			public const int Interview_Question_MultiOptionOrder = 2131493310;
+			
+			// aapt resource value: 0x7f0c01ca
+			public const int Interview_Question_Multimedia_Picture = 2131493322;
+			
+			// aapt resource value: 0x7f0c01c8
+			public const int Interview_Question_OptionRemoveAnswer = 2131493320;
+			
+			// aapt resource value: 0x7f0c01dc
+			public const int Interview_Question_Progress_Indicator = 2131493340;
+			
+			// aapt resource value: 0x7f0c01b5
+			public const int Interview_Question_ProtectedAnswerIcon = 2131493301;
+			
+			// aapt resource value: 0x7f0c01cd
+			public const int Interview_Question_RecordedAnswer = 2131493325;
+			
+			// aapt resource value: 0x7f0c01c7
+			public const int Interview_Question_RemoveAnswer = 2131493319;
+			
+			// aapt resource value: 0x7f0c01b4
+			public const int Interview_Question_TextEditor = 2131493300;
+			
+			// aapt resource value: 0x7f0c01a7
+			public const int Interview_Question_Title = 2131493287;
+			
+			// aapt resource value: 0x7f0c01a6
+			public const int Interview_Question_Title_Base = 2131493286;
+			
+			// aapt resource value: 0x7f0c01d4
+			public const int Interview_Question_Warning_Details = 2131493332;
+			
+			// aapt resource value: 0x7f0c01d3
+			public const int Interview_Question_Warning_Title = 2131493331;
+			
+			// aapt resource value: 0x7f0c01c1
+			public const int Interview_Question_YesNo_Title = 2131493313;
+			
+			// aapt resource value: 0x7f0c01c2
+			public const int Interview_Question_YesNo_Title_delimeter = 2131493314;
+			
+			// aapt resource value: 0x7f0c01c3
+			public const int Interview_Question_YesNo_Title_text = 2131493315;
+			
+			// aapt resource value: 0x7f0c01af
+			public const int Interview_Readonly_Question_Answer = 2131493295;
+			
+			// aapt resource value: 0x7f0c01b0
+			public const int Interview_Readonly_Question_Icon = 2131493296;
+			
+			// aapt resource value: 0x7f0c01ae
+			public const int Interview_Readonly_Question_Layout = 2131493294;
+			
+			// aapt resource value: 0x7f0c019e
+			public const int Interview_Roster = 2131493278;
+			
+			// aapt resource value: 0x7f0c020d
+			public const int Interview_Sidebar = 2131493389;
+			
+			// aapt resource value: 0x7f0c020e
+			public const int Interview_Sidebar_Body = 2131493390;
+			
+			// aapt resource value: 0x7f0c0212
+			public const int Interview_Sidebar_GroupRow = 2131493394;
+			
+			// aapt resource value: 0x7f0c020f
+			public const int Interview_Sidebar_Header = 2131493391;
+			
+			// aapt resource value: 0x7f0c0216
+			public const int Interview_Sidebar_PrefilledQuestion = 2131493398;
+			
+			// aapt resource value: 0x7f0c0209
+			public const int Interview_Sidebar_PrefilledQuestions = 2131493385;
+			
+			// aapt resource value: 0x7f0c0208
+			public const int Interview_Sidebar_PrefilledQuestions_Container = 2131493384;
+			
+			// aapt resource value: 0x7f0c0210
+			public const int Interview_Sidebar_Sections = 2131493392;
+			
+			// aapt resource value: 0x7f0c0213
+			public const int Interview_Sidebar_Sections_Group = 2131493395;
+			
+			// aapt resource value: 0x7f0c0211
+			public const int Interview_Sidebar_Sections_Section = 2131493393;
+			
+			// aapt resource value: 0x7f0c0215
+			public const int Interview_Sidebar_Sections_Section_Title = 2131493397;
+			
+			// aapt resource value: 0x7f0c0214
+			public const int Interview_Sidebar_Sections_ToggleButton = 2131493396;
+			
+			// aapt resource value: 0x7f0c0217
+			public const int Interview_Sidebar_Title = 2131493399;
+			
+			// aapt resource value: 0x7f0c01b3
+			public const int Interview_TextEditor = 2131493299;
+			
+			// aapt resource value: 0x7f0c01df
+			public const int Interview_Variable_Description = 2131493343;
+			
+			// aapt resource value: 0x7f0c019a
+			public const int Link_Button = 2131493274;
+			
+			// aapt resource value: 0x7f0c0242
+			public const int Login_Button = 2131493442;
+			
+			// aapt resource value: 0x7f0c023e
+			public const int Login_Editor = 2131493438;
+			
+			// aapt resource value: 0x7f0c023f
+			public const int Login_Endpoint_Editor = 2131493439;
+			
+			// aapt resource value: 0x7f0c023d
+			public const int Login_ErrorMessage = 2131493437;
+			
+			// aapt resource value: 0x7f0c0244
+			public const int Login_Footer = 2131493444;
+			
+			// aapt resource value: 0x7f0c0245
+			public const int Login_Footer_Message = 2131493445;
+			
+			// aapt resource value: 0x7f0c0240
+			public const int Login_Login_Editor = 2131493440;
+			
+			// aapt resource value: 0x7f0c023c
+			public const int Login_Logo = 2131493436;
+			
+			// aapt resource value: 0x7f0c0246
+			public const int Login_OnlineSingin_Button = 2131493446;
+			
+			// aapt resource value: 0x7f0c0241
+			public const int Login_Password_Editor = 2131493441;
+			
+			// aapt resource value: 0x7f0c0243
+			public const int Login_Troubleshotting_Button = 2131493443;
 			
 			// aapt resource value: 0x7f0c0247
 			public const int Menu_Hint = 2131493447;
@@ -18672,29 +18404,29 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0031
 			public const int Platform_Widget_AppCompat_Spinner = 2131492913;
 			
-			// aapt resource value: 0x7f0c021b
-			public const int PrefilledQuestionsToolbarTitle = 2131493403;
+			// aapt resource value: 0x7f0c0204
+			public const int PrefilledQuestionsToolbarTitle = 2131493380;
 			
-			// aapt resource value: 0x7f0c0221
-			public const int PrefilledQuestions_List = 2131493409;
+			// aapt resource value: 0x7f0c020a
+			public const int PrefilledQuestions_List = 2131493386;
 			
-			// aapt resource value: 0x7f0c0222
-			public const int PrefilledQuestions_QuestionnaireTitle = 2131493410;
+			// aapt resource value: 0x7f0c020b
+			public const int PrefilledQuestions_QuestionnaireTitle = 2131493387;
 			
-			// aapt resource value: 0x7f0c0223
-			public const int PrefilledQuestions_StartButton = 2131493411;
+			// aapt resource value: 0x7f0c020c
+			public const int PrefilledQuestions_StartButton = 2131493388;
 			
-			// aapt resource value: 0x7f0c0230
-			public const int ProgressBarTheme_Blue_Light = 2131493424;
+			// aapt resource value: 0x7f0c0219
+			public const int ProgressBarTheme_Blue_Light = 2131493401;
 			
 			// aapt resource value: 0x7f0c0192
 			public const int Progress_Indicator = 2131493266;
 			
-			// aapt resource value: 0x7f0c0239
-			public const int RadioButtonTheme = 2131493433;
+			// aapt resource value: 0x7f0c0222
+			public const int RadioButtonTheme = 2131493410;
 			
-			// aapt resource value: 0x7f0c019b
-			public const int Restore_Button = 2131493275;
+			// aapt resource value: 0x7f0c0232
+			public const int Restore_Button = 2131493426;
 			
 			// aapt resource value: 0x7f0c003a
 			public const int RtlOverlay_DialogWindowTitle_AppCompat = 2131492922;
@@ -18738,23 +18470,23 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0047
 			public const int RtlUnderlay_Widget_AppCompat_ActionButton_Overflow = 2131492935;
 			
-			// aapt resource value: 0x7f0c0231
-			public const int SeekBarTheme_Blue_Light = 2131493425;
+			// aapt resource value: 0x7f0c021a
+			public const int SeekBarTheme_Blue_Light = 2131493402;
 			
-			// aapt resource value: 0x7f0c023d
-			public const int SpinnerDropDownItemTheme = 2131493437;
+			// aapt resource value: 0x7f0c0226
+			public const int SpinnerDropDownItemTheme = 2131493414;
 			
-			// aapt resource value: 0x7f0c023c
-			public const int SpinnerTheme = 2131493436;
+			// aapt resource value: 0x7f0c0225
+			public const int SpinnerTheme = 2131493413;
 			
-			// aapt resource value: 0x7f0c0233
-			public const int StyledDialog = 2131493427;
+			// aapt resource value: 0x7f0c021c
+			public const int StyledDialog = 2131493404;
 			
-			// aapt resource value: 0x7f0c0241
-			public const int TabLayoutStyle = 2131493441;
+			// aapt resource value: 0x7f0c022a
+			public const int TabLayoutStyle = 2131493418;
 			
-			// aapt resource value: 0x7f0c0242
-			public const int TabTextAppearance = 2131493442;
+			// aapt resource value: 0x7f0c022b
+			public const int TabTextAppearance = 2131493419;
 			
 			// aapt resource value: 0x7f0c00d6
 			public const int TextAppearance_AppCompat = 2131493078;
@@ -18969,8 +18701,8 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0107
 			public const int TextAppearance_Widget_AppCompat_Toolbar_Title = 2131493127;
 			
-			// aapt resource value: 0x7f0c01b0
-			public const int Text_Roboto_24 = 2131493296;
+			// aapt resource value: 0x7f0c0199
+			public const int Text_Roboto_24 = 2131493273;
 			
 			// aapt resource value: 0x7f0c0108
 			public const int Theme_AppCompat = 2131493128;
@@ -19095,14 +18827,14 @@ namespace WB.UI.Supervisor
 			// aapt resource value: 0x7f0c0008
 			public const int ThemeOverlay_MediaRouter_Light = 2131492872;
 			
-			// aapt resource value: 0x7f0c021d
-			public const int ToolbarTitle = 2131493405;
+			// aapt resource value: 0x7f0c0206
+			public const int ToolbarTitle = 2131493382;
 			
-			// aapt resource value: 0x7f0c0219
-			public const int VerticalContentHeightWrappingLayout = 2131493401;
+			// aapt resource value: 0x7f0c0202
+			public const int VerticalContentHeightWrappingLayout = 2131493378;
 			
-			// aapt resource value: 0x7f0c021a
-			public const int VerticalFullWidthWrappingLayout = 2131493402;
+			// aapt resource value: 0x7f0c0203
+			public const int VerticalFullWidthWrappingLayout = 2131493379;
 			
 			// aapt resource value: 0x7f0c011d
 			public const int Widget_AppCompat_ActionBar = 2131493149;
