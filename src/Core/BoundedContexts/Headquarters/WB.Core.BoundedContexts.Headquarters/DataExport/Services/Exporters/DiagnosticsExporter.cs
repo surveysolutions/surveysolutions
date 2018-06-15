@@ -67,8 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.transactionManager = transactionManager;
         }
 
-        public void Export(QuestionnaireExportStructure questionnaireExportStructure,
-            List<Guid> interviewIdsToExport,
+        public void Export(List<Guid> interviewIdsToExport,
             string basePath,
             IProgress<int> progress, 
             CancellationToken cancellationToken)
