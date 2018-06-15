@@ -4,7 +4,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
     public abstract class QuestionAnswered : QuestionActiveEvent
     {
-        public DateTime? AnswerTimeUtc { get; private set; }
+        public DateTime? AnswerTimeUtc { get; set; }
 
         /// <summary>
         /// 
@@ -14,16 +14,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
         /// <param name="rosterVector"></param>
         /// <param name="originDate"></param>
         /// <param name="answerTimeUtc">Backward compatibility. Delete consciously</param>
-        protected QuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate, DateTime? answerTimeUtc = null)
+        protected QuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate)
             : base(userId, questionId, rosterVector, originDate)
         {
             if (originDate != default(DateTimeOffset))
             {
                 this.AnswerTimeUtc = originDate.UtcDateTime;
-            }
-            else if (answerTimeUtc != default(DateTime))
-            {
-                this.AnswerTimeUtc = answerTimeUtc;
             }
         }
     }

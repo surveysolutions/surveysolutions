@@ -5,20 +5,17 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewCompleted : InterviewActiveEvent
     {
-        public InterviewCompleted(Guid userId, DateTimeOffset originDate, string comment, DateTime? completeTime = null)
+        public InterviewCompleted(Guid userId, DateTimeOffset originDate, string comment)
             : base(userId, originDate)
         {
             this.Comment = comment;
 
             if (originDate != default(DateTimeOffset))
                 this.CompleteTime = originDate.UtcDateTime;
-            else if (completeTime!= null && completeTime != default(DateTime))
-            {
-                this.CompleteTime = completeTime;
-            }
+            
         }
 
-        public DateTime? CompleteTime { get; private set; }
+        public DateTime? CompleteTime { get; set; }
         public string Comment { get; private set; }
     }
 }

@@ -127,7 +127,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
                             writer.WriteField(record.OriginatorName);
                             writer.WriteField(record.OriginatorRole);
                             writer.WriteField(record.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
-                            writer.WriteField(record.Offset != null ? record.Offset.Value.ToString("{0:c}") : "");
+                            writer.WriteField(record.Offset != null ? record.Offset.Value.ToString() : "");
 
                             writer.WriteField(String.Join("||",
                                 record.Parameters.Values.Select(Utils.RemoveNewLine)));

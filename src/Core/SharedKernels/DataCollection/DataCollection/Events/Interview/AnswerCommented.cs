@@ -5,19 +5,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswerCommented : QuestionActiveEvent
     {
-        public DateTime? CommentTime { get; private set; }
+        public DateTime? CommentTime { get; set; }
 
         public string Comment { get; private set; }
 
-        public AnswerCommented(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate, string comment, DateTime? commentTime = null)
+        public AnswerCommented(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate, string comment)
             : base(userId, questionId, rosterVector, originDate)
         {
             this.Comment = comment;
-
-            if (commentTime != null && commentTime != default(DateTime))
-            {
-                this.CommentTime = commentTime;
-            }
         }
     }
 }
