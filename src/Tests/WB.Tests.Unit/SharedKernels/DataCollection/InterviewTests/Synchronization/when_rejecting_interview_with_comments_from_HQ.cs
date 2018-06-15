@@ -1,5 +1,5 @@
-using System;
 using Ncqrs.Spec;
+using System;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
 
             interview = Setup.StatefulInterview(questionnaire);
-            interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, new DateTimeOffset(), existingComment.Text, existingComment.Date));
+            interview.Apply(new AnswerCommented(userId, commentedQuestionId, new decimal[]{}, new DateTimeOffset(existingComment.Date), existingComment.Text));
 
             interview.AssignInterviewer(supervisorId, userId, DateTimeOffset.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
