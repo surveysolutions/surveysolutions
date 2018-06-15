@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public DateTime? CreationTime { get; }
 
         public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
-            int? assignmentId, DateTimeOffset originDate, bool usesExpressionStorage = false, DateTime? creationTime = null)
+            int? assignmentId, DateTimeOffset originDate, bool usesExpressionStorage = false)
             : base(userId, originDate)
         {
             this.QuestionnaireId = questionnaireId;
@@ -23,8 +23,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
             if (originDate != default(DateTimeOffset))
                 this.CreationTime = originDate.UtcDateTime;
-            else if(creationTime != null && creationTime != default(DateTime))
-                this.CreationTime = creationTime;
         }
     }
 }

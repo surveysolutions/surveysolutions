@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewRestarted : InterviewActiveEvent
     {
-        public InterviewRestarted(Guid userId, DateTimeOffset originDate, string comment, DateTime? restartTime = null)
+        public InterviewRestarted(Guid userId, DateTimeOffset originDate, string comment)
             : base(userId, originDate)
         {
             Comment = comment;
@@ -14,13 +14,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             {
                 this.RestartTime = originDate.UtcDateTime;
             }
-            else if (restartTime != null && restartTime != default(DateTime))
-            {
-                this.RestartTime = restartTime;
-            }
         }
 
-        public DateTime? RestartTime { get; private set; }
+        public DateTime? RestartTime { get; set; }
         public string Comment { get; private set; }
     }
 }
