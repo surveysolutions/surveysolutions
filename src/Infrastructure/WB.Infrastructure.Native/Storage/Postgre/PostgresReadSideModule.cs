@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -115,6 +116,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
                 {
                     status.Message = Modules.InitializingDb;
                     DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
+
+                    Thread.Sleep(new TimeSpan(0, 0, 5, 0));
 
                     status.Message = Modules.MigrateDb;
                     DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
