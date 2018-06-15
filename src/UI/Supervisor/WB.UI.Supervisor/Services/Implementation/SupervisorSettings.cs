@@ -1,5 +1,6 @@
 ﻿using System;
 using Android.App;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,7 +13,7 @@ using Environment = System.Environment;
 
 namespace WB.UI.Supervisor.Services.Implementation
 {
-    internal class SupervisorSettings : EnumeratorSettings
+    internal class SupervisorSettings : EnumeratorSettings, ISupervisorSettings
     {
         private readonly IPlainStorage<ApplicationSettingsView> settingsStorage;
         private readonly IPlainStorage<SupervisorIdentity> usersStorage;
@@ -52,11 +53,13 @@ namespace WB.UI.Supervisor.Services.Implementation
         };
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
+        public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
-        public override int EventChunkSize => throw new NotImplementedException();
         public override bool VibrateOnError => throw new NotImplementedException();
         public override bool ShowLocationOnMap => throw new NotImplementedException();
         public override int GpsReceiveTimeoutSec => throw new NotImplementedException();
+        public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();
+        public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
 
         protected override void SaveSettings(EnumeratorSettingsView settings)
             => this.settingsStorage.Store((ApplicationSettingsView)settings);

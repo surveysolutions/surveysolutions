@@ -2,13 +2,13 @@ using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Supervisor.Activities;
-using WB.UI.Supervisor.ViewModel;
 
 namespace WB.UI.Supervisor.Services.Implementation
 {

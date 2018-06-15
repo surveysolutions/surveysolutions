@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-  <solid android:color="@color/dashboard_button_color_pressed" />
-  <corners android:radius="@dimen/Dashboard_Layout_border_radius" />
-</shape>

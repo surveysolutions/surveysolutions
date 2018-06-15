@@ -7,7 +7,6 @@ using SQLite;
 using SQLitePCL;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Shared.Enumerator.Services
@@ -50,11 +49,11 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            var backupTempFolder = $"_temp-backup-{DateTime.Now:s}";
+            var backupTempFolder = $"temp-backup-{DateTime.Now:s}";
             var backupFolderPath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupTempFolder);
 
             var backupFileName = $"backup-{DateTime.Now:s}.zip";
-            var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupFileName);
+            var backupFilePath = this.fileSystemAccessor.CombinePath(backupFolderPath, backupFileName);
 
             try
             {
