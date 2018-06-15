@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_chapter_has_more_than_allowed_questions : QuestionnaireVerifierTestsContext
     {
