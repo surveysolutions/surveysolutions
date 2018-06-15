@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Resources;
-using RedirectResult = System.Web.Http.Results.RedirectResult;
 
 namespace WB.UI.Shared.Web.Filters
 {
