@@ -210,6 +210,9 @@
   <data name="StaySignedIn" xml:space="preserve">
     <value>Оставаться в системе в течении 1 дня</value>
   </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Показать пароль</value>
+  </data>
   <data name="TesterApp" xml:space="preserve">
     <value>Установите Survey Solutions Questionnaire Tester на андроид планшет, чтобы тестировать опросники которые Вы создаете в дизайнере опросников.</value>
   </data>
