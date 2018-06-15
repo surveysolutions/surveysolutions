@@ -11,5 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
 
         string GetFileNameForTabByQuestionnaire(QuestionnaireIdentity identity, string pathToExportedData,
             DataExportFormat format, string statusSuffix, DateTime? fromDate = null, DateTime? toDate = null);
+
+        string GetFileNameForAssignmentTemplate(QuestionnaireIdentity identity);
     }
 }

@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         protected QuestionnaireBrowseItem(Guid questionnaireId, 
             long version, 
             string title, 
+            string variable,
             DateTime creationDate, 
             DateTime lastEntryDate, 
             Guid? createdBy, 
@@ -30,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
             this.QuestionnaireId = questionnaireId;
             this.Version = version;
             this.Title = title;
+            this.Variable = variable;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
@@ -41,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         }
 
         public QuestionnaireBrowseItem(QuestionnaireDocument doc, long version, bool allowCensusMode, long questionnaireContentVersion, bool isSupportAssignments, bool allowExportVariables)
-            : this(doc.PublicKey, version, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode, isSupportAssignments, allowExportVariables)
+            : this(doc.PublicKey, version, doc.Title, doc.VariableName, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic, allowCensusMode, isSupportAssignments, allowExportVariables)
         {
             this.FeaturedQuestions =
                 doc.Find<IQuestion>(q => q.Featured)
@@ -62,6 +64,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
         public virtual DateTime LastEntryDate { get;  set; }
 
         public virtual string Title { get;  set; }
+
+        public virtual string Variable { get;  set; }
 
         public virtual bool IsPublic { get; set; }
 
