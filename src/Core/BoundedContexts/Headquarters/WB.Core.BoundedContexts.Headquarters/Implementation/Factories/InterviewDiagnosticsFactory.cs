@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     NumberUnansweredQuestions = 0,
                     NumberCommentedQuestions = i.CommentedEntitiesCount,
                     InterviewDuration = i.InterviewDurationLong,
-                });
+                }).OrderBy(x => x.InterviewId);
             }).ToList();
         }
     }
