@@ -14,10 +14,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Factories
         public int NumberOfInterviewers { get; set; }
         public int NumberRejectionsBySupervisor { get; set; }
         public int NumberRejectionsByHq { get; set; }
-        public int NumberValidQuetions { get; set; }
-        public int NumberInvalidQuetions { get; set; }
-        public int NumberUnansweredQuetions { get; set; }
-        public int NumberCommentedQuetions { get; set; }
+        public int NumberValidQuestions { get; set; }
+        public int NumberInvalidEntities { get; set; }
+        public int NumberUnansweredQuestions { get; set; }
+        public int NumberCommentedQuestions { get; set; }
         public long? InterviewDuration { get; set; }
     }
 

@@ -40,10 +40,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("n_of_Interviewers", "Number of interviewers who worked on this interview"),
             new DoExportFileHeader("n_rejections_by_supervisor", "How many times this interview was rejected by supervisors"),
             new DoExportFileHeader("n_rejections_by_hq", "How many times this interview was rejected by HQ"),
-            //new DoExportFileHeader("n_quetions_valid", "Number of valid questions"),
-            new DoExportFileHeader("n_quetions_errors", "Number of questions with errors"),
-            //new DoExportFileHeader("n_quetions_unanswered", "Number of unanswered questions"),
-            new DoExportFileHeader("n_quetions_comments", "Number of questions with comments"),
+            //new DoExportFileHeader("n_questions_valid", "Number of valid questions"),
+            new DoExportFileHeader("n_entities_errors", "Number of questions and static texts with errors"),
+            //new DoExportFileHeader("n_questions_unanswered", "Number of unanswered questions"),
+            new DoExportFileHeader("n_questions_comments", "Number of questions with comments"),
             new DoExportFileHeader("interview_duration", "active time it took to complete the interview"),
         };
 
@@ -147,10 +147,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interview.NumberOfInterviewers.ToString(),
                     interview.NumberRejectionsBySupervisor.ToString(),
                     interview.NumberRejectionsByHq.ToString(),
-                    //interview.NumberValidQuetions.ToString(),
-                    interview.NumberInvalidQuetions.ToString(),
-                    //interview.NumberUnansweredQuetions.ToString(),
-                    interview.NumberCommentedQuetions.ToString(),
+                    //interview.NumberValidQuestions.ToString(),
+                    interview.NumberInvalidEntities.ToString(),
+                    //interview.NumberUnansweredQuestions.ToString(),
+                    interview.NumberCommentedQuestions.ToString(),
                     interview.InterviewDuration?.ToString(),
                 });
             }

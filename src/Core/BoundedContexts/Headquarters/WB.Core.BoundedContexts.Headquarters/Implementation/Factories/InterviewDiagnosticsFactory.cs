@@ -39,10 +39,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
                     NumberOfInterviewers = i.InterviewCommentedStatuses.Where(s => s.Status == InterviewExportedAction.InterviewerAssigned).Select(s => s.InterviewerId).Where(s => s != null).Distinct().Count(),
                     NumberRejectionsBySupervisor = i.InterviewCommentedStatuses.Where(s => s.Status == InterviewExportedAction.RejectedBySupervisor).Count(),
                     NumberRejectionsByHq = i.InterviewCommentedStatuses.Where(s => s.Status == InterviewExportedAction.RejectedByHeadquarter).Count(),
-                    NumberValidQuetions = 0,
-                    NumberInvalidQuetions = i.ErrorsCount,
-                    NumberUnansweredQuetions = 0,
-                    NumberCommentedQuetions = i.CommentedEntitiesCount,
+                    NumberValidQuestions = 0,
+                    NumberInvalidEntities = i.ErrorsCount,
+                    NumberUnansweredQuestions = 0,
+                    NumberCommentedQuestions = i.CommentedEntitiesCount,
                     InterviewDuration = i.InterviewDurationLong,
                 });
             }).ToList();
