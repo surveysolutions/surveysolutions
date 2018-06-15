@@ -300,17 +300,40 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             var localInterviewsToRemove = localInterviews.Where(
                 interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
 
-            var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId).ToList();
+            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
+            
+            var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
+                                                                   .Concat(obsoleteInterviews)
+                                                                   .ToList();
 
             var remoteInterviewsToCreate = remoteInterviews
-                .Where(interview => !localInterviewIds.Contains(interview.Id)).ToList();
+                .Where(interview => !localInterviewIds.Contains(interview.Id) || obsoleteInterviews.Contains(interview.Id))
+                .ToList();
 
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
+
         }
 
-        
+        private Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, 
+            IProgress<SyncProgressInfo> progress, 
+            CancellationToken cancellationToken)
+        {
+            progress.Report(new SyncProgressInfo
+            {
+                Title = InterviewerUIResources.Synchronization_CheckForObsolete_Interviews
+            });
+
+            var lastKnownEventsWithInterviewIds = localInterviewIds.Select(x => new ObsoletePackageCheck
+                {
+                    InterviewId = x,
+                    SequenceOfLastReceivedEvent = this.eventStore.GetLastEventKnownToHq(x)
+                }).Where(x => x.SequenceOfLastReceivedEvent > 0)
+                .ToList();
+            return this.synchronizationService.CheckObsoleteInterviewsAsync(lastKnownEventsWithInterviewIds, cancellationToken);
+        }
+
         private void RemoveInterviews(List<Guid> interviewIds, SynchronizationStatistics statistics,
             IProgress<SyncProgressInfo> progress)
         {
