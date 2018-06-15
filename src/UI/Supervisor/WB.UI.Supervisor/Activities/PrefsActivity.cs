@@ -3,8 +3,8 @@ using Android.App;
 using Android.OS;
 using Android.Preferences;
 using MvvmCross;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.UI.Supervisor.Services;
 using WB.UI.Supervisor.SharedPreferences;
 
 namespace WB.UI.Supervisor.Activities

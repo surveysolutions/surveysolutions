@@ -4,10 +4,10 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Supervisor.ViewModel;
 
 namespace WB.UI.Supervisor.Activities
 {
@@ -56,8 +56,8 @@ namespace WB.UI.Supervisor.Activities
             switch (item.ItemId)
             {
                 case Resource.Id.menu_settings:
-                    //Intent intent = new Intent(this, typeof(PrefsActivity));
-                    //this.StartActivity(intent);
+                    Intent intent = new Intent(this, typeof(PrefsActivity));
+                    this.StartActivity(intent);
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();

@@ -294,19 +294,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
-    <Compile Include="Services\ISupervisorSettings.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\Implementation\SupervisorPrincipal.cs" />
     <Compile Include="Services\Implementation\SupervisorSettings.cs" />
-    <Compile Include="Services\Implementation\SynchronizationService.cs" />
     <Compile Include="Services\Implementation\TabletDiagnosticService.cs" />
     <Compile Include="Services\Implementation\ViewModelNavigationService.cs" />
     <Compile Include="Services\ISupervisorPrincipal.cs" />
-    <Compile Include="Services\IInterviewerSynchronizationService.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SupervisorMvxApplication.cs" />
     <Compile Include="SupervisorApplication.cs" />
@@ -317,8 +316,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorSetup.cs" />
     <Compile Include="Activities\SplashActivity.cs" />
-    <Compile Include="ViewModel\FinishInstallationViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="Views\ApplicationSettingsView.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -329,21 +326,27 @@
     <AndroidResource Include="Resources\layout\splash.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\Login.axml">
+    <AndroidResource Include="Resources\layout\login.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\diagnostics.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
+    <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
+    <AndroidResource Include="Resources\layout\diagnostics__tabletinformation.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable\SurveyShape.xml" />
     <AndroidResource Include="Resources\drawable\SurveyTableHeader.xml" />
     <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
@@ -354,69 +357,18 @@
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\drawable\icon.png" />
-    <AndroidResource Include="Resources\drawable\login_logo.png" />
     <AndroidResource Include="Resources\drawable\capi_splash.png" />
     <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable\ic_download.png" />
-    <AndroidResource Include="Resources\drawable\ic_synchronization_fail.png" />
-    <AndroidResource Include="Resources\drawable\ic_synchronization_success.png" />
-    <AndroidResource Include="Resources\drawable\ic_upload.png" />
-    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
-    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
-    <AndroidResource Include="Resources\drawable\synchronization_fail_process_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_success_process_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_upload_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_download_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
-    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_sync_icon.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_sync_icon_small.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_layout_border.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_default.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_remove_icon_pressed.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml" />
-    <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\drawable\borderless_button.xml" />
-    <AndroidResource Include="Resources\drawable\filepicker_file.png" />
-    <AndroidResource Include="Resources\drawable\filepicker_folder.png" />
-    <AndroidResource Include="Resources\drawable\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\drawable\filepicker_previous.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_folder.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\filepicker_previous.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_file.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_folder.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
-    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
     <AndroidResource Include="Resources\values-small\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values-large\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_expand_handle.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_rejected.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_completed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_inprogress.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_new.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj">
@@ -475,32 +427,7 @@
     <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\back_arrow.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\Colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
@@ -516,9 +443,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\login.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\menu\diagnostics.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -530,22 +454,25 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\menu\relink.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\menu\settings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\menu\troubleshooting.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\drawable-v21\" />
+    <Folder Include="Resources\drawable-xxxhdpi\" />
+    <Folder Include="ViewModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\login_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\login.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
