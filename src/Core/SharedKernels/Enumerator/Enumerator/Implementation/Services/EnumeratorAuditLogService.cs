@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public abstract class EnumeratorAuditLogService : IAuditLogService
+    public class EnumeratorAuditLogService : IAuditLogService
     {
         private readonly IPlainStorage<AuditLogRecordView, int?> auditLogStorage;
         private readonly IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage;
@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private const string AuditLogSettingsKey = "settings";
 
-        protected EnumeratorAuditLogService(IPlainStorage<AuditLogRecordView, int?> auditLogStorage,
+        public EnumeratorAuditLogService(IPlainStorage<AuditLogRecordView, int?> auditLogStorage,
             IPlainStorage<AuditLogSettingsView> auditLogSettingsStorage,
             ISerializer serializer,
             ILogger logger,
