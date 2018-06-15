@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using NLog;
@@ -34,8 +33,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
-
-                Thread.Sleep(new TimeSpan(0, 0, 5, 0));
 
                 status.Message = Modules.MigrateDb;
                 DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
