@@ -408,9 +408,12 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerPrincipal principal = null,
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
-            IHttpStatistician httpStatistician = null)
+            IHttpStatistician httpStatistician = null,
+            IInterviewerEventStorage interviewerEventStorage = null,
+            IEventBus eventBus = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
+
             return new SynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
@@ -418,7 +421,9 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>() &&
+                                                                                        x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>() 
+                                                                                        ),
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
@@ -434,8 +439,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
-                Mock.Of<IEventBus>(),
-                Mock.Of<IInterviewerEventStorage>());
+                eventBus ?? Mock.Of<IEventBus>(),
+                interviewerEventStorage ?? Mock.Of<IInterviewerEventStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
