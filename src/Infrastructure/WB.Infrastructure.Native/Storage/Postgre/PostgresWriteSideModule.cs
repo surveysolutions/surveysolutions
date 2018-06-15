@@ -39,7 +39,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
             catch (Exception exc)
             {
-                LogManager.GetLogger("maigration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
+                LogManager.GetLogger("migration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
 
