@@ -9,10 +9,10 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public  InterviewStatus? PreviousStatus { get; private set; }
         public InterviewStatus Status { get; private set; }
         public string Comment { get; private set; }
-        public DateTime? UtcTime { get; private set; }
+        public DateTime? UtcTime { get; set; }
 
         public InterviewStatusChanged(InterviewStatus status, string comment, DateTimeOffset originDate, 
-            InterviewStatus? previousStatus = null, DateTime? utcTime = null) : base (originDate)
+            InterviewStatus? previousStatus = null) : base (originDate)
         {
             this.PreviousStatus = previousStatus;
             this.Status = status;
@@ -20,10 +20,6 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
             if (originDate != default(DateTimeOffset))
                 this.UtcTime = originDate.UtcDateTime;
-            else if (utcTime != null && utcTime != default(DateTime))
-            {
-                this.UtcTime = utcTime;
-            }
         }
     }
 }

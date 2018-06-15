@@ -8,8 +8,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public Tuple<decimal, string>[] Answers { get; private set; }
 
         public TextListQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
-            DateTimeOffset originDate, Tuple<decimal, string>[] answers, DateTime? answerTimeUtc = null)
-            : base(userId, questionId, rosterVector, originDate, answerTimeUtc)
+            DateTimeOffset originDate, Tuple<decimal, string>[] answers)
+            : base(userId, questionId, rosterVector, originDate)
         {
             this.Answers = answers;
         }
