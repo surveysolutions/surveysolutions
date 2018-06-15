@@ -210,6 +210,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Storage
             return new List<CommittedEvent>();
         }
 
+        public int GetLastEventKnownToHq(Guid interviewId)
+        {
+            var connection = this.GetOrCreateConnection(interviewId);
+            using (connection.Lock())
+            {
+                var lastKnownEvent = connection.Table<EventView>()
+                    .Where(eventView => eventView.EventSourceId == interviewId && eventView.ExistsOnHq == 1)
+                    .OrderByDescending(e => e.EventSequence)
+                    .FirstOrDefault();
+                return lastKnownEvent?.EventSequence ?? 0;
+            }
+        }
+
         public void Dispose()
         {
             this.DisposeEventStoreInSingleFile();

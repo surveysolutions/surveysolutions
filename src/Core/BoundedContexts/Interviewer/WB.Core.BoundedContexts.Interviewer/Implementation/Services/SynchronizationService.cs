@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly string interviewsController = string.Concat(interviewerApiUrl, "v2", "/interviews");
         private readonly string interviewDetailsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
         private readonly string interviewUploadController = string.Concat(interviewerApiUrl, "v3", "/interviews");
+        private readonly string interviewObsoleteCheck = string.Concat(interviewerApiUrl, "v3", "/interviews/CheckObsoleteInterviews");
         
         private readonly string questionnairesController = string.Concat(interviewerApiUrl, apiVersion, "/questionnaires");
         private readonly string assignmentsController = string.Concat(interviewerApiUrl, apiVersion, "/assignments");
@@ -104,8 +105,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 credentials: credentials ?? this.restCredentials, token: token));
         }
 
-
-
         public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
@@ -122,6 +121,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.auditLogController}",
                 request: entities,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
+
+        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<List<Guid>>(
+                url: this.interviewObsoleteCheck,
+                request: checks,
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }
