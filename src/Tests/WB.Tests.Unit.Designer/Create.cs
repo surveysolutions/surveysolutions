@@ -627,7 +627,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IComposite[] children)
-            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X");
+            => Create.QuestionnaireDocument(id: id, children: children, title: "Questionnaire X", variable: "questionnaire");
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = null, string expression = "2*2", string label = null)
         {
@@ -640,11 +640,18 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireDocument QuestionnaireDocument(
             Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
         {
+            return QuestionnaireDocument("questionnaire", id, title, children, userId);
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocument(
+            string variable, Guid? id = null, string title = null, IEnumerable<IComposite> children = null, Guid? userId = null)
+        {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>()),
                 Title = title,
+                VariableName = variable,
                 CreatedBy = userId ?? Guid.NewGuid()
             };
         }
@@ -676,6 +683,7 @@ namespace WB.Tests.Unit.Designer
             var result = new QuestionnaireDocument
             {
                 Title = "Q",
+                VariableName = "Q",
                 PublicKey = questionnaireId ?? Guid.NewGuid(),
                 Children = new IComposite[]
                 {
@@ -1158,9 +1166,9 @@ namespace WB.Tests.Unit.Designer
                 return new AddVariable(questionnaireId, entityId, new VariableData(variableType, name, expression, label), responsibleId, parentId, index);
             }
 
-            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", bool isPublic = false, bool isResponsibleAdmin = false)
+            public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false)
             {
-                return new UpdateQuestionnaire(questionnaireId, title, isPublic, responsibleId, isResponsibleAdmin);
+                return new UpdateQuestionnaire(questionnaireId, title, variable, isPublic, responsibleId, isResponsibleAdmin);
             }
             public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
             {
@@ -1303,8 +1311,8 @@ namespace WB.Tests.Unit.Designer
             return new DeskAuthenticationService(new DeskSettings(multipassKey, returnUrlFormat, siteKey));
         }
 
-        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false)
-            => new UpdateQuestionnaire(Guid.NewGuid(), title, isPublic, responsibleId, isResponsibleAdmin);
+        public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire")
+            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, isPublic, responsibleId, isResponsibleAdmin);
 
         public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
             => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, sharedPersons);

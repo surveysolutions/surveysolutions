@@ -218,6 +218,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(command.Title);
 
             this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(command.Title);
+            this.innerDocument.VariableName = System.Web.HttpUtility.HtmlDecode(command.Variable);
             this.innerDocument.IsPublic = command.IsPublic;
         }
 
