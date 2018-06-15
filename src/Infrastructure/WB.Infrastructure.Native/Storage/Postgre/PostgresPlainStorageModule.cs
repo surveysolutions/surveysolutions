@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
 using NHibernate;
@@ -63,6 +64,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
+
+                Thread.Sleep(new TimeSpan(0, 0, 5, 0));
 
                 status.Message = Modules.MigrateDb;
                 DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
