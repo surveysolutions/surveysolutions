@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
@@ -33,6 +34,7 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
@@ -73,7 +75,7 @@ namespace WB.UI.Interviewer
         {
             base.FillValueConverters(registry);
 
-            registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
+            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
             registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
             registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
             registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
@@ -119,7 +121,11 @@ namespace WB.UI.Interviewer
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
 
-            builder.RegisterType<InterviewerSettings>().As<IEnumeratorSettings>().As<IRestServiceSettings>().As<IInterviewerSettings>()
+            builder.RegisterType<InterviewerSettings>()
+                .As<IEnumeratorSettings>()
+                .As<IRestServiceSettings>()
+                .As<IInterviewerSettings>()
+                .As<IDeviceSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 

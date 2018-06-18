@@ -6,9 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
 using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -19,6 +16,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
@@ -35,7 +33,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IAuditLogSynchronizer auditLogSynchronizer;
         private readonly ILiteEventBus eventBus;
-        private readonly IInterviewerEventStorage eventStore;
+        private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -70,7 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
-            IInterviewerEventStorage eventStore) : base(synchronizationService, logger,
+            IEnumeratorEventStorage eventStore) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
             interviewViewRepository, auditLogService)
         {
