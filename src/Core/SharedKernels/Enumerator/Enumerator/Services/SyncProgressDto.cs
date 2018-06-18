@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public class SyncProgressDto
     {
