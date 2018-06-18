@@ -210,6 +210,9 @@
   <data name="StaySignedIn" xml:space="preserve">
     <value>Stay logged in for a day</value>
   </data>
+  <data name="ShowPassword" xml:space="preserve">
+    <value>Show Password</value>
+  </data>
   <data name="TesterApp" xml:space="preserve">
     <value>Install Survey Solutions Questionnaire Tester on an Android tablet to test questionnaires you develop on Designer.</value>
   </data>

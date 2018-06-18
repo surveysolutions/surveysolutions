@@ -1109,6 +1109,6 @@
     <value>Comment cannot contain more than {1} characters</value>
   </data>
   <data name="IsWarning" xml:space="preserve">
-    <value>Is warning</value>
+    <value>Warning</value>
   </data>
 </root>

@@ -13,7 +13,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
-    internal class CommandService : ICommandService
+    public class CommandService : ICommandService
     {
         private readonly IEventSourcedAggregateRootRepository eventSourcedRepository;
         private readonly IPlainAggregateRootRepository plainRepository;

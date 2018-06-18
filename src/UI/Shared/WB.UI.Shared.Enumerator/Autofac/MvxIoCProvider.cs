@@ -25,6 +25,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Autofac;
@@ -58,6 +59,11 @@ namespace WB.UI.Shared.Enumerator.Autofac
                 throw new ArgumentNullException("container");
 
             _container = container;
+        }
+
+        public object IoCConstruct(Type type, params object[] arguments)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -250,6 +256,31 @@ namespace WB.UI.Shared.Enumerator.Autofac
         public T IoCConstruct<T>() where T : class
         {
             return (T)IoCConstruct(typeof(T));
+        }
+
+        public T IoCConstruct<T>(IDictionary<string, object> arguments) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T IoCConstruct<T>(object arguments) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public T IoCConstruct<T>(params object[] arguments) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public object IoCConstruct(Type type, IDictionary<string, object> arguments)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object IoCConstruct(Type type, object arguments)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
