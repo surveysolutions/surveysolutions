@@ -1913,13 +1913,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             {
                 this.ApplyEvent(new InterviewerAssigned(userId, interviewerId.Value, originDate));
             }
-
-            //why we apply events and raise new events with old dates?
             
             foreach (var commentedAnswer in commentedAnswers)
             {
                 this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId,
-                    commentedAnswer.RosterVector, originDate, commentedAnswer.Text/*, commentedAnswer.Date*/));
+                    commentedAnswer.RosterVector, originDate, commentedAnswer.Text));
             }
         }
 
