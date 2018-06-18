@@ -2,9 +2,10 @@ using System;
 using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
@@ -26,49 +27,49 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public SynchronizationStatistics Statistics
         {
             get => statistics;
-            set => this.RaiseAndSetIfChanged(ref this.statistics, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.statistics, value);
         }
 
         public SynchronizationStatus Status
         {
             get => this.status;
-            set => this.RaiseAndSetIfChanged(ref this.status, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.status, value);
         }
 
         public bool SynchronizationErrorOccured
         {
             get => this.synchronizationErrorOccured;
-            set => this.RaiseAndSetIfChanged(ref this.synchronizationErrorOccured, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.synchronizationErrorOccured, value);
         }
 
         public bool IsSynchronizationInfoShowed
         {
             get => this.isSynchronizationInfoShowed;
-            set => this.RaiseAndSetIfChanged(ref this.isSynchronizationInfoShowed, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isSynchronizationInfoShowed, value);
         }
 
         public bool IsSynchronizationInProgress
         {
             get => this.isSynchronizationInProgress;
-            set => this.RaiseAndSetIfChanged(ref this.isSynchronizationInProgress, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isSynchronizationInProgress, value);
         }
 
         public bool HasUserAnotherDevice
         {
             get => this.hasUserAnotherDevice;
-            set => this.RaiseAndSetIfChanged(ref this.hasUserAnotherDevice, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.hasUserAnotherDevice, value);
         }
 
         public string ProcessOperation
         {
             get => this.processOperation;
-            set => this.RaiseAndSetIfChanged(ref this.processOperation, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.processOperation, value);
         }
 
         public string ProcessOperationDescription
         {
             get => this.processOperationDescription;
-            set => this.RaiseAndSetIfChanged(ref this.processOperationDescription, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.processOperationDescription, value);
         }
 
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);

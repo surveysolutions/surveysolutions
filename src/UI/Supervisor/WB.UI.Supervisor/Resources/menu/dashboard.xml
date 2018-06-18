@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/menu">
+  <item
+      android:id="@+id/menu_synchronization"
+      local:showAsAction="always"
+      android:icon="@drawable/dashboard_sync_icon"/>
+  <item
+      android:id="@+id/menu_settings"
+      local:showAsAction="never" />
+  <item
+      android:id="@+id/menu_diagnostics"
+      local:showAsAction="never" />
+  <item
+      android:id="@+id/menu_signout"
+      local:showAsAction="never" />
+</menu>

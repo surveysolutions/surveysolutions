@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {

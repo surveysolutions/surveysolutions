@@ -2,6 +2,7 @@
 using System.Globalization;
 using MvvmCross.Converters;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 
 namespace WB.UI.Interviewer.Converters
