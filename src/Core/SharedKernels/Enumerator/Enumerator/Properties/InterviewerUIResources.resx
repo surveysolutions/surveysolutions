@@ -747,4 +747,7 @@ Downloaded {3}%</value>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Exit Search</value>
   </data>
+    <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Check for obsolete interviews</value>
+  </data>
 </root>

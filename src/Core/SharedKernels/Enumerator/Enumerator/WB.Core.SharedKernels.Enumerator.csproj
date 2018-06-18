@@ -11,10 +11,9 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.1" />
     <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.1.1" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.0.1" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
@@ -32,9 +31,6 @@
   <ItemGroup>
     <Reference Include="Humanizer">
       <HintPath>..\..\..\..\..\packages\Humanizer.Core.2.2.0\lib\netstandard1.0\Humanizer.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmCross.Plugin.WebBrowser">
-      <HintPath>..\..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.6.0.1\lib\monoandroid81\MvvmCross.Plugin.WebBrowser.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

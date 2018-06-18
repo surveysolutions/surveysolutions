@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -18,10 +20,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
-        private readonly string interviewsController = string.Concat(interviewerApiUrl, "v2", "/interviews");
-        private readonly string interviewDetailsController = string.Concat(interviewerApiUrl, "v3", "/interviews");
-        private readonly string interviewUploadController = string.Concat(interviewerApiUrl, "v3", "/interviews");
-        private readonly string interviewObsoleteCheck = string.Concat(interviewerApiUrl, "v3", "/interviews/CheckObsoleteInterviews");
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             IInterviewerSettings interviewerSettings, ISyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -37,14 +35,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
-        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<List<Guid>>(
-                url: this.interviewObsoleteCheck,
-                request: checks,
-                credentials: this.restCredentials,
-                token: cancellationToken));
-        }
-
     }
 }
