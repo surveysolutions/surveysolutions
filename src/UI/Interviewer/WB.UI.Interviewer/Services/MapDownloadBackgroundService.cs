@@ -7,6 +7,7 @@ using MvvmCross;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Services
 {

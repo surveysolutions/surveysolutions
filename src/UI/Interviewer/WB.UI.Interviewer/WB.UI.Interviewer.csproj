@@ -326,9 +326,6 @@
     <Compile Include="Services\MapDownloadBackgroundService.cs" />
     <Compile Include="Services\MapDownloadBackgroundServiceBinder.cs" />
     <Compile Include="Services\MapDownloadServiceConnection.cs" />
-    <Compile Include="Services\SyncServiceConnection.cs" />
-    <Compile Include="Services\SyncBgService.cs" />
-    <Compile Include="Services\SyncServiceBinder.cs" />
     <Compile Include="Settings\AndroidDeviceOrientation.cs" />
     <Compile Include="Settings\AndroidBattery.cs" />
     <Compile Include="Settings\GsmSignalStrengthListener.cs" />
