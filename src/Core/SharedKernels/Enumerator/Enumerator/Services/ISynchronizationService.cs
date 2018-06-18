@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -34,7 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId);
 
-        Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+        Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
+
         Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
@@ -53,5 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
         Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);
+        Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken);
     }
 }

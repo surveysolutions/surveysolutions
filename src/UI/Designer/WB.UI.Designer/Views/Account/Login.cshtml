@@ -39,13 +39,19 @@
         @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
     </div>
 
+    <div>
+        <input class="wb-checkbox" id="ShowPassword" type="checkbox" onclick='var pass = document.getElementById("Password"); pass.type = pass.type === "text" ? "password" :"text" ;'>
+        <label for="ShowPassword" style="margin-bottom: 0;">
+            <span></span>@AccountResources.ShowPassword
+        </label>
+    </div>
     <div class="form-group">
         @Html.CheckBoxFor(x => x.StaySignedIn, new { @class = "wb-checkbox", placeholder = AccountResources.StaySignedIn })
 
-        <label for="StaySignedIn">
+        <label for="StaySignedIn" >
             <span></span>@AccountResources.StaySignedIn
         </label>
-        
+
         <br>
     </div>
 
@@ -56,7 +62,7 @@
         </div>
     }
     <div class="form-actions">
-        <input class="btn btn-success btn-lg" type="submit" value="@AccountResources.Login"/>
+        <input class="btn btn-success btn-lg" type="submit" value="@AccountResources.Login" />
         <a class="btn btn-link" href="@Url.Action("PasswordReset", "Account")">@AccountResources.ForgotPassword</a>
     </div>
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
