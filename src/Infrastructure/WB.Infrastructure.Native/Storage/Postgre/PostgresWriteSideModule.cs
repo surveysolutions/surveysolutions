@@ -22,8 +22,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<IStreamableEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
-            registry.BindToMethod<IEventStore>(context => context.Get<IStreamableEventStore>());
+            registry.BindAsSingletonWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindToMethod<IEventStore>(context => context.Get<IHeadquartersEventStore>());
         }
 
         public Task Init(IServiceLocator serviceLocator)

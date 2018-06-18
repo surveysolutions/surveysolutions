@@ -33,7 +33,7 @@ using BindingFlags = System.Reflection.BindingFlags;
 namespace WB.UI.Shared.Enumerator
 {
     public abstract class EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
-        where TApplication : IMvxApplication, new()
+        where TApplication : class, IMvxApplication, new()
     {
         protected EnumeratorSetup()
         {

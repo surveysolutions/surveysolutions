@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
@@ -146,6 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.Name.Dispose();
+            this.InterviewState.DisposeIfDisposable();
         }
     }
 }

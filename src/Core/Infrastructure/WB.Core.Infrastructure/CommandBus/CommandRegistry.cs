@@ -341,7 +341,28 @@ namespace WB.Core.Infrastructure.CommandBus
 
             configurer.Invoke(configuration);
 
-            Handlers[typeof(TCommand).Name].AppendValidators(configuration.GetValidators());
+            var commandType = typeof(TCommand);
+            var commandName = commandType.Name;
+            if (Handlers.ContainsKey(commandName))
+            {
+                Handlers[commandName].AppendValidators(configuration.GetValidators());
+            }
+            else
+            {
+                foreach (var handlersKey in Handlers.Keys)
+                {
+                    var commandDescriptor = Handlers[handlersKey];
+                    var registeredExistingCommand = commandDescriptor.Handler.Target.GetType().GetGenericArguments().FirstOrDefault();
+                    if(registeredExistingCommand != null)
+                    {
+                        if(!configuration.GetSkipCommands().Contains(registeredExistingCommand) &&
+                           commandType.IsAssignableFrom(registeredExistingCommand))
+                        {
+                            commandDescriptor.AppendValidators(configuration.GetValidators());
+                        }
+                    }
+                }
+            }
         }
     }
 }

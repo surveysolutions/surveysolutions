@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using SQLite;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
@@ -9,7 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public Guid EventId { get; set; }
 
         [Unique(Name = "Unique AR sequence")]
-        [Indexed]
         public Guid EventSourceId { get; set; }
 
         [Unique(Name = "Unique AR sequence")]
@@ -22,5 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string JsonEvent { get; set; }
 
         public string EventType { get; set; }
+
+        public int? ExistsOnHq { get; set; } // library does not support good way of handling default values and bools https://github.com/praeclarum/sqlite-net/issues/326
     }
 }
