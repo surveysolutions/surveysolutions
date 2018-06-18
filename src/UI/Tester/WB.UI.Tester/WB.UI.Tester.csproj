@@ -365,6 +365,9 @@
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\refresh.xml" />
+  </ItemGroup>
   <Choose>
     <When Condition="!$(DefineConstants.Contains('EXCLUDEEXTENSIONS'))">
       <ItemGroup>
