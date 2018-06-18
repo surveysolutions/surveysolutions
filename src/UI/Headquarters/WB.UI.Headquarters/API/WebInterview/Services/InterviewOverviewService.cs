@@ -6,26 +6,19 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
-using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services.Overview;
-
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
-        private readonly IWebInterviewInterviewEntityFactory entityFactory;
-
-        public InterviewOverviewService(IWebInterviewInterviewEntityFactory entityFactory)
-        {
-            this.entityFactory = entityFactory;
-        }
-
         public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview)
         {
             var interviewEntities = interview.GetUnderlyingInterviewerEntities();
             var sections = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
-            return interviewEntities.Select(x => BuildOverviewNode(x, interview, sections));
+            return interviewEntities
+                .Where(interview.IsEnabled)
+                .Select(x => BuildOverviewNode(x, interview, sections));
         }
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
@@ -66,20 +59,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     return new OverviewWebGroupNode(roster)
                     {
                         Id = roster.Identity.ToString(),
-                        Title = roster.Title.Text  + " - " + roster.RosterTitle,
-                        Status = this.entityFactory.CalculateSimpleStatus(roster, true)
+                        Title = roster.Title.Text,
+                        RosterTitle = roster.RosterTitle
                     };
                 }
 
                 return new OverviewWebGroupNode(group)
                 {
                     Id = group.Identity.ToString(),
-                    Status = this.entityFactory.CalculateSimpleStatus(group, true),
                     Title = group.Title.Text
                 };
             }
 
-            throw new NotSupportedException($"Display of {interviewerEntityIdentity} entity is not supported");
+            throw new NotSupportedException($@"Display of {interviewerEntityIdentity} entity is not supported");
         }
     }
 }
