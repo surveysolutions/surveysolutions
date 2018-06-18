@@ -36,13 +36,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             
             if (question != null)
             {
-                return new OverviewWebQuestionNode(question);
+                return new OverviewWebQuestionNode(question, interview);
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
             if (staticText != null)
             {
-                return new OverviewStaticText(staticText)
+                return new OverviewStaticText(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
                     Title = staticText.Title.Text
