@@ -58,7 +58,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             if (GetItem() is IDashboardViewItem dashboardItem)
             {
-                var popup = new PopupMenu(this.DashboardItem.Context, this.MenuHandle);
+                var popup = new PopupMenu(this.DashboardItem.Context, this.MenuHandle, GravityFlags.Left);
 
                 foreach (var action in dashboardItem.ContextMenu.Where(a => a.Command.CanExecute()))
                 {
@@ -72,7 +72,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     action.Command.Execute();
                 };
 
-                popup.Gravity = GravityFlags.Left;
                 popup.Show();
             }
         }

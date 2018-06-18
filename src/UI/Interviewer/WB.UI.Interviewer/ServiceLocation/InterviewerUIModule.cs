@@ -11,13 +11,18 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Implementation.Storage;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
@@ -46,6 +51,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
 
             registry.Bind<ISynchronizationService, SynchronizationService>();
+            registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
             registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
@@ -66,6 +72,9 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IMapService, MapService>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
+
+
+            registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 
             registry.Bind<LoginViewModel>();
             registry.Bind<PrefilledQuestionsViewModel>();

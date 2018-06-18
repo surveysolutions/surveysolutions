@@ -1015,7 +1015,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is warning.
+        ///   Looks up a localized string similar to Warning.
         /// </summary>
         public static string IsWarning {
             get {

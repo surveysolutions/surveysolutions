@@ -11,9 +11,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly ILogger logger;
+        private readonly IExecutedCommandsStorage executedCommandsStorage;
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IFriendlyErrorMessageService friendlyErrorMessageService;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -49,6 +50,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
+            IExecutedCommandsStorage executedCommandsStorage,
             IAttachmentContentStorage attachmentContentStorage, 
             IQuestionnaireStorage questionnaireRepository)
         {
@@ -60,6 +62,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.friendlyErrorMessageService = friendlyErrorMessageService;
             this.userInteractionService = userInteractionService;
             this.logger = logger;
+            this.executedCommandsStorage = executedCommandsStorage;
             this.attachmentContentStorage = attachmentContentStorage;
             this.questionnaireRepository = questionnaireRepository;
         }
@@ -98,14 +101,20 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
 
                     var interviewId = Guid.NewGuid();
-                    InterviewSynchronizationDto synchronizationDto = interview.GetSynchronizationDto();
-                    var createInterviewCommand = new CreateInterviewFromSnapshotCommand(
-                        interviewId: interviewId,
-                        userId: this.principal.CurrentUserIdentity.UserId,
-                        sycnhronizedInterview: synchronizationDto);
-                    await this.commandService.ExecuteAsync(createInterviewCommand, null, cancellationToken);
+                    
+                    var existingInterviewCommands = this.executedCommandsStorage.Get(interview.Id);
+                    foreach (var existingInterviewCommand in existingInterviewCommands)
+                    {
+                        if (existingInterviewCommand is CreateInterview createCommand)
+                        {
+                            createCommand.QuestionnaireId = questionnaireIdentity;
+                        }
+                        existingInterviewCommand.InterviewId = interviewId;
+                        await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
+                    }
 
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
+                    this.executedCommandsStorage.Clear(interview.Id);
                 }
                 catch (Exception e)
                 {

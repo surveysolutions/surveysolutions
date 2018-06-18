@@ -14,5 +14,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite
         bool IsSubscribed(ILiteEventHandler handler);
 
         IReadOnlyCollection<Action<object>> GetHandlers(CommittedEvent @event);
+
+        void RemoveAggregateRoot(string aggregateRootId);
     }
 }

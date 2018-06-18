@@ -1,4 +1,4 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Services;
+﻿using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Services
 {
