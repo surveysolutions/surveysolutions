@@ -606,4 +606,12 @@
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>
+    <data name="Interview_Overview" xml:space="preserve">
+    <value>Обзор</value>
+    <comment>Обзор</comment>
+  </data>
+    <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Обзор</value>
+    <comment>Обзор</comment>
+  </data>
 </root>
