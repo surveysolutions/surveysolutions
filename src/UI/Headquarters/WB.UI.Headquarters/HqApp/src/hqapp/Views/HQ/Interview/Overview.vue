@@ -1,5 +1,5 @@
 <template>
-    <div :class="sectionClass">
+    <div>
         <div v-if="currentSection" ref="breadcrumb" class="unit-title break-line" style="position: fixed; width: 100%">
             <ol class="breadcrumb">
                 <li v-for="breadcrumb in currentSection.breadcrumbs" :key="breadcrumb.target">
@@ -10,7 +10,7 @@
             <h3>{{currentSection.Title}}</h3>
         </div>
 
-        <OverviewItem v-for="item in itemsList" :key="item.id" :item="item" @mount="registerItemToStick" />
+        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
 
         <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler" :distance="1000">
             <span slot="no-more"></span>
@@ -20,9 +20,9 @@
 </template>
 
 <script>
+
 import InfiniteLoading from "vue-infinite-loading";
 import OverviewItem from "./components/OverviewItem";
-import { GroupStatus } from "./index"
 
 export default {
     components: { InfiniteLoading, OverviewItem },
@@ -30,7 +30,7 @@ export default {
     data() {
         return {
             loaded: 100,
-            items: [],
+            sticked: [],
             scroll: 0,
             scrollable: null
         };
@@ -50,35 +50,22 @@ export default {
             return this.$store.state.review.overview;
         },
 
-        itemsList() {
+        items() {
             return _.slice(this.overview.entities, 0, this.loaded);
         },
 
         currentSection() {
-            if (this.items.length == 0) return null;
+            if (this.sticked.length == 0) return null;
 
             const index = _.sortedIndexBy(
-                this.items,
+                this.sticked,
                 { top: this.scroll + this.breadcrumbsOffset() },
                 it => it.top
             );
 
-            const item = this.items[index > 0 ? index - 1 : index];
+            const item = this.sticked[index > 0 ? index - 1 : index];
             return item.item;
-        },
-
-        sectionClass() {
-            if (this.info) {
-                return [
-                    {
-                        "complete-section":
-                            this.currentSection.status == 3 /* GroupStatus.Completed */ && !this.hasError,
-                        "section-with-error": this.hasError
-                    }
-                ];
-            }
-            return [];
-        }
+        }      
     },
 
     watch: {
@@ -93,7 +80,7 @@ export default {
         breadcrumbsOffset() {
             const el = this.$refs.breadcrumb;
             if (el == null) return 0;
-            //console.log("breadcrumbsOffset", el.offsetTop, el.clientHeight)
+
             return el.offsetTop + el.clientHeight;
         },
 
@@ -109,7 +96,6 @@ export default {
         },
 
         handleScroll(args, a, b, c) {
-            //console.log("handleScroll", window.scrollY);
             this.scroll = window.scrollY;
         },
 
@@ -117,8 +103,8 @@ export default {
             const item = arg.item;
             const top = arg.el.offsetTop;
 
-            const index = _.sortedIndexBy(this.items, { top }, it => it.top);
-            this.items.splice(index, 0, { top, item });
+            const index = _.sortedIndexBy(this.sticked, { top }, it => it.top);
+            this.sticked.splice(index, 0, { top, item });
         }
     }
 };
