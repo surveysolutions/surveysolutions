@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -31,7 +32,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
         protected string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
-        
+        private string InterviewDetailsController => string.Concat(ApiUrl, "v3", "/interviews");
+        private string InterviewUploadController => string.Concat(ApiUrl, "v3", "/interviews");
+        private string InterviewObsoleteCheck => string.Concat(ApiUrl, "v3", "/interviews/CheckObsoleteInterviews");
+
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
         protected string TranslationsController => string.Concat(ApplicationUrl, "/translations");
@@ -117,6 +121,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: cancellationToken));
         }
 
+        public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<List<Guid>>(
+                url: this.InterviewObsoleteCheck,
+                request: checks,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
+
         #endregion
 
         #region AssignmentsApi
@@ -149,24 +162,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            try
-            {
-                string url = string.Concat(ApiUrl, "compatibility/", this.deviceSettings.GetDeviceId(), "/",
-                    this.syncProtocolVersionProvider.GetProtocolVersion());
+            string url = string.Concat(ApiUrl, "compatibility/", this.deviceSettings.GetDeviceId(), "/",
+                this.syncProtocolVersionProvider.GetProtocolVersion());
 
-                var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
-                    url: url, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
+            var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
+                url: url, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
 
-                if (response == null || response.Trim('"') != "449634775")
-                {
-                    throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
-                }
-            }
-            catch (SynchronizationException ex)
+            if (response == null || response.Trim('"') != "449634775")
             {
-                if ((ex.InnerException as RestException)?.StatusCode == HttpStatusCode.NotFound)
-                    await this.OldCanSynchronizeAsync(credentials, token).ConfigureAwait(false);
-                else throw;
+                throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
             }
         }
 
@@ -195,14 +199,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 request: exception,
                 credentials: this.restCredentials,
                 token: token));
-        }
-
-        [Obsolete("Since v5.10")]
-        private Task OldCanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync(
-                url: string.Concat(this.DevicesController, "/current/" + this.deviceSettings.GetDeviceId(), "/", this.syncProtocolVersionProvider.GetProtocolVersion()),
-                credentials: credentials ?? this.restCredentials, token: token));
         }
 
         public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
@@ -312,13 +308,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 credentials: this.restCredentials));
         }
 
-        public Task<InterviewerInterviewApiView> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             try
             {
                 return this.TryGetRestResponseOrThrowAsync(
-                    () => this.restService.GetAsync<InterviewerInterviewApiView>(
-                        url: string.Concat(this.InterviewsController, "/", interviewId),
+                    () =>  this.restService.GetAsync<List<CommittedEvent>>(
+                        url: string.Concat(this.InterviewDetailsController, "/", interviewId),
                         credentials: this.restCredentials,
                         onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                         token: token));
@@ -327,7 +323,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
                 if (httpStatusCode == HttpStatusCode.NotFound)
-                    return Task.FromResult<InterviewerInterviewApiView>(null);
+                    return Task.FromResult<List<CommittedEvent>>(null);
 
                 this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
                 throw;
@@ -337,7 +333,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: string.Concat(this.InterviewsController, "/", interviewId),
+                url: string.Concat(this.InterviewUploadController, "/", interviewId),
                 request: completedInterview,
                 credentials: this.restCredentials,
                 token: token));

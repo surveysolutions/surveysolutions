@@ -759,4 +759,7 @@
     <value>Загрузка на хедквотер аудин информации</value>
     <comment>Загрузка на хедквотер аудин информации</comment>
   </data>
+    <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Проверка устаревших интервью</value>
+  </data>
 </root>

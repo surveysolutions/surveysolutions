@@ -409,7 +409,7 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null,
-            IInterviewerEventStorage interviewerEventStorage = null,
+            IEnumeratorEventStorage interviewerEventStorage = null,
             IEventBus eventBus = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
@@ -440,7 +440,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                interviewerEventStorage ?? Mock.Of<IInterviewerEventStorage>());
+                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
