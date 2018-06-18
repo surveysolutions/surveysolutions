@@ -353,6 +353,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Supervisor</value>
+  </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>To complete screen</value>
   </data>

@@ -599,4 +599,8 @@
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} из {1} опций выбрано</value>
   </data>
+    <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Supervisor</value>
+    <comment>Survey Solutions Supervisor</comment>
+  </data>
 </root>

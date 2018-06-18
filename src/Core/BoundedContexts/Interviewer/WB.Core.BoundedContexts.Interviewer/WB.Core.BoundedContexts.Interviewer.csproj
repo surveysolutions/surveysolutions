@@ -25,49 +25,7 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.es.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.fr.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.id-ID.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.km.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.pt.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.ru.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-	<EmbeddedResource Update="Properties\InterviewerUIResources.ro.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.th-TH.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.uk-UA.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.vi-VN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.zh-CN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
+    <Folder Include="Implementation\AuditLog\" />
+    <Folder Include="Implementation\Storage\" />
   </ItemGroup>
 </Project>

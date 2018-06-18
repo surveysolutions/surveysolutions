@@ -41,6 +41,11 @@ namespace WB.UI.Shared.Enumerator.Services
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
         public abstract Task NavigateToLoginAsync();
+        public abstract Task NavigateToFinishInstallationAsync();
+
+        public abstract Task NavigateToMapsAsync();
+
+
         public abstract Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();

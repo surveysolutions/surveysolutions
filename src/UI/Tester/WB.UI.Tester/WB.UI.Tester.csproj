@@ -132,6 +132,9 @@
     <Reference Include="MvvmCross.Plugin.Visibility, Version=6.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.6.1.1\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
     </Reference>
+    <Reference Include="MvvmCross.Plugin.WebBrowser, Version=6.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.6.0.1\lib\monoandroid81\MvvmCross.Plugin.WebBrowser.dll</HintPath>
+    </Reference>
     <Reference Include="MWBarcodeScanner, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\libs\android\MWBarcodeScanner.dll</HintPath>
