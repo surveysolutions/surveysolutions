@@ -133,8 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
                 else
                 {
-                    var rosterIndexAjustment = dataByLevel.ScopeVectors
-                        .SelectMany(x => x.Key)
+                    var rosterIndexAjustment = headerStructureForLevel.LevelScopeVector
                         .Select(x => (questionnaire.IsQuestion(x) && questionnaire.IsQuestionInteger(x)) ? 1 : 0)
                         .ToArray();
                     

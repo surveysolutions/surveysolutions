@@ -121,7 +121,7 @@ namespace WB.UI.Designer.Controllers
                 byte[] content = this.fileSystemAccessor.ReadAllBytes(pdfGenerationProgress.FilePath);
 
                 this.fileSystemAccessor.DeleteFile(pdfGenerationProgress.FilePath);
-                GeneratedPdfs.TryRemove(pdfKey);
+                GeneratedPdfs.TryRemove(pdfKey, out _);
 
                 return this.File(content, "application/pdf", $"{questionnaireTitle}.pdf");
             }
@@ -167,7 +167,7 @@ namespace WB.UI.Designer.Controllers
             PdfGenerationProgress pdfGenerationProgress = GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             if (pdfGenerationProgress != null && pdfGenerationProgress.IsFailed)
             {
-                GeneratedPdfs.TryRemove(pdfKey);
+                GeneratedPdfs.TryRemove(pdfKey, out _);
             }
             GeneratedPdfs.GetOrAdd(pdfKey, _ => StartNewPdfGeneration(id, translation, cultureCode));
             return this.Json(PdfStatus.InProgress(PdfMessages.Retry));

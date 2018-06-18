@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.Preferences;
-using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
@@ -75,6 +75,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
             }
         }
 
+        public Version GetSupportedQuestionnaireContentVersion() => null;
+
         public int GpsReceiveTimeoutSec
         {
             get
@@ -99,9 +101,6 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return SharedPreferences.GetBoolean(VibrateOnErrorParameterName, defValue);
             }
         }
-
-        public bool TestingConditions
- { get; }
 
         public double GpsDesiredAccuracy
         {

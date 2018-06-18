@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Events;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -31,6 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
+        private readonly IHeadquartersEventStore eventStore;
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ICommandService commandService;
@@ -44,6 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
+            IHeadquartersEventStore eventStore,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
@@ -56,6 +59,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.packagesTracker = packagesTracker;
+            this.eventStore = eventStore;
             this.logger = logger;
             this.serializer = serializer;
             this.commandService = commandService;
@@ -64,11 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.interviews = interviews;
             this.transactionManager = transactionManager;
             this.userRepository = userRepository;
-        }
-
-        [Obsolete("Since v 5.8")]
-        public virtual void StoreOrProcessPackage(string item)
-        {
         }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
@@ -122,7 +121,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     this.ProcessPackage(interviewPackage);
                 }
 
-                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
                 this.brokenInterviewPackageStorage.Remove(packageId);
             });
         }
@@ -132,9 +130,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             packageIds.ForEach(packageId =>
             {
                 var brokenInterviewPackage = this.brokenInterviewPackageStorage.GetById(packageId);
-                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Dec();
                 brokenInterviewPackage.ExceptionType = requestErrorType.ToString();
-                CommonMetrics.BrokenPackagesCount.Labels(brokenInterviewPackage.ExceptionType).Inc();
             });
         }
 
@@ -220,6 +216,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void ProcessPackage(InterviewPackage interview)
         {
+            // TODO validate event stream versions for no gaps inside
             Stopwatch innerwatch = Stopwatch.StartNew();
             string existingInterviewKey = null;
             try
@@ -233,7 +230,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
                 var aggregateRootEvents = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(interview.Events);
+                    .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
+
+                var firstEvent = aggregateRootEvents.FirstOrDefault();
+                if (firstEvent != null && 
+                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1, 
+                        interview.InterviewId,
+                        EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                {
+                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", InterviewDomainExceptionType.PackageIsOudated);
+                }
 
                 AssertPackageNotDuplicated(aggregateRootEvents);
 
@@ -305,9 +312,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
                     ReprocessAttemptsCount = interview.ProcessAttemptsCount,
                 }, null);
-
-                CommonMetrics.BrokenPackagesCount.Labels(exceptionType).Inc();
-
+                
                 this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }

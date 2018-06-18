@@ -66,6 +66,56 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             Assert.That(result.Levels[2].Records[3].ParentRecordIds[0], Is.EqualTo("2"));
         }
 
+        [Test]
+        public void when_creating_interview_export_view_by_interview_with_2_rosters_in_first_level_by_diff_roster_size_and_one_of_them_numeric_should_return_roster_instance_code_by_numeric_roster_started_from_1()
+        {
+            //arrange
+            var numericRosterId = Guid.Parse("11111111111111111111111111111111");
+            var listRosterId = Guid.Parse("13333333333333333333333333333333");
+            var numericRosterSizeId = Guid.Parse("44444444444444444444444444444444");
+            var listRosterSizeId =     Guid.Parse("55555555555555555555555555555555");
+            var questionInListRosterId = Guid.Parse("66666666666666666666666666666666");
+            var questionInNumericRosterId = Guid.Parse("77777777777777777777777777777777");
+
+            var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextListQuestion(listRosterSizeId),
+                Create.Entity.ListRoster(rosterId: listRosterId, rosterSizeQuestionId: listRosterSizeId,
+                    children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion(questionInListRosterId)
+                    }),
+                Create.Entity.NumericIntegerQuestion(numericRosterSizeId),
+                Create.Entity.NumericRoster(rosterId: numericRosterId, rosterSizeQuestionId: numericRosterSizeId,
+                    children: new IComposite[]
+                    {
+                        Create.Entity.NumericIntegerQuestion(questionInNumericRosterId)
+                    }));
+
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
+            var exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
+
+            var questionnaireIdentity = new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
+            var questionnaireExportStructure = exportViewFactory.CreateQuestionnaireExportStructure(questionnaireIdentity);
+
+            InterviewData interview = CreateInterviewData();
+            var vector = new decimal[] { 0 };
+            var interviewLevel = new InterviewLevel(new ValueVector<Guid> { numericRosterSizeId }, 0, vector);
+            interviewLevel.ScopeVectors.Add(new ValueVector<Guid> { listRosterSizeId }, 0);
+            interviewLevel.QuestionsSearchCache.Add(questionInNumericRosterId, new InterviewQuestion(questionInNumericRosterId));
+            interviewLevel.QuestionsSearchCache[questionInNumericRosterId].Answer = 22;
+            interview.Levels.Add(string.Join(",", vector), interviewLevel);
+
+            //act
+
+            var result = exportViewFactory.CreateInterviewDataExportView(questionnaireExportStructure, interview, questionnaire);
+
+            //assert
+            Assert.That(result.Levels[2].Records[0].RecordId, Is.EqualTo("1"));
+        }
+
         private static InterviewData CreateInterviewDataWith2PropagatedLevels(Guid rosterId, Guid nestedRosterId, Guid questionInsideRosterGroupId)
         {
             InterviewData interview = CreateInterviewData();
