@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -36,7 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
-        private readonly ILogger logger;
+        private readonly ILiteEventRegistry eventRegistry;
 
         public InterviewerInterviewAccessor(
             IPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -51,7 +52,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
-            ILogger logger)
+            ILiteEventRegistry eventRegistry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.snapshotStoreWithCache = snapshotStoreWithCache;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
-            this.logger = logger;
+            this.eventRegistry = eventRegistry;
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -77,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
+            this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
         }
 
         private void RemoveInterviewImages(Guid interviewId)
@@ -137,9 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.Read(interviewId, 0).ToList();
-
-            this.ThrowIfEventSequenceIsBroken(storedEvents, interviewId);
+            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
 
             var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
 
@@ -148,22 +148,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 .ToArray();
 
             return eventsToSend;
-        }
-
-        private void ThrowIfEventSequenceIsBroken(List<CommittedEvent> events, Guid interviewId)
-        {
-            for (int index = 0; index < events.Count; index++)
-            {
-                CommittedEvent @event = events[index];
-                int expectedEventSequence = index + 1;
-
-                if (expectedEventSequence != @event.EventSequence)
-                {
-                    var message = $"Expected event sequence {expectedEventSequence} is missing. Event stream is not full. Interview ID: {interviewId.FormatGuid()}.";
-                    this.logger.Error(message);
-                    throw new ArgumentException(message);
-                }
-            }
         }
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)

@@ -512,8 +512,11 @@
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
     <value>Периметр:</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Длинна:</value>
   </data>
   <data name="AreaMap_MapTitle" xml:space="preserve">
     <value>Карта</value>

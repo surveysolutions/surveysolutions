@@ -1758,7 +1758,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewWasCompleted();
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.Created, InterviewStatus.SupervisorAssigned, InterviewStatus.InterviewerAssigned, InterviewStatus.Restored);
-            propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
 
             this.ApplyEvent(new InterviewDeleted(userId));
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Deleted, comment: null, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));

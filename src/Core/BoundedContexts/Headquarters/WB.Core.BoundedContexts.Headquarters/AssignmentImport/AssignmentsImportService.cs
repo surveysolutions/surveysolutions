@@ -451,7 +451,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             foreach (var answersByRosterInstanceId in answersGroupedByRosterInstanceId)
             foreach (var interviewAnswer in answersByRosterInstanceId)
-            foreach (var rosterLevel in levelsOfRostersByRosterSize)
+            foreach (var rosterLevel in levelsOfRostersByRosterSize.Distinct())
             {
                 if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
 

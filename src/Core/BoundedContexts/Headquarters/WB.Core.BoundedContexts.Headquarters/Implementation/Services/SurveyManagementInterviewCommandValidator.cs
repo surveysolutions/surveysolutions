@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.interviewPreconditionsServiceSettings = interviewPreconditionsServiceSettings;
         }
 
+
         private int? GetMaxAllowedInterviewsCount()
         {
             return this.interviewPreconditionsServiceSettings.InterviewLimitCount;

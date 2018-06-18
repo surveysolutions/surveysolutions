@@ -7,5 +7,6 @@
         public static readonly int MaxLongRosterRowCount = 200;
         public static readonly int MinLongRosterRowCount = 1;
         public static readonly string HtmlRemovalPattern = "<.*?>";
+        public static readonly int ThrottlePeriod = 500;
     }
 }
