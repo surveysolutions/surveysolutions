@@ -44,7 +44,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
@@ -87,6 +86,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
@@ -188,7 +188,7 @@ namespace WB.Tests.Abc.TestFactories
         
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,
-            IInterviewerEventStorage eventStore = null,
+            IEnumeratorEventStorage eventStore = null,
             ICommandService commandService = null,
             IPlainStorage<QuestionnaireView> questionnaireRepository = null,
             IInterviewerPrincipal principal = null,
@@ -205,7 +205,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewFileViewRepository ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
                 commandService ?? Mock.Of<ICommandService>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
-                eventStore ?? Mock.Of<IInterviewerEventStorage>(),
+                eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
                 aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
@@ -409,7 +409,7 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerQuestionnaireAccessor questionnaireFactory = null,
             IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null,
-            IInterviewerEventStorage interviewerEventStorage = null,
+            IEnumeratorEventStorage interviewerEventStorage = null,
             IEventBus eventBus = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
@@ -440,7 +440,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                interviewerEventStorage ?? Mock.Of<IInterviewerEventStorage>());
+                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,

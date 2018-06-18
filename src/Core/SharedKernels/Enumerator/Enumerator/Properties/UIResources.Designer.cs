@@ -1404,6 +1404,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Supervisor.
+        /// </summary>
+        public static string Supervisor_ApplicationName {
+            get {
+                return ResourceManager.GetString("Supervisor_ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have any assignments on this device. Send tablet information, clear application&apos;s data and login by another account.
         /// </summary>
         public static string Synchronization_UserLinkedToAnotherDevice_Description {

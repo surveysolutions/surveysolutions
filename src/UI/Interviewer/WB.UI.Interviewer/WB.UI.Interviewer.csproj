@@ -293,7 +293,6 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
     <Compile Include="Converters\InterviewStatusToButtonConverter.cs" />
     <Compile Include="Converters\InterviewStatusToDrawableConverter.cs" />
     <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
@@ -308,9 +307,7 @@
     <Compile Include="CustomBindings\StatusToDasboardBackgroundConverter.cs" />
     <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
     <Compile Include="CustomControls\MvxFragmentStatePagerAdapter.cs" />
-    <Compile Include="Implementations\Services\ArchivePatcherService.cs" />
     <Compile Include="Implementations\Services\DeviceInformationService.cs" />
-    <Compile Include="Implementations\Services\InMemorySnapshotStoreWithCache.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
@@ -323,7 +320,6 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\InterviewerLoggingModule.cs" />
     <Compile Include="ServiceLocation\InterviewerUIModule.cs" />
-    <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
@@ -392,10 +388,6 @@
     <AndroidResource Include="Resources\layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\filepicker_createfolder.axml" />
-    <AndroidResource Include="Resources\layout\filepicker_fragment.axml" />
-    <AndroidResource Include="Resources\layout\filepicker_listitem.axml" />
-    <AndroidResource Include="Resources\layout\filepicker_mainactivity.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__check_new_version.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
@@ -425,7 +417,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
-    <AndroidJavaLibrary Include="patch-applier.jar" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
@@ -444,12 +435,6 @@
     <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
     <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
-    <AndroidResource Include="Resources\values\colors.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\values\dimensions.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\menu\login.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -466,9 +451,6 @@
     <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\drawable\login_logo.png" />
     <AndroidResource Include="Resources\drawable\capi_splash.png" />
-    <AndroidResource Include="Resources\values\dashboard.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\drawable-hdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
@@ -477,9 +459,6 @@
     <AndroidResource Include="Resources\drawable\ic_synchronization_fail.png" />
     <AndroidResource Include="Resources\drawable\ic_synchronization_success.png" />
     <AndroidResource Include="Resources\drawable\ic_upload.png" />
-    <AndroidResource Include="Resources\values\login.xml" />
-    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
-    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
     <AndroidResource Include="Resources\xml\preferences.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -495,12 +474,9 @@
     <AndroidResource Include="Resources\drawable\synchronization_download_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
-    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
     <AndroidResource Include="Resources\drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\drawable\dashboard_sync_icon_small.png" />
     <AndroidResource Include="Resources\drawable\dashboard_item_layout_border.xml" />
-    <AndroidResource Include="Resources\values\diagnostics.xml" />
     <AndroidResource Include="Resources\values\relink.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -516,13 +492,8 @@
     </AndroidResource>
     <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
-    <AndroidResource Include="Resources\menu\filepicker_menu.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\drawable\borderless_button.xml" />
-    <AndroidResource Include="Resources\drawable\filepicker_file.png" />
-    <AndroidResource Include="Resources\drawable\filepicker_folder.png" />
-    <AndroidResource Include="Resources\drawable\filepicker_new_folder.png" />
-    <AndroidResource Include="Resources\drawable\filepicker_previous.png" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_file.png" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_folder.png" />
     <AndroidResource Include="Resources\drawable-hdpi\filepicker_new_folder.png" />
@@ -532,7 +503,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_new_folder.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\filepicker_previous.png" />
     <AndroidResource Include="Resources\menu\diagnostics.xml" />
-    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
     <AndroidResource Include="Resources\xml\file_paths.xml" />
     <AndroidResource Include="Resources\values-small\dimensions.xml">
       <SubType>Designer</SubType>
@@ -625,6 +595,42 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\back_arrow.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\dashboard.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\login.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\dimensions.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\diagnostics.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\colors.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
