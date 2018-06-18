@@ -154,4 +154,7 @@
   <data name="Duration" xml:space="preserve">
     <value>Длительность</value>
   </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Обзор</value>
+  </data>
 </root>
