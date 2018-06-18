@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
 namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 {
     public class OverviewQuestion : OverviewNode
     {
-        public OverviewQuestion(InterviewTreeQuestion treeQuestion) : base(treeQuestion)
+        public OverviewQuestion(InterviewTreeQuestion treeQuestion, IStatefulInterview interview) : base(treeQuestion)
         {
             this.Answer = treeQuestion.GetAnswerAsString(CultureInfo.CurrentCulture);
             
@@ -25,7 +26,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             }
 
             base.IsAnswered = treeQuestion.IsAnswered();
-            this.ErrorMessages = treeQuestion.ValidationMessages.Select(x => x.Text).ToList();
+            this.ErrorMessages = interview.GetFailedValidationMessages(treeQuestion.Identity, "")
+                .Where(x => !string.IsNullOrEmpty(x)).ToList();
             HasComment = treeQuestion.AnswerComments.Count > 0;
         }
 

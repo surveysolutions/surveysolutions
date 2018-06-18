@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using MvvmCross.Commands;
 using MvvmCross.WeakSubscription;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -20,7 +21,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public OverviewAudioQuestionViewModel(InterviewTreeQuestion treeQuestion,
             IAudioFileStorage audioFileStorage,
-            IAudioService audioService) : base(treeQuestion)
+            IAudioService audioService,
+            IUserInteractionService interactionService, 
+            IStatefulInterview statefulInterview) : base(treeQuestion, statefulInterview, interactionService)
         {
             this.audioService = audioService;
             this.interviewId = Guid.Parse(treeQuestion.Tree.InterviewId);
