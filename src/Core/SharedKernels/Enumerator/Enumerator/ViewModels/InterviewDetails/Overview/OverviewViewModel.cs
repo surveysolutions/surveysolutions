@@ -21,6 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         private readonly IViewModelNavigationService navigationService;
         private readonly IAudioService audioService;
         private readonly IAudioFileStorage audioFileStorage;
+        private readonly IUserInteractionService userInteractionService;
         private readonly DynamicTextViewModel nameViewModel;
 
         public OverviewViewModel(IStatefulInterviewRepository interviewRepository,
@@ -28,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             IViewModelNavigationService navigationService,
             IAudioService audioService,
             IAudioFileStorage audioFileStorage,
+            IUserInteractionService userInteractionService,
             DynamicTextViewModel nameViewModel)
         {
             this.interviewRepository = interviewRepository;
@@ -35,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.navigationService = navigationService;
             this.audioService = audioService;
             this.audioFileStorage = audioFileStorage;
+            this.userInteractionService = userInteractionService;
             this.nameViewModel = nameViewModel;
         }
 
@@ -60,21 +63,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             {
                 if (question.IsMultimedia)
                 {
-                    return new OverviewMultimediaQuestionViewModel(question, fileStorage, navigationService);
+                    return new OverviewMultimediaQuestionViewModel(question, fileStorage, navigationService, userInteractionService, interview);
                 }
 
                 if (question.IsAudio)
                 {
-                    return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService);
+                    return new OverviewAudioQuestionViewModel(question, audioFileStorage, audioService, userInteractionService, interview);
                 }
 
-                return new OverviewQuestionViewModel(question);
+                return new OverviewQuestionViewModel(question, interview,userInteractionService);
             }
 
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
             if (staticText != null)
             {
-                return new OverviewStaticTextViewModel(staticText, Mvx.Resolve<AttachmentViewModel>())
+                return new OverviewStaticTextViewModel(staticText, Mvx.Resolve<AttachmentViewModel>(), interview, userInteractionService)
                 {
                     Id = staticText.Identity.ToString(),
                     Title = staticText.Title.Text
