@@ -1,4 +1,4 @@
-﻿using System;
+﻿using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.UI.Shared.Web.Configuration;
 
@@ -16,7 +16,6 @@ namespace WB.UI.Headquarters.Code
         public string BaseUrl
         {
             get { return configurationManager.AppSettings["BaseUrl"]; }
-            set { throw new NotImplementedException(); }
         }
 
         public string GetBaseUrl() => BaseUrl;
@@ -42,15 +41,5 @@ namespace WB.UI.Headquarters.Code
         {
             return !string.IsNullOrWhiteSpace(BaseUrl);
         }
-    }
-
-    public interface IQRCodeHelper
-    {
-        string GetQRCodeAsBase64StringSrc(string relativeUrl, int height, int width, int margin = 0);
-        bool SupportQRCodeGeneration();
-
-        string GetFullUrl(string relativeUrl);
-
-        string GetBaseUrl();
     }
 }
