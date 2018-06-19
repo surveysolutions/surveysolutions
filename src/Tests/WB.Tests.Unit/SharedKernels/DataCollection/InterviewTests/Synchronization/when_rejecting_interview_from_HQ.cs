@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             @event.UserId == answerComment.UserId &&
             @event.Comment == answerComment.Text &&
             @event.QuestionId == commentedQuestionId &&
-            @event.CommentTime == answerComment.Date
+            @event.OriginDate == answerComment.Date
         );
 
         static Interview interview;
