@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string title;
         public string Title
         {
-            get { return this.title; }
+            get => this.title;
             set { this.title = value; this.RaisePropertyChanged(); }
         }
 
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool YesSelected
         {
-            get { return this.Selected.HasValue && this.Selected.Value; }
+            get => this.Selected.HasValue && this.Selected.Value;
             set
             {
                 if (this.YesSelected == value)
@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool NoSelected
         {
-            get { return this.Selected.HasValue && !this.Selected.Value; }
+            get => this.Selected.HasValue && !this.Selected.Value;
             set
             {
                 if (this.NoSelected == value)
@@ -79,7 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? YesAnswerCheckedOrder
         {
-            get { return this.yesAnswerCheckedOrder; }
+            get => this.yesAnswerCheckedOrder;
             set
             {
                 if (this.yesAnswerCheckedOrder == value)
