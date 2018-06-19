@@ -114,7 +114,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
 
                     await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
-                    this.executedCommandsStorage.Clear(interview.Id);
                 }
                 catch (Exception e)
                 {
@@ -122,6 +121,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
+                }
+                finally
+                { 
+                    this.executedCommandsStorage.Clear(interview.Id);
                 }
             }
 
