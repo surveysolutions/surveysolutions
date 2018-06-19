@@ -8,14 +8,13 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Filters;
 
-
-namespace WB.UI.Headquarters.API.Supervisor
+namespace WB.UI.Headquarters.API.Supervisor.v1
 {
-    public class SupervisorApiController : ApiController
+    public class SupervisorAppApiController : ApiController
     {
         private readonly IAuthorizedUser authorizedUser;
 
-        public SupervisorApiController(IAuthorizedUser authorizedUser)
+        public SupervisorAppApiController(IAuthorizedUser authorizedUser)
         {
             this.authorizedUser = authorizedUser;
         }
