@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -15,7 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 {
     internal class when_selecting_first_option : SingleOptionLinkedQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] 
+        public void context () {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 Create.Entity.SingleOptionQuestion(questionId, linkedToQuestionId: linkedToQuestionId),
                 Create.Entity.FixedRoster(fixedTitles: new[] { Create.Entity.FixedTitle(1), Create.Entity.FixedTitle(2), Create.Entity.FixedTitle(3) }, children: new IComposite[]
@@ -36,14 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedQu
 
             viewModel.Init(interviewId, questionIdentity, navigationState);
 
-            BecauseOf();
+            viewModel.OptionSelectedAsync(viewModel.Options.First()).WaitAndUnwrapException();
         }
 
-        public void BecauseOf() =>
-            viewModel.OptionSelectedAsync(viewModel.Options.First()).WaitAndUnwrapException();
-
-        [NUnit.Framework.Test] public void should_execute_AnswerSingleOptionLinkedQuestionCommand_command () =>
-            answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
+        [Test] public void should_execute_AnswerSingleOptionLinkedQuestionCommand_command () =>
+            answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(It.IsAny<AnswerSingleOptionLinkedQuestionCommand>()));
 
         private static SingleOptionLinkedQuestionViewModel viewModel;
         private static string interviewId = "11111111111111111111111111111111";

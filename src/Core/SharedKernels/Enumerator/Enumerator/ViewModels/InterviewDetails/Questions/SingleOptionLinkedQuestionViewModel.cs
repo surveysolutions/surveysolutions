@@ -46,20 +46,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
         {
-            if (principal == null) throw new ArgumentNullException("principal");
-            if (questionnaireStorage == null) throw new ArgumentNullException("questionnaireStorage");
-            if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
-            if (eventRegistry == null) throw new ArgumentNullException("eventRegistry");
-
+            if (principal == null) throw new ArgumentNullException(nameof(principal));
             this.userId = principal.CurrentUserIdentity.UserId;
-            this.interviewRepository = interviewRepository;
-            this.eventRegistry = eventRegistry;
+            this.interviewRepository = interviewRepository ?? throw new ArgumentNullException(nameof(interviewRepository));
+            this.eventRegistry = eventRegistry ?? throw new ArgumentNullException(nameof(eventRegistry));
             this.mainThreadDispatcher = mainThreadDispatcher ?? MvxMainThreadDispatcher.Instance;
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
-            this.questionnaireRepository = questionnaireStorage;
+            this.questionnaireRepository = questionnaireStorage ?? throw new ArgumentNullException("questionnaireStorage");
             this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
@@ -77,12 +73,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private OptionBorderViewModel optionsBottomBorderViewModel;
 
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
-
         public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
-            get { return this.options; }
+            get => this.options;
             private set { this.options = value; this.RaisePropertyChanged(() => this.HasOptions);}
         }
 
@@ -161,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.Identity,
                         DateTime.UtcNow));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
-                this.prviouslySelectedOptionToReset = null;
+                this.previousOptionToReset = null;
             }
             catch (InterviewException exception)
             {
@@ -171,8 +164,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
-            var selectedOption = this.selectedOptionToSave;
-            var previousOption = this.prviouslySelectedOptionToReset;
+            var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
+            var previousOption = this.GetOptionByValue(this.previousOptionToReset);
+
+            if (selectedOption == null)
+                return;
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interviewId,
@@ -193,7 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
-                this.prviouslySelectedOptionToReset = selectedOption;
+                this.previousOptionToReset = null;
             }
             catch (InterviewException ex)
             {
@@ -208,14 +204,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private SingleOptionLinkedQuestionOptionViewModel prviouslySelectedOptionToReset = null;
-        private SingleOptionLinkedQuestionOptionViewModel selectedOptionToSave = null;
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+        private decimal[] previousOptionToReset = null;
+        private decimal[] selectedOptionToSave = null;
 
         internal async Task OptionSelectedAsync(object sender)
         {
-            this.selectedOptionToSave = (SingleOptionLinkedQuestionOptionViewModel) sender;
-            if (this.prviouslySelectedOptionToReset == null)
-                this.prviouslySelectedOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOptionToSave);
+            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
+            this.selectedOptionToSave = selectedOption.RosterVector;
+            if (this.previousOptionToReset == null)
+                this.previousOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption)?.RosterVector;
 
             if (this.ThrottlePeriod == 0)
             {
@@ -225,6 +224,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 timer.Change(ThrottlePeriod, Timeout.Infinite);
             }
+        }
+
+        private SingleOptionLinkedQuestionOptionViewModel GetOptionByValue(decimal[] value)
+        {
+            return value != null 
+                ? this.Options.FirstOrDefault(x => Enumerable.SequenceEqual(x.RosterVector, value))
+                : null;
         }
 
         public void Handle(AnswersRemoved @event)

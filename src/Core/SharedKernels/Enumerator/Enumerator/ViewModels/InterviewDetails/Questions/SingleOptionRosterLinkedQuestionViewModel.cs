@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -56,6 +58,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         private Identity questionIdentity;
@@ -181,10 +184,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        internal async Task OptionSelectedAsync(object sender)
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+        private decimal[] previousOptionToReset = null;
+        private decimal[] selectedOptionToSave = null;
+
+        private async Task SaveAnswer()
         {
-            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
-            var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
+            var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
+            if (selectedOption == null)
+                return;
+
+            var previousOption = this.GetOptionByValue(this.previousOptionToReset);
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interviewId,
@@ -215,6 +226,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        private SingleOptionLinkedQuestionOptionViewModel GetOptionByValue(decimal[] value)
+        {
+            return value != null 
+                ? this.Options.FirstOrDefault(x => Enumerable.SequenceEqual(x.RosterVector, value))
+                : null;
+        }
+
+        internal async Task OptionSelectedAsync(object sender)
+        {
+            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
+            this.selectedOptionToSave = selectedOption.RosterVector;
+
+            if (this.previousOptionToReset == null)
+                this.previousOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption)?.RosterVector;
+
+            if (this.ThrottlePeriod == 0)
+            {
+                await SaveAnswer();
+            }
+            else
+            {
+                timer.Change(ThrottlePeriod, Timeout.Infinite);
             }
         }
         
