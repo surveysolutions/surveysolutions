@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         Group = 100,
         Complete = 1000,
         Cover = 5000,
-        Identifying = 11000
+        Identifying = 11000,
         Overview  = 100500 
     }
 
