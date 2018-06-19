@@ -10,6 +10,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         public SynchronizationActivity SynchronizationActivity { get; set; }
         public int RegistredDevicesCount { get; set; }
         public bool HasAnyGpsAnswerForInterviewer { get; set; }
+
+        public string QRCodeAsBase64String { set; get; }
     }
 
     public class InterviewerProfileSyncStatistics
