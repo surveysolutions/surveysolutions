@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<resources>
+    <dimen name="Dashboard_Tab_Frame_paddingTop">30dp</dimen>
+    <dimen name="Dashboard_PrefilledQuestion_Width">300dp</dimen>
+    <dimen name="Dashboard_Layout_marginLeft">28dp</dimen>
+    <dimen name="Dashboard_Layout_marginRight">28dp</dimen>
+
+    <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
+
+    <dimen name="Dashboard_Synchronization_Statistics_Height">180dp</dimen>
+    <dimen name="Dashboard_Synchronization_Statistics_Width">350dp</dimen>
+</resources>

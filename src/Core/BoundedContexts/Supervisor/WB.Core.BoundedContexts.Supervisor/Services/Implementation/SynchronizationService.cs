@@ -26,7 +26,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         public Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            throw new System.NotImplementedException();
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<SupervisorApiView>(url: string.Concat(this.UsersController, "/current"),
+                    credentials: credentials ?? this.restCredentials, token: token));
         }
     }
 }

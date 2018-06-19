@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private Guid LastVisitedInterviewId { get; set; }
 
         public SynchronizationViewModel Synchronization { get; set; }
+        public string DashboardTitle => "title :)";
+
 
         public DashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,

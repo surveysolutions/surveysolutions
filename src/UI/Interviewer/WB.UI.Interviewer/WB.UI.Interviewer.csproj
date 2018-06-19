@@ -376,9 +376,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\dashboard_census_questionnare_item.axml" />
-    <AndroidResource Include="Resources\layout\synchronization_panel.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\dashboard_item_prefilled_question.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -471,7 +468,6 @@
     <AndroidResource Include="Resources\drawable\synchronization_download_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_sync_icon.png" />
     <AndroidResource Include="Resources\drawable\dashboard_sync_icon_small.png" />
     <AndroidResource Include="Resources\drawable\dashboard_item_layout_border.xml" />
     <AndroidResource Include="Resources\values\relink.xml">

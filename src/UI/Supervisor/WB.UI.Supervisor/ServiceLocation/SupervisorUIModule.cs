@@ -60,7 +60,6 @@ namespace WB.UI.Supervisor.ServiceLocation
             //registry.Bind<CompanyLogoSynchronizer>();
             //registry.Bind<IMapSyncProvider, MapSyncProvider>();
             registry.Bind<IMapService, MapService>();
-            registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             //registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
             registry.Bind<LoginViewModel>();
