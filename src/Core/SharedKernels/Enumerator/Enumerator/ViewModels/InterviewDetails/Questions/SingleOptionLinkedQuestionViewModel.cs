@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -58,15 +60,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.questionnaireRepository = questionnaireStorage;
+            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         private Guid interviewId;
+
         private Guid linkedToQuestionId;
+
         private CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> options;
+
         private IEnumerable<Guid> parentRosterIds;
+
         private readonly QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState;
+
         private OptionBorderViewModel optionsTopBorderViewModel;
+
         private OptionBorderViewModel optionsBottomBorderViewModel;
+
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
 
         public CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel> Options
         {
@@ -79,6 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IQuestionStateViewModel QuestionState => this.questionState;
 
         public QuestionInstructionViewModel InstructionViewModel { get; set; }
+
         public AnsweringViewModel Answering { get; private set; }
 
         public Identity Identity { get; private set; }
@@ -148,6 +161,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.Identity,
                         DateTime.UtcNow));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+                this.prviouslySelectedOptionToReset = null;
             }
             catch (InterviewException exception)
             {
@@ -155,10 +169,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        internal async Task OptionSelectedAsync(object sender)
+        private async Task SaveAnswer()
         {
-            var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
-            var previousOption = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption);
+            var selectedOption = this.selectedOptionToSave;
+            var previousOption = this.prviouslySelectedOptionToReset;
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interviewId,
@@ -178,6 +192,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                this.prviouslySelectedOptionToReset = selectedOption;
             }
             catch (InterviewException ex)
             {
@@ -189,6 +205,25 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        private SingleOptionLinkedQuestionOptionViewModel prviouslySelectedOptionToReset = null;
+        private SingleOptionLinkedQuestionOptionViewModel selectedOptionToSave = null;
+
+        internal async Task OptionSelectedAsync(object sender)
+        {
+            this.selectedOptionToSave = (SingleOptionLinkedQuestionOptionViewModel) sender;
+            if (this.prviouslySelectedOptionToReset == null)
+                this.prviouslySelectedOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOptionToSave);
+
+            if (this.ThrottlePeriod == 0)
+            {
+                await SaveAnswer();
+            }
+            else
+            {
+                timer.Change(ThrottlePeriod, Timeout.Infinite);
             }
         }
 
