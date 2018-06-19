@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         Group = 100,
         Complete = 1000,
         Cover = 5000,
-        PrefieldScreen = 11000,
+        Identifying = 11000
         Overview  = 100500 
     }
 
@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public static NavigationIdentity CreateForPrefieldScreen()
         {
-            return new NavigationIdentity(ScreenType.PrefieldScreen, targetGroup: null);
+            return new NavigationIdentity(ScreenType.Identifying, targetGroup: null);
         }
 
         public static NavigationIdentity CreateForCompleteScreen()

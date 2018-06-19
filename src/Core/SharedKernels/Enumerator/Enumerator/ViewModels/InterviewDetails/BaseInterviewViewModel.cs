@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 case ScreenType.Cover: return NavigationDirection.Previous;
                 case ScreenType.Complete: return NavigationDirection.Next;
-                case ScreenType.PrefieldScreen:
+                case ScreenType.Identifying:
                     switch (eventArgs.PreviousStage)
                     {
                         case ScreenType.Cover: return NavigationDirection.Next;
@@ -229,7 +229,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     {
                         case ScreenType.Cover: return NavigationDirection.Next;
                         case ScreenType.Complete: return NavigationDirection.Previous;
-                        case ScreenType.PrefieldScreen: return NavigationDirection.Next;
+                        case ScreenType.Identifying: return NavigationDirection.Next;
 
                         default:
                             var interview = this.interviewRepository.Get(this.InterviewId);

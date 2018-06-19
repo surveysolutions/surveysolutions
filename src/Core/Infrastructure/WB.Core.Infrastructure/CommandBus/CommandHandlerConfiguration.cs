@@ -11,7 +11,8 @@ namespace WB.Core.Infrastructure.CommandBus
         private readonly List<Type> validators = new List<Type>();
         private readonly List<Type> postProcessors = new List<Type>();
         private readonly List<Type> preProcessors = new List<Type>();
-        private readonly List<Type> skippedCommands = new List<Type>();
+        private readonly HashSet<Type> skippedCommands = new HashSet<Type>();
+        private readonly HashSet<Type> skippedPostProcessCommands = new HashSet<Type>();
 
         public CommandHandlerConfiguration<TAggregate, TCommand> ValidatedBy<TValidator>() 
             where TValidator : ICommandValidator<TAggregate, TCommand>
@@ -23,6 +24,12 @@ namespace WB.Core.Infrastructure.CommandBus
         public CommandHandlerConfiguration<TAggregate, TCommand> SkipValidationFor<TSkipCommand>() where TSkipCommand : ICommand
         {
             this.skippedCommands.Add(typeof(TSkipCommand));
+            return this;
+        }
+
+        public CommandHandlerConfiguration<TAggregate, TCommand> SkipPostProcessFor<TSkipCommand>() where TSkipCommand : ICommand
+        {
+            this.skippedPostProcessCommands.Add(typeof(TSkipCommand));
             return this;
         }
 
@@ -42,7 +49,9 @@ namespace WB.Core.Infrastructure.CommandBus
 
         public List<Type> GetValidators() => this.validators;
 
-        public List<Type> GetSkipCommands() => this.skippedCommands;
+        public HashSet<Type> GetSkipCommands() => this.skippedCommands;
+
+        public HashSet<Type> GetSkipPostProcessCommands() => this.skippedPostProcessCommands;
 
         public List<Type> GetPostProcessors() => this.postProcessors;
 
