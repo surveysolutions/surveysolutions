@@ -49,9 +49,6 @@ namespace WB.UI.Tester.Activities
         {
             switch (item.ItemId)
             {
-                case Resource.Id.dashboard_refresh:
-                    this.ViewModel.RefreshQuestionnairesCommand.Execute();
-                    break;
                 case Resource.Id.dashboard_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
