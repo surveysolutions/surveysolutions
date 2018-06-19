@@ -113,7 +113,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
                     }
 
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
+                    if (navigationIdentity.TargetScreen == ScreenType.Identifying)
+                    {
+                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+                    }
+                    else
+                    {
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
+                    }
                 }
                 catch (Exception e)
                 {
