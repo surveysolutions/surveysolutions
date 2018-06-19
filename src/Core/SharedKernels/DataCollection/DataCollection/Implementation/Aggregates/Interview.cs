@@ -1917,7 +1917,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             foreach (var commentedAnswer in commentedAnswers)
             {
                 this.ApplyEvent(new AnswerCommented(commentedAnswer.UserId, commentedAnswer.QuestionId,
-                    commentedAnswer.RosterVector, originDate, commentedAnswer.Text));
+                    commentedAnswer.RosterVector, commentedAnswer.Date, commentedAnswer.Text));
             }
         }
 
