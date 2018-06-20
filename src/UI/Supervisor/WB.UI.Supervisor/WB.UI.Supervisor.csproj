@@ -330,7 +330,6 @@
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
@@ -341,7 +340,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable\borderless_button.xml" />
     <AndroidResource Include="Resources\values-small\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -403,12 +401,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\back_arrow.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -465,19 +457,10 @@
     <AndroidResource Include="Resources\values\login.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\dashboard.axml">

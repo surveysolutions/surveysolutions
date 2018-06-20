@@ -601,19 +601,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
