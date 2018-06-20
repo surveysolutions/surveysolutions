@@ -3,11 +3,11 @@ using Moq;
 using NUnit.Framework;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 

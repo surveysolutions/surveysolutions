@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SQLite;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -9,7 +8,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class AssignmentDocumentsStorage :
         SqlitePlainStorage<AssignmentDocument, int>,

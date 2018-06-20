@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Ncqrs.Eventing;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
+namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IInterviewEventStreamOptimizer
     {
