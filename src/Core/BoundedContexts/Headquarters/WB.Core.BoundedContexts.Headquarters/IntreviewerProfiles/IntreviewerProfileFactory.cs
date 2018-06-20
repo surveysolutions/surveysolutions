@@ -150,7 +150,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.RegistredDevicesCount = registredDeviceCount;
             profile.HasAnyGpsAnswerForInterviewer = interviewFactory.HasAnyGpsAnswerForInterviewer(userId);
 
-            profile.QRCodeAsBase64String = ServiceLocator.Current.GetInstance<IQRCodeHelper>().GetQRCodeAsBase64StringSrc(
+            profile.SupportQRCodeGeneration = qRCodeHelper.SupportQRCodeGeneration();
+            profile.QRCodeAsBase64String = qRCodeHelper.GetQRCodeAsBase64StringSrc(
                 JsonConvert.SerializeObject((new FinishInstallationInfo()
                 {
                     Url = qRCodeHelper.GetBaseUrl(),

@@ -127,7 +127,7 @@
                     <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_ShowAuditLog</a>
                 </li>
             </ul>
-            @if (ServiceLocator.Current.GetInstance<IQRCodeHelper>().SupportQRCodeGeneration())
+            @if (Model.SupportQRCodeGeneration)
             {
                 <figure class="qrcode-wrapper">
 

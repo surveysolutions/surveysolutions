@@ -11,7 +11,9 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         public int RegistredDevicesCount { get; set; }
         public bool HasAnyGpsAnswerForInterviewer { get; set; }
 
+        public bool SupportQRCodeGeneration { set; get; }
         public string QRCodeAsBase64String { set; get; }
+
     }
 
     public class InterviewerProfileSyncStatistics
