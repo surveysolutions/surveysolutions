@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             }
             else
             {
-                var errorsCount = aggregate.CountInvalidEntitiesInInterviewForSupervisor();
+                var errorsCount = aggregate.CountAllInvalidEntities();
                 summary.ErrorsCount = errorsCount;
             }
 
