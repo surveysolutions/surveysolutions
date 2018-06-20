@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.SharedKernels.Enumerator.Services
 {
     public interface IAnswerToStringConverter
     {

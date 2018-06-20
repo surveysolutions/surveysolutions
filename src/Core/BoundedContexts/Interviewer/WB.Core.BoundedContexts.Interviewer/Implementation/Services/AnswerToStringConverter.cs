@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {

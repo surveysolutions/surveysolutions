@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
 {
     public class CompanyLogoSynchronizer
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class DeviceInfo
     {

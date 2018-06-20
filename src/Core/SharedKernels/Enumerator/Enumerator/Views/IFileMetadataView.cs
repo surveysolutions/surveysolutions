@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public interface IFileMetadataView : IPlainStorageEntity
     {
