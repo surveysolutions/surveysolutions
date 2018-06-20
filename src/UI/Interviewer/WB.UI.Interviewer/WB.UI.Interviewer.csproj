@@ -405,11 +405,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\layout\ErrorScreen.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidEnvironment Include="AndroidEnvironment.txt" />
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
@@ -417,8 +412,6 @@
     <AndroidResource Include="Resources\drawable\dashboardquestionnaire.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\SurveyShape.xml" />
-    <AndroidResource Include="Resources\drawable\SurveyTableHeader.xml" />
     <AndroidResource Include="Resources\values\Themes.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -426,9 +419,6 @@
     <AndroidResource Include="Resources\values\settings.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
-    <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
-    <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
     <AndroidResource Include="Resources\menu\login.xml">
       <SubType>Designer</SubType>
     </AndroidResource>

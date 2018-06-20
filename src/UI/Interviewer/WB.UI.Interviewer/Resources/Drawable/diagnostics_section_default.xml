@@ -3,7 +3,7 @@
 <item>
     <shape>
       <solid android:color="@color/applicationBackground" />
-      <stroke android:width="1dip" android:color="@color/complete_screen_statistics_border" />
+      <stroke android:width="@dimen/one" android:color="@color/complete_screen_statistics_border" />
     </shape>
   </item>
 </layer-list>
