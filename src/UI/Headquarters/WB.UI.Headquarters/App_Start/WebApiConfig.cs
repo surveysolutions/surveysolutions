@@ -183,6 +183,9 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/supervisor/v1/users/login", c => c.Action<SupervisorUserApiController>(x => x.Login(Param.Any<LogonInfo>())));
             config.TypedRoute("api/supervisor/v1/users/current", c => c.Action<SupervisorUserApiController>(x => x.Current()));
             config.TypedRoute("api/supervisor/v1/users/hasdevice", c => c.Action<SupervisorUserApiController>(x => x.HasDevice()));
+
+            config.TypedRoute("api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}", 
+                c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
 //            config.TypedRoute("api/supervisor/v1/translations/{id}",
 //                c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
 //            config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV2Controller>(x => x.CompanyLogo()));
