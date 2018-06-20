@@ -7,6 +7,8 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
@@ -51,6 +53,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
+            registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 
             //registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
             //registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
@@ -75,7 +78,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             //registry.Bind<SynchronizationViewModel>();
             //registry.Bind<MapSynchronizationViewModel>();
             //registry.Bind<RelinkDeviceViewModel>();
-            //registry.Bind<DashboardViewModel>();
+            registry.Bind<DashboardViewModel>();
             //registry.Bind<DashboardSearchViewModel>();
             //registry.Bind<MapsViewModel>();
             //registry.Bind<CompletedInterviewsViewModel>();
