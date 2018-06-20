@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -12,19 +12,19 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer;
 using WB.UI.Headquarters.Code;
 
-
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.Supervisor.v1
 {
-    [ApiBasicAuth(UserRoles.Interviewer)]
-    public class DevicesApiV2Controller : DevicesControllerBase
+    [ApiBasicAuth(UserRoles.Supervisor)]
+    public class SupervisorDevicesApiV1Controller : DevicesControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
         private readonly HqUserManager userManager;
 
-        public DevicesApiV2Controller(
+        public SupervisorDevicesApiV1Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
@@ -40,18 +40,16 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
         }
 
         [HttpGet]
-        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
-        public override HttpResponseMessage CanSynchronize(string id, int version) => base.CanSynchronize(id, version);
+        public override HttpResponseMessage CanSynchronize(string id, int version) => this.Request.CreateResponse(HttpStatusCode.OK);
 
         [HttpPost]
-        [WriteToSyncLog(SynchronizationLogType.LinkToDevice)]
-        public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => base.LinkCurrentResponsibleToDevice(id, version);
+        public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => this.Request.CreateResponse(HttpStatusCode.OK);
 
         [HttpPost]
         public async Task<IHttpActionResult> Info(DeviceInfoApiView info)
         {
             var deviceLocation = info.DeviceLocation;
-            
+
             var user = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
 
             if (user == null) return this.Unauthorized();
@@ -118,7 +116,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
                 TotalDownloadedBytes = statistics.TotalDownloadedBytes,
                 TotalUploadedBytes = statistics.TotalUploadedBytes,
                 TotalSyncDuration = statistics.TotalSyncDuration,
-                
+
                 AssignmentsOnDeviceCount = statistics.AssignmentsOnDeviceCount,
                 NewAssignmentsCount = statistics.NewAssignmentsCount
             };
@@ -142,5 +140,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
 
             return this.Ok();
         }
+
     }
 }

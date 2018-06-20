@@ -26,7 +26,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
             this.userManager = userManager;
         }
         
-        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         public virtual HttpResponseMessage CanSynchronize(string id, int version)
         {
             int supervisorRevisionNumber = this.syncVersionProvider.GetProtocolVersion();
@@ -42,10 +41,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
                 : this.Request.CreateResponse(HttpStatusCode.OK);
         }
         
-        [WriteToSyncLog(SynchronizationLogType.LinkToDevice)]
-        public virtual HttpResponseMessage LinkCurrentInterviewerToDevice(string id, int version)
+        public virtual HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version)
         {
-            this.userManager.LinkDeviceToInterviewer(this.authorizedUser.Id, id, DateTime.UtcNow);
+            this.userManager.LinkDeviceToInterviewerOrSupervisor(this.authorizedUser.Id, id, DateTime.UtcNow);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
