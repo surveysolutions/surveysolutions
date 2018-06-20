@@ -34,6 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
         {
+            await this.SaveUserToLocalStorageAsync(credentials, token);
             var interviewerIdentity = this.interviewersPlainStorage.FirstOrDefault();
 
             await this.viewModelNavigationService
