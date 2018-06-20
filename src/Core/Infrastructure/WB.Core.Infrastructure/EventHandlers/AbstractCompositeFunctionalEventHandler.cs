@@ -30,7 +30,7 @@ namespace WB.Core.Infrastructure.EventHandlers
             var typeInfo = genericUpgrader.MakeGenericType(typeof(TEntity), evt.Payload.GetType()).GetTypeInfo();
             foreach (var handler in Handlers)
             {
-                if (typeInfo.IsAssignableFrom(handler.GetType()))
+                if (typeInfo.IsInstanceOfType(handler))
                     return true;
             }
             return false;

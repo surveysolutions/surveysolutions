@@ -79,14 +79,14 @@ namespace WB.Core.Infrastructure.CommandBus
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
             {
-                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, isStateless:false, configurer: configurer);
+                Register(aggregateRootIdResolver, commandHandler, isInitializer: true, isStateless: false, configurer: configurer);
                 return this;
             }
 
             public AggregateSetup<TAggregate> Handles<TCommand>(
                 Func<TCommand, Guid> aggregateRootIdResolver,
                 Func<TAggregate, Action<TCommand>> getCommandHandler,
-                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null) 
+                Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
                 => this.Handles(
                     aggregateRootIdResolver,
@@ -94,7 +94,7 @@ namespace WB.Core.Infrastructure.CommandBus
                     configurer);
 
             public AggregateSetup<TAggregate> Handles<TCommand>(
-                Func<TCommand, Guid> aggregateRootIdResolver, 
+                Func<TCommand, Guid> aggregateRootIdResolver,
                 Action<TCommand, TAggregate> commandHandler,
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
@@ -114,7 +114,7 @@ namespace WB.Core.Infrastructure.CommandBus
                     configurer);
 
             public AggregateSetup<TAggregate> StatelessHandles<TCommand>(
-                Func<TCommand, Guid> aggregateRootIdResolver, 
+                Func<TCommand, Guid> aggregateRootIdResolver,
                 Action<TCommand, TAggregate> commandHandler,
                 Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer = null)
                 where TCommand : ICommand
@@ -156,7 +156,7 @@ namespace WB.Core.Infrastructure.CommandBus
             public AggregateWithCommandSetup<TAggregate, TAggregateCommand> InitializesWith<TCommand>(Action<TCommand, TAggregate> commandHandler)
                 where TCommand : TAggregateCommand
             {
-                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, isStateless:false, configurer: null);
+                Register(command => this.aggregateRootIdResolver.Invoke(command), commandHandler, isInitializer: true, isStateless: false, configurer: null);
                 return this;
             }
 
@@ -206,15 +206,15 @@ namespace WB.Core.Infrastructure.CommandBus
 
         #endregion
 
-        private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver, 
-            Action<TCommand, TAggregate> commandHandler, 
+        private static void Register<TCommand, TAggregate>(Func<TCommand, Guid> aggregateRootIdResolver,
+            Action<TCommand, TAggregate> commandHandler,
             bool isInitializer,
             bool isStateless,
             Action<CommandHandlerConfiguration<TAggregate, TCommand>> configurer)
             where TCommand : ICommand
             where TAggregate : IAggregateRoot
         {
-            string commandName = typeof (TCommand).Name;
+            string commandName = typeof(TCommand).Name;
 
             if (Handlers.ContainsKey(commandName))
                 throw new ArgumentException($"Command {commandName} is already registered.");
@@ -223,11 +223,11 @@ namespace WB.Core.Infrastructure.CommandBus
             configurer?.Invoke(configuration);
 
             Handlers.Add(commandName, new HandlerDescriptor(
-                typeof (TAggregate),
+                typeof(TAggregate),
                 isInitializer: isInitializer,
                 isStateless: isStateless,
-                idResolver: command => aggregateRootIdResolver.Invoke((TCommand) command),
-                handler: (command, aggregate) => commandHandler.Invoke((TCommand) command, (TAggregate) aggregate),
+                idResolver: command => aggregateRootIdResolver.Invoke((TCommand)command),
+                handler: (command, aggregate) => commandHandler.Invoke((TCommand)command, (TAggregate)aggregate),
                 validators: configuration.GetValidators(),
                 postProcessors: configuration.GetPostProcessors(),
                 preProcessors: configuration.GetPreProcessors()));
@@ -346,21 +346,27 @@ namespace WB.Core.Infrastructure.CommandBus
             if (Handlers.ContainsKey(commandName))
             {
                 Handlers[commandName].AppendValidators(configuration.GetValidators());
+                Handlers[commandName].AppendPostProcessors(configuration.GetPostProcessors());
+                return;
             }
-            else
+
+            foreach (var handlersKey in Handlers.Keys)
             {
-                foreach (var handlersKey in Handlers.Keys)
+                var commandDescriptor = Handlers[handlersKey];
+                var registeredExistingCommand = commandDescriptor.Handler.Target.GetType().GetGenericArguments().FirstOrDefault();
+
+                if (registeredExistingCommand == null) continue;
+
+                if(!commandType.IsAssignableFrom(registeredExistingCommand)) continue;
+
+                if (!configuration.GetSkipCommands().Contains(registeredExistingCommand))
                 {
-                    var commandDescriptor = Handlers[handlersKey];
-                    var registeredExistingCommand = commandDescriptor.Handler.Target.GetType().GetGenericArguments().FirstOrDefault();
-                    if(registeredExistingCommand != null)
-                    {
-                        if(!configuration.GetSkipCommands().Contains(registeredExistingCommand) &&
-                           commandType.IsAssignableFrom(registeredExistingCommand))
-                        {
-                            commandDescriptor.AppendValidators(configuration.GetValidators());
-                        }
-                    }
+                    commandDescriptor.AppendValidators(configuration.GetValidators());
+                }
+
+                if (!configuration.GetSkipPostProcessCommands().Contains(registeredExistingCommand))
+                {
+                    commandDescriptor.AppendPostProcessors(configuration.GetPostProcessors());
                 }
             }
         }
