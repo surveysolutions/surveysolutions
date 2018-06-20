@@ -330,11 +330,7 @@
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\drawable\SurveyShape.xml" />
-    <AndroidResource Include="Resources\drawable\SurveyTableHeader.xml" />
     <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
-    <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
-    <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
@@ -447,8 +443,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\drawable-v21\" />
-    <Folder Include="Resources\drawable-xxxhdpi\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
   <ItemGroup>
