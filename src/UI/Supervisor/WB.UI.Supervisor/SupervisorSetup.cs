@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Android.Widget;
 using Autofac;
-using HockeyApp.Android;
+using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
@@ -31,7 +31,6 @@ using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Supervisor.Activities;
 using WB.UI.Supervisor.MvvmBindings;
 using WB.UI.Supervisor.Services.Implementation;
-using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Supervisor
 {
@@ -73,7 +72,7 @@ namespace WB.UI.Supervisor
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new MvxIoCProvider(this.CreateAndInitializeIoc());
+            return new Shared.Enumerator.Autofac.MvxIoCProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()
@@ -89,6 +88,7 @@ namespace WB.UI.Supervisor
                 };
 
             ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             foreach (var module in modules)
             {
                 builder.RegisterModule(module.AsAutofac());

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Navigation;
@@ -39,7 +40,15 @@ namespace WB.UI.Supervisor.Services.Implementation
 
         public override Task NavigateToDashboardAsync(string interviewId = null)
         {
-            throw new System.NotImplementedException();
+            if (interviewId == null)
+            {
+                return this.navigationService.Navigate<DashboardViewModel>();
+            }
+
+            return this.navigationService.Navigate<DashboardViewModel, DashboardViewModelArgs>(new DashboardViewModelArgs
+            {
+                InterviewId = Guid.Parse(interviewId)
+            });
         }
 
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
