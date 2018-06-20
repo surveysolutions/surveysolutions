@@ -75,7 +75,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<DiagnosticsViewModel>();
             registry.Bind<FinishInstallationViewModel>();
             //registry.Bind<InterviewerCompleteInterviewViewModel>();
-            //registry.Bind<SynchronizationViewModel>();
+            registry.Bind<SynchronizationViewModel>();
             //registry.Bind<MapSynchronizationViewModel>();
             //registry.Bind<RelinkDeviceViewModel>();
             registry.Bind<DashboardViewModel>();

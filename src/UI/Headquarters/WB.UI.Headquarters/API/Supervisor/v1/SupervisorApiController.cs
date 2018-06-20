@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.API.Supervisor.v1
         }
 
         [ApiBasicAuth(UserRoles.Supervisor)]
-        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
+        //[WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
         [System.Web.Http.HttpGet]
         [ApiNoCache]
         public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)
@@ -44,9 +44,9 @@ namespace WB.UI.Headquarters.API.Supervisor.v1
 //                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
 //            }
 
-            return this.authorizedUser.DeviceId != deviceId
+            return /*this.authorizedUser.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
-                : this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
+                :*/ this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
         }
 
         private Version GetSupervisorVersionFromUserAgent(HttpRequestMessage request)
