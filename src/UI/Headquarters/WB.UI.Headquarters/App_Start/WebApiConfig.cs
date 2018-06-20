@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters
             config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}",
                 c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/devices/link/{id}/{version:int}",
-                c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
+                c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentResponsibleToDevice(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/users/login", c => c.Action<UsersApiV2Controller>(x => x.Login(Param.Any<LogonInfo>())));
             config.TypedRoute("api/interviewer/v2/users/current", c => c.Action<UsersApiV2Controller>(x => x.Current()));
             config.TypedRoute("api/interviewer/v2/users/supervisor", c => c.Action<UsersApiV2Controller>(x => x.Supervisor()));
@@ -164,22 +164,25 @@ namespace WB.UI.Headquarters
 
         private static void RegisterSupervisorV1Api(HttpConfiguration config)
         {
-//            config.TypedRoute(@"api/supervisor/v1/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
-//            config.TypedRoute(@"api/supervisor/v1/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
-//            config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
-//
-//            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
-//            config.TypedRoute("api/supervisor/v1/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
-//
-//
-//            config.TypedRoute("api/supervisor/v1/tabletInfo",
-//                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
-//            config.TypedRoute("api/supervisor/v1/tabletInfoAsFile",
-//                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
-//            config.TypedRoute("api/supervisor/v1/devices/current/{id}/{version}",
-//                c => c.Action<DevicesApiV2Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
-//            config.TypedRoute("api/supervisor/v1/devices/link/{id}/{version:int}",
-//                c => c.Action<DevicesApiV2Controller>(x => x.LinkCurrentInterviewerToDevice(Param.Any<string>(), Param.Any<int>())));
+            config.TypedRoute(@"api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
+                c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
+
+            //            config.TypedRoute(@"api/supervisor/v1/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
+            //            config.TypedRoute(@"api/supervisor/v1/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
+            //            config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
+            //
+            //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
+            //            config.TypedRoute("api/supervisor/v1/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
+            //
+            //
+            //            config.TypedRoute("api/supervisor/v1/tabletInfo",
+            //                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
+            //            config.TypedRoute("api/supervisor/v1/tabletInfoAsFile",
+            //                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
+            config.TypedRoute("api/supervisor/v1/devices/current/{id}/{version}",
+                c => c.Action<SupervisorDevicesApiV1Controller>(x => x.CanSynchronize(Param.Any<string>(), Param.Any<int>())));
+            config.TypedRoute("api/supervisor/v1/devices/link/{id}/{version:int}",
+                c => c.Action<SupervisorDevicesApiV1Controller>(x => x.LinkCurrentResponsibleToDevice(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/users/login", c => c.Action<SupervisorUserApiController>(x => x.Login(Param.Any<LogonInfo>())));
             config.TypedRoute("api/supervisor/v1/users/current", c => c.Action<SupervisorUserApiController>(x => x.Current()));
             config.TypedRoute("api/supervisor/v1/users/hasdevice", c => c.Action<SupervisorUserApiController>(x => x.HasDevice()));
