@@ -434,9 +434,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\login_logo.png" />
   </ItemGroup>
@@ -455,9 +453,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\login.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
