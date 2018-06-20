@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -20,6 +21,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public class MapSyncProvider : AbstractSynchronizationProcess, IMapSyncProvider
     {
+        private readonly IInterviewerPrincipal principal;
+        private readonly IPasswordHasher passwordHasher;
+        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private readonly IMapService mapService;
@@ -29,12 +33,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IPasswordHasher passwordHasher, IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository, IAuditLogService auditLogService) 
             : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal, passwordHasher, interviewersPlainStorage,
+            httpStatistician, userInteractionService, principal, passwordHasher, 
             interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.mapService = mapService;
+            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.passwordHasher = passwordHasher;
+            this.principal = principal;
         }
 
         protected override bool SendStatistics => false;
@@ -135,6 +142,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public override SyncStatisticsApiView ToSyncStatisticsApiView(SynchronizationStatistics statistics, Stopwatch stopwatch)
         {
             return new SyncStatisticsApiView();
+        }
+
+        protected override void CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        {
+            
+        }
+
+        protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
+        {
+            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
+            localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
+            localInterviewer.Token = credentials.Token;
+
+            this.interviewersPlainStorage.Store(localInterviewer);
+            this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
         }
     }
 }
