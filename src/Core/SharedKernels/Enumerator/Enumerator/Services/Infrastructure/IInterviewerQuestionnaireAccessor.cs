@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
+namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IInterviewerQuestionnaireAccessor
     {

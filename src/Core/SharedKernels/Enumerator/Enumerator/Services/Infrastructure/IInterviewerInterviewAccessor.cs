@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
-namespace WB.Core.BoundedContexts.Interviewer.Services.Infrastructure
+namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
 {
     public interface IInterviewerInterviewAccessor
     {
