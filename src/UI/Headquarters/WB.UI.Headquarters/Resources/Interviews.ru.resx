@@ -142,7 +142,7 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут удалены.&lt;/h3&gt;
-&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
+&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью, которые не получены интервьюером, имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;.</value>
