@@ -1,0 +1,65 @@
+﻿using System;
+using Moq;
+using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
+using WB.Tests.Abc;
+
+namespace WB.Tests.Unit.BoundedContexts.Headquarters
+{
+    [TestFixture]
+    public class InterviewSummaryErrorsCountPostProcessorTests
+    {
+        private InterviewSummaryErrorsCountPostProcessor subject;
+        private Mock<IReadSideRepositoryWriter<InterviewSummary>> interviewSummaryRepo;
+        private InterviewSummary summary;
+        static readonly Guid interviewId = Id.g1;
+        static readonly Guid questionId = Id.g2;
+        private StatefulInterview interview;
+
+
+        [SetUp]
+        public void Setup()
+        {
+            this.summary = Create.Entity.InterviewSummary(interviewId);
+
+            this.interviewSummaryRepo = new Mock<IReadSideRepositoryWriter<InterviewSummary>>();
+            this.interviewSummaryRepo
+                .Setup(s => s.GetById(interviewId.FormatGuid()))
+                .Returns(summary);
+            
+            this.subject = new InterviewSummaryErrorsCountPostProcessor(interviewSummaryRepo.Object);
+
+            this.interview = Create.AggregateRoot.StatefulInterview(interviewId,
+                questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionId)));
+        }
+
+        [Test]
+        public void should_store_errors_count_if_there_is_errors()
+        {
+            this.interview.ApplyEvent(Create.Event.AnswersDeclaredInvalid(Create.Identity(questionId)));
+            this.interview.ApplyEvent(new InterviewDeclaredInvalid());
+
+            subject.Process(this.interview, null);
+
+            this.interviewSummaryRepo.Verify(
+                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 1), interviewId.FormatGuid()));
+        }
+        
+        [Test]
+        public void should_store_zero_errors_count_if_there_is_no_errors()
+        {
+            this.interview.ApplyEvent(Create.Event.AnswersDeclaredValid(Create.Identity(questionId)));
+            this.interview.ApplyEvent(new InterviewDeclaredValid());
+
+            subject.Process(this.interview, null);
+
+            this.interviewSummaryRepo.Verify(
+                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 0), interviewId.FormatGuid()));
+        }
+    }
+}
