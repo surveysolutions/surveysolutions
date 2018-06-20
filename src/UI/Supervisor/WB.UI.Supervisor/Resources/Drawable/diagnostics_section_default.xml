@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<item>
-    <shape>
-      <solid android:color="@color/applicationBackground" />
-      <stroke android:width="1dip" android:color="@color/complete_screen_statistics_border" />
-    </shape>
-  </item>
-</layer-list>

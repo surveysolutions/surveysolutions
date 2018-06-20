@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.TesterResourcesTests
         private static bool HasHardcodedDimensions(XElement element)
         {
             return IsDimension(element.Value)
-                || element.Attributes().Any(attribute => IsDimension(attribute.Value));
+                || element.Attributes().Any(attribute => attribute.Name.Equals("viewportWidth") && IsDimension(attribute.Value));
         }
 
         private static bool IsDimension(string value)
