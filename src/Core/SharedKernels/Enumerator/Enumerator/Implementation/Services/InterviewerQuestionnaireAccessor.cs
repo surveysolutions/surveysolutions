@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
@@ -18,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class InterviewerQuestionnaireAccessor : IInterviewerQuestionnaireAccessor
     {

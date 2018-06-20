@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.Enumerator.Services
+namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
     public interface ISyncBgService
     {

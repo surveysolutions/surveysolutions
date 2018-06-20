@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace WB.UI.Interviewer.Infrastructure
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class InterviewerQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {

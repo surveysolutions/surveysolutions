@@ -7,6 +7,7 @@ using MvvmCross;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.UI.Shared.Enumerator.Services
 {

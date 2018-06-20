@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.SharedKernels.Enumerator.Services
+namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
     public interface ISynchronizationProcess
     {

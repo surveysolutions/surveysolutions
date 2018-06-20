@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -23,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class InterviewerInterviewAccessor : IInterviewerInterviewAccessor
     {
@@ -33,7 +30,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository;
         private readonly IPlainStorage<InterviewFileView> interviewFileViewRepository;
         private readonly ICommandService commandService;
-        private readonly IInterviewerPrincipal principal;
+        private readonly IPrincipal principal;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
@@ -48,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository,
             IPlainStorage<InterviewFileView> interviewFileViewRepository,
             ICommandService commandService,
-            IInterviewerPrincipal principal,
+            IPrincipal principal,
             IEnumeratorEventStorage eventStore,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,

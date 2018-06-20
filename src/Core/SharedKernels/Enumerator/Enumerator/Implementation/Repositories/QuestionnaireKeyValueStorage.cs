@@ -1,10 +1,9 @@
 using Main.Core.Documents;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 {
     public class QuestionnaireKeyValueStorage : IPlainKeyValueStorage<QuestionnaireDocument>
     {
