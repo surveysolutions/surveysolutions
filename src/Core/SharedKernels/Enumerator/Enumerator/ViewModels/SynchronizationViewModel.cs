@@ -3,6 +3,7 @@ using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels

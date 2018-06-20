@@ -6,6 +6,7 @@ using Android.Views;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 

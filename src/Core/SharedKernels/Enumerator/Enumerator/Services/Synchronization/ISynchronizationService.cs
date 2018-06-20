@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
-namespace WB.Core.SharedKernels.Enumerator.Services
+namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
     public interface ISynchronizationService
     {

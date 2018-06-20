@@ -1,9 +1,8 @@
 ﻿using System;
 using SQLite;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class AudioFileMetadataView : IFileMetadataView, IPlainStorageEntity
     {

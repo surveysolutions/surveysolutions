@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Eventing;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class InterviewEventStreamOptimizer : IInterviewEventStreamOptimizer
     {

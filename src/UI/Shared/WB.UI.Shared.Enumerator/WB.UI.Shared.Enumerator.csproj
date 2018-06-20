@@ -326,6 +326,7 @@
     <Compile Include="Services\Internals\CrashReporting.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
+    <Compile Include="Services\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="Services\Logging\NLogLogger.cs" />
     <Compile Include="Services\Logging\NLogLoggerProvider.cs" />
     <Compile Include="Services\Internals\PictureChooser.cs" />

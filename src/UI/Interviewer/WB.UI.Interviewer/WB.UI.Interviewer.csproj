@@ -321,7 +321,6 @@
     <Compile Include="Implementations\Services\StoredEvent.cs" />
     <Compile Include="Implementations\Services\TabletDiagnosticService.cs" />
     <Compile Include="Infrastructure\InterviewerInfrastructureModule.cs" />
-    <Compile Include="Infrastructure\InterviewerQuestionnaireAssemblyFileAccessor.cs" />
     <Compile Include="InterviewerMvxApplication.cs" />
     <Compile Include="Implementations\Services\ViewModelNavigationService.cs" />
     <Compile Include="InterviewerApplication.cs" />
