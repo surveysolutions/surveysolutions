@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class MapsApiV2Controller : ApiController

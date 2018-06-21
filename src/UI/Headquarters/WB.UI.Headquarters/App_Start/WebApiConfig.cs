@@ -8,13 +8,12 @@ using System.Web.Http.ExceptionHandling;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
+using WB.UI.Headquarters.API.DataCollection;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v3;
+using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
 using WB.UI.Headquarters.API.Filters;
-using WB.UI.Headquarters.API.Interviewer;
-using WB.UI.Headquarters.API.Interviewer.v2;
-using WB.UI.Headquarters.API.Interviewer.v3;
-using WB.UI.Headquarters.API.Supervisor.v1;
 using WB.UI.Shared.Web.Compression;
 using WB.UI.Shared.Web.Filters;
 
@@ -29,6 +28,7 @@ namespace WB.UI.Headquarters
 
             config.MapHttpAttributeRoutes(new TypedDirectRouteProvider());
 
+            //InterviewerV2WebApiConfig.Register(config);
             RegisterInterviewerV2Api(config);
             RegisterSupervisorV1Api(config);
             RegisterInterviewsApiController(config);

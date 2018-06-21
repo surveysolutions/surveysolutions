@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.UI.Headquarters.Resources;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [Obsolete(@"Since v 5.10")]
     public class InterviewerApiV2Controller : ApiController

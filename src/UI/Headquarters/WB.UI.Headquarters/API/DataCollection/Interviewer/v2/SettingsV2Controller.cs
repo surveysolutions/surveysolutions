@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class SettingsV2Controller : ApiController

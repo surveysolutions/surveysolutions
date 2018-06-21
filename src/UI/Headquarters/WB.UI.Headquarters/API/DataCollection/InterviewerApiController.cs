@@ -22,7 +22,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API.Interviewer
+namespace WB.UI.Headquarters.API.DataCollection
 {
     public class InterviewerApiController : ApiController
     {

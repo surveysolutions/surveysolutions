@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
+namespace WB.UI.Headquarters.API.DataCollection
 {
     public class UsersControllerBase : ApiController
     {

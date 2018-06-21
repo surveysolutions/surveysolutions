@@ -4,11 +4,10 @@ using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API.Supervisor.v1
+namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
     public class SupervisorAppApiController : ApiController
     {
