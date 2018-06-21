@@ -2,9 +2,9 @@ using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Android.Views;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
-namespace WB.UI.Interviewer.Settings
+namespace WB.UI.Shared.Enumerator.Settings
 {
     public class AndroidDeviceOrientation : IDeviceOrientation
     {

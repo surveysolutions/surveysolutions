@@ -46,7 +46,7 @@ namespace WB.UI.Headquarters.API.Supervisor.v1
 
             return /*this.authorizedUser.DeviceId != deviceId
                 ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
-                :*/ this.Request.CreateResponse(HttpStatusCode.OK, @"449634775");
+                :*/ this.Request.CreateResponse(HttpStatusCode.OK, @"158329303");
         }
 
         private Version GetSupervisorVersionFromUserAgent(HttpRequestMessage request)
