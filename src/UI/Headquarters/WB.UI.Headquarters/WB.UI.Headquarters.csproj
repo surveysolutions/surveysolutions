@@ -1777,6 +1777,9 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Supervisor\SupervisorV1WebApiConfig.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AuditLogApiV2Controller.cs" />
@@ -1793,7 +1796,7 @@
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
-    <Compile Include="API\DataCollection\Supervisor\v1\SupervisorDevicesApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\UsersApiController.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
     <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
