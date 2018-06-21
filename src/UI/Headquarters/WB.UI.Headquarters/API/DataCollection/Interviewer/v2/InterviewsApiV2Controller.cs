@@ -22,7 +22,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-    public class InterviewsApiV2Controller : InterviewsControllerBase
+    public class InterviewsApiV2Controller : InterviewerInterviewsControllerBase
     {
         public InterviewsApiV2Controller(
             IImageFileStorage imageFileStorage,
@@ -78,6 +78,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 
             return response;
         }
+
         [HttpPost]
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 
