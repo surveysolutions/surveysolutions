@@ -855,6 +855,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Commentaries.
+        /// </summary>
+        public static string Interview_Overview_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overview.
         /// </summary>
         public static string Interview_Overview_Name {
