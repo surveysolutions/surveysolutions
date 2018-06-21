@@ -17,13 +17,13 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
     [ApiBasicAuth(UserRoles.Supervisor)]
-    public class SupervisorDevicesApiV1Controller : DevicesControllerBase
+    public class DevicesApiV1Controller : DevicesControllerBase
     {
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
         private readonly HqUserManager userManager;
 
-        public SupervisorDevicesApiV1Controller(
+        public DevicesApiV1Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,

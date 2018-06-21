@@ -11,13 +11,13 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    public class SupervisorUserApiController : ApiController
+    public class UserApiController : ApiController
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly IUserViewFactory userViewFactory;
         protected readonly HqSignInManager signInManager;
 
-        public SupervisorUserApiController(
+        public UserApiController(
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory,
             HqSignInManager signInManager)
