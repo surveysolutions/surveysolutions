@@ -2,10 +2,10 @@ using System;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using BatteryStatus = WB.Core.BoundedContexts.Interviewer.Services.BatteryStatus;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using BatteryStatus = WB.Core.SharedKernels.Enumerator.Implementation.Services.BatteryStatus;
 
-namespace WB.UI.Interviewer.Settings
+namespace WB.UI.Shared.Enumerator.Settings
 {
     public class AndroidBattery : IBattery
     {

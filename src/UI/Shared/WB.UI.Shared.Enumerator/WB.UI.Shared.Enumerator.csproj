@@ -319,6 +319,7 @@
     <Compile Include="Services\BackupRestoreService.cs" />
     <Compile Include="Services\BaseViewModelNavigationService.cs" />
     <Compile Include="Services\AutoSendingCrashListener.cs" />
+    <Compile Include="Services\DeviceInformationService.cs" />
     <Compile Include="Services\DevicePasswordHasher.cs" />
     <Compile Include="Services\EnumeratorSettings.cs" />
     <Compile Include="Services\EnumeratorTabletDiagnosticService.cs" />
@@ -340,6 +341,9 @@
     <Compile Include="Services\ServiceBinder.cs" />
     <Compile Include="Services\SyncBgService.cs" />
     <Compile Include="Services\SyncServiceConnection.cs" />
+    <Compile Include="Settings\AndroidBattery.cs" />
+    <Compile Include="Settings\AndroidDeviceOrientation.cs" />
+    <Compile Include="Settings\GsmSignalStrengthListener.cs" />
     <Compile Include="Utils\AndroidInformationUtils.cs" />
     <Compile Include="Utils\StringExtensions.cs" />
     <Compile Include="ValueCombiners\BaseValueCombiner.cs" />

@@ -1,6 +1,6 @@
 using Android.Telephony;
 
-namespace WB.UI.Interviewer.Settings
+namespace WB.UI.Shared.Enumerator.Settings
 {
     public class GsmSignalStrengthListener : PhoneStateListener
     {

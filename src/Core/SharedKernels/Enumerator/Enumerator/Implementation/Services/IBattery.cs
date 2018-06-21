@@ -1,4 +1,4 @@
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public enum BatteryStatus
     {

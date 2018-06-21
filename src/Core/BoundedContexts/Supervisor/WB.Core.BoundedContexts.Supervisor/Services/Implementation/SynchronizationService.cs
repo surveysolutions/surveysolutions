@@ -30,5 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 this.restService.GetAsync<SupervisorApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
+
+        protected override string CanSynchronizeValidResponse => "158329303";
     }
 }

@@ -10,17 +10,15 @@ using Android.Telephony;
 using Java.Util;
 using Plugin.DeviceInfo;
 using Plugin.Permissions.Abstractions;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.UI.Interviewer.Settings;
-using WB.UI.Shared.Enumerator.Services;
+using WB.UI.Shared.Enumerator.Settings;
 using Permission = Plugin.Permissions.Abstractions.Permission;
 
-namespace WB.UI.Interviewer.Implementations.Services
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class DeviceInformationService : IDeviceInformationService
     {
