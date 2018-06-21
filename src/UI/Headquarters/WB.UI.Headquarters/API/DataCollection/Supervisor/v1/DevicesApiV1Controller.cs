@@ -19,10 +19,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(UserRoles.Supervisor)]
     public class DevicesApiV1Controller : DevicesControllerBase
     {
-        private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
-        private readonly IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository;
-        private readonly HqUserManager userManager;
-
         public DevicesApiV1Controller(
             ISyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
@@ -31,11 +27,10 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             HqUserManager userManager) : base(
                 authorizedUser: authorizedUser,
                 syncVersionProvider: syncVersionProvider,
-                userManager: userManager)
+                userManager: userManager,
+                syncLogRepository: syncLogRepository,
+                deviceSyncInfoRepository: deviceSyncInfoRepository)
         {
-            this.deviceSyncInfoRepository = deviceSyncInfoRepository;
-            this.syncLogRepository = syncLogRepository;
-            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -45,100 +40,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => this.Request.CreateResponse(HttpStatusCode.OK);
 
         [HttpPost]
-        public async Task<IHttpActionResult> Info(DeviceInfoApiView info)
-        {
-            var deviceLocation = info.DeviceLocation;
-
-            var user = await this.userManager.FindByIdAsync(this.authorizedUser.Id);
-
-            if (user == null) return this.Unauthorized();
-
-            this.deviceSyncInfoRepository.AddOrUpdate(new DeviceSyncInfo
-            {
-                SyncDate = DateTime.UtcNow,
-                InterviewerId = this.authorizedUser.Id,
-                DeviceId = info.DeviceId,
-                LastAppUpdatedDate = info.LastAppUpdatedDate,
-                DeviceModel = info.DeviceModel,
-                DeviceType = info.DeviceType,
-                AndroidVersion = info.AndroidVersion,
-                DeviceLanguage = info.DeviceLanguage,
-                DeviceBuildNumber = info.DeviceBuildNumber,
-                DeviceSerialNumber = info.DeviceSerialNumber,
-                DeviceManufacturer = info.DeviceManufacturer,
-                DBSizeInfo = info.DBSizeInfo,
-                AndroidSdkVersion = info.AndroidSdkVersion,
-                AndroidSdkVersionName = info.AndroidSdkVersionName,
-                DeviceDate = info.DeviceDate,
-                AppVersion = info.AppVersion,
-                AppBuildVersion = info.AppBuildVersion,
-                MobileSignalStrength = info.MobileSignalStrength,
-                AppOrientation = info.AppOrientation,
-                MobileOperator = info.MobileOperator,
-                NetworkSubType = info.NetworkSubType,
-                NetworkType = info.NetworkType,
-                BatteryChargePercent = info.BatteryChargePercent,
-                BatteryPowerSource = info.BatteryPowerSource,
-                IsPowerInSaveMode = info.IsPowerInSaveMode,
-                DeviceLocationLat = deviceLocation?.Latitude,
-                DeviceLocationLong = deviceLocation?.Longitude,
-                NumberOfStartedInterviews = info.NumberOfStartedInterviews,
-                RAMFreeInBytes = info.RAMInfo?.Free ?? 0,
-                RAMTotalInBytes = info.RAMInfo?.Total ?? 0,
-                StorageFreeInBytes = info.StorageInfo?.Free ?? 0,
-                StorageTotalInBytes = info.StorageInfo?.Total ?? 0
-            });
-
-            user.Profile.DeviceAppBuildVersion = info.AppBuildVersion;
-            user.Profile.DeviceAppVersion = info.AppVersion;
-
-            await this.userManager.UpdateAsync(user);
-
-            return this.Ok();
-        }
+        public override Task<IHttpActionResult> Info(DeviceInfoApiView info) => base.Info(info);
 
         [HttpPost]
-        public IHttpActionResult Statistics(SyncStatisticsApiView statistics)
-        {
-            var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(this.authorizedUser.Id);
-            deviceInfo.Statistics = new SyncStatistics
-            {
-                DownloadedInterviewsCount = statistics.DownloadedInterviewsCount,
-                DownloadedQuestionnairesCount = statistics.DownloadedQuestionnairesCount,
-                UploadedInterviewsCount = statistics.UploadedInterviewsCount,
-                NewInterviewsOnDeviceCount = statistics.NewInterviewsOnDeviceCount,
-                RejectedInterviewsOnDeviceCount = statistics.RejectedInterviewsOnDeviceCount,
-                RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,
-                RemovedInterviewsCount = statistics.RemovedInterviewsCount,
-                SyncFinishDate = DateTime.UtcNow,
-                TotalConnectionSpeed = statistics.TotalConnectionSpeed,
-                TotalDownloadedBytes = statistics.TotalDownloadedBytes,
-                TotalUploadedBytes = statistics.TotalUploadedBytes,
-                TotalSyncDuration = statistics.TotalSyncDuration,
-
-                AssignmentsOnDeviceCount = statistics.AssignmentsOnDeviceCount,
-                NewAssignmentsCount = statistics.NewAssignmentsCount
-            };
-            this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
-
-            return this.Ok();
-        }
+        public override IHttpActionResult Statistics(SyncStatisticsApiView statistics) => base.Statistics(statistics);
 
         [HttpPost]
-        public IHttpActionResult UnexpectedException(UnexpectedExceptionApiView exception)
-        {
-            this.syncLogRepository.Store(new SynchronizationLogItem
-            {
-                DeviceId = this.authorizedUser.DeviceId,
-                InterviewerId = this.authorizedUser.Id,
-                InterviewerName = this.authorizedUser.UserName,
-                LogDate = DateTime.UtcNow,
-                Type = SynchronizationLogType.DeviceUnexpectedException,
-                Log = $@"<font color=""red"">{exception.StackTrace}</font>"
-            }, Guid.NewGuid());
-
-            return this.Ok();
-        }
-
+        public override IHttpActionResult UnexpectedException(UnexpectedExceptionApiView exception) => base.UnexpectedException(exception);
     }
 }

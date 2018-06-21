@@ -1,19 +1,16 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-    public class AttachmentsApiV2Controller : AttachmentsControllerBase
+    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
+    public class AttachmentsApiV1Controller : AttachmentsControllerBase
     {
-        public AttachmentsApiV2Controller(IAttachmentContentService attachmentContentService) : base(attachmentContentService)
+        public AttachmentsApiV1Controller(IAttachmentContentService attachmentContentService) : base(attachmentContentService)
         {
         }
 
@@ -21,4 +18,5 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         [WriteToSyncLog(SynchronizationLogType.GetAttachmentContent)]
         public override HttpResponseMessage GetAttachmentContent(string id) => base.GetAttachmentContent(id);
     }
+
 }

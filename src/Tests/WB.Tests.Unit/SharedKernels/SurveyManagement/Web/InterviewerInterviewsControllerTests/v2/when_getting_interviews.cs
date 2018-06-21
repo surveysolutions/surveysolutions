@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewInformationFactory = Mock.Of<IInterviewInformationFactory>(
-                x => x.GetInProgressInterviews(interviewId1) == interviewsFromStorage);
+                x => x.GetInProgressInterviewsForInterviewer(interviewId1) == interviewsFromStorage);
 
             controller = CreateInterviewerInterviewsController(
                 interviewsFactory: interviewInformationFactory);
