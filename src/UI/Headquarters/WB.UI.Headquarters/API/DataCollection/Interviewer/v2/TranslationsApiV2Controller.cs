@@ -12,24 +12,15 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-    public class TranslationsApiV2Controller : ApiController
+    public class TranslationsApiV2Controller : TranslationsControllerBase
     {
-        private readonly ITranslationManagementService translations;
-
-        public TranslationsApiV2Controller(ITranslationManagementService translations)
+        public TranslationsApiV2Controller(ITranslationManagementService translations) : base(translations)
         {
-            this.translations = translations;
         }
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetTranslations)]
-        public HttpResponseMessage Get(string id)
-        {
-            var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
+        public override HttpResponseMessage Get(string id) => base.Get(id);
 
-            var translationInstances = this.translations.GetAll(questionnaireIdentity).Cast<TranslationDto>();
-
-            return Request.CreateResponse(HttpStatusCode.OK, translationInstances);
-        }
     }
 }

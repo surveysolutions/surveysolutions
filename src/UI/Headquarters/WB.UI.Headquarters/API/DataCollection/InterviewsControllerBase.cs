@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,7 +18,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
-    public class InterviewsControllerBase : ApiController
+    public abstract class InterviewsControllerBase : ApiController
     {
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
@@ -28,7 +29,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         protected readonly IJsonAllTypesSerializer synchronizationSerializer;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
-        public InterviewsControllerBase(
+        protected InterviewsControllerBase(
             IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
@@ -51,7 +52,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
         public virtual HttpResponseMessage Get()
         {
-            var resultValue = this.interviewsFactory.GetInProgressInterviews(this.authorizedUser.Id)
+            var resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
                 .Select(interview => new InterviewApiView()
                 {
                     Id = interview.Id,
@@ -68,6 +69,9 @@ namespace WB.UI.Headquarters.API.DataCollection
 
             return response;
         }
+
+        protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
+
         
         [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         public virtual void LogInterviewAsSuccessfullyHandled(Guid id)

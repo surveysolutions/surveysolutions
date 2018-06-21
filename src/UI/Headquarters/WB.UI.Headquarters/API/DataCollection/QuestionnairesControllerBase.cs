@@ -21,7 +21,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
-    public class QuestionnairesControllerBase : ApiController
+    public abstract class QuestionnairesControllerBase : ApiController
     {
         protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor;
@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
         private readonly ISerializer serializer;
 
-        public QuestionnairesControllerBase(
+        protected QuestionnairesControllerBase(
             IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
@@ -42,7 +42,24 @@ namespace WB.UI.Headquarters.API.DataCollection
             this.questionnaireStorage = questionnaireStorage;
             this.readsideRepositoryWriter = readsideRepositoryWriter;
         }
-        
+
+        public virtual HttpResponseMessage List()
+        {
+            var questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel { Page = 1, PageSize = int.MaxValue });
+            var resultValue = questionnaireBrowseView.Items
+                .Select(x => new QuestionnaireIdentity(x.QuestionnaireId, x.Version))
+                .ToList();
+
+            var response = this.Request.CreateResponse(resultValue);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                Public = false,
+                NoCache = true
+            };
+
+            return response;
+        }
+
         [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
         public virtual HttpResponseMessage Census()
         {
@@ -64,9 +81,29 @@ namespace WB.UI.Headquarters.API.DataCollection
             };
             return response;
         }
-        
+
+        [WriteToSyncLog(SynchronizationLogType.GetQuestionnaireAttachments)]
+        public virtual HttpResponseMessage GetAttachments(Guid id, int version)
+        {
+            var questionnaireDocument = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
+
+            if (questionnaireDocument == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            var attachmentIds = questionnaireDocument.Attachments.Select(a => a.ContentId).ToList();
+
+            var response = this.Request.CreateResponse(attachmentIds);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                Public = true,
+                MaxAge = TimeSpan.FromDays(10)
+            };
+
+            return response;
+        }
+
         [WriteToSyncLog(SynchronizationLogType.GetQuestionnaire)]
-        protected HttpResponseMessage Get(Guid id, int version, long contentVersion, bool useInOldSerializationFormat)
+        public virtual HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
             var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
             var questionnaireBrowseItem = this.readsideRepositoryWriter.GetById(new QuestionnaireIdentity(id, version).ToString());
@@ -79,18 +116,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
-            JsonSerializerSettings JsonSerializerSettingsNewToOld = new JsonSerializerSettings()
-            {
-                TypeNameHandling = TypeNameHandling.Objects,
-                NullValueHandling = NullValueHandling.Ignore,
-                FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.None,
-                Binder = new NewToOldAssemblyRedirectSerializationBinder()
-            };
-
-            var questionnaireDocumentVersionedSrialized = useInOldSerializationFormat
-                ? JsonConvert.SerializeObject(questionnaireDocumentVersioned, JsonSerializerSettingsNewToOld)
-                : this.serializer.Serialize(questionnaireDocumentVersioned);
+            var questionnaireDocumentVersionedSrialized = this.serializer.Serialize(questionnaireDocumentVersioned);
 
             var resultValue = new QuestionnaireApiView
             {

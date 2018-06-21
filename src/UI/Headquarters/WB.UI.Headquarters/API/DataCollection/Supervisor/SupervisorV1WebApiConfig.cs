@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Threading;
 using System.Web.Http;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.DataCollection.Supervisor.v1;
@@ -16,9 +19,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute(@"api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
 
-            //            config.TypedRoute(@"api/supervisor/v1/devices/info", c => c.Action<DevicesApiV2Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
-            //            config.TypedRoute(@"api/supervisor/v1/devices/statistics", c => c.Action<DevicesApiV2Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
-            //            config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV2Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
+            config.TypedRoute(@"api/supervisor/v1/devices/info", c => c.Action<DevicesApiV1Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
+            config.TypedRoute(@"api/supervisor/v1/devices/statistics", c => c.Action<DevicesApiV1Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
+            config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV1Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
             //
             //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             //            config.TypedRoute("api/supervisor/v1/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
@@ -38,40 +41,55 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
 
             config.TypedRoute("api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
-            //            config.TypedRoute("api/supervisor/v1/translations/{id}",
-            //                c => c.Action<TranslationsApiV2Controller>(x => x.Get(Param.Any<string>())));
+            config.TypedRoute("api/supervisor/v1/translations/{id}",
+                c => c.Action<TranslationsApiV1Controller>(x => x.Get(Param.Any<string>())));
             //            config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV2Controller>(x => x.CompanyLogo()));
             //            config.TypedRoute("api/supervisor/v1/autoupdate", c => c.Action<SettingsV2Controller>(x => x.AutoUpdateEnabled()));
             //            config.TypedRoute("api/supervisor/v1/questionnaires/census",
             //                c => c.Action<QuestionnairesApiV2Controller>(x => x.Census()));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/list",
-            //                c => c.Action<QuestionnairesApiV2Controller>(x => x.List()));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/{contentVersion:long}",
-            //                c => c.Action<QuestionnairesApiV2Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/assembly",
-            //                c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/logstate",
-            //                c =>
-            //                    c.Action<QuestionnairesApiV2Controller>(
-            //                        x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/assembly/logstate",
-            //                c =>
-            //                    c.Action<QuestionnairesApiV2Controller>(
-            //                        x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/attachments",
-            //                c => c.Action<QuestionnairesApiV2Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
-            //
-            //            config.TypedRoute("api/supervisor/v1/attachments/{id}",
-            //                c => c.Action<AttachmentsApiV2Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
-            //            config.TypedRoute("api/supervisor/v1/assignments",
-            //                c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
-            //            config.TypedRoute("api/supervisor/v1/assignments/{id}",
-            //                c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
+
+            config.TypedRoute("api/supervisor/v1/questionnaires/list",
+                c => c.Action<QuestionnairesApiV1Controller>(x => x.List()));
+            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/{contentVersion:long}",
+                c => c.Action<QuestionnairesApiV1Controller>(x => x.Get(Param.Any<Guid>(), Param.Any<int>(), Param.Any<long>())));
+            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/assembly",
+                c => c.Action<QuestionnairesApiV1Controller>(x => x.GetAssembly(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/logstate",
+                c =>
+                    c.Action<QuestionnairesApiV1Controller>(
+                        x => x.LogQuestionnaireAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/assembly/logstate",
+                c =>
+                    c.Action<QuestionnairesApiV1Controller>(
+                        x => x.LogQuestionnaireAssemblyAsSuccessfullyHandled(Param.Any<Guid>(), Param.Any<int>())));
+            config.TypedRoute("api/supervisor/v1/questionnaires/{id:guid}/{version:int}/attachments",
+                c => c.Action<QuestionnairesApiV1Controller>(x => x.GetAttachments(Param.Any<Guid>(), Param.Any<int>())));
+            
+            config.TypedRoute("api/supervisor/v1/attachments/{id}",
+                c => c.Action<AttachmentsApiV1Controller>(x => x.GetAttachmentContent(Param.Any<string>())));
+            config.TypedRoute("api/supervisor/v1/assignments",
+                c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
+            config.TypedRoute("api/supervisor/v1/assignments/{id}",
+                c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
             //            config.TypedRoute("api/supervisor/v1/maps", c => c.Action<MapsApiV2Controller>(x => x.GetMaps()));
             //            config.TypedRoute("api/supervisor/v1/maps/{id}",
             //                c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));
             //            config.TypedRoute("api/supervisor/v1/auditlog",
             //                c => c.Action<AuditLogApiV2Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
+
+            config.TypedRoute("api/supervisor/v2/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
+
+            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV1Controller>(x => x.Details(Param.Any<Guid>())));
+            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}/logstate",
+                c => c.Action<InterviewsApiV1Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
+            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}",
+                c => c.Action<InterviewsApiV1Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
+            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}/image",
+                c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}/audio",
+                c => c.Action<InterviewsApiV1Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+
         }
 
 #pragma warning restore 4014

@@ -1,37 +1,32 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(UserRoles.Interviewer)]
-    public class QuestionnairesApiV2Controller : QuestionnairesControllerBase
+    [ApiBasicAuth(UserRoles.Supervisor)]
+    public class QuestionnairesApiV1Controller : QuestionnairesControllerBase
     {
-        public QuestionnairesApiV2Controller(
+        public QuestionnairesApiV1Controller(
             IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,
             IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter) : base(
-                questionnaireStorage: questionnaireStorage,
-                readsideRepositoryWriter: readsideRepositoryWriter,
-                questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
-                questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
-                serializer: serializer)
+            questionnaireStorage: questionnaireStorage,
+            readsideRepositoryWriter: readsideRepositoryWriter,
+            questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
+            questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
+            serializer: serializer)
         {
         }
 
