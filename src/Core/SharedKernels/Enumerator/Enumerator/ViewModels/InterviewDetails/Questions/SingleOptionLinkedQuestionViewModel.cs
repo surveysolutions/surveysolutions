@@ -216,6 +216,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.previousOptionToReset == null)
                 this.previousOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption)?.RosterVector;
 
+            this.Options.Where(option => option.Selected && option != selectedOption).ForEach(x => x.Selected = false);
+
             if (this.ThrottlePeriod == 0)
             {
                 await SaveAnswer();
