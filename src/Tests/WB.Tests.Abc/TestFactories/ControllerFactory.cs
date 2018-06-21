@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.DataCollection;
+using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Abc.TestFactories
