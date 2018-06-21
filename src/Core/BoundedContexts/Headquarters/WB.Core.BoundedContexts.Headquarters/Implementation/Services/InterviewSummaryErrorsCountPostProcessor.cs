@@ -23,6 +23,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             var summary = interviewSummaryReader.GetById(aggregate.Id.FormatGuid());
 
+            if (summary == null)
+            {
+                return;
+            }
+
             if (!aggregate.HasErrors)
             {
                 summary.ErrorsCount = 0;

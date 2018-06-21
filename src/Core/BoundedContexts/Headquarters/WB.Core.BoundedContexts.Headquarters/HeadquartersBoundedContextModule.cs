@@ -368,6 +368,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 configuration
                 .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
                     .SkipPostProcessFor<HardDeleteInterview>()
+                    .SkipPostProcessFor<DeleteInterviewCommand>()
                     .SkipPostProcessFor<MarkInterviewAsReceivedByInterviewer>()
                     .SkipPostProcessFor<AssignInterviewerCommand>()
                     .SkipPostProcessFor<AssignSupervisorCommand>()
