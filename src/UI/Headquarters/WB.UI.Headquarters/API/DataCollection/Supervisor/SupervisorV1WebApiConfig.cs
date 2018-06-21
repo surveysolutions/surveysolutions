@@ -43,10 +43,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/translations/{id}",
                 c => c.Action<TranslationsApiV1Controller>(x => x.Get(Param.Any<string>())));
-            //            config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV2Controller>(x => x.CompanyLogo()));
-            //            config.TypedRoute("api/supervisor/v1/autoupdate", c => c.Action<SettingsV2Controller>(x => x.AutoUpdateEnabled()));
-            //            config.TypedRoute("api/supervisor/v1/questionnaires/census",
-            //                c => c.Action<QuestionnairesApiV2Controller>(x => x.Census()));
+            config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV1Controller>(x => x.CompanyLogo()));
+            config.TypedRoute("api/supervisor/v1/autoupdate", c => c.Action<SettingsV1Controller>(x => x.AutoUpdateEnabled()));
 
             config.TypedRoute("api/supervisor/v1/questionnaires/list",
                 c => c.Action<QuestionnairesApiV1Controller>(x => x.List()));
@@ -74,8 +72,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             //            config.TypedRoute("api/supervisor/v1/maps", c => c.Action<MapsApiV2Controller>(x => x.GetMaps()));
             //            config.TypedRoute("api/supervisor/v1/maps/{id}",
             //                c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));
-            //            config.TypedRoute("api/supervisor/v1/auditlog",
-            //                c => c.Action<AuditLogApiV2Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
+            config.TypedRoute("api/supervisor/v1/auditlog",
+                c => c.Action<AuditLogApiV1Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
 
             config.TypedRoute("api/supervisor/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
 
