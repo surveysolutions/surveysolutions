@@ -178,10 +178,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             selectedOptionToSave = selectedOption.Value;
-            this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
-
+            
             if (this.previousOptionToReset == null)
                 this.previousOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption)?.Value;
+
+            this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
+
             if (this.ThrottlePeriod == 0)
             {
                 await SaveAnswer();
