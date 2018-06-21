@@ -4,11 +4,9 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection;
-using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
+namespace WB.UI.Headquarters.API.DataCollection
 {
     public class DevicesControllerBase : ApiController
     {

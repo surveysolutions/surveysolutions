@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.Interviewer
+namespace WB.UI.Headquarters.API.DataCollection
 {
     public class QuestionnairesControllerBase : ApiController
     {

@@ -3,15 +3,15 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.UI.Headquarters.Code;
-using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     public class AssignmentsApiV2Controller : ApiController, IAssignmentSynchronizationApi
     {
