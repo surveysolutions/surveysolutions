@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -35,5 +36,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
+
+        protected override string CanSynchronizeValidResponse => "449634775";
     }
 }

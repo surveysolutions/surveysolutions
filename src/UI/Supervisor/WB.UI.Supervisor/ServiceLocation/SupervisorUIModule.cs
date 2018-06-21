@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Settings;
 using WB.UI.Supervisor.Services;
 using WB.UI.Supervisor.Services.Implementation;
 
@@ -45,9 +46,9 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<ISynchronizationService, SynchronizationService>();
             registry.Bind<ISupervisorSynchronizationService, SynchronizationService>();
             registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
-            //registry.Bind<IBattery, AndroidBattery>();
-            //registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
-            //registry.Bind<IDeviceInformationService, DeviceInformationService>();
+            registry.Bind<IBattery, AndroidBattery>();
+            registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
+            registry.Bind<IDeviceInformationService, DeviceInformationService>();
             registry.Bind<IArchivePatcherService, ArchivePatcherService>();
             //registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 

@@ -49,12 +49,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         private readonly IPrincipal principal;
         protected readonly IRestService restService;
-        private readonly IDeviceSettings deviceSettings;
-        private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ICheckVersionUriProvider checkVersionUriProvider;
-        private readonly ILogger logger;
-        private readonly IEnumeratorSettings enumeratorSettings;
+        protected readonly IDeviceSettings deviceSettings;
+        protected readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
+        protected readonly IFileSystemAccessor fileSystemAccessor;
+        protected readonly ICheckVersionUriProvider checkVersionUriProvider;
+        protected readonly ILogger logger;
+        protected readonly IEnumeratorSettings enumeratorSettings;
 
         protected RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
             ? null
@@ -169,11 +169,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var response = await this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
                 url: url, credentials: credentials ?? this.restCredentials, token: token)).ConfigureAwait(false);
 
-            if (response == null || response.Trim('"') != "449634775")
+            if (response == null || response.Trim('"') != CanSynchronizeValidResponse)
             {
                 throw new SynchronizationException(SynchronizationExceptionType.InvalidUrl, InterviewerUIResources.InvalidEndpoint);
             }
         }
+
+        protected abstract string CanSynchronizeValidResponse { get; }
 
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
         {

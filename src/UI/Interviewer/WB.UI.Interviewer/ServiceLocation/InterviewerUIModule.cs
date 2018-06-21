@@ -31,6 +31,7 @@ using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Settings;
 
 namespace WB.UI.Interviewer.ServiceLocation
 {
