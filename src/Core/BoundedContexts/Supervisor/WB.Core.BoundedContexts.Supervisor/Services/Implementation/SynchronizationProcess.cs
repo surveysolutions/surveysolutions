@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -84,6 +85,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
             CancellationToken cancellationToken)
         {
             return Task.CompletedTask; // supervisor is not support census
+        }
+
+        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(new List<Guid>());
         }
     }
 }

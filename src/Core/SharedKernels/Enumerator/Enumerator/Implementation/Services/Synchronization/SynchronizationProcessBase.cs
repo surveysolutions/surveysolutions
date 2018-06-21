@@ -309,7 +309,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         }
 
-        private Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, 
+        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, 
             IProgress<SyncProgressInfo> progress, 
             CancellationToken cancellationToken)
         {
