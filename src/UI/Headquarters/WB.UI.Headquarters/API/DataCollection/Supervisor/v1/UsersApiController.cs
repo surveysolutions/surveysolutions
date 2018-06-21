@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.Supervisor.v1
+namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
     public class SupervisorUserApiController : ApiController
     {

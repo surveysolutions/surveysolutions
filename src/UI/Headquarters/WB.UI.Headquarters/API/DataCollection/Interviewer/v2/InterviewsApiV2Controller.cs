@@ -19,7 +19,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV2Controller : InterviewsControllerBase

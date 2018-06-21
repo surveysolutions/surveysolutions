@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.API.Interviewer;
+using WB.UI.Headquarters.API.DataCollection;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {

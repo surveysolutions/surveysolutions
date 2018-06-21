@@ -15,9 +15,8 @@ using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
-using WB.UI.Shared.Web.Filters;
 
-namespace WB.UI.Headquarters.API.Interviewer.v3
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : ApiController

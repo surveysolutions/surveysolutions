@@ -14,10 +14,9 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.UI.Headquarters.API.Interviewer;
 using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     [ApiBasicAuth(UserRoles.Interviewer)]
     public class QuestionnairesApiV2Controller : QuestionnairesControllerBase

@@ -11,7 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
 {
     public class UsersApiV2Controller : UsersControllerBase
     {

@@ -15,8 +15,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
 
-
-namespace WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer
+namespace WB.UI.Headquarters.API.DataCollection
 {
     public class InterviewsControllerBase : ApiController
     {
