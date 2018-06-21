@@ -66,7 +66,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IMapService, MapService>();
             //registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
-           ]
+           
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
