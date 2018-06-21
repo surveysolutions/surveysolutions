@@ -32,8 +32,6 @@ namespace WB.UI.Supervisor.ServiceLocation
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<SupervisorMvxApplication>();
-            registry.Bind<SupervisorAppStart>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
             registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();
@@ -67,35 +65,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IMapService, MapService>();
             //registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
-            registry.Bind<LoginViewModel>();
-            //registry.Bind<PrefilledQuestionsViewModel>();
-            //registry.Bind<InterviewViewModel>();
-            registry.Bind<BackupRestoreViewModel>();
-            registry.Bind<BackupViewModel>();
-            registry.Bind<BandwidthTestViewModel>();
-            registry.Bind<CheckNewVersionViewModel>();
-            registry.Bind<DiagnosticsViewModel>();
-            registry.Bind<FinishInstallationViewModel>();
-            //registry.Bind<InterviewerCompleteInterviewViewModel>();
-            registry.Bind<SynchronizationViewModel>();
-            //registry.Bind<MapSynchronizationViewModel>();
-            //registry.Bind<RelinkDeviceViewModel>();
-            registry.Bind<DashboardViewModel>();
-            //registry.Bind<DashboardSearchViewModel>();
-            //registry.Bind<MapsViewModel>();
-            //registry.Bind<CompletedInterviewsViewModel>();
-            //registry.Bind<RejectedInterviewsViewModel>();
-            //registry.Bind<StartedInterviewsViewModel>();
-            //registry.Bind<AssignmentDashboardItemViewModel>();
-            //registry.Bind<CensusQuestionnaireDashboardItemViewModel>();
-            //registry.Bind<ExpandableQuestionsDashboardItemViewModel>();
-            //registry.Bind<InterviewDashboardItemViewModel>();
-            //registry.Bind<CreateNewViewModel>();
-            //registry.Bind<DashboardSubTitleViewModel>();
-            //registry.Bind<CompanyLogoSynchronizer>();
-            //registry.Bind<LoadingViewModel>();
-            registry.Bind<PhotoViewViewModel>();
-
+           ]
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
             registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
