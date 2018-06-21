@@ -136,7 +136,7 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能删除处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
+&lt;b&gt;注意！&lt;/b&gt;您可以删除只有以下状态的面试者未收到的面试：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;
