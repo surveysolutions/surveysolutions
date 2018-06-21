@@ -1915,10 +1915,10 @@
     <Compile Include="API\HealthCheckApiController.cs" />
     <Compile Include="API\InterviewerSyncController.cs" />
     <Compile Include="API\DataCollection\DevicesControllerBase.cs" />
-    <Compile Include="API\DataCollection\InterviewerApiController.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerApiController.cs" />
     <Compile Include="API\DataCollection\InterviewsControllerBase.cs" />
     <Compile Include="API\DataCollection\QuestionnairesControllerBase.cs" />
-    <Compile Include="API\DataCollection\UsersControllerBase.cs" />
+    <Compile Include="API\DataCollection\Interviewer\UsersControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AttachmentsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\DevicesApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\InterviewerApiV2Controller.cs" />
