@@ -1,16 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@android:color/transparent" />
-        </shape>
-    </item>
-    <item
-        android:top="@dimen/Interview_Overview_background_padding_inner"
-        android:right="@dimen/Interview_Overview_left_margin"
-        android:bottom="@dimen/Interview_Overview_background_padding_inner">
-        <shape android:shape="rectangle">
-            <solid android:color="@color/overview_commented_overlay" />
-        </shape>
-    </item>
-</layer-list>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/overview_commented_overlay" />
+</shape>
+
+

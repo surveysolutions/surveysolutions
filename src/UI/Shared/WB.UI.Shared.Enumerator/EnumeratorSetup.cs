@@ -82,6 +82,7 @@ namespace WB.UI.Shared.Enumerator
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
                 {typeof(OverviewViewModel), typeof (OverviewFragment)},
+                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();

@@ -28,6 +28,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             base.IsAnswered = treeQuestion.IsAnswered();
             this.ErrorMessages = interview.GetFailedValidationMessages(treeQuestion.Identity, "")
                 .Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+            this.HasWarnings = interview.GetFailedWarningMessages(treeQuestion.Identity, "").Any();
             HasComment = treeQuestion.AnswerComments.Count > 0;
         }
 
@@ -36,6 +38,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public string Answer { get; set; }
 
         public bool HasComment { get; set; }
+
+        public bool HasWarnings { get; set; }
 
         public sealed override OverviewNodeState State { get; set; }
     }

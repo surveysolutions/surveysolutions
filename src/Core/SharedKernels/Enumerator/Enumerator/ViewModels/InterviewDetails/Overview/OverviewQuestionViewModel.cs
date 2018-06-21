@@ -9,19 +9,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
     public class OverviewQuestionViewModel : OverviewQuestion
     {
-        private readonly IUserInteractionService userInteractionService;
-
         public OverviewQuestionViewModel(InterviewTreeQuestion treeQuestion, IStatefulInterview interview, IUserInteractionService userInteractionService) : base(treeQuestion, interview)
         {
-            this.userInteractionService = userInteractionService;
+
         }
 
-        public IMvxCommand ShowErrors => new MvxCommand(() =>
-        {
-            foreach (var error in this.ErrorMessages)
-            {
-                userInteractionService.ShowToast(error);
-            }
-        }, () => ErrorMessages.Count > 0);
     }
 }
