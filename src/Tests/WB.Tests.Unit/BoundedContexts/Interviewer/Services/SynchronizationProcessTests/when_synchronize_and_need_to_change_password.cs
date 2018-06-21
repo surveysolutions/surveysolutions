@@ -11,6 +11,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -28,13 +29,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             Mock<IUserInteractionService> userInteractionServiceMock = new Mock<IUserInteractionService>();
-            Mock<IInterviewerPrincipal> principalMock = new Mock<IInterviewerPrincipal>();
             Mock<ISynchronizationService> synchronizationServiceMock = new Mock<ISynchronizationService>();
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
-            principalMock
-                .Setup(x => x.CurrentUserIdentity)
-                .Returns(interviewerIdentity);
+            var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
 
             userInteractionServiceMock
                 .Setup(x => x.ConfirmWithTextInputAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
