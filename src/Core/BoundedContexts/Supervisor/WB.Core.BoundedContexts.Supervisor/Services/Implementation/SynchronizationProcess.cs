@@ -79,5 +79,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         {
             return supervisorSettings.GetApplicationVersionCode();
         }
+
+        protected override Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
+            CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask; // supervisor is not support census
+        }
     }
 }

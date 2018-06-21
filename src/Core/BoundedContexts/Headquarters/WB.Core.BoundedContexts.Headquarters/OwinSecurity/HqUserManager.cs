@@ -175,6 +175,9 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             if(!currentUser.IsInRole(UserRoles.Interviewer) && !currentUser.IsInRole(UserRoles.Supervisor))
                 throw new AuthenticationException(@"Only interviewer or supervisor can be linked to device");
 
+            if (currentUser.Profile == null)
+                currentUser.Profile = new HqUserProfile();
+
             currentUser.Profile.DeviceId = deviceId;
             currentUser.Profile.DeviceRegistrationDate = deviceRegistrationDate;
             this.UpdateUser(currentUser, null);

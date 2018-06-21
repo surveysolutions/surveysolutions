@@ -23,9 +23,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
         {
         }
 
-        protected override IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId)
+        protected override IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid supervisorId)
         {
-            return this.interviewsFactory.GetInProgressInterviewsForInterviewer(responsibleId);
+            return this.interviewsFactory.GetInProgressInterviewsForSupervisor(supervisorId);
         }
     }
 }

@@ -77,17 +77,17 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             //            config.TypedRoute("api/supervisor/v1/auditlog",
             //                c => c.Action<AuditLogApiV2Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
 
-            config.TypedRoute("api/supervisor/v2/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
+            config.TypedRoute("api/supervisor/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
 
-            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}",
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}",
                 c => c.Action<InterviewsApiV1Controller>(x => x.Details(Param.Any<Guid>())));
-            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}/logstate",
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/logstate",
                 c => c.Action<InterviewsApiV1Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
-            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}",
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}",
                 c => c.Action<InterviewsApiV1Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
-            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}/image",
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/image",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
-            config.TypedRoute("api/supervisor/v2/interviews/{id:guid}/audio",
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
 
         }
