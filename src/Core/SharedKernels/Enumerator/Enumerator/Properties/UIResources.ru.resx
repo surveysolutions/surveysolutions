@@ -617,6 +617,9 @@
   <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
     <value>Дополнительная информация</value>
   </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
   <data name="Interview_Overview_Warnings" xml:space="preserve">
     <value>Ошибки</value>
   </data>
