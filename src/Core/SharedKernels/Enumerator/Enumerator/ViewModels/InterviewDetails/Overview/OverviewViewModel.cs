@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
         public void Configure(string interviewId)
         {
+            this.InterviewId = interviewId;
             var interview = interviewRepository.Get(interviewId);
             var sections = interview.GetEnabledSections().Select(x => x.Identity).ToImmutableHashSet();
 
@@ -52,6 +53,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.Name.InitAsStatic(UIResources.Interview_Overview_Name);
             this.Items = interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections)).ToList();
         }
+
+        public string InterviewId { get; set; }
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
             IStatefulInterview interview,

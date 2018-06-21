@@ -20,10 +20,13 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 
             this.ErrorMessages = interview.GetFailedValidationMessages(treeNode.Identity, "")
                 .Where(x => !string.IsNullOrEmpty(x)).ToList();
+            this.HasWarnings = interview.GetFailedWarningMessages(treeNode.Identity, "").Any();
         }
 
         public List<string> ErrorMessages { get; set; }
 
         public sealed override OverviewNodeState State { get; set; }
+
+        public bool HasWarnings { get; set; }
     }
 }
