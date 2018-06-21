@@ -846,6 +846,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional info.
+        /// </summary>
+        public static string Interview_Overview_AdditionalInfo {
+            get {
+                return ResourceManager.GetString("Interview_Overview_AdditionalInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overview.
         /// </summary>
         public static string Interview_Overview_Name {
@@ -860,6 +869,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Interview_Overview_NotAnswered {
             get {
                 return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning(s).
+        /// </summary>
+        public static string Interview_Overview_Warnings {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Warnings", resourceCulture);
             }
         }
         

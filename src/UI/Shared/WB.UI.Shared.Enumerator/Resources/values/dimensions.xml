@@ -47,6 +47,7 @@
   <dimen name="Interview_Overview_unanswered_background_padding">26dp</dimen>
   <dimen name="Interview_Overview_background_padding_outer">36dp</dimen>
   <dimen name="Interview_Overview_background_padding_inner">6dp</dimen>
+  <dimen name="Interview_Overview_Answer_margin_top">6dp</dimen>
   <dimen name="Interview_Overview_left_margin">42dp</dimen>
-  <dimen name="Interview_Overview_top_margin">18dp</dimen>
+  <dimen name="Interview_Overview_top_margin">15dp</dimen>
 </resources>

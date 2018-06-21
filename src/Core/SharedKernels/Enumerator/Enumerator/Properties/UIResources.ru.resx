@@ -606,12 +606,18 @@
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>
-    <data name="Interview_Overview" xml:space="preserve">
+  <data name="Interview_Overview" xml:space="preserve">
     <value>Обзор</value>
     <comment>Обзор</comment>
   </data>
-    <data name="Interview_Overview_Name" xml:space="preserve">
+  <data name="Interview_Overview_Name" xml:space="preserve">
     <value>Обзор</value>
     <comment>Обзор</comment>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Дополнительная информация</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Ошибки</value>
   </data>
 </root>
