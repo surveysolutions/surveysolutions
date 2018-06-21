@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         public override HttpResponseMessage CanSynchronize(string id, int version) => this.Request.CreateResponse(HttpStatusCode.OK);
 
         [HttpPost]
-        public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => this.Request.CreateResponse(HttpStatusCode.OK);
+        public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => base.LinkCurrentResponsibleToDevice(id, version);
 
         [HttpPost]
         public override Task<IHttpActionResult> Info(DeviceInfoApiView info) => base.Info(info);

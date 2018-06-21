@@ -347,7 +347,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
-        private async Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress,
+        protected virtual async Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics,
             CancellationToken cancellationToken)
         {
