@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Tests.Abc;
@@ -62,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             subject.Process(this.interview, null);
 
             this.interviewSummaryRepo.Verify(
-                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 4), interviewId.FormatGuid()));
+                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 4), interviewId.FormatGuid()), Times.Once);
         }
         
         [Test]
@@ -73,7 +74,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
             subject.Process(this.interview, null);
 
             this.interviewSummaryRepo.Verify(
-                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 0), interviewId.FormatGuid()));
+                repo => repo.Store(It.Is<InterviewSummary>(s => s.ErrorsCount == 0), interviewId.FormatGuid()), Times.Once);
+        }
+
+        [Test]
+        public void should_handle_non_existing_summary()
+        {
+            var someInterview = Create.AggregateRoot.StatefulInterview(Guid.NewGuid());
+
+            Assert.DoesNotThrow(() => subject.Process(someInterview, new DeleteInterviewCommand(someInterview.Id, Guid.NewGuid())));
+
+            this.interviewSummaryRepo.Verify(
+                repo => repo.Store(It.IsAny<InterviewSummary>(), It.IsAny<string>()), Times.Never);
         }
     }
 }
