@@ -73,8 +73,13 @@
 
                 <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
                 <label for="cb-hide-instructions"><span></span>{{'QuestionHideInstruction' | i18next}} <help key="hideInstructions" /></label>
+                
+                <div class="pseudo-form-control">
+                    <div id="edit-question-title-highlight"
+                         ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.instructions"></div>
+                </div>
 
-                <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
+                <!--<textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>-->
             </div>
 
             <div class="form-group col-xs-1">

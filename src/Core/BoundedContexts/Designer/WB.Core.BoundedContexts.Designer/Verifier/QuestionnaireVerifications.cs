@@ -158,8 +158,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
-
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
+                
                 if (translatedEntity.Entity is IValidatable entityAsValidatable)
                 {
                     var validationConditions = entityAsValidatable.ValidationConditions;
@@ -174,9 +174,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if (translatedEntity.Entity is IQuestion entityAsQuestion)
                 {
                     var variableLabel= entityAsQuestion.VariableLabel;
-                    if (string.IsNullOrWhiteSpace(variableLabel))
-                        continue;
-                    foundErrors.AddRange(GetErrorsBySubstitutionsInVariableLabel(translatedEntity, variableLabel, questionnaire));
+                    if (!string.IsNullOrWhiteSpace(variableLabel))
+                      foundErrors.AddRange(GetErrorsBySubstitutionsInVariableLabel(translatedEntity, variableLabel, questionnaire));
+
+                    if (!string.IsNullOrWhiteSpace(entityAsQuestion.Instructions))
+                        foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, entityAsQuestion.Instructions, questionnaire));
                 }
             }
 
@@ -214,7 +216,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return entityErrors;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title);
 
@@ -242,10 +244,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             RosterScope vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            bool isTitle = validationConditionIndex == null;
+            bool isTitleOrInstructions = validationConditionIndex == null;
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
 
-            if (traslatedEntityWithSubstitution.Entity is IQuestion question && isTitle && substitutionReference == question.StataExportCaption)
+            if (traslatedEntityWithSubstitution.Entity is IQuestion question && isTitleOrInstructions && substitutionReference == question.StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
                     VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,

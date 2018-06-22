@@ -145,10 +145,10 @@
     <value>Linked question references a question not in a roster.</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Question with title substitution cannot be marked as identifying.</value>
+    <value>Question with title or instrustions substitution cannot be marked as identifying.</value>
   </data>
   <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>Question with title substitution cannot reference itself.</value>
+    <value>Question with title or instrustions substitution cannot reference itself.</value>
   </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Substitution references a nonexistent question or variable.</value>
