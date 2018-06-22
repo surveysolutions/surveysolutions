@@ -161,7 +161,7 @@
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) წაიშლება. &lt;/ h3&gt;
 
-&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ წაშალოთ  ინტერვიუები მხოლოდ შემდეგი სტატუსებით: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
+&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუერის მიერ არ მიიღოთ გასაუბრება მხოლოდ შემდეგ სტატუტებთან: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. </value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;

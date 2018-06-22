@@ -1329,6 +1329,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for obsolete interviews.
+        /// </summary>
+        public static string Synchronization_CheckForObsolete_Interviews {
+            get {
+                return ResourceManager.GetString("Synchronization_CheckForObsolete_Interviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Checking application updates.
         /// </summary>
         public static string Synchronization_CheckNewVersionOfApplication {

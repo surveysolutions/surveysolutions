@@ -1,7 +1,6 @@
 using System;
 using MvvmCross.Plugin.Messenger;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;

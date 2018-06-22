@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+  <LinearLayout style="@style/Diagnostics_TitleSection">
+    <TextView
+         style="@style/Diagnostics_Section_Title"
+         local:MvxBind="Text Localization('Diagnostics_Send_Title'); Click TabletInformation.CreateBackupCommand;  UnderlinePressed ." />
+    <TextView
+              style="@style/Diagnostics_Section_Description"
+              local:MvxBind="Html Localization('Diagnostics_Send_Description')" />
+  </LinearLayout>
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible TabletInformation.IsPackageBuild;" >
+    <TextView
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Text Localization('Diagnostics_TabletInformationReady_Title')" />
+    <TextView
+    style="@style/Diagnostics_Section_Description"
+    local:MvxBind="Text Localization('Diagnostics_TabletInformationWhenGenerated_Title')" />
+
+    <TextView
+   style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text TabletInformation.WhenGenerated" />
+    <TextView
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_TabletInformationScope_Title')" />
+    <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text TabletInformation.Scope" />
+    <LinearLayout style="@style/Diagnostic_FormContainer">
+      <Button
+        style="@style/Diagnostics_Green_Button"
+        local:MvxBind="Text Localization('Diagnostics_Send'); Click TabletInformation.SendBackupCommand" />
+
+      <Button
+          style="@style/Diagnostic_Transparent_Button" 
+          local:MvxBind="Text Localization('Diagnostics_Delete'); Click TabletInformation.DeleteBackupCommand" />
+    </LinearLayout>
+
+  </LinearLayout>
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible TabletInformation.IsPackageSendingAttemptCompleted;" >
+    <TextView
+     style="@style/Diagnostics_Subsection_Title"
+     local:MvxBind="Text TabletInformation.PackageSendingAttemptResponceText" />
+  </LinearLayout>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               android:indeterminateOnly="true" 
+               local:MvxBind="Visible TabletInformation.IsInProgress" />
+</LinearLayout>

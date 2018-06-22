@@ -30,7 +30,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     internal class when_processing_package_failed : with_postgres_db
     {
         [OneTimeSetUp] public void context () {
-            Context();
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
                 new[] {typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap)}, true);
             plainPostgresTransactionManager =

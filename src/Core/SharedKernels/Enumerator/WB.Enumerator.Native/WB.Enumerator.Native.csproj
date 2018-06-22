@@ -8,6 +8,7 @@
         <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
         <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
         <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+        <Configurations>Debug;Release;Debug-ESRI</Configurations>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
         <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
@@ -22,7 +23,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Antlr" Version="3.5.0.2" />
-        <PackageReference Include="AutoMapper" Version="6.2.2" />
+        <PackageReference Include="AutoMapper" Version="7.0.1" />
         <PackageReference Include="CSCore" Version="1.2.1.2" />
         <PackageReference Include="Dapper" Version="1.50.4" />
         <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
