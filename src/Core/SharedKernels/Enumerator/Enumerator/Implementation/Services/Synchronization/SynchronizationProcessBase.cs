@@ -96,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            await this.UploadCompletedInterviewsAsync(progress, statistics, cancellationToken);
+            await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
@@ -405,10 +405,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             };
         }
 
-        private async Task UploadCompletedInterviewsAsync(IProgress<SyncProgressInfo> progress,
+        private async Task UploadInterviewsAsync(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
-            var completedInterviews = this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.Completed);
+            var completedInterviews = GetInterviewsForUpload();
 
             statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
 
@@ -461,6 +461,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
+
+        protected abstract IReadOnlyCollection<InterviewView> GetInterviewsForUpload();
 
         private async Task UploadImagesByCompletedInterviewAsync(Guid interviewId, IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)

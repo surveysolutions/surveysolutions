@@ -8,6 +8,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         private readonly ISupervisorSettings supervisorSettings;
         private readonly IPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPasswordHasher passwordHasher;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService,
@@ -57,6 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
             this.principal = principal;
             this.supervisorSettings = supervisorSettings;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
+            this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
         }
 
@@ -90,6 +93,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         protected override Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             return Task.FromResult(new List<Guid>());
+        }
+
+        protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
+        {
+            return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.ApprovedBySupervisor);
         }
     }
 }
