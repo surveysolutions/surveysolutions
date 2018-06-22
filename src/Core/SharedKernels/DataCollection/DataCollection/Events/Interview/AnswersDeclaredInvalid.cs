@@ -38,6 +38,20 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
         }
 
+        protected AnswersDeclaredInvalid(Identity[] questions) : base(DateTimeOffset.Now)
+        {
+            this.OriginDate = null;
+
+            this.Questions = questions;
+            var dictionary = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+            foreach (var question in questions)
+            {
+                dictionary.Add(question, new List<FailedValidationCondition>());
+            }
+
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(dictionary);
+        }
+
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions, 
             DateTimeOffset originDate) : base(originDate)
         {
