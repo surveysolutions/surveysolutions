@@ -14,8 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos
 
         public override bool Equals(object obj)
         {
-            AnsweredYesNoOption option  = obj as AnsweredYesNoOption;
-            return option != null && this.Equals(option);
+            return obj is AnsweredYesNoOption option && this.Equals(option);
         }
 
         protected bool Equals(AnsweredYesNoOption other)

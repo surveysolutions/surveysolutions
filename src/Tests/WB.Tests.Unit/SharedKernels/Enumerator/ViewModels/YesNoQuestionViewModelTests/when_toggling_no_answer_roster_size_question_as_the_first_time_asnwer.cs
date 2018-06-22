@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.First()).Wait();
+        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.First(), null).Wait();
 
         [NUnit.Framework.Test] public void should_send_answering_command () =>
             answeringViewModelMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.IsAny<AnswerQuestionCommand>()), Times.Once);

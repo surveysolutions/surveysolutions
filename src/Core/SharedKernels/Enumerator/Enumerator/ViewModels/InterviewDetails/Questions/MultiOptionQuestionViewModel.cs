@@ -187,30 +187,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private readonly Timer timer;
         protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
-        private List<int> previousOptionToReset = null;
-        private List<int> selectedOptionToSave = null;
+        private List<int> previousOptionsToReset = null;
+        private List<int> selectedOptionsToSave = null;
 
         private async Task SaveAnswer()
         {
-            var itemsToDelete = previousOptionToReset.Except(selectedOptionToSave).ToList();
-            if (this.isRosterSizeQuestion && itemsToDelete.Any())
+            if (this.isRosterSizeQuestion)
             {
-                var amountOfRostersToRemove = itemsToDelete.Count;
-                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
-                if (!await this.userInteraction.ConfirmAsync(message))
+                var itemsToDelete = previousOptionsToReset.Except(selectedOptionsToSave).ToList();
+                if (itemsToDelete.Any())
                 {
-                    foreach (var itemToDelete in itemsToDelete)
+                    var amountOfRostersToRemove = itemsToDelete.Count;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                    if (!await this.userInteraction.ConfirmAsync(message))
                     {
-                        var option = this.GetOptionByValue(itemToDelete);
-                        if (option!=null)
-                            option.Checked = true;    
-                    }
+                        foreach (var itemToDelete in itemsToDelete)
+                        {
+                            var option = this.GetOptionByValue(itemToDelete);
+                            if (option!=null)
+                                option.Checked = true;    
+                        }
                     
-                    return;
+                        return;
+                    }
                 }
             }
 
-            var selectedValues = selectedOptionToSave.ToArray();
+            var selectedValues = selectedOptionsToSave.ToArray();
 
             var command = new AnswerMultipleOptionsQuestionCommand(
                 this.interviewId,
@@ -237,7 +240,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                var optionsToReset = previousOptionToReset.Except(selectedOptionToSave).Union(selectedOptionToSave.Except(previousOptionToReset));
+                var optionsToReset = previousOptionsToReset.Except(selectedOptionsToSave).Union(selectedOptionsToSave.Except(previousOptionsToReset));
 
                 foreach (var optionToReset in optionsToReset)
                 {
@@ -261,12 +264,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder ?? 0).Select(x => x.Value).ToList() :
                     this.Options.Where(x => x.Checked).Select(x => x.Value).ToList();
 
-            if (previousOptionToReset == null)
+            if (previousOptionsToReset == null)
             {
                 var toggledOptionValue = (changedModel as MultiOptionQuestionOptionViewModel).Value;
-                previousOptionToReset = allSelectedOptions.Except(toggledOptionValue.ToEnumerable()).ToList();
+                previousOptionsToReset = allSelectedOptions.Except(toggledOptionValue.ToEnumerable()).ToList();
                 if (!changedModel.Checked)
-                    previousOptionToReset.Add(toggledOptionValue);
+                    previousOptionsToReset.Add(toggledOptionValue);
             }
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
@@ -275,7 +278,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            selectedOptionToSave = allSelectedOptions;
+            selectedOptionsToSave = allSelectedOptions;
 
             if (this.ThrottlePeriod == 0)
             {
