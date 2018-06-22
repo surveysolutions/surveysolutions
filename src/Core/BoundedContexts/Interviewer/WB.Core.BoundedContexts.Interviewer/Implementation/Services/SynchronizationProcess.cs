@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -8,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -25,6 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IInterviewerPrincipal principal;
         private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPasswordHasher passwordHasher;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService,
@@ -60,6 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.interviewersPlainStorage = interviewersPlainStorage;
+            this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
         }
 
@@ -97,5 +101,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         {
             return interviewerSettings.GetApplicationVersionCode();
         }
+
+        protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
+        {
+            return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.Completed);
+        }
+
     }
 }
