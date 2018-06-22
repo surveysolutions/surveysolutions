@@ -22,7 +22,7 @@ namespace WB.UI.Interviewer.Settings
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
 
         public InterviewerSettings(IPlainStorage<ApplicationSettingsView> settingsStorage,
-            ISyncProtocolVersionProvider syncProtocolVersionProvider,
+            IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,

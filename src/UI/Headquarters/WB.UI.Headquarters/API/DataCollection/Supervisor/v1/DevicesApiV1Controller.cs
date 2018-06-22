@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     public class DevicesApiV1Controller : DevicesControllerBase
     {
         public DevicesApiV1Controller(
-            ISyncProtocolVersionProvider syncVersionProvider,
+            ISupervisorSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,
@@ -34,9 +34,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpGet]
-        public override HttpResponseMessage CanSynchronize(string id, int version) => this.Request.CreateResponse(HttpStatusCode.OK);
+        [WriteToSyncLog(SynchronizationLogType.CanSynchronize)]
+        public override HttpResponseMessage CanSynchronize(string id, int version) => base.CanSynchronize(id, version);
 
         [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.LinkToDevice)]
         public override HttpResponseMessage LinkCurrentResponsibleToDevice(string id, int version) => base.LinkCurrentResponsibleToDevice(id, version);
 
         [HttpPost]

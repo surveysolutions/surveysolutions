@@ -61,7 +61,8 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IArchivePatcherService, ArchivePatcherService>();
             registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 
-            registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
+            registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
+            registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
 
             registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
