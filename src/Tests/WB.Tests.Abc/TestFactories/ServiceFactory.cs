@@ -80,6 +80,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -140,14 +141,14 @@ namespace WB.Tests.Abc.TestFactories
                 interviewReferencesStorage ?? new TestInMemoryWriter<InterviewSummary>(),
                 cumulativeReportReader ?? Mock.Of<INativeReadSideStorage<CumulativeReportStatusChange>>());
 
-        public InterviewerDashboardEventHandler DashboardDenormalizer(
+        public InterviewDashboardEventHandler DashboardDenormalizer(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireStorage questionnaireStorage = null,
             ILiteEventRegistry liteEventRegistry = null,
             IPlainStorage<PrefilledQuestionView> prefilledQuestions = null,
             IAnswerToStringConverter answerToStringConverter = null
         )
-            => new InterviewerDashboardEventHandler(
+            => new InterviewDashboardEventHandler(
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 prefilledQuestions ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),

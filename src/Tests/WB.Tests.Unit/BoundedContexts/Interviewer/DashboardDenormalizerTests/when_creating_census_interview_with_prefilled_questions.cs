@@ -4,13 +4,14 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
-    [TestOf(typeof(InterviewerDashboardEventHandler))]
+    [TestOf(typeof(InterviewDashboardEventHandler))]
     internal class InterviewerDashboardEventHandlerTest
     {
         [Test]
