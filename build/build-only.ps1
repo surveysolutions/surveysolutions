@@ -116,7 +116,7 @@ try {
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
             -OutFileName $SuperPackageName `
-            -ExcludeExtra $true | % { if (-not $_) { Exit } }
+            -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
         CopyCapi -Project $ProjectHeadquarters -source $SuperPackageName -cleanUp $false | % { if (-not $_) { Exit } }
 
