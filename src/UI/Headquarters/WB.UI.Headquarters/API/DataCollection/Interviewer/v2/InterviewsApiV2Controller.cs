@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -24,23 +25,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV2Controller : InterviewerInterviewsControllerBase
     {
-        public InterviewsApiV2Controller(
-            IImageFileStorage imageFileStorage,
-            IAudioFileStorage audioFileStorage,
-            IAuthorizedUser authorizedUser,
-            IInterviewInformationFactory interviewsFactory,
-            IInterviewPackagesService incomingSyncPackagesQueue,
-            ICommandService commandService,
-            IMetaInfoBuilder metaBuilder,
-            IJsonAllTypesSerializer synchronizationSerializer) : base(
-                imageFileStorage: imageFileStorage,
-                audioFileStorage: audioFileStorage,
-                authorizedUser: authorizedUser,
-                interviewsFactory: interviewsFactory,
-                interviewPackagesService: incomingSyncPackagesQueue,
-                commandService: commandService,
-                metaBuilder: metaBuilder,
-                synchronizationSerializer: synchronizationSerializer)
+        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService interviewPackagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IInterviewPackagesService packagesService) 
+            : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, interviewPackagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, packagesService)
         {
         }
 
