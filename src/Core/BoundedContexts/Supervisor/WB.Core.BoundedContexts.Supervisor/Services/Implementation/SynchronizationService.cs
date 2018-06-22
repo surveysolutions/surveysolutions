@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected override string ApiUrl => "api/supervisor/";
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
-            ISupervisorSettings settings, ISyncProtocolVersionProvider syncProtocolVersionProvider,
+            ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
             base(principal, restService, settings, syncProtocolVersionProvider, fileSystemAccessor,
                 checkVersionUriProvider, logger, settings)
