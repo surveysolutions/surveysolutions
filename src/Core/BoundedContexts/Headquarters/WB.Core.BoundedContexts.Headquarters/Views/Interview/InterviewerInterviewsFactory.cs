@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         ) ||
                         ( // assigned on interviewers on his team
                             interview.TeamLeadId == supervisorId &&
-                            (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor)
+                            (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.RejectedByHeadquarters)
                         )
                     )
                     .Select(x => new { x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor })
