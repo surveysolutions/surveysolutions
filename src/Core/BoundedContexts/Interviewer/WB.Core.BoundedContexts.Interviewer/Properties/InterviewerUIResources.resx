@@ -628,7 +628,7 @@ for further instructions</value>
   <data name="Synchronization_DownloadApplication" xml:space="preserve">
     <value>Downloading application updates</value>
   </data>
-    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Received {0} of {1} at {2} ({3}%)</value>
   </data>
   <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">

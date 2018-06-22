@@ -7,6 +7,13 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
+    public class ObsoletePackageCheck
+    {
+        public Guid InterviewId { get; set; }
+
+        public int SequenceOfLastReceivedEvent { get; set; }
+    }
+
     public class InterviewPackageApiView
     {
         public Guid InterviewId { get; set; }

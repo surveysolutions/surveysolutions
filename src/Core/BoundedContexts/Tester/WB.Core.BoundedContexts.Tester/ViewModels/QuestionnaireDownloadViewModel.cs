@@ -113,8 +113,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                         await this.commandService.ExecuteAsync(existingInterviewCommand, cancellationToken: cancellationToken);
                     }
 
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
-                    this.executedCommandsStorage.Clear(interview.Id);
+                    if (navigationIdentity.TargetScreen == ScreenType.Identifying)
+                    {
+                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewId.FormatGuid());
+                    }
+                    else
+                    {
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -122,6 +128,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await userInteractionService.AlertAsync(TesterUIResources.ReloadInterviewErrorMessage);
                     var newInterviewId = await this.CreateInterview(questionnaireIdentity, progress);
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
+                }
+                finally
+                { 
+                    this.executedCommandsStorage.Clear(interview.Id);
                 }
             }
 
