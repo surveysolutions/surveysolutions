@@ -180,9 +180,6 @@
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID d'affectation. Cliquez dans le champ pour taper le numéro complet d'identification.</value>
   </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Version du questionnaire. Sélectionnez une version du questionnaire pour voir ses entretiens associés dans le rapport situé à droite. Sélectionnez "Tous les questionnaires" pour voir les entretiens associés à un questionnaire donné.</value>
-  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>Utilisateur responsable Cliquez dans le champ pour choisir un nom d'utilisateur en le sélectionnant directement ou en tapant pour filtrer la liste des noms d'utilisateur plus loin.</value>
   </data>
