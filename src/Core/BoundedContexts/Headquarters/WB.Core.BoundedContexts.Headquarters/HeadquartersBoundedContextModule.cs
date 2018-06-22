@@ -365,14 +365,24 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupevisor)
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor)
                 ;
-
-            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration.ValidatedBy<InterviewReceivedByInterviewerCommandValidator>()
+            
+            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
+                configuration
+                .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
+                    .SkipPostProcessFor<HardDeleteInterview>()
+                    .SkipPostProcessFor<MarkInterviewAsReceivedByInterviewer>()
+                    .SkipPostProcessFor<AssignInterviewerCommand>()
+                    .SkipPostProcessFor<AssignSupervisorCommand>()
+                .ValidatedBy<InterviewReceivedByInterviewerCommandValidator>()
                     .SkipValidationFor<SynchronizeInterviewEventsCommand>()
                     .SkipValidationFor<MarkInterviewAsReceivedByInterviewer>()
                     .SkipValidationFor<AssignInterviewerCommand>()
                     .SkipValidationFor<AssignResponsibleCommand>()
                     .SkipValidationFor<AssignSupervisorCommand>()
+                    .SkipValidationFor<HardDeleteInterview>()
+                    .SkipValidationFor<DeleteInterviewCommand>()
             );
+
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 

@@ -175,7 +175,7 @@
     <value>监督员</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
-    <value>范围</value>
+    <value>地理</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
     <value>录音</value>

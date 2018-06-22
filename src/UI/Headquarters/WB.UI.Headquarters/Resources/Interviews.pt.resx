@@ -136,7 +136,7 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) será excluído.&lt;/h3&gt;
-&lt;b&gt;Nota!&lt;/b&gt; Você pode excluir a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;.</value>
+&lt;b&gt;Nota!&lt;/b&gt; Você pode excluir entrevistas não recebidas pelo entrevistador com os seguintes status apenas: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;

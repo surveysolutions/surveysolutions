@@ -58,6 +58,11 @@ namespace WB.UI.Interviewer.Implementations.Services
             base.RestartApp(typeof(SplashActivity));
         }
 
+        public override Task NavigateToFinishInstallationAsync()
+            => this.NavigateToAsync<FinishInstallationViewModel>();
+
+        public override Task NavigateToMapsAsync() => this.NavigateToAsync<MapsViewModel>();
+
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs
             {
