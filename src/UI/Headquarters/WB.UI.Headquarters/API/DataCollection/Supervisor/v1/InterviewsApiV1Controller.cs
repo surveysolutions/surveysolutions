@@ -27,14 +27,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(new[] { UserRoles.Supervisor })]
     public class InterviewsApiV1Controller : SupervisorInterviewsControllerBase
     {
-        private readonly IHeadquartersEventStore eventStore;
-        private readonly IInterviewPackagesService packagesService;
-
         public InterviewsApiV1Controller(IHeadquartersEventStore eventStore, IInterviewPackagesService packagesService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService interviewPackagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer) 
             : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, interviewPackagesService, commandService, metaBuilder, synchronizationSerializer)
         {
-            this.eventStore = eventStore;
-            this.packagesService = packagesService;
         }
 
         [HttpGet]
@@ -42,35 +37,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
-        public JsonResult<List<CommittedEvent>> Details(Guid id)
-        {
-            var allEvents = eventStore.Read(id, 0).ToList();
-            return Json(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
-        }
+        public override JsonResult<List<CommittedEvent>> DetailsV3(Guid id) => base.DetailsV3(id);
 
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
         [HttpPost]
-        public HttpResponseMessage Post(InterviewPackageApiView package)
-        {
-            if (string.IsNullOrEmpty(package.Events))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Server cannot accept empty package content.");
-
-            var interviewPackage = new InterviewPackage
-            {
-                InterviewId = package.InterviewId,
-                QuestionnaireId = package.MetaInfo.TemplateId,
-                QuestionnaireVersion = package.MetaInfo.TemplateVersion,
-                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
-                ResponsibleId = package.MetaInfo.ResponsibleId,
-                IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
-                IncomingDate = DateTime.UtcNow,
-                Events = package.Events
-            };
-
-            this.packagesService.StoreOrProcessPackage(interviewPackage);
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
+        public override HttpResponseMessage PostV3(InterviewPackageApiView package) => base.PostV3(package);
 
         [HttpPost]
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);

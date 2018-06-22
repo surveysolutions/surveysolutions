@@ -11,58 +11,33 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.Synchronization.MetaInfo;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-    public class InterviewsApiV3Controller : ApiController
+    public class InterviewsApiV3Controller : InterviewerInterviewsControllerBase
     {
-        private readonly IHeadquartersEventStore eventStore;
-        private readonly IInterviewPackagesService packagesService;
-
-        public InterviewsApiV3Controller(
-            IHeadquartersEventStore eventStore,
-            IInterviewPackagesService packagesService)
+        public InterviewsApiV3Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService interviewPackagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IInterviewPackagesService packagesService) 
+            : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, interviewPackagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, packagesService)
         {
-            this.eventStore = eventStore;
-            this.packagesService = packagesService;
         }
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
-        public JsonResult<List<CommittedEvent>> DetailsV3(Guid id)
-        {
-            var allEvents = eventStore.Read(id, 0).ToList();
-            return Json(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
-        }
+        public override JsonResult<List<CommittedEvent>> DetailsV3(Guid id) => base.DetailsV3(id);
 
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
         [HttpPost]
-        public HttpResponseMessage PostV3(InterviewPackageApiView package)
-        {
-            if (string.IsNullOrEmpty(package.Events))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Server cannot accept empty package content.");
-
-            var interviewPackage = new InterviewPackage
-            {
-                InterviewId = package.InterviewId,
-                QuestionnaireId = package.MetaInfo.TemplateId,
-                QuestionnaireVersion = package.MetaInfo.TemplateVersion,
-                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
-                ResponsibleId = package.MetaInfo.ResponsibleId,
-                IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
-                IncomingDate = DateTime.UtcNow,
-                Events = package.Events
-            };
-
-            this.packagesService.StoreOrProcessPackage(interviewPackage);
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
+        public override HttpResponseMessage PostV3(InterviewPackageApiView package) => base.PostV3(package);
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckObsoleteInterviews)]
