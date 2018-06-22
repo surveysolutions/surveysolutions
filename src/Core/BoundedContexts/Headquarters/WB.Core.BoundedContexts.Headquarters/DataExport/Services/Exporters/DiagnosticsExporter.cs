@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interview.NumberInvalidEntities.ToString(),
                     //interview.NumberUnansweredQuestions.ToString(),
                     interview.NumberCommentedQuestions.ToString(),
-                    interview.InterviewDuration != null ? new TimeSpan(interview.InterviewDuration.Value).ToString() : string.Empty,
+                    interview.InterviewDuration != null ? new TimeSpan(interview.InterviewDuration.Value).ToString("c", CultureInfo.InvariantCulture) : string.Empty,
                 });
             }
             return interviewsStringData;
