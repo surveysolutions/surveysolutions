@@ -28,7 +28,16 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
                 this.failedValidationConditions = null;
             }
         }
-        
+
+        protected AnswersDeclaredInvalid():base(DateTimeOffset.Now)
+        {
+            //fix deserrialization of old events
+            this.OriginDate = null;
+
+            this.Questions = new Identity[] { };
+            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+        }
+
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions, 
             DateTimeOffset originDate) : base(originDate)
         {
