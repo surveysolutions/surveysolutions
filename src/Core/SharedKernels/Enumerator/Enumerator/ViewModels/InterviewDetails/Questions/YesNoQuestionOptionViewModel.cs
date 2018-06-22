@@ -18,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.QuestionViewModel = questionViewModel;
             this.QuestionState = questionState;
-            this.AnswerChanged += (o, e) => this.RaiseToggleAnswer();
+            this.AnswerChanged += (o, e) => this.RaiseToggleAnswer(e as YesNoEventArgs);
         }
 
         public decimal Value { get; set; }
@@ -34,7 +34,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool? Selected
         {
-            get { return this.selected; }
+            get => this.selected;
             set
             {
                 if (this.selected == value)
@@ -56,8 +56,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.YesSelected == value)
                     return;
 
+                var oldValue = this.Selected;
                 this.Selected = value;
-                this.OnAnswerChanged();
+                this.OnAnswerChanged(oldValue);
             }
         }
 
@@ -69,8 +70,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (this.NoSelected == value)
                     return;
 
+                var oldValue = this.Selected;
                 this.Selected = !value;
-                this.OnAnswerChanged();
+                this.OnAnswerChanged(oldValue);
             }
         }
 
@@ -100,29 +102,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref yesCanBeChecked, value);
         }
 
-        public async void RaiseToggleAnswer()
+        public async void RaiseToggleAnswer(YesNoEventArgs e)
         {
-            await this.QuestionViewModel.ToggleAnswerAsync(this).ConfigureAwait(false); 
+            await this.QuestionViewModel.ToggleAnswerAsync(this, e.OldValue).ConfigureAwait(false); 
         }
 
         public IMvxCommand RemoveAnswerCommand
         {
             get
             {
-                return new MvxCommand(() => {
+                return new MvxCommand(() =>
+                {
+                    bool? oldValue = this.Selected;
                     this.Selected = null;
-                    this.OnAnswerChanged();
+                    this.OnAnswerChanged(oldValue);
                 });
             }
         }
 
-        protected virtual void OnAnswerChanged()
+        protected virtual void OnAnswerChanged(bool? oldValue)
         {
-            this.AnswerChanged?.Invoke(this, EventArgs.Empty);
+            this.AnswerChanged?.Invoke(this, new YesNoEventArgs(oldValue));
         }
 
         public string YesItemTag => this.QuestionViewModel.Identity + "_Opt_Yes_" + Value;
         public string NoItemTag => this.QuestionViewModel.Identity + "_Opt_No_" + Value;
-
     }
+
+    public class YesNoEventArgs : EventArgs
+    {
+        public bool? OldValue { get; }
+
+        public YesNoEventArgs(bool? oldValue)
+        {
+            OldValue = oldValue;
+        }
+    } 
 }

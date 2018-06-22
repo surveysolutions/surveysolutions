@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -85,6 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Options = new CovariantObservableCollection<YesNoQuestionOptionViewModel>();
+            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public Identity Identity { get; private set; }
@@ -172,50 +174,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel)
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+        private List<AnsweredYesNoOption> previousOptionToReset = null;
+        private List<AnsweredYesNoOption> selectedOptionsToSave = null;
+		
+        private async Task SaveAnswer()
         {
-            List<YesNoQuestionOptionViewModel> allSelectedOptions =
-                this.areAnswersOrdered
-                ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList()
-                : this.Options.Where(x => x.Selected.HasValue).ToList();
-
-            var interview = this.interviewRepository.Get(interviewIdAsString);
-
-            int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
-
-            if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
+            if (this.isRosterSizeQuestion)
             {
-                var answerModel = interview.GetYesNoQuestion(this.Identity);
-                var answeredYesNoOption = answerModel.GetAnswer()?.ToAnsweredYesNoOptions()?.FirstOrDefault(yn => yn.OptionValue == changedModel.Value);
-                changedModel.Selected = answeredYesNoOption?.Yes;
-                return;
-            }
+                var itemsToDelete = previousOptionToReset.Where(x => x.Yes)
+                    .Except(selectedOptionsToSave.Where(x => x.Yes)).ToList();
 
-            if (this.isRosterSizeQuestion && (!changedModel.Selected.HasValue || !changedModel.Selected.Value))
-            {
-                var answerModel = interview.GetYesNoQuestion(this.Identity);
-
-                var backendYesAnswersCount = answerModel?.GetAnswer()?.CheckedOptions?.Count(a => a.Yes) ?? 0;
-                var UIYesAnswersCount = this.Options.Count(o => o.YesSelected);
-
-                if (backendYesAnswersCount > UIYesAnswersCount)
+                if (itemsToDelete.Any())
                 {
-                    var amountOfRostersToRemove = 1;
+                    var amountOfRostersToRemove = itemsToDelete.Count;
                     var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                     if (!await this.userInteraction.ConfirmAsync(message))
                     {
-                        changedModel.Selected = true;
+                        foreach (var itemToDelete in itemsToDelete)
+                        {
+                            var option = this.GetOptionByValue(itemToDelete.OptionValue);
+                            if (option!=null)
+                                option.Selected = true;
+                        }
                         return;
                     }
                 }
             }
-
-            var selectedValuesWithoutJustChanged = allSelectedOptions.Except(x => x.Value == changedModel.Value).Select(x => new AnsweredYesNoOption(x.Value, x.YesSelected));
-
-            var selectedValuesWithJustChanged
-                = changedModel.Selected.HasValue
-                    ? selectedValuesWithoutJustChanged.Union(new AnsweredYesNoOption(changedModel.Value, changedModel.Selected.Value).ToEnumerable()).ToArray()
-                    : selectedValuesWithoutJustChanged.ToArray();
 
             var command = new AnswerYesNoQuestion(
                 this.interviewId,
@@ -223,17 +209,63 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.Identity.Id,
                 this.Identity.RosterVector,
                 DateTime.UtcNow,
-                selectedValuesWithJustChanged);
+                selectedOptionsToSave.ToArray());
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
-
+                previousOptionToReset = null;
             }
             catch (InterviewException ex)
             {
+                // reset to previous state
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        private YesNoQuestionOptionViewModel GetOptionByValue(decimal value)
+        {
+            return this.Options.FirstOrDefault(x => x.Value == value);
+        }
+
+        public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel, bool? oldValue)
+        {
+            List<YesNoQuestionOptionViewModel> allSelectedOptions =
+                this.areAnswersOrdered
+                ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList()
+                : this.Options.Where(x => x.Selected.HasValue).ToList();
+
+            int countYesSelectedOptions = allSelectedOptions.Count(o => o.YesSelected);
+
+            if (previousOptionToReset == null)
+            {
+                previousOptionToReset = allSelectedOptions
+                    .Except(changedModel.ToEnumerable())
+                    .Select(x => new AnsweredYesNoOption(x.Value, x.Selected == true)).ToList();
+                if (oldValue!=null)
+                    previousOptionToReset.Add(new AnsweredYesNoOption(changedModel.Value, oldValue == true));
+            }
+
+            if (this.maxAllowedAnswers.HasValue && countYesSelectedOptions > this.maxAllowedAnswers)
+            {
+                changedModel.Selected = oldValue;
+                return;
+            }
+
+            var selectedValuesWithoutJustChanged = allSelectedOptions.Except(x => x.Value == changedModel.Value).Select(x => new AnsweredYesNoOption(x.Value, x.YesSelected));
+
+            this.selectedOptionsToSave = changedModel.Selected.HasValue
+                    ? selectedValuesWithoutJustChanged.Union(new AnsweredYesNoOption(changedModel.Value, changedModel.Selected.Value).ToEnumerable()).ToList()
+                    : selectedValuesWithoutJustChanged.ToList();
+
+            if (this.ThrottlePeriod == 0)
+            {
+                await SaveAnswer();
+            }
+            else
+            {
+                timer.Change(ThrottlePeriod, Timeout.Infinite);
             }
         }
         
