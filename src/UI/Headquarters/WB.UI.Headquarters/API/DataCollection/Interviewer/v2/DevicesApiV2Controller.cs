@@ -19,7 +19,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
     public class DevicesApiV2Controller : DevicesControllerBase
     {
         public DevicesApiV2Controller(
-            ISyncProtocolVersionProvider syncVersionProvider,
+            IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
             IPlainStorageAccessor<SynchronizationLogItem> syncLogRepository,

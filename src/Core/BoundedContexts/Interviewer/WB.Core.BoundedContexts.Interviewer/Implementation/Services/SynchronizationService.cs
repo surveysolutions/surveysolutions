@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
-            IInterviewerSettings interviewerSettings, ISyncProtocolVersionProvider syncProtocolVersionProvider,
+            IInterviewerSettings interviewerSettings, IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
             base(principal, restService, interviewerSettings, syncProtocolVersionProvider, fileSystemAccessor,
                 checkVersionUriProvider, logger, interviewerSettings)

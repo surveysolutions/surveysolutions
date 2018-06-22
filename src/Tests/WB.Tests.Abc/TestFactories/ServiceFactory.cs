@@ -449,7 +449,7 @@ namespace WB.Tests.Abc.TestFactories
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
             IRestService restService = null,
             IInterviewerSettings interviewerSettings = null,
-            ISyncProtocolVersionProvider syncProtocolVersionProvider = null,
+            IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ILogger logger = null)
         {
@@ -457,7 +457,7 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IPrincipal>(),
                 restService ?? Mock.Of<IRestService>(),
                 interviewerSettings ?? Mock.Of<IInterviewerSettings>(),
-                syncProtocolVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
+                syncProtocolVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 Mock.Of<ICheckVersionUriProvider>(),
                 logger ?? Mock.Of<ILogger>()

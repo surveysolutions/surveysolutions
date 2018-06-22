@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             ITabletInformationService tabletInformationService,
             IUserViewFactory userViewFactory,
             IAndroidPackageReader androidPackageReader,
-            ISyncProtocolVersionProvider syncVersionProvider,
+            IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             IAuthorizedUser authorizedUser,
             IProductVersion productVersion,
             HqSignInManager signInManager,
@@ -241,7 +241,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 
             if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)
             {
-                if (deviceSyncProtocolVersion < SyncProtocolVersionProvider.ProtectedVariablesIntroduced
+                if (deviceSyncProtocolVersion < InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced
                     && this.assignmentsService.HasAssignmentWithProtectedVariables(this.authorizedUser.Id))
                 {
                     return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
