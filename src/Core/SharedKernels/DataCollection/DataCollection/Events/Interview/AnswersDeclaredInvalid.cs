@@ -29,23 +29,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             }
         }
         
-        public AnswersDeclaredInvalid(Identity[] questions, DateTimeOffset originDate): base(originDate)
-        {
-            this.Questions = questions;
-
-            var dictionary = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
-            foreach (var question in questions)
-            {
-                dictionary.Add(question, new List<FailedValidationCondition>());
-            }
-
-            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(dictionary);
-        }
-
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions, 
             DateTimeOffset originDate) : base(originDate)
         {
-            this.Questions = failedValidationConditions.Keys.ToArray();
+            if(failedValidationConditions != null)
+                this.Questions = failedValidationConditions.Keys.ToArray();
+
             this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
         }
     }

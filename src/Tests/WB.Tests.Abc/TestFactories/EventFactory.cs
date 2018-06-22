@@ -23,7 +23,9 @@ namespace WB.Tests.Abc.TestFactories
             });
 
         public AnswersDeclaredInvalid AnswersDeclaredInvalid(params Identity[] questions)
-            => new AnswersDeclaredInvalid(questions, DateTimeOffset.Now);
+            => new AnswersDeclaredInvalid(
+                questions.ToDictionary<Identity, Identity, IReadOnlyList<FailedValidationCondition>>(question => question, question => new List<FailedValidationCondition>()),
+                DateTimeOffset.Now);
 
         public AggregateRootEvent AggregateRootEvent(Core.Infrastructure.EventBus.IEvent evnt)
         {
