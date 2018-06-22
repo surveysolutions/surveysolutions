@@ -22,6 +22,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Interviewer.Activities;
@@ -129,7 +130,7 @@ namespace WB.UI.Interviewer
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
-            builder.RegisterType<InterviewerDashboardEventHandler>().SingleInstance();
+            builder.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));

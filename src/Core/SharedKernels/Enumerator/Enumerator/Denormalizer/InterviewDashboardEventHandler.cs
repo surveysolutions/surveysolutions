@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -18,9 +17,9 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
+namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 {
-    public class InterviewerDashboardEventHandler : BaseDenormalizer,
+    public class InterviewDashboardEventHandler : BaseDenormalizer,
                                          ILitePublishedEventHandler<InterviewCreated>,
                                          ILitePublishedEventHandler<SynchronizationMetadataApplied>,
                                          ILitePublishedEventHandler<InterviewSynchronized>,
@@ -57,7 +56,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IAnswerToStringConverter answerToStringConverter;
 
-        public InterviewerDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
+        public InterviewDashboardEventHandler(IPlainStorage<InterviewView> interviewViewRepository, 
             IPlainStorage<PrefilledQuestionView> prefilledQuestions,
             IQuestionnaireStorage questionnaireRepository,
             ILiteEventRegistry liteEventRegistry,
