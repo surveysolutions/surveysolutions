@@ -160,10 +160,10 @@
     <value>Имя макроса не может быть пустым</value>
   </data>
   <data name="WB0015_QuestionWithTitleSubstitutionCantBePrefilled" xml:space="preserve">
-    <value>Вопрос с подстановкой в тексте не может быть помечен как идентифицирующий</value>
+    <value>Вопрос с подстановкой в тексте или инструкциях не может быть помечен как идентифицирующий</value>
   </data>
   <data name="WB0016_QuestionWithTitleSubstitutionCantReferenceSelf" xml:space="preserve">
-    <value>Вопрос с подстановкой в тексте не может ссылаться на себя</value>
+    <value>Вопрос с подстановкой в тексте или инструкциях не может ссылаться на себя</value>
   </data>
   <data name="WB0017_SubstitutionReferencesNotExistingQuestionOrVariable" xml:space="preserve">
     <value>Подстановка ссылается на несуществующий вопрос либо переменную</value>

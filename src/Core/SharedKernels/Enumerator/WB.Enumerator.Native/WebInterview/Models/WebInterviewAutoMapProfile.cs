@@ -16,11 +16,12 @@ namespace WB.Enumerator.Native.WebInterview.Models
                 .ForMember(x => x.IsValid, opts => opts.MapFrom(x => x.IsValid));
 
             this.CreateMap<InterviewTreeQuestion, GenericQuestion>()
-                 .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
-                 .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
-                 .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
-                 .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()))
-                 .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()));
+                .ForMember(x => x.Id, opts => opts.MapFrom(x => x.Identity))
+                .ForMember(x => x.Title, opts => opts.MapFrom(x => x.Title.BrowserReadyText))
+                .ForMember(x => x.Validity, opts => opts.MapFrom(x => x))
+                .ForMember(x => x.IsAnswered, opts => opts.MapFrom(x => x.IsAnswered()))
+                .ForMember(x => x.IsDisabled, opts => opts.MapFrom(x => x.IsDisabled()))
+                .ForMember(x => x.Instructions, opts => opts.MapFrom(x => x.Instructions.BrowserReadyText));
 
             this.CreateMap<InterviewTreeQuestion, StubEntity>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>();
