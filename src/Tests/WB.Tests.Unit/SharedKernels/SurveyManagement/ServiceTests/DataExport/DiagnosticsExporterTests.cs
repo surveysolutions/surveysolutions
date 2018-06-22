@@ -69,7 +69,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
                     numberInvalidEntities: 9,
                     numberUnansweredQuestions: 1,
                     numberCommentedQuestions: 2,
-                    interviewDuration: 50000),
+                    interviewDuration: 1758237000),
             };
 
             var diagnosticsFactory = new Mock<IInterviewDiagnosticsFactory>();
@@ -94,9 +94,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
             Assert.That(fileData[0], Is.EqualTo(new[] { "Interview_key", "interview_status", "responsible", "n_of_Interviewers", "n_rejections_by_supervisor", "n_rejections_by_hq", "n_entities_errors", "n_questions_comments", "interview_duration" }));
-            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", "InterviewerAssigned", "int1", "1", "2", "3", "5", "7", "100000" }));
-            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", "RejectedByHeadquarters", "int2", "9", "8", "7", "5", "3", "200000" }));
-            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", "RejectedBySupervisor", "int1", "2", "4", "6", "9", "2", "50000" }));
+            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", "InterviewerAssigned", "int1", "1", "2", "3", "5", "7", "00:00:00.0100000" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", "RejectedByHeadquarters", "int2", "9", "8", "7", "5", "3", "00:00:00.0200000" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", "RejectedBySupervisor", "int1", "2", "4", "6", "9", "2", "00:02:55.8237000" }));
         }
     }
 }
