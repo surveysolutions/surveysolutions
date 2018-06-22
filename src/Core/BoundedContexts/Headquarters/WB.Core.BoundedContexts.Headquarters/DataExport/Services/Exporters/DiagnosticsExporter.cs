@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("n_entities_errors", "Number of questions and static texts with errors"),
             //new DoExportFileHeader("n_questions_unanswered", "Number of unanswered questions"),
             new DoExportFileHeader("n_questions_comments", "Number of questions with comments"),
-            new DoExportFileHeader("interview_duration", "active time it took to complete the interview"),
+            new DoExportFileHeader("interview_duration", "Active time it took to complete the interview"),
         };
 
         protected DiagnosticsExporter()
@@ -150,7 +150,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     interview.NumberInvalidEntities.ToString(),
                     //interview.NumberUnansweredQuestions.ToString(),
                     interview.NumberCommentedQuestions.ToString(),
-                    interview.InterviewDuration?.ToString(),
+                    interview.InterviewDuration != null ? new TimeSpan(interview.InterviewDuration.Value).ToString() : string.Empty,
                 });
             }
             return interviewsStringData;
