@@ -33,9 +33,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
         protected string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
-        private string InterviewDetailsController => string.Concat(ApiUrl, "v3", "/interviews");
-        private string InterviewUploadController => string.Concat(ApiUrl, "v3", "/interviews");
-        private string InterviewObsoleteCheck => string.Concat(ApiUrl, "v3", "/interviews/CheckObsoleteInterviews");
+        protected virtual string InterviewDetailsController => string.Concat(ApplicationUrl, "/interviews");
+        protected virtual string InterviewUploadController => string.Concat(ApplicationUrl, "/interviews");
+        protected virtual string InterviewObsoleteCheck => string.Concat(ApplicationUrl, "/interviews/CheckObsoleteInterviews");
 
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");

@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
@@ -58,7 +59,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
                 .First()
                 .Answer.Should().Be(answer.ToString(DateTimeFormat.DateWithTimeFormat));
 
-        static InterviewerDashboardEventHandler denormalizer;
+        static InterviewDashboardEventHandler denormalizer;
         static IPublishedEvent<DateTimeQuestionAnswered> @event;
         static SqliteInmemoryStorage<InterviewView> interviewViewStorage;
         static DateTime answer = new DateTime(2016, 06, 08, 12, 49, 0);

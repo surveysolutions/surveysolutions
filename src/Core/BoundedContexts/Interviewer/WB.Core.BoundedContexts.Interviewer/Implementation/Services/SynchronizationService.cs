@@ -22,6 +22,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
 
+        protected override string InterviewDetailsController => string.Concat(ApiUrl, "v3", "/interviews");
+        protected override string InterviewUploadController => string.Concat(ApiUrl, "v3", "/interviews");
+        protected override string InterviewObsoleteCheck => string.Concat(ApiUrl, "v3", "/interviews/CheckObsoleteInterviews");
+
+
         public SynchronizationService(IPrincipal principal, IRestService restService,
             IInterviewerSettings interviewerSettings, ISyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :

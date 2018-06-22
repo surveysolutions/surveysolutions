@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Supervisor.ServiceLocation;
@@ -103,6 +104,8 @@ namespace WB.UI.Supervisor
                 .As<ISupervisorSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
+
+            builder.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
