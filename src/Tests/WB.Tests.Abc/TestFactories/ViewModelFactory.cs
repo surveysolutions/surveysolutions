@@ -163,7 +163,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireRepository,
                 statefulInterviewRepository,
                 questionStateViewModel,
-                new QuestionInstructionViewModel(questionnaireRepository, statefulInterviewRepository, new DynamicTextViewModel(eventRegistry, statefulInterviewRepository, new SubstitutionService())),
+                new QuestionInstructionViewModel(questionnaireRepository, statefulInterviewRepository, 
+                    new DynamicTextViewModel(eventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues, statefulInterviewRepository, new SubstitutionService())),
                 answering ?? this.AnsweringViewModel());
         }
 
