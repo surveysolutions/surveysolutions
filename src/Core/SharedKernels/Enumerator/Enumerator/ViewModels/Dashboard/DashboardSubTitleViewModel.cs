@@ -1,7 +1,6 @@
 ﻿using MvvmCross.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
     public class DashboardSubTitleViewModel : MvxNotifyPropertyChanged, IDashboardItem
     {
@@ -10,7 +9,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         public string Title
         {
             get => this.title;
-            set => this.RaiseAndSetIfChanged(ref this.title, value);
+            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.title, value);
         }
 
         public bool HasExpandedView => false;
