@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WB.UI.Supervisor.Properties {
+namespace WB.Core.BoundedContexts.Supervisor.Properties {
     using System;
     
     
@@ -22,7 +22,7 @@ namespace WB.UI.Supervisor.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SupervisorDashboard {
+    public class SupervisorDashboard {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,10 +36,10 @@ namespace WB.UI.Supervisor.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.UI.Supervisor.Properties.SupervisorDashboard", typeof(SupervisorDashboard).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Supervisor.Properties.SupervisorDashboard", typeof(SupervisorDashboard).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,7 +51,7 @@ namespace WB.UI.Supervisor.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace WB.UI.Supervisor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Approved.
         /// </summary>
-        internal static string Approved {
+        public static string Approved {
             get {
                 return ResourceManager.GetString("Approved", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace WB.UI.Supervisor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Assignments.
         /// </summary>
-        internal static string Assignments {
+        public static string Assignments {
             get {
                 return ResourceManager.GetString("Assignments", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace WB.UI.Supervisor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Completed.
         /// </summary>
-        internal static string Completed {
+        public static string Completed {
             get {
                 return ResourceManager.GetString("Completed", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace WB.UI.Supervisor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Rejected.
         /// </summary>
-        internal static string Rejected {
+        public static string Rejected {
             get {
                 return ResourceManager.GetString("Rejected", resourceCulture);
             }

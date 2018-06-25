@@ -6,8 +6,8 @@ using Android.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
-using WB.UI.Supervisor.Properties;
 
 namespace WB.UI.Supervisor.Activities.Dashboard
 {
