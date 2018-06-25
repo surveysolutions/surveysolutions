@@ -25,6 +25,7 @@ namespace WB.UI.Supervisor.Activities
     public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService, ISyncServiceHost
     {
         private ActionBarDrawerToggle drawerToggle;
+        public DrawerLayout DrawerLayout { get; private set; }
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         public ServiceBinder<SyncBgService> Binder { get; set; }
@@ -36,9 +37,9 @@ namespace WB.UI.Supervisor.Activities
             this.SetSupportActionBar(toolbar);
             SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(false);
 
-            var drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
-            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
-            drawerLayout.AddDrawerListener(drawerToggle);
+            this.DrawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.drawerToggle = new ActionBarDrawerToggle(this, DrawerLayout, toolbar, 0, 0);
+            DrawerLayout.AddDrawerListener(drawerToggle);
 
             if (bundle == null)
             {

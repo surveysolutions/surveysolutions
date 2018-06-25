@@ -1,7 +1,6 @@
 ﻿using Android.Support.V7.Widget;
-using WB.UI.Shared.Enumerator.CustomBindings;
 
-namespace WB.UI.Interviewer.CustomBindings
+namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class RecyclerViewScrollToPositionBinding : BaseBinding<RecyclerView, int?>
     {

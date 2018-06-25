@@ -291,9 +291,9 @@
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
+    <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />
     <Compile Include="Activities\Dashboard\RejectedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\StartedInterviewsFragment.cs" />
-    <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
@@ -311,7 +311,6 @@
     <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
     <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\ImageCompanyLogoBinding.cs" />
-    <Compile Include="CustomBindings\RecyclerViewScrollToPositionBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
     <Compile Include="CustomBindings\StatusToDasboardBackgroundConverter.cs" />
@@ -371,9 +370,6 @@
     <AndroidResource Include="Resources\values\styles.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\dashboard_interview_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\dashboard.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -381,9 +377,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\dashboard_census_questionnare_item.axml" />
-    <AndroidResource Include="Resources\layout\dashboard_item_prefilled_question.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\finish_installation.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -457,8 +450,6 @@
     <AndroidResource Include="Resources\drawable\synchronization_download_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_sync_icon_small.png" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_layout_border.xml" />
     <AndroidResource Include="Resources\values\relink.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -467,12 +458,6 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\menu\finish.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_pressed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_item_default.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_remove_icon_pressed.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\drawable-v21\dashboard_remove_icon.xml" />
     <AndroidResource Include="Resources\values\strings.xml" />
     <AndroidResource Include="Resources\drawable\borderless_button.xml" />
@@ -492,14 +477,6 @@
     <AndroidResource Include="Resources\values-large\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\drawable\dashboard_expand_handle.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\dashboard_tab_subtitle.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_rejected.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_completed.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_inprogress.xml" />
-    <AndroidResource Include="Resources\drawable\dashboard_interview_status_new.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj">
@@ -551,24 +528,7 @@
   </Choose>
   <ItemGroup>
     <Folder Include="Assets\" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\ic_action_more_vert.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\ic_action_more_vert.png" />
+    <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\menu\maps.xml">
@@ -577,11 +537,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\back_arrow.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values\dashboard.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\login.xml" />
