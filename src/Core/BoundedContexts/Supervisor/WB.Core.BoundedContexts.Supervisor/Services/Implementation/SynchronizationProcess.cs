@@ -87,7 +87,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         protected override Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
             CancellationToken cancellationToken)
         {
-            return Task.CompletedTask; // supervisor is not support census
+            return Task.CompletedTask; // supervisor does not support census
         }
 
         protected override Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
