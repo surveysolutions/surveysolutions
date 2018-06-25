@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;

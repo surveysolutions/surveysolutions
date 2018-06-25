@@ -28,12 +28,28 @@
         </android.support.design.widget.AppBarLayout>
 
         <FrameLayout
-            android:id="@+id/dashboard_content"
             local:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
 
+            <ProgressBar style="@style/Dashboard_Progress_Indicator"
+                         local:MvxBind="ShowProgress Synchronization.IsSynchronizationInProgress; Visibility VisibleOrInvisible(Synchronization.IsSynchronizationInProgress)" />
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="match_parent">
 
+                <include layout="@layout/synchronization_panel" />
+
+                <FrameLayout android:id="@+id/dashboard_content"
+                             android:layout_width="match_parent"
+                             android:layout_height="match_parent">
+                </FrameLayout>
+            </LinearLayout>
+
+        </FrameLayout>
+        
         <!--<android.support.design.widget.FloatingActionButton
             android:id="@+id/overview_floating_action_button"
             android:layout_width="wrap_content"

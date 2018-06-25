@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Converters;
+using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
@@ -68,7 +69,7 @@ namespace WB.UI.Supervisor
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
-
+            registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
             base.FillTargetFactories(registry);
         }
 
