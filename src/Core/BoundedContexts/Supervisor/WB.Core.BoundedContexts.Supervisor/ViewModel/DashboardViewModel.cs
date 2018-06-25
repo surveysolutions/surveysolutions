@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxCommand ShowInterviewsCommand => 
             new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardCompletedInterviewsViewModel>());
 
-        public IMvxAsyncCommand ShowMenuViewModelCommand =>   new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
+        public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 
         private void RunSynchronization()
         {
