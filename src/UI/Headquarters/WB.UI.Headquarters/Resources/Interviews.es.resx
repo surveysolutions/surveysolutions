@@ -165,9 +165,6 @@
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID de asignación. Haga clic en el campo para escribir el número de identificación completo.</value>
   </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione "Todos los cuestionarios" para ver las entrevistas asociadas con cualquier cuestionario.</value>
-  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>Usuario responsable. Haga clic en el campo para elegir un nombre de usuario ya sea seleccionándolo directamente o escribiendo en el filtro de  listas de nombres de usuario.</value>
   </data>
