@@ -38,6 +38,8 @@ namespace WB.UI.Headquarters
             config.TypedRoute(@"api/interviewer/extended/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.PatchExtended(Param.Any<int>())));
             config.TypedRoute(@"api/interviewer/extended/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestExtendedVersion()));
 
+            config.TypedRoute(@"api/interviewer/supervisor", c => c.Action<InterviewerApiController>(x => x.GetSupervisor()));
+
             config.TypedRoute(@"api/interviewer/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
             config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
