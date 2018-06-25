@@ -29,36 +29,19 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
             }
         }
 
-        protected AnswersDeclaredInvalid():base(DateTimeOffset.Now)
-        {
-            //fix deserrialization of old events
-            this.OriginDate = null;
-
-            this.Questions = new Identity[] { };
-            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
-        }
-
-        protected AnswersDeclaredInvalid(Identity[] questions) : base(DateTimeOffset.Now)
-        {
-            this.OriginDate = null;
-
-            this.Questions = questions;
-            var dictionary = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
-            foreach (var question in questions)
-            {
-                dictionary.Add(question, new List<FailedValidationCondition>());
-            }
-
-            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(dictionary);
-        }
-
         public AnswersDeclaredInvalid(IDictionary<Identity, IReadOnlyList<FailedValidationCondition>> failedValidationConditions, 
             DateTimeOffset originDate) : base(originDate)
         {
-            if(failedValidationConditions != null)
+            if (failedValidationConditions != null)
+            {
                 this.Questions = failedValidationConditions.Keys.ToArray();
-
-            this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
+                this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>(failedValidationConditions);
+            }
+            else
+            {
+                this.Questions = new Identity[] { };
+                this.FailedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>();
+            }
         }
     }
 }
