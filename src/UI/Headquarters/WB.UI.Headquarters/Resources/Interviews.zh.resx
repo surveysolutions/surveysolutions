@@ -136,7 +136,7 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;
-&lt;b&gt;注意！&lt;/b&gt;您只能删除处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
+&lt;b&gt;注意！&lt;/b&gt;您可以删除只有以下状态的面试者未收到的面试：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;
@@ -175,9 +175,6 @@
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>任务ID。点击相应区域输入完整的ID。</value>
-  </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>负责人用户。直接点选一个用户名或在筛选器中直接输入用户名，以选定某个用户。</value>

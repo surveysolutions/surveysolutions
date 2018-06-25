@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;.
+        /// </summary>
+        public static string CheckObsoleteInterviews {
+            get {
+                return ResourceManager.GetString("CheckObsoleteInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;li&gt;Delete interview: &lt;a href=&quot;{3}&quot;&gt;{0}&lt;/a&gt;, Package: {1}, Sort index: {2}&lt;/li&gt;.
         /// </summary>
         public static string DeleteInterviewPackage {

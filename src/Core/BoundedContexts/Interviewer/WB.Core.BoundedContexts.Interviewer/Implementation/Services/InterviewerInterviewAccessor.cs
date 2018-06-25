@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -19,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IPlainStorage<InterviewFileView> interviewFileViewRepository;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
-        private readonly IInterviewerEventStorage eventStore;
+        private readonly IEnumeratorEventStorage eventStore;
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IPlainStorage<InterviewFileView> interviewFileViewRepository,
             ICommandService commandService,
             IInterviewerPrincipal principal,
-            IInterviewerEventStorage eventStore,
+            IEnumeratorEventStorage eventStore,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
