@@ -421,9 +421,9 @@ namespace WB.UI.Designer.Controllers
             return Json(new
             {
                 doesUserExist = !string.IsNullOrEmpty(account?.UserName),
-                userName = account.UserName,
-                email = account.Email,
-                id = account.ProviderUserKey
+                userName = account?.UserName,
+                email = account?.Email,
+                id = account?.ProviderUserKey
             });
         }
     }
