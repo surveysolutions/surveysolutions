@@ -211,6 +211,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Contains(this.Identity))
             {
+                UpateMaxAnswersCountMessage(0);
+
                 foreach (var option in this.options)
                     this.UpdateOptionSelection(option, new List<decimal>());
             }
@@ -340,7 +342,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpateMaxAnswersCountMessage(int answersCount)
         {
-            if (this.maxAllowedAnswers.HasValue && this.HasOptions)
+            if (this.maxAllowedAnswers.HasValue)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
                     answersCount, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));

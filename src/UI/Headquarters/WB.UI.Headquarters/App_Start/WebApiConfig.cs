@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Http.Headers;
 using System.Threading;
@@ -155,6 +156,9 @@ namespace WB.UI.Headquarters
 
             config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
                 c => c.Action<InterviewsApiV3Controller>(x => x.PostV3(Param.Any<InterviewPackageApiView>())));
+
+            config.TypedRoute("api/interviewer/v3/interviews/CheckObsoleteInterviews",
+                c => c.Action<InterviewsApiV3Controller>(x => x.CheckObsoleteInterviews(Param.Any<List<ObsoletePackageCheck>>())));
         }
 #pragma warning restore 4014
     }

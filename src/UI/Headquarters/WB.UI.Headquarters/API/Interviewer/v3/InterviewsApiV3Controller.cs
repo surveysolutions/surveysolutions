@@ -8,23 +8,25 @@ using System.Web.Http.Results;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Interviewer.v3
 {
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : ApiController
     {
-        private readonly IEventStore eventStore;
+        private readonly IHeadquartersEventStore eventStore;
         private readonly IInterviewPackagesService packagesService;
 
         public InterviewsApiV3Controller(
-            IEventStore eventStore,
+            IHeadquartersEventStore eventStore,
             IInterviewPackagesService packagesService)
         {
             this.eventStore = eventStore;
@@ -62,5 +64,23 @@ namespace WB.UI.Headquarters.API.Interviewer.v3
 
             return Request.CreateResponse(HttpStatusCode.OK);
         }
+
+        [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.CheckObsoleteInterviews)]
+        public HttpResponseMessage CheckObsoleteInterviews(List<ObsoletePackageCheck> knownPackages)
+        {
+            List<Guid> obsoleteInterviews = new List<Guid>();
+            foreach (var obsoletePackageCheck in knownPackages)
+            {
+                if (this.eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(
+                    obsoletePackageCheck.SequenceOfLastReceivedEvent,
+                    obsoletePackageCheck.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                {
+                    obsoleteInterviews.Add(obsoletePackageCheck.InterviewId);
+                } 
+            }
+
+            return Request.CreateResponse(HttpStatusCode.OK, obsoleteInterviews);
+        } 
     }
 }
