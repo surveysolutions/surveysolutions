@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
+﻿namespace WB.Core.SharedKernels.Enumerator.Views.Dashboard
 {
     public class PrefilledQuestion
     {
