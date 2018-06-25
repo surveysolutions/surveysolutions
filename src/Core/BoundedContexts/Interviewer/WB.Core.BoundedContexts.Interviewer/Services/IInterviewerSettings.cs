@@ -1,28 +1,10 @@
-using System;
-using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
-    public interface IInterviewerSettings : IEnumeratorSettings
+    public interface IInterviewerSettings : IEnumeratorSettings, IDeviceSettings
     {
-        Version GetSupportedQuestionnaireContentVersion();
-        string GetDeviceId();
-        string GetApplicationVersionName();
-        string GetDeviceTechnicalInformation();
-        int GetApplicationVersionCode();
-        void SetEndpoint(string endpoint);
-        void SetHttpResponseTimeout(int timeout);
-        void SetGpsResponseTimeout(int timeout);
-        void SetCommunicationBufferSize(int bufferSize);
-        void SetGpsDesiredAccuracy(double value);
-        void SetEventChunkSize(int eventChunkSize);
         void SetVibrateOnError(bool vibrate);
         void SetShowLocationOnMap(bool showLocationOnMap);
-
-        string BackupFolder { get; }
-        string RestoreFolder { get; }
-
-        string BandwidthTestUri { get; }
-        string InstallationFilePath { get; }
     }
 }
