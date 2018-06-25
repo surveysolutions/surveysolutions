@@ -15,5 +15,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxCommand ShowCompletedInterviews => 
             new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<DashboardCompletedInterviewsViewModel>());
+
+        public IMvxCommand ShowRejectedInterviwes =>
+            new MvxAsyncCommand(async () =>
+                await mvxNavigationService.Navigate<DashboardRejectedInterviewsViewModel>());
     }
 }

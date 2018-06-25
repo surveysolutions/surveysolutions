@@ -27,8 +27,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private int? highLightedItemIndex;
         private Guid? lastVisitedInterviewId;
 
-        protected abstract string TabTitle { get; }
-        protected abstract string TabDescription { get; }
+        public abstract string TabTitle { get; }
+        public abstract string TabDescription { get; }
         protected abstract Expression<Func<InterviewView, bool>> GetDbQuery();
         protected virtual void OnItemCreated(InterviewDashboardItemViewModel interviewDashboardItem) { }
 

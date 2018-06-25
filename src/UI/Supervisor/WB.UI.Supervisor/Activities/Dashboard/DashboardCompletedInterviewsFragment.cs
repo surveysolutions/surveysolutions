@@ -7,7 +7,14 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 {
     [MvxFragmentPresentation(typeof(DashboardCompletedInterviewsViewModel), Resource.Id.dashboard_content,
         ActivityHostViewModelType = typeof(DashboardViewModel))]
-    public class DashboardInterviewsFragment : BaseFragment<DashboardCompletedInterviewsViewModel>
+    public class DashboardCompletedInterviewsFragment : BaseFragment<DashboardCompletedInterviewsViewModel>
+    {
+        protected override int ViewResourceId => Resource.Layout.dashboard_interviews;
+    }
+
+    [MvxFragmentPresentation(typeof(DashboardRejectedInterviewsViewModel), Resource.Id.dashboard_content,
+        ActivityHostViewModelType = typeof(DashboardViewModel))]
+    public class DashboardRejectedInterviewsFragment : BaseFragment<DashboardRejectedInterviewsViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.dashboard_interviews;
     }

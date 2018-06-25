@@ -14,8 +14,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     public class StartedInterviewsViewModel : BaseInterviewsViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.Started;
-        protected override string TabTitle => InterviewerUIResources.Dashboard_StartedLinkText;
-        protected override string TabDescription => InterviewerUIResources.Dashboard_StartedTabText;
+        public override string TabTitle => InterviewerUIResources.Dashboard_StartedLinkText;
+        public override string TabDescription => InterviewerUIResources.Dashboard_StartedTabText;
         
         private readonly IPrincipal principal;
 

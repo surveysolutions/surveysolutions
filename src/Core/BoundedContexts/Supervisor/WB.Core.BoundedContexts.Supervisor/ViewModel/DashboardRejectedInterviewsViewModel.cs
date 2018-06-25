@@ -11,16 +11,17 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
-    public class DashboardCompletedInterviewsViewModel : BaseInterviewsViewModel
+    public class DashboardRejectedInterviewsViewModel : BaseInterviewsViewModel
     {
         private readonly IPrincipal principal;
 
         public override Task Initialize()
         {
+            this.Load(null);
             return Task.CompletedTask;
         }
 
-        public DashboardCompletedInterviewsViewModel(IInterviewViewModelFactory viewModelFactory,
+        public DashboardRejectedInterviewsViewModel(IInterviewViewModelFactory viewModelFactory,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo,
             IPrincipal principal) : 
@@ -31,16 +32,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override GroupStatus InterviewStatus => GroupStatus.Completed;
 
-        public override string TabTitle => SupervisorDashboard.Completed;
+        public override string TabTitle => SupervisorDashboard.Rejected;
 
         public override string TabDescription { get; }
 
         protected override Expression<Func<InterviewView, bool>> GetDbQuery()
         {
-            var interviewerId = this.principal.CurrentUserIdentity.UserId;
+            var currentUserId = this.principal.CurrentUserIdentity.UserId;
 
-            return interview => interview.ResponsibleId == interviewerId &&
-                                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.Completed;
+            return interview => interview.ResponsibleId == currentUserId &&
+                                interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.RejectedByHeadquarters;
         }
     }
 }
