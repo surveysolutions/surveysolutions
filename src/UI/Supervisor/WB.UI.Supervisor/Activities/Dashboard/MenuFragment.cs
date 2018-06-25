@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Support.Design.Widget;
+using Android.Support.V4.Widget;
 using Android.Views;
 using MvvmCross.Droid.Support.V4;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
@@ -16,7 +17,8 @@ namespace WB.UI.Supervisor.Activities.Dashboard
     public class MenuFragment : MvxFragment<DashboardMenuViewModel>, NavigationView.IOnNavigationItemSelectedListener
     {
         private NavigationView navigationView;
-        private IMenuItem _previousMenuItem;
+        private IMenuItem previousMenuItem;
+        private DrawerLayout drawerLayout;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -39,19 +41,19 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             var approvedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_approved_interviews);
             approvedMenuItem.SetTitle(SupervisorDashboard.Assignments);
 
-            _previousMenuItem = interviewsMenuItem.SetChecked(true);
+            previousMenuItem = interviewsMenuItem.SetChecked(true);
 
             return view;
         }
 
         public bool OnNavigationItemSelected(IMenuItem item)
         {
-            _previousMenuItem?.SetChecked(false);
+            previousMenuItem?.SetChecked(false);
 
             item.SetCheckable(true);
             item.SetChecked(true);
 
-            _previousMenuItem = item;
+            previousMenuItem = item;
 
 #pragma warning disable 4014
             Navigate(item.ItemId);
@@ -63,13 +65,16 @@ namespace WB.UI.Supervisor.Activities.Dashboard
         
         private async Task Navigate(int itemId)
         {
-            //((AppCompat)Activity).DrawerLayout.CloseDrawers();
+            ((DashboardActivity)Activity).DrawerLayout.CloseDrawers();
             await Task.Delay(TimeSpan.FromMilliseconds(250));
 
             switch(itemId)
             {
                 case Resource.Id.dashboard_completed_interviews:
                     ViewModel.ShowCompletedInterviews.Execute();
+                    break;
+                case Resource.Id.dashboard_rejected_interviews:
+                    ViewModel.ShowRejectedInterviwes.Execute();
                     break;
             }
         }

@@ -48,7 +48,7 @@
     <!--For some reason moving padding data to styles - break visuals-->
     <ImageView
       android:id="@+id/menu" app:MvxBind="Visible HasContextMenu"
-      android:src="@drawable/ic_action_more_vert"
+      app:srcCompat="@drawable/ic_action_more_vert"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/top_guideline"
