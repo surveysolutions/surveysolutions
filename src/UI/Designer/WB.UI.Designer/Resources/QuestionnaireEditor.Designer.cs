@@ -1411,7 +1411,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnire settings.
+        ///   Looks up a localized string similar to Questionnaire settings.
         /// </summary>
         public static string QuestionnaireSettings {
             get {
