@@ -3,6 +3,7 @@ using System.Globalization;
 using MvvmCross.Converters;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Interviewer.CustomBindings
 {

@@ -30,6 +30,7 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Supervisor.Activities;
+using WB.UI.Supervisor.Activities.Dashboard;
 using WB.UI.Supervisor.MvvmBindings;
 using WB.UI.Supervisor.Services.Implementation;
 
@@ -136,7 +137,8 @@ namespace WB.UI.Supervisor
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(SupervisorSetup).Assembly
+                typeof(SupervisorSetup).Assembly,
+                typeof(DashboardViewModel).Assembly
             });
         }
     }

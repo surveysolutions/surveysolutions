@@ -76,6 +76,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected override void InitializeViewLookup()
         {
+            base.InitializeViewLookup();
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
