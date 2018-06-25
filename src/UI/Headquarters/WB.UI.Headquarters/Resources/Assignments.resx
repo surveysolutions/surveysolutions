@@ -196,7 +196,7 @@
     <value>Indicator of whether the assignment is active or has been archived.</value>
   </data>
   <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire.</value>
+    <value>Select a questionnaire to see its associated assignments. Select “All questionnaires” to see assignments associated with any questionnaire.</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>User responsible. Click in the field to choose a user name either by selecting it directly or typing to filter the list of user names further.</value>
