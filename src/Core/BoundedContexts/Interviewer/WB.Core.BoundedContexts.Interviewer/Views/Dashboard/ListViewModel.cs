@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {

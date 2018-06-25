@@ -1,8 +1,12 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.Res;
 using Android.OS;
+using Android.Support.V4.Widget;
+using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,19 +21,43 @@ namespace WB.UI.Supervisor.Activities
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+    [MvxActivityPresentation]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService, ISyncServiceHost
     {
+        private ActionBarDrawerToggle drawerToggle;
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         public ServiceBinder<SyncBgService> Binder { get; set; }
 
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.SetSupportActionBar(this.FindViewById<Toolbar>(Resource.Id.toolbar));
+            var toolbar = this.FindViewById<Toolbar>(Resource.Id.toolbar);
+            this.SetSupportActionBar(toolbar);
+            SupportActionBar.SetDefaultDisplayHomeAsUpEnabled(false);
+
+            var drawerLayout = this.FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
+            this.drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
+            drawerLayout.AddDrawerListener(drawerToggle);
+
+            if (bundle == null)
+            {
+                ViewModel.ShowInterviewsCommand.Execute();
+                ViewModel.ShowMenuViewModelCommand.Execute();
+            }
         }
 
+        protected override void OnPostCreate(Bundle savedInstanceState)
+        {
+            base.OnPostCreate(savedInstanceState);
+            this.drawerToggle.SyncState();
+        }
+
+        public override void OnConfigurationChanged(Configuration newConfig)
+        {
+            base.OnConfigurationChanged(newConfig);
+            this.drawerToggle.OnConfigurationChanged(newConfig);
+        }
 
         protected override void OnStart()
         {
