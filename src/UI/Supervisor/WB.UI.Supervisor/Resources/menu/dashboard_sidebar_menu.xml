@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/dashboard_side_menu">
+
+    <item
+        android:id="@+id/dashboard_completed_interviews"
+        android:icon="@drawable/temp_image" 
+        android:title="Completed"/>
+    <item
+        android:id="@+id/dashboard_rejected_interviews"
+        android:icon="@drawable/temp_image"
+        android:title="Rejected"/>
+    <item
+        android:id="@+id/dashboard_assignments"
+        android:icon="@drawable/temp_image" 
+        android:title="Assigments"/>
+    <item
+        android:id="@+id/dashboard_approved_interviews"
+        android:icon="@drawable/temp_image"
+        android:title="Approved"/>
+</menu>

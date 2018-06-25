@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
     public interface IDashboardItem
     {

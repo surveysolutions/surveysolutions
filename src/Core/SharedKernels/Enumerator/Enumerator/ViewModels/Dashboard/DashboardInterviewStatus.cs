@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
+﻿namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
     public enum DashboardInterviewStatus
     {
