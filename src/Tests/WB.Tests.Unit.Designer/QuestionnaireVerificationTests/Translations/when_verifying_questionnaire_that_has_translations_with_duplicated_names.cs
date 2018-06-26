@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Translations
 {
     internal class when_verifying_questionnaire_that_has_translations_with_duplicated_names : QuestionnaireVerifierTestsContext
     {

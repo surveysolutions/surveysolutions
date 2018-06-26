@@ -35,21 +35,8 @@
         min-height: 220px;
 
         .modal-header {                       
-            font-size: 36px;          
             .opensanslight-font();            
-            border-bottom: 2px solid @verification-modal-content-border-color;
-
-             button.close {
-                @s: 40px;
-                z-index: 100;
-                width: @s;
-                height: @s;
-                background: url(../i/cross.png) 0 0 no-repeat;
-
-                &:hover {
-                    background-position: 0 -40px;
-                }
-            }
+            
             h3 {
                 span {
                     color: @verification-modal-error-color;

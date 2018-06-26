@@ -3,7 +3,6 @@ using FluentAssertions;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Tests.Abc;
-using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {

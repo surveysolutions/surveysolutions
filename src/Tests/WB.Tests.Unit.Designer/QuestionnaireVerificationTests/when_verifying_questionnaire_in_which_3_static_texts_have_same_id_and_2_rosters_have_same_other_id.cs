@@ -7,7 +7,7 @@ using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_in_which_3_static_texts_have_same_id_and_2_rosters_have_same_other_id : QuestionnaireVerifierTestsContext
     {
