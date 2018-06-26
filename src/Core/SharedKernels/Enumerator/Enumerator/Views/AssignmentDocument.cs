@@ -22,6 +22,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public DateTime ReceivedDateUtc { get; set; }
 
+        public Guid ResponsibleId { get; set; }
+
         public int? CreatedInterviewsCount { get; set; }
 
         [Ignore]
