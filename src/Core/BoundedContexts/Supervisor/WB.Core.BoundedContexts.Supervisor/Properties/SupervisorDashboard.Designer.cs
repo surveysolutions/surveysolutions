@@ -61,38 +61,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approved.
+        ///   Looks up a localized string similar to Collected interviews.
         /// </summary>
-        public static string Approved {
+        public static string CollectedInterviews {
             get {
-                return ResourceManager.GetString("Approved", resourceCulture);
+                return ResourceManager.GetString("CollectedInterviews", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assignments.
+        ///   Looks up a localized string similar to Outbox.
         /// </summary>
-        public static string Assignments {
+        public static string Outbox {
             get {
-                return ResourceManager.GetString("Assignments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Completed.
-        /// </summary>
-        public static string Completed {
-            get {
-                return ResourceManager.GetString("Completed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Rejected.
-        /// </summary>
-        public static string Rejected {
-            get {
-                return ResourceManager.GetString("Rejected", resourceCulture);
+                return ResourceManager.GetString("Outbox", resourceCulture);
             }
         }
         
@@ -102,6 +84,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         public static string ToBeAssigned {
             get {
                 return ResourceManager.GetString("ToBeAssigned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for your action.
+        /// </summary>
+        public static string WaitingForAction {
+            get {
+                return ResourceManager.GetString("WaitingForAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your team.
+        /// </summary>
+        public static string YourTeam {
+            get {
+                return ResourceManager.GetString("YourTeam", resourceCulture);
             }
         }
     }

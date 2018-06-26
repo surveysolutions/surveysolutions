@@ -29,24 +29,23 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             navigationView = view.FindViewById<NavigationView>(Resource.Id.dashboard_sidebar_navigation);
             navigationView.SetNavigationItemSelectedListener(this);
 
-            var interviewsMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_completed_interviews);
-            interviewsMenuItem.SetTitle(SupervisorDashboard.Completed);
-
-            var rejectedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_rejected_interviews);
-            rejectedMenuItem.SetTitle(SupervisorDashboard.Rejected);
-
-            var assignmentsMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_assignments);
-            assignmentsMenuItem.SetTitle(SupervisorDashboard.Assignments);
-
-            var approvedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_approved_interviews);
-            approvedMenuItem.SetTitle(SupervisorDashboard.Approved);
-
             var tobeAssignedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_to_be_assigned);
             tobeAssignedMenuItem.SetTitle(SupervisorDashboard.ToBeAssigned);
-            
             previousMenuItem = tobeAssignedMenuItem.SetChecked(true);
 
+            LocalizeMenuItem(Resource.Id.dashboard_your_team, SupervisorDashboard.YourTeam);
+            LocalizeMenuItem(Resource.Id.dashboard_collected_interviews, SupervisorDashboard.CollectedInterviews);
+            LocalizeMenuItem(Resource.Id.dashboard_waiting_decision, SupervisorDashboard.WaitingForAction);
+            LocalizeMenuItem(Resource.Id.dashboard_outbox, SupervisorDashboard.Outbox);
+
+
             return view;
+        }
+
+        private void LocalizeMenuItem(int id, string title)
+        {
+            var yourTeamGroup = navigationView.Menu.FindItem(id);
+            yourTeamGroup.SetTitle(title);
         }
 
         public bool OnNavigationItemSelected(IMenuItem item)
@@ -73,12 +72,6 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
             switch(itemId)
             {
-                case Resource.Id.dashboard_completed_interviews:
-                    ViewModel.ShowCompletedInterviews.Execute();
-                    break;
-                case Resource.Id.dashboard_rejected_interviews:
-                    ViewModel.ShowRejectedInterviwes.Execute();
-                    break;
                 case Resource.Id.dashboard_to_be_assigned:
                     ViewModel.ShowToBeAssignedItems.Execute();
                     break;

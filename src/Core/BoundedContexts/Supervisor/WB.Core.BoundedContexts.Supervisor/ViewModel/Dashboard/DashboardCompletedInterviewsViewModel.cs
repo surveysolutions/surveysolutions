@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override GroupStatus InterviewStatus => GroupStatus.Completed;
 
-        public override string TabTitle => SupervisorDashboard.Completed;
+        public override string TabTitle => "";
 
         public override string TabDescription { get; }
 
