@@ -288,7 +288,6 @@
     <Compile Include="Activities\Dashboard\DashboardSearchActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
-    <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />

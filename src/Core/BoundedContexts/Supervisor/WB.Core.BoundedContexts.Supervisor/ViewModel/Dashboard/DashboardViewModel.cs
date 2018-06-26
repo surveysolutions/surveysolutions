@@ -51,8 +51,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
-        public IMvxCommand ShowInterviewsCommand => 
-            new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardCompletedInterviewsViewModel>());
+        public IMvxCommand ShowDeafultListCommand => 
+            new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
 
         public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 

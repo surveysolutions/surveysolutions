@@ -95,5 +95,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
                 return ResourceManager.GetString("Rejected", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tasks to assign.
+        /// </summary>
+        public static string ToBeAssigned {
+            get {
+                return ResourceManager.GetString("ToBeAssigned", resourceCulture);
+            }
+        }
     }
 }

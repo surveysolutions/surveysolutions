@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/dashboard_side_menu">
+    <item
+        android:id="@+id/dashboard_to_be_assigned"
+        android:icon="@drawable/temp_image" 
+        android:title="Tasks to be assigned"/>
 
     <item
         android:id="@+id/dashboard_completed_interviews"
