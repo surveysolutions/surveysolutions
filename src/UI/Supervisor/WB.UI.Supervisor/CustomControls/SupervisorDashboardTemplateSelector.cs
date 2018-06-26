@@ -1,5 +1,6 @@
 ﻿using System;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Supervisor.CustomControls
@@ -8,6 +9,7 @@ namespace WB.UI.Supervisor.CustomControls
     {
         private static readonly Type InterviewType = typeof(InterviewDashboardItemViewModel);
         private static readonly Type SubtitleType = typeof(DashboardSubTitleViewModel);
+        private static readonly Type AssignmentType = typeof(SupervisorAssignmentDashboardItemViewModel);
 
         public int GetItemViewType(object forItemObject)
         {
@@ -15,7 +17,7 @@ namespace WB.UI.Supervisor.CustomControls
 
             var typeOfViewModel = forItemObject.GetType();
 
-            if (typeOfViewModel == InterviewType /*|| typeOfViewModel == AssignmentType*/)
+            if (typeOfViewModel == InterviewType || typeOfViewModel == AssignmentType)
                 return Resource.Layout.dashboard_interview_item;
 
             if (typeOfViewModel == SubtitleType)

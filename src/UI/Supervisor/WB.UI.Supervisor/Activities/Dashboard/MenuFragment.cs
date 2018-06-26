@@ -41,7 +41,11 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             var approvedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_approved_interviews);
             approvedMenuItem.SetTitle(SupervisorDashboard.Assignments);
 
-            previousMenuItem = interviewsMenuItem.SetChecked(true);
+            var tobeAssignedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_to_be_assigned);
+            tobeAssignedMenuItem.SetTitle(SupervisorDashboard.Assignments);
+
+            
+            previousMenuItem = tobeAssignedMenuItem.SetChecked(true);
 
             return view;
         }
@@ -75,6 +79,9 @@ namespace WB.UI.Supervisor.Activities.Dashboard
                     break;
                 case Resource.Id.dashboard_rejected_interviews:
                     ViewModel.ShowRejectedInterviwes.Execute();
+                    break;
+                case Resource.Id.dashboard_to_be_assigned:
+                    ViewModel.ShowToBeAssignedItems.Execute();
                     break;
             }
         }

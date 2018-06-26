@@ -18,4 +18,11 @@ namespace WB.UI.Supervisor.Activities.Dashboard
     {
         protected override int ViewResourceId => Resource.Layout.dashboard_interviews;
     }
+
+    [MvxFragmentPresentation(typeof(ToBeAssignedItemsViewModel), Resource.Id.dashboard_content,
+        ActivityHostViewModelType = typeof(DashboardViewModel))]
+    public class DashboardToBeAssignedFragment : BaseFragment<ToBeAssignedItemsViewModel>
+    {
+        protected override int ViewResourceId => Resource.Layout.dashboard_interviews;
+    }
 }

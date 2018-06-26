@@ -237,6 +237,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
+    <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
+    <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
     <Compile Include="Activities\PhotoViewActivity.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />

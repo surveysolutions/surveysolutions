@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             protected set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.itemsCount, value);
         }
 
-        protected void UpdateUiItems() => Task.Run(() =>
+        protected Task UpdateUiItems() => Task.Run(() =>
         {
             this.IsItemsLoaded = false;
 

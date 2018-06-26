@@ -100,7 +100,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<CompletedInterviewsViewModel>();
             registry.Bind<RejectedInterviewsViewModel>();
             registry.Bind<StartedInterviewsViewModel>();
-            registry.Bind<AssignmentDashboardItemViewModel>();
+            registry.Bind<InterviewerAssignmentDashboardItemViewModel>();
             registry.Bind<CensusQuestionnaireDashboardItemViewModel>();
             registry.Bind<ExpandableQuestionsDashboardItemViewModel>();
             registry.Bind<InterviewDashboardItemViewModel>();
