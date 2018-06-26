@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+namespace WB.Core.BoundedContexts.Tester.Services
 {
     public class InMemoryPlainStorage<TEntity> : IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity
