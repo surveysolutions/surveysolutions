@@ -9,7 +9,7 @@ namespace WB.UI.Interviewer.CustomControls
     {
         private static readonly Type CensusType = typeof(CensusQuestionnaireDashboardItemViewModel);
         private static readonly Type InterviewType = typeof(InterviewDashboardItemViewModel);
-        private static readonly Type AssignmentType = typeof(AssignmentDashboardItemViewModel);
+        private static readonly Type AssignmentType = typeof(InterviewerAssignmentDashboardItemViewModel);
         private static readonly Type SubtitleType = typeof(DashboardSubTitleViewModel);
 
         public int GetItemViewType(object forItemObject)

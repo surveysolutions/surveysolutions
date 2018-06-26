@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 // This code is going to be removed after KP-9461. And according to research in KP-9513 we should reduce amount of dependencies in constructor
 
                 var userInteractionService = Mvx.Resolve<IUserInteractionService>();
-                Mvx.Resolve<ILoggerProvider>().GetFor<AssignmentDashboardItemViewModel>().Error(e.Message, e);
+                Mvx.Resolve<ILoggerProvider>().GetFor<InterviewerAssignmentDashboardItemViewModel>().Error(e.Message, e);
                 await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
             }
             finally

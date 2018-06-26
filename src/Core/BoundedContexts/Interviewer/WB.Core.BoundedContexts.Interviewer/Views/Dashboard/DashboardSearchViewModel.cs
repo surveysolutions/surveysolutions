@@ -184,7 +184,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 if (isMatched)
                 {
-                    var assignmentItemViewModel = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
+                    var assignmentItemViewModel = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                     assignmentItemViewModel.Init(assignmentItem);
                     yield return assignmentItemViewModel;
                 }
