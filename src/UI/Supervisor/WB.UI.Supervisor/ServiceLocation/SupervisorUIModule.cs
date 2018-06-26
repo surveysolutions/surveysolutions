@@ -70,7 +70,7 @@ namespace WB.UI.Supervisor.ServiceLocation
            
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
-            registry.Bind<ICheckVersionUriProvider, CheckForVersionUriProvider>();
+            registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
 #else
             registry.Bind<WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();

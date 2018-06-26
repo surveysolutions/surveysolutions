@@ -24,7 +24,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV1Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
             //
             //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
-            //            config.TypedRoute("api/supervisor/v1/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
+            config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorAppApiController>(x => x.GetLatestVersion()));
             //
             //
             //            config.TypedRoute("api/supervisor/v1/tabletInfo",
