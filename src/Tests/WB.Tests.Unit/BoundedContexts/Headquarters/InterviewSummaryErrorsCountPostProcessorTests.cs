@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         public void should_store_errors_count_if_there_is_errors()
         {
             this.interview.ApplyEvent(Create.Event.AnswersDeclaredInvalid(Create.Identity(questionId)));
-            this.interview.ApplyEvent(new InterviewDeclaredInvalid());
+            this.interview.ApplyEvent(new InterviewDeclaredInvalid(DateTimeOffset.Now));
 
             subject.Process(this.interview, null);
 
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
         public void should_store_zero_errors_count_if_there_is_no_errors()
         {
             this.interview.ApplyEvent(Create.Event.AnswersDeclaredValid(Create.Identity(questionId)));
-            this.interview.ApplyEvent(new InterviewDeclaredValid());
+            this.interview.ApplyEvent(new InterviewDeclaredValid(DateTimeOffset.Now));
 
             subject.Process(this.interview, null);
 
