@@ -4,6 +4,7 @@ using MvvmCross.Droid.Support.V7.AppCompat;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Activities
 {

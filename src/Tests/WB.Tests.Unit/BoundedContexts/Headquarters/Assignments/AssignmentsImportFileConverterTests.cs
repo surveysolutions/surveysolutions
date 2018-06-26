@@ -221,7 +221,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         {
             //arrange
             var variable = "questionId";
-            var value = "12/1/98";
+            var value = "12/1/98 13:40:56";
 
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.DateTimeQuestion(variable: variable)));
@@ -240,7 +240,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(answer.Value, Is.EqualTo(value));
             Assert.That(answer.Column, Is.EqualTo(variable));
-            Assert.That(answer.Answer, Is.EqualTo(new DateTime(1998, 12, 1)));
+            Assert.That(answer.Answer, Is.EqualTo(new DateTime(1998, 12, 1, 13, 40, 56, DateTimeKind.Utc)));
             Assert.That(answer.VariableName, Is.EqualTo(variable.ToLower()));
         }
 

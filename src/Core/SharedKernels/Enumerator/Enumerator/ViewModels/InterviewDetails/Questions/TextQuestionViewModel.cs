@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool IsMaskedQuestionAnswered { get; set; }
         
-        public ICommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
+        public ICommand ValueChangeCommand => new MvxAsyncCommand<string>(async s => await this.SaveAnswer(s), s => this.principal.IsAuthenticated);
 
         private IMvxCommand answerRemoveCommand;
         private readonly QuestionStateViewModel<TextQuestionAnswered> questionState;
@@ -153,13 +153,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
-                this.QuestionState?.Validity?.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
                 return;
             }
 
             if(string.IsNullOrWhiteSpace(text))
             {
-                this.QuestionState?.Validity?.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
                 return;
             }
 
@@ -173,11 +173,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState?.Validity?.ExecutedWithoutExceptions();
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState?.Validity?.ProcessException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

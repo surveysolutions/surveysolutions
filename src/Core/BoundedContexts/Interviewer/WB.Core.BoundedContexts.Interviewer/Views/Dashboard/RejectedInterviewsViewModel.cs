@@ -1,6 +1,6 @@
 using System;
 using System.Linq.Expressions;
-using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;

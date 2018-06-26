@@ -3,9 +3,9 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     [TestFixture]
     internal class WarningsTests
@@ -13,13 +13,13 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
         [Test]
         public void no_shared_persons()
             => Enumerable
-                .Empty<SharedPerson>()
+                .Empty<SharedPersonView>()
                 .ExpectWarning("WB0227");
 
         [Test]
         public void shared_person()
             => new[]
-                { Create.SharedPerson() }
+                { Create.SharedPersonView() }
                 .ExpectNoWarning("WB0227");
 
         [Test]

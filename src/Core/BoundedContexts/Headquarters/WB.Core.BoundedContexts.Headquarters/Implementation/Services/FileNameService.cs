@@ -53,9 +53,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return this.fileSystemAccessor.CombinePath(pathToExportedData, archiveName);
         }
 
+        public string GetFileNameForAssignmentTemplate(QuestionnaireIdentity identity)
+        {
+            var questionnaireTitle = GetQuestionnaireTitle(identity);
+            return $"{questionnaireTitle}.tab";
+        }
+
         private string GetQuestionnaireTitle(QuestionnaireIdentity identity)
         {
-            var questionnaireTitle = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString())?.Title);
+            var questionnaire = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString()));
+            var questionnaireTitle = questionnaire.Variable ?? questionnaire.Title;
 
             questionnaireTitle = this.fileSystemAccessor.MakeValidFileName(questionnaireTitle);
             

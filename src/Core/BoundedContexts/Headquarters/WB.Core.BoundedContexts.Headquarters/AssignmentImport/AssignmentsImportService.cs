@@ -325,12 +325,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private static RosterVector ToRosterVector(AssignmentRosterInstanceCode[] rosterInstanceCodes)
             => new RosterVector(rosterInstanceCodes.Select(x => x.Code.Value).ToArray());
 
-        private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments, IQuestionnaire questionnaire)
+        private static IEnumerable<AssignmentToImport> FixRosterSizeAnswers(IEnumerable<AssignmentToImport> assignments,
+            IQuestionnaire questionnaire)
         {
             var allRosterSizeQuestions = questionnaire.GetAllRosterSizeQuestions();
-            if (allRosterSizeQuestions.Count == 0)
-                foreach (var assignmentToImport in assignments)
-                    yield return assignmentToImport;
 
             var questionsInsideRosters = allRosterSizeQuestions
                 .Select(x => (rosterSize: x, rosters: questionnaire.GetRosterGroupsByRosterSizeQuestion(x)))
@@ -340,8 +338,11 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             foreach (var assignment in assignments)
             {
-                if (assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
-                    BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions, questionsInsideRosters, questionnaire);
+                if (allRosterSizeQuestions.Count > 0 && assignment.Answers.Any(x => x.Identity.RosterVector.Length > 0))
+                {
+                    BuildRosterSizeAnswersByRosterQuestionAnswers(assignment, allRosterSizeQuestions,
+                        questionsInsideRosters, questionnaire);
+                }
 
                 yield return assignment;
             }
@@ -366,7 +367,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 {
                     answers = assignment.Answers.Where(y => x.rosterQuestions.Contains(y.Identity.Id)).ToArray(),
                     rosterSizeType = questionnaire.GetQuestionType(x.rosterSize),
-                    rosterSizeLevel = questionnaire.GetRosterLevelForQuestion(x.rosterSize)
+                    rosterSizeLevel = questionnaire.GetRosterLevelForQuestion(x.rosterSize),
+                    levelsOfRostersByRosterSize = questionnaire.GetRosterGroupsByRosterSizeQuestion(x.rosterSize).Select(questionnaire.GetRosterLevelForGroup).ToArray()
                 }).Where(x => x.Value.answers.Length > 0);
 
             var calculatedRosterSizeAnswers = new List<InterviewAnswer>();
@@ -402,7 +404,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                         rosterSizeAnsweredOptions);
                     
                     if (rosterSizeType == QuestionType.Numeric)
-                        FixRosterVectors(answersGroupedByRosterInstanceId, oldToNewRosterInstanceIds, rosterSizeLevel);
+                        FixRosterVectors(answersGroupedByRosterInstanceId, oldToNewRosterInstanceIds, rosterAnswers.Value.levelsOfRostersByRosterSize);
 
                     calculatedRosterSizeAnswers.Add(rosterSizeAnswer);
                 }
@@ -444,22 +446,25 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return rosterSizeAnswer;
         }
 
-        private static void FixRosterVectors(
-            IOrderedEnumerable<IGrouping<int, InterviewAnswer>> answersGroupedByRosterInstanceId,
-            Dictionary<int, int> oldToNewRosterInstanceIds, int rosterSizeLevel)
+        private static void FixRosterVectors(IOrderedEnumerable<IGrouping<int, InterviewAnswer>> answersGroupedByRosterInstanceId,
+            Dictionary<int, int> oldToNewRosterInstanceIds, int[] levelsOfRostersByRosterSize)
         {
             foreach (var answersByRosterInstanceId in answersGroupedByRosterInstanceId)
+            foreach (var interviewAnswer in answersByRosterInstanceId)
+            foreach (var rosterLevel in levelsOfRostersByRosterSize.Distinct())
             {
+                if (rosterLevel > interviewAnswer.Identity.RosterVector.Length) continue;
+
+                var rosterVectorIndex = rosterLevel - 1;
+                var numericRosterInstanceCode = interviewAnswer.Identity.RosterVector[rosterVectorIndex];
+
                 // this means that roster instance id in roster file as we expected in our system
-                if (oldToNewRosterInstanceIds[answersByRosterInstanceId.Key] == answersByRosterInstanceId.Key) continue;
+                if (oldToNewRosterInstanceIds[numericRosterInstanceCode] == numericRosterInstanceCode) continue;
 
-                foreach (var interviewAnswer in answersByRosterInstanceId)
-                {
-                      var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
-                        rosterSizeLevel, oldToNewRosterInstanceIds[answersByRosterInstanceId.Key]);
+                var newRosterVector = interviewAnswer.Identity.RosterVector.Replace(
+                    rosterVectorIndex, oldToNewRosterInstanceIds[numericRosterInstanceCode]);
 
-                    interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
-                }
+                interviewAnswer.Identity = Identity.Create(interviewAnswer.Identity.Id, newRosterVector);
             }
         }
 

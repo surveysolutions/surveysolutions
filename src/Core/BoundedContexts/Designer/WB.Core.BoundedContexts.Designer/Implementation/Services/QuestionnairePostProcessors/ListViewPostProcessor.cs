@@ -255,7 +255,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         public void Process(Questionnaire aggregate, DeleteQuestionnaire command) => this.Delete(command.QuestionnaireId.FormatGuid());
 
         public void Process(Questionnaire aggregate, AddSharedPersonToQuestionnaire command)
-            => this.AddSharedPerson(command.QuestionnaireId.FormatGuid(), command.ResponsibleId, command.PersonId, command.Email, command.ShareType);
+            => this.AddSharedPerson(command.QuestionnaireId.FormatGuid(), command.ResponsibleId, command.PersonId, command.EmailOrLogin, command.ShareType);
 
         public void Process(Questionnaire aggregate, RemoveSharedPersonFromQuestionnaire command)
             => this.RemoveSharedPerson(command.QuestionnaireId.FormatGuid(), command.ResponsibleId, command.PersonId, command.Email);

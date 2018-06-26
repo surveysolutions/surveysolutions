@@ -59,14 +59,22 @@
 
         var linkFn = function (scope, element, attrs) {
             element.bind("mousedown", function (event) {
+                if ($(event.target).is('input')) {
+                    event.stopPropagation();
+                    return;
+                }
+
+                var offset = $(element).offset();
+                var x = event.pageX - offset.left;
+                var y = event.pageY - offset.top;
+
                 element.addClass('draggable').parents().on('mousemove', function (e) {
                     $('.draggable').offset({
-                        top: e.pageY - element.outerHeight() / 8,
-                        left: e.pageX - element.outerWidth() / 8
+                        top: e.pageY - y,
+                        left: e.pageX - x
                     }).on('mouseup', function () {
                         element.removeClass('draggable');
                     });
-                    e.preventDefault();
                 });
             });
 

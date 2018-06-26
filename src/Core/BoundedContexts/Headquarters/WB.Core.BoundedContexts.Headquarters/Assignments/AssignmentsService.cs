@@ -47,11 +47,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public bool HasAssignmentWithProtectedVariables(Guid responsibleId)
         {
-            bool result = this.assignmentsAccessor.Query(_ => _.Where(assigment =>
-                assigment.ResponsibleId == responsibleId
-                && !assigment.Archived
-                && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity)).Select(x => x.ProtectedVariables).ToList())
-                    .Any(x => x.Count > 0);
+            List<List<string>> listOfProtectedValiablesFromAssignments = this.assignmentsAccessor.Query(_ => _
+                .Where(assigment =>
+                    assigment.ResponsibleId == responsibleId
+                    && !assigment.Archived
+                    && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                .Select(x => x.ProtectedVariables)
+                .ToList());
+
+            bool result = listOfProtectedValiablesFromAssignments.Any(x => (x?.Count ?? 0) > 0);
             return result;
         }
 

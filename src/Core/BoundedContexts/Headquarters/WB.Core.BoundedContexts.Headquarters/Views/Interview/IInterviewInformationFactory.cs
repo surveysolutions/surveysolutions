@@ -8,6 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId);
         IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds);
+        [Obsolete("Since 18.08 KP-11379")]
         InterviewSynchronizationDto GetInProgressInterviewDetails(Guid interviewId);
     }
 }

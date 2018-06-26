@@ -31,6 +31,8 @@ namespace WB.UI.Headquarters.API.Interviewer
         private const string PHYSICALAPPLICATIONEXTENDEDFILENAME = "wbcapi.ext.apk";
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
 
+        private const string PHYSICALSUPERVISORAPPLICATIONFILENAME = "supervisor.apk";
+
         private readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly ITabletInformationService tabletInformationService;
         protected readonly IUserViewFactory userViewFactory;
@@ -75,14 +77,21 @@ namespace WB.UI.Headquarters.API.Interviewer
         }
 
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
+        public virtual HttpResponseMessage GetSupervisor()
+        {
+            return this.HttpResponseMessage(PHYSICALSUPERVISORAPPLICATIONFILENAME, PHYSICALSUPERVISORAPPLICATIONFILENAME);
+        }
+
+        [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
         public virtual HttpResponseMessage Get()
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithMaps)
-                return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+                return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME, RESPONSEAPPLICATIONFILENAME);
 
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME, RESPONSEAPPLICATIONFILENAME);
         }
         
         [HttpGet]
@@ -91,12 +100,12 @@ namespace WB.UI.Headquarters.API.Interviewer
         {
             var clientVersion = GetClientVersionFromUserAgent(this.Request);
             if (clientVersion == ClientVersionFromUserAgent.WithoutMaps)
-                return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME);
+                return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME, RESPONSEAPPLICATIONFILENAME);
 
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME);
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONEXTENDEDFILENAME, RESPONSEAPPLICATIONFILENAME);
         }
 
-        private HttpResponseMessage HttpResponseMessage(string appName)
+        private HttpResponseMessage HttpResponseMessage(string appName, string responseFileName)
         {
             string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
 
@@ -109,7 +118,7 @@ namespace WB.UI.Headquarters.API.Interviewer
 
             response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
-                FileName = RESPONSEAPPLICATIONFILENAME
+                FileName = responseFileName 
             };
 
             return response;
@@ -232,6 +241,11 @@ namespace WB.UI.Headquarters.API.Interviewer
             if (interviewerVersion != null && interviewerVersion > currentVersion)
             {
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
+            }
+
+            if (deviceSyncProtocolVersion == 7070) // KP-11462
+            {
+                return this.Request.CreateResponse(HttpStatusCode.UpgradeRequired);
             }
 
             if (deviceSyncProtocolVersion == 7060 /* pre protected questions release */)

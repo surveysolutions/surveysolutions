@@ -626,7 +626,7 @@
     <value>Can </value>
   </data>
   <data name="SettingsInviteCollaborators" xml:space="preserve">
-    <value>Invite collaborators by e-mail:</value>
+    <value>Invite collaborators by e-mail or login</value>
   </data>
   <data name="SettingsOwner" xml:space="preserve">
     <value>owner</value>
@@ -638,7 +638,7 @@
     <value>Public</value>
   </data>
   <data name="SettingsQuestionnaireName" xml:space="preserve">
-    <value>Questionnaire name:</value>
+    <value>Questionnaire name</value>
   </data>
   <data name="SettingsQuestionnaireSharing" xml:space="preserve">
     <value>Make this questionnaire</value>
@@ -647,7 +647,7 @@
     <value>Revoke access</value>
   </data>
   <data name="SettingsTitle" xml:space="preserve">
-    <value>Questionnaire settings</value>
+    <value>Settings</value>
   </data>
   <data name="SettingsVisibleToEveryone" xml:space="preserve">
     <value>visible to everyone in read only mode</value>
@@ -656,7 +656,7 @@
     <value>visible to owner only</value>
   </data>
   <data name="SettingsWhoHasAccess" xml:space="preserve">
-    <value>Who has access:</value>
+    <value>who has access</value>
   </data>
   <data name="ShowList" xml:space="preserve">
     <value>Show list</value>
@@ -712,6 +712,9 @@
   <data name="QuestionCurrentTime" xml:space="preserve">
     <value>Current time</value>
   </data>
+  <data name="GeometryType" xml:space="preserve">
+    <value>Geometry type</value>
+  </data>
   <data name="QuestionDecimalPlaces" xml:space="preserve">
     <value>Number of decimal places</value>
   </data>
@@ -764,7 +767,7 @@
     <value>Invite</value>
   </data>
   <data name="SettingsProvideExistingEmail" xml:space="preserve">
-    <value>Provide email of existing user</value>
+    <value>Provide email or login of existing user</value>
   </data>
   <data name="SettingsProvideValidEmail" xml:space="preserve">
     <value>Provide a valid email</value>
@@ -1070,7 +1073,7 @@
     <value>Use signature pad</value>
   </data>
   <data name="HelpNewComment" xml:space="preserve">
-    <value>add comment</value>
+    <value>Add comment</value>
   </data>
   <data name="VariableVariableName" xml:space="preserve">
     <value>Variable name</value>
@@ -1106,6 +1109,18 @@
     <value>Comment cannot contain more than {1} characters</value>
   </data>
   <data name="IsWarning" xml:space="preserve">
-    <value>Is warning</value>
+    <value>Warning</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>Questionnaire variable</value>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>Collaborators</value>
+  </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+    <value>Public access</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+    <value>Questionnaire settings</value>
   </data>
 </root>
