@@ -39,11 +39,10 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             assignmentsMenuItem.SetTitle(SupervisorDashboard.Assignments);
 
             var approvedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_approved_interviews);
-            approvedMenuItem.SetTitle(SupervisorDashboard.Assignments);
+            approvedMenuItem.SetTitle(SupervisorDashboard.Approved);
 
             var tobeAssignedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_to_be_assigned);
-            tobeAssignedMenuItem.SetTitle(SupervisorDashboard.Assignments);
-
+            tobeAssignedMenuItem.SetTitle(SupervisorDashboard.ToBeAssigned);
             
             previousMenuItem = tobeAssignedMenuItem.SetChecked(true);
 
