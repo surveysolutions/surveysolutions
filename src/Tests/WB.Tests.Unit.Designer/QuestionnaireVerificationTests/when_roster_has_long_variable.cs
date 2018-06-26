@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_roster_has_long_variable : QuestionnaireVerifierTestsContext
     {
