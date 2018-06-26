@@ -7,7 +7,7 @@ using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Translations
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Translations
 {
     internal class when_verifying_questionnaire_with_translations_and_question_that_references_absent_question_in_substitutions : QuestionnaireVerifierTestsContext
     {

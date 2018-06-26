@@ -4,10 +4,9 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     public static class WarningsTestsExpectations
     {
@@ -21,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .QuestionnaireView(questionnaire)
                 .ExpectWarning(warningCode);
 
-        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectWarning(this IEnumerable<SharedPerson> sharedPersons, string warningCode)
+        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectWarning(this IEnumerable<SharedPersonView> sharedPersons, string warningCode)
             => Create
                 .QuestionnaireView(sharedPersons: sharedPersons)
                 .ExpectWarning(warningCode);
@@ -58,7 +57,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .QuestionnaireView(questionnaire)
                 .ExpectNoWarning(warningCode);
 
-        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectNoWarning(this IEnumerable<SharedPerson> sharedPersons, string warningCode)
+        public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectNoWarning(this IEnumerable<SharedPersonView> sharedPersons, string warningCode)
             => Create
                 .QuestionnaireView(sharedPersons: sharedPersons)
                 .ExpectNoWarning(warningCode);

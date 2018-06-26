@@ -25,7 +25,6 @@
         }
 
         .modal-header {
-            border-bottom: none;
             border-radius: 5px 5px 0 0;
 
             &.blue-strip {
@@ -34,22 +33,10 @@
 
             h1 {
                 .opensanslight-font();
+                margin: 0;
             }
 
-            button.close {
-                @s: 40px;
-                position: absolute;
-                z-index: 100;
-                top: 12px;
-                right: 4px;
-                width: @s;
-                height: @s;
-                background: url(../../i/cross.png) 0 0 no-repeat;
 
-                &:hover {
-                    background-position: 0 -40px;
-                }
-            }
 
             h2 {
                 .arial-font();
@@ -74,10 +61,26 @@
 
 .modal-header {
     border-top: 8px solid #d7e4ee;
+    border-bottom: 2px solid @verification-modal-content-border-color;
+
+    button.close {
+        @s: 40px;
+        position: absolute;
+        z-index: 100;
+        right: 4px;
+        width: @s;
+        height: @s;
+        background: url(../../i/cross.png) 0 0 no-repeat;
+
+        &:hover {
+            background-position: 0 -40px;
+        }
+    }
 }
 
 .modal-title {
     .confirm-title();
+    line-height: 1;
 }
 
 .modal-body {

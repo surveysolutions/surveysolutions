@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_verifying_questionnaire_with_group_that_has_enablement_condition_referencing_to_categirocal_multi_not_linked_question : QuestionnaireVerifierTestsContext
     {

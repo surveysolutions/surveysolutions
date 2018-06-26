@@ -3,9 +3,8 @@ using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     public static class ErrorsTestsExpectations
     {
@@ -22,7 +21,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectError(errorCode);
 
         public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectError(
-            this IEnumerable<SharedPerson> sharedPersons, string errorCode)
+            this IEnumerable<SharedPersonView> sharedPersons, string errorCode)
             => Create
                 .QuestionnaireView(sharedPersons: sharedPersons)
                 .ExpectError(errorCode);
@@ -73,7 +72,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
                 .ExpectNoError(errorCode);
 
         public static IReadOnlyCollection<QuestionnaireVerificationMessage> ExpectNoError(
-            this IEnumerable<SharedPerson> sharedPersons, string errorCode)
+            this IEnumerable<SharedPersonView> sharedPersons, string errorCode)
             => Create
                 .QuestionnaireView(sharedPersons: sharedPersons)
                 .ExpectNoError(errorCode);

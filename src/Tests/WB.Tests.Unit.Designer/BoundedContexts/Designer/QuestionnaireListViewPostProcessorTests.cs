@@ -84,7 +84,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         {
             // arrange
             Guid questionnaireId = Guid.NewGuid();
-            var command = new UpdateQuestionnaire(questionnaireId, "title", true, Guid.NewGuid(), false);
+            var command = new UpdateQuestionnaire(questionnaireId, "title", "questionnaire", true, Guid.NewGuid(), false);
 
             AssemblyContext.SetupServiceLocator();
             var listViewItemsStorage = new TestPlainStorage<QuestionnaireListViewItem>();
@@ -167,12 +167,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireListViewItem.SharedPersons.First().ShareType, Is.EqualTo(shareType));
 
             mockOfEmailNotifier.Verify(
-                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.Share, command.Email, It.IsAny<string>(),
+                x => x.NotifyTargetPersonAboutShareChange(ShareChangeType.Share, command.EmailOrLogin, It.IsAny<string>(),
                     questionnaireIdFormatted, listViewItem.Title, command.ShareType, It.IsAny<string>()), Times.Once);
 
             mockOfEmailNotifier.Verify(
                 x => x.NotifyOwnerAboutShareChange(ShareChangeType.Share, questionnaireOwner.Email, questionnaireOwner.UserName,
-                    questionnaireIdFormatted, listViewItem.Title, command.ShareType, It.IsAny<string>(), command.Email), Times.Once);
+                    questionnaireIdFormatted, listViewItem.Title, command.ShareType, It.IsAny<string>(), command.EmailOrLogin), Times.Once);
         }
 
         [Test]

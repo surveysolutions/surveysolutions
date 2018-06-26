@@ -6,7 +6,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
 {
     internal class when_categorical_question_has_more_than_30_options : QuestionnaireVerifierTestsContext
     {
