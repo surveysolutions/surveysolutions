@@ -38,7 +38,6 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             LocalizeMenuItem(Resource.Id.dashboard_waiting_decision, SupervisorDashboard.WaitingForAction);
             LocalizeMenuItem(Resource.Id.dashboard_outbox, SupervisorDashboard.Outbox);
 
-
             return view;
         }
 
