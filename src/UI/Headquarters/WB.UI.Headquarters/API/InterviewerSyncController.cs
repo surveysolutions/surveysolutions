@@ -14,7 +14,6 @@ using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
@@ -34,6 +33,8 @@ namespace WB.UI.Headquarters.API
         private readonly IAndroidPackageReader androidPackageReader;
 
         private string ResponseInterviewerFileName = "interviewer.apk";
+
+        private string ResponseSupervisorFileName = "supervisor.apk";
 
         public InterviewerSyncController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
@@ -96,12 +97,21 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
 
-            return this.CheckFileAndResponse(pathToFile);
+            return this.CheckFileAndResponse(pathToFile, this.ResponseInterviewerFileName);
         }
 
-        private HttpResponseMessage CheckFileAndResponse(string pathToFile)
+        [HttpGet]
+        [AllowAnonymous]
+        public HttpResponseMessage GetLatestSupervisor()
+        {
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
+
+            return this.CheckFileAndResponse(pathToFile, ResponseSupervisorFileName);
+        }
+
+        private HttpResponseMessage CheckFileAndResponse(string pathToFile, string responseFileName)
         {
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
@@ -112,7 +122,7 @@ namespace WB.UI.Headquarters.API
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = this.ResponseInterviewerFileName
+                    FileName = responseFileName 
                 };
 
                 return response;
@@ -125,9 +135,9 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestExtendedVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.ExtendedFileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerExtendedFileName);
 
-            return this.CheckFileAndResponse(pathToFile);
+            return this.CheckFileAndResponse(pathToFile, this.ResponseInterviewerFileName);
         }
 
         [HttpGet]
@@ -135,7 +145,7 @@ namespace WB.UI.Headquarters.API
         public bool CheckNewVersion(int versionCode)
         {
             string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
 
             int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null

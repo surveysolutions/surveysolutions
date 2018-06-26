@@ -35,6 +35,8 @@ namespace WB.UI.Headquarters
             InterviewerV3WebApiConfig.Register(config);
             SupervisorV1WebApiConfig.Register(config);
 
+            config.TypedRoute(@"api/interviewer/supervisor", c => c.Action<InterviewerApiController>(x => x.GetSupervisor()));
+
 
             config.Filters.Add(new UnhandledExceptionFilter());
             config.MessageHandlers.Add(new CompressionHandler());
