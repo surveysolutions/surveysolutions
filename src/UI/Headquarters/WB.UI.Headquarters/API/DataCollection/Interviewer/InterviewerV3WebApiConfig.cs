@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Threading;
 using System.Web.Http;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
-using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v3;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer

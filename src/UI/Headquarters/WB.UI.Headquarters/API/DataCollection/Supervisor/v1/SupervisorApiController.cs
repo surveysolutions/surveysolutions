@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
+using System.Web.Hosting;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.Infrastructure.FileSystem;
 using WB.UI.Headquarters.Code;
 using WB.UI.Shared.Web.Filters;
 
@@ -11,11 +13,33 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
     public class SupervisorAppApiController : ApiController
     {
+        private const string RESPONSEAPPLICATIONFILENAME = "supervisor.apk";
+        private const string PHYSICALAPPLICATIONFILENAME = "supervisor.apk";
+        private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
+        private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IAndroidPackageReader androidPackageReader;
+
         private readonly IAuthorizedUser authorizedUser;
 
-        public SupervisorAppApiController(IAuthorizedUser authorizedUser)
+        public SupervisorAppApiController(
+            IAuthorizedUser authorizedUser, 
+            IFileSystemAccessor fileSystemAccessor, 
+            IAndroidPackageReader androidPackageReader)
         {
             this.authorizedUser = authorizedUser;
+            this.fileSystemAccessor = fileSystemAccessor;
+            this.androidPackageReader = androidPackageReader;
+        }
+
+        [HttpGet]
+        public virtual int? GetLatestVersion()
+        {
+            string pathToInterviewerApp =
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), PHYSICALAPPLICATIONFILENAME);
+
+            return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
+                ? null
+                : this.androidPackageReader.Read(pathToInterviewerApp).Version;
         }
 
         [ApiBasicAuth(UserRoles.Supervisor)]
