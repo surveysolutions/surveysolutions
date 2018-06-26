@@ -24,6 +24,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                          ILitePublishedEventHandler<InterviewSynchronized>,
                                          ILitePublishedEventHandler<InterviewStatusChanged>,
                                          ILitePublishedEventHandler<InterviewHardDeleted>,
+                                         ILitePublishedEventHandler<InterviewerAssigned>,
+                                         
 
                                          ILitePublishedEventHandler<TextQuestionAnswered>,
                                          ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
@@ -316,7 +318,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
         {
-            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted;
+            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted || status == InterviewStatus.RejectedBySupervisor;
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
@@ -514,6 +516,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Length, 
                 evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
+        }
+
+        public void Handle(IPublishedEvent<InterviewerAssigned> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.ResponsibleId = @event.Payload.InterviewerId.GetValueOrDefault();
+            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            this.interviewViewRepository.Store(interviewView);
         }
     }
 }

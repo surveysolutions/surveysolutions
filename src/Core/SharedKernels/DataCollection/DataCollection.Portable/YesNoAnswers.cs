@@ -29,6 +29,14 @@ namespace WB.Core.SharedKernels.DataCollection
                 int.Parse(stringParts[0], CultureInfo.InvariantCulture),
                 stringParts[1].Trim().ToLower() == "yes");
         }
+
+        public override bool Equals(object obj)
+        {
+            var targetAnswer = (CheckedYesNoAnswerOption) obj;
+            if (targetAnswer == null) return false;
+
+            return this.Value == targetAnswer.Value && this.Yes == targetAnswer.Yes && this.No == targetAnswer.No;
+        }
     }
 
     // new type with interger arrays for ExpressionStorage

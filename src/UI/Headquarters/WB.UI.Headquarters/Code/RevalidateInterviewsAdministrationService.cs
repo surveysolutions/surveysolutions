@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -23,6 +24,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
         private static readonly object RebuildAllViewsLockObject = new object();
         private static string statusMessage;
         private readonly ITransactionManagerProvider transactionManagerProvider;
+        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         private readonly ICommandService commandService;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader;
@@ -38,17 +40,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             ILogger logger,
             ICommandService commandService, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewsReader, 
-            ITransactionManagerProvider transactionManagerProvider)
+            ITransactionManagerProvider transactionManagerProvider,
+            IPlainTransactionManagerProvider plainTransactionManagerProvider)
         {
             this.logger = logger;
             this.commandService = commandService;
             this.interviewsReader = interviewsReader;
             this.transactionManagerProvider = transactionManagerProvider;
+            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
-        public void RevalidateAllInterviewsWithErrorsAsync()
+        public void RevalidateAllInterviewsWithErrorsAsync(Guid userId, DateTime? fromDate, DateTime? toDate)
         {
-            new Task(this.RevalidateAllInterviewsWithErrors).Start();
+            new Task(() => this.RevalidateAllInterviewsWithErrors(userId, fromDate, toDate)).Start();
         }
 
         public bool AreInterviewsBeingRevalidatingNow()
@@ -64,7 +68,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 areInterviewsBeingRevalidatingNow ? "Yes" : "No");
         }
 
-        private void RevalidateAllInterviewsWithErrors()
+        private void RevalidateAllInterviewsWithErrors(Guid userId, DateTime? fromDate, DateTime? toDate)
         {
             if (!areInterviewsBeingRevalidatingNow)
             {
@@ -72,7 +76,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 {
                     if (!areInterviewsBeingRevalidatingNow)
                     {
-                        this.RevalidateAllInterviewsImpl();
+                        this.RevalidateAllInterviewsImpl(userId, fromDate, toDate);
                     }
                 }
             }
@@ -86,11 +90,11 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
             shouldStopInterviewsRevalidating = true;
         }
 
-        private void RevalidateAllInterviewsImpl()
+        private void RevalidateAllInterviewsImpl(Guid userId, DateTime? fromDate, DateTime? toDate)
         {
             try
             {
-                var bus = ServiceLocator.Current.GetInstance<IEventBus>() as IEventDispatcher;
+                var bus = ServiceLocator.Current.GetInstance<ILiteEventBus>();
                 if (bus == null)
                 {
                     UpdateStatusMessage("Environments setup problems.");
@@ -102,12 +106,20 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                 List<InterviewSummary> interviews = new List<InterviewSummary>();
                 transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
                 {
-                    interviews = this.interviewsReader.Query(_ => _.Where(interview =>
-                        interview.Status == InterviewStatus.Completed
-                        || interview.Status == InterviewStatus.RejectedBySupervisor
-                        || interview.Status == InterviewStatus.ApprovedBySupervisor
-                        || interview.Status == InterviewStatus.ApprovedByHeadquarters
-                        || interview.Status == InterviewStatus.RejectedByHeadquarters).ToList());
+                    interviews = this.interviewsReader.Query(_ =>
+                    {
+                        if (fromDate.HasValue)
+                            _ = _.Where(i => i.UpdateDate >= fromDate.Value);
+                        if (toDate.HasValue)
+                            _ = _.Where(i => i.UpdateDate <= toDate.Value);
+
+                        return _.Where(interview =>
+                            interview.Status == InterviewStatus.Completed
+                            || interview.Status == InterviewStatus.RejectedBySupervisor
+                            || interview.Status == InterviewStatus.ApprovedBySupervisor
+                            || interview.Status == InterviewStatus.ApprovedByHeadquarters
+                            || interview.Status == InterviewStatus.RejectedByHeadquarters).ToList();
+                    });
                 });
                 
 
@@ -144,13 +156,19 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Code
                             try
                             {
                                 this.transactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-                                this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId));
+                                this.plainTransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
+
+                                this.commandService.Execute(new ReevaluateSynchronizedInterview(interviewItemId.InterviewId, userId));
+
                                 this.transactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
+                                this.plainTransactionManagerProvider.GetPlainTransactionManager().CommitTransaction();
                             }
                             catch (Exception e)
                             {
                                 this.logger.Error($"Failed to revalidate interview {interviewItemId}", e);
                                 this.transactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
+                                this.plainTransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
+
                                 failedInterviewsCount++;
                             }
 

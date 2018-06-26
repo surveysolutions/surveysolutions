@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
@@ -24,13 +25,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage;
+        private readonly IAccountRepository accountRepository;
 
         public QuestionnaireViewFactory(
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage)
+            IPlainStorageAccessor<QuestionnaireListViewItem> listItemStorage, 
+            IAccountRepository accountRepository)
         {
             this.questionnaireStorage = questionnaireStorage;
             this.listItemStorage = listItemStorage;
+            this.accountRepository = accountRepository;
         }
 
         public QuestionnaireView Load(QuestionnaireViewInputModel input)
@@ -77,10 +81,18 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
             return false;
         }
 
-        private List<SharedPerson> GetSharedPersons(Guid questionnaireId)
+        private List<SharedPersonView> GetSharedPersons(Guid questionnaireId)
         {
             var listViewItem = this.listItemStorage.GetById(questionnaireId.FormatGuid());
-            var sharedPersons = listViewItem.SharedPersons;
+            var sharedPersons = listViewItem.SharedPersons
+                .Select(x => new SharedPersonView
+                {
+                    Email = x.Email,
+                    IsOwner = x.IsOwner,
+                    Login = accountRepository.GetByProviderKey(x.UserId)?.UserName ?? string.Empty,
+                    ShareType = x.ShareType,
+                    UserId = x.UserId
+                });
             return sharedPersons.ToList();
         }
 

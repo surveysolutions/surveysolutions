@@ -3,7 +3,6 @@ using Android.App;
 using Android.OS;
 using Android.Preferences;
 using MvvmCross;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Interviewer.SharedPreferences;
@@ -85,11 +84,6 @@ namespace WB.UI.Interviewer.Activities
                     interviewerSettings.SetVibrateOnError(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.VibrateOnError));
                     this.UpdateSettings();
                 };
-//                this.FindPreference(SettingsNames.TestingConditions).PreferenceChange += (sender, e) =>
-//                {
-//                    interviewerSettings.SetTestingConditions(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.TestingConditions));
-//                    this.UpdateSettings();
-//                };
                 this.FindPreference(SettingsNames.ShowLocationOnMap).PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetShowLocationOnMap(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.ShowLocationOnMap));
@@ -125,9 +119,6 @@ namespace WB.UI.Interviewer.Activities
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.VibrateOnError, UIResources.Prefs_VibrateOnErrorTitle,
                     UIResources.Prefs_VibrateOnErrorSummary, interviewerSettings.VibrateOnError);
-
-//                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.TestingConditions, "TestingConditions",
-//                    "TestingConditions", interviewerSettings.TestingConditions);
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.ShowLocationOnMap, 
                     UIResources.Prefs_ShowLocationOnMap,

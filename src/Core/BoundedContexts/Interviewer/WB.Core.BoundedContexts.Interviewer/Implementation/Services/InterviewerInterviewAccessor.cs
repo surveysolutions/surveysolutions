@@ -5,19 +5,20 @@ using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
@@ -31,12 +32,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IPlainStorage<InterviewFileView> interviewFileViewRepository;
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
-        private readonly IInterviewerEventStorage eventStore;
+        private readonly IEnumeratorEventStorage eventStore;
         private readonly IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache;
         private readonly ISnapshotStoreWithCache snapshotStoreWithCache;
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
-        private readonly ILogger logger;
+        private readonly ILiteEventRegistry eventRegistry;
 
         public InterviewerInterviewAccessor(
             IPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -46,12 +47,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IPlainStorage<InterviewFileView> interviewFileViewRepository,
             ICommandService commandService,
             IInterviewerPrincipal principal,
-            IInterviewerEventStorage eventStore,
+            IEnumeratorEventStorage eventStore,
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache,
             ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
-            ILogger logger)
+            ILiteEventRegistry eventRegistry)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -65,7 +66,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.snapshotStoreWithCache = snapshotStoreWithCache;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
-            this.logger = logger;
+            this.eventRegistry = eventRegistry;
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -77,6 +78,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
+            this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
         }
 
         private void RemoveInterviewImages(Guid interviewId)
@@ -137,9 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         private AggregateRootEvent[] BuildEventStreamOfLocalChangesToSend(Guid interviewId)
         {
-            List<CommittedEvent> storedEvents = this.eventStore.Read(interviewId, 0).ToList();
-
-            this.ThrowIfEventSequenceIsBroken(storedEvents, interviewId);
+            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
 
             var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
 
@@ -148,22 +148,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 .ToArray();
 
             return eventsToSend;
-        }
-
-        private void ThrowIfEventSequenceIsBroken(List<CommittedEvent> events, Guid interviewId)
-        {
-            for (int index = 0; index < events.Count; index++)
-            {
-                CommittedEvent @event = events[index];
-                int expectedEventSequence = index + 1;
-
-                if (expectedEventSequence != @event.EventSequence)
-                {
-                    var message = $"Expected event sequence {expectedEventSequence} is missing. Event stream is not full. Interview ID: {interviewId.FormatGuid()}.";
-                    this.logger.Error(message);
-                    throw new ArgumentException(message);
-                }
-            }
         }
 
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)
