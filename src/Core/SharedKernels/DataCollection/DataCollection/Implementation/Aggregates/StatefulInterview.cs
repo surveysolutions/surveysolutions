@@ -283,8 +283,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             propertiesInvariants.ThrowIfInterviewStatusIsNotOneOfExpected(
                 InterviewStatus.InterviewerAssigned, InterviewStatus.Restarted, InterviewStatus.RejectedBySupervisor);
 
-            propertiesInvariants.ThrowIfInterviewReceivedByInterviewer();
-
             if (isNeedFirePassiveEvents)
             {
                 var treeDifference = FindDifferenceBetweenTrees(this.sourceInterview, this.Tree);

@@ -10,7 +10,8 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         LookupTable = 50,
         Attachment = 60,
         Variable = 70,
-        Translation = 80
+        Translation = 80,
+        Questionnaire = 90
     }
 
     public enum QuestionnaireVerificationReferenceProperty

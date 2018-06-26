@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_roster_group_by_question_that_have_roster_title_question_not_in_groups_by_roster_size_question : QuestionnaireVerifierTestsContext
     {

@@ -1688,9 +1688,13 @@ namespace WB.Tests.Abc.TestFactories
             Guid? assigneeSupervisorId = null,
             string responsibleName = null,
             ISet<InterviewSummary> interviewSummary = null,
-            string questionnaireTitle = null, DateTime? updatedAt = null)
+            string questionnaireTitle = null, 
+            DateTime? updatedAt = null,
+            Guid? responsibleId = null,
+            List<string> protectedVariables = null)
         {
             var result = new Assignment();
+            
             var asDynamic = result.AsDynamic();
             asDynamic.Quantity = quantity;
             asDynamic.Id = id ?? 0;
@@ -1728,6 +1732,11 @@ namespace WB.Tests.Abc.TestFactories
 
             if(interviewSummary != null)
                 asDynamic.InterviewSummaries = interviewSummary;
+            if (responsibleId.HasValue)
+            {
+                asDynamic.ResponsibleId = responsibleId.Value;
+            }
+            asDynamic.ProtectedVariables = protectedVariables;
 
             return result;
         }
@@ -1936,12 +1945,14 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
         public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
+            => this.PreloadedFile(null, questionnaireOrRosterName, rows);
+
+        public PreloadedFile PreloadedFile(string fileName, string questionnaireOrRosterName, params PreloadingRow[] rows)
         {
             var columns = rows.SelectMany(x => x.Cells).OfType<PreloadingValue>().Select(x => x.Column).ToArray();
             return new PreloadedFile
             {
-                FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName,
-                    columns: columns),
+                FileInfo = Create.Entity.PreloadedFileInfo(columns, fileName, questionnaireOrRosterName),
                 Rows = rows
             };
         }

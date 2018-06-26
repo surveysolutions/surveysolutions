@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {
     internal class when_cascading_question_from_roster_references_parent_from_parent_roster : QuestionnaireVerifierTestsContext
     {

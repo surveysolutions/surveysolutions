@@ -156,6 +156,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void SaveAnswers()
         {
+            if (!this.principal.IsAuthenticated) return;
+
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
 
             if (answerViewModels.Any(x => string.IsNullOrWhiteSpace(x.Title)))

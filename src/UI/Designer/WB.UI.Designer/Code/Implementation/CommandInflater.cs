@@ -5,6 +5,7 @@ using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
@@ -18,14 +19,17 @@ namespace WB.UI.Designer.Code.Implementation
         private readonly IMembershipUserService userHelper;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader;
         private readonly IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList;
+        private readonly IAccountRepository accountRepository;
 
         public CommandInflater(IMembershipUserService userHelper,
             IPlainKeyValueStorage<QuestionnaireDocument> questionnaireDocumentReader,
-            IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList)
+            IPlainStorageAccessor<QuestionnaireListViewItem> questionnairesList,
+            IAccountRepository accountRepository)
         {
             this.userHelper = userHelper;
             this.questionnaireDocumentReader = questionnaireDocumentReader;
             this.questionnairesList = questionnairesList;
+            this.accountRepository = accountRepository;
         }
 
         public void PrepareDeserializedCommandForExecution(ICommand command)
@@ -60,16 +64,20 @@ namespace WB.UI.Designer.Code.Implementation
 
             if (questionnaire == null)
             {
-                throw new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound, "Source questionnaire was not found and might be deleted.");
+                throw new CommandInflaitingException(CommandInflatingExceptionType.EntityNotFound,
+                    "Source questionnaire was not found and might be deleted.");
             }
 
-            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId || this.userHelper.WebUser.IsAdmin)
+            if (questionnaire.IsPublic || questionnaire.CreatedBy == this.userHelper.WebUser.UserId ||
+                this.userHelper.WebUser.IsAdmin)
                 return questionnaire;
 
             var questionnaireListItem = this.questionnairesList.GetById(id.FormatGuid());
-            if (questionnaireListItem == null || questionnaireListItem.SharedPersons.All(x => x.UserId != this.userHelper.WebUser.UserId))
+            if (questionnaireListItem == null ||
+                questionnaireListItem.SharedPersons.All(x => x.UserId != this.userHelper.WebUser.UserId))
             {
-                throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden, "You don't have permissions to access the source questionnaire");
+                throw new CommandInflaitingException(CommandInflatingExceptionType.Forbidden,
+                    "You don't have permissions to access the source questionnaire");
             }
 
             return questionnaire;
@@ -77,32 +85,31 @@ namespace WB.UI.Designer.Code.Implementation
 
         private void SetResponsible(ICommand command)
         {
-            var currentCommand = command as QuestionnaireCommandBase;
-            if (currentCommand == null) return;
+            if (!(command is QuestionnaireCommandBase currentCommand)) return;
 
             currentCommand.ResponsibleId = this.userHelper.WebUser.UserId;
             currentCommand.IsResponsibleAdmin = this.userHelper.WebUser.IsAdmin;
         }
 
-        private static void ValidateAddSharedPersonCommand(ICommand command)
+        private void ValidateAddSharedPersonCommand(ICommand command)
         {
-            var addSharedPersonCommand = command as AddSharedPersonToQuestionnaire;
-            if (addSharedPersonCommand != null)
-            {
-                var sharedPersonUserName = Membership.GetUserNameByEmail(addSharedPersonCommand.Email);
+            if (!(command is AddSharedPersonToQuestionnaire addSharedPersonCommand)) 
+                return;
 
-                addSharedPersonCommand.PersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
-            }
+            var user = accountRepository.GetByNameOrEmail(addSharedPersonCommand.EmailOrLogin);
+
+            addSharedPersonCommand.PersonId = user.ProviderUserKey;
+            addSharedPersonCommand.EmailOrLogin = user.Email;
         }
 
-        private static void ValidateRemoveSharedPersonCommand(ICommand command)
+        private void ValidateRemoveSharedPersonCommand(ICommand command)
         {
-            var removeSharedPersonCommand = command as RemoveSharedPersonFromQuestionnaire;
-            if (removeSharedPersonCommand != null)
-            {
-                var sharedPersonUserName = Membership.GetUserNameByEmail(removeSharedPersonCommand.Email);
-                removeSharedPersonCommand.PersonId = Membership.GetUser(sharedPersonUserName).ProviderUserKey.AsGuid();
-            }
+            if (!(command is RemoveSharedPersonFromQuestionnaire removeSharedPersonCommand)) 
+                return;
+
+            var user = accountRepository.GetByNameOrEmail(removeSharedPersonCommand.Email);
+            removeSharedPersonCommand.PersonId = user.ProviderUserKey;
+            removeSharedPersonCommand.Email = user.Email;
         }
     }
 }

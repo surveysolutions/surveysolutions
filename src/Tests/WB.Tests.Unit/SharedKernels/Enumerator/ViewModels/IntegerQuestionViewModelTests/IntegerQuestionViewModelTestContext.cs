@@ -31,7 +31,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
             SpecialValuesViewModel specialValuesViewModel = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity && _.IsAuthenticated == true);
+            
 
             QuestionStateMock.Setup(x => x.Validity).Returns(ValidityModelMock.Object);
 
@@ -44,7 +45,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.IntegerQuestionViewM
                 AnsweringViewModelMock.Object,
                 Mock.Of<QuestionInstructionViewModel>(),
                 Mock.Of<ILiteEventRegistry>(),
-                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>());
+                specialValuesViewModel ?? Mock.Of<SpecialValuesViewModel>())
+            {
+                ThrottlePeriod = 0
+            };
         }
 
         protected static void SetUp()

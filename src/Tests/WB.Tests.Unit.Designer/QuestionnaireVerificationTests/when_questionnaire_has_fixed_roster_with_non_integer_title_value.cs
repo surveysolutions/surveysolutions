@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_questionnaire_has_fixed_roster_with_non_integer_title_value : QuestionnaireVerifierTestsContext
     {

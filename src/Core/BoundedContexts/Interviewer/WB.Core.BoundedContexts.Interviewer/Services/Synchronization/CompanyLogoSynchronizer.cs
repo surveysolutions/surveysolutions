@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
 {
@@ -12,7 +14,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services.Synchronization
         private readonly IPlainStorage<CompanyLogo> logoStorage;
         private readonly ISynchronizationService synchronizationService;
 
-        public CompanyLogoSynchronizer(IPlainStorage<CompanyLogo> logoStorage, 
+        public CompanyLogoSynchronizer(IPlainStorage<CompanyLogo> logoStorage,
             ISynchronizationService synchronizationService)
         {
             this.logoStorage = logoStorage;

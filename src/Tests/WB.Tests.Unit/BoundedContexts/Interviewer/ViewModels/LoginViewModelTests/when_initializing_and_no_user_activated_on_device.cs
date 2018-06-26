@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             await viewModel.Initialize();
 
             // Assert
-            viewModelNavigationServiceMock.Verify(x => x.NavigateToAsync<FinishInstallationViewModel>(), Times.Once);
+            viewModelNavigationServiceMock.Verify(x => x.NavigateToFinishInstallationAsync(), Times.Once);
         }
     }
 }

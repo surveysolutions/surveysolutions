@@ -7,7 +7,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     class when_checking_for_errors_questionnaire_that_has_two_attachments_with_same_names : QuestionnaireVerifierTestsContext
     {
