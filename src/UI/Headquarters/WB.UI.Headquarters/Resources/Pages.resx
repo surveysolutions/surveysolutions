@@ -1001,9 +1001,6 @@
   <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
     <value>Welcome to Survey Solutions Supervisor download page</value>
   </data>
-  <data name="DownloadPage_Welcome" xml:space="preserve">
-    <value>Welcome to Survey Solutions Interviewer download page</value>
-  </data>
   <data name="DownloadPage_PageTitle" xml:space="preserve">
     <value>Download Interviewer app</value>
   </data>
