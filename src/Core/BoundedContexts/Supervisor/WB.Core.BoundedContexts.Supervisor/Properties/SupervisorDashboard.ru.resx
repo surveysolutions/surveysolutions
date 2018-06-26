@@ -117,19 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Approved" xml:space="preserve">
-    <value>Утверждённые</value>
-  </data>
-  <data name="Assignments" xml:space="preserve">
-    <value>Задания</value>
-  </data>
-  <data name="Completed" xml:space="preserve">
-    <value>Завершённые</value>
-  </data>
-  <data name="Rejected" xml:space="preserve">
-    <value>Отклонённые</value>
+  <data name="Outbox" xml:space="preserve">
+    <value>Исходящие</value>
   </data>
   <data name="ToBeAssigned" xml:space="preserve">
     <value>Распределить задания</value>
+  </data>
+  <data name="WaitingForAction" xml:space="preserve">
+    <value>Ожидают решения</value>
+  </data>
+  <data name="YourTeam" xml:space="preserve">
+    <value>Команда</value>
   </data>
 </root>
