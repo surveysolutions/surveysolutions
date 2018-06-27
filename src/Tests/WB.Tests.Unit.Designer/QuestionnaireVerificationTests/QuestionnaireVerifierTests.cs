@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests;
-using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
@@ -27,18 +25,14 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
+            
+            verificationMessages.ShouldContainError("WB0016");
 
-
-            verificationMessages.Count().Should().Be(1);
-
-            verificationMessages.Single().Code.Should().Be("WB0016");
-
-            verificationMessages.Single().References.Count().Should().Be(1);
-
-            verificationMessages.Single().References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
-
-            verificationMessages.Single().References.First().Id.Should().Be(questionWithSelfSubstitutionsId);
+            var error = verificationMessages.GetError("WB0016");
+            error.References.Count().Should().Be(1);
+            error.References.First().Type.Should().Be(QuestionnaireVerificationReferenceType.Question);
+            error.References.First().Id.Should().Be(questionWithSelfSubstitutionsId);
         }
 
         [Test]
@@ -54,15 +48,13 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 
             var verifier = CreateQuestionnaireVerifier();
 
-            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+            var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-            verificationMessages.Count().Should().Be(1);
+            verificationMessages.ShouldContainError("WB0017");
 
-            verificationMessages.Single().Code.Should().Be("WB0017");
-
-            verificationMessages.Single().References.Count().Should().Be(1);
-
-            verificationMessages.Single().References.First().Id.Should().Be(questionWithSelfSubstitutionsId);
+            var error = verificationMessages.GetError("WB0017");
+            error.References.Count().Should().Be(1);
+            error.References.First().Id.Should().Be(questionWithSelfSubstitutionsId);
         }
 
         [Test]
@@ -82,9 +74,9 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                 }));
 
              var verifier = CreateQuestionnaireVerifier();
-             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire));
+             var verificationMessages = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-            
+
             verificationMessages.ShouldContainError("WB0019");
 
             verificationMessages.GetError("WB0019")
@@ -92,7 +84,6 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
                     .Should().BeEquivalentTo(QuestionnaireVerificationReferenceType.Question, QuestionnaireVerificationReferenceType.Variable);
 
             verificationMessages.GetError("WB0019").References.ElementAt(0).Id.Should().Be(questionId);
-
             verificationMessages.GetError("WB0019").References.ElementAt(1).Id.Should().Be(variableId);
         }
     }
