@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Threading;
 using System.Web.Http;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
@@ -24,9 +23,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             config.TypedRoute("api/interviewer/v2", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             config.TypedRoute("api/interviewer/v2/latestversion", c => c.Action<InterviewerApiV2Controller>(x => x.GetLatestVersion()));
 
-
-            config.TypedRoute("api/interviewer/v2/tabletInfo",
-                c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformation(Param.Any<TabletInformationPackage>())));
             config.TypedRoute("api/interviewer/v2/tabletInfoAsFile",
                 c => c.Action<InterviewerApiV2Controller>(x => x.PostTabletInformationAsFile()));
             config.TypedRoute("api/interviewer/v2/devices/current/{id}/{version}",

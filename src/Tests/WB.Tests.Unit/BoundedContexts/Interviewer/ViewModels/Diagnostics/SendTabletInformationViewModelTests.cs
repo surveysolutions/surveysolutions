@@ -81,11 +81,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
         }
 
-        private BackupViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
+        private SendTabletInformationViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
             ISynchronizationService synchronizationService = null)
         {
             return
-                new BackupViewModel(
+                new SendTabletInformationViewModel(
                     backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.BackupAsync() == Task.FromResult("backup-path")),
                     synchronizationService ?? Mock.Of<ISynchronizationService>(), 
                     Mock.Of<ILogger>(), 

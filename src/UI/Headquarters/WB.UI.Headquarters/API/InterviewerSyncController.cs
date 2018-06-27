@@ -11,7 +11,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Controllers;
@@ -152,20 +151,6 @@ namespace WB.UI.Headquarters.API
                 : this.androidPackageReader.Read(pathToInterviewerApp).Version;
             
             return interviewerApkVersion.HasValue && (interviewerApkVersion.Value > versionCode);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public void PostInfoPackage(TabletInformationPackage tabletInformationPackage)
-        {
-            var user = this.userViewFactory.GetUser(new UserViewInputModel(tabletInformationPackage.AndroidId));
-
-            this.tabletInformationService.SaveTabletInformation(
-                content: Convert.FromBase64String(tabletInformationPackage.Content),
-                androidId: tabletInformationPackage.AndroidId,
-                user: user);
-
-            //log record
         }
     }
 }
